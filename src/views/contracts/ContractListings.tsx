@@ -64,7 +64,12 @@ export function ContractListingMeta(props: { contract: PublicContract }) {
       }}
     >
       <Box
-        sx={{ display: "flex", alignItems: "baseline", minWidth: 0, maxWidth: "100%" }}
+        sx={{
+          display: "flex",
+          alignItems: "baseline",
+          minWidth: 0,
+          maxWidth: "100%",
+        }}
       >
         <MaterialLink
           component={Link}

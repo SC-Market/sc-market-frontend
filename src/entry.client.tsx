@@ -22,7 +22,10 @@ import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { embedNetworkEnv, isEmbedPath } from "./store/embedNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate, applyWhiteLabelTitle } from "./seo/pageHead"
-import { resolveBrowserCustomDomain, getWhiteLabelConfig } from "./hooks/contractor/CustomDomain"
+import {
+  resolveBrowserCustomDomain,
+  getWhiteLabelConfig,
+} from "./hooks/contractor/CustomDomain"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import i18n, { initialLocaleReady, toSupportedLocale } from "./util/i18n"
 import { renderedVariant } from "./ssr/requestContext"
@@ -148,7 +151,8 @@ const head = createHead({
   init: [
     {
       titleTemplate: whiteLabelOrgName
-        ? (title?: string | null) => applyWhiteLabelTitle(whiteLabelOrgName, title)
+        ? (title?: string | null) =>
+            applyWhiteLabelTitle(whiteLabelOrgName, title)
         : applyTitleTemplate,
     },
   ],
@@ -299,11 +303,7 @@ void initialLocaleReady.then(async () => {
       void whenStartupGateOpen()
         .then(() => import("./store/refreshShippedData"))
         .then(({ refreshShippedLiveData }) =>
-          refreshShippedLiveData(
-            store,
-            makeStore({ networkEnv }),
-            shipped,
-          ),
+          refreshShippedLiveData(store, makeStore({ networkEnv }), shipped),
         )
         .catch(() => {})
     }

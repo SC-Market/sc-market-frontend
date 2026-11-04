@@ -12,21 +12,25 @@ export const GUIDE_LINKS = {
   howOrdersWork: "/guides/buying/how-orders-work",
   handleOrders: "/guides/selling/handle-orders-as-a-seller",
   sellItems: "/guides/selling/sell-items",
-  quickList: "/guides/selling/sell-items#list-an-item-in-seconds-with-quick-list",
+  quickList:
+    "/guides/selling/sell-items#list-an-item-in-seconds-with-quick-list",
   auctions: "/guides/selling/auctions",
   fillBuyOrder: "/guides/selling/fill-a-buy-order",
   stockLots: "/guides/selling/stock-lots-and-allocation",
   stockModes: "/guides/selling/stock-lots-and-allocation#stock-settings",
-  myStock: "/guides/selling/stock-lots-and-allocation#my-stock-your-personal-lots",
+  myStock:
+    "/guides/selling/stock-lots-and-allocation#my-stock-your-personal-lots",
   importFromUex: "/guides/selling/import-from-uex",
   connectDiscordBot: "/guides/discord/connect-the-discord-bot",
-  discordUserInstall: "/guides/discord/connect-the-discord-bot#add-sc-market-to-your-discord-account",
+  discordUserInstall:
+    "/guides/discord/connect-the-discord-bot#add-sc-market-to-your-discord-account",
   orderAlerts: "/guides/discord/order-alerts-and-claiming",
   webhooks: "/guides/discord/webhooks",
   apiTokens: "/guides/discord/api-tokens",
   notificationSettings: "/guides/getting-started/notification-settings",
   orgRoles: "/guides/orgs/roles-and-permissions",
-  orgShopPermissions: "/guides/orgs/roles-and-permissions#permissions-for-an-org-shop",
+  orgShopPermissions:
+    "/guides/orgs/roles-and-permissions#permissions-for-an-org-shop",
   orgInvites: "/guides/orgs/invite-and-manage-members",
   orgAuditLogs: "/guides/orgs/audit-logs",
   orgWhiteLabel: "/guides/org-storefront/white-label",
@@ -34,8 +38,10 @@ export const GUIDE_LINKS = {
   orgRecruiting: "/guides/org-storefront/recruiting",
   orgShop: "/guides/org-storefront/org-shop",
   tradeSafely: "/guides/getting-started/trade-safely",
-  sellerActivity: "/guides/getting-started/trade-safely#check-who-you-re-trading-with",
-  storefrontDirectory: "/guides/org-storefront/white-label#the-storefront-directory",
+  sellerActivity:
+    "/guides/getting-started/trade-safely#check-who-you-re-trading-with",
+  storefrontDirectory:
+    "/guides/org-storefront/white-label#the-storefront-directory",
 } as const
 
 export type GuideLink = keyof typeof GUIDE_LINKS

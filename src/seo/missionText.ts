@@ -5,7 +5,11 @@
  * /missions capability text and the game-data freshness stamp. Pure: no React, no
  * browser globals, so it runs in Workers and at build time.
  */
-import type { GameVersion, Mission, MissionRewardPool } from "../store/api/v2/market"
+import type {
+  GameVersion,
+  Mission,
+  MissionRewardPool,
+} from "../store/api/v2/market"
 
 import { formatAuec, formatDate, formatInteger } from "../util/format/format"
 /** Game placeholder words → readable ones ([TARGET NAME] → "Target"). */
@@ -36,11 +40,15 @@ function readablePlaceholder(raw: string): string {
 
 /** The giver's name, if it is a real name (not a ~mission token or an @key). */
 export function usableGiver(giver: string | null | undefined): string | null {
-  return giver && !giver.includes("~mission") && !giver.startsWith("@") ? giver : null
+  return giver && !giver.includes("~mission") && !giver.startsWith("@")
+    ? giver
+    : null
 }
 
 /** Who gives the mission: the giver org, else the faction (real names only). */
-export function missionGiver(m: Pick<Mission, "mission_giver_org" | "faction">): string | null {
+export function missionGiver(
+  m: Pick<Mission, "mission_giver_org" | "faction">,
+): string | null {
   return usableGiver(m.mission_giver_org) ?? usableGiver(m.faction)
 }
 
@@ -57,7 +65,10 @@ export interface MissionTextPart {
  * and `[KEY]` placeholders as readable words. `~mission(Contractor)` is the
  * mission giver when `giver` is a real name.
  */
-export function missionTextParts(text: string | null | undefined, giver?: string | null): MissionTextPart[] {
+export function missionTextParts(
+  text: string | null | undefined,
+  giver?: string | null,
+): MissionTextPart[] {
   if (!text) return []
   const cleaned = text.replace(/<\/?em\d*>/gi, "").replace(/\\n/g, "\n")
   const parts: MissionTextPart[] = []
@@ -65,13 +76,19 @@ export function missionTextParts(text: string | null | undefined, giver?: string
   let last = 0
   for (const match of cleaned.matchAll(token)) {
     const index = match.index ?? 0
-    if (index > last) parts.push({ text: cleaned.slice(last, index), placeholder: false })
+    if (index > last)
+      parts.push({ text: cleaned.slice(last, index), placeholder: false })
     const key = match[1] ?? match[2]
     const named = /^contractor$/i.test(key.trim()) ? usableGiver(giver) : null
-    parts.push(named ? { text: named, placeholder: false } : { text: readablePlaceholder(key), placeholder: true })
+    parts.push(
+      named
+        ? { text: named, placeholder: false }
+        : { text: readablePlaceholder(key), placeholder: true },
+    )
     last = index + match[0].length
   }
-  if (last < cleaned.length) parts.push({ text: cleaned.slice(last), placeholder: false })
+  if (last < cleaned.length)
+    parts.push({ text: cleaned.slice(last), placeholder: false })
   return parts
 }
 
@@ -80,7 +97,10 @@ export function missionTextParts(text: string | null | undefined, giver?: string
  * `~mission(Key|…)` and `[KEY]` placeholders replaced with readable words
  * (`~mission(Contractor)`: the giver, when given).
  */
-export function readableMissionText(text: string | null | undefined, giver?: string | null): string {
+export function readableMissionText(
+  text: string | null | undefined,
+  giver?: string | null,
+): string {
   return missionTextParts(text, giver)
     .map((p) => p.text)
     .join("")
@@ -90,7 +110,13 @@ export function readableMissionText(text: string | null | undefined, giver?: str
 
 type MissionNameFields = Pick<
   Mission,
-  "mission_name" | "mission_giver_org" | "faction" | "star_system" | "required_rank" | "rank_index" | "min_standing_display"
+  | "mission_name"
+  | "mission_giver_org"
+  | "faction"
+  | "star_system"
+  | "required_rank"
+  | "rank_index"
+  | "min_standing_display"
 >
 
 /** "Vaughn, Rank 0, Stanton": what tells same-named missions apart. */
@@ -106,7 +132,8 @@ export function missionDisambiguator(m: MissionNameFields): string {
 
 /** "A Chance to Impress — Vaughn, Rank 0, Stanton" (unique across the database). */
 export function missionTitle(m: MissionNameFields): string {
-  const name = readableMissionText(m.mission_name, missionGiver(m)) || "Unknown mission"
+  const name =
+    readableMissionText(m.mission_name, missionGiver(m)) || "Unknown mission"
   const extra = missionDisambiguator(m)
   return extra ? `${name} — ${extra}` : name
 }
@@ -118,7 +145,8 @@ export function missionRewardRange(
 ): string | null {
   const min = m.credit_reward_min ?? null
   const max = m.credit_reward_max ?? null
-  if (min && max && max > min) return `${formatInteger(min, locale)}–${formatAuec(max, locale)}`
+  if (min && max && max > min)
+    return `${formatInteger(min, locale)}–${formatAuec(max, locale)}`
   const one = max || min
   return one ? formatAuec(one, locale) : null
 }
@@ -127,13 +155,20 @@ export function missionRewardRange(
 export function bestBlueprintDrop(
   pools: MissionRewardPool[] | undefined,
 ): { name: string; probability: number; guaranteed: boolean } | null {
-  let best: { name: string; probability: number; guaranteed: boolean } | null = null
+  let best: { name: string; probability: number; guaranteed: boolean } | null =
+    null
   for (const pool of pools ?? []) {
     for (const bp of pool.blueprints ?? []) {
-      const probability = bp.is_guaranteed ? 100 : dropPercent(bp.drop_probability)
+      const probability = bp.is_guaranteed
+        ? 100
+        : dropPercent(bp.drop_probability)
       if (!Number.isFinite(probability)) continue
       if (!best || probability > best.probability) {
-        best = { name: bp.output_item_name || bp.blueprint_name, probability, guaranteed: bp.is_guaranteed }
+        best = {
+          name: bp.output_item_name || bp.blueprint_name,
+          probability,
+          guaranteed: bp.is_guaranteed,
+        }
       }
     }
   }
@@ -156,14 +191,19 @@ export function formatPercent(value: number): string {
   return `${Number(value.toFixed(value < 1 ? 2 : 1))}%`
 }
 
-function legality(m: Pick<Mission, "legal_status" | "is_illegal" | "is_lawful">): string | null {
+function legality(
+  m: Pick<Mission, "legal_status" | "is_illegal" | "is_lawful">,
+): string | null {
   if (m.legal_status === "ILLEGAL" || m.is_illegal) return "illegal"
-  if (m.legal_status === "LEGAL" || m.is_lawful || m.is_illegal === false) return "legal"
+  if (m.legal_status === "LEGAL" || m.is_lawful || m.is_illegal === false)
+    return "legal"
   return null
 }
 
 /** "bounty hunting", from career_type / category ("BountyHunting" → "bounty hunting"). */
-export function missionType(m: Pick<Mission, "career_type" | "category" | "mission_type">): string | null {
+export function missionType(
+  m: Pick<Mission, "career_type" | "category" | "mission_type">,
+): string | null {
   const raw = m.career_type || m.mission_type || m.category
   if (!raw) return null
   return raw
@@ -202,7 +242,9 @@ export function missionSummaryLine(
 }
 
 /** { number: "4.10.2", type: "LIVE", build: "12881860" } from "4.10.2-LIVE.12881860". */
-export function parseGameVersion(v: Pick<GameVersion, "version_number" | "version_type" | "build_number">): {
+export function parseGameVersion(
+  v: Pick<GameVersion, "version_number" | "version_type" | "build_number">,
+): {
   number: string
   type: string
   build: string | null
@@ -219,7 +261,9 @@ export function parseGameVersion(v: Pick<GameVersion, "version_number" | "versio
  * "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build 12881860)."
  * for mission, blueprint and item pages and their hubs. Null without a version.
  */
-export function freshnessStamp(v: GameVersion | null | undefined): string | null {
+export function freshnessStamp(
+  v: GameVersion | null | undefined,
+): string | null {
   if (!v) return null
   const { number, type, build } = parseGameVersion(v)
   const date = v.last_data_update ? new Date(v.last_data_update) : null
@@ -231,7 +275,9 @@ export function freshnessStamp(v: GameVersion | null | undefined): string | null
 }
 
 /** JSON-LD dateModified for game-data pages: the version's last import. */
-export function gameDataDateModified(v: GameVersion | null | undefined): string | undefined {
+export function gameDataDateModified(
+  v: GameVersion | null | undefined,
+): string | undefined {
   if (!v?.last_data_update) return undefined
   const date = new Date(v.last_data_update)
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString()

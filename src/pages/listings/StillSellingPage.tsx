@@ -1,13 +1,7 @@
 import React from "react"
 import { Link as RouterLink, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-} from "@mui/material"
+import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { PageCard, PageCardActions } from "../../components/paper/PageCard"

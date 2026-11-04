@@ -52,9 +52,15 @@ describe("buildCommodityAnswers", () => {
       t,
       "en",
     )
-    expect(summary).toContain("The cheapest known place to buy it is Lorville, at about 20 aUEC.")
-    const buy = faqs.find((f) => f.question === "Where can I buy Agricium in Star Citizen?")
-    expect(buy?.answer).toBe("Agricium can be bought at Lorville (20 aUEC) and Area18 (30 aUEC).")
+    expect(summary).toContain(
+      "The cheapest known place to buy it is Lorville, at about 20 aUEC.",
+    )
+    const buy = faqs.find(
+      (f) => f.question === "Where can I buy Agricium in Star Citizen?",
+    )
+    expect(buy?.answer).toBe(
+      "Agricium can be bought at Lorville (20 aUEC) and Area18 (30 aUEC).",
+    )
   })
 
   it("lists acquisition methods as alternatives", () => {
@@ -77,7 +83,9 @@ describe("buildCommodityAnswers", () => {
       "en",
     )
     const mine = faqs.find((f) => f.question.startsWith("Where can I mine"))
-    expect(mine?.answer).toBe("Agricium can be mined at Aberdeen, Daymar, and Lyria.")
+    expect(mine?.answer).toBe(
+      "Agricium can be mined at Aberdeen, Daymar, and Lyria.",
+    )
   })
 
   it("omits sections without data", () => {
@@ -86,21 +94,28 @@ describe("buildCommodityAnswers", () => {
       t,
       "en",
     )
-    expect(summary).toBe("Agricium is a Star Citizen commodity in the Metal category.")
+    expect(summary).toBe(
+      "Agricium is a Star Citizen commodity in the Metal category.",
+    )
     expect(faqs).toEqual([])
   })
 
   it("names blueprint outputs as uses", () => {
     const { faqs } = buildCommodityAnswers(
-      commodity({}, {
-        blueprints_requiring: [
-          { output_item_name: "Arclight", blueprint_name: "bp_arclight" },
-        ] as ResourceDetailResponse["blueprints_requiring"],
-      }),
+      commodity(
+        {},
+        {
+          blueprints_requiring: [
+            { output_item_name: "Arclight", blueprint_name: "bp_arclight" },
+          ] as ResourceDetailResponse["blueprints_requiring"],
+        },
+      ),
       t,
       "en",
     )
-    expect(faqs.at(-1)?.answer).toBe("Agricium is a crafting ingredient for items such as Arclight.")
+    expect(faqs.at(-1)?.answer).toBe(
+      "Agricium is a crafting ingredient for items such as Arclight.",
+    )
   })
 })
 
@@ -112,18 +127,27 @@ describe("buildOreAnswers", () => {
       marketPrice: 88,
       locations: [
         { locationName: "Lyria", system: "Stanton", relativeProbability: 0.2 },
-        { locationName: "Aberdeen", system: "Stanton", relativeProbability: 0.9 },
+        {
+          locationName: "Aberdeen",
+          system: "Stanton",
+          relativeProbability: 0.9,
+        },
       ],
     } as OreDetailResponse
     const { summary, faqs } = buildOreAnswers(ore, t, "en")
-    expect(summary).toContain("Known locations include Aberdeen (Stanton) and Lyria (Stanton).")
+    expect(summary).toContain(
+      "Known locations include Aberdeen (Stanton) and Lyria (Stanton).",
+    )
     expect(faqs).toHaveLength(1)
   })
 })
 
 describe("buildShipSummary", () => {
   it("falls back to role and skips missing specs", () => {
-    const ship = { name: "Cutlass Black", role: "Medium Freight" } as WikiShipDetail
+    const ship = {
+      name: "Cutlass Black",
+      role: "Medium Freight",
+    } as WikiShipDetail
     expect(buildShipSummary(ship, t)).toBe(
       "The Cutlass Black is a ship in Star Citizen. Role: Medium Freight.",
     )
@@ -137,9 +161,16 @@ describe("buildItemSummary", () => {
       type: "Weapon",
       market_stats: { listing_count: 0, total_quantity: 0 },
     } as unknown as WikiItemDetail
-    expect(buildItemSummary(item, t, "en")).toBe("Arclight is an item in Star Citizen. Type: Weapon.")
+    expect(buildItemSummary(item, t, "en")).toBe(
+      "Arclight is an item in Star Citizen. Type: Weapon.",
+    )
 
-    item.market_stats = { listing_count: 4, min_price: 1000, max_price: 2500, total_quantity: 9 }
+    item.market_stats = {
+      listing_count: 4,
+      min_price: 1000,
+      max_price: 2500,
+      total_quantity: 9,
+    }
     expect(buildItemSummary(item, t, "en")).toContain(
       "Players sell it on SC Market for 1,000 aUEC to 2,500 aUEC (active listings: 4).",
     )

@@ -18,7 +18,11 @@ export function SeoHead({ head }: { head: PageHead }) {
   return (
     <Helmet
       title={head.title}
-      link={head.canonical ? [{ rel: "canonical", href: head.canonical }] : undefined}
+      link={
+        head.canonical
+          ? [{ rel: "canonical", href: head.canonical }]
+          : undefined
+      }
       meta={head.meta.map((m) => ({ ...m }))}
       script={head.jsonLd.map((data) => ({
         type: "application/ld+json",

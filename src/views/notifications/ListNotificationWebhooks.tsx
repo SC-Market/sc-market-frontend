@@ -77,10 +77,10 @@ export function WebhookRow(props: {
       })
     } else {
       let reason = String(res?.error || "")
-      if (res?.error && 'data' in res.error && res.error.data) {
+      if (res?.error && "data" in res.error && res.error.data) {
         const errData = res.error.data as { error?: string; message?: string }
         reason = errData.error || errData.message || reason
-      } else if (res?.error && 'message' in res.error) {
+      } else if (res?.error && "message" in res.error) {
         reason = res.error.message ?? reason
       }
       issueAlert({
@@ -148,7 +148,11 @@ export function WebhookRow(props: {
           align={"right"}
         >
           <IconButton
-            aria-label={t("notificationWebhooks.delete", "Delete webhook {{name}}", { name: row.name })}
+            aria-label={t(
+              "notificationWebhooks.delete",
+              "Delete webhook {{name}}",
+              { name: row.name },
+            )}
             onClick={(event) => {
               submitDelete()
               event.stopPropagation()

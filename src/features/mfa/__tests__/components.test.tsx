@@ -9,21 +9,33 @@ const api = vi.hoisted(() => ({
   confirm: vi.fn(),
   verify: vi.fn(),
   status: { enrolled: true, enforcement: "enforce" } as Record<string, unknown>,
-  session: { status: "authenticated", profile: { role: "admin" } } as Record<string, unknown>,
+  session: { status: "authenticated", profile: { role: "admin" } } as Record<
+    string,
+    unknown
+  >,
 }))
 
 vi.mock("../../../store/api/v2/market", () => {
-  const mutation = (fn: (arg: unknown) => Promise<{ data?: unknown; error?: unknown }>) => () => {
-    const [state, setState] = React.useState<{ data?: unknown; error?: unknown; isLoading: boolean }>({
-      isLoading: false,
-    })
-    const trigger = async (arg: unknown) => {
-      const r = await fn(arg)
-      setState({ ...r, isLoading: false })
-      return r
+  const mutation =
+    (fn: (arg: unknown) => Promise<{ data?: unknown; error?: unknown }>) =>
+    () => {
+      const [state, setState] = React.useState<{
+        data?: unknown
+        error?: unknown
+        isLoading: boolean
+      }>({
+        isLoading: false,
+      })
+      const trigger = async (arg: unknown) => {
+        const r = await fn(arg)
+        setState({ ...r, isLoading: false })
+        return r
+      }
+      return [
+        trigger,
+        { ...state, reset: () => setState({ isLoading: false }) },
+      ]
     }
-    return [trigger, { ...state, reset: () => setState({ isLoading: false }) }]
-  }
   return {
     useStartTotpEnrollmentMutation: mutation(api.start),
     useConfirmTotpEnrollmentMutation: mutation(api.confirm),
@@ -32,7 +44,9 @@ vi.mock("../../../store/api/v2/market", () => {
   }
 })
 vi.mock("../../../store/hooks", () => ({ useAppDispatch: () => vi.fn() }))
-vi.mock("../../../hooks/login/useSession", () => ({ useSession: () => api.session }))
+vi.mock("../../../hooks/login/useSession", () => ({
+  useSession: () => api.session,
+}))
 // ContainerGrid is the page layout that adds the top-bar spacer; the gate must
 // render inside it so it doesn't sit under the fixed top bar.
 vi.mock("../../../components/layout/ContainerGrid", () => ({
@@ -54,14 +68,24 @@ beforeEach(() => {
 describe("MfaEnrollDialog", () => {
   it("shows QR and manual key, confirms the code, then the recovery codes once", async () => {
     api.start.mockResolvedValue({
-      data: { factor_id: "f1", otpauth_uri: "otpauth://x", qr_data_url: "data:image/svg+xml;base64,AA", manual_key: "ABCD EFGH" },
+      data: {
+        factor_id: "f1",
+        otpauth_uri: "otpauth://x",
+        qr_data_url: "data:image/svg+xml;base64,AA",
+        manual_key: "ABCD EFGH",
+      },
     })
     const codes = Array.from({ length: 10 }, (_, i) => `AAAA${i}-BBBBB`)
-    api.confirm.mockResolvedValue({ data: { recovery_codes: codes, elevated_until: null } })
+    api.confirm.mockResolvedValue({
+      data: { recovery_codes: codes, elevated_until: null },
+    })
     const onClose = vi.fn()
     render(<MfaEnrollDialog open onClose={onClose} />)
 
-    expect(await screen.findByAltText(/QR code/i)).toHaveAttribute("src", "data:image/svg+xml;base64,AA")
+    expect(await screen.findByAltText(/QR code/i)).toHaveAttribute(
+      "src",
+      "data:image/svg+xml;base64,AA",
+    )
     expect(screen.getByTestId("mfa-manual-key")).toHaveTextContent("ABCD EFGH")
     fireEvent.click(screen.getByRole("button", { name: /next/i }))
 
@@ -72,7 +96,11 @@ describe("MfaEnrollDialog", () => {
     expect(input).toHaveValue("123456")
     fireEvent.click(screen.getByRole("button", { name: /turn on/i }))
 
-    await waitFor(() => expect(api.confirm).toHaveBeenCalledWith({ totpConfirmRequest: { factor_id: "f1", code: "123456" } }))
+    await waitFor(() =>
+      expect(api.confirm).toHaveBeenCalledWith({
+        totpConfirmRequest: { factor_id: "f1", code: "123456" },
+      }),
+    )
     const list = await screen.findByRole("list", { name: "recovery codes" })
     expect(list.querySelectorAll("li")).toHaveLength(10)
     const done = screen.getByRole("button", { name: /done/i })
@@ -83,11 +111,22 @@ describe("MfaEnrollDialog", () => {
   })
 
   it("shows the server's error for a wrong code", async () => {
-    api.start.mockResolvedValue({ data: { factor_id: "f1", otpauth_uri: "x", qr_data_url: "data:x", manual_key: "K" } })
-    api.confirm.mockResolvedValue({ error: { status: 400, data: { error: { code: "MFA_INVALID_CODE" } } } })
+    api.start.mockResolvedValue({
+      data: {
+        factor_id: "f1",
+        otpauth_uri: "x",
+        qr_data_url: "data:x",
+        manual_key: "K",
+      },
+    })
+    api.confirm.mockResolvedValue({
+      error: { status: 400, data: { error: { code: "MFA_INVALID_CODE" } } },
+    })
     render(<MfaEnrollDialog open onClose={vi.fn()} />)
     fireEvent.click(await screen.findByRole("button", { name: /next/i }))
-    fireEvent.change(screen.getByLabelText("authentication code"), { target: { value: "000000" } })
+    fireEvent.change(screen.getByLabelText("authentication code"), {
+      target: { value: "000000" },
+    })
     fireEvent.click(screen.getByRole("button", { name: /turn on/i }))
     expect(await screen.findByText(/not valid/i)).toBeInTheDocument()
   })
@@ -95,30 +134,52 @@ describe("MfaEnrollDialog", () => {
 
 describe("MfaCodeForm", () => {
   it("verifies a code, or a recovery code", async () => {
-    api.verify.mockResolvedValue({ data: { method: "totp", elevated_until: "", stepup_until: "" } })
+    api.verify.mockResolvedValue({
+      data: { method: "totp", elevated_until: "", stepup_until: "" },
+    })
     const onVerified = vi.fn()
     render(<MfaCodeForm onVerified={onVerified} />)
-    fireEvent.change(screen.getByLabelText("authentication code"), { target: { value: "654321" } })
+    fireEvent.change(screen.getByLabelText("authentication code"), {
+      target: { value: "654321" },
+    })
     fireEvent.click(screen.getByRole("button", { name: /verify/i }))
     await waitFor(() => expect(onVerified).toHaveBeenCalled())
-    expect(api.verify).toHaveBeenCalledWith({ mfaVerifyRequest: { code: "654321" } })
+    expect(api.verify).toHaveBeenCalledWith({
+      mfaVerifyRequest: { code: "654321" },
+    })
 
     fireEvent.click(screen.getByRole("button", { name: /recovery code/i }))
-    fireEvent.change(screen.getByLabelText("recovery code"), { target: { value: "abcde-fghjk" } })
+    fireEvent.change(screen.getByLabelText("recovery code"), {
+      target: { value: "abcde-fghjk" },
+    })
     fireEvent.click(screen.getByRole("button", { name: /verify/i }))
     await waitFor(() =>
-      expect(api.verify).toHaveBeenLastCalledWith({ mfaVerifyRequest: { recovery_code: "ABCDE-FGHJK" } }),
+      expect(api.verify).toHaveBeenLastCalledWith({
+        mfaVerifyRequest: { recovery_code: "ABCDE-FGHJK" },
+      }),
     )
   })
 
   it("explains a lockout", async () => {
     api.verify.mockResolvedValue({
-      error: { status: 429, data: { error: { code: "MFA_LOCKED", details: { locked_until: "2026-10-26T12:15:00Z" } } } },
+      error: {
+        status: 429,
+        data: {
+          error: {
+            code: "MFA_LOCKED",
+            details: { locked_until: "2026-10-26T12:15:00Z" },
+          },
+        },
+      },
     })
     render(<MfaCodeForm onVerified={vi.fn()} />)
-    fireEvent.change(screen.getByLabelText("authentication code"), { target: { value: "111111" } })
+    fireEvent.change(screen.getByLabelText("authentication code"), {
+      target: { value: "111111" },
+    })
     fireEvent.click(screen.getByRole("button", { name: /verify/i }))
-    expect(await screen.findByText(/Too many attempts, try again at/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(/Too many attempts, try again at/i),
+    ).toBeInTheDocument()
   })
 })
 
@@ -142,7 +203,10 @@ describe("SiteAdminRoute", () => {
   })
 
   it("shows the challenge for an admin who has not verified", async () => {
-    api.session = { status: "authenticated", profile: { role: "user", admin_locked: "mfa_required" } }
+    api.session = {
+      status: "authenticated",
+      profile: { role: "user", admin_locked: "mfa_required" },
+    }
     api.status = { enrolled: true, enforcement: "enforce" }
     renderAt()
     const title = await screen.findByText("Two-factor verification")
@@ -151,7 +215,10 @@ describe("SiteAdminRoute", () => {
   })
 
   it("prompts setup for an admin without a factor", async () => {
-    api.session = { status: "authenticated", profile: { role: "user", admin_locked: "mfa_enrollment" } }
+    api.session = {
+      status: "authenticated",
+      profile: { role: "user", admin_locked: "mfa_enrollment" },
+    }
     api.status = { enrolled: false, enforcement: "enforce" }
     renderAt()
     const title = await screen.findByText("Set up two-factor authentication")
@@ -159,7 +226,10 @@ describe("SiteAdminRoute", () => {
   })
 
   it("still 404s regular users and custom-domain admin locks", () => {
-    for (const profile of [{ role: "user" }, { role: "user", admin_locked: "custom_origin" }]) {
+    for (const profile of [
+      { role: "user" },
+      { role: "user", admin_locked: "custom_origin" },
+    ]) {
       api.session = { status: "authenticated", profile }
       const { unmount } = renderAt()
       expect(screen.getByText("NOT FOUND")).toBeInTheDocument()

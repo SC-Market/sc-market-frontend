@@ -1,13 +1,28 @@
 import React from "react"
-import { Box, Button, Chip, Grid, Pagination, Skeleton, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Chip,
+  Grid,
+  Pagination,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { Link, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetStorefrontsQuery } from "../../store/api/v2/market"
-import { StorefrontCard, STOREFRONT_CARD_HEIGHT } from "../../features/storefront/components/StorefrontCard"
+import {
+  StorefrontCard,
+  STOREFRONT_CARD_HEIGHT,
+} from "../../features/storefront/components/StorefrontCard"
 import { EnquireBrandedStorefront } from "../../features/storefront/components/EnquireBrandedStorefront"
-import { STOREFRONTS_PAGE_SIZE, storefrontsHubArgs } from "../../features/storefront/domain"
+import {
+  STOREFRONTS_PAGE_SIZE,
+  storefrontsHubArgs,
+} from "../../features/storefront/domain"
 import { PATHS } from "../../routes/paths"
 import { storefrontsSeoText } from "../../seo/hubHeads"
 import { pagedPath } from "../../seo/queryIndexing"
@@ -31,9 +46,12 @@ export function StorefrontsHub() {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
   const field = searchParams.get("field") || null
-  const { data, isLoading, isFetching, currentData } = useGetStorefrontsQuery(storefrontsHubArgs(page, field), {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data, isLoading, isFetching, currentData } = useGetStorefrontsQuery(
+    storefrontsHubArgs(page, field),
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  )
   usePageReady(isPrimaryLoading({ isLoading, isFetching, currentData }))
   const storefronts = data?.storefronts ?? []
   const fields = data?.fields ?? []
@@ -46,15 +64,32 @@ export function StorefrontsHub() {
     setSearchParams(params, { replace: next === 1 })
   }
   // A new filter starts on its first page.
-  const setField = (next: string | null) => setSearchParams(next ? { field: next } : {})
+  const setField = (next: string | null) =>
+    setSearchParams(next ? { field: next } : {})
 
   return (
-    <StandardPageLayout title={seo.title} description={seo.description} headerTitle={seo.title} sidebarOpen maxWidth="lg">
+    <StandardPageLayout
+      title={seo.title}
+      description={seo.description}
+      headerTitle={seo.title}
+      sidebarOpen
+      maxWidth="lg"
+    >
       {/* Only the bare ?page=N pages are indexable, so only they link up (prev/next). */}
       {!field && (
         <Helmet>
-          {page > 1 && <link rel="prev" href={`${FRONTEND_URL}${pagedPath(PATHS.storefronts, page - 1)}`} />}
-          {page < totalPages && <link rel="next" href={`${FRONTEND_URL}${pagedPath(PATHS.storefronts, page + 1)}`} />}
+          {page > 1 && (
+            <link
+              rel="prev"
+              href={`${FRONTEND_URL}${pagedPath(PATHS.storefronts, page - 1)}`}
+            />
+          )}
+          {page < totalPages && (
+            <link
+              rel="next"
+              href={`${FRONTEND_URL}${pagedPath(PATHS.storefronts, page + 1)}`}
+            />
+          )}
         </Helmet>
       )}
       <Grid item xs={12}>
@@ -66,7 +101,13 @@ export function StorefrontsHub() {
             )}
           </Typography>
           {fields.length > 1 && (
-            <Stack direction="row" flexWrap="wrap" useFlexGap spacing={1} aria-label={t("storefront.hub.filter", "Filter by focus")}>
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              useFlexGap
+              spacing={1}
+              aria-label={t("storefront.hub.filter", "Filter by focus")}
+            >
               <Chip
                 label={t("storefront.hub.all", "All")}
                 color={field === null ? "primary" : "default"}
@@ -87,15 +128,29 @@ export function StorefrontsHub() {
             sx={{
               display: "grid",
               gap: 1.5,
-              gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "repeat(2, minmax(0, 1fr))", md: "repeat(3, minmax(0, 1fr))" },
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                sm: "repeat(2, minmax(0, 1fr))",
+                md: "repeat(3, minmax(0, 1fr))",
+              },
             }}
           >
             {isLoading
-              ? Array.from({ length: 6 }, (_, i) => <Skeleton key={i} variant="rounded" height={STOREFRONT_CARD_HEIGHT} />)
-              : storefronts.map((s) => <StorefrontCard key={s.spectrum_id} storefront={s} />)}
+              ? Array.from({ length: 6 }, (_, i) => (
+                  <Skeleton
+                    key={i}
+                    variant="rounded"
+                    height={STOREFRONT_CARD_HEIGHT}
+                  />
+                ))
+              : storefronts.map((s) => (
+                  <StorefrontCard key={s.spectrum_id} storefront={s} />
+                ))}
           </Box>
           {!isLoading && storefronts.length === 0 && (
-            <Typography color="text.primary">{t("storefront.hub.empty", "No storefronts yet.")}</Typography>
+            <Typography color="text.primary">
+              {t("storefront.hub.empty", "No storefronts yet.")}
+            </Typography>
           )}
           {totalPages > 1 && (
             <Box sx={{ display: "flex", justifyContent: "center", pt: 1 }}>
@@ -105,16 +160,32 @@ export function StorefrontsHub() {
                 onChange={(_, value) => setPage(value)}
                 color="primary"
                 shape="rounded"
-                renderItem={linkedPaginationItem(PATHS.storefronts, searchParams)}
+                renderItem={linkedPaginationItem(
+                  PATHS.storefronts,
+                  searchParams,
+                )}
               />
             </Box>
           )}
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ sm: "center" }} sx={{ pt: 2 }}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1}
+            alignItems={{ sm: "center" }}
+            sx={{ pt: 2 }}
+          >
             <Typography color="text.primary">
-              {t("storefront.hub.yourOrg", "Run an org? Verify it, open a shop and it can be listed here.")}
+              {t(
+                "storefront.hub.yourOrg",
+                "Run an org? Verify it, open a shop and it can be listed here.",
+              )}
             </Typography>
             <HelpLink guide="storefrontDirectory" />
-            <Button component={Link} to={PATHS.orgRegister} variant="outlined" size="small">
+            <Button
+              component={Link}
+              to={PATHS.orgRegister}
+              variant="outlined"
+              size="small"
+            >
               {t("storefront.hub.register", "Register your org")}
             </Button>
             <EnquireBrandedStorefront variant="text" />

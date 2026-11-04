@@ -23,7 +23,10 @@ export function useRequestReviewRevision() {
       requestRevision(args)
         .unwrap()
         .then(() => {
-          issueAlert({ message: t("reviewRevision.success.requested"), severity: "success" })
+          issueAlert({
+            message: t("reviewRevision.success.requested"),
+            severity: "success",
+          })
           return true
         })
         .catch((e) => {
@@ -42,11 +45,19 @@ export function useUpdateReview() {
   const [updateReview, { isLoading }] = useUpdateOrderReviewMutation()
 
   const update = useCallback(
-    (args: { reviewId: string; orderId: string; content: string; rating: number }) =>
+    (args: {
+      reviewId: string
+      orderId: string
+      content: string
+      rating: number
+    }) =>
       updateReview(args)
         .unwrap()
         .then(() => {
-          issueAlert({ message: t("reviewRevision.success.updated"), severity: "success" })
+          issueAlert({
+            message: t("reviewRevision.success.updated"),
+            severity: "success",
+          })
           return true
         })
         .catch((e) => {

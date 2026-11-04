@@ -144,9 +144,7 @@ export function AdminModerationView() {
       display: "flex",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2">
-          {fmt.date(params.value)}
-        </Typography>
+        <Typography variant="body2">{fmt.date(params.value)}</Typography>
       ),
     },
     {
@@ -215,16 +213,27 @@ export function AdminModerationView() {
             <InputLabel id="admin-moderation-view-status-filter-label">
               {t("admin.moderation.filter.status", "Status Filter")}
             </InputLabel>
-            <Select labelId="admin-moderation-view-status-filter-label"
+            <Select
+              labelId="admin-moderation-view-status-filter-label"
               value={statusFilter}
               label={t("admin.moderation.filter.status", "Status Filter")}
-              onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+              onChange={(e) =>
+                setStatusFilter(e.target.value as typeof statusFilter)
+              }
             >
               <MenuItem value="">{t("adminUi.common.allStatuses")}</MenuItem>
-              <MenuItem value="pending">{t("adminUi.moderation.statuses.pending")}</MenuItem>
-              <MenuItem value="in_progress">{t("adminUi.moderation.statuses.inProgress")}</MenuItem>
-              <MenuItem value="resolved">{t("adminUi.moderation.statuses.resolved")}</MenuItem>
-              <MenuItem value="dismissed">{t("adminUi.moderation.statuses.dismissed")}</MenuItem>
+              <MenuItem value="pending">
+                {t("adminUi.moderation.statuses.pending")}
+              </MenuItem>
+              <MenuItem value="in_progress">
+                {t("adminUi.moderation.statuses.inProgress")}
+              </MenuItem>
+              <MenuItem value="resolved">
+                {t("adminUi.moderation.statuses.resolved")}
+              </MenuItem>
+              <MenuItem value="dismissed">
+                {t("adminUi.moderation.statuses.dismissed")}
+              </MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -255,7 +264,9 @@ export function AdminModerationView() {
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            {t("adminUi.moderation.loadError", { error: JSON.stringify(error) })}
+            {t("adminUi.moderation.loadError", {
+              error: JSON.stringify(error),
+            })}
           </Typography>
         </Grid>
       )}
@@ -276,15 +287,24 @@ export function AdminModerationView() {
               <InputLabel id="admin-moderation-view-status-label">
                 {t("admin.moderation.field.status", "Status")}
               </InputLabel>
-              <Select labelId="admin-moderation-view-status-label"
+              <Select
+                labelId="admin-moderation-view-status-label"
                 value={updateStatus}
                 label={t("admin.moderation.field.status", "Status")}
                 onChange={(e) => setUpdateStatus(e.target.value)}
               >
-                <MenuItem value="pending">{t("adminUi.moderation.statuses.pending")}</MenuItem>
-                <MenuItem value="in_progress">{t("adminUi.moderation.statuses.inProgress")}</MenuItem>
-                <MenuItem value="resolved">{t("adminUi.moderation.statuses.resolved")}</MenuItem>
-                <MenuItem value="dismissed">{t("adminUi.moderation.statuses.dismissed")}</MenuItem>
+                <MenuItem value="pending">
+                  {t("adminUi.moderation.statuses.pending")}
+                </MenuItem>
+                <MenuItem value="in_progress">
+                  {t("adminUi.moderation.statuses.inProgress")}
+                </MenuItem>
+                <MenuItem value="resolved">
+                  {t("adminUi.moderation.statuses.resolved")}
+                </MenuItem>
+                <MenuItem value="dismissed">
+                  {t("adminUi.moderation.statuses.dismissed")}
+                </MenuItem>
               </Select>
             </FormControl>
             <TextField

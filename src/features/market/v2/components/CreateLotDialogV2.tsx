@@ -28,7 +28,10 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../../hooks/accessibility/useFocusOnReveal"
-import type { LocationInfo, VariantAttributes } from "../../../../store/api/v2/market"
+import type {
+  LocationInfo,
+  VariantAttributes,
+} from "../../../../store/api/v2/market"
 import {
   useGetListingDetailQuery,
   useGetVariantTypesQuery,
@@ -73,10 +76,8 @@ export function CreateLotDialogV2({
   useEffect(() => setListingId(defaultListingId), [defaultListingId])
 
   // A lot belongs to a listing item; resolve the chosen listing's items
-  const { data: listingDetail, isFetching: listingLoading } = useGetListingDetailQuery(
-    { id: listingId },
-    { skip: !listingId },
-  )
+  const { data: listingDetail, isFetching: listingLoading } =
+    useGetListingDetailQuery({ id: listingId }, { skip: !listingId })
   const listingItems = listingDetail?.items ?? []
   const [itemId, setItemId] = useState("")
   useEffect(() => {
@@ -187,11 +188,14 @@ export function CreateLotDialogV2({
     setIsLoading(true)
 
     const variantAttributes: VariantAttributes = { quality_tier: qualityTier }
-    if (qualityValue !== undefined) variantAttributes.quality_value = qualityValue
+    if (qualityValue !== undefined)
+      variantAttributes.quality_value = qualityValue
     if (craftedSource) {
-      variantAttributes.crafted_source = craftedSource as VariantAttributes["crafted_source"]
+      variantAttributes.crafted_source =
+        craftedSource as VariantAttributes["crafted_source"]
     }
-    if (blueprintTier !== undefined) variantAttributes.blueprint_tier = blueprintTier
+    if (blueprintTier !== undefined)
+      variantAttributes.blueprint_tier = blueprintTier
 
     const created = await createLot({
       item_id: itemId,
@@ -234,7 +238,9 @@ export function CreateLotDialogV2({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("CreateLotDialogV2.title", "Create Stock Lot")}</DialogTitle>
+      <DialogTitle>
+        {t("CreateLotDialogV2.title", "Create Stock Lot")}
+      </DialogTitle>
 
       <DialogContent>
         <Stack spacing={2} mt={1}>
@@ -244,11 +250,16 @@ export function CreateLotDialogV2({
             fullWidth
             required
             label={t("CreateLotDialogV2.listing", "Listing")}
-            value={listings.some((l) => l.listing_id === listingId) ? listingId : ""}
+            value={
+              listings.some((l) => l.listing_id === listingId) ? listingId : ""
+            }
             onChange={(e) => setListingId(e.target.value)}
             helperText={
               listingId && !listingLoading && listingItems.length === 0
-                ? t("CreateLotDialogV2.noItems", "This listing has no item to add stock to")
+                ? t(
+                    "CreateLotDialogV2.noItems",
+                    "This listing has no item to add stock to",
+                  )
                 : undefined
             }
           >
@@ -315,7 +326,10 @@ export function CreateLotDialogV2({
                 )
                 const min = qualityTierType?.min_value ?? 1
                 const max = qualityTierType?.max_value ?? 5
-                return Array.from({ length: max - min + 1 }, (_, i) => min + i).map((tier) => (
+                return Array.from(
+                  { length: max - min + 1 },
+                  (_, i) => min + i,
+                ).map((tier) => (
                   <MenuItem key={tier} value={tier}>
                     {t("CreateLotDialogV2.tier", "Tier")} {tier}
                   </MenuItem>
@@ -350,9 +364,7 @@ export function CreateLotDialogV2({
             <Select
               labelId="create-lot-source-label"
               value={craftedSource || ""}
-              onChange={(e) =>
-                setCraftedSource(e.target.value || undefined)
-              }
+              onChange={(e) => setCraftedSource(e.target.value || undefined)}
               label={t("CreateLotDialogV2.craftedSource", "Source")}
             >
               <MenuItem value="">
@@ -362,7 +374,12 @@ export function CreateLotDialogV2({
                 const sourceType = variantTypesData?.variant_types.find(
                   (vt) => vt.name === "crafted_source",
                 )
-                const values = sourceType?.allowed_values ?? ["crafted", "store", "looted", "unknown"]
+                const values = sourceType?.allowed_values ?? [
+                  "crafted",
+                  "store",
+                  "looted",
+                  "unknown",
+                ]
                 return values.map((val) => (
                   <MenuItem key={val} value={val}>
                     {val.charAt(0).toUpperCase() + val.slice(1)}
@@ -400,7 +417,11 @@ export function CreateLotDialogV2({
               borderColor: "divider",
             }}
           >
-            <Typography variant="caption" color="text.secondary" display="block">
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+            >
               {t("CreateLotDialogV2.preview", "Variant Preview")}:
             </Typography>
             <Typography variant="body2" fontWeight="medium">

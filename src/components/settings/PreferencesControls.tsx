@@ -24,15 +24,49 @@ import { isSiteAdmin } from "../../util/siteRole"
 
 // Font names are proper nouns; `labelKey` options add a translated descriptor
 // around the font name (passed as {{font}}).
-const FONT_OPTIONS: { label: string; value: string; url?: string; labelKey?: string }[] = [
+const FONT_OPTIONS: {
+  label: string
+  value: string
+  url?: string
+  labelKey?: string
+}[] = [
   { label: "Roboto", labelKey: "chromeUi.fonts.default", value: "" },
-  { label: "Electrolize", labelKey: "chromeUi.fonts.scStyle", value: "Electrolize", url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap" },
-  { label: "Orbitron", value: "Orbitron", url: "https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" },
-  { label: "Rajdhani", value: "Rajdhani", url: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" },
-  { label: "Exo 2", value: "Exo 2", url: "https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" },
-  { label: "Jura", value: "Jura", url: "https://fonts.googleapis.com/css2?family=Jura:wght@400;500;700&display=swap" },
-  { label: "Share Tech Mono", value: "Share Tech Mono", url: "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" },
-  { label: "JetBrains Mono", value: "JetBrains Mono", url: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" },
+  {
+    label: "Electrolize",
+    labelKey: "chromeUi.fonts.scStyle",
+    value: "Electrolize",
+    url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap",
+  },
+  {
+    label: "Orbitron",
+    value: "Orbitron",
+    url: "https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap",
+  },
+  {
+    label: "Rajdhani",
+    value: "Rajdhani",
+    url: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap",
+  },
+  {
+    label: "Exo 2",
+    value: "Exo 2",
+    url: "https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap",
+  },
+  {
+    label: "Jura",
+    value: "Jura",
+    url: "https://fonts.googleapis.com/css2?family=Jura:wght@400;500;700&display=swap",
+  },
+  {
+    label: "Share Tech Mono",
+    value: "Share Tech Mono",
+    url: "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap",
+  },
+  {
+    label: "JetBrains Mono",
+    value: "JetBrains Mono",
+    url: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap",
+  },
 ]
 
 function loadFont(fontValue: string) {
@@ -60,11 +94,23 @@ function applyFont(fontValue: string) {
 }
 
 function getStoredFont(): string {
-  try { return localStorage.getItem("sc-admin-font") || "" } catch { return "" }
+  try {
+    return localStorage.getItem("sc-admin-font") || ""
+  } catch {
+    return ""
+  }
 }
 
 /** Cyberbunk-style theme preset swatch */
-function ThemePresetSwatch({ name, onClick, isActive }: { name: string; onClick: () => void; isActive: boolean }) {
+function ThemePresetSwatch({
+  name,
+  onClick,
+  isActive,
+}: {
+  name: string
+  onClick: () => void
+  isActive: boolean
+}) {
   const themeObj = CUSTOM_THEMES.get(name)
   const primary = themeObj?.palette?.primary?.main || "#888"
   const bg = themeObj?.palette?.background?.default || "#1A1A2E"
@@ -82,7 +128,10 @@ function ThemePresetSwatch({ name, onClick, isActive }: { name: string; onClick:
           borderColor: isActive ? "primary.main" : "divider",
           background: `linear-gradient(to right, ${primary} 50%, ${bg} 50%)`,
           transition: "transform 0.15s, box-shadow 0.15s",
-          "&:hover": { transform: "scale(1.2)", boxShadow: `0 0 8px ${primary}` },
+          "&:hover": {
+            transform: "scale(1.2)",
+            boxShadow: `0 0 8px ${primary}`,
+          },
           flexShrink: 0,
         }}
       />
@@ -102,11 +151,17 @@ export function PreferencesControls() {
   const [selectedFont, setSelectedFont] = useState(getStoredFont)
 
   // Apply stored font on mount
-  useEffect(() => { if (selectedFont) applyFont(selectedFont) }, [])
+  useEffect(() => {
+    if (selectedFont) applyFont(selectedFont)
+  }, [])
 
   const handleFontChange = useCallback((value: string) => {
     setSelectedFont(value)
-    try { localStorage.setItem("sc-admin-font", value) } catch { /* Storage unavailable: the font still applies for this visit. */ }
+    try {
+      localStorage.setItem("sc-admin-font", value)
+    } catch {
+      /* Storage unavailable: the font still applies for this visit. */
+    }
     applyFont(value)
   }, [])
 
@@ -151,20 +206,37 @@ export function PreferencesControls() {
             <>
               {/* Base theme toggle */}
               <ToggleButtonGroup
-                value={["light", "dark", "system"].includes(lightTheme) ? lightTheme : null}
+                value={
+                  ["light", "dark", "system"].includes(lightTheme)
+                    ? lightTheme
+                    : null
+                }
                 exclusive
                 onChange={(e, v) => v && setLightTheme(v)}
                 size="small"
                 fullWidth
                 sx={{ mb: 1 }}
               >
-                <ToggleButton value="light">{t("preferences.light")}</ToggleButton>
-                <ToggleButton value="dark">{t("preferences.dark")}</ToggleButton>
-                <ToggleButton value="system">{t("preferences.system", "System")}</ToggleButton>
+                <ToggleButton value="light">
+                  {t("preferences.light")}
+                </ToggleButton>
+                <ToggleButton value="dark">
+                  {t("preferences.dark")}
+                </ToggleButton>
+                <ToggleButton value="system">
+                  {t("preferences.system", "System")}
+                </ToggleButton>
               </ToggleButtonGroup>
 
               {/* Cyberbunk-style preset swatches */}
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, maxWidth: 240 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 0.5,
+                  maxWidth: 240,
+                }}
+              >
                 {themeNames.map((name) => (
                   <ThemePresetSwatch
                     key={name}
@@ -289,17 +361,36 @@ export function PreferencesControls() {
                 {t("preferences.font", "Font")}
               </Typography>
               <Autocomplete
-                value={FONT_OPTIONS.find((f) => f.value === selectedFont) || FONT_OPTIONS[0]}
+                value={
+                  FONT_OPTIONS.find((f) => f.value === selectedFont) ||
+                  FONT_OPTIONS[0]
+                }
                 onChange={(_, v) => v && handleFontChange(v.value)}
                 options={FONT_OPTIONS}
-                getOptionLabel={(o) => (o.labelKey ? t(o.labelKey, { font: o.label }) : o.label)}
+                getOptionLabel={(o) =>
+                  o.labelKey ? t(o.labelKey, { font: o.label }) : o.label
+                }
                 isOptionEqualToValue={(a, b) => a.value === b.value}
                 renderInput={(params) => (
-                  <TextField {...params} size="small" placeholder={t("settingsUi.selectFont")} />
+                  <TextField
+                    {...params}
+                    size="small"
+                    placeholder={t("settingsUi.selectFont")}
+                  />
                 )}
                 renderOption={(props, option) => (
-                  <Box component="li" {...props} sx={{ fontFamily: option.value ? `"${option.value}", sans-serif` : undefined }}>
-                    {option.labelKey ? t(option.labelKey, { font: option.label }) : option.label}
+                  <Box
+                    component="li"
+                    {...props}
+                    sx={{
+                      fontFamily: option.value
+                        ? `"${option.value}", sans-serif`
+                        : undefined,
+                    }}
+                  >
+                    {option.labelKey
+                      ? t(option.labelKey, { font: option.label })
+                      : option.label}
                   </Box>
                 )}
               />

@@ -70,13 +70,17 @@ export function orderViewerRoles(
   viewer: Viewer | null | undefined,
   orgContractor: Contractor | null | undefined,
 ): OrderViewerRoles {
-  const customer = !!viewer && !!parties.customer && parties.customer === viewer.username
-  const assigned = !!viewer && !!parties.assignedTo && parties.assignedTo === viewer.username
+  const customer =
+    !!viewer && !!parties.customer && parties.customer === viewer.username
+  const assigned =
+    !!viewer && !!parties.assignedTo && parties.assignedTo === viewer.username
   const orgMember = isDealOrgMember(parties, viewer)
   const orgManager =
-    orgMember && has_permission(orgContractor, viewer, "manage_orders", viewer?.contractors)
+    orgMember &&
+    has_permission(orgContractor, viewer, "manage_orders", viewer?.contractors)
   const orgClaimer =
-    orgMember && has_permission(orgContractor, viewer, "claim_orders", viewer?.contractors)
+    orgMember &&
+    has_permission(orgContractor, viewer, "claim_orders", viewer?.contractors)
   return {
     customer,
     assigned,

@@ -47,7 +47,7 @@ export function HideOnlineStatusToggle() {
       <Typography variant="caption" color="text.secondary" sx={{ ml: 6 }}>
         {t(
           "settings.profile.hideOnlineStatusHelp",
-          "Buyers see roughly when you were last active (for example \"Active today\") on your listings and shop. Turn this on to hide it.",
+          'Buyers see roughly when you were last active (for example "Active today") on your listings and shop. Turn this on to hide it.',
         )}
       </Typography>
     </Stack>

@@ -1,77 +1,93 @@
-import "./setup";
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { configureStore } from "@reduxjs/toolkit";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import * as marketApi from "../../../../store/api/v2/market";
-import { serviceApi } from "../../../../store/service";
-import { ListingDetailV2 } from "../ListingDetailV2";
-import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
+import "./setup"
+import React from "react"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { render, screen } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { MemoryRouter, Routes, Route } from "react-router-dom"
+import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import * as marketApi from "../../../../store/api/v2/market"
+import { serviceApi } from "../../../../store/service"
+import { ListingDetailV2 } from "../ListingDetailV2"
+import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market"
 import {
   queryError,
   queryLoading,
   querySuccess,
-} from "../../../../__tests__/rtkQueryMocks";
-import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
-import type { VariantBreakdown as VariantBreakdownComponent } from "../../../../components/market/v2/VariantBreakdown";
-import type { QualityBadge as QualityBadgeComponent } from "../../../../components/market/v2/QualityBadge";
-import type { UnderlineLink as UnderlineLinkComponent } from "../../../../components/typography/UnderlineLink";
-import type { MarkdownRender as MarkdownRenderComponent } from "../../../../components/markdown/Markdown.lazy";
+} from "../../../../__tests__/rtkQueryMocks"
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
+import type { VariantBreakdown as VariantBreakdownComponent } from "../../../../components/market/v2/VariantBreakdown"
+import type { QualityBadge as QualityBadgeComponent } from "../../../../components/market/v2/QualityBadge"
+import type { UnderlineLink as UnderlineLinkComponent } from "../../../../components/typography/UnderlineLink"
+import type { MarkdownRender as MarkdownRenderComponent } from "../../../../components/markdown/Markdown.lazy"
 
-type VariantBreakdownProps = React.ComponentProps<typeof VariantBreakdownComponent>;
-type QualityBadgeProps = React.ComponentProps<typeof QualityBadgeComponent>;
-type UnderlineLinkProps = React.ComponentProps<typeof UnderlineLinkComponent>;
-type MarkdownRenderProps = React.ComponentProps<typeof MarkdownRenderComponent>;
+type VariantBreakdownProps = React.ComponentProps<
+  typeof VariantBreakdownComponent
+>
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadgeComponent>
+type UnderlineLinkProps = React.ComponentProps<typeof UnderlineLinkComponent>
+type MarkdownRenderProps = React.ComponentProps<typeof MarkdownRenderComponent>
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
   palette: { outline: { main: "#e0e0e0" } },
-});
+})
 
 // Mock alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
-}));
+}))
 
 // Mock @mui/x-charts to avoid ESM resolution issues
 vi.mock("@mui/x-charts", () => ({
   LineChart: () => <div data-testid="line-chart" />,
   BarChart: () => <div data-testid="bar-chart" />,
   PieChart: () => <div data-testid="pie-chart" />,
-}));
+}))
 
 vi.mock("@mui/x-charts/LineChart", () => ({
   LineChart: () => <div data-testid="line-chart" />,
-}));
+}))
 
 vi.mock("@mui/x-charts/BarChart", () => ({
   BarChart: () => <div data-testid="bar-chart" />,
-}));
+}))
 
 // Mock the useParams hook
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+  const actual = await vi.importActual("react-router-dom")
   return {
     ...actual,
     useParams: () => ({ id: "test-listing-id" }),
-  };
-});
+  }
+})
 
 // Mock StandardPageLayout to avoid context dependencies
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, isLoading, error }: StandardPageLayoutProps) => (
+  StandardPageLayout: ({
+    children,
+    title,
+    isLoading,
+    error,
+  }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       <h1>{title}</h1>
       {isLoading && <div data-testid="loading">Loading...</div>}
-      {Boolean(error) && <div data-testid="error">Error: {JSON.stringify(error)}</div>}
+      {Boolean(error) && (
+        <div data-testid="error">Error: {JSON.stringify(error)}</div>
+      )}
       {children}
     </div>
   ),
-}));
+}))
 
 // Mock VariantBreakdown component
 vi.mock("../../../../components/market/v2/VariantBreakdown", () => ({
@@ -80,12 +96,17 @@ vi.mock("../../../../components/market/v2/VariantBreakdown", () => ({
       <table>
         <tbody>
           {variants.map((variant) => (
-            <tr key={variant.variant_id} data-testid={`variant-row-${variant.variant_id}`}>
+            <tr
+              key={variant.variant_id}
+              data-testid={`variant-row-${variant.variant_id}`}
+            >
               <td>{variant.display_name}</td>
               <td>{variant.quantity}</td>
               <td>{variant.price}</td>
               {variant.attributes?.quality_tier != null && (
-                <td data-testid={`quality-badge-${variant.attributes.quality_tier}`}>
+                <td
+                  data-testid={`quality-badge-${variant.attributes.quality_tier}`}
+                >
                   Tier {variant.attributes.quality_tier}
                 </td>
               )}
@@ -96,30 +117,34 @@ vi.mock("../../../../components/market/v2/VariantBreakdown", () => ({
       {showActions && <button>Add to Cart</button>}
     </div>
   ),
-}));
+}))
 
 // Mock QualityBadge component
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
   QualityBadge: ({ tier }: QualityBadgeProps) => (
     <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
   ),
-}));
+}))
 
 // Mock UnderlineLink component
 vi.mock("../../../../components/typography/UnderlineLink", () => ({
   UnderlineLink: ({ children }: UnderlineLinkProps) => <span>{children}</span>,
-}));
+}))
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock lazy Markdown to avoid Suspense with no boundary
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownRender: ({ text }: MarkdownRenderProps) => <div data-testid="markdown">{text}</div>,
+  MarkdownRender: ({ text }: MarkdownRenderProps) => (
+    <div data-testid="markdown">{text}</div>
+  ),
   MarkdownEditor: () => <div />,
-}));
+}))
 
 // Create mock store
 const createMockStore = () => {
@@ -129,9 +154,12 @@ const createMockStore = () => {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketApi.marketV2Api.middleware, serviceApi.middleware),
-  });
-};
+      getDefaultMiddleware().concat(
+        marketApi.marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
+  })
+}
 
 // Mock listing data
 const mockListingData: GetListingDetailApiResponse = {
@@ -194,15 +222,15 @@ const mockListingData: GetListingDetailApiResponse = {
       ],
     },
   ],
-};
+}
 
 describe("ListingDetailV2", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   const renderComponent = () => {
-    const store = createMockStore();
+    const store = createMockStore()
     return render(
       <Provider store={store}>
         <ThemeProvider theme={testTheme}>
@@ -212,96 +240,96 @@ describe("ListingDetailV2", () => {
             </Routes>
           </MemoryRouter>
         </ThemeProvider>
-      </Provider>
-    );
-  };
+      </Provider>,
+    )
+  }
 
   it("displays variant breakdown with all variants", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify VariantBreakdown component is rendered
-    expect(screen.getByTestId("variant-breakdown")).toBeInTheDocument();
+    expect(screen.getByTestId("variant-breakdown")).toBeInTheDocument()
 
     // Verify both variants are displayed
-    expect(screen.getByTestId("variant-row-variant-123")).toBeInTheDocument();
-    expect(screen.getByTestId("variant-row-variant-456")).toBeInTheDocument();
+    expect(screen.getByTestId("variant-row-variant-123")).toBeInTheDocument()
+    expect(screen.getByTestId("variant-row-variant-456")).toBeInTheDocument()
 
     // Verify variant details
-    expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument();
-    expect(screen.getByText("Tier 3 (65.0%) - Store")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
+    expect(screen.getByText("Tier 3 (65.0%) - Store")).toBeInTheDocument()
+  })
 
   it("displays quality tier with QualityBadge visual indicators", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify quality badges are rendered
-    expect(screen.getByTestId("quality-badge-3")).toBeInTheDocument();
-    expect(screen.getByTestId("quality-badge-5")).toBeInTheDocument();
-  });
+    expect(screen.getByTestId("quality-badge-3")).toBeInTheDocument()
+    expect(screen.getByTestId("quality-badge-5")).toBeInTheDocument()
+  })
 
   it("displays seller information with rating", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify seller name and rating
-    expect(screen.getByText("Test Seller")).toBeInTheDocument();
-    expect(screen.getByText("4.5")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Test Seller")).toBeInTheDocument()
+    expect(screen.getByText("4.5")).toBeInTheDocument()
+  })
 
   it("displays price range when variants have different prices", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Prices are rendered per-variant inside the VariantBreakdown table
-    expect(screen.getByText("30000")).toBeInTheDocument();
-    expect(screen.getByText("50000")).toBeInTheDocument();
-  });
+    expect(screen.getByText("30000")).toBeInTheDocument()
+    expect(screen.getByText("50000")).toBeInTheDocument()
+  })
 
   it("displays total quantity available", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Per-variant quantities are rendered inside the VariantBreakdown table (10 + 5 = 15)
-    expect(screen.getByText("10")).toBeInTheDocument();
-    expect(screen.getByText("5")).toBeInTheDocument();
-  });
+    expect(screen.getByText("10")).toBeInTheDocument()
+    expect(screen.getByText("5")).toBeInTheDocument()
+  })
 
   it("shows OUT OF STOCK chip when quantity is zero", () => {
     const noStockData: GetListingDetailApiResponse = {
@@ -321,121 +349,121 @@ describe("ListingDetailV2", () => {
           ],
         },
       ],
-    };
+    }
 
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         noStockData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify OUT OF STOCK chip is displayed
-    expect(screen.getByText("OUT OF STOCK")).toBeInTheDocument();
-  });
+    expect(screen.getByText("OUT OF STOCK")).toBeInTheDocument()
+  })
 
   it("displays loading state", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       queryLoading<typeof marketApi.marketV2Api.endpoints.getListingDetail>(),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify loading state
-    expect(screen.getByTestId("loading")).toBeInTheDocument();
-  });
+    expect(screen.getByTestId("loading")).toBeInTheDocument()
+  })
 
   it("displays error state when listing not found", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       queryError<typeof marketApi.marketV2Api.endpoints.getListingDetail>({
         status: 404,
         data: { message: "Not found" },
       }),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify error state
-    expect(screen.getByTestId("error")).toBeInTheDocument();
-  });
+    expect(screen.getByTestId("error")).toBeInTheDocument()
+  })
 
   it("displays listing metadata with timestamps", () => {
-    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
-    
+    const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery")
+
     mockHook.mockReturnValue(
       querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    renderComponent();
+    renderComponent()
 
     // Verify timestamps are displayed (component renders "Listed <relative time>")
-    expect(screen.getByText(/Listed/)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Listed/)).toBeInTheDocument()
+  })
 
   it("computes quality tier range correctly", () => {
-    const variants = mockListingData.items[0].variants;
+    const variants = mockListingData.items[0].variants
     const qualityTiers = variants
       .map((v) => v.attributes.quality_tier)
-      .filter((tier): tier is number => tier !== undefined && tier !== null);
+      .filter((tier): tier is number => tier !== undefined && tier !== null)
 
-    const min = Math.min(...qualityTiers);
-    const max = Math.max(...qualityTiers);
+    const min = Math.min(...qualityTiers)
+    const max = Math.max(...qualityTiers)
 
-    expect(min).toBe(3);
-    expect(max).toBe(5);
-  });
+    expect(min).toBe(3)
+    expect(max).toBe(5)
+  })
 
   it("computes price range correctly", () => {
-    const variants = mockListingData.items[0].variants;
-    const prices = variants.map((v) => v.price);
+    const variants = mockListingData.items[0].variants
+    const prices = variants.map((v) => v.price)
 
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
+    const min = Math.min(...prices)
+    const max = Math.max(...prices)
 
-    expect(min).toBe(30000);
-    expect(max).toBe(50000);
-  });
+    expect(min).toBe(30000)
+    expect(max).toBe(50000)
+  })
 
   it("computes total quantity correctly", () => {
     const totalQuantity = mockListingData.items
       .flatMap((item) => item.variants)
-      .reduce((sum, variant) => sum + variant.quantity, 0);
+      .reduce((sum, variant) => sum + variant.quantity, 0)
 
-    expect(totalQuantity).toBe(15); // 10 + 5
-  });
+    expect(totalQuantity).toBe(15) // 10 + 5
+  })
 
   it("has correct listing data structure", () => {
-    expect(mockListingData.listing.title).toBe("Test Listing");
-    expect(mockListingData.seller.name).toBe("Test Seller");
-    expect(mockListingData.seller.rating).toBe(4.5);
-    expect(mockListingData.items).toHaveLength(1);
-    expect(mockListingData.items[0].variants).toHaveLength(2);
-  });
+    expect(mockListingData.listing.title).toBe("Test Listing")
+    expect(mockListingData.seller.name).toBe("Test Seller")
+    expect(mockListingData.seller.rating).toBe(4.5)
+    expect(mockListingData.items).toHaveLength(1)
+    expect(mockListingData.items[0].variants).toHaveLength(2)
+  })
 
   it("has correct variant structure", () => {
-    const variant = mockListingData.items[0].variants[0];
-    
-    expect(variant.variant_id).toBe("variant-123");
-    expect(variant.display_name).toBe("Tier 5 (95.5%) - Crafted");
-    expect(variant.attributes.quality_tier).toBe(5);
-    expect(variant.quantity).toBe(10);
-    expect(variant.price).toBe(50000);
-    expect(variant.locations).toContain("Port Olisar");
-  });
-});
+    const variant = mockListingData.items[0].variants[0]
+
+    expect(variant.variant_id).toBe("variant-123")
+    expect(variant.display_name).toBe("Tier 5 (95.5%) - Crafted")
+    expect(variant.attributes.quality_tier).toBe(5)
+    expect(variant.quantity).toBe(10)
+    expect(variant.price).toBe(50000)
+    expect(variant.locations).toContain("Port Olisar")
+  })
+})
 
 /**
  * Test Coverage Summary:
- * 
+ *
  * ✅ Displays variant breakdown with all variants
  * ✅ Displays quality tier with QualityBadge visual indicators
  * ✅ Displays seller information with rating
@@ -450,7 +478,7 @@ describe("ListingDetailV2", () => {
  * ✅ Computes total quantity correctly
  * ✅ Has correct listing data structure
  * ✅ Has correct variant structure
- * 
+ *
  * Requirements Validated:
  * - 11.9: Component reuse (StandardPageLayout, UnderlineLink, QualityBadge, VariantBreakdown)
  * - 12.1-12.12: Visual parity (typography, button variants, chip styling)

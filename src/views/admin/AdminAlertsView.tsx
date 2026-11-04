@@ -41,22 +41,50 @@ export function AdminAlertsView() {
   const theme = useTheme<ExtendedTheme>()
 
   const {
-    alertsData, isLoading, error, rows,
-    page, setPage, pageSize, setPageSize,
-    targetTypeFilter, setTargetTypeFilter,
-    activeFilter, setActiveFilter,
+    alertsData,
+    isLoading,
+    error,
+    rows,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    targetTypeFilter,
+    setTargetTypeFilter,
+    activeFilter,
+    setActiveFilter,
     selectedAlert,
-    isCreateModalOpen, isEditModalOpen, isDeleteModalOpen,
-    handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
-    formData, setFormData,
-    channels, setChannels, confirmEmailOpen, setConfirmEmailOpen,
-    linkError, handleLinkChange,
-    contractorError, contractorSearchQuery, setContractorSearchQuery,
-    selectedContractor, contractorOptions, isSearchingContractors,
-    handleContractorChange, handleTargetTypeChange,
-    isCreating, isUpdating, isDeleting,
-    handleCreateAlert, handleUpdateAlert, handleDeleteAlert,
-    updateAlertMut, issueAlert,
+    isCreateModalOpen,
+    isEditModalOpen,
+    isDeleteModalOpen,
+    handleOpenCreateModal,
+    handleOpenEditModal,
+    handleOpenDeleteModal,
+    handleCloseModals,
+    formData,
+    setFormData,
+    channels,
+    setChannels,
+    confirmEmailOpen,
+    setConfirmEmailOpen,
+    linkError,
+    handleLinkChange,
+    contractorError,
+    contractorSearchQuery,
+    setContractorSearchQuery,
+    selectedContractor,
+    contractorOptions,
+    isSearchingContractors,
+    handleContractorChange,
+    handleTargetTypeChange,
+    isCreating,
+    isUpdating,
+    isDeleting,
+    handleCreateAlert,
+    handleUpdateAlert,
+    handleDeleteAlert,
+    updateAlertMut,
+    issueAlert,
   } = useAdminAlerts()
 
   const columns: GridColDef[] = [
@@ -92,7 +120,12 @@ export function AdminAlertsView() {
       renderCell: (params: GridRenderCellParams) => (
         <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
           {((params.value as string[] | undefined) ?? []).map((c) => (
-            <Chip key={c} label={c.replace("_", " ")} size="small" variant="outlined" />
+            <Chip
+              key={c}
+              label={c.replace("_", " ")}
+              size="small"
+              variant="outlined"
+            />
           ))}
         </Box>
       ),
@@ -110,9 +143,9 @@ export function AdminAlertsView() {
             color="primary"
             size="small"
             onClick={() => {
-            const path = safeRedirectPath(params.value, "")
-            if (path) window.open(path, "_blank", "noopener")
-          }}
+              const path = safeRedirectPath(params.value, "")
+              if (path) window.open(path, "_blank", "noopener")
+            }}
           >
             {t("admin.alerts.openLink", "Open Link")}
           </Button>
@@ -129,9 +162,7 @@ export function AdminAlertsView() {
       display: "flex",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2">
-          {fmt.date(params.value)}
-        </Typography>
+        <Typography variant="body2">{fmt.date(params.value)}</Typography>
       ),
     },
     {
@@ -142,7 +173,11 @@ export function AdminAlertsView() {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
-          label={params.value ? t("admin.alerts.active") : t("adminUi.alerts.inactive")}
+          label={
+            params.value
+              ? t("admin.alerts.active")
+              : t("adminUi.alerts.inactive")
+          }
           color={params.value ? "success" : "default"}
           size="small"
         />
@@ -204,17 +239,30 @@ export function AdminAlertsView() {
             <InputLabel id="admin-alerts-view-target-type-label">
               {t("admin.alerts.targetTypeFilter", "Target Type")}
             </InputLabel>
-            <Select labelId="admin-alerts-view-target-type-label"
+            <Select
+              labelId="admin-alerts-view-target-type-label"
               value={targetTypeFilter}
               label={t("admin.alerts.targetTypeFilter", "Target Type")}
-              onChange={(e) => setTargetTypeFilter(e.target.value as typeof targetTypeFilter)}
+              onChange={(e) =>
+                setTargetTypeFilter(e.target.value as typeof targetTypeFilter)
+              }
             >
               <MenuItem value="">{t("adminUi.alerts.allTypes")}</MenuItem>
-              <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
-              <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
-              <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
-              <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
-              <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
+              <MenuItem value="all_users">
+                {t("adminUi.alerts.targetTypes.allUsers")}
+              </MenuItem>
+              <MenuItem value="org_members">
+                {t("adminUi.alerts.targetTypes.orgMembers")}
+              </MenuItem>
+              <MenuItem value="org_owners">
+                {t("adminUi.alerts.targetTypes.orgOwners")}
+              </MenuItem>
+              <MenuItem value="admins_only">
+                {t("adminUi.alerts.targetTypes.adminsOnly")}
+              </MenuItem>
+              <MenuItem value="specific_org">
+                {t("adminUi.alerts.targetTypes.specificOrg")}
+              </MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -223,7 +271,8 @@ export function AdminAlertsView() {
             <InputLabel id="admin-alerts-view-active-status-label">
               {t("admin.alerts.activeFilter", "Active Status")}
             </InputLabel>
-            <Select labelId="admin-alerts-view-active-status-label"
+            <Select
+              labelId="admin-alerts-view-active-status-label"
               value={activeFilter === null ? "" : activeFilter}
               label={t("admin.alerts.activeFilter", "Active Status")}
               onChange={(e) =>
@@ -320,16 +369,27 @@ export function AdminAlertsView() {
               <InputLabel id="admin-alerts-view-target-type-2-label">
                 {t("admin.alerts.targetType", "Target Type")}
               </InputLabel>
-              <Select labelId="admin-alerts-view-target-type-2-label"
+              <Select
+                labelId="admin-alerts-view-target-type-2-label"
                 value={formData.target_type}
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}
               >
-                <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
-                <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
-                <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
-                <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
-                <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
+                <MenuItem value="all_users">
+                  {t("adminUi.alerts.targetTypes.allUsers")}
+                </MenuItem>
+                <MenuItem value="org_members">
+                  {t("adminUi.alerts.targetTypes.orgMembers")}
+                </MenuItem>
+                <MenuItem value="org_owners">
+                  {t("adminUi.alerts.targetTypes.orgOwners")}
+                </MenuItem>
+                <MenuItem value="admins_only">
+                  {t("adminUi.alerts.targetTypes.adminsOnly")}
+                </MenuItem>
+                <MenuItem value="specific_org">
+                  {t("adminUi.alerts.targetTypes.specificOrg")}
+                </MenuItem>
               </Select>
             </FormControl>
             {formData.target_type === "specific_org" && (
@@ -430,8 +490,14 @@ export function AdminAlertsView() {
       </Dialog>
 
       {/* Emailing every user: confirm first. */}
-      <Dialog open={confirmEmailOpen} onClose={() => setConfirmEmailOpen(false)} maxWidth="xs">
-        <DialogTitle>{t("admin.alerts.confirmEmail.title", "Email every user?")}</DialogTitle>
+      <Dialog
+        open={confirmEmailOpen}
+        onClose={() => setConfirmEmailOpen(false)}
+        maxWidth="xs"
+      >
+        <DialogTitle>
+          {t("admin.alerts.confirmEmail.title", "Email every user?")}
+        </DialogTitle>
         <DialogContent>
           <Typography variant="body2">
             {t(
@@ -494,16 +560,27 @@ export function AdminAlertsView() {
               <InputLabel id="admin-alerts-view-target-type-3-label">
                 {t("admin.alerts.targetType", "Target Type")}
               </InputLabel>
-              <Select labelId="admin-alerts-view-target-type-3-label"
+              <Select
+                labelId="admin-alerts-view-target-type-3-label"
                 value={formData.target_type}
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}
               >
-                <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
-                <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
-                <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
-                <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
-                <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
+                <MenuItem value="all_users">
+                  {t("adminUi.alerts.targetTypes.allUsers")}
+                </MenuItem>
+                <MenuItem value="org_members">
+                  {t("adminUi.alerts.targetTypes.orgMembers")}
+                </MenuItem>
+                <MenuItem value="org_owners">
+                  {t("adminUi.alerts.targetTypes.orgOwners")}
+                </MenuItem>
+                <MenuItem value="admins_only">
+                  {t("adminUi.alerts.targetTypes.adminsOnly")}
+                </MenuItem>
+                <MenuItem value="specific_org">
+                  {t("adminUi.alerts.targetTypes.specificOrg")}
+                </MenuItem>
               </Select>
             </FormControl>
             {formData.target_type === "specific_org" && (

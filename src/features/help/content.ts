@@ -6,7 +6,12 @@
 import { createContext, use, useContext, useEffect, useState } from "react"
 import { bodies, index } from "virtual:help-content"
 import { retryDynamicImport } from "../../util/retryDynamicImport"
-import type { CategoryMeta, ChangelogMeta, ContentBody, GuideMeta } from "./domain/types"
+import type {
+  CategoryMeta,
+  ChangelogMeta,
+  ContentBody,
+  GuideMeta,
+} from "./domain/types"
 
 export const helpIndex = index
 
@@ -18,7 +23,10 @@ export function guidesIn(categoryId: string): GuideMeta[] {
   return index.guides.filter((g) => g.category === categoryId)
 }
 
-export function findGuide(category: string | undefined, slug: string | undefined): GuideMeta | undefined {
+export function findGuide(
+  category: string | undefined,
+  slug: string | undefined,
+): GuideMeta | undefined {
   return index.guides.find((g) => g.category === category && g.slug === slug)
 }
 
@@ -29,7 +37,9 @@ export function findGuideById(id: string): GuideMeta | undefined {
 /** Published changelog entries, newest first. */
 export const changelogEntries: readonly ChangelogMeta[] = index.changelog
 
-export function findChangelogEntry(slug: string | undefined): ChangelogMeta | undefined {
+export function findChangelogEntry(
+  slug: string | undefined,
+): ChangelogMeta | undefined {
   return index.changelog.find((e) => e.slug === slug)
 }
 
@@ -80,7 +90,9 @@ export const RenderedContentBodies = createContext<Set<string> | null>(null)
  * page hydrates is thrown away and shown as the page's placeholder as soon
  * as anything above it updates (the session check, say): a layout shift.
  */
-export async function preloadContentBodies(keys: readonly string[]): Promise<void> {
+export async function preloadContentBodies(
+  keys: readonly string[],
+): Promise<void> {
   await Promise.allSettled(keys.map((key) => bodyEntry(key)?.promise))
 }
 
@@ -106,7 +118,11 @@ export function useContentBody(key: string | undefined): {
   body: ContentBody | undefined
   error: unknown
 } {
-  const [state, setState] = useState<{ key?: string; body?: ContentBody; error?: unknown }>({})
+  const [state, setState] = useState<{
+    key?: string
+    body?: ContentBody
+    error?: unknown
+  }>({})
   useEffect(() => {
     const entry = key ? bodyEntry(key) : undefined
     if (!key || !entry) return
@@ -118,5 +134,7 @@ export function useContentBody(key: string | undefined): {
       cancelled = true
     }
   }, [key])
-  return state.key === key ? { body: state.body, error: state.error } : { body: undefined, error: undefined }
+  return state.key === key
+    ? { body: state.body, error: state.error }
+    : { body: undefined, error: undefined }
 }

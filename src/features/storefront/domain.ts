@@ -3,7 +3,10 @@
  * and helpers for the org home page, the embeds and the edge bridge.
  * Framework-free (the bridge imports it on Cloudflare).
  */
-import type { GetStorefrontsApiArg, SearchListingsApiArg } from "../../store/api/v2/market"
+import type {
+  GetStorefrontsApiArg,
+  SearchListingsApiArg,
+} from "../../store/api/v2/market"
 
 /** Featured listings on the org home page: the newest in-stock ones of every org shop. */
 export const ORG_FEATURED_LISTINGS = 8
@@ -32,7 +35,10 @@ export const STOREFRONTS_PAGE_SIZE = 24
  * The homepage row asks for page 1 with these same args, so the two share
  * one cache entry (and the prerendered data of both pages).
  */
-export function storefrontsHubArgs(page = 1, field?: string | null): GetStorefrontsApiArg {
+export function storefrontsHubArgs(
+  page = 1,
+  field?: string | null,
+): GetStorefrontsApiArg {
   return field
     ? { page, pageSize: STOREFRONTS_PAGE_SIZE, field }
     : { page, pageSize: STOREFRONTS_PAGE_SIZE }
@@ -54,7 +60,9 @@ export function orgScopedListingArgs<T extends SearchListingsApiArg>(
  * its spectrum ID is RSI's, not a "~" custom identifier (test orgs are
  * "~TEST…"). Same rule as the backend's isRsiVerifiedOrg.
  */
-export function isRsiVerifiedSpectrumId(spectrumId: string | null | undefined): boolean {
+export function isRsiVerifiedSpectrumId(
+  spectrumId: string | null | undefined,
+): boolean {
   return !!spectrumId && !spectrumId.startsWith("~")
 }
 

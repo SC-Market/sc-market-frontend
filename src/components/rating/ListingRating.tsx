@@ -12,10 +12,7 @@ import {
   RocketLaunchRounded,
   FavoriteRounded,
 } from "@mui/icons-material"
-import {
-  Box,
-  Tooltip,
-} from "@mui/material"
+import { Box, Tooltip } from "@mui/material"
 import { Rating } from "../../features/contractor/domain/types"
 import React, { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
@@ -99,17 +96,19 @@ export function ListingNameAndRating(props: {
       ? `/user/${user?.username}`
       : `/contractor/${contractor?.spectrum_id}`
 
-  const displayName = shop
-    ? shop.name
-    : user?.display_name || contractor?.name
+  const displayName = shop ? shop.name : user?.display_name || contractor?.name
 
   // Build shopRating from shop prop if not explicitly provided
-  const effectiveShopRating: ShopRatingProps | undefined = shopRating ?? (shop ? {
-    avg_rating: shop.rating ?? 0,
-    rating_count: shop.rating_count ?? 0,
-    total_orders: shop.total_orders ?? 0,
-    streak: shop.streak ?? 0,
-  } : undefined)
+  const effectiveShopRating: ShopRatingProps | undefined =
+    shopRating ??
+    (shop
+      ? {
+          avg_rating: shop.rating ?? 0,
+          rating_count: shop.rating_count ?? 0,
+          total_orders: shop.total_orders ?? 0,
+          streak: shop.streak ?? 0,
+        }
+      : undefined)
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
@@ -125,11 +124,13 @@ export function ListingNameAndRating(props: {
           color: "inherit",
         }}
       >
-        <UnderlineLink variant={"subtitle2"}>
-          {displayName}
-        </UnderlineLink>
+        <UnderlineLink variant={"subtitle2"}>{displayName}</UnderlineLink>
       </Box>
-      <ListingSellerRating user={user} contractor={contractor} shopRating={effectiveShopRating} />
+      <ListingSellerRating
+        user={user}
+        contractor={contractor}
+        shopRating={effectiveShopRating}
+      />
     </Box>
   )
 }
@@ -143,17 +144,29 @@ export function ListingSellerRating(props: {
   const { user, contractor, shop, shopRating } = props
 
   // Build shopRating from shop prop if not explicitly provided
-  const effectiveShopRating: ShopRatingProps | undefined = shopRating ?? (shop ? {
-    avg_rating: shop.rating ?? 0,
-    rating_count: shop.rating_count ?? 0,
-    total_orders: shop.total_orders ?? 0,
-    streak: shop.streak ?? 0,
-  } : undefined)
+  const effectiveShopRating: ShopRatingProps | undefined =
+    shopRating ??
+    (shop
+      ? {
+          avg_rating: shop.rating ?? 0,
+          rating_count: shop.rating_count ?? 0,
+          total_orders: shop.total_orders ?? 0,
+          streak: shop.streak ?? 0,
+        }
+      : undefined)
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
-      <SellerRatingStars user={user} contractor={contractor} shopRating={effectiveShopRating} />
-      <SellerRatingCount user={user} contractor={contractor} shopRating={effectiveShopRating} />
+      <SellerRatingStars
+        user={user}
+        contractor={contractor}
+        shopRating={effectiveShopRating}
+      />
+      <SellerRatingCount
+        user={user}
+        contractor={contractor}
+        shopRating={effectiveShopRating}
+      />
     </Box>
   )
 }
@@ -234,10 +247,7 @@ export function SellerRatingStars(props: {
   }, [user, contractor, shopRating])
 
   return (
-    <StaticRatingStars
-      value={rating}
-      emptyColor={theme.palette.text.primary}
-    />
+    <StaticRatingStars value={rating} emptyColor={theme.palette.text.primary} />
   )
 }
 
@@ -303,12 +313,13 @@ export function SellerRatingCount(props: {
   }, [shopRating, user, contractor, rating])
 
   const badges = prioritizeBadges(allBadges, display_limit)
-  const displayCount = shopRating ? shopRating.rating_count : rating.rating_count
+  const displayCount = shopRating
+    ? shopRating.rating_count
+    : rating.rating_count
 
   return (
     <>
-      ({fmt.number(displayCount)}){" "}
-      <BadgeDisplay badges={badges} />
+      ({fmt.number(displayCount)}) <BadgeDisplay badges={badges} />
     </>
   )
 }

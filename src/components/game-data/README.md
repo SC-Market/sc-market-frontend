@@ -9,6 +9,7 @@ This directory contains shared UI components for the SC Game Data and Crafting S
 Game version selector component that allows users to switch between LIVE, PTU, and EPTU versions.
 
 **Features:**
+
 - Dropdown with LIVE/PTU/EPTU options
 - Displays full version number including build
 - Shows last data update timestamp
@@ -19,10 +20,10 @@ Game version selector component that allows users to switch between LIVE, PTU, a
 **Requirements:** 13.1-13.6, 45.1-45.10
 
 **Usage:**
+
 ```tsx
 import { VersionSelector } from "@/components/game-data"
-
-<VersionSelector
+;<VersionSelector
   onVersionChange={(versionId, versionType) => {
     console.log(`Selected ${versionType}: ${versionId}`)
   }}
@@ -32,6 +33,7 @@ import { VersionSelector } from "@/components/game-data"
 ```
 
 **Props:**
+
 - `onVersionChange?: (versionId: string, versionType: string) => void` - Callback when version changes
 - `compact?: boolean` - Show compact version (no label)
 - `width?: string | number` - Custom width (default: 300)
@@ -43,6 +45,7 @@ import { VersionSelector } from "@/components/game-data"
 Display icon for game items with fallback to placeholder.
 
 **Features:**
+
 - Displays item icon with fallback
 - Supports multiple sizes
 - Loading state with skeleton
@@ -52,10 +55,10 @@ Display icon for game items with fallback to placeholder.
 **Requirements:** 48.1-48.10
 
 **Usage:**
+
 ```tsx
 import { GameItemIcon } from "@/components/game-data"
-
-<GameItemIcon
+;<GameItemIcon
   name="Aegis Avenger"
   iconUrl="/path/to/icon.png"
   size={48}
@@ -65,6 +68,7 @@ import { GameItemIcon } from "@/components/game-data"
 ```
 
 **Props:**
+
 - `name: string` - Item name for alt text (required)
 - `iconUrl?: string` - Icon URL (thumbnail_path or image_url)
 - `size?: number` - Size in pixels (default: 48)
@@ -79,6 +83,7 @@ import { GameItemIcon } from "@/components/game-data"
 Display quality tier badge with color coding.
 
 **Features:**
+
 - Color-coded by tier (Bronze to Diamond)
 - Displays tier number and optional name
 - Tooltip with quality value if provided
@@ -87,24 +92,21 @@ Display quality tier badge with color coding.
 **Requirements:** 48.1-48.10
 
 **Usage:**
+
 ```tsx
 import { QualityBadge } from "@/components/game-data"
-
-<QualityBadge
-  tier={5}
-  showName={true}
-  size="small"
-  value={95.5}
-/>
+;<QualityBadge tier={5} showName={true} size="small" value={95.5} />
 ```
 
 **Props:**
+
 - `tier: number` - Quality tier (1-5) (required)
 - `showName?: boolean` - Show tier name (Bronze, Silver, etc.) (default: false)
 - `size?: "small" | "medium"` - Size variant (default: "small")
 - `value?: number` - Optional quality value (0-100) for tooltip
 
 **Tier Colors:**
+
 - Tier 1 (Bronze): Warning color
 - Tier 2 (Silver): Grey
 - Tier 3 (Gold): Info color
@@ -118,6 +120,7 @@ import { QualityBadge } from "@/components/game-data"
 Display blueprint/item rarity badge with color coding.
 
 **Features:**
+
 - Color-coded by rarity
 - Displays rarity name
 - Consistent styling
@@ -125,20 +128,19 @@ Display blueprint/item rarity badge with color coding.
 **Requirements:** 48.1-48.10
 
 **Usage:**
+
 ```tsx
 import { RarityBadge } from "@/components/game-data"
-
-<RarityBadge
-  rarity="Legendary"
-  size="small"
-/>
+;<RarityBadge rarity="Legendary" size="small" />
 ```
 
 **Props:**
+
 - `rarity: "Common" | "Uncommon" | "Rare" | "Epic" | "Legendary" | string` - Rarity level (required)
 - `size?: "small" | "medium"` - Size variant (default: "small")
 
 **Rarity Colors:**
+
 - Common: Grey
 - Uncommon: Success color
 - Rare: Info color
@@ -152,6 +154,7 @@ import { RarityBadge } from "@/components/game-data"
 Display location badge with appropriate icon.
 
 **Features:**
+
 - Displays location with appropriate icon
 - Tooltip with full path if provided
 - Consistent styling
@@ -159,10 +162,10 @@ Display location badge with appropriate icon.
 **Requirements:** 48.1-48.10
 
 **Usage:**
+
 ```tsx
 import { LocationBadge } from "@/components/game-data"
-
-<LocationBadge
+;<LocationBadge
   location="Stanton"
   type="system"
   size="small"
@@ -171,12 +174,14 @@ import { LocationBadge } from "@/components/game-data"
 ```
 
 **Props:**
+
 - `location: string` - Location name (required)
 - `type?: "system" | "planet" | "location"` - Location type for icon selection (default: "location")
 - `size?: "small" | "medium"` - Size variant (default: "small")
 - `fullPath?: string` - Optional full location path for tooltip
 
 **Icons:**
+
 - System: PublicIcon (globe)
 - Planet: LocationOnIcon (pin)
 - Location: PlaceIcon (marker)
@@ -188,6 +193,7 @@ import { LocationBadge } from "@/components/game-data"
 Multi-select category filter with checkboxes.
 
 **Features:**
+
 - Multi-select checkboxes
 - Optional item counts
 - Consistent styling with Market V2
@@ -196,10 +202,10 @@ Multi-select category filter with checkboxes.
 **Requirements:** 48.1-48.10
 
 **Usage:**
+
 ```tsx
 import { CategoryFilter } from "@/components/game-data"
-
-<CategoryFilter
+;<CategoryFilter
   label="Item Categories"
   categories={[
     { value: "weapons", label: "Weapons", count: 150 },
@@ -213,6 +219,7 @@ import { CategoryFilter } from "@/components/game-data"
 ```
 
 **Props:**
+
 - `label: string` - Filter label (required)
 - `categories: CategoryOption[]` - Available categories (required)
 - `selectedCategories: string[]` - Selected category values (required)
@@ -220,6 +227,7 @@ import { CategoryFilter } from "@/components/game-data"
 - `showCounts?: boolean` - Show item counts (default: false)
 
 **CategoryOption Type:**
+
 ```typescript
 interface CategoryOption {
   value: string
@@ -237,11 +245,13 @@ interface CategoryOption {
 RTK Query API for game version management.
 
 **Endpoints:**
+
 - `useListVersionsQuery()` - List all versions
 - `useGetActiveVersionsQuery()` - Get active versions (one per type)
 - `useSelectVersionMutation()` - Select user's preferred version
 
 **Types:**
+
 ```typescript
 interface GameVersion {
   version_id: string
@@ -269,6 +279,7 @@ interface ActiveVersionsResponse {
 ### Color Consistency
 
 All components use the ExtendedTheme from Market V2 for consistent color coding:
+
 - Quality tiers use the same colors as Market V2 quality system
 - Badges use theme palette colors (success, warning, info, etc.)
 - All components support dark/light theme switching
@@ -276,6 +287,7 @@ All components use the ExtendedTheme from Market V2 for consistent color coding:
 ### Responsive Design
 
 All components are designed to be mobile-responsive:
+
 - Flexible sizing with size props
 - Touch-friendly interaction areas
 - Proper spacing using theme.layoutSpacing
@@ -283,6 +295,7 @@ All components are designed to be mobile-responsive:
 ### Accessibility
 
 Components follow accessibility best practices:
+
 - Proper ARIA labels
 - Keyboard navigation support
 - Tooltips for additional context
@@ -291,6 +304,7 @@ Components follow accessibility best practices:
 ### Loading States
 
 Components that fetch data include loading states:
+
 - Skeleton loaders for icons
 - Disabled states for selectors
 - Loading indicators where appropriate
@@ -302,6 +316,7 @@ Components that fetch data include loading states:
 Unit tests should be created for these components (Task 10.3 - optional).
 
 **Test Coverage Should Include:**
+
 - Component rendering with various props
 - User interactions (clicks, selections)
 - Loading and error states
@@ -315,6 +330,7 @@ Unit tests should be created for these components (Task 10.3 - optional).
 These components integrate with the following backend endpoints:
 
 **VersionsController:**
+
 - `GET /api/v2/game-data/versions/` - List all versions
 - `GET /api/v2/game-data/versions/active` - Get active versions
 - `POST /api/v2/game-data/versions/select` - Select version

@@ -53,9 +53,18 @@ export function ResponsiveDialog({
       fullWidth
       aria-labelledby={titleId}
     >
-      <DialogTitle id={titleId} sx={{ pr: 6 }} color="text.secondary" fontWeight={700}>
+      <DialogTitle
+        id={titleId}
+        sx={{ pr: 6 }}
+        color="text.secondary"
+        fontWeight={700}
+      >
         {title}
-        <IconButton aria-label={closeLabel} onClick={onClose} sx={{ position: "absolute", right: 8, top: 8 }}>
+        <IconButton
+          aria-label={closeLabel}
+          onClick={onClose}
+          sx={{ position: "absolute", right: 8, top: 8 }}
+        >
           <CloseRounded />
         </IconButton>
       </DialogTitle>

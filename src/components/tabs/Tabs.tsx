@@ -28,7 +28,10 @@ export function TabPanel(props: TabPanelProps) {
       hidden={!isActive}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      style={{ width: "100%", display: isActive ? undefined : preload ? "none" : undefined }}
+      style={{
+        width: "100%",
+        display: isActive ? undefined : preload ? "none" : undefined,
+      }}
     >
       {(isActive || preload) && children}
     </div>

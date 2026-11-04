@@ -35,7 +35,10 @@ export function LandingTrust() {
   ]
   return (
     <LandingSection labelledBy="landing-why-title" testId="landing-why">
-      <LandingSectionHeader id="landing-why-title" title={t("landing.whyTitle")} />
+      <LandingSectionHeader
+        id="landing-why-title"
+        title={t("landing.whyTitle")}
+      />
       <Box
         sx={{
           display: "grid",

@@ -18,12 +18,21 @@ describe("canClaimOffer / availableOfferActions", () => {
   const manager = { orgManager: true, orgClaimer: false }
   const claimer = { orgManager: false, orgClaimer: true }
   const neither = { orgManager: false, orgClaimer: false }
-  const open = { status: "Waiting for Seller", assignedTo: null, contractor: "ORG" }
+  const open = {
+    status: "Waiting for Seller",
+    assignedTo: null,
+    contractor: "ORG",
+  }
 
   it.each([
     ["claimer, active unassigned", open, claimer, true],
     ["manager, active unassigned", open, manager, true],
-    ["waiting for the customer is active too", { ...open, status: "Waiting for Customer" }, claimer, true],
+    [
+      "waiting for the customer is active too",
+      { ...open, status: "Waiting for Customer" },
+      claimer,
+      true,
+    ],
     ["plain member", open, neither, false],
     ["already assigned", { ...open, assignedTo: "someone" }, claimer, false],
     ["accepted", { ...open, status: "Accepted" }, manager, false],
@@ -36,8 +45,13 @@ describe("canClaimOffer / availableOfferActions", () => {
   })
 
   it("managers may reassign an active session, not a closed one", () => {
-    expect(availableOfferActions({ ...open, assignedTo: "someone" }, manager).canAssign).toBe(true)
-    expect(availableOfferActions({ ...open, status: "Accepted" }, manager).canAssign).toBe(false)
+    expect(
+      availableOfferActions({ ...open, assignedTo: "someone" }, manager)
+        .canAssign,
+    ).toBe(true)
+    expect(
+      availableOfferActions({ ...open, status: "Accepted" }, manager).canAssign,
+    ).toBe(false)
     expect(availableOfferActions(open, claimer).canAssign).toBe(false)
   })
 })

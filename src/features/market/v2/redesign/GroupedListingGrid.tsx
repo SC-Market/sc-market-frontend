@@ -138,15 +138,37 @@ function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
   }
   return (
     <>
-      {isNew && <Chip label={t("market.new", "NEW")} color="secondary" size="small" sx={chipSx} />}
+      {isNew && (
+        <Chip
+          label={t("market.new", "NEW")}
+          color="secondary"
+          size="small"
+          sx={chipSx}
+        />
+      )}
       {outOfStock && (
-        <Chip label={t("market.outOfStock", "OUT OF STOCK")} color="error" size="small" sx={chipSx} />
+        <Chip
+          label={t("market.outOfStock", "OUT OF STOCK")}
+          color="error"
+          size="small"
+          sx={chipSx}
+        />
       )}
       {listing.has_bulk_discount && (
-        <Chip label={t("market.bulkDiscount", "BULK")} color="info" size="small" sx={chipSx} />
+        <Chip
+          label={t("market.bulkDiscount", "BULK")}
+          color="info"
+          size="small"
+          sx={chipSx}
+        />
       )}
       {listing.visibility === "private" && (
-        <Chip label={t("market.internalListing", "INTERNAL")} color="warning" size="small" sx={chipSx} />
+        <Chip
+          label={t("market.internalListing", "INTERNAL")}
+          color="warning"
+          size="small"
+          sx={chipSx}
+        />
       )}
     </>
   )
@@ -218,7 +240,9 @@ const GroupedListingGridInner = React.forwardRef<
     (): GridEntry[] =>
       insertAds(buildEntries(listings), (entry) => entry.key).map(
         (entry, i): GridEntry =>
-          "_isAd" in entry ? { kind: "ad", key: `ad:${i}`, ad: entry.ad } : entry,
+          "_isAd" in entry
+            ? { kind: "ad", key: `ad:${i}`, ad: entry.ad }
+            : entry,
       ),
     [listings],
   )
@@ -254,7 +278,8 @@ const GroupedListingGridInner = React.forwardRef<
   const orderedEntries = useMemo(() => {
     if (!expanded) return entries.map((entry, index) => ({ entry, index }))
     const expandedIndex = entries.findIndex((e) => e.key === expanded)
-    if (expandedIndex < 0) return entries.map((entry, index) => ({ entry, index }))
+    if (expandedIndex < 0)
+      return entries.map((entry, index) => ({ entry, index }))
     const rowStart = Math.floor(expandedIndex / columns) * columns
     const withIndex = entries.map((entry, index) => ({ entry, index }))
     if (rowStart === expandedIndex) return withIndex
@@ -302,7 +327,12 @@ const GroupedListingGridInner = React.forwardRef<
       <Grid container spacing={1}>
         {orderedEntries.map(({ entry, index }) =>
           index >= rendered ? (
-            <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
+            <Grid
+              item
+              {...gridBreakpoints}
+              key={entry.key}
+              ref={register(entry.key)}
+            >
               {entry.kind === "single" ? (
                 <CardStub
                   height={LISTING_CARD_HEIGHT}
@@ -314,11 +344,21 @@ const GroupedListingGridInner = React.forwardRef<
               )}
             </Grid>
           ) : entry.kind === "ad" ? (
-            <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
+            <Grid
+              item
+              {...gridBreakpoints}
+              key={entry.key}
+              ref={register(entry.key)}
+            >
               <AdCard ad={entry.ad} index={index} noGridWrapper />
             </Grid>
           ) : entry.kind === "single" ? (
-            <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
+            <Grid
+              item
+              {...gridBreakpoints}
+              key={entry.key}
+              ref={register(entry.key)}
+            >
               <ListingCardV2
                 listing={entry.listing}
                 index={index}
@@ -386,7 +426,9 @@ function GroupCard({
   // would otherwise inflate the count and mismatch what the expansion shows.
   const sellerCount = new Set(listings.map((l) => l.shop_id)).size
   const priceMin = Math.min(...listings.map((l) => l.price_min ?? 0))
-  const priceMax = Math.max(...listings.map((l) => l.price_max ?? l.price_min ?? 0))
+  const priceMax = Math.max(
+    ...listings.map((l) => l.price_max ?? l.price_min ?? 0),
+  )
   const totalQuantity = listings.reduce(
     (sum, l) => sum + (l.quantity_available ?? 0),
     0,
@@ -401,7 +443,11 @@ function GroupCard({
   const allOutOfStock = listings.every((l) => (l.quantity_available ?? 0) === 0)
 
   return (
-    <Fade in={true} timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
+    <Fade
+      in={true}
+      timeout={500}
+      style={{ transitionDelay: `${50 + 50 * index}ms` }}
+    >
       <Card
         sx={{
           position: "relative",
@@ -564,9 +610,13 @@ function GroupCard({
                   noWrap
                   sx={{ fontSize: "0.7rem", lineHeight: 1.2, minWidth: 0 }}
                 >
-                  {t("MarketRedesign.acrossSellers", "across {{count}} sellers", {
-                    count: sellerCount,
-                  })}
+                  {t(
+                    "MarketRedesign.acrossSellers",
+                    "across {{count}} sellers",
+                    {
+                      count: sellerCount,
+                    },
+                  )}
                 </Typography>
                 <Stack
                   direction="row"
@@ -603,7 +653,10 @@ function GroupCard({
         {/* Expanded seller comparison */}
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ p: 1.5 }}>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", mb: 1.5 }}
+            >
               {fmt.priceRange(priceMin, priceMax)} {"·"}{" "}
               {t("MarketRedesign.sellersCount", "{{count}} sellers", {
                 count: sellerCount,
@@ -617,7 +670,11 @@ function GroupCard({
             {/* Sell side — who's offering this item */}
             <Typography
               variant="overline"
-              sx={{ color: "text.secondary", fontWeight: 700, letterSpacing: 0.5 }}
+              sx={{
+                color: "text.secondary",
+                fontWeight: 700,
+                letterSpacing: 0.5,
+              }}
             >
               {t("MarketRedesign.forSale", "For sale")}
             </Typography>
@@ -678,7 +735,12 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
           count: orders.length,
         })}
       </Typography>
-      <Box sx={{ maxHeight: 240, overflowY: orders.length > 5 ? "auto" : "visible" }}>
+      <Box
+        sx={{
+          maxHeight: 240,
+          overflowY: orders.length > 5 ? "auto" : "visible",
+        }}
+      >
         <Stack divider={<Divider />}>
           {orders.map((o, i) => (
             <Stack
@@ -688,19 +750,44 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
               alignItems="center"
               sx={{ py: 1 }}
             >
-              <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }} noWrap>
+              <Typography
+                variant="body2"
+                sx={{ flex: 1, color: "text.secondary" }}
+                noWrap
+              >
                 {o.buyer_name}
               </Typography>
               {i === 0 && (
-                <Chip label={t("MarketRedesign.topBid", "Top bid")} size="small" color="secondary" sx={{ height: 20 }} />
+                <Chip
+                  label={t("MarketRedesign.topBid", "Top bid")}
+                  size="small"
+                  color="secondary"
+                  sx={{ height: 20 }}
+                />
               )}
               {o.negotiable && (
-                <Chip label={t("MarketRedesign.negotiable", "Negotiable")} size="small" variant="outlined" sx={{ height: 20 }} />
+                <Chip
+                  label={t("MarketRedesign.negotiable", "Negotiable")}
+                  size="small"
+                  variant="outlined"
+                  sx={{ height: 20 }}
+                />
               )}
-              <Typography variant="body2" sx={{ color: "text.primary", width: 90, textAlign: "right" }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.primary", width: 90, textAlign: "right" }}
+              >
                 {fmt.number(remainingQuantity(o))}
               </Typography>
-              <Typography variant="body2" sx={{ color: "secondary.main", fontWeight: 700, width: 120, textAlign: "right" }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "secondary.main",
+                  fontWeight: 700,
+                  width: 120,
+                  textAlign: "right",
+                }}
+              >
                 {fmt.price(o.price_per_unit)}
               </Typography>
             </Stack>
@@ -779,7 +866,8 @@ function GroupSellers({
   // shown once with all its tags (deduped by listing_id:variant_id).
   const highlights = useMemo<Highlight[]>(() => {
     if (variants.length === 0) return []
-    const keyOf = (v: GameItemListingResult) => `${v.listing_id}:${v.variant_id}`
+    const keyOf = (v: GameItemListingResult) =>
+      `${v.listing_id}:${v.variant_id}`
 
     const lowestPrice = variants.reduce((a, b) => (b.price < a.price ? b : a))
     const highestQuality = variants.reduce((a, b) =>
@@ -804,7 +892,11 @@ function GroupSellers({
     // separate rows (so multiple variants show as separate entries). Insertion
     // order gives a sensible display order.
     const tagsByKey = new Map<string, Highlight>()
-    const add = (v: GameItemListingResult, labelKey: string, labelFallback: string) => {
+    const add = (
+      v: GameItemListingResult,
+      labelKey: string,
+      labelFallback: string,
+    ) => {
       const k = keyOf(v)
       const entry = tagsByKey.get(k) ?? { variant: v, tags: [] }
       entry.tags.push({ labelKey, labelFallback })
@@ -839,11 +931,20 @@ function GroupSellers({
     <Box>
       <Grid container spacing={1.5}>
         {highlights.map((h, i) => (
-          <Grid item xs={12} sm={6} md={4} key={`${h.variant.listing_id}:${h.variant.variant_id}`}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            key={`${h.variant.listing_id}:${h.variant.variant_id}`}
+          >
             <Grow
               in
               timeout={300}
-              style={{ transformOrigin: "top", transitionDelay: `${Math.min(i, 6) * 40}ms` }}
+              style={{
+                transformOrigin: "top",
+                transitionDelay: `${Math.min(i, 6) * 40}ms`,
+              }}
             >
               <Box sx={{ height: "100%" }}>
                 <VariantHighlightCard variant={h.variant} tags={h.tags} />
@@ -873,10 +974,16 @@ function variantQualityChip(
   v: GameItemListingResult,
 ): { label: string; color: QualityColor } | null {
   if (v.quality_value != null) {
-    return { label: `${v.quality_value}`, color: qualityValueColor(v.quality_value) }
+    return {
+      label: `${v.quality_value}`,
+      color: qualityValueColor(v.quality_value),
+    }
   }
   if (v.quality_tier != null) {
-    return { label: `Q${v.quality_tier}`, color: qualityTierColor(v.quality_tier) }
+    return {
+      label: `Q${v.quality_tier}`,
+      color: qualityTierColor(v.quality_tier),
+    }
   }
   return null
 }
@@ -929,10 +1036,19 @@ function VariantHighlightCard({
   const qc = variantQualityChip(variant)
   const label = variantLabel(variant)
   return (
-    <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
+    <Card
+      variant="outlined"
+      sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}
+    >
       <CardContent>
         {/* Superlative tags (Lowest price / Highest quality / Top rated) */}
-        <Stack direction="row" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{ mb: 1 }}
+          flexWrap="wrap"
+          useFlexGap
+        >
           {tags.map((tag) => (
             <Chip
               key={tag.labelKey}
@@ -944,9 +1060,31 @@ function VariantHighlightCard({
           ))}
         </Stack>
 
-        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 0.5 }} flexWrap="wrap" useFlexGap>
-          <RouterLink to={formatMarketUrl(variant)} style={{ textDecoration: "none", color: "inherit", flex: 1, minWidth: 0 }}>
-            <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={0.5}
+          sx={{ mb: 0.5 }}
+          flexWrap="wrap"
+          useFlexGap
+        >
+          <RouterLink
+            to={formatMarketUrl(variant)}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.secondary",
+                "&:hover": { color: "secondary.main" },
+              }}
+              noWrap
+            >
               {variant.shop_name}
             </Typography>
           </RouterLink>
@@ -954,13 +1092,21 @@ function VariantHighlightCard({
             <Chip
               label={qc.label}
               size="small"
-              sx={{ height: 20, fontSize: "0.65rem", ...qualityChipSx(qc.color) }}
+              sx={{
+                height: 20,
+                fontSize: "0.65rem",
+                ...qualityChipSx(qc.color),
+              }}
             />
           )}
         </Stack>
 
         {label && (
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.5 }} noWrap>
+          <Typography
+            variant="caption"
+            sx={{ color: "text.secondary", display: "block", mb: 0.5 }}
+            noWrap
+          >
             {label}
           </Typography>
         )}
@@ -982,7 +1128,12 @@ function VariantHighlightCard({
           {fmt.price(variant.price)}
         </Typography>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mt: 0.5 }}
+        >
           <Typography variant="caption" sx={{ color: "text.primary" }}>
             {variant.quantity_available != null
               ? t("MarketRedesign.available", "{{count}} available", {
@@ -1002,7 +1153,11 @@ function VariantHighlightCard({
  * happen with current search results, but kept as a safe fallback). Renders the
  * client-grouped per-LISTING rows without the per-variant fetch or add-to-cart.
  */
-function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] }) {
+function GroupSellersFallback({
+  listings,
+}: {
+  listings: ListingSearchResult[]
+}) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   return (
@@ -1017,17 +1172,49 @@ function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] })
             direction="row"
             spacing={1.5}
             alignItems="center"
-            sx={{ py: 1, textDecoration: "none", color: "inherit", "&:hover": { color: "secondary.main" } }}
+            sx={{
+              py: 1,
+              textDecoration: "none",
+              color: "inherit",
+              "&:hover": { color: "secondary.main" },
+            }}
           >
-            <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }} noWrap>
+            <Typography
+              variant="body2"
+              sx={{ flex: 1, color: "text.secondary" }}
+              noWrap
+            >
               {s.shop_name}
             </Typography>
             <ListingFlagChips listing={s} />
             {qc && (
-              <Chip label={qc.label} size="small" sx={{ height: 20, fontSize: "0.65rem", ...qualityChipSx(qc.color) }} />
+              <Chip
+                label={qc.label}
+                size="small"
+                sx={{
+                  height: 20,
+                  fontSize: "0.65rem",
+                  ...qualityChipSx(qc.color),
+                }}
+              />
             )}
-            {i === 0 && <Chip label={t("marketV2.bestPrice")} size="small" color="primary" sx={{ height: 20 }} />}
-            <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 110, textAlign: "right" }}>
+            {i === 0 && (
+              <Chip
+                label={t("marketV2.bestPrice")}
+                size="small"
+                color="primary"
+                sx={{ height: 20 }}
+              />
+            )}
+            <Typography
+              variant="body2"
+              sx={{
+                color: "primary.main",
+                fontWeight: 700,
+                width: 110,
+                textAlign: "right",
+              }}
+            >
               {fmt.price(s.price_min)}
             </Typography>
           </Stack>

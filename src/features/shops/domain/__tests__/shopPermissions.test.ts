@@ -48,7 +48,9 @@ describe("shop permission helpers", () => {
 
   describe("canOpenShopSettings", () => {
     it("allows shop managers (owner or Manage Market: can_manage)", () => {
-      expect(canOpenShopSettings(perms({ can_manage: true, manage_market: true }))).toBe(true)
+      expect(
+        canOpenShopSettings(perms({ can_manage: true, manage_market: true })),
+      ).toBe(true)
     })
 
     it("follows can_manage, the flag the backend's canManageShop sets", () => {
@@ -59,7 +61,9 @@ describe("shop permission helpers", () => {
     it("denies Manage Stock and Manage Orders on their own", () => {
       expect(canOpenShopSettings(perms({ manage_stock: true }))).toBe(false)
       expect(canOpenShopSettings(perms({ manage_orders: true }))).toBe(false)
-      expect(canOpenShopSettings(perms({ manage_stock: true, manage_orders: true }))).toBe(false)
+      expect(
+        canOpenShopSettings(perms({ manage_stock: true, manage_orders: true })),
+      ).toBe(false)
     })
 
     it("denies without permissions (someone else's shop)", () => {

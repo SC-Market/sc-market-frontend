@@ -42,4 +42,8 @@ export const bwinThemeOptions: ThemeOptions = {
   navKind: "outlined",
 }
 
-export const BWINCORP_theme = createAppTheme(themeBase, mainThemeOptions, bwinThemeOptions)
+export const BWINCORP_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  bwinThemeOptions,
+)

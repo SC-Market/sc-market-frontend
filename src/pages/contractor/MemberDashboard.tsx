@@ -26,19 +26,26 @@ export function MemberDashboard() {
   const lg = useBreakpointUp("lg")
   const xxl = useBreakpointUp("xxl")
 
-  if (shopCtx && spectrumId && shopCtx.shop.permissions?.manage_orders === false) {
+  if (
+    shopCtx &&
+    spectrumId &&
+    shopCtx.shop.permissions?.manage_orders === false
+  ) {
     return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />
   }
 
-  const pageTitle = shopCtx
-    ? t("orders.title", "Orders")
-    : t("dashboard.title")
+  const pageTitle = shopCtx ? t("orders.title", "Orders") : t("dashboard.title")
 
   const offersSection = <ReceivedOffersArea unassigned={!!shopCtx} />
 
-  const ordersSection = shopCtx
-    ? <OrdersViewPaginated title={t("orders.title", "Orders")} shop_id={shopCtx.shop.shop_id} />
-    : <OrdersViewPaginated title={t("MemberAssignments.assignments")} assigned />
+  const ordersSection = shopCtx ? (
+    <OrdersViewPaginated
+      title={t("orders.title", "Orders")}
+      shop_id={shopCtx.shop.shop_id}
+    />
+  ) : (
+    <OrdersViewPaginated title={t("MemberAssignments.assignments")} assigned />
+  )
 
   return (
     <StandardPageLayout
@@ -59,7 +66,10 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={2.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+              <OrderMetrics
+                spectrumId={spectrumId}
+                shopId={shopCtx?.shop.shop_id}
+              />
               <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
@@ -68,7 +78,10 @@ export function MemberDashboard() {
               {offersSection}
               {ordersSection}
               <MatchingBuyOrdersArea />
-              <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+              <UserOrderTrend
+                spectrumId={spectrumId}
+                shopId={shopCtx?.shop.shop_id}
+              />
             </Grid>
           </Grid>
         </>
@@ -77,7 +90,10 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+              <OrderMetrics
+                spectrumId={spectrumId}
+                shopId={shopCtx?.shop.shop_id}
+              />
               <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
@@ -86,7 +102,10 @@ export function MemberDashboard() {
               {offersSection}
               {ordersSection}
               <MatchingBuyOrdersArea />
-              <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+              <UserOrderTrend
+                spectrumId={spectrumId}
+                shopId={shopCtx?.shop.shop_id}
+              />
             </Grid>
           </Grid>
         </>
@@ -98,8 +117,14 @@ export function MemberDashboard() {
           </Grid>
           {ordersSection}
           <MatchingBuyOrdersArea />
-          <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
-          <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+          <OrderMetrics
+            spectrumId={spectrumId}
+            shopId={shopCtx?.shop.shop_id}
+          />
+          <UserOrderTrend
+            spectrumId={spectrumId}
+            shopId={shopCtx?.shop.shop_id}
+          />
           <Grid item xs={12}>
             <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
           </Grid>

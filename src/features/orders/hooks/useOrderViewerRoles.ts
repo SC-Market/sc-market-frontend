@@ -15,12 +15,20 @@ import {
 export function useOrderViewerRoles(parties: DealParties): OrderViewerRoles {
   const { data: profile } = useGetUserProfileQuery()
   const member = isDealOrgMember(parties, profile)
-  const { data: orgContractor } = useGetContractorBySpectrumIDQuery(parties.contractor!, {
-    skip: !parties.contractor || !member,
-  })
+  const { data: orgContractor } = useGetContractorBySpectrumIDQuery(
+    parties.contractor!,
+    {
+      skip: !parties.contractor || !member,
+    },
+  )
   const { customer, assignedTo, contractor } = parties
   return useMemo(
-    () => orderViewerRoles({ customer, assignedTo, contractor }, profile, orgContractor),
+    () =>
+      orderViewerRoles(
+        { customer, assignedTo, contractor },
+        profile,
+        orgContractor,
+      ),
     [customer, assignedTo, contractor, profile, orgContractor],
   )
 }

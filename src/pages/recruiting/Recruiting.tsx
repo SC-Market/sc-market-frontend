@@ -46,7 +46,12 @@ export function Recruiting() {
   // Manage Recruiting permission (same check as /recruiting/post/create).
   const { org: selectedOrg } = useSelectedOrg()
   const { data: profile } = useGetUserProfileQuery()
-  const canRecruit = has_permission(selectedOrg, profile, "manage_recruiting", profile?.contractors)
+  const canRecruit = has_permission(
+    selectedOrg,
+    profile,
+    "manage_recruiting",
+    profile?.contractors,
+  )
   const pageData = usePageRecruiting({
     page,
     perPage,

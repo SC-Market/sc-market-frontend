@@ -51,7 +51,9 @@ vi.mock("../../../hooks/login/useSession", () => ({
 }))
 // English catalog t() (src/test/mocks/reactI18next).
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 vi.mock("../../../features/market/api/marketApi", () => ({
   useGetMarketStatsQuery: () => h.stats,
@@ -103,7 +105,9 @@ const LISTINGS: SearchListingsResponse = {
 const ORDERS: SearchBuyOrdersResponse = {
   buy_orders: [
     order("o1", "Savrilium", {
-      photos: [{ resource_id: "r1", url: "https://cdn.example/savrilium.webp" }],
+      photos: [
+        { resource_id: "r1", url: "https://cdn.example/savrilium.webp" },
+      ],
     }),
     order("o2", "Killshot Rifle", { price_per_unit: 0 }),
   ],
@@ -325,7 +329,9 @@ describe("LandingHero", () => {
     expect(
       within(post).getByRole("link", { name: english.landing.wantedNowPost }),
     ).toHaveAttribute("href", "/buyorder/create")
-    expect(within(table).getAllByTestId("landing-post-buy-order")).toHaveLength(1)
+    expect(within(table).getAllByTestId("landing-post-buy-order")).toHaveLength(
+      1,
+    )
   })
 
   it("the Wanted now table holds skeleton rows while loading and a message on failure", () => {

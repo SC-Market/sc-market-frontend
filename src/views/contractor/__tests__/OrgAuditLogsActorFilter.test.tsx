@@ -12,7 +12,10 @@ const { logsQuery, membersQuery } = vi.hoisted(() => ({
   logsQuery: vi.fn(),
   membersQuery: vi.fn(),
 }))
-const emptyLogs = { data: { items: [], total: 0, page: 1, page_size: 10 }, isLoading: false }
+const emptyLogs = {
+  data: { items: [], total: 0, page: 1, page_size: 10 },
+  isLoading: false,
+}
 const members = { data: [{ username: "alice" }, { username: "alfred" }] }
 
 vi.mock("../../../features/contractor/api/contractorApi", () => ({
@@ -40,7 +43,9 @@ describe("OrgAuditLogs › filter by member", () => {
         <OrgAuditLogs />
       </ThemeProvider>,
     )
-    const input = screen.getByLabelText(/orgAuditLogs.filter_actor|Filter by member/)
+    const input = screen.getByLabelText(
+      /orgAuditLogs.filter_actor|Filter by member/,
+    )
     fireEvent.change(input, { target: { value: "al" } })
     await waitFor(() =>
       expect(membersQuery).toHaveBeenCalledWith(
@@ -52,9 +57,14 @@ describe("OrgAuditLogs › filter by member", () => {
 
     await waitFor(() =>
       expect(logsQuery).toHaveBeenLastCalledWith(
-        expect.objectContaining({ spectrum_id: "TESTORG", actor_username: "alice" }),
+        expect.objectContaining({
+          spectrum_id: "TESTORG",
+          actor_username: "alice",
+        }),
       ),
     )
-    expect(logsQuery.mock.calls.every(([arg]) => !("actor_id" in (arg as object)))).toBe(true)
+    expect(
+      logsQuery.mock.calls.every(([arg]) => !("actor_id" in (arg as object))),
+    ).toBe(true)
   })
 })

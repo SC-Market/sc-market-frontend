@@ -19,17 +19,17 @@ interface QualityDistributionChartProps {
 
 /**
  * QualityDistributionChart - Quality tier distribution histogram
- * 
+ *
  * Displays a bar chart showing the distribution of quality tiers across
  * available listings for a specific game item. Each bar represents a quality
  * tier (1-5) with quantity available on the Y-axis.
- * 
+ *
  * Features:
  * - Color-coded bars by quality tier (Bronze to Diamond)
  * - Interactive tooltips showing price range and seller count
  * - Click-to-filter functionality
  * - Responsive design for mobile
- * 
+ *
  * Requirements: 40.1-40.10, 47.6-47.10
  * - Uses useGetQualityDistributionQuery hook (40.1)
  * - Displays histogram as bar chart (40.2)
@@ -53,9 +53,10 @@ export function QualityDistributionChart({
   const theme = useTheme<ExtendedTheme>()
 
   // Fetch quality distribution data from V2 API
-  const { data, isLoading, isError } = marketV2Api.useGetQualityDistributionQuery({
-    gameItemId,
-  })
+  const { data, isLoading, isError } =
+    marketV2Api.useGetQualityDistributionQuery({
+      gameItemId,
+    })
 
   // Map quality tier to theme color
   const getTierColor = (tier: number): string => {
@@ -101,7 +102,7 @@ export function QualityDistributionChart({
 
     // Ensure all tiers 1-5 are represented (fill missing with 0)
     const tierMap = new Map(
-      data.distribution.map((item) => [item.quality_tier, item])
+      data.distribution.map((item) => [item.quality_tier, item]),
     )
 
     return [1, 2, 3, 4, 5].map((tier) => {
@@ -119,7 +120,10 @@ export function QualityDistributionChart({
   }, [data])
 
   // Custom tooltip formatter
-  const tooltipFormatter = (value: number | null, context: { dataIndex: number }) => {
+  const tooltipFormatter = (
+    value: number | null,
+    context: { dataIndex: number },
+  ) => {
     if (value === null || !chartData[context.dataIndex]) {
       return ""
     }
@@ -136,12 +140,8 @@ export function QualityDistributionChart({
       tierData.quantity > 0
         ? `Avg: ${fmt.integer(tierData.avgPrice)} aUEC`
         : "",
-      tierData.quantity > 0
-        ? `Sellers: ${tierData.sellerCount}`
-        : "",
-      tierData.quantity > 0
-        ? `Listings: ${tierData.listingCount}`
-        : "",
+      tierData.quantity > 0 ? `Sellers: ${tierData.sellerCount}` : "",
+      tierData.quantity > 0 ? `Listings: ${tierData.listingCount}` : "",
     ]
       .filter(Boolean)
       .join("\n")
@@ -152,7 +152,10 @@ export function QualityDistributionChart({
     return (
       <Box sx={{ p: 2, textAlign: "center" }}>
         <Typography variant="body2" color="text.secondary">
-          {t("market.loadingQualityDistribution", "Loading quality distribution...")}
+          {t(
+            "market.loadingQualityDistribution",
+            "Loading quality distribution...",
+          )}
         </Typography>
       </Box>
     )
@@ -165,7 +168,7 @@ export function QualityDistributionChart({
         <Typography variant="body2" color="error">
           {t(
             "market.errorLoadingQualityDistribution",
-            "Error loading quality distribution"
+            "Error loading quality distribution",
           )}
         </Typography>
       </Box>
@@ -177,7 +180,10 @@ export function QualityDistributionChart({
     return (
       <Box sx={{ p: 2, textAlign: "center" }}>
         <Typography variant="body2" color="text.secondary">
-          {t("market.noQualityDistribution", "No quality distribution data available")}
+          {t(
+            "market.noQualityDistribution",
+            "No quality distribution data available",
+          )}
         </Typography>
       </Box>
     )
@@ -239,7 +245,7 @@ export function QualityDistributionChart({
           // Handle click-to-filter when a bar is clicked
           if (onTierClick && data?.axisValue !== undefined) {
             const tierIndex = chartData.findIndex(
-              (d) => getTierName(d.tier) === data.axisValue
+              (d) => getTierName(d.tier) === data.axisValue,
             )
             if (tierIndex !== -1) {
               onTierClick(chartData[tierIndex].tier)

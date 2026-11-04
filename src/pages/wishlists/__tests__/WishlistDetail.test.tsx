@@ -1,7 +1,7 @@
 import "../../../util/i18n"
 /**
  * Unit tests for WishlistDetail component
- * 
+ *
  * Task 14.2 - Create WishlistDetail component
  * Requirements: 8.1, 8.2, 8.3, 53.1-53.10
  */
@@ -65,7 +65,9 @@ vi.mock("../../../store/api/v2/market", async () => {
 // Mock the Page component to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", async () => {
   return {
-    Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Page: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   }
 })
 
@@ -95,14 +97,17 @@ function createTestStore() {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
 // Helper to render with providers
 function renderWithProviders(
   ui: React.ReactElement,
-  { store = createTestStore() } = {}
+  { store = createTestStore() } = {},
 ) {
   const currentOrgState: React.ContextType<typeof CurrentOrgContext> = [
     null,
@@ -124,7 +129,7 @@ function renderWithProviders(
           </DrawerOpenContext.Provider>
         </BrowserRouter>
       </ThemeProvider>
-    </Provider>
+    </Provider>,
   )
 }
 
@@ -244,23 +249,31 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText(/Failed to load shopping list/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Failed to load shopping list/i),
+      ).toBeInTheDocument()
     })
 
     it("should display wishlist name and description", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
       expect(screen.getAllByText("Ship Components").length).toBeGreaterThan(0)
-      expect(screen.getByText("Components for my Constellation")).toBeInTheDocument()
+      expect(
+        screen.getByText("Components for my Constellation"),
+      ).toBeInTheDocument()
     })
 
     it("should display all wishlist items with names and icons", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -272,7 +285,9 @@ describe("WishlistDetail", () => {
 
     it("should display item quantities", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -284,7 +299,9 @@ describe("WishlistDetail", () => {
 
     it("should display item types", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -297,7 +314,9 @@ describe("WishlistDetail", () => {
   describe("Display quality tiers (Requirement 53.6)", () => {
     it("should display quality tier stars when specified", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -319,7 +338,9 @@ describe("WishlistDetail", () => {
       }
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(dataWithoutQuality),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          dataWithoutQuality,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -331,7 +352,9 @@ describe("WishlistDetail", () => {
   describe("Display acquisition status (Requirement 53.8)", () => {
     it("should display acquired badge for completed items", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -341,7 +364,9 @@ describe("WishlistDetail", () => {
 
     it("should display mark as acquired button for incomplete items", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -354,7 +379,9 @@ describe("WishlistDetail", () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       const mockUpdateItem =
@@ -388,7 +415,9 @@ describe("WishlistDetail", () => {
   describe("Display crafting availability (Requirement 53.3)", () => {
     it("should display craftable badge for items with blueprints", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -422,7 +451,9 @@ describe("WishlistDetail", () => {
   describe("Display progress statistics (Requirement 53.4)", () => {
     it("should display progress percentage", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -432,7 +463,9 @@ describe("WishlistDetail", () => {
 
     it("should display total items count", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -442,7 +475,9 @@ describe("WishlistDetail", () => {
 
     it("should display completed items count", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -452,7 +487,9 @@ describe("WishlistDetail", () => {
 
     it("should display remaining items count", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -462,7 +499,9 @@ describe("WishlistDetail", () => {
 
     it("should display estimated cost when available", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -472,7 +511,9 @@ describe("WishlistDetail", () => {
 
     it("should display progress bar", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -485,7 +526,9 @@ describe("WishlistDetail", () => {
   describe("Support item priority sorting (Requirement 53.5, 53.9)", () => {
     it("should display priority levels for each item", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -497,7 +540,9 @@ describe("WishlistDetail", () => {
 
     it("should have sort dropdown with priority option", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -509,13 +554,17 @@ describe("WishlistDetail", () => {
 
     it("should sort items by priority by default", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
       const itemNames = screen.getAllByRole("heading", { level: 6 })
-      const firstItem = itemNames.find((el) => el.textContent?.includes("Quantum Drive"))
+      const firstItem = itemNames.find((el) =>
+        el.textContent?.includes("Quantum Drive"),
+      )
       expect(firstItem).toBeInTheDocument()
     })
 
@@ -523,7 +572,9 @@ describe("WishlistDetail", () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -545,7 +596,9 @@ describe("WishlistDetail", () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -567,7 +620,9 @@ describe("WishlistDetail", () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -589,7 +644,9 @@ describe("WishlistDetail", () => {
   describe("Display notes (Requirement 53.7)", () => {
     it("should display item notes when present", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
@@ -600,51 +657,72 @@ describe("WishlistDetail", () => {
     it("should not display notes section when notes are absent", () => {
       const dataWithoutNotes = {
         ...mockWishlistData,
-        items: mockWishlistData.items.map((item) => ({ ...item, notes: undefined })),
+        items: mockWishlistData.items.map((item) => ({
+          ...item,
+          notes: undefined,
+        })),
       }
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(dataWithoutNotes),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          dataWithoutNotes,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.queryByText("Need for main thrusters")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Need for main thrusters"),
+      ).not.toBeInTheDocument()
     })
   })
 
   describe("Item actions", () => {
     it("should display add item button", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByRole("button", { name: /Add Item/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Add Item/i }),
+      ).toBeInTheDocument()
     })
 
     it("should display shopping list button", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByRole("button", { name: /Shopping List/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Shopping List/i }),
+      ).toBeInTheDocument()
     })
 
     it("should open item menu when clicking more button", async () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
-      const moreButtons = screen.getAllByRole("button", { name: /^Actions for / })
-      const moreButton = moreButtons.find((btn) => btn.querySelector('[data-testid="MoreVertIcon"]'))
+      const moreButtons = screen.getAllByRole("button", {
+        name: /^Actions for /,
+      })
+      const moreButton = moreButtons.find((btn) =>
+        btn.querySelector('[data-testid="MoreVertIcon"]'),
+      )
 
       if (moreButton) {
         await user.click(moreButton)
@@ -656,12 +734,14 @@ describe("WishlistDetail", () => {
 
     it("should call removeItem mutation when clicking remove", async () => {
       const user = userEvent.setup()
-      const mockRemoveItem = mockMutationTrigger<typeof marketV2Api.endpoints.removeWishlistItem>(
-        { success: true },
-      )
+      const mockRemoveItem = mockMutationTrigger<
+        typeof marketV2Api.endpoints.removeWishlistItem
+      >({ success: true })
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       vi.spyOn(
@@ -674,8 +754,12 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const moreButtons = screen.getAllByRole("button", { name: /^Actions for / })
-      const moreButton = moreButtons.find((btn) => btn.querySelector('[data-testid="MoreVertIcon"]'))
+      const moreButtons = screen.getAllByRole("button", {
+        name: /^Actions for /,
+      })
+      const moreButton = moreButtons.find((btn) =>
+        btn.querySelector('[data-testid="MoreVertIcon"]'),
+      )
 
       if (moreButton) {
         await user.click(moreButton)
@@ -696,15 +780,21 @@ describe("WishlistDetail", () => {
       const user = userEvent.setup()
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)
 
-      const shoppingListButton = screen.getByRole("button", { name: /Shopping List/i })
+      const shoppingListButton = screen.getByRole("button", {
+        name: /Shopping List/i,
+      })
       await user.click(shoppingListButton)
 
-      expect(mockNavigate).toHaveBeenCalledWith("/shopping-lists/wishlist-1/shopping-list")
+      expect(mockNavigate).toHaveBeenCalledWith(
+        "/shopping-lists/wishlist-1/shopping-list",
+      )
     })
   })
 
@@ -727,8 +817,12 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText("No items in this shopping list")).toBeInTheDocument()
-      expect(screen.getByText(/Add items to start tracking/i)).toBeInTheDocument()
+      expect(
+        screen.getByText("No items in this shopping list"),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText(/Add items to start tracking/i),
+      ).toBeInTheDocument()
     })
 
     it("should display add first item button in empty state", () => {
@@ -749,14 +843,18 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByRole("button", { name: /Add Your First Item/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Add Your First Item/i }),
+      ).toBeInTheDocument()
     })
   })
 
   describe("Breadcrumbs", () => {
     it("should display breadcrumbs with wishlist name", () => {
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.getWishlist>(mockWishlistData),
+        querySuccess<typeof marketV2Api.endpoints.getWishlist>(
+          mockWishlistData,
+        ),
       )
 
       renderWithProviders(<WishlistDetail />)

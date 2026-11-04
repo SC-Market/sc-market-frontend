@@ -22,7 +22,11 @@ export function usePeriodicBackgroundSync() {
   const checkRegistrationStatus = async () => {
     try {
       const registration = await navigator.serviceWorker.ready
-      const periodicSync = (registration as ServiceWorkerRegistration & { periodicSync?: PeriodicSyncManager }).periodicSync
+      const periodicSync = (
+        registration as ServiceWorkerRegistration & {
+          periodicSync?: PeriodicSyncManager
+        }
+      ).periodicSync
 
       if (periodicSync) {
         const tags = await periodicSync.getTags()
@@ -73,7 +77,11 @@ export function usePeriodicBackgroundSync() {
 
     try {
       const registration = await navigator.serviceWorker.ready
-      const periodicSync = (registration as ServiceWorkerRegistration & { periodicSync?: PeriodicSyncManager }).periodicSync
+      const periodicSync = (
+        registration as ServiceWorkerRegistration & {
+          periodicSync?: PeriodicSyncManager
+        }
+      ).periodicSync
 
       if (!periodicSync) {
         console.debug("PeriodicSync API not available")
@@ -113,7 +121,11 @@ export function usePeriodicBackgroundSync() {
 
     try {
       const registration = await navigator.serviceWorker.ready
-      const periodicSync = (registration as ServiceWorkerRegistration & { periodicSync?: PeriodicSyncManager }).periodicSync
+      const periodicSync = (
+        registration as ServiceWorkerRegistration & {
+          periodicSync?: PeriodicSyncManager
+        }
+      ).periodicSync
 
       if (periodicSync) {
         await periodicSync.unregister(tag)

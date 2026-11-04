@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Dialog, DialogContent, DialogTitle } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { setMfaChallengeHandler, type MfaChallengeKind } from "../challengeBroker"
+import {
+  setMfaChallengeHandler,
+  type MfaChallengeKind,
+} from "../challengeBroker"
 import { MfaCodeForm } from "./MfaCodeForm"
 
 /**
@@ -33,7 +36,12 @@ export function MfaChallengeDialogHost() {
   }
 
   return (
-    <Dialog open={kind !== null} onClose={() => finish(false)} maxWidth="xs" fullWidth>
+    <Dialog
+      open={kind !== null}
+      onClose={() => finish(false)}
+      maxWidth="xs"
+      fullWidth
+    >
       <DialogTitle>
         {kind === "step_up"
           ? t("mfa.stepUp.title", "Confirm it's you")

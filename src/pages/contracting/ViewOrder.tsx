@@ -1,11 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom"
 import React, { useMemo, useState } from "react"
-import {
-  Grid,
-  Skeleton,
-  Stack,
-  Tabs,
-} from "@mui/material"
+import { Grid, Skeleton, Stack, Tabs } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
@@ -78,7 +73,8 @@ export function ViewOrder() {
   const chatObj = pageData.data?.chat
   const session = pageData.data?.offerSession
 
-  const { data: orderDetailV2, isLoading: orderDetailV2Loading } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
+  const { data: orderDetailV2, isLoading: orderDetailV2Loading } =
+    useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
   const { data: profile } = useGetUserProfileQuery()
 
   const roles = useOrderViewerRoles({
@@ -146,7 +142,9 @@ export function ViewOrder() {
         order?.title
           ? order.title
           : order?.order_id
-            ? t("orders.orderShort", { id: order.order_id.substring(0, 8).toUpperCase() })
+            ? t("orders.orderShort", {
+                id: order.order_id.substring(0, 8).toUpperCase(),
+              })
             : t("orders.orderLabel")
       }
       breadcrumbs={[
@@ -162,11 +160,16 @@ export function ViewOrder() {
             ]
           : []),
         {
-          label: order?.title || t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() }),
+          label:
+            order?.title ||
+            t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() }),
         },
       ]}
       showOrgInBreadcrumbs={true}
-      entityTitle={order?.title || t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() })}
+      entityTitle={
+        order?.title ||
+        t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() })
+      }
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<OrderPageBodySkeleton />}
@@ -209,11 +212,10 @@ export function ViewOrder() {
               )}
               {((session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0) ||
-                (orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0)) && (
-                  <HapticTab
-                    label={t("orders.marketListings", "Items")}
-                  />
-                )}
+                (orderDetailV2?.market_listings_v2 &&
+                  orderDetailV2.market_listings_v2.length > 0)) && (
+                <HapticTab label={t("orders.marketListings", "Items")} />
+              )}
               {canManageStock && (
                 <HapticTab label={t("orders.allocation", "Stock Allocation")} />
               )}
@@ -231,8 +233,9 @@ export function ViewOrder() {
             const serviceTab = session?.offers[0]?.service ? tabIndex++ : -1
             const hasItems =
               (session?.offers[0]?.market_listings &&
-              session.offers[0].market_listings.length > 0) ||
-              (orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0)
+                session.offers[0].market_listings.length > 0) ||
+              (orderDetailV2?.market_listings_v2 &&
+                orderDetailV2.market_listings_v2.length > 0)
             const marketListingsTab = hasItems ? tabIndex++ : -1
             const allocationTab = canManageStock ? tabIndex++ : -1
             const availabilityTab = amRelated ? tabIndex++ : -1
@@ -338,9 +341,12 @@ export function ViewOrder() {
                   activeTab === marketListingsTab &&
                   (!orderDetailV2Loading ? (
                     <Grid item xs={12}>
-                      {orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0 && (
-                        <OfferMarketListingsV2Items items={orderDetailV2.market_listings_v2} />
-                      )}
+                      {orderDetailV2?.market_listings_v2 &&
+                        orderDetailV2.market_listings_v2.length > 0 && (
+                          <OfferMarketListingsV2Items
+                            items={orderDetailV2.market_listings_v2}
+                          />
+                        )}
                     </Grid>
                   ) : (
                     <Grid item xs={12} lg={4}>
@@ -349,13 +355,11 @@ export function ViewOrder() {
                   ))}
 
                 {/* Stock Allocation Tab */}
-                {canManageStock &&
-                  order &&
-                  activeTab === allocationTab && (
-                    <Grid item xs={12}>
-                      <SplitAllocationView orderId={order.order_id} />
-                    </Grid>
-                  )}
+                {canManageStock && order && activeTab === allocationTab && (
+                  <Grid item xs={12}>
+                    <SplitAllocationView orderId={order.order_id} />
+                  </Grid>
+                )}
 
                 {/* Availability Tab */}
                 {amRelated && order && activeTab === availabilityTab && (

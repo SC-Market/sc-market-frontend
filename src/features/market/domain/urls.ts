@@ -20,7 +20,11 @@ export function formatListingSlug(title: string): string {
     .replace(/[^\w-]+/g, "")
 }
 
-export function formatMarketUrl(listing: { listing_id: string; title: string; listing_type?: string }): string {
+export function formatMarketUrl(listing: {
+  listing_id: string
+  title: string
+  listing_type?: string
+}): string {
   try {
     return listing?.listing_type === "aggregate"
       ? `/market/aggregate/${formatShortSlug(listing.listing_id, listing.title)}`

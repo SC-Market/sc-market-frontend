@@ -67,7 +67,10 @@ export function SendMoneyRecipientSection(
             />
           )}
           value={props.targetObject}
-          onChange={(_event: React.SyntheticEvent, newValue: User | Contractor | null) => {
+          onChange={(
+            _event: React.SyntheticEvent,
+            newValue: User | Contractor | null,
+          ) => {
             props.setTargetObject(newValue)
           }}
           inputValue={props.target}

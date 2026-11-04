@@ -41,12 +41,7 @@ export function ConfigureDiscord(props: { org?: boolean }) {
       setUseUserOfficial()
     }
     window.open(DISCORD_INVITE, "_blank")
-  }, [
-    contractor_id,
-    props.org,
-    setUseContractorOfficial,
-    setUseUserOfficial,
-  ])
+  }, [contractor_id, props.org, setUseContractorOfficial, setUseUserOfficial])
 
   return (
     <Section title={t("ConfigureDiscord.orderManagement")} xs={12}>

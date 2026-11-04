@@ -24,12 +24,20 @@ import { useFormatters } from "../../util/format"
 
 /** labelKey: i18n key for the button/job label, resolved with t() at render time. */
 const SOURCES: { key: ImportSource; labelKey: string }[] = [
-  { key: "cstone-items", labelKey: "adminUi.importMonitoring.sources.cstoneItems" },
+  {
+    key: "cstone-items",
+    labelKey: "adminUi.importMonitoring.sources.cstoneItems",
+  },
   { key: "uex-items", labelKey: "adminUi.importMonitoring.sources.uexItems" },
-  { key: "uex-attributes", labelKey: "adminUi.importMonitoring.sources.uexAttributes" },
+  {
+    key: "uex-attributes",
+    labelKey: "adminUi.importMonitoring.sources.uexAttributes",
+  },
 ]
 
-function statusColor(status: ImportJob["status"]): "info" | "success" | "error" {
+function statusColor(
+  status: ImportJob["status"],
+): "info" | "success" | "error" {
   if (status === "running") return "info"
   if (status === "completed") return "success"
   return "error"
@@ -53,7 +61,11 @@ function JobCard({ job }: { job: ImportJob }) {
           {source ? t(source.labelKey) : job.source}
         </Typography>
         <Chip label={job.status} color={statusColor(job.status)} size="small" />
-        <Typography variant="caption" color="text.secondary" sx={{ ml: "auto" }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ ml: "auto" }}
+        >
           {fmt.dateTime(job.startedAt)}
         </Typography>
       </Box>
@@ -87,7 +99,9 @@ export function AdminImportMonitoringView() {
 
   const jobs = data?.jobs ?? []
   const hasRunning = jobs.some((j: ImportJob) => j.status === "running")
-  const runningSource = jobs.find((j: ImportJob) => j.status === "running")?.source
+  const runningSource = jobs.find(
+    (j: ImportJob) => j.status === "running",
+  )?.source
 
   // Sync polling speed with job state
   React.useEffect(() => {
@@ -103,9 +117,15 @@ export function AdminImportMonitoringView() {
   const handleStart = async (source: ImportSource) => {
     try {
       await startImport({ source }).unwrap()
-      issueAlert({ message: t("adminUi.importMonitoring.started", { source }), severity: "info" })
+      issueAlert({
+        message: t("adminUi.importMonitoring.started", { source }),
+        severity: "info",
+      })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("adminUi.importMonitoring.startFailed")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("adminUi.importMonitoring.startFailed")
       issueAlert({
         message,
         severity: "error",
@@ -139,11 +159,17 @@ export function AdminImportMonitoringView() {
                 onClick={() => handleStart(s.key)}
                 disabled={starting || !!runningSource}
               >
-                {runningSource === s.key ? t("adminUi.importMonitoring.running") : t(s.labelKey)}
+                {runningSource === s.key
+                  ? t("adminUi.importMonitoring.running")
+                  : t(s.labelKey)}
               </Button>
             ))}
           </Box>
-          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mt: 1, display: "block" }}
+          >
             {t("adminUi.importMonitoring.oneAtATime")}
           </Typography>
         </Paper>
@@ -155,9 +181,7 @@ export function AdminImportMonitoringView() {
         </Typography>
         {isLoading && <LinearProgress sx={{ mb: 2 }} />}
         {jobs.length === 0 && !isLoading && (
-          <Alert severity="info">
-            {t("adminUi.importMonitoring.noJobs")}
-          </Alert>
+          <Alert severity="info">{t("adminUi.importMonitoring.noJobs")}</Alert>
         )}
         {jobs.map((job: ImportJob) => (
           <JobCard key={job.id} job={job} />

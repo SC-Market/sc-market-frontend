@@ -6,9 +6,6 @@ export function MemberAssignments() {
   const { t } = useTranslation()
 
   return (
-    <OrdersViewPaginated
-      title={t("MemberAssignments.assignments")}
-      assigned
-    />
+    <OrdersViewPaginated title={t("MemberAssignments.assignments")} assigned />
   )
 }

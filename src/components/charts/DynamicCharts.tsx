@@ -6,19 +6,19 @@ import { useTranslation } from "react-i18next"
 const ChartLoadingFallback = ({ label }: { label?: string }) => {
   const { t } = useTranslation()
   return (
-  <Box
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    justifyContent="center"
-    minHeight={300}
-    p={3}
-  >
-    <CircularProgress size={40} />
-    <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-      {label ?? t("appUi.charts.loadingChart")}
-    </Typography>
-  </Box>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      minHeight={300}
+      p={3}
+    >
+      <CircularProgress size={40} />
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+        {label ?? t("appUi.charts.loadingChart")}
+      </Typography>
+    </Box>
   )
 }
 

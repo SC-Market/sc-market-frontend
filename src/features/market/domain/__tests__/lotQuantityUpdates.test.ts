@@ -15,11 +15,15 @@ describe("lotUpdatesForQuantityChange", () => {
 
   // Regression: raising the total from 8 to 10 wrote 10 into one lot.
   it("adds an increase to the newest lot only", () => {
-    expect(lotUpdatesForQuantityChange(lots, 2)).toEqual([{ lot_id: "newest", quantity_total: 7 }])
+    expect(lotUpdatesForQuantityChange(lots, 2)).toEqual([
+      { lot_id: "newest", quantity_total: 7 },
+    ])
   })
 
   it("takes a decrease from the newest lot when it holds enough", () => {
-    expect(lotUpdatesForQuantityChange(lots, -4)).toEqual([{ lot_id: "newest", quantity_total: 1 }])
+    expect(lotUpdatesForQuantityChange(lots, -4)).toEqual([
+      { lot_id: "newest", quantity_total: 1 },
+    ])
   })
 
   it("takes a larger decrease from the lots in order, skipping empty ones", () => {

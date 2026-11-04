@@ -14,9 +14,7 @@ export function usePageImportFleet() {
 
     try {
       const content = await selectedFile.text()
-      const res = await uploadFleetFile(
-        JSON.parse(content || "[]"),
-      )
+      const res = await uploadFleetFile(JSON.parse(content || "[]"))
 
       if ("data" in res && !("error" in res)) {
         issueAlert({
@@ -24,11 +22,13 @@ export function usePageImportFleet() {
           severity: "success",
         })
       } else {
-        const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+        const error =
+          "error" in res
+            ? (res.error as { error?: string; data?: { error?: string } })
+            : undefined
         issueAlert({
           message: t("ships.import.failed", {
-            error:
-              error?.error || error?.data?.error || "",
+            error: error?.error || error?.data?.error || "",
           }),
           severity: "error",
         })

@@ -32,13 +32,25 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const {
-    myProfile, contractor,
-    isPersonallyBlocked, isSelf, isOrgBlocked, isAdmin,
-    personalBlocklistLoading, orgBlocklistLoading,
+    myProfile,
+    contractor,
+    isPersonallyBlocked,
+    isSelf,
+    isOrgBlocked,
+    isAdmin,
+    personalBlocklistLoading,
+    orgBlocklistLoading,
   } = useUserActions(user.username)
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
-  const handleViewRSIPage = () => { window.open(`https://robertsspaceindustries.com/citizens/${user.username}`, "_blank"); handleClose() }
+  const handleViewRSIPage = () => {
+    window.open(
+      `https://robertsspaceindustries.com/citizens/${user.username}`,
+      "_blank",
+    )
+    handleClose()
+  }
   const handleSuccess = () => handleClose()
 
   return (
@@ -145,12 +157,21 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
                 to={`${ADMIN_PATHS.identity}?q=${encodeURIComponent(user.username)}`}
                 onClick={handleClose}
               >
-                <ListItemIcon sx={{ transition: "0.3s", fontSize: "0.9em", color: theme.palette.primary.main }}>
+                <ListItemIcon
+                  sx={{
+                    transition: "0.3s",
+                    fontSize: "0.9em",
+                    color: theme.palette.primary.main,
+                  }}
+                >
                   <ManageAccountsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <Box color={"text.secondary"} fontSize="0.9em">
-                    {t("userActions.adminOpenIdentity", "Open in Admin -> Identity")}
+                    {t(
+                      "userActions.adminOpenIdentity",
+                      "Open in Admin -> Identity",
+                    )}
                   </Box>
                 </ListItemText>
               </ListItemButton>
@@ -158,7 +179,6 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
           </List>
         </Box>
       </Popover>
-
     </>
   )
 }

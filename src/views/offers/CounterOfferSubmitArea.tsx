@@ -9,7 +9,9 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-export function CounterOfferSubmitArea(props: { session: GetOfferSessionV2Response }) {
+export function CounterOfferSubmitArea(props: {
+  session: GetOfferSessionV2Response
+}) {
   const { session } = props
   const { submit, isLoading: counterOfferLoading } = useCounterOfferSubmit(
     session.session_id,

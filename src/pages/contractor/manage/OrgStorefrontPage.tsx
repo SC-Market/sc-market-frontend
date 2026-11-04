@@ -16,7 +16,9 @@ import {
 
 /** The org's "Show in the public storefront directory" setting (Manage Org Details). */
 function OrgDirectorySetting(props: { spectrumId: string }) {
-  const { data } = useGetOrgStorefrontStatusQuery({ spectrumId: props.spectrumId })
+  const { data } = useGetOrgStorefrontStatusQuery({
+    spectrumId: props.spectrumId,
+  })
   const [setDirectory, state] = useSetOrgStorefrontDirectoryMutation()
   if (!data) return null
   return (
@@ -60,7 +62,11 @@ export function OrgStorefrontPage() {
       <BrandingStatusCard spectrumId={spectrumId} />
       {canManageDetails && (
         <>
-          <StorefrontEnquiryCard targetType="org" targetId={spectrumId} handle={spectrumId} />
+          <StorefrontEnquiryCard
+            targetType="org"
+            targetId={spectrumId}
+            handle={spectrumId}
+          />
           <OrgDirectorySetting spectrumId={spectrumId} />
         </>
       )}

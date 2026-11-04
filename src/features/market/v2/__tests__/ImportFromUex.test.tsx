@@ -7,7 +7,13 @@ import "../../../../util/i18n"
  * still skips is listed with its reason afterwards.
  */
 import React from "react"
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react"
 import { Provider } from "react-redux"
 import { ThemeProvider } from "@mui/material/styles"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -46,20 +52,28 @@ beforeEach(() => {
     ],
   }
   originalFetch = globalThis.fetch
-  globalThis.fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const req = input instanceof Request ? input : new Request(String(input), init)
-    const url = new URL(req.url)
-    let body: unknown = {}
-    if (req.method === "POST" && url.pathname === "/api/v2/listings/import-uex") {
-      const parsed = (await req.json()) as Body
-      sent.push(parsed)
-      body = parsed.confirm ? confirmResponse : { preview, total: preview.length }
-    }
-    return new Response(JSON.stringify(body), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    })
-  }) as typeof fetch
+  globalThis.fetch = vi.fn(
+    async (input: RequestInfo | URL, init?: RequestInit) => {
+      const req =
+        input instanceof Request ? input : new Request(String(input), init)
+      const url = new URL(req.url)
+      let body: unknown = {}
+      if (
+        req.method === "POST" &&
+        url.pathname === "/api/v2/listings/import-uex"
+      ) {
+        const parsed = (await req.json()) as Body
+        sent.push(parsed)
+        body = parsed.confirm
+          ? confirmResponse
+          : { preview, total: preview.length }
+      }
+      return new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    },
+  ) as typeof fetch
 })
 
 afterEach(() => {
@@ -89,9 +103,15 @@ describe("ImportFromUex", () => {
     expect(blocked).toBeDisabled()
     expect(blocked).not.toBeChecked()
     expect(screen.getByText("No price set")).toBeInTheDocument()
-    expect(screen.getByText(/can't be imported as they are/)).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Select Arrowhead" })).toBeChecked()
-    expect(screen.getByRole("checkbox", { name: "Select Helmet" })).toBeChecked()
+    expect(
+      screen.getByText(/can't be imported as they are/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: "Select Arrowhead" }),
+    ).toBeChecked()
+    expect(
+      screen.getByRole("checkbox", { name: "Select Helmet" }),
+    ).toBeChecked()
     // Clicking the blocked row doesn't tick it.
     fireEvent.click(screen.getByText("Free armor"))
     expect(blocked).not.toBeChecked()
@@ -105,7 +125,9 @@ describe("ImportFromUex", () => {
 
     // The backend's per-listing result: the skipped one is listed with its reason.
     const box = skipped.closest("[role=alert]") as HTMLElement
-    expect(within(box).getByText(/Helmet/)).toHaveTextContent("Helmet — Couldn't be saved")
+    expect(within(box).getByText(/Helmet/)).toHaveTextContent(
+      "Helmet — Couldn't be saved",
+    )
     expect(screen.getByText(/Successfully imported/)).toHaveTextContent(
       "Successfully imported 1 of 2 listings from UEX.",
     )
@@ -115,10 +137,16 @@ describe("ImportFromUex", () => {
     await loadPreview()
     const all = screen.getByRole("checkbox", { name: /2 of 2 selected/ })
     fireEvent.click(all)
-    expect(screen.getByRole("button", { name: "Import 0 Listings" })).toBeDisabled()
+    expect(
+      screen.getByRole("button", { name: "Import 0 Listings" }),
+    ).toBeDisabled()
     fireEvent.click(screen.getByRole("checkbox", { name: /0 of 2 selected/ }))
-    expect(screen.getByRole("button", { name: "Import 2 Listings" })).toBeEnabled()
-    expect(screen.getByRole("checkbox", { name: "Select Free armor" })).not.toBeChecked()
+    expect(
+      screen.getByRole("button", { name: "Import 2 Listings" }),
+    ).toBeEnabled()
+    expect(
+      screen.getByRole("checkbox", { name: "Select Free armor" }),
+    ).not.toBeChecked()
   })
 
   it("shows no skipped list when everything imported", async () => {

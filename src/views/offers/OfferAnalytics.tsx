@@ -19,63 +19,124 @@ export function OfferAnalyticsCharts({ analytics }: OfferAnalyticsProps) {
   const { t } = useTranslation()
 
   const formatChartData = (data: typeof analytics.daily_totals) =>
-    data.map((item) => ({ x: new Date(item.date).toISOString(), y: item.total }))
+    data.map((item) => ({
+      x: new Date(item.date).toISOString(),
+      y: item.total,
+    }))
 
   const formatStatusData = (
     data: typeof analytics.daily_totals,
     status: "active" | "accepted" | "rejected",
-  ) => data.map((item) => ({ x: new Date(item.date).toISOString(), y: item[status] }))
+  ) =>
+    data.map((item) => ({
+      x: new Date(item.date).toISOString(),
+      y: item[status],
+    }))
 
   return (
     <>
-      <Section xs={12} title={t("offerTrend.offer_count_daily", "Offer Count (Daily)")}>
+      <Section
+        xs={12}
+        title={t("offerTrend.offer_count_daily", "Offer Count (Daily)")}
+      >
         <Grid item xs={12}>
           <MuiAreaChart
             series={[
-              { name: t("offerTrend.total", "Total"), data: formatChartData(analytics.daily_totals) },
-              { name: t("offerTrend.active", "Active"), data: formatStatusData(analytics.daily_totals, "active") },
-              { name: t("offerTrend.accepted", "Accepted"), data: formatStatusData(analytics.daily_totals, "accepted") },
-              { name: t("offerTrend.rejected", "Rejected"), data: formatStatusData(analytics.daily_totals, "rejected") },
+              {
+                name: t("offerTrend.total", "Total"),
+                data: formatChartData(analytics.daily_totals),
+              },
+              {
+                name: t("offerTrend.active", "Active"),
+                data: formatStatusData(analytics.daily_totals, "active"),
+              },
+              {
+                name: t("offerTrend.accepted", "Accepted"),
+                data: formatStatusData(analytics.daily_totals, "accepted"),
+              },
+              {
+                name: t("offerTrend.rejected", "Rejected"),
+                data: formatStatusData(analytics.daily_totals, "rejected"),
+              },
             ]}
             height={400}
           />
         </Grid>
       </Section>
 
-      <Section xs={12} title={t("offerTrend.offer_count_weekly", "Offer Count (Weekly)")}>
+      <Section
+        xs={12}
+        title={t("offerTrend.offer_count_weekly", "Offer Count (Weekly)")}
+      >
         <Grid item xs={12}>
           <MuiAreaChart
             series={[
-              { name: t("offerTrend.total", "Total"), data: formatChartData(analytics.weekly_totals) },
-              { name: t("offerTrend.active", "Active"), data: formatStatusData(analytics.weekly_totals, "active") },
-              { name: t("offerTrend.accepted", "Accepted"), data: formatStatusData(analytics.weekly_totals, "accepted") },
-              { name: t("offerTrend.rejected", "Rejected"), data: formatStatusData(analytics.weekly_totals, "rejected") },
+              {
+                name: t("offerTrend.total", "Total"),
+                data: formatChartData(analytics.weekly_totals),
+              },
+              {
+                name: t("offerTrend.active", "Active"),
+                data: formatStatusData(analytics.weekly_totals, "active"),
+              },
+              {
+                name: t("offerTrend.accepted", "Accepted"),
+                data: formatStatusData(analytics.weekly_totals, "accepted"),
+              },
+              {
+                name: t("offerTrend.rejected", "Rejected"),
+                data: formatStatusData(analytics.weekly_totals, "rejected"),
+              },
             ]}
             height={400}
           />
         </Grid>
       </Section>
 
-      <Section xs={12} title={t("offerTrend.offer_count_monthly", "Offer Count (Monthly)")}>
+      <Section
+        xs={12}
+        title={t("offerTrend.offer_count_monthly", "Offer Count (Monthly)")}
+      >
         <Grid item xs={12}>
           <MuiAreaChart
             series={[
-              { name: t("offerTrend.total", "Total"), data: formatChartData(analytics.monthly_totals) },
-              { name: t("offerTrend.active", "Active"), data: formatStatusData(analytics.monthly_totals, "active") },
-              { name: t("offerTrend.accepted", "Accepted"), data: formatStatusData(analytics.monthly_totals, "accepted") },
-              { name: t("offerTrend.rejected", "Rejected"), data: formatStatusData(analytics.monthly_totals, "rejected") },
+              {
+                name: t("offerTrend.total", "Total"),
+                data: formatChartData(analytics.monthly_totals),
+              },
+              {
+                name: t("offerTrend.active", "Active"),
+                data: formatStatusData(analytics.monthly_totals, "active"),
+              },
+              {
+                name: t("offerTrend.accepted", "Accepted"),
+                data: formatStatusData(analytics.monthly_totals, "accepted"),
+              },
+              {
+                name: t("offerTrend.rejected", "Rejected"),
+                data: formatStatusData(analytics.monthly_totals, "rejected"),
+              },
             ]}
             height={400}
           />
         </Grid>
       </Section>
 
-      <Section xs={12} title={t("offerTrend.average_accepted_value_monthly", "Average Accepted Offer Value (Monthly)")}>
+      <Section
+        xs={12}
+        title={t(
+          "offerTrend.average_accepted_value_monthly",
+          "Average Accepted Offer Value (Monthly)",
+        )}
+      >
         <Grid item xs={12}>
           <MuiLineChart
             series={[
               {
-                name: t("offerTrend.average_accepted_value", "Average Accepted Value"),
+                name: t(
+                  "offerTrend.average_accepted_value",
+                  "Average Accepted Value",
+                ),
                 data: analytics.monthly_totals.map((item) => ({
                   x: new Date(item.date).toISOString(),
                   y: item.average_accepted_value || 0,
@@ -98,7 +159,11 @@ export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
       <ol>
         {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
-            <UnderlineLink color={"text.secondary"} to={SHOP_PATHS.profile(s.slug)} component={Link}>
+            <UnderlineLink
+              color={"text.secondary"}
+              to={SHOP_PATHS.profile(s.slug)}
+              component={Link}
+            >
               {s.name}
             </UnderlineLink>
             : {s.accepted_offers}/{s.total_offers}
@@ -117,7 +182,11 @@ export function OfferTopUsersAnalytics({ analytics }: OfferAnalyticsProps) {
         {analytics.top_users.map((c, i) => (
           <ListItem key={c.username}>
             {i + 1}.&nbsp;
-            <UnderlineLink color={"text.secondary"} to={USER_PATHS.profile(c.username)} component={Link}>
+            <UnderlineLink
+              color={"text.secondary"}
+              to={USER_PATHS.profile(c.username)}
+              component={Link}
+            >
               {c.username}
             </UnderlineLink>
             : {c.accepted_offers}/{c.total_offers}
@@ -136,25 +205,32 @@ export function OfferSummary({ analytics }: OfferAnalyticsProps) {
     <Section title={t("contractsUi.offerSummary")} xs={12} lg={6}>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.totalOffers")}</strong> {analytics.summary.total_offers}
+          <strong>{t("contractsUi.totalOffers")}</strong>{" "}
+          {analytics.summary.total_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.activeOffers")}</strong> {analytics.summary.active_offers}
+          <strong>{t("contractsUi.activeOffers")}</strong>{" "}
+          {analytics.summary.active_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.waitingForBuyer")}</strong> {analytics.summary.waiting_for_buyer}
+          <strong>{t("contractsUi.waitingForBuyer")}</strong>{" "}
+          {analytics.summary.waiting_for_buyer}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.waitingForSeller")}</strong> {analytics.summary.waiting_for_seller}
+          <strong>{t("contractsUi.waitingForSeller")}</strong>{" "}
+          {analytics.summary.waiting_for_seller}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.acceptedOffers")}</strong> {analytics.summary.accepted_offers}
+          <strong>{t("contractsUi.acceptedOffers")}</strong>{" "}
+          {analytics.summary.accepted_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.rejectedOffers")}</strong> {analytics.summary.rejected_offers}
+          <strong>{t("contractsUi.rejectedOffers")}</strong>{" "}
+          {analytics.summary.rejected_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.totalValue")}</strong> {fmt.number(analytics.summary.total_value)} aUEC
+          <strong>{t("contractsUi.totalValue")}</strong>{" "}
+          {fmt.number(analytics.summary.total_value)} aUEC
         </Grid>
       </Grid>
     </Section>

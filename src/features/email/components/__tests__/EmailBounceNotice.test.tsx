@@ -58,11 +58,15 @@ describe("EmailBounceNotice", () => {
   it("says the email bounced and offers to update it", () => {
     const onEditEmail = vi.fn()
     setup(status())
-    render(<EmailBounceNotice email="a@example.test" onEditEmail={onEditEmail} />)
+    render(
+      <EmailBounceNotice email="a@example.test" onEditEmail={onEditEmail} />,
+    )
     expect(
       screen.getByText("Your email bounced. Please update it."),
     ).toBeInTheDocument()
-    expect(screen.getByText(/Email to a@example.test bounced on/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Email to a@example.test bounced on/),
+    ).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Update email" }))
     expect(onEditEmail).toHaveBeenCalled()
   })
@@ -79,7 +83,10 @@ describe("EmailBounceNotice", () => {
   it("re-verify sends a verification email", async () => {
     reverify.mockReturnValue({
       unwrap: () =>
-        Promise.resolve({ sent: true, reverify_available_at: "2026-11-02T10:15:00.000Z" }),
+        Promise.resolve({
+          sent: true,
+          reverify_available_at: "2026-11-02T10:15:00.000Z",
+        }),
     })
     setup(status())
     render(<EmailBounceNotice email="a@example.test" onEditEmail={vi.fn()} />)
@@ -93,7 +100,9 @@ describe("EmailBounceNotice", () => {
   it("re-verify is disabled until the server's cooldown ends", () => {
     setup(
       status({
-        reverify_available_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+        reverify_available_at: new Date(
+          Date.now() + 10 * 60 * 1000,
+        ).toISOString(),
       }),
     )
     render(<EmailBounceNotice email="a@example.test" onEditEmail={vi.fn()} />)

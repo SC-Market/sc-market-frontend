@@ -25,30 +25,34 @@ const ORDER_MUTATIONS = [
   "leaveOrderReview",
 ]
 
-export const v2CacheInvalidationMiddleware: Middleware = (storeApi) => (next) => (action: unknown) => {
-  const result = next(action)
+export const v2CacheInvalidationMiddleware: Middleware =
+  (storeApi) => (next) => (action: unknown) => {
+    const result = next(action)
 
-  const act = action as { type?: string; meta?: { arg?: { endpointName?: string } } }
-  if (typeof act?.type === "string" && act.type.endsWith("/fulfilled")) {
-    const endpointName = act?.meta?.arg?.endpointName
+    const act = action as {
+      type?: string
+      meta?: { arg?: { endpointName?: string } }
+    }
+    if (typeof act?.type === "string" && act.type.endsWith("/fulfilled")) {
+      const endpointName = act?.meta?.arg?.endpointName
 
-    if (endpointName && OFFER_MUTATIONS.includes(endpointName)) {
-      storeApi.dispatch(marketV2Api.util.invalidateTags(["Offers V2"]))
+      if (endpointName && OFFER_MUTATIONS.includes(endpointName)) {
+        storeApi.dispatch(marketV2Api.util.invalidateTags(["Offers V2"]))
+      }
+
+      if (endpointName && ORDER_MUTATIONS.includes(endpointName)) {
+        storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
+      }
+
+      // Cancelling an order returns its allocated units to their lots
+      if (endpointName === "setOrderStatus") {
+        storeApi.dispatch(marketV2Api.util.invalidateTags(["Stock Lots V2"]))
+      }
+
+      if (endpointName === "updateOfferStatus") {
+        storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
+      }
     }
 
-    if (endpointName && ORDER_MUTATIONS.includes(endpointName)) {
-      storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
-    }
-
-    // Cancelling an order returns its allocated units to their lots
-    if (endpointName === "setOrderStatus") {
-      storeApi.dispatch(marketV2Api.util.invalidateTags(["Stock Lots V2"]))
-    }
-
-    if (endpointName === "updateOfferStatus") {
-      storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
-    }
+    return result
   }
-
-  return result
-}

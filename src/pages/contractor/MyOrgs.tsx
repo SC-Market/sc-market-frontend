@@ -52,7 +52,14 @@ export function MyOrgs() {
             <Grid item xs={12} sm={6} md={4} key={org.spectrum_id}>
               <Card>
                 <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      mb: 1,
+                    }}
+                  >
                     <Avatar
                       src={org.avatar || undefined}
                       variant="rounded"
@@ -61,7 +68,9 @@ export function MyOrgs() {
                       {org.name[0]}
                     </Avatar>
                     <Box>
-                      <Typography variant="h6" noWrap>{org.name}</Typography>
+                      <Typography variant="h6" noWrap>
+                        {org.name}
+                      </Typography>
                       <Typography variant="caption" color="text.secondary">
                         {org.spectrum_id}
                       </Typography>

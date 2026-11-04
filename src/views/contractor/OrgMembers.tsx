@@ -30,7 +30,10 @@ import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
 import { MinimalUser } from "../../datatypes/User"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { Contractor, ContractorRole } from "../../features/contractor/domain/types"
+import {
+  Contractor,
+  ContractorRole,
+} from "../../features/contractor/domain/types"
 import { useMemberActions } from "../../features/contractor/hooks/useMemberActions"
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 import { MEMBER_LIST_PAGE_SIZE } from "../../features/contractor/domain/constants"
@@ -50,8 +53,14 @@ function PeopleRow(props: {
 
   const [roles, setRoles] = useState(row.roles)
   const {
-    profile, myPosition, theirPosition, canKick,
-    addRoleCallback, removeRoleCallback, kickCallback, canRemoveRole,
+    profile,
+    myPosition,
+    theirPosition,
+    canKick,
+    addRoleCallback,
+    removeRoleCallback,
+    kickCallback,
+    canRemoveRole,
   } = useMemberActions(contractor, row.username, row.roles)
   return (
     <TableRow

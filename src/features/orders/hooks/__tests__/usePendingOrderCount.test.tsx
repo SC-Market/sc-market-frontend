@@ -78,7 +78,9 @@ describe("usePendingOrderCount", () => {
         <Bell />
       </Provider>,
     )
-    await waitFor(() => expect(screen.getByTestId("badge").textContent).toBe("3"))
+    await waitFor(() =>
+      expect(screen.getByTestId("badge").textContent).toBe("3"),
+    )
     expect(screen.getByTestId("bell").textContent).toBe("7")
     await act(() => new Promise((r) => setTimeout(r, 20)))
     expect(requests).toEqual(["/api/notification/0?pageSize=5"])
@@ -95,7 +97,9 @@ describe("usePendingOrderCount", () => {
     expect(requests).toEqual([])
     expect(screen.getByTestId("badge").textContent).toBe("0")
     act(() => openStartupGate())
-    await waitFor(() => expect(screen.getByTestId("badge").textContent).toBe("3"))
+    await waitFor(() =>
+      expect(screen.getByTestId("badge").textContent).toBe("3"),
+    )
     expect(requests).toHaveLength(1)
   })
 })

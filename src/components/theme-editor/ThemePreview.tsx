@@ -44,7 +44,9 @@ function isValidColor(value: unknown): boolean {
 
 // Deep-clone theme options, stripping any string values that aren't valid colors
 // from palette sub-objects (where MUI would call getContrastText)
-function sanitizePalette(obj: Record<string, unknown>): Record<string, unknown> {
+function sanitizePalette(
+  obj: Record<string, unknown>,
+): Record<string, unknown> {
   const result: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(obj)) {
     if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -65,7 +67,9 @@ function sanitizeThemeData(data: ThemeOptions): ThemeOptions {
   if (!data || typeof data !== "object") return data
   const result = { ...data }
   if (result.palette) {
-    result.palette = sanitizePalette(result.palette as Record<string, unknown>) as ThemeOptions["palette"]
+    result.palette = sanitizePalette(
+      result.palette as Record<string, unknown>,
+    ) as ThemeOptions["palette"]
   }
   return result
 }
@@ -185,7 +189,11 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               <Typography variant="caption" color="text.primary">
                 {t("theme.previewCardContent", "Card content")}
               </Typography>
-              <Typography variant="caption" color="text.secondary" display="block">
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+              >
                 {t("theme.previewSecondaryText", "Secondary text")}
               </Typography>
             </CardContent>
@@ -242,7 +250,10 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               display="block"
               sx={{ mb: 0.5 }}
             >
-              {t("theme.previewActionHoverLabel", "Menu & list hover (palette.action.hover)")}
+              {t(
+                "theme.previewActionHoverLabel",
+                "Menu & list hover (palette.action.hover)",
+              )}
             </Typography>
             <ListItemButton
               dense
@@ -264,7 +275,12 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               height={28}
               sx={{ mt: 0.75, borderRadius: 1 }}
             />
-            <Typography variant="caption" color="text.disabled" display="block" sx={{ mt: 0.25 }}>
+            <Typography
+              variant="caption"
+              color="text.disabled"
+              display="block"
+              sx={{ mt: 0.25 }}
+            >
               {t(
                 "theme.previewSkeletonWaveHint",
                 "Skeleton “wave” shimmer uses this color — not filled button hover.",
@@ -358,7 +374,9 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
                     lineHeight: 1.3,
                   }}
                 >
-                  {t("chromeUi.themePreview.listingTitle", { ship: PREVIEW_LISTING_SHIP })}
+                  {t("chromeUi.themePreview.listingTitle", {
+                    ship: PREVIEW_LISTING_SHIP,
+                  })}
                 </Typography>
               </CardContent>
             </Card>

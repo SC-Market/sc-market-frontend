@@ -1,9 +1,4 @@
-import {
-  Breadcrumbs,
-  BreadcrumbsProps,
-  Link,
-  Typography,
-} from "@mui/material"
+import { Breadcrumbs, BreadcrumbsProps, Link, Typography } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link as RouterLink } from "react-router-dom"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
@@ -65,55 +60,55 @@ export function PageBreadcrumbs({
 
   return (
     <>
-    <BreadcrumbJsonLd schema={breadcrumbSchema} />
-    <Breadcrumbs
-      {...MuiBreadcrumbsProps}
-      separator={<NavigateNextRoundedIcon fontSize="small" />}
-      maxItems={isMobile ? 2 : undefined}
-      sx={{ mb: 2, ...MuiBreadcrumbsProps?.sx }}
-    >
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1
-        const isFirst = index === 0
+      <BreadcrumbJsonLd schema={breadcrumbSchema} />
+      <Breadcrumbs
+        {...MuiBreadcrumbsProps}
+        separator={<NavigateNextRoundedIcon fontSize="small" />}
+        maxItems={isMobile ? 2 : undefined}
+        sx={{ mb: 2, ...MuiBreadcrumbsProps?.sx }}
+      >
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1
+          const isFirst = index === 0
 
-        if (isLast) {
+          if (isLast) {
+            return (
+              <Typography
+                key={index}
+                color="text.primary"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  fontWeight: 500,
+                }}
+              >
+                {item.icon}
+                {item.label}
+              </Typography>
+            )
+          }
+
           return (
-            <Typography
+            <Link
               key={index}
-              color="text.primary"
+              component={RouterLink}
+              to={item.href!}
+              color="secondary"
+              underline="hover"
               sx={{
                 display: "flex",
                 alignItems: "center",
                 gap: 0.5,
-                fontWeight: 500,
               }}
             >
+              {isFirst && !item.icon && <HomeRoundedIcon fontSize="small" />}
               {item.icon}
               {item.label}
-            </Typography>
+            </Link>
           )
-        }
-
-        return (
-          <Link
-            key={index}
-            component={RouterLink}
-            to={item.href!}
-            color="secondary"
-            underline="hover"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-            }}
-          >
-            {isFirst && !item.icon && <HomeRoundedIcon fontSize="small" />}
-            {item.icon}
-            {item.label}
-          </Link>
-        )
-      })}
-    </Breadcrumbs>
+        })}
+      </Breadcrumbs>
     </>
   )
 }

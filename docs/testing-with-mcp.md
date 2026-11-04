@@ -276,8 +276,16 @@ separate "test realm", enforced on the server and in the database:
 
    ```json
    {
-     "~test-buyer": { "username": "~test-buyer", "secret": "BASE32SECRET", "otpauth_uri": "otpauth://..." },
-     "~test-seller": { "username": "~test-seller", "secret": "BASE32SECRET", "otpauth_uri": "otpauth://..." }
+     "~test-buyer": {
+       "username": "~test-buyer",
+       "secret": "BASE32SECRET",
+       "otpauth_uri": "otpauth://..."
+     },
+     "~test-seller": {
+       "username": "~test-seller",
+       "secret": "BASE32SECRET",
+       "otpauth_uri": "otpauth://..."
+     }
    }
    ```
 
@@ -289,6 +297,7 @@ separate "test realm", enforced on the server and in the database:
    ```
 
    Never commit this file, paste it into a chat, or print a secret.
+
 4. Deleting an account (same page) removes it with its test orgs, shops,
    listings and orders. Remove its entry from the file too.
 
@@ -318,6 +327,7 @@ separate "test realm", enforced on the server and in the database:
    A code works once (replays are refused) and for about 30 seconds either
    side. If a login fails, wait for the next 30-second step and compute a new
    code; don't retry the same one.
+
 2. Open a tab on **https://sc-market.space** in the account's own, logged-out
    isolated context (the request must come from the main site; white-label
    domains are refused):
@@ -325,6 +335,7 @@ separate "test realm", enforced on the server and in the database:
    ```
    new_page  url=https://sc-market.space/  isolatedContext=test-buyer
    ```
+
 3. Post the login from that tab:
 
    ```
@@ -344,6 +355,7 @@ separate "test realm", enforced on the server and in the database:
    failure is the same `401 Invalid username or code`; `429` means the budget
    (10 attempts per hour per account, 30 per IP) is spent; `404` means test
    login is switched off.
+
 4. Use one context per account (`test-buyer`, `test-seller`, ...) and keep
    using it; log in again only when the session is gone. Close your tabs when
    you're done.
@@ -359,4 +371,3 @@ Test login is off unless the backend runs with `TEST_LOGIN_ENABLED=true`
 until they expire or the account is deleted. To switch it off, unset the
 variable (`scripts/lightsail-env.sh` in sc-market-cdk) and redeploy. To stop a
 single account, delete it in Admin → Test accounts.
-

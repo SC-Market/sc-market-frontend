@@ -69,7 +69,10 @@ cpSync(CLIENT_DIR, outDir, {
 // Not pages (src/ssr/routePlaceholders.ts, the mission hub routes'
 // placeholders in src/prerender/paths.ts): React Router "prerendered" them
 // only so those routes may have a server loader.
-const PLACEHOLDERS = [...SSR_ROUTE_PLACEHOLDERS, ...MISSION_HUB_ROUTE_PLACEHOLDERS]
+const PLACEHOLDERS = [
+  ...SSR_ROUTE_PLACEHOLDERS,
+  ...MISSION_HUB_ROUTE_PLACEHOLDERS,
+]
 for (const placeholder of PLACEHOLDERS) {
   rmSync(path.join(outDir, placeholder), { recursive: true, force: true })
   rmSync(path.join(outDir, `${placeholder}.data`), { force: true })

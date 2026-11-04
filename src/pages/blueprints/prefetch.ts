@@ -30,11 +30,15 @@ export async function prefetchBlueprintPage(
   await Promise.all([
     settleQuery(
       dispatch(
-        marketV2Api.endpoints.getBlueprintDetail.initiate({ blueprintId: slug }),
+        marketV2Api.endpoints.getBlueprintDetail.initiate({
+          blueprintId: slug,
+        }),
       ),
     ),
     settleQuery(dispatch(marketV2Api.endpoints.getActiveVersions.initiate())),
-    settleQuery(dispatch(marketV2Api.endpoints.getBlueprintCategories.initiate({}))),
+    settleQuery(
+      dispatch(marketV2Api.endpoints.getBlueprintCategories.initiate({})),
+    ),
     settleQuery(
       dispatch(
         marketV2Api.endpoints.searchBlueprints.initiate({

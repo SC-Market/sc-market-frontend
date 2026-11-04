@@ -122,9 +122,9 @@ const PATHS = [
 describe("matchBridgeRoute", () => {
   it.each(PATHS)("ranks %s like react-router", (path) => {
     const ours = matchBridgeRoute(path)
-    expect(ours ? { kind: ours.route.kind, params: ours.params } : null).toEqual(
-      routerMatch(path),
-    )
+    expect(
+      ours ? { kind: ours.route.kind, params: ours.params } : null,
+    ).toEqual(routerMatch(path))
   })
 
   it("never matches static siblings", () => {
@@ -135,14 +135,27 @@ describe("matchBridgeRoute", () => {
 
   it("matches / only for the root itself, never a file or other page", () => {
     expect(matchBridgeRoute("/")?.route.kind).toBe("home")
-    for (const path of ["/favicon.ico", "/index.html", "/sw.js", "/robots.txt", "/logo512.png", "/assets/index-abc.js", "/login", "/x/y"]) {
+    for (const path of [
+      "/favicon.ico",
+      "/index.html",
+      "/sw.js",
+      "/robots.txt",
+      "/logo512.png",
+      "/assets/index-abc.js",
+      "/login",
+      "/x/y",
+    ]) {
       expect(matchBridgeRoute(path), path).toBeNull()
     }
   })
 
   it("decodes params like useParams", () => {
-    expect(matchBridgeRoute("/user/Some%20Body")?.params).toEqual({ username: "Some Body" })
-    expect(matchBridgeRoute("/wiki/manufacturers/Klaus%20%26%20Werner")?.params).toEqual({ id: "Klaus & Werner" })
+    expect(matchBridgeRoute("/user/Some%20Body")?.params).toEqual({
+      username: "Some Body",
+    })
+    expect(
+      matchBridgeRoute("/wiki/manufacturers/Klaus%20%26%20Werner")?.params,
+    ).toEqual({ id: "Klaus & Werner" })
   })
 
   it("rejects undecodable params", () => {
@@ -152,11 +165,17 @@ describe("matchBridgeRoute", () => {
 
 /** The sitemap proxy's rule (functions/[sitemap].ts). */
 const SITEMAP_RULE = "/sitemap*.xml"
-const PAGINATED_PRERENDERED_HUBS: string[] = ["/wiki/items", "/wiki/ships", "/wiki/commodities"]
+const PAGINATED_PRERENDERED_HUBS: string[] = [
+  "/wiki/items",
+  "/wiki/ships",
+  "/wiki/commodities",
+]
 
 describe("public/_routes.json", () => {
   const toRegex = (rule: string) =>
-    new RegExp(`^${rule.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`)
+    new RegExp(
+      `^${rule.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`,
+    )
   const include = routesJson.include.map(toRegex)
   const exclude = routesJson.exclude.map(toRegex)
   const invokes = (path: string) =>
@@ -166,7 +185,9 @@ describe("public/_routes.json", () => {
   // router still renders) just get the plain shell. Links and the sitemap
   // only use the lowercase prefixes.
   it("invokes the Function for every lowercase-prefix bridge route that isn't prerendered", () => {
-    for (const path of PATHS.filter((p) => p.split("/")[1] === p.split("/")[1].toLowerCase())) {
+    for (const path of PATHS.filter(
+      (p) => p.split("/")[1] === p.split("/")[1].toLowerCase(),
+    )) {
       const match = matchBridgeRoute(path)
       if (match && !PRERENDERED_KINDS.has(match.route.kind)) {
         expect(invokes(path), path).toBe(true)
@@ -177,7 +198,12 @@ describe("public/_routes.json", () => {
   // Prerendered pages are static files: Pages serves them without running
   // the Function (and it would only pass them through, see handler.ts).
   it("skips the Function for the prerendered homepage, hubs, /guides and /about", () => {
-    for (const path of [HOME_PATH, ...GAME_DATA_HUB_PATHS, "/guides", "/about"]) {
+    for (const path of [
+      HOME_PATH,
+      ...GAME_DATA_HUB_PATHS,
+      "/guides",
+      "/about",
+    ]) {
       if (PAGINATED_PRERENDERED_HUBS.includes(path)) continue
       expect(invokes(path), path).toBe(false)
     }
@@ -200,7 +226,9 @@ describe("public/_routes.json", () => {
   // fresh (a query skips hydration) with that page's canonical and links.
   it("leaves /storefronts and its ?page=N to the static file (no Function)", () => {
     expect(invokes("/storefronts")).toBe(false)
-    expect(BRIDGE_PAGES[matchBridgeRoute("/storefronts")!.route.kind].paginated).toBe(true)
+    expect(
+      BRIDGE_PAGES[matchBridgeRoute("/storefronts")!.route.kind].paginated,
+    ).toBe(true)
     expect(PAGINATED_PATHS).toContain("/storefronts")
   })
 
@@ -283,9 +311,20 @@ describe("pagination: SPA and bridge agree", () => {
       .map(([kind]) => kind)
       .sort()
     // The patterns' kinds, through one sample path each.
-    const patternSamples = ["/missions/givers/x", "/missions/factions/x", "/missions/types/x", "/missions/systems/x"]
-    for (const path of patternSamples) expect(PAGINATED_PATTERNS.some((p) => p.test(path)), path).toBe(true)
-    const kindsOfPaths = [...PAGINATED_PATHS, ...patternSamples].map((p) => matchBridgeRoute(p)!.route.kind).sort()
+    const patternSamples = [
+      "/missions/givers/x",
+      "/missions/factions/x",
+      "/missions/types/x",
+      "/missions/systems/x",
+    ]
+    for (const path of patternSamples)
+      expect(
+        PAGINATED_PATTERNS.some((p) => p.test(path)),
+        path,
+      ).toBe(true)
+    const kindsOfPaths = [...PAGINATED_PATHS, ...patternSamples]
+      .map((p) => matchBridgeRoute(p)!.route.kind)
+      .sort()
     expect(kindsOfPaths).toEqual(paginatedKinds)
   })
 })

@@ -26,6 +26,9 @@ export async function onRequest(context: PagesContext): Promise<Response> {
     )
   } catch (error) {
     console.error("sitemap proxy error", error)
-    return new Response("Sitemap temporarily unavailable", { status: 503, headers: { "Retry-After": "600" } })
+    return new Response("Sitemap temporarily unavailable", {
+      status: 503,
+      headers: { "Retry-After": "600" },
+    })
   }
 }

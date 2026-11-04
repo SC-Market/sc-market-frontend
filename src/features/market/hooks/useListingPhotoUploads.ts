@@ -10,7 +10,9 @@ import { usePhotoUploads } from "./usePhotoUploads"
 export function useListingPhotoUploads() {
   const { t } = useTranslation()
   const [photos, setPhotos] = useState<string[]>([])
-  const uploads = usePhotoUploads(t("SelectPhotosArea.uploadFailed", "Upload failed"))
+  const uploads = usePhotoUploads(
+    t("SelectPhotosArea.uploadFailed", "Upload failed"),
+  )
   const { reset: resetUploads } = uploads
 
   /** Clears every photo (after a listing was created with them). */

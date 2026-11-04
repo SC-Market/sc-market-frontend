@@ -13,7 +13,10 @@ import { marketV2Api } from "../../store/api/v2/market"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { recruitingApi } from "../../features/recruiting/api/recruitingApi"
 import type { StoreExtra } from "../../store/networkEnv"
-import { prefetchWikiCommodityPage, prefetchWikiItemPage } from "../../pages/wiki/prefetch"
+import {
+  prefetchWikiCommodityPage,
+  prefetchWikiItemPage,
+} from "../../pages/wiki/prefetch"
 import { prefetchListingPage } from "../../features/market/v2/prefetch"
 import { prefetchShopPage } from "../../features/shops/prefetch"
 import { prefetchOrgPage } from "../../features/contractor/prefetch"
@@ -54,7 +57,9 @@ type TestStore = ReturnType<typeof makeTestStore>
 function mockApi(routes: Record<string, unknown>) {
   const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
     const url = new URL(input instanceof Request ? input.url : String(input))
-    const match = Object.keys(routes).find((suffix) => url.pathname.endsWith(suffix))
+    const match = Object.keys(routes).find((suffix) =>
+      url.pathname.endsWith(suffix),
+    )
     if (match === undefined) {
       return new Response(JSON.stringify({ message: "not found" }), {
         status: 404,
@@ -121,14 +126,16 @@ describe("page data prefetch", () => {
 
     const state = store.getState()
     expect(
-      marketV2Api.endpoints.getResource.select({ resourceId: "agricium" })(state)
-        .status,
+      marketV2Api.endpoints.getResource.select({ resourceId: "agricium" })(
+        state,
+      ).status,
     ).toBe("fulfilled")
     // MiningDataSection: useSearchOresQuery({ text: resourceName, pageSize: 5 })
     expect(
-      marketV2Api.endpoints.searchOres.select({ text: "Agricium", pageSize: 5 })(
-        state,
-      ).status,
+      marketV2Api.endpoints.searchOres.select({
+        text: "Agricium",
+        pageSize: 5,
+      })(state).status,
     ).toBe("fulfilled")
     expect(requestedPaths(fetchMock)).toHaveLength(2)
     expectNoSubscriptions(store)
@@ -139,14 +146,21 @@ describe("page data prefetch", () => {
 
     await prefetchWikiCommodityPage(store.dispatch, { id: "missing" })
 
-    expect(requestedPaths(fetchMock)).toEqual(["/api/v2/game-data/resources/missing"])
+    expect(requestedPaths(fetchMock)).toEqual([
+      "/api/v2/game-data/resources/missing",
+    ])
     expectNoSubscriptions(store)
   })
 
   it("wiki item: detail, acquisition document and charts, all by the route id", async () => {
     const fetchMock = mockApi({
-      "/game-data/wiki/items/11111111--p4-ar": { id: "11111111-2222-4333-8444-555555555555", name: "P4-AR" },
-      "/game-items/11111111--p4-ar/acquisition": { item: { id: "11111111-2222-4333-8444-555555555555" } },
+      "/game-data/wiki/items/11111111--p4-ar": {
+        id: "11111111-2222-4333-8444-555555555555",
+        name: "P4-AR",
+      },
+      "/game-items/11111111--p4-ar/acquisition": {
+        item: { id: "11111111-2222-4333-8444-555555555555" },
+      },
       "/analytics/price-history": { data: [] },
       "/analytics/quality-distribution": { distribution: [] },
     })
@@ -158,9 +172,13 @@ describe("page data prefetch", () => {
     // WikiItemDetail: useGetAcquisitionQuery({ id }) with the route id
     expect(paths).toContain("/api/v2/game-items/11111111--p4-ar/acquisition")
     expect(
-      marketV2Api.endpoints.getAcquisition.select({ id: "11111111--p4-ar" })(store.getState()).status,
+      marketV2Api.endpoints.getAcquisition.select({ id: "11111111--p4-ar" })(
+        store.getState(),
+      ).status,
     ).toBe("fulfilled")
-    expect(paths.some((p) => p.includes("/shops") || p.includes("/listings/search"))).toBe(false)
+    expect(
+      paths.some((p) => p.includes("/shops") || p.includes("/listings/search")),
+    ).toBe(false)
     expect(paths.some((p) => p.includes("/api/v1/"))).toBe(false)
     expectNoSubscriptions(store)
   })
@@ -168,12 +186,18 @@ describe("page data prefetch", () => {
   it("listing: detail, then seller/item sections from the resolved listing", async () => {
     const fetchMock = mockApi({
       "/listings/abc": {
-        listing: { listing_id: "listing-1", title: "Gun", sale_type: "auction" },
+        listing: {
+          listing_id: "listing-1",
+          title: "Gun",
+          sale_type: "auction",
+        },
         seller: { shop_id: "shop-1", slug: "acme", name: "Acme" },
         items: [
           {
             game_item: { id: "item-1", name: "Gun", type: "Weapon" },
-            variants: [{ price: 100, quantity: 1, attributes: {}, locations: [] }],
+            variants: [
+              { price: 100, quantity: 1, attributes: {}, locations: [] },
+            ],
           },
         ],
       },
@@ -187,18 +211,27 @@ describe("page data prefetch", () => {
 
     const state = store.getState()
     const status = (s: { status: string }) => s.status
-    expect(status(marketV2Api.endpoints.getListingDetail.select({ id: "abc" })(state))).toBe(
-      "fulfilled",
-    )
+    expect(
+      status(
+        marketV2Api.endpoints.getListingDetail.select({ id: "abc" })(state),
+      ),
+    ).toBe("fulfilled")
     // SellerReviews
     expect(
       status(
-        marketV2Api.endpoints.getShopReviews.select({ shopId: "shop-1", pageSize: 3 })(state),
+        marketV2Api.endpoints.getShopReviews.select({
+          shopId: "shop-1",
+          pageSize: 3,
+        })(state),
       ),
     ).toBe("fulfilled")
     // AggregateMarketDataV2
     expect(
-      status(marketV2Api.endpoints.getPriceHistory.select({ gameItemId: "item-1" })(state)),
+      status(
+        marketV2Api.endpoints.getPriceHistory.select({ gameItemId: "item-1" })(
+          state,
+        ),
+      ),
     ).toBe("fulfilled")
     // SellerOtherListingsV2
     expect(
@@ -224,11 +257,19 @@ describe("page data prefetch", () => {
     ).toBe("fulfilled")
     // BidAreaV2 (auction)
     expect(
-      status(marketV2Api.endpoints.getAuctionDetail.select({ listingId: "listing-1" })(state)),
+      status(
+        marketV2Api.endpoints.getAuctionDetail.select({
+          listingId: "listing-1",
+        })(state),
+      ),
     ).toBe("fulfilled")
     // Seller-only ListingOrdersSection is not prefetched
     expect(
-      status(marketV2Api.endpoints.getOrdersByListing.select({ listingId: "listing-1" })(state)),
+      status(
+        marketV2Api.endpoints.getOrdersByListing.select({
+          listingId: "listing-1",
+        })(state),
+      ),
     ).toBe("uninitialized")
     expect(fetchMock).toHaveBeenCalledTimes(6)
     expectNoSubscriptions(store)
@@ -250,52 +291,63 @@ describe("page data prefetch", () => {
 
     await prefetchShopPage(store.dispatch, { slug: "acme", tab: "about" })
     let state = store.getState()
-    expect(marketV2Api.endpoints.getShop.select({ slug: "acme" })(state).status).toBe(
-      "fulfilled",
-    )
     expect(
-      marketV2Api.endpoints.getShopReviews.select({ shopId: "shop-1", pageSize: 200 })(state)
-        .status,
+      marketV2Api.endpoints.getShop.select({ slug: "acme" })(state).status,
     ).toBe("fulfilled")
-    expect(marketV2Api.endpoints.searchListings.select(listingsArgs)(state).status).toBe(
-      "uninitialized",
-    )
+    expect(
+      marketV2Api.endpoints.getShopReviews.select({
+        shopId: "shop-1",
+        pageSize: 200,
+      })(state).status,
+    ).toBe("fulfilled")
+    expect(
+      marketV2Api.endpoints.searchListings.select(listingsArgs)(state).status,
+    ).toBe("uninitialized")
 
     await prefetchShopPage(store.dispatch, { slug: "acme" })
     state = store.getState()
-    expect(marketV2Api.endpoints.searchListings.select(listingsArgs)(state).status).toBe(
-      "fulfilled",
-    )
+    expect(
+      marketV2Api.endpoints.searchListings.select(listingsArgs)(state).status,
+    ).toBe("fulfilled")
     expectNoSubscriptions(store)
   })
 
   it("org: contractor, then every preloaded tab keyed on the resolved spectrum id", async () => {
     mockApi({
-      "/api/contractors/scm": { data: { spectrum_id: "SCM", name: "SC Market" } },
+      "/api/contractors/scm": {
+        data: { spectrum_id: "SCM", name: "SC Market" },
+      },
       "/api/recruiting/contractors/SCM/posts": { data: { post_id: "post-1" } },
       "/api/recruiting/posts/post-1/comments": { data: [] },
       "/shops/by-owner": [],
-      "/api/contractors/SCM/members": { data: { total: 0, page: 0, page_size: 50, members: [] } },
+      "/api/contractors/SCM/members": {
+        data: { total: 0, page: 0, page_size: 50, members: [] },
+      },
       "/api/contractors/SCM/reviews": { data: [] },
     })
 
     await prefetchOrgPage(store.dispatch, { id: "scm" })
 
     const state = store.getState()
-    expect(contractorsApi.endpoints.getContractorBySpectrumID.select("scm")(state).status).toBe(
-      "fulfilled",
-    )
-    expect(recruitingApi.endpoints.recruitingGetPostByOrg.select("SCM")(state).status).toBe(
-      "fulfilled",
-    )
     expect(
-      recruitingApi.endpoints.recruitingGetPostCommentsByID.select("post-1")(state).status,
+      contractorsApi.endpoints.getContractorBySpectrumID.select("scm")(state)
+        .status,
+    ).toBe("fulfilled")
+    expect(
+      recruitingApi.endpoints.recruitingGetPostByOrg.select("SCM")(state)
+        .status,
+    ).toBe("fulfilled")
+    expect(
+      recruitingApi.endpoints.recruitingGetPostCommentsByID.select("post-1")(
+        state,
+      ).status,
     ).toBe("fulfilled")
     // OrgStoreView passes { username: undefined, spectrumId }; same cache entry
     expect(
-      marketV2Api.endpoints.getShopsByOwner.select({ username: undefined, spectrumId: "SCM" })(
-        state,
-      ).status,
+      marketV2Api.endpoints.getShopsByOwner.select({
+        username: undefined,
+        spectrumId: "SCM",
+      })(state).status,
     ).toBe("fulfilled")
     // MemberList's first-render args
     expect(
@@ -308,9 +360,9 @@ describe("page data prefetch", () => {
         sort: "username",
       })(state).status,
     ).toBe("fulfilled")
-    expect(contractorsApi.endpoints.getContractorReviews.select("SCM")(state).status).toBe(
-      "fulfilled",
-    )
+    expect(
+      contractorsApi.endpoints.getContractorReviews.select("SCM")(state).status,
+    ).toBe("fulfilled")
     expectNoSubscriptions(store)
   })
 })

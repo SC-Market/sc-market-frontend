@@ -74,7 +74,11 @@ export function MobileSidebarWrapper({
           }}
         >
           {showCloseButton && (
-            <IconButton aria-label={t("ui.close", "Close")} onClick={onClose} size="small">
+            <IconButton
+              aria-label={t("ui.close", "Close")}
+              onClick={onClose}
+              size="small"
+            >
               <CloseRounded />
             </IconButton>
           )}

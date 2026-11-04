@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 /**
  * Tests for BulkStockManagementV2 Component
  *
@@ -18,7 +18,14 @@ import { BulkStockManagementV2 } from "../BulkStockManagementV2"
 const testTheme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
 })
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { StockLotDetail } from "../../../../store/api/v2/market"
@@ -28,8 +35,21 @@ import { serviceApi } from "../../../../store/service"
 const shopAccess = vi.hoisted(() => ({ canManage: true, manageStock: false }))
 const routeShop = () => ({
   shop: {
-    shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z",
-    permissions: { can_manage: shopAccess.canManage, manage_market: shopAccess.canManage, manage_stock: shopAccess.manageStock, manage_orders: false },
+    shop_id: "shop-1",
+    name: "Test Shop",
+    slug: "test-shop",
+    owner_spectrum_id: "o1",
+    is_org_owned: false,
+    avatar: null,
+    banner: null,
+    description: null,
+    created_at: "2024-01-01T00:00:00Z",
+    permissions: {
+      can_manage: shopAccess.canManage,
+      manage_market: shopAccess.canManage,
+      manage_stock: shopAccess.manageStock,
+      manage_orders: false,
+    },
   },
 })
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
@@ -44,7 +64,9 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock data
@@ -126,7 +148,10 @@ const createMockStore = (initialState = {}) => {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
     preloadedState: initialState,
   })
 }
@@ -361,7 +386,12 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getMyListings",
-        { pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId: "shop-1" },
+        {
+          pageSize: 100,
+          sortBy: "updated_at",
+          sortOrder: "desc",
+          shopId: "shop-1",
+        },
         {
           listings: [
             {
@@ -609,22 +639,35 @@ describe("BulkStockManagementV2", () => {
   // Regression: the "Search lots..." box did nothing.
   it("filters lots by the search box", async () => {
     renderWithLots()
-    await waitFor(() => expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument())
-    await userEvent.type(screen.getAllByPlaceholderText("Search lots...")[0], "lorville")
-    await waitFor(() => expect(screen.queryByText("Tier 5 (95.5%) - Crafted")).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument(),
+    )
+    await userEvent.type(
+      screen.getAllByPlaceholderText("Search lots...")[0],
+      "lorville",
+    )
+    await waitFor(() =>
+      expect(
+        screen.queryByText("Tier 5 (95.5%) - Crafted"),
+      ).not.toBeInTheDocument(),
+    )
     expect(screen.getByText("Tier 3 (65.0%) - Store")).toBeInTheDocument()
   })
 
   // Regression: quantity editing was double-click only, with no sign it existed.
   it("shows how to edit and a pencil on each quantity", async () => {
     renderWithLots()
-    await waitFor(() => expect(screen.getAllByLabelText("Edit quantity").length).toBe(2))
+    await waitFor(() =>
+      expect(screen.getAllByLabelText("Edit quantity").length).toBe(2),
+    )
     expect(screen.getByText(/Double-click a quantity/)).toBeInTheDocument()
   })
 
   it("asks before deleting a lot", async () => {
     renderWithLots()
-    await waitFor(() => expect(screen.getAllByLabelText("Delete lot").length).toBe(2))
+    await waitFor(() =>
+      expect(screen.getAllByLabelText("Delete lot").length).toBe(2),
+    )
     await userEvent.click(screen.getAllByLabelText("Delete lot")[0])
     expect(await screen.findByText("Delete lot?")).toBeInTheDocument()
   })
@@ -633,11 +676,15 @@ describe("BulkStockManagementV2", () => {
   it("is read-only for members who can't manage the shop", async () => {
     shopAccess.canManage = false
     renderWithLots()
-    await waitFor(() => expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument(),
+    )
     expect(screen.queryByText("Add Lot")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("Edit quantity")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("Delete lot")).not.toBeInTheDocument()
-    expect(screen.getByText(/ask an org admin for the Manage Stock permission/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/ask an org admin for the Manage Stock permission/i),
+    ).toBeInTheDocument()
   })
 
   // Regression: the sidebar showed Stock to Manage Stock members, but the page
@@ -646,7 +693,9 @@ describe("BulkStockManagementV2", () => {
     shopAccess.canManage = false
     shopAccess.manageStock = true
     renderWithLots()
-    await waitFor(() => expect(screen.getAllByLabelText("Delete lot").length).toBe(2))
+    await waitFor(() =>
+      expect(screen.getAllByLabelText("Delete lot").length).toBe(2),
+    )
     expect(screen.getByText("Add Lot")).toBeInTheDocument()
     expect(screen.queryByText(/ask an org admin/i)).not.toBeInTheDocument()
   })

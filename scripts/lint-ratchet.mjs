@@ -43,7 +43,9 @@ counts.byRule = Object.fromEntries(
 
 if (update) {
   writeFileSync(baselinePath, JSON.stringify(counts, null, 2) + "\n")
-  console.log(`Baseline written: ${counts.warnings} warnings, ${counts.errors} errors.`)
+  console.log(
+    `Baseline written: ${counts.warnings} warnings, ${counts.errors} errors.`,
+  )
   process.exit(0)
 }
 
@@ -59,7 +61,9 @@ if (hookErrors.length > 0) {
 for (const kind of ["warnings", "errors"]) {
   if (counts[kind] > baseline[kind]) {
     failed = true
-    console.error(`ESLint ${kind} went up: ${baseline[kind]} -> ${counts[kind]}.`)
+    console.error(
+      `ESLint ${kind} went up: ${baseline[kind]} -> ${counts[kind]}.`,
+    )
   }
 }
 if (failed) {
@@ -76,5 +80,7 @@ console.log(
     `${counts.errors} errors (baseline ${baseline.errors}).`,
 )
 if (counts.warnings < baseline.warnings || counts.errors < baseline.errors) {
-  console.log("Counts dropped: run `node scripts/lint-ratchet.mjs --update` and commit the new baseline.")
+  console.log(
+    "Counts dropped: run `node scripts/lint-ratchet.mjs --update` and commit the new baseline.",
+  )
 }

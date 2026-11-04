@@ -1,5 +1,10 @@
 import { MinimalUser } from "../../datatypes/User"
-import { Avatar, Skeleton, Typography, Link as MaterialLink } from "@mui/material"
+import {
+  Avatar,
+  Skeleton,
+  Typography,
+  Link as MaterialLink,
+} from "@mui/material"
 import { Stack } from "@mui/system"
 import React from "react"
 import { MinimalContractor } from "../../features/contractor/domain/types"

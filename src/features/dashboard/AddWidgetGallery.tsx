@@ -376,10 +376,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
             <TextField
               size="small"
               fullWidth
-              label={t(
-                "dashboard.listingsPreview.searchLabel",
-                "Search query",
-              )}
+              label={t("dashboard.listingsPreview.searchLabel", "Search query")}
               placeholder={t(
                 "dashboard.listingsPreview.searchPlaceholder",
                 "e.g. medical gown",

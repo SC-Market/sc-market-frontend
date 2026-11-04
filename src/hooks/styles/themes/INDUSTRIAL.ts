@@ -96,4 +96,8 @@ export const industrialThemeOptions: ThemeOptions = {
   },
 }
 
-export const INDUSTRIAL_theme = createAppTheme(themeBase, mainThemeOptions, industrialThemeOptions)
+export const INDUSTRIAL_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  industrialThemeOptions,
+)

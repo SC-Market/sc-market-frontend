@@ -1,9 +1,9 @@
 /**
  * CategoryFilter - Multi-select category filter
- * 
+ *
  * Provides checkbox-based category filtering for items, blueprints, etc.
  * Follows Market V2 filter patterns.
- * 
+ *
  * Requirements: 48.1-48.10
  */
 
@@ -41,7 +41,7 @@ interface CategoryFilterProps {
 
 /**
  * CategoryFilter Component
- * 
+ *
  * Features:
  * - Multi-select checkboxes (48.1)
  * - Optional item counts (48.2)

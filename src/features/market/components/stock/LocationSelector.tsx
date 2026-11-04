@@ -76,7 +76,10 @@ export function LocationSelector({
     useCreateLocationMutation()
 
   // Use provided locations or fetched locations
-  const locations = useMemo(() => providedLocations || locationsData?.locations || [], [locationsData?.locations, providedLocations])
+  const locations = useMemo(
+    () => providedLocations || locationsData?.locations || [],
+    [locationsData?.locations, providedLocations],
+  )
 
   // Sort locations: preset first, then custom
   // The API already returns them sorted, but we ensure it here for provided locations
@@ -111,7 +114,10 @@ export function LocationSelector({
     locations.find((loc) => loc.location_id === value) || null
 
   // Handle selection
-  const handleChange = (_event: React.SyntheticEvent, newValue: Location | string | null) => {
+  const handleChange = (
+    _event: React.SyntheticEvent,
+    newValue: Location | string | null,
+  ) => {
     if (typeof newValue === "string") {
       // User typed a new location name and pressed Enter
       handleCreateLocation(newValue)

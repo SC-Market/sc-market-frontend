@@ -48,6 +48,7 @@ The V2 routing infrastructure has been created with the following components:
 ```
 
 This means:
+
 - ✅ V2 users see the main listing search with quality tiers
 - ❌ V2 users clicking on a listing still see V1 detail page
 - ❌ V2 users clicking "Create Listing" still see V1 form
@@ -84,8 +85,8 @@ Then create router components for each route that switch between V1/V2:
 // MarketListingRouter.tsx
 export function MarketListingRouter() {
   const { marketVersion } = useFeatureFlag()
-  return marketVersion === "V2" 
-    ? <ListingDetailV2 /> 
+  return marketVersion === "V2"
+    ? <ListingDetailV2 />
     : <ViewMarketListing />
 }
 ```

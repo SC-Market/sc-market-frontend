@@ -26,7 +26,12 @@ interface MissionDetailModalProps {
   onBlueprintClick?: (blueprintId: string) => void
 }
 
-export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick }: MissionDetailModalProps) {
+export function MissionDetailModal({
+  missionId,
+  open,
+  onClose,
+  onBlueprintClick,
+}: MissionDetailModalProps) {
   const { t } = useTranslation()
   const { data, isLoading, error } = useGetMissionDetailQuery(
     { missionId: missionId! },
@@ -37,11 +42,23 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
           <MissionName name={m?.mission_name} variant="inherit" />
         </Typography>
-        <IconButton onClick={onClose} size="small" aria-label={t("missionsUi.close")}><Close /></IconButton>
+        <IconButton
+          onClick={onClose}
+          size="small"
+          aria-label={t("missionsUi.close")}
+        >
+          <Close />
+        </IconButton>
       </DialogTitle>
 
       {m && (
@@ -53,7 +70,9 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
       <DialogContent sx={{ minHeight: 400 }}>
         {isLoading && <DetailSkeleton />}
         {error && <Alert severity="error">{t("missionsUi.loadFailed")}</Alert>}
-        {data && <MissionDetailTabs data={data} onBlueprintClick={onBlueprintClick} />}
+        {data && (
+          <MissionDetailTabs data={data} onBlueprintClick={onBlueprintClick} />
+        )}
       </DialogContent>
     </Dialog>
   )

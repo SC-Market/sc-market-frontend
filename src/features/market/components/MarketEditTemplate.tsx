@@ -15,11 +15,15 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next" // Localization
 import { OrderSettings } from "../../../components/settings/OrderSettings"
 
-export function MarketEditTemplate(props: { org?: boolean; contractorId?: string }) {
+export function MarketEditTemplate(props: {
+  org?: boolean
+  contractorId?: string
+}) {
   const { t } = useTranslation() // Localization hook
 
   const { data: contractor } = useGetContractorBySpectrumIDQuery(
-    props.contractorId!, { skip: !props.org || !props.contractorId }
+    props.contractorId!,
+    { skip: !props.org || !props.contractorId },
   )
   const { data: profile } = useGetUserProfileQuery()
 

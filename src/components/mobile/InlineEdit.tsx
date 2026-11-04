@@ -85,7 +85,11 @@ export function InlineEdit({
       setIsEditing(false)
       setError(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("sharedUi.inlineEdit.saveFailed"))
+      setError(
+        err instanceof Error
+          ? err.message
+          : t("sharedUi.inlineEdit.saveFailed"),
+      )
     }
   }
 
@@ -157,7 +161,8 @@ export function InlineEdit({
             mt: multiline ? 0.5 : 0,
           }}
         >
-          <IconButton aria-label={t("ui.save", "Save")}
+          <IconButton
+            aria-label={t("ui.save", "Save")}
             size="small"
             color="primary"
             onClick={handleSave}
@@ -165,7 +170,8 @@ export function InlineEdit({
           >
             <CheckRounded fontSize="small" />
           </IconButton>
-          <IconButton aria-label={t("ui.cancel", "Cancel")}
+          <IconButton
+            aria-label={t("ui.cancel", "Cancel")}
             size="small"
             color="error"
             onClick={handleCancel}
@@ -208,7 +214,11 @@ export function InlineEdit({
           {value || placeholder}
         </Typography>
       )}
-      <IconButton aria-label={t("ui.edit", "Edit")} size="small" sx={{ opacity: 0.6 }}>
+      <IconButton
+        aria-label={t("ui.edit", "Edit")}
+        size="small"
+        sx={{ opacity: 0.6 }}
+      >
         <EditRounded fontSize="small" />
       </IconButton>
     </Box>

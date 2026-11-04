@@ -12,9 +12,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Block, PersonRemove } from "@mui/icons-material"
-import {
-  useGetShopBlocklistQuery,
-} from "../../../store/api/v2/market"
+import { useGetShopBlocklistQuery } from "../../../store/api/v2/market"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { UserSearch } from "../../../components/search/UserSearch"
 import { Link } from "react-router-dom"
@@ -29,7 +27,9 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
   const { data: blocklist = [] } = useGetShopBlocklistQuery({ shopId })
   const { block, unblock: handleUnblock } = useShopBlocklist(shopId)
 
-  const [selectedUser, setSelectedUser] = useState<{ username: string } | null>(null)
+  const [selectedUser, setSelectedUser] = useState<{ username: string } | null>(
+    null,
+  )
   const [reason, setReason] = useState("")
 
   const handleBlock = async () => {
@@ -47,7 +47,9 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
     >
       <Grid item xs={12} sm={8}>
         <UserSearch
-          onUserSelect={(user: User) => setSelectedUser({ username: user.username })}
+          onUserSelect={(user: User) =>
+            setSelectedUser({ username: user.username })
+          }
           placeholder={t("shops.blocklist.searchPlaceholder")}
         />
       </Grid>
@@ -76,7 +78,11 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
       )}
       {blocklist.length > 0 && (
         <Grid item xs={12}>
-          <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 1, mb: 0.5 }}>
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{ mt: 1, mb: 0.5 }}
+          >
             {t("shops.blocklist.blockedCount", { count: blocklist.length })}
           </Typography>
           <List disablePadding dense>
@@ -89,7 +95,10 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                 sx={{ borderRadius: 1 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={entry.avatar || undefined} sx={{ width: 28, height: 28 }} />
+                  <Avatar
+                    src={entry.avatar || undefined}
+                    sx={{ width: 28, height: 28 }}
+                  />
                 </ListItemAvatar>
                 <ListItemText
                   primary={entry.display_name || entry.username}
@@ -99,7 +108,9 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                   edge="end"
                   size="small"
                   color="error"
-                  aria-label={t("shops.blocklist.unblockLabel", { name: entry.display_name || entry.username })}
+                  aria-label={t("shops.blocklist.unblockLabel", {
+                    name: entry.display_name || entry.username,
+                  })}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()

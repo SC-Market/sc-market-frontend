@@ -15,22 +15,51 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
-import { useGetRefiningMethodsQuery, type RefiningMethod } from "../../store/api/v2/market"
+import {
+  useGetRefiningMethodsQuery,
+  type RefiningMethod,
+} from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { Speed, HighQuality } from "@mui/icons-material"
 
-const speedColor: Record<string, string> = { Fast: "#4caf50", Normal: "#ff9800", Slow: "#f44336" }
-const qualityColor: Record<string, string> = { Careful: "#4caf50", Normal: "#ff9800", Wasteful: "#f44336" }
+const speedColor: Record<string, string> = {
+  Fast: "#4caf50",
+  Normal: "#ff9800",
+  Slow: "#f44336",
+}
+const qualityColor: Record<string, string> = {
+  Careful: "#4caf50",
+  Normal: "#ff9800",
+  Wasteful: "#f44336",
+}
 const speedDesc: Record<string, { key: string; en: string }> = {
-  Fast: { key: "wiki.refinery.speedDesc.fast", en: "Shortest processing time — get your refined materials quickly" },
-  Normal: { key: "wiki.refinery.speedDesc.normal", en: "Balanced processing time" },
-  Slow: { key: "wiki.refinery.speedDesc.slow", en: "Longest processing time — but often paired with better yield" },
+  Fast: {
+    key: "wiki.refinery.speedDesc.fast",
+    en: "Shortest processing time — get your refined materials quickly",
+  },
+  Normal: {
+    key: "wiki.refinery.speedDesc.normal",
+    en: "Balanced processing time",
+  },
+  Slow: {
+    key: "wiki.refinery.speedDesc.slow",
+    en: "Longest processing time — but often paired with better yield",
+  },
 }
 const qualityDesc: Record<string, { key: string; en: string }> = {
-  Careful: { key: "wiki.refinery.qualityDesc.careful", en: "Highest yield — minimal material loss during refining" },
-  Normal: { key: "wiki.refinery.qualityDesc.normal", en: "Balanced yield — moderate material loss" },
-  Wasteful: { key: "wiki.refinery.qualityDesc.wasteful", en: "Lowest yield — significant material loss, but cheaper" },
+  Careful: {
+    key: "wiki.refinery.qualityDesc.careful",
+    en: "Highest yield — minimal material loss during refining",
+  },
+  Normal: {
+    key: "wiki.refinery.qualityDesc.normal",
+    en: "Balanced yield — moderate material loss",
+  },
+  Wasteful: {
+    key: "wiki.refinery.qualityDesc.wasteful",
+    en: "Lowest yield — significant material loss, but cheaper",
+  },
 }
 
 // Speed/quality come from the API as English codes; translate the known ones.
@@ -44,26 +73,86 @@ const QUALITY_KEYS: Record<string, string> = {
   Normal: "gameTaxonomyUi.refiningQualities.normal",
   Wasteful: "gameTaxonomyUi.refiningQualities.wasteful",
 }
-function codeLabel(keys: Record<string, string>, code: string, t: TFunction): string {
+function codeLabel(
+  keys: Record<string, string>,
+  code: string,
+  t: TFunction,
+): string {
   return keys[code] ? t(keys[code]) : code
 }
 
-const bestForCopy: { speed: string; quality: string; key: string; en: string }[] = [
-  { speed: "Fast", quality: "Careful", key: "wiki.refinery.bestFor.fastCareful", en: "Best overall — fast with high yield" },
-  { speed: "Fast", quality: "Normal", key: "wiki.refinery.bestFor.fastNormal", en: "Quick turnaround, decent yield" },
-  { speed: "Fast", quality: "Wasteful", key: "wiki.refinery.bestFor.fastWasteful", en: "Fastest possible, accept material loss" },
-  { speed: "Normal", quality: "Careful", key: "wiki.refinery.bestFor.normalCareful", en: "Popular choice — good yield, reasonable time" },
-  { speed: "Normal", quality: "Normal", key: "wiki.refinery.bestFor.normalNormal", en: "Balanced all-around" },
-  { speed: "Normal", quality: "Wasteful", key: "wiki.refinery.bestFor.normalWasteful", en: "Quick-ish with lower yield" },
-  { speed: "Slow", quality: "Careful", key: "wiki.refinery.bestFor.slowCareful", en: "Maximum yield — worth the wait for expensive ores" },
-  { speed: "Slow", quality: "Normal", key: "wiki.refinery.bestFor.slowNormal", en: "Slow but steady" },
-  { speed: "Slow", quality: "Wasteful", key: "wiki.refinery.bestFor.slowWasteful", en: "Slow AND wasteful — generally avoid" },
+const bestForCopy: {
+  speed: string
+  quality: string
+  key: string
+  en: string
+}[] = [
+  {
+    speed: "Fast",
+    quality: "Careful",
+    key: "wiki.refinery.bestFor.fastCareful",
+    en: "Best overall — fast with high yield",
+  },
+  {
+    speed: "Fast",
+    quality: "Normal",
+    key: "wiki.refinery.bestFor.fastNormal",
+    en: "Quick turnaround, decent yield",
+  },
+  {
+    speed: "Fast",
+    quality: "Wasteful",
+    key: "wiki.refinery.bestFor.fastWasteful",
+    en: "Fastest possible, accept material loss",
+  },
+  {
+    speed: "Normal",
+    quality: "Careful",
+    key: "wiki.refinery.bestFor.normalCareful",
+    en: "Popular choice — good yield, reasonable time",
+  },
+  {
+    speed: "Normal",
+    quality: "Normal",
+    key: "wiki.refinery.bestFor.normalNormal",
+    en: "Balanced all-around",
+  },
+  {
+    speed: "Normal",
+    quality: "Wasteful",
+    key: "wiki.refinery.bestFor.normalWasteful",
+    en: "Quick-ish with lower yield",
+  },
+  {
+    speed: "Slow",
+    quality: "Careful",
+    key: "wiki.refinery.bestFor.slowCareful",
+    en: "Maximum yield — worth the wait for expensive ores",
+  },
+  {
+    speed: "Slow",
+    quality: "Normal",
+    key: "wiki.refinery.bestFor.slowNormal",
+    en: "Slow but steady",
+  },
+  {
+    speed: "Slow",
+    quality: "Wasteful",
+    key: "wiki.refinery.bestFor.slowWasteful",
+    en: "Slow AND wasteful — generally avoid",
+  },
 ]
 
 function MethodCard({ method }: { method: RefiningMethod }) {
   const { t } = useTranslation()
   return (
-    <Card sx={{ height: "100%", borderLeft: 3, borderColor: qualityColor[method.quality] || "grey.500" }}>
+    <Card
+      sx={{
+        height: "100%",
+        borderLeft: 3,
+        borderColor: qualityColor[method.quality] || "grey.500",
+      }}
+    >
       <CardContent>
         <Typography variant="subtitle1" fontWeight={700} gutterBottom>
           {method.name}
@@ -73,20 +162,32 @@ function MethodCard({ method }: { method: RefiningMethod }) {
             icon={<Speed sx={{ fontSize: 14 }} />}
             label={codeLabel(SPEED_KEYS, method.speed, t)}
             size="small"
-            sx={{ bgcolor: speedColor[method.speed] + "22", color: speedColor[method.speed], fontWeight: 600, height: 24 }}
+            sx={{
+              bgcolor: speedColor[method.speed] + "22",
+              color: speedColor[method.speed],
+              fontWeight: 600,
+              height: 24,
+            }}
           />
           <Chip
             icon={<HighQuality sx={{ fontSize: 14 }} />}
             label={codeLabel(QUALITY_KEYS, method.quality, t)}
             size="small"
-            sx={{ bgcolor: qualityColor[method.quality] + "22", color: qualityColor[method.quality], fontWeight: 600, height: 24 }}
+            sx={{
+              bgcolor: qualityColor[method.quality] + "22",
+              color: qualityColor[method.quality],
+              fontWeight: 600,
+              height: 24,
+            }}
           />
         </Stack>
         <Typography variant="caption" color="text.secondary" display="block">
-          {speedDesc[method.speed] && t(speedDesc[method.speed].key, speedDesc[method.speed].en)}
+          {speedDesc[method.speed] &&
+            t(speedDesc[method.speed].key, speedDesc[method.speed].en)}
         </Typography>
         <Typography variant="caption" color="text.secondary" display="block">
-          {qualityDesc[method.quality] && t(qualityDesc[method.quality].key, qualityDesc[method.quality].en)}
+          {qualityDesc[method.quality] &&
+            t(qualityDesc[method.quality].key, qualityDesc[method.quality].en)}
         </Typography>
       </CardContent>
     </Card>
@@ -111,7 +212,10 @@ export function WikiRefineryPage() {
       title={t("wiki.refinery.title", "Refining Methods")}
       headerTitle={t("wiki.refinery.headerTitle", "Refining Methods")}
       breadcrumbs={[
-        { label: t("wiki.refinery.breadcrumbWiki", "Wiki"), href: "/wiki/items" },
+        {
+          label: t("wiki.refinery.breadcrumbWiki", "Wiki"),
+          href: "/wiki/items",
+        },
         { label: t("wiki.refinery.breadcrumbRefining", "Refining Methods") },
       ]}
       isLoading={isLoading}
@@ -135,28 +239,60 @@ export function WikiRefineryPage() {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell><strong>{t("wiki.refinery.colMethod", "Method")}</strong></TableCell>
-                <TableCell align="center"><strong>{t("wiki.refinery.colSpeed", "Speed")}</strong></TableCell>
-                <TableCell align="center"><strong>{t("wiki.refinery.colYield", "Yield")}</strong></TableCell>
-                <TableCell><strong>{t("wiki.refinery.colBestFor", "Best For")}</strong></TableCell>
+                <TableCell>
+                  <strong>{t("wiki.refinery.colMethod", "Method")}</strong>
+                </TableCell>
+                <TableCell align="center">
+                  <strong>{t("wiki.refinery.colSpeed", "Speed")}</strong>
+                </TableCell>
+                <TableCell align="center">
+                  <strong>{t("wiki.refinery.colYield", "Yield")}</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>{t("wiki.refinery.colBestFor", "Best For")}</strong>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {methods.map((m) => (
                 <TableRow key={m.name} hover>
                   <TableCell>
-                    <Typography variant="body2" fontWeight={600}>{m.name}</Typography>
+                    <Typography variant="body2" fontWeight={600}>
+                      {m.name}
+                    </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Chip label={codeLabel(SPEED_KEYS, m.speed, t)} size="small" sx={{ bgcolor: speedColor[m.speed] + "22", color: speedColor[m.speed], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
+                    <Chip
+                      label={codeLabel(SPEED_KEYS, m.speed, t)}
+                      size="small"
+                      sx={{
+                        bgcolor: speedColor[m.speed] + "22",
+                        color: speedColor[m.speed],
+                        fontWeight: 600,
+                        height: 22,
+                        fontSize: "0.75rem",
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="center">
-                    <Chip label={codeLabel(QUALITY_KEYS, m.quality, t)} size="small" sx={{ bgcolor: qualityColor[m.quality] + "22", color: qualityColor[m.quality], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
+                    <Chip
+                      label={codeLabel(QUALITY_KEYS, m.quality, t)}
+                      size="small"
+                      sx={{
+                        bgcolor: qualityColor[m.quality] + "22",
+                        color: qualityColor[m.quality],
+                        fontWeight: 600,
+                        height: 22,
+                        fontSize: "0.75rem",
+                      }}
+                    />
                   </TableCell>
                   <TableCell>
                     <Typography variant="caption" color="text.secondary">
                       {bestForCopy
-                        .filter((b) => b.speed === m.speed && b.quality === m.quality)
+                        .filter(
+                          (b) => b.speed === m.speed && b.quality === m.quality,
+                        )
                         .map((b) => t(b.key, b.en))}
                     </Typography>
                   </TableCell>
@@ -168,13 +304,24 @@ export function WikiRefineryPage() {
       </Grid>
 
       {/* Cards by Speed */}
-      {["Fast", "Normal", "Slow"].map((speed) => (
+      {["Fast", "Normal", "Slow"].map((speed) =>
         bySpeed[speed]?.length ? (
           <React.Fragment key={speed}>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2 }}>
-                <Chip label={codeLabel(SPEED_KEYS, speed, t)} size="small" sx={{ bgcolor: speedColor[speed] + "22", color: speedColor[speed], fontWeight: 700, mr: 1 }} />
-                {t("wiki.refinery.processingHeader", "{{speed}} Processing", { speed: codeLabel(SPEED_KEYS, speed, t) })}
+                <Chip
+                  label={codeLabel(SPEED_KEYS, speed, t)}
+                  size="small"
+                  sx={{
+                    bgcolor: speedColor[speed] + "22",
+                    color: speedColor[speed],
+                    fontWeight: 700,
+                    mr: 1,
+                  }}
+                />
+                {t("wiki.refinery.processingHeader", "{{speed}} Processing", {
+                  speed: codeLabel(SPEED_KEYS, speed, t),
+                })}
               </Typography>
             </Grid>
             {bySpeed[speed].map((m) => (
@@ -183,8 +330,8 @@ export function WikiRefineryPage() {
               </Grid>
             ))}
           </React.Fragment>
-        ) : null
-      ))}
+        ) : null,
+      )}
     </StandardPageLayout>
   )
 }

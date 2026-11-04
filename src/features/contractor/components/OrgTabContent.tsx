@@ -1,6 +1,14 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Alert, Box, Chip, Container, Grid, Paper, useTheme } from "@mui/material"
+import {
+  Alert,
+  Box,
+  Chip,
+  Container,
+  Grid,
+  Paper,
+  useTheme,
+} from "@mui/material"
 import { Link } from "react-router-dom"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { Section } from "../../../components/paper/Section"
@@ -114,19 +122,28 @@ function OrgShopRedirect({ spectrumId }: { spectrumId: string }) {
 
   if (shop) {
     return (
-      <Alert severity="info" action={
-        <Link to={SHOP_PATHS.profile(shop.slug)} style={{ color: "inherit" }}>
-          {t("common.viewShop", "View Shop")}
-        </Link>
-      }>
-        {t("org.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+      <Alert
+        severity="info"
+        action={
+          <Link to={SHOP_PATHS.profile(shop.slug)} style={{ color: "inherit" }}>
+            {t("common.viewShop", "View Shop")}
+          </Link>
+        }
+      >
+        {t(
+          "org.customOrdersMovedToShop",
+          "Custom orders are now placed through shops.",
+        )}
       </Alert>
     )
   }
 
   return (
     <Alert severity="info">
-      {t("org.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+      {t(
+        "org.customOrdersMovedToShop",
+        "Custom orders are now placed through shops.",
+      )}
     </Alert>
   )
 }

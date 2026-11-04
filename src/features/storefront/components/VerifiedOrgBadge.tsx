@@ -10,7 +10,12 @@ import { useTranslation } from "react-i18next"
 export function VerifiedOrgBadge(props: { size?: "small" | "medium" }) {
   const { t } = useTranslation()
   return (
-    <Tooltip title={t("storefront.verified.tooltip", "This org proved it runs its RSI org page when it registered on SC Market.")}>
+    <Tooltip
+      title={t(
+        "storefront.verified.tooltip",
+        "This org proved it runs its RSI org page when it registered on SC Market.",
+      )}
+    >
       <Chip
         icon={<VerifiedRounded />}
         label={t("storefront.verified.label", "Verified org")}

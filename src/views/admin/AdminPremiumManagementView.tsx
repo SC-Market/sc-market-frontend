@@ -108,8 +108,7 @@ export function AdminPremiumManagementView() {
       field: "granted_at",
       headerName: t("admin.premium.grantedAt", "Granted"),
       width: 180,
-      valueFormatter: (value: string) =>
-        value ? fmt.date(value) : "",
+      valueFormatter: (value: string) => (value ? fmt.date(value) : ""),
     },
     {
       field: "revoked_at",
@@ -117,7 +116,11 @@ export function AdminPremiumManagementView() {
       width: 120,
       renderCell: (params: GridRenderCellParams<PremiumTier>) => (
         <Chip
-          label={params.value ? t("adminUi.premium.revoked") : t("admin.alerts.active")}
+          label={
+            params.value
+              ? t("adminUi.premium.revoked")
+              : t("admin.alerts.active")
+          }
           color={params.value ? "default" : "success"}
           size="small"
         />
@@ -146,10 +149,7 @@ export function AdminPremiumManagementView() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            onClick={() => setGrantDialogOpen(true)}
-          >
+          <Button variant="contained" onClick={() => setGrantDialogOpen(true)}>
             {t("admin.premium.grant", "Grant Premium")}
           </Button>
         </Box>
@@ -237,8 +237,11 @@ export function AdminPremiumManagementView() {
             </Box>
           )}
           <FormControl fullWidth sx={{ mt: 1 }}>
-            <InputLabel id="admin-premium-management-view-tier-label">{t("admin.premium.tier", "Tier")}</InputLabel>
-            <Select labelId="admin-premium-management-view-tier-label"
+            <InputLabel id="admin-premium-management-view-tier-label">
+              {t("admin.premium.tier", "Tier")}
+            </InputLabel>
+            <Select
+              labelId="admin-premium-management-view-tier-label"
               value={selectedTier}
               label={t("admin.premium.tier", "Tier")}
               onChange={(e) => setSelectedTier(e.target.value)}

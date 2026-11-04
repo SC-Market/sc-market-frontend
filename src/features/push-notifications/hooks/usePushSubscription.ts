@@ -95,8 +95,7 @@ export function usePushSubscription() {
         setError(
           t("settings.pushNotifications.subscribeFailed", {
             reason: err instanceof Error ? err.message : String(err),
-            defaultValue:
-              "Couldn't turn on push notifications: {{reason}}",
+            defaultValue: "Couldn't turn on push notifications: {{reason}}",
           }),
         )
       }

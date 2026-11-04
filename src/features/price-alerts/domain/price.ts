@@ -1,7 +1,6 @@
 /** Highest target price the backend stores (int4). */
 export const MAX_TARGET_PRICE = 2_147_483_647
 
-
 /**
  * A typed target price, or null when it isn't a whole number above 1 aUEC
  * (1 aUEC listings are placeholders and never alert).

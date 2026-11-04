@@ -18,7 +18,10 @@ export function SignUpPage() {
     usePageSignUp()
 
   if (isAuthenticated) {
-    const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
+    const redirectTo = safeRedirectPath(
+      searchParams.get("redirect"),
+      "/dashboard",
+    )
     return <Navigate to={redirectTo} replace />
   }
 

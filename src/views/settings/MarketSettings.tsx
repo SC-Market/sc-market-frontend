@@ -14,9 +14,7 @@ export function MarketSettings() {
       alignItems={"flex-start"}
     >
       <Grid item xs={12}>
-        <Alert severity="info">
-          {t("marketV2.settingsMoved")}
-        </Alert>
+        <Alert severity="info">{t("marketV2.settingsMoved")}</Alert>
       </Grid>
     </Grid>
   )

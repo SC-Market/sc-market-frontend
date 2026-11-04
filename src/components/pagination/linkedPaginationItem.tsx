@@ -11,13 +11,28 @@ import { pagedPath } from "../../seo/queryIndexing"
  * `?page=N` form is linked: other query params (filters) are noindex
  * variants, so their pages stay plain buttons.
  */
-export function linkedPaginationItem(path: string, searchParams: URLSearchParams) {
+export function linkedPaginationItem(
+  path: string,
+  searchParams: URLSearchParams,
+) {
   const linkable = [...searchParams.keys()].every((key) => key === "page")
   function LinkedPaginationItem(item: PaginationRenderItemParams) {
-    if (!linkable || item.page === null || item.disabled || item.type === "start-ellipsis" || item.type === "end-ellipsis") {
+    if (
+      !linkable ||
+      item.page === null ||
+      item.disabled ||
+      item.type === "start-ellipsis" ||
+      item.type === "end-ellipsis"
+    ) {
       return <PaginationItem {...item} />
     }
-    return <PaginationItem component={Link} to={pagedPath(path, item.page)} {...item} />
+    return (
+      <PaginationItem
+        component={Link}
+        to={pagedPath(path, item.page)}
+        {...item}
+      />
+    )
   }
   return LinkedPaginationItem
 }

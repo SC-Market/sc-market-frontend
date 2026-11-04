@@ -89,4 +89,8 @@ export const spaceThemeOptions: ThemeOptions = {
   },
 }
 
-export const SPACE_theme = createAppTheme(themeBase, mainThemeOptions, spaceThemeOptions)
+export const SPACE_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  spaceThemeOptions,
+)

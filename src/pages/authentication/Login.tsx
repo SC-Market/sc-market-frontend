@@ -24,7 +24,10 @@ export function Login() {
   const [searchParams] = useSearchParams()
   const profile = useGetUserProfileQuery()
   const identifier = useGetAuthenticatorIdentifier()
-  const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
+  const redirectTo = safeRedirectPath(
+    searchParams.get("redirect"),
+    "/dashboard",
+  )
 
   return (
     <Page title={t("login.title", "Login")}>

@@ -1,60 +1,65 @@
 import "../../../../util/i18n"
-import "./setup";
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { configureStore } from "@reduxjs/toolkit";
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { MarketAggregateViewV2 } from "../MarketAggregateViewV2";
-import { generatedApiV2 } from "../../../../store/generatedApiV2";
-import { serviceApi } from "../../../../store/service";
-import { mockMutationHook, querySuccess } from "../../../../__tests__/rtkQueryMocks";
-import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import "./setup"
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { BrowserRouter } from "react-router-dom"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import { configureStore } from "@reduxjs/toolkit"
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
+import { MarketAggregateViewV2 } from "../MarketAggregateViewV2"
+import { generatedApiV2 } from "../../../../store/generatedApiV2"
+import { serviceApi } from "../../../../store/service"
+import {
+  mockMutationHook,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks"
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
 import type {
   MuiAreaChart,
   MuiBarChart,
   MuiLineChart,
-} from "../../../../components/charts/MuiCharts";
-import type { TabbedChartLayout } from "../../../../components/charts/TabbedChartLayout";
-import type { DynamicKlineChart } from "../../../../components/charts/DynamicCharts";
-import type { QualityHistogram } from "../../../../components/market/v2/QualityHistogram";
-import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
-import type { QualityFilter } from "../../../../components/market/v2/QualityFilter";
-import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
-import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
-import type { CreateBuyOrderV2 } from "../components/CreateBuyOrderV2";
+} from "../../../../components/charts/MuiCharts"
+import type { TabbedChartLayout } from "../../../../components/charts/TabbedChartLayout"
+import type { DynamicKlineChart } from "../../../../components/charts/DynamicCharts"
+import type { QualityHistogram } from "../../../../components/market/v2/QualityHistogram"
+import type { QualityBadge } from "../../../../components/market/v2/QualityBadge"
+import type { QualityFilter } from "../../../../components/market/v2/QualityFilter"
+import type { VariantSelector } from "../../../../components/market/v2/VariantSelector"
+import type { ListingNameAndRating } from "../../../../components/rating/ListingRating"
+import type { CreateBuyOrderV2 } from "../components/CreateBuyOrderV2"
 
 import type {
   GetListingsApiResponse,
   GetPriceHistoryApiResponse,
   GetQualityDistributionApiResponse,
   SearchBuyOrdersApiResponse,
-} from "../../../../store/api/v2/market";
+} from "../../../../store/api/v2/market"
 
 /** The generated market API module, used to derive endpoint response types. */
-type MarketV2Module = typeof import("../../../../store/api/v2/market");
-type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
+type MarketV2Module = typeof import("../../../../store/api/v2/market")
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
 
-type MuiAreaChartProps = React.ComponentProps<typeof MuiAreaChart>;
-type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>;
-type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>;
-type TabbedChartLayoutProps = React.ComponentProps<typeof TabbedChartLayout>;
-type DynamicKlineChartProps = React.ComponentProps<typeof DynamicKlineChart>;
-type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>;
-type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
-type QualityFilterProps = React.ComponentProps<typeof QualityFilter>;
-type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
-type ListingNameAndRatingProps = React.ComponentProps<typeof ListingNameAndRating>;
-type CreateBuyOrderV2Props = React.ComponentProps<typeof CreateBuyOrderV2>;
+type MuiAreaChartProps = React.ComponentProps<typeof MuiAreaChart>
+type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>
+type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>
+type TabbedChartLayoutProps = React.ComponentProps<typeof TabbedChartLayout>
+type DynamicKlineChartProps = React.ComponentProps<typeof DynamicKlineChart>
+type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>
+type QualityFilterProps = React.ComponentProps<typeof QualityFilter>
+type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>
+type ListingNameAndRatingProps = React.ComponentProps<
+  typeof ListingNameAndRating
+>
+type CreateBuyOrderV2Props = React.ComponentProps<typeof CreateBuyOrderV2>
 
 /**
  * Unit Tests for MarketAggregateViewV2 Component
- * 
+ *
  * Task: 11.5 Implement MarketAggregateViewV2 component
  * Requirements: 41.1-41.12
- * 
+ *
  * Test Coverage:
  * - Displays quality distribution chart (41.4)
  * - Shows price comparison table by quality tier (41.5)
@@ -69,13 +74,13 @@ type CreateBuyOrderV2Props = React.ComponentProps<typeof CreateBuyOrderV2>;
 
 // Mock dependencies
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+  const actual = await vi.importActual("react-router-dom")
   return {
     ...actual,
     useParams: () => ({ id: "test-game-item-id" }),
     useNavigate: () => vi.fn(),
-  };
-});
+  }
+})
 
 // StandardPageLayout depends on Page (useRouteError -> data router) and
 // drawer/layout contexts not present under BrowserRouter. Mock it to render
@@ -103,19 +108,15 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("react-cookie", () => ({
-  useCookies: () => [
-    { market_cart: [] },
-    vi.fn(),
-    vi.fn(),
-  ],
-}));
+  useCookies: () => [{ market_cart: [] }, vi.fn(), vi.fn()],
+}))
 
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
-}));
+}))
 
 vi.mock("../../../../store/profile", () => ({
   useGetUserProfileQuery: () => ({
@@ -125,11 +126,11 @@ vi.mock("../../../../store/profile", () => ({
       role: "user",
     },
   }),
-}));
+}))
 
 vi.mock("../../../../hooks/login/CurrentOrg", () => ({
   useCurrentOrg: () => [null],
-}));
+}))
 
 // Mock chart components
 vi.mock("../../../../components/charts/MuiCharts", () => ({
@@ -151,7 +152,7 @@ vi.mock("../../../../components/charts/MuiCharts", () => ({
       <div>Height: {height}</div>
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/charts/TabbedChartLayout", () => ({
   TabbedChartLayout: ({ tabs, children }: TabbedChartLayoutProps) => (
@@ -162,7 +163,7 @@ vi.mock("../../../../components/charts/TabbedChartLayout", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/charts/DynamicCharts", () => ({
   // `children` is a render prop receiving the lazily-imported klinecharts module;
@@ -170,7 +171,7 @@ vi.mock("../../../../components/charts/DynamicCharts", () => ({
   DynamicKlineChart: (_props: DynamicKlineChartProps) => (
     <div data-testid="dynamic-kline-chart" />
   ),
-}));
+}))
 
 // Mock V2 components
 vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
@@ -180,18 +181,22 @@ vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
       <div>{distribution.length} tiers</div>
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
-  QualityBadge: ({ tier }: QualityBadgeProps) => <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>,
-}));
+  QualityBadge: ({ tier }: QualityBadgeProps) => (
+    <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
+  ),
+}))
 
 vi.mock("../../../../components/market/v2/QualityFilter", () => ({
   QualityFilter: ({ minTier, onMinTierChange }: QualityFilterProps) => (
     <div data-testid="quality-filter">
       <select
         value={minTier ?? ""}
-        onChange={(e) => onMinTierChange(e.target.value ? Number(e.target.value) : null)}
+        onChange={(e) =>
+          onMinTierChange(e.target.value ? Number(e.target.value) : null)
+        }
       >
         <option value="">All Tiers</option>
         <option value="1">Tier 1</option>
@@ -202,7 +207,7 @@ vi.mock("../../../../components/market/v2/QualityFilter", () => ({
       </select>
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/market/v2/VariantSelector", () => ({
   VariantSelector: ({ onVariantChange }: VariantSelectorProps) => (
@@ -215,15 +220,19 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
       <option value="variant-2">Variant 2</option>
     </select>
   ),
-}));
+}))
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor, shop }: ListingNameAndRatingProps) => (
+  ListingNameAndRating: ({
+    user,
+    contractor,
+    shop,
+  }: ListingNameAndRatingProps) => (
     <div data-testid="seller-rating">
       {user?.username || contractor?.name || shop?.name}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../price-alerts/components/WatchPriceButton", () => ({
   WatchPriceButton: () => <button type="button">Watch price</button>,
@@ -235,7 +244,7 @@ vi.mock("../components/CreateBuyOrderV2", () => ({
       Create Buy Order for {gameItem?.id}
     </div>
   ),
-}));
+}))
 
 // The component now fetches its data via RTK Query hooks; mock them with fixtures
 // typed against the generated OpenAPI response types so contract drift breaks the
@@ -303,7 +312,7 @@ vi.mock("../../../../store/api/v2/market", () => {
     total: 2,
     page: 1,
     page_size: 20,
-  };
+  }
 
   const qualityDistribution: GetQualityDistributionApiResponse = {
     game_item_id: "test-game-item-id",
@@ -329,7 +338,7 @@ vi.mock("../../../../store/api/v2/market", () => {
         shop_count: 1,
       },
     ],
-  };
+  }
 
   const priceHistory: GetPriceHistoryApiResponse = {
     game_item_id: "test-game-item-id",
@@ -347,7 +356,7 @@ vi.mock("../../../../store/api/v2/market", () => {
         volume: 20,
       },
     ],
-  };
+  }
 
   const buyOrders: SearchBuyOrdersApiResponse = {
     buy_orders: [
@@ -370,13 +379,15 @@ vi.mock("../../../../store/api/v2/market", () => {
     total: 1,
     page: 1,
     page_size: 20,
-  };
+  }
 
   return {
     useGetListingsQuery: () =>
       querySuccess<MarketV2Endpoints["getListings"]>(listings),
     useGetQualityDistributionQuery: () =>
-      querySuccess<MarketV2Endpoints["getQualityDistribution"]>(qualityDistribution),
+      querySuccess<MarketV2Endpoints["getQualityDistribution"]>(
+        qualityDistribution,
+      ),
     useGetPriceHistoryQuery: () =>
       querySuccess<MarketV2Endpoints["getPriceHistory"]>(priceHistory),
     useSearchBuyOrdersQuery: () =>
@@ -385,8 +396,8 @@ vi.mock("../../../../store/api/v2/market", () => {
       mockMutationHook<MarketV2Endpoints["fulfillBuyOrder"]>(),
     useCancelBuyOrderMutation: () =>
       mockMutationHook<MarketV2Endpoints["cancelBuyOrder"]>(),
-  };
-});
+  }
+})
 
 // Create mock store
 const createMockStore = () => {
@@ -396,230 +407,242 @@ const createMockStore = () => {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(generatedApiV2.middleware, serviceApi.middleware),
-  });
-};
+      getDefaultMiddleware().concat(
+        generatedApiV2.middleware,
+        serviceApi.middleware,
+      ),
+  })
+}
 
 // Extended theme so components using theme.layoutSpacing / theme.borderRadius render.
 const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
   palette: { outline: { main: "#e0e0e0" } },
-});
+})
 
 // Wrapper component for tests
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const store = createMockStore();
+  const store = createMockStore()
   return (
     <Provider store={store}>
       <ThemeProvider theme={testTheme}>
         <BrowserRouter>{children}</BrowserRouter>
       </ThemeProvider>
     </Provider>
-  );
-};
+  )
+}
 
 describe("MarketAggregateViewV2", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   afterEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   it("renders game item details correctly", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that game item name is displayed (title + breadcrumb).
-    expect(screen.getAllByText("Sample Item").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Sample Item").length).toBeGreaterThan(0)
 
     // Check that game item type is displayed
-    expect(screen.getByText("Weapon")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Weapon")).toBeInTheDocument()
+  })
 
   it("displays quality distribution chart", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that quality distribution section is present
     // Note: Actual chart rendering depends on QualityHistogram component
-    expect(screen.getByText(/Quality Distribution/i)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Quality Distribution/i)).toBeInTheDocument()
+  })
 
   it("shows price comparison table by quality tier", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that price comparison table is present
-    expect(screen.getByText(/Price by Quality Tier/i)).toBeInTheDocument();
-    
+    expect(screen.getByText(/Price by Quality Tier/i)).toBeInTheDocument()
+
     // Check that table headers are present
-    expect(screen.getByText(/Min Price/i)).toBeInTheDocument();
-    expect(screen.getByText(/Avg Price/i)).toBeInTheDocument();
-    expect(screen.getByText(/Max Price/i)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Min Price/i)).toBeInTheDocument()
+    expect(screen.getByText(/Avg Price/i)).toBeInTheDocument()
+    expect(screen.getByText(/Max Price/i)).toBeInTheDocument()
+  })
 
   it("lists all sellers with their offerings", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that sell orders section is present
-    expect(screen.getByText(/Sell Orders/i)).toBeInTheDocument();
-    
+    expect(screen.getByText(/Sell Orders/i)).toBeInTheDocument()
+
     // Check that seller names are displayed
-    expect(screen.getByText("Seller One")).toBeInTheDocument();
-    expect(screen.getByText("Seller Two")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Seller One")).toBeInTheDocument()
+    expect(screen.getByText("Seller Two")).toBeInTheDocument()
+  })
 
   it("provides quality tier filter", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that quality filter is present
     // Note: Actual filter rendering depends on QualityFilter component
-    const filterElements = screen.getAllByText(/Quality Tier/i);
-    expect(filterElements.length).toBeGreaterThan(0);
-  });
+    const filterElements = screen.getAllByText(/Quality Tier/i)
+    expect(filterElements.length).toBeGreaterThan(0)
+  })
 
   it("shows seller ratings and badges", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that seller ratings are displayed
     // Note: Actual rating display depends on ListingNameAndRating component
-    expect(screen.getByText("Seller One")).toBeInTheDocument();
-    expect(screen.getByText("Seller Two")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Seller One")).toBeInTheDocument()
+    expect(screen.getByText("Seller Two")).toBeInTheDocument()
+  })
 
   it("provides Add to Cart button for each listing", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Each sell listing row exposes a "Buy" action button.
     const buyButtons = screen
       .getAllByRole("button")
-      .filter((button) => /buy/i.test(button.textContent || ""));
-    expect(buyButtons.length).toBeGreaterThan(0);
-  });
+      .filter((button) => /buy/i.test(button.textContent || ""))
+    expect(buyButtons.length).toBeGreaterThan(0)
+  })
 
   it("displays buy orders section", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // "Buy Orders" appears both as a stat label and a section title.
-    expect(screen.getAllByText(/Buy Orders/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Buy Orders/i).length).toBeGreaterThan(0)
 
     // Check that buyer name is displayed
-    expect(screen.getByText("Buyer One")).toBeInTheDocument();
-  });
+    expect(screen.getByText("Buyer One")).toBeInTheDocument()
+  })
 
   it("displays create buy order form", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that create buy order section is present
-    expect(screen.getByText(/Create Buy Order/i)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Create Buy Order/i)).toBeInTheDocument()
+  })
 
   it("displays buy/sell wall charts", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Analytics card exposes Price History and Order Depth views.
-    expect(screen.getAllByText(/Order Depth/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Price History/i).length).toBeGreaterThan(0);
-  });
+    expect(screen.getAllByText(/Order Depth/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Price History/i).length).toBeGreaterThan(0)
+  })
 
   it("displays price history chart", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that price history section is present
-    expect(screen.getByText(/Price History/i)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Price History/i)).toBeInTheDocument()
+  })
 
   it("maintains visual parity with V1 layout structure", () => {
     const { container } = render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that Grid container is present
-    const gridContainer = container.querySelector(".MuiGrid-container");
-    expect(gridContainer).toBeInTheDocument();
-    
+    const gridContainer = container.querySelector(".MuiGrid-container")
+    expect(gridContainer).toBeInTheDocument()
+
     // Check that image section is present (lg={4})
-    const imageSection = container.querySelector('[class*="MuiGrid-grid-lg-4"]');
-    expect(imageSection).toBeInTheDocument();
-    
+    const imageSection = container.querySelector('[class*="MuiGrid-grid-lg-4"]')
+    expect(imageSection).toBeInTheDocument()
+
     // Check that details section is present (lg={8})
-    const detailsSection = container.querySelector('[class*="MuiGrid-grid-lg-8"]');
-    expect(detailsSection).toBeInTheDocument();
-  });
+    const detailsSection = container.querySelector(
+      '[class*="MuiGrid-grid-lg-8"]',
+    )
+    expect(detailsSection).toBeInTheDocument()
+  })
 
   it("handles loading state", () => {
     // Component uses mock data by default, so loading state is not easily testable
     // This would be tested when API integration is complete
-    expect(true).toBe(true);
-  });
+    expect(true).toBe(true)
+  })
 
   it("displays breadcrumb navigation", () => {
     render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that breadcrumbs are present
-    const breadcrumbs = screen.getByLabelText(/breadcrumb/i);
-    expect(breadcrumbs).toBeInTheDocument();
-  });
+    const breadcrumbs = screen.getByLabelText(/breadcrumb/i)
+    expect(breadcrumbs).toBeInTheDocument()
+  })
 
   it("maintains visual parity with V1 layout structure", () => {
     const { container } = render(
       <TestWrapper>
         <MarketAggregateViewV2 />
-      </TestWrapper>
-    );
+      </TestWrapper>,
+    )
 
     // Check that Grid container is present
-    const gridContainer = container.querySelector(".MuiGrid-container");
-    expect(gridContainer).toBeInTheDocument();
-  });
-});
+    const gridContainer = container.querySelector(".MuiGrid-container")
+    expect(gridContainer).toBeInTheDocument()
+  })
+})

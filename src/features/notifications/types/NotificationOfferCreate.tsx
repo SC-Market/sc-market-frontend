@@ -18,8 +18,17 @@ interface OfferEntity {
   offers: Array<{
     cost: string | number
     title: string
-    market_listings?: Array<{ listing_id: string; quantity: number; listing?: { details?: { title?: string } }; title?: string }>
-    market_listings_v2?: Array<{ listing_id: string; title: string; quantity: number }>
+    market_listings?: Array<{
+      listing_id: string
+      quantity: number
+      listing?: { details?: { title?: string } }
+      title?: string
+    }>
+    market_listings_v2?: Array<{
+      listing_id: string
+      title: string
+      quantity: number
+    }>
     v2_variant_items?: Array<{ listing_id: string; quantity: number }>
     service?: { title: string; service_id: string } | null
   }>
@@ -51,7 +60,10 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
     if (latestOffer.v2_variant_items?.length) {
       const grouped = new Map<string, number>()
       for (const vi of latestOffer.v2_variant_items) {
-        grouped.set(vi.listing_id, (grouped.get(vi.listing_id) || 0) + vi.quantity)
+        grouped.set(
+          vi.listing_id,
+          (grouped.get(vi.listing_id) || 0) + vi.quantity,
+        )
       }
       return Array.from(grouped.entries()).map(([listing_id, quantity]) => ({
         title: listing_id.substring(0, 8),
@@ -62,7 +74,10 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
     // V1 market listings
     if (latestOffer.market_listings?.length) {
       return latestOffer.market_listings.map((ml) => ({
-        title: ml.title || (ml.listing as { details?: { title?: string } })?.details?.title || "Item",
+        title:
+          ml.title ||
+          (ml.listing as { details?: { title?: string } })?.details?.title ||
+          "Item",
         quantity: ml.quantity,
       }))
     }
@@ -89,7 +104,11 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
         <UnderlineLink>{offer.customer.display_name}</UnderlineLink>
       </Link>
       {latestOffer && (
-        <Stack direction="row" spacing={0.5} sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}
+        >
           <Chip
             label={fmt.price(Number(latestOffer.cost))}
             size="small"
@@ -97,7 +116,11 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
             variant="outlined"
           />
           {latestOffer.service && (
-            <Chip label={latestOffer.service.title} size="small" variant="outlined" />
+            <Chip
+              label={latestOffer.service.title}
+              size="small"
+              variant="outlined"
+            />
           )}
           {itemSummary?.map((item, i) => (
             <Chip

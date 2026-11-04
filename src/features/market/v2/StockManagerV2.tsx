@@ -6,7 +6,15 @@
  * (pages/inventory). The name is from V1's ManageStock.
  */
 
-import React, { useState, useCallback, useMemo, createContext, useContext, useEffect, useRef } from "react"
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+} from "react"
 import {
   GridColDef,
   GridEventListener,
@@ -107,13 +115,20 @@ interface NewListingRowV2 {
 /* ── Listing selection (bulk actions) ── */
 
 const ListingSelectionContext = createContext<
-  [GridRowSelectionModel, React.Dispatch<React.SetStateAction<GridRowSelectionModel>>] | null
+  | [
+      GridRowSelectionModel,
+      React.Dispatch<React.SetStateAction<GridRowSelectionModel>>,
+    ]
+  | null
 >(null)
 
 /** The selection state from StockManagerV2. Both consumers render inside its provider. */
 function useListingSelection() {
   const ctx = useContext(ListingSelectionContext)
-  if (!ctx) throw new Error("useListingSelection must be used inside ListingSelectionContext")
+  if (!ctx)
+    throw new Error(
+      "useListingSelection must be used inside ListingSelectionContext",
+    )
   return ctx
 }
 
@@ -207,10 +222,19 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setArchiveDialogOpen(false)} disabled={archiving} color="inherit">
+        <Button
+          onClick={() => setArchiveDialogOpen(false)}
+          disabled={archiving}
+          color="inherit"
+        >
           {t("ItemStock.bulkArchiveCancel")}
         </Button>
-        <LoadingButton onClick={handleConfirmBulkArchive} loading={archiving} color="error" variant="contained">
+        <LoadingButton
+          onClick={handleConfirmBulkArchive}
+          loading={archiving}
+          color="error"
+          variant="contained"
+        >
           {t("ItemStock.bulkArchiveConfirm")}
         </LoadingButton>
       </DialogActions>
@@ -222,18 +246,68 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
   if (isMobile) {
     return (
       <>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2, borderBottom: 1, borderColor: "divider" }}>
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center" }}>
-            <LoadingButton color="success" startIcon={<RadioButtonCheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("active")} fullWidth disabled={!hasSelection}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            p: 2,
+            borderBottom: 1,
+            borderColor: "divider",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <LoadingButton
+              color="success"
+              startIcon={<RadioButtonCheckedRounded />}
+              variant="outlined"
+              size="small"
+              loading={bulkLoading}
+              onClick={() => void handleBulkStatus("active")}
+              fullWidth
+              disabled={!hasSelection}
+            >
               {t("ItemStock.activate")}
             </LoadingButton>
-            <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("inactive")} fullWidth disabled={!hasSelection}>
+            <LoadingButton
+              color="error"
+              startIcon={<RadioButtonUncheckedRounded />}
+              variant="outlined"
+              size="small"
+              loading={bulkLoading}
+              onClick={() => void handleBulkStatus("inactive")}
+              fullWidth
+              disabled={!hasSelection}
+            >
               {t("ItemStock.deactivate")}
             </LoadingButton>
-            <LoadingButton color="warning" startIcon={<ArchiveOutlined />} variant="outlined" size="small" loading={bulkLoading} onClick={() => setArchiveDialogOpen(true)} fullWidth disabled={!hasSelection}>
+            <LoadingButton
+              color="warning"
+              startIcon={<ArchiveOutlined />}
+              variant="outlined"
+              size="small"
+              loading={bulkLoading}
+              onClick={() => setArchiveDialogOpen(true)}
+              fullWidth
+              disabled={!hasSelection}
+            >
               {t("ItemStock.archive")}
             </LoadingButton>
-            <Button onClick={onAddQuickListing} color="primary" variant="outlined" size="small" startIcon={<AddRounded />} sx={{ flex: "0 0 auto" }}>
+            <Button
+              onClick={onAddQuickListing}
+              color="primary"
+              variant="outlined"
+              size="small"
+              startIcon={<AddRounded />}
+              sx={{ flex: "0 0 auto" }}
+            >
               {t("ItemStock.addQuickListing")}
             </Button>
           </Box>
@@ -246,13 +320,37 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
   return (
     <Toolbar sx={{ justifyContent: "flex-end" }}>
       <Stack direction="row" spacing="1px">
-        <LoadingButton color="success" startIcon={<RadioButtonCheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("active")} disabled={!hasSelection}>
+        <LoadingButton
+          color="success"
+          startIcon={<RadioButtonCheckedRounded />}
+          variant="outlined"
+          size="small"
+          loading={bulkLoading}
+          onClick={() => void handleBulkStatus("active")}
+          disabled={!hasSelection}
+        >
           {t("ItemStock.activate")}
         </LoadingButton>
-        <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("inactive")} disabled={!hasSelection}>
+        <LoadingButton
+          color="error"
+          startIcon={<RadioButtonUncheckedRounded />}
+          variant="outlined"
+          size="small"
+          loading={bulkLoading}
+          onClick={() => void handleBulkStatus("inactive")}
+          disabled={!hasSelection}
+        >
           {t("ItemStock.deactivate")}
         </LoadingButton>
-        <LoadingButton color="warning" startIcon={<ArchiveOutlined />} variant="outlined" size="small" loading={bulkLoading} onClick={() => setArchiveDialogOpen(true)} disabled={!hasSelection}>
+        <LoadingButton
+          color="warning"
+          startIcon={<ArchiveOutlined />}
+          variant="outlined"
+          size="small"
+          loading={bulkLoading}
+          onClick={() => setArchiveDialogOpen(true)}
+          disabled={!hasSelection}
+        >
           {t("ItemStock.archive")}
         </LoadingButton>
         <Tooltip title={t("ItemStock.addQuickListing")}>
@@ -265,7 +363,6 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
     </Toolbar>
   )
 }
-
 
 /* ── ShopListingsGridV2: the listings grid (cards on mobile) ── */
 
@@ -299,13 +396,18 @@ function ShopListingsGridV2({
 
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
-  const [editingRows, setEditingRows] = useState<Record<string, Partial<NewListingRowV2>>>({})
+  const [editingRows, setEditingRows] = useState<
+    Record<string, Partial<NewListingRowV2>>
+  >({})
   const [editTarget, setEditTarget] = useState<MyListingItem | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const [selectionModel, setSelectionModel] = useListingSelection()
 
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (params, event) => {
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+    params,
+    event,
+  ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true
     }
@@ -395,7 +497,11 @@ function ShopListingsGridV2({
                 onChange={(name, _type, itemId) => {
                   setEditingRows((prev) => ({
                     ...prev,
-                    [params.id]: { ...prev[params.id as string], game_item_name: name, game_item_id: itemId },
+                    [params.id]: {
+                      ...prev[params.id as string],
+                      game_item_name: name,
+                      game_item_id: itemId,
+                    },
                   }))
                 }}
                 size="small"
@@ -404,7 +510,11 @@ function ShopListingsGridV2({
           }
           if (nr) return nr.game_item_name || t("ItemStock.noItemSelected")
           return (
-            <Stack direction="row" spacing={theme.layoutSpacing.compact} alignItems="center">
+            <Stack
+              direction="row"
+              spacing={theme.layoutSpacing.compact}
+              alignItems="center"
+            >
               <MaterialLink
                 component={Link}
                 to={formatMarketUrl(params.row)}
@@ -434,7 +544,10 @@ function ShopListingsGridV2({
                 onValueChange={(v) => {
                   setEditingRows((prev) => ({
                     ...prev,
-                    [params.id]: { ...prev[params.id as string], price: v.floatValue || 1 },
+                    [params.id]: {
+                      ...prev[params.id as string],
+                      price: v.floatValue || 1,
+                    },
                   }))
                 }}
                 size="small"
@@ -467,7 +580,10 @@ function ShopListingsGridV2({
                 onValueChange={(v) => {
                   setEditingRows((prev) => ({
                     ...prev,
-                    [params.id]: { ...prev[params.id as string], quantity_available: v.floatValue || 0 },
+                    [params.id]: {
+                      ...prev[params.id as string],
+                      quantity_available: v.floatValue || 0,
+                    },
                   }))
                 }}
                 size="small"
@@ -490,9 +606,21 @@ function ShopListingsGridV2({
           if (nr) return "—"
           const min = params.row.quality_tier_min
           const max = params.row.quality_tier_max
-          if (min == null) return <Typography variant="body2" color="text.disabled">—</Typography>
+          if (min == null)
+            return (
+              <Typography variant="body2" color="text.disabled">
+                —
+              </Typography>
+            )
           const label = min === max ? `Tier ${min}` : `T${min}–${max}`
-          return <Chip label={label} size="small" variant="outlined" color={min >= 4 ? "success" : min >= 3 ? "primary" : "default"} />
+          return (
+            <Chip
+              label={label}
+              size="small"
+              variant="outlined"
+              color={min >= 4 ? "success" : min >= 3 ? "primary" : "default"}
+            />
+          )
         },
       },
       {
@@ -520,7 +648,9 @@ function ShopListingsGridV2({
                 inputProps={{ "aria-label": t("ItemStock.status") }}
                 checked={(editing?.status ?? "active") === "active"}
                 onChange={(e) => {
-                  const newStatus: "active" | "inactive" = e.target.checked ? "active" : "inactive"
+                  const newStatus: "active" | "inactive" = e.target.checked
+                    ? "active"
+                    : "inactive"
                   setEditingRows((prev) => ({
                     ...prev,
                     [params.id]: {
@@ -539,7 +669,10 @@ function ShopListingsGridV2({
               alignItems="center"
               variant="subtitle2"
             >
-              <RadioButtonCheckedRounded fontSize="small" style={{ marginRight: 1 }} />{" "}
+              <RadioButtonCheckedRounded
+                fontSize="small"
+                style={{ marginRight: 1 }}
+              />{" "}
               {params.value === "active"
                 ? t("ItemStock.active")
                 : params.value === "expired"
@@ -574,20 +707,31 @@ function ShopListingsGridV2({
           if (!canManage) return "—"
           // Renewable: paused (expired) or within the 3-day notice window.
           // Renew starts a new month and reactivates a paused listing.
-          const msLeft = params.value ? new Date(params.value).getTime() - Date.now() : 0
-          if (!paused && msLeft > RENEW_WINDOW_MS) return fmt.timeUntil(params.value, Date.now())
+          const msLeft = params.value
+            ? new Date(params.value).getTime() - Date.now()
+            : 0
+          if (!paused && msLeft > RENEW_WINDOW_MS)
+            return fmt.timeUntil(params.value, Date.now())
           // An active listing long past its date: a date migrated from V1
           // that nothing enforces (listing expiry is off), not renewable.
           if (!paused && msLeft < -RENEW_WINDOW_MS) return "—"
           const label = paused
             ? t("ItemStock.reactivateListing", "Paused: renew and reactivate")
-            : t("ItemStock.renewListing", "Expires soon: renew for another month")
+            : t(
+                "ItemStock.renewListing",
+                "Expires soon: renew for another month",
+              )
           return (
             <Tooltip title={label}>
               <IconButton
                 aria-label={label}
-                sx={{ color: paused || msLeft <= 0 ? "error.main" : "warning.main" }}
-                onClick={(e) => { e.stopPropagation(); handleRefresh(params.row.listing_id) }}
+                sx={{
+                  color: paused || msLeft <= 0 ? "error.main" : "warning.main",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleRefresh(params.row.listing_id)
+                }}
               >
                 <RefreshOutlined />
               </IconButton>
@@ -610,14 +754,28 @@ function ShopListingsGridV2({
             if (isEdit) {
               const editing = editingRows[params.id as string]
               return (
-                <Stack direction="row" spacing={theme.layoutSpacing.compact} justifyContent="flex-end" sx={{ width: "100%" }}>
+                <Stack
+                  direction="row"
+                  spacing={theme.layoutSpacing.compact}
+                  justifyContent="flex-end"
+                  sx={{ width: "100%" }}
+                >
                   <Tooltip title={t("ItemStock.save")}>
-                    <IconButton size="small" onClick={handleSaveClick(params.id)} disabled={!editing?.game_item_id} color="primary">
+                    <IconButton
+                      size="small"
+                      onClick={handleSaveClick(params.id)}
+                      disabled={!editing?.game_item_id}
+                      color="primary"
+                    >
                       <SaveRounded />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title={t("ItemStock.discard")}>
-                    <IconButton size="small" onClick={handleCancelClick(params.id)} color="error">
+                    <IconButton
+                      size="small"
+                      onClick={handleCancelClick(params.id)}
+                      color="error"
+                    >
                       <DeleteRounded />
                     </IconButton>
                   </Tooltip>
@@ -626,7 +784,11 @@ function ShopListingsGridV2({
             }
             return (
               <Tooltip title={t("ItemStock.edit")}>
-                <IconButton size="small" onClick={handleEditClick(params.id)} color="inherit">
+                <IconButton
+                  size="small"
+                  onClick={handleEditClick(params.id)}
+                  color="inherit"
+                >
                   <CreateRounded />
                 </IconButton>
               </Tooltip>
@@ -636,15 +798,34 @@ function ShopListingsGridV2({
           if (!canManage) return null
           return (
             <Tooltip title={t("ItemStock.editListing")}>
-              <Link to={MARKET_PATHS.edit(params.value)} state={withShopContext(shop.slug)} style={{ color: "inherit" }}>
-                <IconButton aria-label={t("ItemStock.editListing")}><CreateRounded /></IconButton>
+              <Link
+                to={MARKET_PATHS.edit(params.value)}
+                state={withShopContext(shop.slug)}
+                style={{ color: "inherit" }}
+              >
+                <IconButton aria-label={t("ItemStock.editListing")}>
+                  <CreateRounded />
+                </IconButton>
               </Link>
             </Tooltip>
           )
         },
       },
     ],
-    [t, fmt, theme, newRows, rowModesModel, editingRows, handleRefresh, handleEditClick, handleCancelClick, handleSaveClick, canManage, shop.slug],
+    [
+      t,
+      fmt,
+      theme,
+      newRows,
+      rowModesModel,
+      editingRows,
+      handleRefresh,
+      handleEditClick,
+      handleCancelClick,
+      handleSaveClick,
+      canManage,
+      shop.slug,
+    ],
   )
 
   // Combine existing + new rows
@@ -679,11 +860,24 @@ function ShopListingsGridV2({
             const id = `new-${Date.now()}`
             setNewRows((prev) => [
               ...prev,
-              { id, game_item_id: null, game_item_name: null, price: 1, quantity_available: 1, status: "active", isNew: true },
+              {
+                id,
+                game_item_id: null,
+                game_item_name: null,
+                price: 1,
+                quantity_available: 1,
+                status: "active",
+                isNew: true,
+              },
             ])
           }}
         />
-        <Paper sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel), overflow: "hidden" }}>
+        <Paper
+          sx={{
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            overflow: "hidden",
+          }}
+        >
           {allRows.length === 0 ? (
             <EmptyListings showCreateAction={false} />
           ) : (
@@ -691,7 +885,14 @@ function ShopListingsGridV2({
               <MobileListingRow
                 key={row.id}
                 listing={row as MyListingItem}
-                onEdit={canManage ? (l) => { setEditTarget(l); setSheetOpen(true) } : undefined}
+                onEdit={
+                  canManage
+                    ? (l) => {
+                        setEditTarget(l)
+                        setSheetOpen(true)
+                      }
+                    : undefined
+                }
               />
             ))
           )}
@@ -702,7 +903,9 @@ function ShopListingsGridV2({
           page={page}
           onPageChange={(_, p) => onPageChange(p)}
           rowsPerPage={pageSize}
-          onRowsPerPageChange={(e) => onPageSizeChange(parseInt(e.target.value, 10))}
+          onRowsPerPageChange={(e) =>
+            onPageSizeChange(parseInt(e.target.value, 10))
+          }
           rowsPerPageOptions={[24, 48, 96]}
           labelRowsPerPage={t("common.rowsPerPage", "Rows per page")}
         />
@@ -729,7 +932,9 @@ function ShopListingsGridV2({
         onRowEditStop={handleRowEditStop}
         rowModesModel={rowModesModel}
         onRowModesModelChange={setRowModesModel}
-        initialState={{ sorting: { sortModel: [{ field: "title", sort: "asc" }] } }}
+        initialState={{
+          sorting: { sortModel: [{ field: "title", sort: "asc" }] },
+        }}
         slots={{
           toolbar: ListingsToolbarV2,
         }}
@@ -746,7 +951,10 @@ function ShopListingsGridV2({
         paginationMode="server"
         rowCount={total}
         paginationModel={{ page, pageSize }}
-        onPaginationModelChange={(m) => { onPageChange(m.page); onPageSizeChange(m.pageSize) }}
+        onPaginationModelChange={(m) => {
+          onPageChange(m.page)
+          onPageSizeChange(m.pageSize)
+        }}
         pageSizeOptions={[24, 48, 96]}
         loading={isLoading}
       />
@@ -799,7 +1007,12 @@ export function StockManagerV2() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)
   const [searchParams] = useSearchParams()
-  const statusFilter = searchParams.get("status") as "active" | "inactive" | "expired" | "cancelled" | null
+  const statusFilter = searchParams.get("status") as
+    | "active"
+    | "inactive"
+    | "expired"
+    | "cancelled"
+    | null
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",
@@ -823,14 +1036,19 @@ export function StockManagerV2() {
     <StandardPageLayout
       title={t("sidebar.manage_listings")}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
+        {
+          label: t("sidebar.market_short", "Market"),
+          href: MARKET_PATHS.search,
+        },
         { label: t("sidebar.manage_listings", "Manage Listings") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={isLoading}
     >
-      <ListingSelectionContext.Provider value={[selectionModel, setSelectionModel]}>
+      <ListingSelectionContext.Provider
+        value={[selectionModel, setSelectionModel]}
+      >
         <RenewFromLink />
         {canManage && (
           <Grid item xs={12}>
@@ -854,7 +1072,14 @@ export function StockManagerV2() {
             )}
 
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  flexWrap: "wrap",
+                }}
+              >
                 {isMobile && (
                   <Button
                     variant="outlined"
@@ -871,11 +1096,23 @@ export function StockManagerV2() {
                   rightAction={
                     canManage ? (
                       <Stack direction="row" spacing={1}>
-                        <Button variant="outlined" color="secondary" onClick={() => setImportOpen(true)}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => setImportOpen(true)}
+                        >
                           {t("ItemStock.importFromUex", "Import from UEX")}
                         </Button>
-                        <Link to={SHOP_PATHS.create(shop.slug)} style={{ textDecoration: "none" }}>
-                          <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
+                        <Link
+                          to={SHOP_PATHS.create(shop.slug)}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<AddRounded />}
+                            size="large"
+                          >
                             {t("market.createListing", "Create Listing")}
                           </Button>
                         </Link>
@@ -894,7 +1131,10 @@ export function StockManagerV2() {
 
             {canManage && (
               <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
-                <FirstUseHint hint="listingQuantity" title={t("hints.listingQuantity.title")}>
+                <FirstUseHint
+                  hint="listingQuantity"
+                  title={t("hints.listingQuantity.title")}
+                >
                   {t("hints.listingQuantity.body")}
                 </FirstUseHint>
               </Grid>
@@ -909,7 +1149,9 @@ export function StockManagerV2() {
             {/* Desktop sidebar */}
             {!isMobile && (
               <Grid item xs={12} md={3}>
-                <Paper><MarketSearchAreaV2 manageMode /></Paper>
+                <Paper>
+                  <MarketSearchAreaV2 manageMode />
+                </Paper>
               </Grid>
             )}
 
@@ -924,7 +1166,9 @@ export function StockManagerV2() {
                     pageSize={pageSize}
                     onPageChange={setPage}
                     onPageSizeChange={setPageSize}
-                    onRefreshAll={() => { refetch() }}
+                    onRefreshAll={() => {
+                      refetch()
+                    }}
                     isLoading={isLoading}
                   />
                 </Grid>
@@ -932,7 +1176,11 @@ export function StockManagerV2() {
             </Grid>
 
             {/* Archived listings link */}
-            <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", justifyContent: "flex-end" }}
+            >
               <Link to={MARKET_PATHS.myListings} style={{ color: "inherit" }}>
                 <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
@@ -941,7 +1189,11 @@ export function StockManagerV2() {
         </Grid>
       </ListingSelectionContext.Provider>
       {canManage && (
-        <ImportFromUexDialog shopId={shop.shop_id} open={importOpen} onClose={() => setImportOpen(false)} />
+        <ImportFromUexDialog
+          shopId={shop.shop_id}
+          open={importOpen}
+          onClose={() => setImportOpen(false)}
+        />
       )}
     </StandardPageLayout>
   )

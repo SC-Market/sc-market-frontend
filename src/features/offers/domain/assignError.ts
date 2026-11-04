@@ -7,7 +7,8 @@ export function assignErrorReason(error: unknown): string {
   if (!error) return ""
   if (typeof error === "object" && "data" in error && error.data) {
     const data = error.data as { error?: string; message?: string }
-    if (data.error || data.message) return (data.error || data.message) as string
+    if (data.error || data.message)
+      return (data.error || data.message) as string
   } else if (typeof error === "object" && "message" in error) {
     const message = (error as { message?: string }).message
     if (message) return message

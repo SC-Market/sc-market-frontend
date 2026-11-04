@@ -10,7 +10,10 @@ import {
 } from "../challengeBroker"
 
 const json = (status: number, body: unknown = {}) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } })
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  })
 const mfa403 = (code: string) => json(403, { error: { code, message: "x" } })
 
 const env: NetworkEnv = {
@@ -48,15 +51,24 @@ describe("MFA challenge in the base query", () => {
   it.each([
     ["MFA_REQUIRED", "required"],
     ["MFA_STEP_UP_REQUIRED", "step_up"],
-  ])("on 403 %s, prompts (%s) and retries once after verification", async (code, kind) => {
-    const handler = vi.fn(() => Promise.resolve(true))
-    unregister = setMfaChallengeHandler(handler)
-    fetchMock.mockResolvedValueOnce(mfa403(code)).mockResolvedValueOnce(json(200, { ok: 1 }))
-    const result = await bq()({ url: "/admin/feature-flags/config", method: "PUT", body: {} }, api, {})
-    expect(handler).toHaveBeenCalledWith(kind)
-    expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(result.data).toEqual({ ok: 1 })
-  })
+  ])(
+    "on 403 %s, prompts (%s) and retries once after verification",
+    async (code, kind) => {
+      const handler = vi.fn(() => Promise.resolve(true))
+      unregister = setMfaChallengeHandler(handler)
+      fetchMock
+        .mockResolvedValueOnce(mfa403(code))
+        .mockResolvedValueOnce(json(200, { ok: 1 }))
+      const result = await bq()(
+        { url: "/admin/feature-flags/config", method: "PUT", body: {} },
+        api,
+        {},
+      )
+      expect(handler).toHaveBeenCalledWith(kind)
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+      expect(result.data).toEqual({ ok: 1 })
+    },
+  )
 
   it("returns the error when the user cancels", async () => {
     unregister = setMfaChallengeHandler(() => Promise.resolve(false))
@@ -68,7 +80,9 @@ describe("MFA challenge in the base query", () => {
 
   it("retries only once even if still not verified", async () => {
     unregister = setMfaChallengeHandler(() => Promise.resolve(true))
-    fetchMock.mockImplementation(() => Promise.resolve(mfa403("MFA_STEP_UP_REQUIRED")))
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(mfa403("MFA_STEP_UP_REQUIRED")),
+    )
     await bq()("/admin/x", api, {})
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
@@ -91,7 +105,11 @@ describe("MFA challenge in the base query", () => {
     const handler = vi.fn(() => Promise.resolve(true))
     unregister = setMfaChallengeHandler(handler)
     fetchMock.mockResolvedValue(mfa403("MFA_STEP_UP_REQUIRED"))
-    await bq()({ url: "/auth/mfa/recovery-codes/regenerate", method: "POST" }, api, {})
+    await bq()(
+      { url: "/auth/mfa/recovery-codes/regenerate", method: "POST" },
+      api,
+      {},
+    )
     expect(handler).not.toHaveBeenCalled()
     expect(isMfaEndpoint("/auth/mfa/verify")).toBe(true)
     expect(isMfaEndpoint("/admin/mfa/users/x/reset")).toBe(false)

@@ -11,7 +11,10 @@ import { useTranslation } from "react-i18next"
 import { useGetShopCustomersQuery } from "../../../store/api/v2/market"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
-import { ControlledTable, HeadCell } from "../../../components/table/PaginatedTable"
+import {
+  ControlledTable,
+  HeadCell,
+} from "../../../components/table/PaginatedTable"
 import { Link } from "react-router-dom"
 import { Stack } from "@mui/system"
 import { USER_PATHS } from "../../../routes/paths"
@@ -29,11 +32,36 @@ interface CustomerRow {
 }
 
 const headCells: readonly HeadCell<CustomerRow>[] = [
-  { id: "username", numeric: false, disablePadding: false, label: "orders.table.customer" },
-  { id: "order_count", numeric: true, disablePadding: false, label: "customerList.orders" },
-  { id: "fulfilled_count", numeric: true, disablePadding: false, label: "customerList.fulfilled" },
-  { id: "total_spent", numeric: true, disablePadding: false, label: "ordersUi2.shopCustomers.totalSpent" },
-  { id: "last_order_at", numeric: true, disablePadding: false, label: "ordersUi2.shopCustomers.lastOrder" },
+  {
+    id: "username",
+    numeric: false,
+    disablePadding: false,
+    label: "orders.table.customer",
+  },
+  {
+    id: "order_count",
+    numeric: true,
+    disablePadding: false,
+    label: "customerList.orders",
+  },
+  {
+    id: "fulfilled_count",
+    numeric: true,
+    disablePadding: false,
+    label: "customerList.fulfilled",
+  },
+  {
+    id: "total_spent",
+    numeric: true,
+    disablePadding: false,
+    label: "ordersUi2.shopCustomers.totalSpent",
+  },
+  {
+    id: "last_order_at",
+    numeric: true,
+    disablePadding: false,
+    label: "ordersUi2.shopCustomers.lastOrder",
+  },
 ]
 
 function CustomerRowComponent(props: {
@@ -55,7 +83,10 @@ function CustomerRowComponent(props: {
       <TableCell padding="checkbox" sx={{ display: "none" }} />
       <TableCell>
         <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Avatar src={row.avatar || undefined} sx={{ width: 32, height: 32 }} />
+          <Avatar
+            src={row.avatar || undefined}
+            sx={{ width: 32, height: 32 }}
+          />
           <Stack>
             <Typography variant="body2" fontWeight="bold">
               {row.display_name || row.username}
@@ -72,9 +103,7 @@ function CustomerRowComponent(props: {
       <TableCell align="right">{row.fulfilled_count}</TableCell>
       <TableCell align="right">{fmt.number(row.total_spent)} aUEC</TableCell>
       <TableCell align="right">
-        {row.last_order_at
-          ? fmt.date(new Date(row.last_order_at))
-          : "—"}
+        {row.last_order_at ? fmt.date(new Date(row.last_order_at)) : "—"}
       </TableCell>
     </TableRow>
   )
@@ -103,23 +132,23 @@ export function ShopCustomers() {
     >
       <Grid item xs={12}>
         <Paper>
-        <ControlledTable
-          rows={data?.items || []}
-          headCells={[...headCells]}
-          generateRow={CustomerRowComponent}
-          keyAttr="user_id"
-          initialSort="order_count"
-          page={page}
-          onPageChange={setPage}
-          pageSize={pageSize}
-          onPageSizeChange={setPageSize}
-          rowCount={data?.total || 0}
-          orderBy={orderBy}
-          onOrderByChange={setOrderBy}
-          order={order}
-          onOrderChange={setOrder}
-          disableSelect
-        />
+          <ControlledTable
+            rows={data?.items || []}
+            headCells={[...headCells]}
+            generateRow={CustomerRowComponent}
+            keyAttr="user_id"
+            initialSort="order_count"
+            page={page}
+            onPageChange={setPage}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
+            rowCount={data?.total || 0}
+            orderBy={orderBy}
+            onOrderByChange={setOrderBy}
+            order={order}
+            onOrderChange={setOrder}
+            disableSelect
+          />
         </Paper>
       </Grid>
     </StandardPageLayout>

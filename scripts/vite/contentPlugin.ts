@@ -34,7 +34,11 @@ import {
 import { CONTENT_ASSET_PATHS } from "../../src/features/help/domain/assetPaths"
 import { CHANGELOG_PATHS } from "../../src/routes/paths"
 import { DEFAULT_FRONTEND_URL } from "../../src/seo/constants"
-import { changelogBodyKey, type Block, type ContentBody } from "../../src/features/help/domain/types"
+import {
+  changelogBodyKey,
+  type Block,
+  type ContentBody,
+} from "../../src/features/help/domain/types"
 
 export const HELP_CONTENT_ID = "virtual:help-content"
 const RESOLVED_HELP_CONTENT_ID = "\0" + HELP_CONTENT_ID
@@ -101,9 +105,14 @@ export function contentPlugin(): Plugin {
       includeDrafts,
       imageResolver: (file) => (src) => {
         const abs = path.join(contentRoot, path.dirname(file), src)
-        if (!existsSync(abs)) throw new ContentError(file, `screenshot "${src}" not found`)
+        if (!existsSync(abs))
+          throw new ContentError(file, `screenshot "${src}" not found`)
         // Root-relative, so Vite resolves it the same in dev and build.
-        return IMAGE_PLACEHOLDER + "/" + path.relative(root, abs).split(path.sep).join("/")
+        return (
+          IMAGE_PLACEHOLDER +
+          "/" +
+          path.relative(root, abs).split(path.sep).join("/")
+        )
       },
     })
     checkRedirects(site)
@@ -112,9 +121,17 @@ export function contentPlugin(): Plugin {
 
   /** Root-relative module id of a page body. */
   const bodyId = (file: string) =>
-    "/" + path.relative(root, path.join(contentRoot, file)).split(path.sep).join("/") + BODY_QUERY
+    "/" +
+    path
+      .relative(root, path.join(contentRoot, file))
+      .split(path.sep)
+      .join("/") +
+    BODY_QUERY
 
-  const fail = (ctx: { error(message: string): never }, error: unknown): never => {
+  const fail = (
+    ctx: { error(message: string): never },
+    error: unknown,
+  ): never => {
     if (error instanceof ContentError) ctx.error(error.message)
     throw error
   }
@@ -159,12 +176,17 @@ export function contentPlugin(): Plugin {
         const loaders = [
           ...compiled.guides.map((g) => [g.meta.id, bodyId(g.file)] as const),
           ["about", bodyId(ABOUT_FILE)] as const,
-          ...compiled.changelog.map((e) => [changelogBodyKey(e.meta.slug), bodyId(e.file)] as const),
+          ...compiled.changelog.map(
+            (e) => [changelogBodyKey(e.meta.slug), bodyId(e.file)] as const,
+          ),
         ]
         return [
           `export const index = ${JSON.stringify(contentIndex(compiled))}`,
           `export const bodies = {`,
-          ...loaders.map(([key, mod]) => `  ${JSON.stringify(key)}: () => import(${JSON.stringify(mod)}),`),
+          ...loaders.map(
+            ([key, mod]) =>
+              `  ${JSON.stringify(key)}: () => import(${JSON.stringify(mod)}),`,
+          ),
           `}`,
         ].join("\n")
       }
@@ -184,17 +206,27 @@ export function contentPlugin(): Plugin {
       const page =
         file === ABOUT_FILE
           ? compiled.about
-          : (compiled.guides.find((g) => g.file === file) ?? compiled.changelog.find((e) => e.file === file))
-      if (!page) return this.error(`${file}: not a content page (draft or unknown)`)
+          : (compiled.guides.find((g) => g.file === file) ??
+            compiled.changelog.find((e) => e.file === file))
+      if (!page)
+        return this.error(`${file}: not a content page (draft or unknown)`)
 
       // Swap image placeholders for imports so they get hashed asset URLs.
       const imports: string[] = []
-      let json = JSON.stringify({ blocks: page.body.blocks, steps: page.body.steps })
-      json = json.replace(new RegExp(`"${IMAGE_PLACEHOLDER}([^"]+)"`, "g"), (_m, src: string) => {
-        const name = `img${imports.length}`
-        imports.push(`import ${name} from ${JSON.stringify("/" + src.replace(/^\//, ""))}`)
-        return name
+      let json = JSON.stringify({
+        blocks: page.body.blocks,
+        steps: page.body.steps,
       })
+      json = json.replace(
+        new RegExp(`"${IMAGE_PLACEHOLDER}([^"]+)"`, "g"),
+        (_m, src: string) => {
+          const name = `img${imports.length}`
+          imports.push(
+            `import ${name} from ${JSON.stringify("/" + src.replace(/^\//, ""))}`,
+          )
+          return name
+        },
+      )
       return [...imports, `export default ${json}`].join("\n")
     },
 
@@ -214,14 +246,24 @@ export function contentPlugin(): Plugin {
 
       emit(CONTENT_ASSET_PATHS.manifest, sitemapManifest(compiled))
       emit(CONTENT_ASSET_PATHS.index, { version: 1, ...contentIndex(compiled) })
-      emit(CONTENT_ASSET_PATHS.about, { ...aboutAsset(compiled), body: bridgeBody(compiled.about.body) })
+      emit(CONTENT_ASSET_PATHS.about, {
+        ...aboutAsset(compiled),
+        body: bridgeBody(compiled.about.body),
+      })
       for (const category of compiled.categories) {
-        emit(CONTENT_ASSET_PATHS.category(category.id), categoryAsset(compiled, category))
+        emit(
+          CONTENT_ASSET_PATHS.category(category.id),
+          categoryAsset(compiled, category),
+        )
       }
       this.emitFile({
         type: "asset",
         fileName: CHANGELOG_PATHS.feed.replace(/^\//, ""),
-        source: changelogFeed(compiled, { origin: DEFAULT_FRONTEND_URL, siteName: "SC Market", today: todayUtc() }),
+        source: changelogFeed(compiled, {
+          origin: DEFAULT_FRONTEND_URL,
+          siteName: "SC Market",
+          today: todayUtc(),
+        }),
       })
       for (const guide of compiled.guides) {
         const asset = guideAsset(compiled, guide)

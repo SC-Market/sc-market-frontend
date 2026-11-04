@@ -14,11 +14,15 @@ type SessionLike = Order | OfferSession | GetOfferSessionV2Response
 function getUsername(user: unknown): string {
   if (!user) return "Unknown"
   if (typeof user === "string") return user
-  if (typeof user === "object" && user !== null && "username" in user) return (user as { username: string }).username
+  if (typeof user === "object" && user !== null && "username" in user)
+    return (user as { username: string }).username
   return "Unknown"
 }
 
-export function OrderAvailabilityArea(props: { order?: SessionLike; session?: GetOfferSessionV2Response }) {
+export function OrderAvailabilityArea(props: {
+  order?: SessionLike
+  session?: GetOfferSessionV2Response
+}) {
   const source = props.session || props.order
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -30,10 +34,16 @@ export function OrderAvailabilityArea(props: { order?: SessionLike; session?: Ge
 
   return (
     <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
-      <Grid item xs={12} lg={source.assigned_to && source.availability?.assigned ? 6 : 12}>
+      <Grid
+        item
+        xs={12}
+        lg={source.assigned_to && source.availability?.assigned ? 6 : 12}
+      >
         {source.availability.customer && (
           <AvailabilityDisplay
-            name={t("orderAvailabilityArea.customer_name", { name: customerName })}
+            name={t("orderAvailabilityArea.customer_name", {
+              name: customerName,
+            })}
             value={convertAvailability(source.availability.customer)}
           />
         )}
@@ -41,7 +51,9 @@ export function OrderAvailabilityArea(props: { order?: SessionLike; session?: Ge
       {assignedName && source.availability?.assigned && (
         <Grid item xs={12} lg={6}>
           <AvailabilityDisplay
-            name={t("orderAvailabilityArea.assigned_name", { name: assignedName })}
+            name={t("orderAvailabilityArea.assigned_name", {
+              name: assignedName,
+            })}
             value={convertAvailability(source.availability.assigned)}
           />
         </Grid>

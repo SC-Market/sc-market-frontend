@@ -195,26 +195,26 @@ export function EmailSettings({
         hasEmail &&
         organizationsData &&
         organizationsData.length > 0 && (
-        <Grid item xs={12}>
-          <OrganizationPreferenceSelector
-            organizations={organizationsData}
-            preferences={preferences?.preferences?.organizations || []}
-            notificationTypes={availableNotificationTypes}
-            onPreferenceChange={(pref, enabled, contractorId) =>
-              handlePreferenceChange(
-                pref as EmailPreference,
-                enabled,
-                contractorId,
-              )
-            }
-            onBatchPreferenceChange={(updates, contractorId) =>
-              handleBatchPreferenceChange(updates, contractorId)
-            }
-            type="email"
-            isLoading={organizationsLoading}
-          />
-        </Grid>
-      )}
+          <Grid item xs={12}>
+            <OrganizationPreferenceSelector
+              organizations={organizationsData}
+              preferences={preferences?.preferences?.organizations || []}
+              notificationTypes={availableNotificationTypes}
+              onPreferenceChange={(pref, enabled, contractorId) =>
+                handlePreferenceChange(
+                  pref as EmailPreference,
+                  enabled,
+                  contractorId,
+                )
+              }
+              onBatchPreferenceChange={(updates, contractorId) =>
+                handleBatchPreferenceChange(updates, contractorId)
+              }
+              type="email"
+              isLoading={organizationsLoading}
+            />
+          </Grid>
+        )}
 
       {/* Add Email Dialog */}
       <AddEmailDialog

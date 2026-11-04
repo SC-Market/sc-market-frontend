@@ -151,7 +151,10 @@ export interface MarketListingBody {
   end_time: Date | null
   spectrum_id?: string | null
   delivery_preference?: string | null
-  bulk_discount_tiers?: Array<{ min_quantity: number; discount_percent: number }>
+  bulk_discount_tiers?: Array<{
+    min_quantity: number
+    discount_percent: number
+  }>
 }
 
 export interface MarketListingUpdateBody {

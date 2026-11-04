@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { extractProfileIdFromUrl, isRsiUrl, sanitizeAlphanumeric } from "../rsiUrlUtils"
+import {
+  extractProfileIdFromUrl,
+  isRsiUrl,
+  sanitizeAlphanumeric,
+} from "../rsiUrlUtils"
 
 /** What the RSI verification field ends up with for a pasted value (AuthenticateRSI). */
 function handleFrom(input: string): string {
@@ -35,6 +39,8 @@ describe("RSI profile URL forms accepted by verification", () => {
   })
 
   it("keeps _ and - in handles", () => {
-    expect(handleFrom("https://robertsspaceindustries.com/en/citizens/some_user-01")).toBe("some_user-01")
+    expect(
+      handleFrom("https://robertsspaceindustries.com/en/citizens/some_user-01"),
+    ).toBe("some_user-01")
   })
 })

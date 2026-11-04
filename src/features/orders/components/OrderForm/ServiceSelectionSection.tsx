@@ -17,24 +17,41 @@ export function ServiceSelectionSection() {
   return (
     <Section xs={12}>
       <Grid item xs={12} lg={4}>
-        <Typography variant="h6" align="left" color="text.secondary" sx={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h6"
+          align="left"
+          color="text.secondary"
+          sx={{ fontWeight: "bold" }}
+        >
           {t("CreateOrderForm.services")}
         </Typography>
       </Grid>
       <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.compact}>
         <Grid item xs={12}>
           <TextField
-            fullWidth select label={t("CreateOrderForm.selectServiceOptional")} id="order-service"
+            fullWidth
+            select
+            label={t("CreateOrderForm.selectServiceOptional")}
+            id="order-service"
             value={service?.service_name || ""}
             onChange={(e: React.ChangeEvent<{ value: string }>) => {
               if (e.target.value === "") setService(null)
-              else setService((services || []).find((s) => s.service_name === e.target.value)!)
+              else
+                setService(
+                  (services || []).find(
+                    (s) => s.service_name === e.target.value,
+                  )!,
+                )
             }}
             color="secondary"
             SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
           >
             <MenuItem value="">{t("CreateOrderForm.noService")}</MenuItem>
-            {(services || []).map((s) => <MenuItem value={s.service_name} key={s.service_name}>{s.service_name}</MenuItem>)}
+            {(services || []).map((s) => (
+              <MenuItem value={s.service_name} key={s.service_name}>
+                {s.service_name}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
       </Grid>

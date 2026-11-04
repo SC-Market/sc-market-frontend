@@ -1,7 +1,7 @@
 import "../../../util/i18n"
 /**
  * BlueprintBrowser Component Tests
- * 
+ *
  * Basic smoke tests for the BlueprintBrowser component.
  * Task 12.1 - Create BlueprintBrowser component
  */
@@ -119,7 +119,10 @@ vi.mock("../../../store/api/v2/market", async () => {
       error: undefined,
     }),
     useAddBlueprintToInventoryMutation: () => [vi.fn(), { isLoading: false }],
-    useRemoveBlueprintFromInventoryMutation: () => [vi.fn(), { isLoading: false }],
+    useRemoveBlueprintFromInventoryMutation: () => [
+      vi.fn(),
+      { isLoading: false },
+    ],
     useGetWishlistsQuery: () => ({
       data: undefined,
       isLoading: false,
@@ -146,20 +149,24 @@ const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <Provider store={store}>
       <BrowserRouter>{component}</BrowserRouter>
-    </Provider>
+    </Provider>,
   )
 }
 
 describe("BlueprintBrowser", () => {
   it("should render the component with title", () => {
     renderWithProviders(<BlueprintBrowser />)
-    expect(screen.getByRole("heading", { name: "Blueprint Browser" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: "Blueprint Browser" }),
+    ).toBeInTheDocument()
   })
 
   it("should render the unified search bar", () => {
     renderWithProviders(<BlueprintBrowser />)
     expect(
-      screen.getByPlaceholderText("Search blueprints, materials, categories..."),
+      screen.getByPlaceholderText(
+        "Search blueprints, materials, categories...",
+      ),
     ).toBeInTheDocument()
   })
 
@@ -169,7 +176,9 @@ describe("BlueprintBrowser", () => {
     const selects = screen.getAllByRole("combobox")
     expect(selects.length).toBeGreaterThanOrEqual(3) // Category, Tier, Source, unified search
     // Named filter fields
-    expect(screen.getByRole("button", { name: /reset filters/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /reset filters/i }),
+    ).toBeInTheDocument()
   })
 
   it("should render view mode toggle buttons", () => {
@@ -195,7 +204,11 @@ describe("BlueprintBrowser", () => {
     window.history.pushState({}, "", "/blueprints")
     searchArgs.length = 0
     renderWithProviders(<BlueprintBrowser />)
-    expect(searchArgs.at(-1)).toMatchObject({ sourceable: true, page: 1, pageSize: 40 })
+    expect(searchArgs.at(-1)).toMatchObject({
+      sourceable: true,
+      page: 1,
+      pageSize: 40,
+    })
   })
 
   it("drops the sourceable filter when Hide Unsourceable is off", () => {

@@ -56,9 +56,9 @@ function discordCopy(): [string, string][] {
  */
 function commandsIn(text: string): string[] {
   const quoted = [...text.matchAll(/`(\/[^`]+)`/g)].map((m) => m[1])
-  const plain = [...text.replace(/`[^`]*`/g, "").matchAll(/(?:^|\s)(\/[a-z]+(?: [a-z]+)?)/g)].map(
-    (m) => m[1],
-  )
+  const plain = [
+    ...text.replace(/`[^`]*`/g, "").matchAll(/(?:^|\s)(\/[a-z]+(?: [a-z]+)?)/g),
+  ].map((m) => m[1])
   return [...quoted, ...plain].map((command) =>
     command
       .split(/\s+/)
@@ -93,7 +93,9 @@ describe("discord_bot help copy", () => {
     (_file, json) => {
       const text = JSON.stringify([json.discord_bot, json.ConfigureDiscord])
       expect(text).toContain("/setup threads")
-      expect(text).not.toMatch(/\/(register|subscribe|unsubscribe|lookup|stock|price)\b/)
+      expect(text).not.toMatch(
+        /\/(register|subscribe|unsubscribe|lookup|stock|price)\b/,
+      )
     },
   )
 })

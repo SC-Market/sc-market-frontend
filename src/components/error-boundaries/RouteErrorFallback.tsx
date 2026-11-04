@@ -52,12 +52,27 @@ export function RouteErrorFallback() {
   if (isRouteErrorResponse(error)) {
     return (
       <ErrorFallback
-        error={new Error(error.statusText || t("appUi.errorBoundary.errorStatus", { status: error.status, defaultValue: "Error {{status}}" }))}
+        error={
+          new Error(
+            error.statusText ||
+              t("appUi.errorBoundary.errorStatus", {
+                status: error.status,
+                defaultValue: "Error {{status}}",
+              }),
+          )
+        }
         resetErrorBoundary={navigate}
         isRouteError={true}
         showDetails={import.meta.env.DEV}
-        title={t("appUi.errorBoundary.errorStatus", { status: error.status, defaultValue: "Error {{status}}" })}
-        message={error.data?.message || error.statusText || t("appUi.errorBoundary.anErrorOccurred", "An error occurred")}
+        title={t("appUi.errorBoundary.errorStatus", {
+          status: error.status,
+          defaultValue: "Error {{status}}",
+        })}
+        message={
+          error.data?.message ||
+          error.statusText ||
+          t("appUi.errorBoundary.anErrorOccurred", "An error occurred")
+        }
       />
     )
   }

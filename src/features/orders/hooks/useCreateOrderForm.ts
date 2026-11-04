@@ -62,16 +62,28 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
   const [createOrder, { isLoading }] = useCreateOrderMutation()
 
   // Services
-  const { data: userServices } = useGetServicesQuery(assigned_to!, { skip: !assigned_to })
-  const { data: contractorServices } = useGetServicesContractorQuery(contractor_id!, { skip: !contractor_id })
-  const services = useMemo(() => userServices || contractorServices, [contractorServices, userServices])
+  const { data: userServices } = useGetServicesQuery(assigned_to!, {
+    skip: !assigned_to,
+  })
+  const { data: contractorServices } = useGetServicesContractorQuery(
+    contractor_id!,
+    { skip: !contractor_id },
+  )
+  const services = useMemo(
+    () => userServices || contractorServices,
+    [contractorServices, userServices],
+  )
   const [service, setService] = useState<Service | null>(params.service || null)
 
   // Availability requirement
   const { data: contractorRequirement, refetch: refetchContractorRequirement } =
-    useCheckContractorAvailabilityRequirementQuery(contractor_id!, { skip: !contractor_id })
+    useCheckContractorAvailabilityRequirementQuery(contractor_id!, {
+      skip: !contractor_id,
+    })
   const { data: userRequirement, refetch: refetchUserRequirement } =
-    useCheckUserAvailabilityRequirementQuery(assigned_to!, { skip: !assigned_to })
+    useCheckUserAvailabilityRequirementQuery(assigned_to!, {
+      skip: !assigned_to,
+    })
 
   const availabilityRequirement = useMemo(() => {
     if (contractorRequirement?.required) return contractorRequirement
@@ -84,8 +96,13 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
   )
 
   // Order limits
-  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(contractor_id!, { skip: !contractor_id })
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(assigned_to!, { skip: !assigned_to })
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
+    contractor_id!,
+    { skip: !contractor_id },
+  )
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(assigned_to!, {
+    skip: !assigned_to,
+  })
   const orderLimits: OrderLimits | undefined = contractorLimits || userLimits
 
   const hasAvailabilitySet = useMemo(() => {
@@ -97,14 +114,16 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
 
   // Availability modal
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
-  const [availabilitySelections, setAvailabilitySelections] = useState<boolean[]>(
-    convertAvailability(userAvailability?.selections || []),
-  )
+  const [availabilitySelections, setAvailabilitySelections] = useState<
+    boolean[]
+  >(convertAvailability(userAvailability?.selections || []))
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
 
   useEffect(() => {
     if (userAvailability) {
-      setAvailabilitySelections(convertAvailability(userAvailability.selections || []))
+      setAvailabilitySelections(
+        convertAvailability(userAvailability.selections || []),
+      )
     }
   }, [userAvailability])
 
@@ -117,7 +136,10 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
           if (!current) current = { start: i, finish: i }
           else current.finish = i
         } else {
-          if (current) { spans.push(current); current = null }
+          if (current) {
+            spans.push(current)
+            current = null
+          }
         }
       }
       if (current) spans.push(current)
@@ -133,22 +155,40 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
         issueAlert({ message: t("availability.updated"), severity: "success" })
       } catch (error) {
         const err = error as { error?: string; data?: { error?: string } }
-        const errorMessage = err?.error || err?.data?.error || (error instanceof Error ? error.message : String(error))
-        issueAlert({ message: `${t("availability.failed")} ${errorMessage}`, severity: "error" })
+        const errorMessage =
+          err?.error ||
+          err?.data?.error ||
+          (error instanceof Error ? error.message : String(error))
+        issueAlert({
+          message: `${t("availability.failed")} ${errorMessage}`,
+          severity: "error",
+        })
       }
     },
-    [contractor_id, assigned_to, updateAvailability, refetchContractorRequirement, refetchUserRequirement, issueAlert, t],
+    [
+      contractor_id,
+      assigned_to,
+      updateAvailability,
+      refetchContractorRequirement,
+      refetchUserRequirement,
+      issueAlert,
+      t,
+    ],
   )
 
   // Resolve shop name from contractor/user
   const { data: sellerShops } = useGetShopsByOwnerQuery(
-    contractor_id ? { spectrumId: contractor_id } : { username: assigned_to || "" },
+    contractor_id
+      ? { spectrumId: contractor_id }
+      : { username: assigned_to || "" },
     { skip: !contractor_id && !assigned_to },
   )
   const sellerName = sellerShops?.[0]?.name || ""
 
   // Sync service from props
-  useEffect(() => { setService(params.service || null) }, [params.service])
+  useEffect(() => {
+    setService(params.service || null)
+  }, [params.service])
 
   useEffect(() => {
     if (service) {
@@ -165,43 +205,88 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
       }))
     } else {
       setState({
-        title: "", rush: false, description: "", type: "Escort",
-        collateral: 0, estimate: 0, offer: 0, service_id: null, payment_type: "one-time",
+        title: "",
+        rush: false,
+        description: "",
+        type: "Escort",
+        collateral: 0,
+        estimate: 0,
+        offer: 0,
+        service_id: null,
+        payment_type: "one-time",
       })
     }
   }, [service])
 
   const submitOrder = useCallback(async () => {
     createOrder({
-      title: state.title, rush: state.rush, description: state.description,
-      kind: state.type, collateral: state.collateral, cost: state.offer,
-      contractor: contractor_id, assigned_to, payment_type: state.payment_type,
-      service_id: service?.service_id, departure: null, destination: null,
+      title: state.title,
+      rush: state.rush,
+      description: state.description,
+      kind: state.type,
+      collateral: state.collateral,
+      cost: state.offer,
+      contractor: contractor_id,
+      assigned_to,
+      payment_type: state.payment_type,
+      service_id: service?.service_id,
+      departure: null,
+      destination: null,
     })
       .unwrap()
       .then((data) => {
         setState({
-          title: "", rush: false, description: "", type: "Escort",
-          collateral: 0, estimate: 0, offer: 0, payment_type: "one-time",
+          title: "",
+          rush: false,
+          description: "",
+          type: "Escort",
+          collateral: 0,
+          estimate: 0,
+          offer: 0,
+          payment_type: "one-time",
         })
-        issueAlert({ message: t("CreateOrderForm.alert.submitted"), severity: "success" })
+        issueAlert({
+          message: t("CreateOrderForm.alert.submitted"),
+          severity: "success",
+        })
         if (data.discord_invite) {
-          const newWindow = window.open(`https://discord.gg/${data.discord_invite}`, "_blank")
+          const newWindow = window.open(
+            `https://discord.gg/${data.discord_invite}`,
+            "_blank",
+          )
           if (newWindow) newWindow.focus()
         }
         navigate(ORDER_PATHS.offer(data.session_id))
       })
       .catch((err) => issueAlert(err))
-  }, [createOrder, contractor_id, assigned_to, service, issueAlert, state, navigate, t])
+  }, [
+    createOrder,
+    contractor_id,
+    assigned_to,
+    service,
+    issueAlert,
+    state,
+    navigate,
+    t,
+  ])
 
   return {
-    state, setState,
+    state,
+    setState,
     isLoading,
-    services, service, setService,
-    availabilityRequirement, hasAvailabilitySet, formDisabled,
-    isAvailabilityModalOpen, setIsAvailabilityModalOpen,
-    availabilitySelections, handleSaveAvailability,
-    orderLimits, sellerName,
-    submitOrder, issueAlert,
+    services,
+    service,
+    setService,
+    availabilityRequirement,
+    hasAvailabilitySet,
+    formDisabled,
+    isAvailabilityModalOpen,
+    setIsAvailabilityModalOpen,
+    availabilitySelections,
+    handleSaveAvailability,
+    orderLimits,
+    sellerName,
+    submitOrder,
+    issueAlert,
   }
 }

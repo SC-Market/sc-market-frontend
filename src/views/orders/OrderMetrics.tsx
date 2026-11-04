@@ -200,8 +200,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"success.main"}>
-            {fmt.number(metrics.recent_activity.value_last_7_days)}{" "}
-            aUEC
+            {fmt.number(metrics.recent_activity.value_last_7_days)} aUEC
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -222,8 +221,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"success.main"}>
-            {fmt.number(metrics.recent_activity.value_last_30_days)}{" "}
-            aUEC
+            {fmt.number(metrics.recent_activity.value_last_30_days)} aUEC
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -254,7 +252,11 @@ export function ContractorOrderMetricsDisplay(props: {
                     gap={1}
                     minWidth={0}
                   >
-                    <Typography variant="body1" noWrap sx={{ minWidth: 0, flex: 1 }}>
+                    <Typography
+                      variant="body1"
+                      noWrap
+                      sx={{ minWidth: 0, flex: 1 }}
+                    >
                       {index + 1}. {customer.username}
                     </Typography>
                     <Box textAlign="right" flexShrink={0}>
@@ -262,8 +264,7 @@ export function ContractorOrderMetricsDisplay(props: {
                         {customer.order_count} {t("orderMetrics.orders")}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {fmt.number(customer.total_value)}{" "}
-                        aUEC
+                        {fmt.number(customer.total_value)} aUEC
                       </Typography>
                     </Box>
                   </Box>
@@ -280,8 +281,14 @@ export function ContractorOrderMetricsDisplay(props: {
   )
 }
 
-export function OrderMetrics(props: { spectrumId: string | undefined; shopId?: string }) {
-  const { metrics, isLoading, error } = useOrderMetrics(props.spectrumId, props.shopId)
+export function OrderMetrics(props: {
+  spectrumId: string | undefined
+  shopId?: string
+}) {
+  const { metrics, isLoading, error } = useOrderMetrics(
+    props.spectrumId,
+    props.shopId,
+  )
   const { t } = useTranslation()
 
   if (isLoading) {

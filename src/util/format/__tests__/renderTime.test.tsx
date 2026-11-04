@@ -19,18 +19,29 @@ function Probe() {
   const fmt = useFormatters()
   return (
     <p>
-      <span data-testid="now">{now === RENDERED_AT ? "rendered" : "clock"}</span>
+      <span data-testid="now">
+        {now === RENDERED_AT ? "rendered" : "clock"}
+      </span>
       <span data-testid="zone">{zone ?? "local"}</span>
       <span data-testid="price">{fmt.price(1500)}</span>
-      <span data-testid="time">{fmt.time(RENDERED_AT, { hour: "numeric", minute: "2-digit" })}</span>
-      <span data-testid="relative">{fmt.relative(RENDERED_AT - 86_400_000 * 3, now)}</span>
+      <span data-testid="time">
+        {fmt.time(RENDERED_AT, { hour: "numeric", minute: "2-digit" })}
+      </span>
+      <span data-testid="relative">
+        {fmt.relative(RENDERED_AT - 86_400_000 * 3, now)}
+      </span>
     </p>
   )
 }
 
 function i18nIn(lng: string) {
   const instance = createInstance()
-  void instance.init({ lng, resources: {}, initAsync: false, showSupportNotice: false })
+  void instance.init({
+    lng,
+    resources: {},
+    initAsync: false,
+    showSupportNotice: false,
+  })
   return instance
 }
 

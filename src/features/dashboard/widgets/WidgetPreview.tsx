@@ -28,7 +28,13 @@ function Bar({
 }) {
   return (
     <Box
-      sx={{ width: w, height: h, borderRadius: 0.5, bgcolor: color, flexShrink: 0 }}
+      sx={{
+        width: w,
+        height: h,
+        borderRadius: 0.5,
+        bgcolor: color,
+        flexShrink: 0,
+      }}
     />
   )
 }
@@ -132,10 +138,7 @@ export function WidgetPreview({
       {kind === "list" && (
         <>
           {[0, 1, 2].map((i) => (
-            <Box
-              key={i}
-              sx={{ display: "flex", alignItems: "center", gap: 1 }}
-            >
+            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Box
                 sx={{
                   width: 12,

@@ -21,7 +21,11 @@ import {
 } from "@mui/material"
 import React, { useEffect } from "react"
 import { Link as RouterLink } from "react-router-dom"
-import { OrgDetails, UserDetails, UserDetailsSkeleton } from "../../components/list/UserDetails"
+import {
+  OrgDetails,
+  UserDetails,
+  UserDetailsSkeleton,
+} from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
@@ -40,7 +44,10 @@ import {
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
-import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
+import {
+  useIsMobile,
+  useBreakpointDown,
+} from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
@@ -92,17 +99,34 @@ export function OrderDetailsArea(props: { order: Order }) {
 
   const {
     issueAlert,
-    isEditingAssigned, setIsEditingAssigned,
-    target, setTarget, targetObject, setTargetObject,
-    options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOrder,
-    orderDetailV2, hasV2Items,
-    statusColor, status, updateOrderStatus,
-    contractor, assigned, customer,
-    contractorLoading, assignedLoading, customerLoading,
-    roles, actions,
+    isEditingAssigned,
+    setIsEditingAssigned,
+    target,
+    setTarget,
+    targetObject,
+    setTargetObject,
+    options,
+    members,
+    handleAssignSave,
+    handleAssignCancel,
+    handleUnassign,
+    handleClaimOrder,
+    orderDetailV2,
+    hasV2Items,
+    statusColor,
+    status,
+    updateOrderStatus,
+    contractor,
+    assigned,
+    customer,
+    contractorLoading,
+    assignedLoading,
+    customerLoading,
+    roles,
+    actions,
     server_id,
-    createThread, refetchOrder,
+    createThread,
+    refetchOrder,
   } = useOrderDetails(order)
 
   return (
@@ -146,7 +170,12 @@ export function OrderDetailsArea(props: { order: Order }) {
                   {t("orderDetailsArea.seller")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                  <Stack
+                    direction="row"
+                    justifyContent="right"
+                    alignItems="center"
+                    spacing={1}
+                  >
                     {order.shop ? (
                       <MaterialLink
                         component={RouterLink}
@@ -157,8 +186,10 @@ export function OrderDetailsArea(props: { order: Order }) {
                       >
                         {order.shop.name}
                       </MaterialLink>
+                    ) : contractor ? (
+                      <OrgDetails org={contractor} />
                     ) : (
-                      contractor ? <OrgDetails org={contractor} /> : <UserDetailsSkeleton />
+                      <UserDetailsSkeleton />
                     )}
                   </Stack>
                 </TableCell>
@@ -174,24 +205,27 @@ export function OrderDetailsArea(props: { order: Order }) {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     {t("orderDetailsArea.assigned")}
                     {actions.canAssign && (
-                        <Button
-                          size="small"
-                          variant="text"
-                          startIcon={isEditingAssigned ? <Close /> : undefined}
-                          onClick={() =>
-                            setIsEditingAssigned(!isEditingAssigned)
-                          }
-                          sx={{ textTransform: "none", fontSize: "0.75rem" }}
-                        >
-                          {isEditingAssigned
-                            ? t("common.cancel")
-                            : t("memberAssignArea.assign")}
-                        </Button>
-                      )}
+                      <Button
+                        size="small"
+                        variant="text"
+                        startIcon={isEditingAssigned ? <Close /> : undefined}
+                        onClick={() => setIsEditingAssigned(!isEditingAssigned)}
+                        sx={{ textTransform: "none", fontSize: "0.75rem" }}
+                      >
+                        {isEditingAssigned
+                          ? t("common.cancel")
+                          : t("memberAssignArea.assign")}
+                      </Button>
+                    )}
                   </Stack>
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                  <Stack
+                    direction="row"
+                    justifyContent="right"
+                    alignItems="center"
+                    spacing={1}
+                  >
                     {assigned ? (
                       <UserDetails user={assigned} />
                     ) : assignedLoading ? (
@@ -221,7 +255,9 @@ export function OrderDetailsArea(props: { order: Order }) {
                     maxWidth="xs"
                     fullWidth
                   >
-                    <DialogTitle>{t("memberAssignArea.assignMember", "Assign Member")}</DialogTitle>
+                    <DialogTitle>
+                      {t("memberAssignArea.assignMember", "Assign Member")}
+                    </DialogTitle>
                     <DialogContent>
                       <Autocomplete
                         filterOptions={(x) => x}
@@ -290,7 +326,14 @@ export function OrderDetailsArea(props: { order: Order }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {fmt.dateTime(order.timestamp, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
+                  {fmt.dateTime(order.timestamp, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </Stack>
               </TableCell>
             </TableRow>

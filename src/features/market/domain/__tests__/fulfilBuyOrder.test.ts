@@ -35,14 +35,24 @@ describe("fulfilMaxQuantity", () => {
   })
 
   it("is 0 for a filled buy order", () => {
-    expect(fulfilMaxQuantity({ quantity: 3, quantity_fulfilled: 3 }, { available: 9 })).toBe(0)
+    expect(
+      fulfilMaxQuantity(
+        { quantity: 3, quantity_fulfilled: 3 },
+        { available: 9 },
+      ),
+    ).toBe(0)
   })
 })
 
 describe("validateFulfil", () => {
   it.each([
     ["no listing picked", null, 1, "no_listing"],
-    ["listing the backend rejects", opt({ problem: "Quality too low" }), 1, "listing_unusable"],
+    [
+      "listing the backend rejects",
+      opt({ problem: "Quality too low" }),
+      1,
+      "listing_unusable",
+    ],
     ["zero", opt(), 0, "quantity_range"],
     ["negative", opt(), -1, "quantity_range"],
     ["fraction", opt(), 1.5, "quantity_range"],
@@ -58,7 +68,11 @@ describe("validateFulfil", () => {
 
   it("rejects any quantity on a filled buy order", () => {
     expect(
-      validateFulfil({ buyOrder: { quantity: 2, quantity_fulfilled: 2 }, option: opt(), quantity: 1 }),
+      validateFulfil({
+        buyOrder: { quantity: 2, quantity_fulfilled: 2 },
+        option: opt(),
+        quantity: 1,
+      }),
     ).toBe("quantity_range")
   })
 })

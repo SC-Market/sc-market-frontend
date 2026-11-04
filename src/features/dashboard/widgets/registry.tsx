@@ -56,12 +56,7 @@ export interface WidgetRenderProps {
  * widget — a lightweight approximation of its layout so the user can recognize
  * what they're adding without resolving live data.
  */
-export type WidgetPreviewKind =
-  | "metrics"
-  | "chart"
-  | "table"
-  | "list"
-  | "cards"
+export type WidgetPreviewKind = "metrics" | "chart" | "table" | "list" | "cards"
 
 /** Grouping used to organize widgets into titled subsections in the gallery. */
 export type WidgetCategory = "orders" | "market" | "activity" | "personal"
@@ -405,7 +400,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     titleKey: "dashboard.widgets.wishlist.title",
     titleDefault: "Shopping Lists",
     descriptionKey: "dashboard.widgets.wishlist.description",
-    descriptionDefault: "Your shopping lists and how close each is to complete.",
+    descriptionDefault:
+      "Your shopping lists and how close each is to complete.",
     defaultLayout: { w: 3, h: 4 },
     minSize: { w: 2, h: 3 },
     allowedScopes: PERSONAL_ONLY,
@@ -496,7 +492,11 @@ export const ACTIVITY_FILTER_OPTIONS: {
   labelKey: string
   labelDefault: string
 }[] = [
-  { value: "", labelKey: "dashboard.activityFeed.all", labelDefault: "All activity" },
+  {
+    value: "",
+    labelKey: "dashboard.activityFeed.all",
+    labelDefault: "All activity",
+  },
   {
     value: "order_create",
     labelKey: "dashboard.activityFeed.orders",
@@ -521,6 +521,8 @@ export const ACTIVITY_FILTER_OPTIONS: {
 
 const REGISTRY = new Map(WIDGET_DEFINITIONS.map((d) => [d.type, d]))
 
-export function getWidgetDefinition(type: string): WidgetDefinition | undefined {
+export function getWidgetDefinition(
+  type: string,
+): WidgetDefinition | undefined {
   return REGISTRY.get(type)
 }

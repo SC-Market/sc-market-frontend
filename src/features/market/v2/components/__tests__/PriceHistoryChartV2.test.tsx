@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -38,7 +38,9 @@ vi.mock("../../../../../components/charts/MuiCharts", () => ({
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Sample price history data
@@ -94,8 +96,8 @@ const mockPriceHistoryData = {
     },
   ],
   game_item_id: "test-item-id",
-      game_item_name: "Test Item",
-      interval: "day",
+  game_item_name: "Test Item",
+  interval: "day",
   start_date: "2024-01-01T00:00:00Z",
   end_date: "2024-01-02T00:00:00Z",
 }
@@ -151,7 +153,7 @@ const renderWithProviders = (
   return render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>{component}</ThemeProvider>
-    </Provider>
+    </Provider>,
   )
 }
 
@@ -165,7 +167,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     expect(screen.getByText("Loading price history...")).toBeInTheDocument()
@@ -176,7 +178,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     expect(screen.getByText("Error loading price history")).toBeInTheDocument()
@@ -194,7 +196,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     expect(screen.getByText("No price history available")).toBeInTheDocument()
@@ -205,7 +207,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Check chart is rendered
@@ -235,7 +237,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Check filter label
@@ -248,7 +250,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Open dropdown
@@ -275,7 +277,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Open dropdown
@@ -301,7 +303,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" height={600} />,
-      store
+      store,
     )
 
     expect(screen.getByTestId("chart-height")).toHaveTextContent("600")
@@ -312,7 +314,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" width="80%" />,
-      store
+      store,
     )
 
     expect(screen.getByTestId("chart-width")).toHaveTextContent("80%")
@@ -323,7 +325,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Verify each tier has correct number of data points
@@ -363,7 +365,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Should show "All Tiers" for null quality tier
@@ -418,7 +420,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Verify sort order: null (All Tiers), then 1, 3, 5
@@ -433,7 +435,7 @@ describe("PriceHistoryChartV2", () => {
 
     const { container } = renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Verify MUI theme components are used (Stack, Box, FormControl, etc.)
@@ -447,7 +449,7 @@ describe("PriceHistoryChartV2", () => {
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
-      store
+      store,
     )
 
     // Verify default chart configuration matches V1

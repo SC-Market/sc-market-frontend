@@ -54,30 +54,53 @@ describe("faqPageJsonLd / headDescription", () => {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: [
-        { "@type": "Question", name: "Q?", acceptedAnswer: { "@type": "Answer", text: "A." } },
+        {
+          "@type": "Question",
+          name: "Q?",
+          acceptedAnswer: { "@type": "Answer", text: "A." },
+        },
       ],
     })
   })
 
   it("reads the meta description", () => {
-    expect(headDescription({ meta: [{ name: "description", content: "d" }], jsonLd: [] })).toBe("d")
+    expect(
+      headDescription({
+        meta: [{ name: "description", content: "d" }],
+        jsonLd: [],
+      }),
+    ).toBe("d")
     expect(headDescription({ meta: [], jsonLd: [] })).toBe("")
   })
 })
 
 describe("applyWhiteLabelTitle (an org's white-label subdomain)", () => {
   it("is '<Org> — <page>' without SC Market's suffix", () => {
-    expect(applyWhiteLabelTitle("Blackwell Inc.", "Market")).toBe("Blackwell Inc. — Market")
-    expect(applyWhiteLabelTitle("Blackwell Inc.", "Market - SC Market")).toBe("Blackwell Inc. — Market")
-    expect(applyWhiteLabelTitle("Blackwell Inc.", "Aurora MR — Star Citizen Ship | SC Market")).toBe(
-      "Blackwell Inc. — Aurora MR — Star Citizen Ship",
+    expect(applyWhiteLabelTitle("Blackwell Inc.", "Market")).toBe(
+      "Blackwell Inc. — Market",
     )
+    expect(applyWhiteLabelTitle("Blackwell Inc.", "Market - SC Market")).toBe(
+      "Blackwell Inc. — Market",
+    )
+    expect(
+      applyWhiteLabelTitle(
+        "Blackwell Inc.",
+        "Aurora MR — Star Citizen Ship | SC Market",
+      ),
+    ).toBe("Blackwell Inc. — Aurora MR — Star Citizen Ship")
   })
 
   it("keeps a title that already starts with the org, and is the org without one", () => {
-    expect(applyWhiteLabelTitle("Blackwell Inc.", "Blackwell Inc. - Org - SC Market")).toBe("Blackwell Inc. - Org")
+    expect(
+      applyWhiteLabelTitle(
+        "Blackwell Inc.",
+        "Blackwell Inc. - Org - SC Market",
+      ),
+    ).toBe("Blackwell Inc. - Org")
     expect(applyWhiteLabelTitle("Blackwell Inc.", "")).toBe("Blackwell Inc.")
-    expect(applyWhiteLabelTitle("Blackwell Inc.", "SC Market")).toBe("Blackwell Inc.")
+    expect(applyWhiteLabelTitle("Blackwell Inc.", "SC Market")).toBe(
+      "Blackwell Inc.",
+    )
     expect(applyWhiteLabelTitle("Blackwell Inc.", null)).toBe("Blackwell Inc.")
   })
 })

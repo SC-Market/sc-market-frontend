@@ -61,7 +61,6 @@ interface OnboardingStep {
   icon: React.ReactNode
 }
 
-
 export function OnboardingPage() {
   usePageReady(false)
   const { t } = useTranslation()
@@ -218,7 +217,10 @@ export function OnboardingPage() {
         })
         handleNext()
       } catch {
-        issueAlert({ severity: "error", message: t("onboarding.availabilityFailed") })
+        issueAlert({
+          severity: "error",
+          message: t("onboarding.availabilityFailed"),
+        })
       }
     },
     [updateAvailability, issueAlert, handleNext, t],
@@ -227,7 +229,10 @@ export function OnboardingPage() {
   const handleAddEmail = useCallback(async () => {
     if (!emailInput.trim()) return
     try {
-      await addEmail({ email: emailInput.trim(), notificationTypeIds: [] }).unwrap()
+      await addEmail({
+        email: emailInput.trim(),
+        notificationTypeIds: [],
+      }).unwrap()
       setEmailSent(true)
       issueAlert({
         severity: "success",
@@ -354,16 +359,10 @@ export function OnboardingPage() {
             >
               <Box sx={{ mt: 2 }}>
                 <React.Suspense fallback={null}>
-                  <AvailabilitySelector
-                    onSave={handleSaveAvailability}
-                  />
+                  <AvailabilitySelector onSave={handleSaveAvailability} />
                 </React.Suspense>
               </Box>
-              <Button
-                variant="text"
-                onClick={handleNext}
-                sx={{ mt: 2 }}
-              >
+              <Button variant="text" onClick={handleNext} sx={{ mt: 2 }}>
                 {t("onboarding.skip", "Skip")}
               </Button>
             </StepContent>
@@ -414,11 +413,7 @@ export function OnboardingPage() {
                   </LoadingButton>
                 </Stack>
               )}
-              <Button
-                variant="text"
-                onClick={handleNext}
-                sx={{ mt: 2 }}
-              >
+              <Button variant="text" onClick={handleNext} sx={{ mt: 2 }}>
                 {t("onboarding.skip", "Skip")}
               </Button>
             </StepContent>
@@ -456,11 +451,18 @@ export function OnboardingPage() {
             >
               <Box sx={{ mt: 2 }}>
                 <PreferenceSection
-                  title={t("onboarding.emailNotifs.prefsTitle", "Email preferences")}
+                  title={t(
+                    "onboarding.emailNotifs.prefsTitle",
+                    "Email preferences",
+                  )}
                   preferences={emailPreferences?.preferences?.individual || []}
                   notificationTypes={availableNotificationTypes}
                   onPreferenceChange={(pref, enabled) =>
-                    handleEmailPrefChange(pref as EmailPreference, enabled, null)
+                    handleEmailPrefChange(
+                      pref as EmailPreference,
+                      enabled,
+                      null,
+                    )
                   }
                   onBatchPreferenceChange={(updates) =>
                     handleEmailBatchChange(updates, null)
@@ -512,11 +514,18 @@ export function OnboardingPage() {
                   />
                 ) : (
                   <PreferenceSection
-                    title={t("onboarding.pushNotifs.prefsTitle", "Push preferences")}
+                    title={t(
+                      "onboarding.pushNotifs.prefsTitle",
+                      "Push preferences",
+                    )}
                     preferences={pushPreferences?.preferences?.individual || []}
                     notificationTypes={availableNotificationTypes}
                     onPreferenceChange={(pref, enabled) =>
-                      handlePushPrefChange(pref as PushPreference, enabled, null)
+                      handlePushPrefChange(
+                        pref as PushPreference,
+                        enabled,
+                        null,
+                      )
                     }
                     onBatchPreferenceChange={(updates) =>
                       handlePushBatchChange(updates, null)
@@ -565,4 +574,3 @@ function StepContent({
     </Box>
   )
 }
-

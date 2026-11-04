@@ -4,7 +4,16 @@ import {
   OfferDetailsArea,
   OfferMessagesArea,
 } from "../../views/offers/OfferDetailsArea"
-import { Grid, Skeleton, Tabs, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material"
+import {
+  Grid,
+  Skeleton,
+  Tabs,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
+} from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
@@ -47,7 +56,9 @@ export function ViewOfferPage() {
       breadcrumbs={[
         { label: t("offers.dashboard", "Dashboard"), href: PATHS.dashboard },
         {
-          label: t("orders.offerShort", { id: (id || "").substring(0, 8).toUpperCase() }),
+          label: t("orders.offerShort", {
+            id: (id || "").substring(0, 8).toUpperCase(),
+          }),
           href: ORDER_PATHS.offer(id!),
         },
       ]}
@@ -55,7 +66,11 @@ export function ViewOfferPage() {
     >
       {session ? (
         <Grid item xs={12}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Tabs
               value={activeTab}
               onChange={(_, newValue) => setActiveTab(newValue)}
@@ -64,7 +79,9 @@ export function ViewOfferPage() {
               sx={{ borderBottom: 1, borderColor: "divider", flex: 1 }}
             >
               <HapticTab label={t("offers.details", "Details")} />
-              {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
+              {isMobile && (
+                <HapticTab label={t("offers.messages", "Messages")} />
+              )}
               {selectedOffer?.service && (
                 <HapticTab label={t("offers.service", "Service")} />
               )}
@@ -75,16 +92,24 @@ export function ViewOfferPage() {
             </Tabs>
             {session.offers.length > 1 && (
               <FormControl size="small" sx={{ minWidth: 160, ml: 2 }}>
-                <InputLabel id="offer-version-label">{t("contractsUi.version")}</InputLabel>
+                <InputLabel id="offer-version-label">
+                  {t("contractsUi.version")}
+                </InputLabel>
                 <Select
                   labelId="offer-version-label"
                   value={selectedOfferIndex}
                   label={t("contractsUi.version")}
-                  onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}
+                  onChange={(e) =>
+                    setSelectedOfferIndex(Number(e.target.value))
+                  }
                 >
                   {session.offers.map((_, index) => (
                     <MenuItem key={index} value={index}>
-                      {index === 0 ? t("contractsUi.mostRecent") : t("orders.offerShort", { id: session.offers.length - index })}
+                      {index === 0
+                        ? t("contractsUi.mostRecent")
+                        : t("orders.offerShort", {
+                            id: session.offers.length - index,
+                          })}
                     </MenuItem>
                   ))}
                 </Select>
@@ -98,7 +123,10 @@ export function ViewOfferPage() {
       {activeTab === 0 && (
         <>
           {!awaitingData && session ? (
-            <OfferDetailsArea session={session} selectedOfferIndex={selectedOfferIndex} />
+            <OfferDetailsArea
+              session={session}
+              selectedOfferIndex={selectedOfferIndex}
+            />
           ) : (
             <Grid item xs={12} lg={8} md={6}>
               <OfferDetailSkeleton
@@ -143,11 +171,17 @@ export function ViewOfferPage() {
               <OfferServiceArea session={session} />
             )}
 
-            {hasMarketListings && activeTab === marketListingsTab && (
-              hasV2Listings
-                ? <OfferMarketListingsV2Items items={selectedOffer!.market_listings_v2} />
-                : <OfferMarketListingsV1Items items={selectedOffer!.market_listings} />
-            )}
+            {hasMarketListings &&
+              activeTab === marketListingsTab &&
+              (hasV2Listings ? (
+                <OfferMarketListingsV2Items
+                  items={selectedOffer!.market_listings_v2}
+                />
+              ) : (
+                <OfferMarketListingsV1Items
+                  items={selectedOffer!.market_listings}
+                />
+              ))}
 
             {activeTab === availabilityTab && (
               <>

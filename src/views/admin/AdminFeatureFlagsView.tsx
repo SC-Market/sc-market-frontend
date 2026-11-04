@@ -15,7 +15,10 @@ import {
   Typography,
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useGetStatsQuery, type FeatureFlagStats } from "../../store/api/v2/market"
+import {
+  useGetStatsQuery,
+  type FeatureFlagStats,
+} from "../../store/api/v2/market"
 import { ADMIN_PATHS } from "../../routes/paths"
 
 /** Placeholder rows shown while the flag stats load; same shape as a flag row. */
@@ -47,7 +50,9 @@ export function AdminFeatureFlagsView() {
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>{t("admin.featureFlags.title")}</Typography>
+      <Typography variant="h5" gutterBottom>
+        {t("admin.featureFlags.title")}
+      </Typography>
       <TextField
         size="small"
         fullWidth
@@ -75,7 +80,9 @@ export function AdminFeatureFlagsView() {
             <FlagRowSkeleton key={i} />
           ))}
         {filtered.map((flag) => {
-          const label = flag.flag_name.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
+          const label = flag.flag_name
+            .replace(/_/g, " ")
+            .replace(/\bv2\b/i, "V2")
           return (
             <ListItemButton
               key={flag.flag_name}
@@ -85,7 +92,11 @@ export function AdminFeatureFlagsView() {
             >
               <ListItemText
                 primary={
-                  <Typography variant="body1" fontWeight="bold" sx={{ textTransform: "capitalize" }}>
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    sx={{ textTransform: "capitalize" }}
+                  >
                     {label}
                   </Typography>
                 }
@@ -97,7 +108,11 @@ export function AdminFeatureFlagsView() {
                       count: flag.override_count,
                     })}
                     {!flag.enabled && flag.rollout_percentage > 0 && (
-                      <Typography variant="caption" color="warning.main" display="block">
+                      <Typography
+                        variant="caption"
+                        color="warning.main"
+                        display="block"
+                      >
                         {t("adminUi.featureFlags.rolloutNotInEffect")}
                       </Typography>
                     )}
@@ -106,7 +121,11 @@ export function AdminFeatureFlagsView() {
               />
               <Stack direction="row" spacing={1} alignItems="center">
                 <Chip
-                  label={flag.enabled ? t("adminUi.featureFlags.enabled") : t("adminUi.featureFlags.disabled")}
+                  label={
+                    flag.enabled
+                      ? t("adminUi.featureFlags.enabled")
+                      : t("adminUi.featureFlags.disabled")
+                  }
                   color={flag.enabled ? "success" : "default"}
                   size="small"
                 />
@@ -115,8 +134,13 @@ export function AdminFeatureFlagsView() {
           )
         })}
         {!isLoading && !isError && filtered.length === 0 && (
-          <Typography color="text.secondary" sx={{ py: 3, textAlign: "center" }}>
-            {search ? t("adminUi.featureFlags.noMatch") : t("adminUi.featureFlags.noneConfigured")}
+          <Typography
+            color="text.secondary"
+            sx={{ py: 3, textAlign: "center" }}
+          >
+            {search
+              ? t("adminUi.featureFlags.noMatch")
+              : t("adminUi.featureFlags.noneConfigured")}
           </Typography>
         )}
       </List>

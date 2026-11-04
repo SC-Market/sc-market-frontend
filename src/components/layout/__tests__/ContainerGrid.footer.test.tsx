@@ -15,7 +15,9 @@ vi.mock("../../footer/Footer", () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
 }))
 
-const theme = createTheme({ layoutSpacing: { component: 2, layout: 3 } } as never)
+const theme = createTheme({
+  layoutSpacing: { component: 2, layout: 3 },
+} as never)
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   const drawer = React.useState(false)

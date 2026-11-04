@@ -63,11 +63,14 @@ export function ContractorsListSkeleton() {
 
   return (
     <StandardPageLayout
-        title={t("contractorsPage.title")}
-        headerTitle={t("contractorsPage.title")}
+      title={t("contractorsPage.title")}
+      headerTitle={t("contractorsPage.title")}
+      maxWidth="xxl"
+    >
+      <Container
         maxWidth="xxl"
+        sx={{ padding: 0, paddingTop: { xs: 2, sm: 4 } }}
       >
-      <Container maxWidth="xxl" sx={{ padding: 0, paddingTop: { xs: 2, sm: 4 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack
             direction="row"
@@ -78,21 +81,52 @@ export function ContractorsListSkeleton() {
             {/* Sidebar skeleton */}
             <Box sx={{ width: 280, flexShrink: 0 }}>
               <Skeleton variant="text" width={140} height={32} sx={{ mb: 2 }} />
-              <Skeleton variant="rectangular" width="100%" height={40} sx={{ borderRadius: 1, mb: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={40}
+                sx={{ borderRadius: 1, mb: 2 }}
+              />
               <Skeleton variant="text" width={100} height={24} sx={{ mb: 1 }} />
               {[...Array(5)].map((_, i) => (
-                <Skeleton key={i} variant="rectangular" width="100%" height={32} sx={{ borderRadius: 1, mb: 1 }} />
+                <Skeleton
+                  key={i}
+                  variant="rectangular"
+                  width="100%"
+                  height={32}
+                  sx={{ borderRadius: 1, mb: 1 }}
+                />
               ))}
-              <Skeleton variant="text" width={80} height={24} sx={{ mt: 2, mb: 1 }} />
-              <Skeleton variant="rectangular" width="100%" height={32} sx={{ borderRadius: 1, mb: 1 }} />
-              <Skeleton variant="rectangular" width="100%" height={32} sx={{ borderRadius: 1 }} />
+              <Skeleton
+                variant="text"
+                width={80}
+                height={24}
+                sx={{ mt: 2, mb: 1 }}
+              />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={32}
+                sx={{ borderRadius: 1, mb: 1 }}
+              />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={32}
+                sx={{ borderRadius: 1 }}
+              />
             </Box>
 
             {/* Content area */}
             <Box sx={{ flex: 1, maxWidth: "md" }}>
               <ContractorCardsSkeleton count={6} />
               <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                <Skeleton variant="rectangular" width={350} height={48} sx={{ borderRadius: 1 }} />
+                <Skeleton
+                  variant="rectangular"
+                  width={350}
+                  height={48}
+                  sx={{ borderRadius: 1 }}
+                />
               </Box>
             </Box>
           </Stack>

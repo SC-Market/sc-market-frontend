@@ -1,8 +1,26 @@
 import React, { Suspense } from "react"
-import { Box, Divider, Grid, Link, List, ListItem, Paper, Skeleton, Typography } from "@mui/material"
-import { Link as RouterLink, Navigate, useLocation, useParams } from "react-router-dom"
+import {
+  Box,
+  Divider,
+  Grid,
+  Link,
+  List,
+  ListItem,
+  Paper,
+  Skeleton,
+  Typography,
+} from "@mui/material"
+import {
+  Link as RouterLink,
+  Navigate,
+  useLocation,
+  useParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { HelpLayout, UpdatedStamp } from "../../features/help/components/HelpLayout"
+import {
+  HelpLayout,
+  UpdatedStamp,
+} from "../../features/help/components/HelpLayout"
 import { ContentBody } from "../../features/help/components/ContentBody"
 import {
   findCategory,
@@ -28,7 +46,11 @@ function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
       <List dense disablePadding>
         {guides.map((guide) => (
           <ListItem key={guide.id} disableGutters>
-            <Link component={RouterLink} to={HELP_PATHS.guide(guide.category, guide.slug)} color="secondary">
+            <Link
+              component={RouterLink}
+              to={HELP_PATHS.guide(guide.category, guide.slug)}
+              color="secondary"
+            >
               {guide.title}
             </Link>
           </ListItem>
@@ -40,16 +62,25 @@ function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
 
 export function GuidePage() {
   const { t } = useTranslation()
-  const { category: categoryId, slug } = useParams<{ category: string; slug: string }>()
+  const { category: categoryId, slug } = useParams<{
+    category: string
+    slug: string
+  }>()
   const location = useLocation()
   // A moved guide or category (the edge answers these with a 301 first).
   const moved = guideRedirectTarget(location.pathname)
   const guide = findGuide(categoryId, slug)
   const category = findCategory(guide?.category)
   const { body, error } = useContentBody(guide?.id)
-  const helpCrumb = { label: t("help.hubTitle", HELP_HUB_NAME), href: HELP_PATHS.hub }
+  const helpCrumb = {
+    label: t("help.hubTitle", HELP_HUB_NAME),
+    href: HELP_PATHS.hub,
+  }
 
-  if (moved) return <Navigate to={`${moved}${location.search}${location.hash}`} replace />
+  if (moved)
+    return (
+      <Navigate to={`${moved}${location.search}${location.hash}`} replace />
+    )
   if (!guide || !category) {
     return (
       <HelpLayout
@@ -63,7 +94,9 @@ export function GuidePage() {
     )
   }
 
-  const related = guide.related.map(findGuideById).filter((g): g is GuideMeta => !!g)
+  const related = guide.related
+    .map(findGuideById)
+    .filter((g): g is GuideMeta => !!g)
   const relatedIds = new Set([guide.id, ...guide.related])
   const more = guidesIn(category.id).filter((g) => !relatedIds.has(g.id))
 
@@ -95,8 +128,16 @@ export function GuidePage() {
             <ContentBody contentKey={guide.id} />
           </Suspense>
           <Divider sx={{ mt: 3 }} />
-          <GuideLinks title={t("help.nextSteps", "Next steps")} guides={related} />
-          <GuideLinks title={t("help.moreIn", "More in {{category}}", { category: category.title })} guides={more} />
+          <GuideLinks
+            title={t("help.nextSteps", "Next steps")}
+            guides={related}
+          />
+          <GuideLinks
+            title={t("help.moreIn", "More in {{category}}", {
+              category: category.title,
+            })}
+            guides={more}
+          />
         </Paper>
       </Grid>
     </HelpLayout>

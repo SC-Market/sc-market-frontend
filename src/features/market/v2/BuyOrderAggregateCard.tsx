@@ -76,8 +76,7 @@ export function BuyOrderAggregateCard({
     [aggregate.orders],
   )
   const totalQty = useMemo(
-    () =>
-      totalRemainingQuantity(aggregate.orders),
+    () => totalRemainingQuantity(aggregate.orders),
     [aggregate.orders],
   )
   const imageUrl = useMemo(
@@ -102,7 +101,11 @@ export function BuyOrderAggregateCard({
       data-testid="buy-order-card"
       data-id={aggregate.item_id}
     >
-      <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
+      <Fade
+        in
+        timeout={500}
+        style={{ transitionDelay: `${50 + 50 * index}ms` }}
+      >
         <Link
           to={MARKET_PATHS.aggregate(aggregate.item_id)}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -131,7 +134,9 @@ export function BuyOrderAggregateCard({
               />
               <Box
                 sx={{
-                  ...(theme.palette.mode === "light" ? { display: "none" } : {}),
+                  ...(theme.palette.mode === "light"
+                    ? { display: "none" }
+                    : {}),
                   position: "absolute",
                   zIndex: 3,
                   top: 0,
@@ -182,10 +187,10 @@ export function BuyOrderAggregateCard({
                   color="text.secondary"
                   sx={{ fontSize: "0.7rem", lineHeight: 1 }}
                 >
-                  {fmt.number(totalQty)}{" "}
-                  {t("market.requested", "requested")}
+                  {fmt.number(totalQty)} {t("market.requested", "requested")}
                   {" · "}
-                  {aggregate.orders.length} {t("market.buyOrders", "buy orders")}
+                  {aggregate.orders.length}{" "}
+                  {t("market.buyOrders", "buy orders")}
                 </Typography>
               </CardContent>
             </Card>

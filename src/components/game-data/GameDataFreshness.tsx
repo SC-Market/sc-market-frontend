@@ -14,7 +14,13 @@ export function GameDataFreshness(props: Omit<TypographyProps, "children">) {
   const text = freshnessStamp(data?.LIVE)
   if (!text) return null
   return (
-    <Typography variant="caption" component="p" color="text.primary" sx={{ mt: 2, opacity: 0.8 }} {...props}>
+    <Typography
+      variant="caption"
+      component="p"
+      color="text.primary"
+      sx={{ mt: 2, opacity: 0.8 }}
+      {...props}
+    >
       {text}
     </Typography>
   )

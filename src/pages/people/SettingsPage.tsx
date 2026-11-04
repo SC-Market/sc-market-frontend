@@ -45,12 +45,18 @@ import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { PageBusy } from "../../components/metadata/PageReady"
-import { SETTINGS_TABS, settingsTabFromQuery, settingsTabKey } from "./settingsTabs"
+import {
+  SETTINGS_TABS,
+  settingsTabFromQuery,
+  settingsTabKey,
+} from "./settingsTabs"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Admin-only; loaded only when the tab is shown.
 const MfaSettings = lazyWithRetry(() =>
-  import("../../features/mfa/components/MfaSettings").then((m) => ({ default: m.MfaSettings })),
+  import("../../features/mfa/components/MfaSettings").then((m) => ({
+    default: m.MfaSettings,
+  })),
 )
 
 const MOBILE_NAV_TAB_INDEX = SETTINGS_TABS["mobile-nav"]

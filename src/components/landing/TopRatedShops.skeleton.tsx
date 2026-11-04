@@ -18,10 +18,7 @@ export const TOP_RATED_SHOPS_COUNT = 4
 export const TOP_SHOP_CELL_HEIGHT = 186
 
 /** One shop cell: fixed height, the card fills it. */
-export function TopShopCell(props: {
-  children: ReactNode
-  slug?: string
-}) {
+export function TopShopCell(props: { children: ReactNode; slug?: string }) {
   return (
     <Box
       data-testid={props.slug ? "shop-card" : undefined}
@@ -37,7 +34,10 @@ export function TopShopCell(props: {
 export function TopRatedShopsLayout(props: { children: ReactNode }) {
   const { t } = useTranslation()
   return (
-    <LandingSection labelledBy="landing-top-shops-title" testId="landing-top-shops">
+    <LandingSection
+      labelledBy="landing-top-shops-title"
+      testId="landing-top-shops"
+    >
       <LandingSectionHeader
         id="landing-top-shops-title"
         title={t("landing.topShopsTitle")}

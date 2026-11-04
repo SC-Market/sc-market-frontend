@@ -26,7 +26,12 @@ describe("orderSettingsOps", () => {
 
   it("back to a default deletes the stored row", () => {
     expect(
-      orderSettingsOps(defaults, ["require_availability", "stock_subtraction_timing", "allocation_mode", "min_order_size"]),
+      orderSettingsOps(defaults, [
+        "require_availability",
+        "stock_subtraction_timing",
+        "allocation_mode",
+        "min_order_size",
+      ]),
     ).toEqual([
       { op: "delete", settingType: "require_availability" },
       { op: "delete", settingType: "stock_subtraction_timing" },
@@ -47,17 +52,45 @@ describe("orderSettingsOps", () => {
       maxOrderValueEnabled: true,
     }
     expect(orderSettingsOps(form, [])).toEqual([
-      { op: "upsert", settingType: "offer_message", message_content: "Hi", enabled: false },
-      { op: "upsert", settingType: "require_availability", message_content: "", enabled: true },
-      { op: "upsert", settingType: "stock_subtraction_timing", message_content: "on_received", enabled: true },
-      { op: "upsert", settingType: "allocation_mode", message_content: "manual", enabled: true },
-      { op: "upsert", settingType: "max_order_value", message_content: "5000", enabled: true },
+      {
+        op: "upsert",
+        settingType: "offer_message",
+        message_content: "Hi",
+        enabled: false,
+      },
+      {
+        op: "upsert",
+        settingType: "require_availability",
+        message_content: "",
+        enabled: true,
+      },
+      {
+        op: "upsert",
+        settingType: "stock_subtraction_timing",
+        message_content: "on_received",
+        enabled: true,
+      },
+      {
+        op: "upsert",
+        settingType: "allocation_mode",
+        message_content: "manual",
+        enabled: true,
+      },
+      {
+        op: "upsert",
+        settingType: "max_order_value",
+        message_content: "5000",
+        enabled: true,
+      },
     ])
   })
 
   it("an enabled limit with no value is cleared, an empty message is left alone", () => {
     expect(
-      orderSettingsOps({ ...defaults, minOrderSizeEnabled: true, minOrderSize: "  " }, ["min_order_size", "offer_message"]),
+      orderSettingsOps(
+        { ...defaults, minOrderSizeEnabled: true, minOrderSize: "  " },
+        ["min_order_size", "offer_message"],
+      ),
     ).toEqual([{ op: "delete", settingType: "min_order_size" }])
   })
 })

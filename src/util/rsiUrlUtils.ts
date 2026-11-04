@@ -12,7 +12,9 @@ export function extractProfileIdFromUrl(url: string): string | null {
     const pathParts = urlObj.pathname.split("/").filter(Boolean)
 
     // Look for /citizens/ pattern (locale prefix is optional, e.g., /en/, /fr/, etc.)
-    const citizensIndex = pathParts.findIndex((p) => p.toLowerCase() === "citizens")
+    const citizensIndex = pathParts.findIndex(
+      (p) => p.toLowerCase() === "citizens",
+    )
     if (citizensIndex !== -1 && pathParts.length > citizensIndex + 1) {
       return pathParts[citizensIndex + 1]
     }

@@ -1,13 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
-import { useAssignOrderMutation, useUnassignOrderMutation } from "../api/ordersApi"
+import {
+  useGetContractorMembersQuery,
+  contractorsApi,
+} from "../../contractor/api/contractorApi"
+import {
+  useAssignOrderMutation,
+  useUnassignOrderMutation,
+} from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 import throttle from "lodash/throttle"
 
-export function useMemberAssign(orderId: string, contractorId: string | undefined) {
+export function useMemberAssign(
+  orderId: string,
+  contractorId: string | undefined,
+) {
   const [target, setTarget] = useState("")
   const [targetObject, setTargetObject] = useState<{
     username: string
@@ -62,9 +71,15 @@ export function useMemberAssign(orderId: string, contractorId: string | undefine
       username: targetObject.username,
     })
     if ("data" in res && !("error" in res)) {
-      issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
+      issueAlert({
+        message: t("memberAssignArea.assigned"),
+        severity: "success",
+      })
     } else {
-      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      const error =
+        "error" in res
+          ? (res.error as { error?: string; data?: { error?: string } })
+          : undefined
       issueAlert({
         message: `${t("memberAssignArea.failed_assign")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
@@ -75,9 +90,15 @@ export function useMemberAssign(orderId: string, contractorId: string | undefine
   const removeAssignment = useCallback(async () => {
     const res = await unassignUser({ order_id: orderId })
     if ("data" in res && !("error" in res)) {
-      issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
+      issueAlert({
+        message: t("memberAssignArea.unassigned"),
+        severity: "success",
+      })
     } else {
-      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      const error =
+        "error" in res
+          ? (res.error as { error?: string; data?: { error?: string } })
+          : undefined
       issueAlert({
         message: `${t("memberAssignArea.failed_unassign")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",

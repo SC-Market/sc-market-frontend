@@ -50,7 +50,10 @@ export function useBreakpointUp(key: Breakpoint): boolean {
 }
 
 /** `theme.breakpoints.between(start, end)`: `start` <= width < `end`. */
-export function useBreakpointBetween(start: Breakpoint, end: Breakpoint): boolean {
+export function useBreakpointBetween(
+  start: Breakpoint,
+  end: Breakpoint,
+): boolean {
   const theme = useTheme()
   return useBreakpointQuery(theme.breakpoints.between(start, end))
 }

@@ -2,7 +2,9 @@ import { useTranslation } from "react-i18next"
 import React, { Component, ReactElement, Suspense } from "react"
 import { Grid, GridProps } from "@mui/material"
 
-interface LazySectionProps<P extends Record<string, unknown> = Record<string, unknown>> {
+interface LazySectionProps<
+  P extends Record<string, unknown> = Record<string, unknown>,
+> {
   // Lazy-loaded component
   component: React.LazyExoticComponent<React.ComponentType<P>>
 
@@ -96,7 +98,9 @@ class SectionErrorBoundary extends Component<
  * />
  * ```
  */
-export function LazySection<P extends Record<string, unknown> = Record<string, unknown>>(props: LazySectionProps<P>): ReactElement {
+export function LazySection<
+  P extends Record<string, unknown> = Record<string, unknown>,
+>(props: LazySectionProps<P>): ReactElement {
   const {
     component: LazyComponent,
     componentProps,

@@ -2,9 +2,15 @@ import { renderHook } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
 
 const alert = vi.fn()
-const assign = vi.fn(() => ({ unwrap: () => Promise.reject({ message: "Taken" }) }))
-vi.mock("../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => alert }))
-vi.mock("../../api/ordersApi", () => ({ useAssignOrderMutation: () => [assign] }))
+const assign = vi.fn(() => ({
+  unwrap: () => Promise.reject({ message: "Taken" }),
+}))
+vi.mock("../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => alert,
+}))
+vi.mock("../../api/ordersApi", () => ({
+  useAssignOrderMutation: () => [assign],
+}))
 
 import { useClaimOrder } from "../useClaimOrder"
 

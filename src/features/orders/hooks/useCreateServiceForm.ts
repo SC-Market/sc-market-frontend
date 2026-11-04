@@ -86,8 +86,10 @@ export function useCreateServiceForm(service?: Service) {
   const [destSuggest, setDestSuggest] = useState<StarmapObject[]>([])
   const [departTarget, setDepartTarget] = useState("")
   const [destTarget, setDestTarget] = useState("")
-  const [departTargetObject, setDepartTargetObject] = useState<StarmapObject | null>(null)
-  const [destTargetObject, setDestTargetObject] = useState<StarmapObject | null>(null)
+  const [departTargetObject, setDepartTargetObject] =
+    useState<StarmapObject | null>(null)
+  const [destTargetObject, setDestTargetObject] =
+    useState<StarmapObject | null>(null)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
   // Populate form when editing existing service
@@ -116,39 +118,58 @@ export function useCreateServiceForm(service?: Service) {
   }, [service?.photos])
 
   // Starmap suggestions
-  const getSuggestions = useCallback(async (query: string) => {
-    if (query.length < 3) return []
-    const result = await dispatch(
-      starmapApi.endpoints.searchStarmap.initiate({ query }),
-    )
-    if (!result.data) return []
-    const responseData = result.data as unknown as { results?: StarmapObject[]; objects?: { resultset?: StarmapObject[] } }
-    const resultList: StarmapObject[] = responseData.objects?.resultset || responseData.results || []
-    const extended: StarmapObject[] = []
-    await Promise.all(
-      resultList.map(async (obj) => {
-        if (obj.type === "SATELLITE") {
-          const planetNum = obj.designation.replace(/\D/g, "")
-          const planetDes = `${obj.star_system.name} ${romanize(parseInt(planetNum))}`
-          extended.push(...(await getSuggestions(planetDes)))
-        }
-      }),
-    )
-    extended.push(...resultList)
-    return extended
-  }, [dispatch])
+  const getSuggestions = useCallback(
+    async (query: string) => {
+      if (query.length < 3) return []
+      const result = await dispatch(
+        starmapApi.endpoints.searchStarmap.initiate({ query }),
+      )
+      if (!result.data) return []
+      const responseData = result.data as unknown as {
+        results?: StarmapObject[]
+        objects?: { resultset?: StarmapObject[] }
+      }
+      const resultList: StarmapObject[] =
+        responseData.objects?.resultset || responseData.results || []
+      const extended: StarmapObject[] = []
+      await Promise.all(
+        resultList.map(async (obj) => {
+          if (obj.type === "SATELLITE") {
+            const planetNum = obj.designation.replace(/\D/g, "")
+            const planetDes = `${obj.star_system.name} ${romanize(parseInt(planetNum))}`
+            extended.push(...(await getSuggestions(planetDes)))
+          }
+        }),
+      )
+      extended.push(...resultList)
+      return extended
+    },
+    [dispatch],
+  )
 
   const retrieveDepart = useMemo(
-    () => throttle(async (query: string) => setDepartSuggest(await getSuggestions(query)), 400),
+    () =>
+      throttle(
+        async (query: string) => setDepartSuggest(await getSuggestions(query)),
+        400,
+      ),
     [getSuggestions],
   )
   const retrieveDest = useMemo(
-    () => throttle(async (query: string) => setDestSuggest(await getSuggestions(query)), 400),
+    () =>
+      throttle(
+        async (query: string) => setDestSuggest(await getSuggestions(query)),
+        400,
+      ),
     [getSuggestions],
   )
 
-  useEffect(() => { retrieveDepart(departTarget) }, [departTarget, retrieveDepart])
-  useEffect(() => { retrieveDest(destTarget) }, [destTarget, retrieveDest])
+  useEffect(() => {
+    retrieveDepart(departTarget)
+  }, [departTarget, retrieveDepart])
+  useEffect(() => {
+    retrieveDest(destTarget)
+  }, [destTarget, retrieveDest])
 
   const handleFileUpload = useCallback((files: File[]) => {
     setUploadedFiles((prev) => [...prev, ...files])
@@ -157,7 +178,8 @@ export function useCreateServiceForm(service?: Service) {
   // Mutations
   const [createService] = useCreateServiceMutation()
   const [updateService] = useUpdateServiceMutation()
-  const [uploadServicePhotos, { isLoading: isUploadingPhotos }] = useUploadServicePhotosMutation()
+  const [uploadServicePhotos, { isLoading: isUploadingPhotos }] =
+    useUploadServicePhotosMutation()
 
   const submitService = useCallback(async () => {
     const allPhotos = [...state.photos]
@@ -186,13 +208,19 @@ export function useCreateServiceForm(service?: Service) {
         .unwrap()
         .then(async () => {
           if (uploadedFiles.length > 0) {
-            uploadServicePhotos({ service_id: serviceId, photos: uploadedFiles })
+            uploadServicePhotos({
+              service_id: serviceId,
+              photos: uploadedFiles,
+            })
               .unwrap()
               .then(() => setUploadedFiles([]))
               .catch((err) => issueAlert(err))
           }
           setState({ ...INITIAL_STATE })
-          issueAlert({ message: t("CreateServiceForm.alert.submitted"), severity: "success" })
+          issueAlert({
+            message: t("CreateServiceForm.alert.submitted"),
+            severity: "success",
+          })
           navigate(ORDER_PATHS.services)
         })
         .catch((err) => issueAlert(err))
@@ -217,20 +245,36 @@ export function useCreateServiceForm(service?: Service) {
         .then(async (result) => {
           const serviceId = result.service_id
           if (uploadedFiles.length > 0) {
-            uploadServicePhotos({ service_id: serviceId, photos: uploadedFiles })
+            uploadServicePhotos({
+              service_id: serviceId,
+              photos: uploadedFiles,
+            })
               .unwrap()
               .catch((err) => issueAlert(err))
           }
           setState({ ...INITIAL_STATE })
           setUploadedFiles([])
-          issueAlert({ message: t("CreateServiceForm.alert.submitted"), severity: "success" })
+          issueAlert({
+            message: t("CreateServiceForm.alert.submitted"),
+            severity: "success",
+          })
           navigate(ORDER_PATHS.serviceEdit(serviceId))
         })
         .catch((err) => issueAlert(err))
     }
   }, [
-    createService, contractorId, departTargetObject, destTargetObject,
-    service, issueAlert, state, uploadedFiles, updateService, uploadServicePhotos, t, navigate,
+    createService,
+    contractorId,
+    departTargetObject,
+    destTargetObject,
+    service,
+    issueAlert,
+    state,
+    uploadedFiles,
+    updateService,
+    uploadServicePhotos,
+    t,
+    navigate,
   ])
 
   const removePendingFile = useCallback((file: File) => {
@@ -238,13 +282,21 @@ export function useCreateServiceForm(service?: Service) {
   }, [])
 
   return {
-    state, setState,
-    departSuggest, destSuggest,
-    departTarget, setDepartTarget,
-    destTarget, setDestTarget,
-    departTargetObject, setDepartTargetObject,
-    destTargetObject, setDestTargetObject,
-    uploadedFiles, handleFileUpload, removePendingFile,
+    state,
+    setState,
+    departSuggest,
+    destSuggest,
+    departTarget,
+    setDepartTarget,
+    destTarget,
+    setDestTarget,
+    departTargetObject,
+    setDepartTargetObject,
+    destTargetObject,
+    setDestTargetObject,
+    uploadedFiles,
+    handleFileUpload,
+    removePendingFile,
     isUploadingPhotos,
     submitService,
     issueAlert,

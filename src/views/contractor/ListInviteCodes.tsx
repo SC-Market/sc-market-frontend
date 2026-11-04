@@ -1,8 +1,4 @@
-import React, {
-  MouseEventHandler,
-  ReactElement,
-  useCallback,
-} from "react"
+import React, { MouseEventHandler, ReactElement, useCallback } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
@@ -11,10 +7,7 @@ import {
   useGetContractorInvitesQuery,
 } from "../../features/contractor/api/contractorApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  ContentCopyRounded,
-  DeleteRounded,
-} from "@mui/icons-material"
+import { ContentCopyRounded, DeleteRounded } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ContractorInviteCode } from "../../features/contractor/domain/types"
 import { useTheme } from "@mui/material/styles"
@@ -75,10 +68,10 @@ export function InviteRow(props: {
       })
     } else {
       let reason = String(res.error || "")
-      if (res.error && 'data' in res.error && res.error.data) {
+      if (res.error && "data" in res.error && res.error.data) {
         const errData = res.error.data as { error?: string; message?: string }
         reason = errData.error || errData.message || reason
-      } else if (res.error && 'message' in res.error) {
+      } else if (res.error && "message" in res.error) {
         reason = res.error.message ?? reason
       }
       issueAlert({
@@ -140,7 +133,9 @@ export function InviteRow(props: {
           align={"right"}
         >
           <IconButton
-            aria-label={t("inviteCodes.copy", "Copy invite link {{code}}", { code: row.invite_id })}
+            aria-label={t("inviteCodes.copy", "Copy invite link {{code}}", {
+              code: row.invite_id,
+            })}
             onClick={(event) => {
               navigator.clipboard.writeText(
                 `${window.location.origin}/contractor_invite/${row.invite_id}`,
@@ -163,7 +158,9 @@ export function InviteRow(props: {
           align={"right"}
         >
           <IconButton
-            aria-label={t("inviteCodes.delete", "Delete invite {{code}}", { code: row.invite_id })}
+            aria-label={t("inviteCodes.delete", "Delete invite {{code}}", {
+              code: row.invite_id,
+            })}
             onClick={(event) => {
               submitDelete()
               event.stopPropagation()

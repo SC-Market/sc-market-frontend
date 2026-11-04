@@ -28,7 +28,12 @@ export function useClaimOffer() {
     (sessionId: string, username: string) =>
       assignOffer({ session_id: sessionId, username })
         .unwrap()
-        .then(() => issueAlert({ message: t("orders.claimed", "Offer claimed"), severity: "success" }))
+        .then(() =>
+          issueAlert({
+            message: t("orders.claimed", "Offer claimed"),
+            severity: "success",
+          }),
+        )
         .catch((e) => issueAlert(e as UnwrappedErrorInterface)),
     [assignOffer, issueAlert, t],
   )
@@ -45,7 +50,10 @@ export function useOfferAssignment(sessionId: string) {
     async (username: string) => {
       const res = await assignOffer({ session_id: sessionId, username })
       if ("data" in res && !("error" in res)) {
-        issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
+        issueAlert({
+          message: t("memberAssignArea.assigned"),
+          severity: "success",
+        })
       } else {
         issueAlert({
           message: `${t("memberAssignArea.failed_assign")} ${assignErrorReason(res.error)}`,
@@ -59,7 +67,10 @@ export function useOfferAssignment(sessionId: string) {
   const unassign = useCallback(async () => {
     const res = await unassignOffer({ session_id: sessionId })
     if ("data" in res && !("error" in res)) {
-      issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
+      issueAlert({
+        message: t("memberAssignArea.unassigned"),
+        severity: "success",
+      })
     } else {
       issueAlert({
         message: `${t("memberAssignArea.failed_unassign")} ${assignErrorReason(res.error)}`,

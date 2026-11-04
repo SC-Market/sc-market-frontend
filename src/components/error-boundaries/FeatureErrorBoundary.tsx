@@ -84,7 +84,10 @@ export function FeatureErrorBoundary({
       resetErrorBoundary={reset}
       isRouteError={false}
       showDetails={import.meta.env.DEV}
-      title={t("appUi.errorBoundary.featureTitle", { feature: featureName, defaultValue: "Error in {{feature}}" })}
+      title={t("appUi.errorBoundary.featureTitle", {
+        feature: featureName,
+        defaultValue: "Error in {{feature}}",
+      })}
       message={t("appUi.errorBoundary.featureMessage", {
         feature: featureName,
         defaultValue:

@@ -7,7 +7,10 @@
 
 import React from "react"
 import { Avatar, AvatarProps } from "@mui/material"
-import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons"
+import {
+  getResourceCategoryIcon,
+  getCommodityColor,
+} from "../../util/gameIcons"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
@@ -47,12 +50,25 @@ export function GameItemAvatar({
   sx,
   ...rest
 }: GameItemAvatarProps) {
-  const resolvedIcon = iconUrl || getResourceCategoryIcon(subType) || getResourceCategoryIcon(itemType) || undefined
+  const resolvedIcon =
+    iconUrl ||
+    getResourceCategoryIcon(subType) ||
+    getResourceCategoryIcon(itemType) ||
+    undefined
   const isSvg = isSvgIcon(resolvedIcon)
-  const bgColor = useCommodityColor ? (getCommodityColor(subType) || getCommodityColor(itemType) || undefined) : undefined
+  const bgColor = useCommodityColor
+    ? getCommodityColor(subType) || getCommodityColor(itemType) || undefined
+    : undefined
 
   // Scale font size relative to avatar size — smaller for text fallback
-  const fontSize = size <= 16 ? "0.4rem" : size <= 24 ? "0.5rem" : size <= 32 ? "0.6rem" : "0.7rem"
+  const fontSize =
+    size <= 16
+      ? "0.4rem"
+      : size <= 24
+        ? "0.5rem"
+        : size <= 32
+          ? "0.6rem"
+          : "0.7rem"
 
   return (
     <Avatar
@@ -65,7 +81,9 @@ export function GameItemAvatar({
         fontWeight: 700,
         color: "#fff !important", // Force white text on colored bg
         bgcolor: bgColor || "secondary.main",
-        ...(resolvedIcon && isSvg ? { p: Math.max(2, size * 0.12) + "px" } : {}),
+        ...(resolvedIcon && isSvg
+          ? { p: Math.max(2, size * 0.12) + "px" }
+          : {}),
         flexShrink: 0,
         ...sx,
       }}

@@ -1,9 +1,9 @@
 /**
  * VersionSelector - Game version selector component
- * 
+ *
  * Allows users to select between LIVE, PTU, and EPTU game versions.
  * Persists selection to localStorage and displays last update timestamp.
- * 
+ *
  * Requirements: 13.1-13.6, 45.1-45.10
  */
 
@@ -20,7 +20,11 @@ import {
 import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import UpdateIcon from "@mui/icons-material/Update"
-import { useGetActiveVersionsQuery, useSelectVersionMutation, type GameVersion } from "../../store/api/v2/market"
+import {
+  useGetActiveVersionsQuery,
+  useSelectVersionMutation,
+  type GameVersion,
+} from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface VersionSelectorProps {
@@ -36,7 +40,7 @@ const VERSION_STORAGE_KEY = "sc-market-selected-version"
 
 /**
  * VersionSelector Component
- * 
+ *
  * Features:
  * - Dropdown with LIVE/PTU/EPTU options (45.2, 45.3)
  * - Displays full version number including build (45.4)
@@ -54,7 +58,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   const theme = useTheme<ExtendedTheme>()
   const { data: activeVersions, isLoading } = useGetActiveVersionsQuery()
   const [selectVersion] = useSelectVersionMutation()
-  
+
   const [selectedVersionId, setSelectedVersionId] = useState<string>("")
 
   // Load persisted version on mount
@@ -62,7 +66,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     if (!activeVersions) return
 
     const stored = localStorage.getItem(VERSION_STORAGE_KEY)
-    
+
     if (stored) {
       // Verify stored version still exists
       const allVersions = [
@@ -70,7 +74,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
         activeVersions.PTU,
         activeVersions.EPTU,
       ].filter(Boolean)
-      
+
       const exists = allVersions.some((v) => v?.version_id === stored)
       if (exists) {
         setSelectedVersionId(stored)
@@ -90,13 +94,16 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     localStorage.setItem(VERSION_STORAGE_KEY, versionId)
 
     // Find version type
-    const versionType = Object.entries(activeVersions || {}).find(
-      ([_, version]) => version?.version_id === versionId
-    )?.[0] || "LIVE"
+    const versionType =
+      Object.entries(activeVersions || {}).find(
+        ([_, version]) => version?.version_id === versionId,
+      )?.[0] || "LIVE"
 
     // Call API to persist selection (if authenticated)
     try {
-      await selectVersion({ selectVersionRequest: { version_id: versionId } }).unwrap()
+      await selectVersion({
+        selectVersionRequest: { version_id: versionId },
+      }).unwrap()
     } catch {
       // Ignore auth errors for guest users
       console.debug("Version selection not persisted (guest user)")
@@ -182,7 +189,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   ].filter((v) => v.data)
 
   const selectedVersion = versions.find(
-    (v) => v.data?.version_id === selectedVersionId
+    (v) => v.data?.version_id === selectedVersionId,
   )
 
   return (
@@ -252,7 +259,11 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
                   {formatVersion(version.data)}
                 </Typography>
               </Box>
-              <Tooltip title={t("wikiUi.versionSelector.lastUpdated", { time: formatLastUpdate(version.data!.last_data_update) })}>
+              <Tooltip
+                title={t("wikiUi.versionSelector.lastUpdated", {
+                  time: formatLastUpdate(version.data!.last_data_update),
+                })}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -279,7 +290,9 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           color="text.secondary"
           sx={{ mt: 0.5, display: "block" }}
         >
-          {t("wikiUi.versionSelector.lastUpdated", { time: formatLastUpdate(selectedVersion.data!.last_data_update) })}
+          {t("wikiUi.versionSelector.lastUpdated", {
+            time: formatLastUpdate(selectedVersion.data!.last_data_update),
+          })}
         </Typography>
       )}
     </Box>

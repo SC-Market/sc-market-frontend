@@ -24,7 +24,14 @@ export function NotificationBid(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.details.title }) : `/market/${bid.listing_id}`}
+      to={
+        listing
+          ? formatMarketUrl({
+              listing_id: bid.listing_id,
+              title: listing.details.title,
+            })
+          : `/market/${bid.listing_id}`
+      }
       notif={notif}
     >
       {t("notifications.new_bid_placed_by")}{" "}
@@ -47,7 +54,14 @@ export function NotificationBid(props: { notif: Notification }) {
       </Link>{" "}
       {t("notifications.for")}{" "}
       <Link
-        to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.details.title }) : `/market/${bid.listing_id}`}
+        to={
+          listing
+            ? formatMarketUrl({
+                listing_id: bid.listing_id,
+                title: listing.details.title,
+              })
+            : `/market/${bid.listing_id}`
+        }
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,

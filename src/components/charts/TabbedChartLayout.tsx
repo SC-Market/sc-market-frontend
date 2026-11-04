@@ -15,7 +15,10 @@ export function TabbedChartLayout({
   children,
 }: TabbedChartLayoutProps) {
   return (
-    <Box display="flex" sx={{ border: 1, borderColor: "divider", borderRadius: 1, width: "100%" }}>
+    <Box
+      display="flex"
+      sx={{ border: 1, borderColor: "divider", borderRadius: 1, width: "100%" }}
+    >
       <Tabs
         orientation="vertical"
         value={selectedTab}

@@ -76,7 +76,8 @@ const localPlugin = {
 // switch a folder to error once it is clean.
 const RAW_MUI = {
   Dialog: "use BottomSheet (components/mobile) or a shared dialog component",
-  Avatar: "use UserAvatar / ContractorAvatar (components/avatar), which set alt",
+  Avatar:
+    "use UserAvatar / ContractorAvatar (components/avatar), which set alt",
   Drawer: "use BottomSheet (components/mobile) or the shared nav drawers",
   Switch: "use a labelled FormControlLabel + Switch from a shared component",
 }
@@ -93,15 +94,15 @@ const scmStyle = {
         messages: {
           toLocale:
             "{{name}}() without a locale formats in the machine's language, so the server render and the browser disagree. Use util/format (useFormatters() in components, or a format* function with an explicit locale).",
-          intl:
-            "Intl.{{name}} without a locale uses the machine's language. Pass the page's locale (useFormatters().locale, pageLocale()) or use util/format.",
+          intl: "Intl.{{name}} without a locale uses the machine's language. Pass the page's locale (useFormatters().locale, pageLocale()) or use util/format.",
         },
       },
       create(context) {
         const noLocale = (args) =>
           args.length === 0 ||
           (args[0].type === "Identifier" && args[0].name === "undefined")
-        const INTL = /^(NumberFormat|DateTimeFormat|RelativeTimeFormat|ListFormat|PluralRules|DisplayNames|DurationFormat)$/
+        const INTL =
+          /^(NumberFormat|DateTimeFormat|RelativeTimeFormat|ListFormat|PluralRules|DisplayNames|DurationFormat)$/
         const intlCtor = (node) => {
           const c = node.callee
           if (
@@ -112,7 +113,11 @@ const scmStyle = {
             INTL.test(c.property.name) &&
             noLocale(node.arguments)
           ) {
-            context.report({ node, messageId: "intl", data: { name: c.property.name } })
+            context.report({
+              node,
+              messageId: "intl",
+              data: { name: c.property.name },
+            })
           }
         }
         return {
@@ -121,10 +126,16 @@ const scmStyle = {
             if (
               c.type === "MemberExpression" &&
               c.property.type === "Identifier" &&
-              /^toLocale(String|DateString|TimeString)$/.test(c.property.name) &&
+              /^toLocale(String|DateString|TimeString)$/.test(
+                c.property.name,
+              ) &&
               noLocale(node.arguments)
             ) {
-              context.report({ node, messageId: "toLocale", data: { name: c.property.name } })
+              context.report({
+                node,
+                messageId: "toLocale",
+                data: { name: c.property.name },
+              })
             }
             intlCtor(node)
           },
@@ -143,7 +154,12 @@ const scmStyle = {
         const check = (node, value) => {
           if (typeof value !== "string") return
           const m = WHOLE_HEX.exec(value) ?? EMBEDDED_HEX.exec(value)
-          if (m) context.report({ node, messageId: "hex", data: { value: m[0].trim() } })
+          if (m)
+            context.report({
+              node,
+              messageId: "hex",
+              data: { value: m[0].trim() },
+            })
         }
         return {
           Literal: (node) => check(node, node.value),
@@ -218,9 +234,18 @@ export default [
         "error",
         {
           patterns: [
-            { group: ["react", "react-dom"], message: "domain/ must be pure — no React imports" },
-            { group: ["@mui/*"], message: "domain/ must be pure — no MUI imports" },
-            { group: ["**/store", "**/store/**"], message: "domain/ must be pure — no store imports" },
+            {
+              group: ["react", "react-dom"],
+              message: "domain/ must be pure — no React imports",
+            },
+            {
+              group: ["@mui/*"],
+              message: "domain/ must be pure — no MUI imports",
+            },
+            {
+              group: ["**/store", "**/store/**"],
+              message: "domain/ must be pure — no store imports",
+            },
           ],
         },
       ],
@@ -235,7 +260,11 @@ export default [
         "warn",
         {
           patterns: [
-            { group: ["**/store", "**/store/**"], message: "Shared components should not import from store/ — receive data via props instead (see ARCHITECTURE.md)" },
+            {
+              group: ["**/store", "**/store/**"],
+              message:
+                "Shared components should not import from store/ — receive data via props instead (see ARCHITECTURE.md)",
+            },
           ],
         },
       ],
@@ -250,7 +279,28 @@ export default [
         "warn",
         {
           patterns: [
-            { group: ["**/store/profile", "**/store/contractor", "**/store/offer", "**/store/orders", "**/store/services", "**/store/recruiting", "**/store/notification", "**/store/moderation", "**/store/public_contracts", "**/store/admin", "**/store/ships", "**/store/orderSettings", "**/store/comments", "**/store/transactions", "**/store/commodities", "**/store/organizations"], message: "Use feature-owned API slices (features/*/api/) instead of legacy store slices (see DECOUPLING_PLAN.md)" },
+            {
+              group: [
+                "**/store/profile",
+                "**/store/contractor",
+                "**/store/offer",
+                "**/store/orders",
+                "**/store/services",
+                "**/store/recruiting",
+                "**/store/notification",
+                "**/store/moderation",
+                "**/store/public_contracts",
+                "**/store/admin",
+                "**/store/ships",
+                "**/store/orderSettings",
+                "**/store/comments",
+                "**/store/transactions",
+                "**/store/commodities",
+                "**/store/organizations",
+              ],
+              message:
+                "Use feature-owned API slices (features/*/api/) instead of legacy store slices (see DECOUPLING_PLAN.md)",
+            },
           ],
         },
       ],
@@ -309,7 +359,10 @@ export default [
     files: ["src/**/*.tsx"],
     ignores: LINT_TEST_AND_ROUTE_IGNORES,
     rules: {
-      "max-lines": ["warn", { max: 400, skipBlankLines: true, skipComments: true }],
+      "max-lines": [
+        "warn",
+        { max: 400, skipBlankLines: true, skipComments: true },
+      ],
     },
   },
 
@@ -318,7 +371,11 @@ export default [
   // shows the error in place; a bare import()/lazy() here skips all of that.
   // The import()s themselves live in src/app/pages.ts (see definePage.tsx).
   {
-    files: ["src/routes/pages/**/*.tsx", "src/routes/elements/**/*.tsx", "src/routes/layouts/**/*.tsx"],
+    files: [
+      "src/routes/pages/**/*.tsx",
+      "src/routes/elements/**/*.tsx",
+      "src/routes/layouts/**/*.tsx",
+    ],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -328,8 +385,10 @@ export default [
             'Route modules load pages with definePage("Name") (src/app/pages.ts), never import().',
         },
         {
-          selector: "CallExpression[callee.name='lazy'], CallExpression[callee.property.name='lazy']",
-          message: "Route modules load pages through definePage, not React.lazy.",
+          selector:
+            "CallExpression[callee.name='lazy'], CallExpression[callee.property.name='lazy']",
+          message:
+            "Route modules load pages through definePage, not React.lazy.",
         },
       ],
     },

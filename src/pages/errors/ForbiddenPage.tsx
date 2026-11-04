@@ -14,7 +14,11 @@ export function ForbiddenPage({ message }: { message?: string }) {
         {t("errors.forbidden.title", "Access Denied")}
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        {message || t("errors.forbidden.description", "You don't have permission to view this page.")}
+        {message ||
+          t(
+            "errors.forbidden.description",
+            "You don't have permission to view this page.",
+          )}
       </Typography>
       <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
         <Button component={Link} to={PATHS.home} variant="contained">

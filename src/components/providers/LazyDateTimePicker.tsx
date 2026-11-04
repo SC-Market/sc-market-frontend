@@ -11,22 +11,23 @@ import { lazyWithRetry } from "../../util/lazyWithRetry"
 // `DateTimePicker` is generic over its date type and its accessible-field DOM
 // structure flag. `lazyWithRetry()` cannot carry generics through, so pin it to the
 // concrete instantiation this wrapper exposes.
-const LocalizedDateTimePicker = lazyWithRetry<ComponentType<DateTimePickerProps<Date>>>(
-  () =>
-    Promise.all([
-      import("./DatePickerProvider"),
-      import("@mui/x-date-pickers"),
-    ]).then(([{ DatePickerProvider }, { DateTimePicker }]) => ({
-      default: function LocalizedDateTimePicker(
-        props: DateTimePickerProps<Date>,
-      ) {
-        return (
-          <DatePickerProvider>
-            <DateTimePicker {...props} />
-          </DatePickerProvider>
-        )
-      },
-    })),
+const LocalizedDateTimePicker = lazyWithRetry<
+  ComponentType<DateTimePickerProps<Date>>
+>(() =>
+  Promise.all([
+    import("./DatePickerProvider"),
+    import("@mui/x-date-pickers"),
+  ]).then(([{ DatePickerProvider }, { DateTimePicker }]) => ({
+    default: function LocalizedDateTimePicker(
+      props: DateTimePickerProps<Date>,
+    ) {
+      return (
+        <DatePickerProvider>
+          <DateTimePicker {...props} />
+        </DatePickerProvider>
+      )
+    },
+  })),
 )
 
 export function LazyDateTimePicker(props: DateTimePickerProps<Date>) {

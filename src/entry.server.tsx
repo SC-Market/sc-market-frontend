@@ -241,7 +241,11 @@ export default async function handleRequest(
     pageHeadTags,
     data: {
       elementId: PRERENDERED_DATA_ELEMENT_ID,
-      value: { api: shipped, contentBodies, renderedAt } satisfies PrerenderedData,
+      value: {
+        api: shipped,
+        contentBodies,
+        renderedAt,
+      } satisfies PrerenderedData,
     },
   })
 

@@ -8,7 +8,16 @@
  * listing_item_lot, and "inventory" is the v2 API for your own lots.
  */
 
-import React, { useState, useCallback, useMemo, createContext, useContext, useLayoutEffect, useRef, ReactNode } from "react"
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  ReactNode,
+} from "react"
 import {
   Avatar,
   Autocomplete,
@@ -85,19 +94,32 @@ import { useStockLotActions } from "../hooks/useStockLotActions"
  */
 function useStockShop() {
   const shop = useOptionalShopRouteContext()?.shop
-  return { shopId: shop?.shop_id, canEditLots: !!shop && canEditShopStockLots(shop) }
+  return {
+    shopId: shop?.shop_id,
+    canEditLots: !!shop && canEditShopStockLots(shop),
+  }
 }
 
 /** Rows matching the lot search: item, variant, listing, location or notes. */
 export function matchesLotSearch(
-  row: { game_item_name: string | null; variant_display_name: string; listing_title: string; location_name: string | null; notes: string },
+  row: {
+    game_item_name: string | null
+    variant_display_name: string
+    listing_title: string
+    location_name: string | null
+    notes: string
+  },
   search: string,
 ): boolean {
   const q = search.trim().toLowerCase()
   if (!q) return true
-  return [row.game_item_name, row.variant_display_name, row.listing_title, row.location_name, row.notes].some(
-    (v) => v?.toLowerCase().includes(q),
-  )
+  return [
+    row.game_item_name,
+    row.variant_display_name,
+    row.listing_title,
+    row.location_name,
+    row.notes,
+  ].some((v) => v?.toLowerCase().includes(q))
 }
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
@@ -139,7 +161,8 @@ function StockFilterProvider({ children }: { children: ReactNode }) {
 
 function useStockFilter() {
   const ctx = useContext(StockFilterContext)
-  if (!ctx) throw new Error("useStockFilter must be used within StockFilterProvider")
+  if (!ctx)
+    throw new Error("useStockFilter must be used within StockFilterProvider")
   return ctx
 }
 
@@ -157,7 +180,10 @@ export function BulkStockManagementV2() {
       title={t("sidebar.manage_stock", "Stock")}
       headerActions={<HelpLink guide="stockLots" />}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
+        {
+          label: t("sidebar.market_short", "Market"),
+          href: MARKET_PATHS.search,
+        },
         { label: t("sidebar.manage_stock", "Stock") },
       ]}
       sidebarOpen={true}
@@ -167,7 +193,14 @@ export function BulkStockManagementV2() {
         <Grid item xs={12}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  flexWrap: "wrap",
+                }}
+              >
                 {isMobile && (
                   <Button
                     variant="outlined"
@@ -179,7 +212,9 @@ export function BulkStockManagementV2() {
                     {t("market.filters", "Filters")}
                   </Button>
                 )}
-                <ManageListingsTabBar title={t("sidebar.manage_stock", "Stock")} />
+                <ManageListingsTabBar
+                  title={t("sidebar.manage_stock", "Stock")}
+                />
               </Box>
             </Grid>
 
@@ -242,7 +277,12 @@ function StockSearchAreaV2() {
   const { t } = useTranslation()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
   const { shopId } = useStockShop()
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId })
+  const { data: listingsData } = useGetMyListingsQuery({
+    pageSize: 100,
+    sortBy: "updated_at",
+    sortOrder: "desc",
+    shopId,
+  })
   const listings = listingsData?.listings ?? []
 
   return (
@@ -302,7 +342,11 @@ function QuantityEditCell(params: GridRenderEditCellParams) {
       value={params.value ?? 0}
       onChange={(e) => {
         const val = Math.max(0, Number(e.target.value) || 0)
-        apiRef.current.setEditCellValue({ id: params.id, field: params.field, value: val })
+        apiRef.current.setEditCellValue({
+          id: params.id,
+          field: params.field,
+          value: val,
+        })
       }}
       inputProps={{ min: 0, step: 1 }}
       sx={{ "& input": { textAlign: "right" } }}
@@ -322,7 +366,12 @@ function AllStockLotsGridV2() {
     pageSize: 100,
   })
 
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId })
+  const { data: listingsData } = useGetMyListingsQuery({
+    pageSize: 100,
+    sortBy: "updated_at",
+    sortOrder: "desc",
+    shopId,
+  })
   const listings = listingsData?.listings ?? []
 
   const { deleteLot, updateLot } = useStockLotActions()
@@ -361,18 +410,32 @@ function AllStockLotsGridV2() {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
     const [inputValue, setInputValue] = useState("")
-    const filtered = locations.filter((l) => l.name.toLowerCase().includes(inputValue.toLowerCase()))
+    const filtered = locations.filter((l) =>
+      l.name.toLowerCase().includes(inputValue.toLowerCase()),
+    )
     const selected = locations.find((l) => l.location_id === value) ?? null
 
     return (
       <Autocomplete
         value={selected}
-        onChange={(_, v) => apiRef.current.setEditCellValue({ id, field, value: v?.location_id ?? null })}
+        onChange={(_, v) =>
+          apiRef.current.setEditCellValue({
+            id,
+            field,
+            value: v?.location_id ?? null,
+          })
+        }
         inputValue={inputValue}
         onInputChange={(_, v) => setInputValue(v)}
         options={filtered}
         getOptionLabel={(o) => o.name}
-        renderInput={(params) => <TextField {...params} size="medium" placeholder={t("AllStockLots.selectLocation", "Select location...")} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size="medium"
+            placeholder={t("AllStockLots.selectLocation", "Select location...")}
+          />
+        )}
         fullWidth
         size="medium"
         disablePortal={false}
@@ -395,16 +458,24 @@ function AllStockLotsGridV2() {
         fullWidth
         size="small"
         value={props.value ?? ""}
-        inputProps={{ "aria-label": t("AllStockLots.qualityTier", "Quality tier") }}
+        inputProps={{
+          "aria-label": t("AllStockLots.qualityTier", "Quality tier"),
+        }}
         onChange={(e) => {
           const val = e.target.value === "" ? null : Number(e.target.value)
-          apiRef.current.setEditCellValue({ id: props.id, field: props.field, value: val })
+          apiRef.current.setEditCellValue({
+            id: props.id,
+            field: props.field,
+            value: val,
+          })
         }}
         SelectProps={{ native: true }}
       >
         <option value="">—</option>
         {[1, 2, 3, 4, 5].map((tier) => (
-          <option key={tier} value={tier}>{t("marketUi.bulkStock.tierOption", { tier })}</option>
+          <option key={tier} value={tier}>
+            {t("marketUi.bulkStock.tierOption", { tier })}
+          </option>
         ))}
       </TextField>
     )
@@ -413,7 +484,9 @@ function AllStockLotsGridV2() {
   // Quality edit cell for value mode with quality bands.
   // Stores the selected band mapped value in the quality_tier column field;
   // handleRowUpdate interprets it as quality_value when qualityBands are present.
-  function QualityBandEditCell(props: GridRenderEditCellParams & { bands: QualityBand[] }) {
+  function QualityBandEditCell(
+    props: GridRenderEditCellParams & { bands: QualityBand[] },
+  ) {
     const apiRef = useGridApiContext()
     // Show the current quality_value as the initial selection
     const currentValue = props.row.quality_value as number | null
@@ -422,7 +495,11 @@ function AllStockLotsGridV2() {
         bands={props.bands}
         value={currentValue}
         onChange={(val) => {
-          apiRef.current.setEditCellValue({ id: props.id, field: props.field, value: val })
+          apiRef.current.setEditCellValue({
+            id: props.id,
+            field: props.field,
+            value: val,
+          })
         }}
         label=""
         allowAny
@@ -488,8 +565,12 @@ function AllStockLotsGridV2() {
       align: "right" as const,
       headerAlign: "right" as const,
       valueParser: (value: string) => Math.max(0, Number(value) || 0),
-      renderEditCell: (params: GridRenderEditCellParams) => <QuantityEditCell {...params} />,
-      renderCell: (params: GridRenderCellParams) => <EditableCell params={params} canEdit={canEditLots} />,
+      renderEditCell: (params: GridRenderEditCellParams) => (
+        <QuantityEditCell {...params} />
+      ),
+      renderCell: (params: GridRenderCellParams) => (
+        <EditableCell params={params} canEdit={canEditLots} />
+      ),
     },
     {
       field: "location_id",
@@ -500,7 +581,8 @@ function AllStockLotsGridV2() {
       renderEditCell: renderLocationEditCell,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">
-          {locations.find((l) => l.location_id === params.value)?.name ?? t("marketUi.bulkStock.unspecified")}
+          {locations.find((l) => l.location_id === params.value)?.name ??
+            t("marketUi.bulkStock.unspecified")}
         </Typography>
       ),
     },
@@ -532,7 +614,9 @@ function AllStockLotsGridV2() {
                 {title}
               </UnderlineLink>
             ) : (
-              <Typography variant="body2" color="text.disabled">{title}</Typography>
+              <Typography variant="body2" color="text.disabled">
+                {title}
+              </Typography>
             )}
           </Box>
         )
@@ -546,7 +630,11 @@ function AllStockLotsGridV2() {
       editable: canEditLots,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
-          label={params.value ? t("inventory.listed", "Listed") : t("inventory.personal", "Personal")}
+          label={
+            params.value
+              ? t("inventory.listed", "Listed")
+              : t("inventory.personal", "Personal")
+          }
           color={params.value ? "success" : "default"}
           size="small"
           variant="outlined"
@@ -580,7 +668,10 @@ function AllStockLotsGridV2() {
     await deleteLot(lotId)
   }
 
-  const handleRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
+  const handleRowUpdate = async (
+    newRow: GridRowModel,
+    oldRow: GridRowModel,
+  ) => {
     if (String(newRow.id).startsWith("new-")) return newRow
 
     // When quality bands are available, the quality_tier column carries a band
@@ -637,7 +728,8 @@ function AllStockLotsGridV2() {
 
   const handleAddRow = () => {
     // Default to first listing or the currently filtered listing
-    const defaultListing = filters.listingId || (listings.length > 0 ? listings[0].listing_id : "")
+    const defaultListing =
+      filters.listingId || (listings.length > 0 ? listings[0].listing_id : "")
     setAddLotListingId(defaultListing)
   }
 
@@ -660,7 +752,10 @@ function AllStockLotsGridV2() {
               guide="stockLots"
               action={
                 canEditLots && listings.length > 0
-                  ? { label: t("AllStockLots.addLot", "Add Lot"), onClick: handleAddRow }
+                  ? {
+                      label: t("AllStockLots.addLot", "Add Lot"),
+                      onClick: handleAddRow,
+                    }
                   : undefined
               }
               sx={{ minHeight: 200, pb: 4 }}
@@ -668,13 +763,27 @@ function AllStockLotsGridV2() {
           ),
           toolbar: () => (
             <Box sx={{ p: 2 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Typography variant="h6">{t("AllStockLots.title", "All Stock Lots")}</Typography>
+                  <Typography variant="h6">
+                    {t("AllStockLots.title", "All Stock Lots")}
+                  </Typography>
                   <Chip label={rows.length} size="small" color="primary" />
                 </Box>
                 {canEditLots && (
-                  <Button size="small" variant="contained" startIcon={<AddIcon />} onClick={handleAddRow} disabled={listings.length === 0}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleAddRow}
+                    disabled={listings.length === 0}
+                  >
                     {t("AllStockLots.addLot", "Add Lot")}
                   </Button>
                 )}
@@ -691,20 +800,31 @@ function AllStockLotsGridV2() {
           ),
         }}
         showToolbar
-        sx={{ "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" } }}
+        sx={{
+          "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" },
+        }}
       />
       <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
-        <DialogTitle>{t("AllStockLots.confirmDeleteTitle", "Delete lot?")}</DialogTitle>
+        <DialogTitle>
+          {t("AllStockLots.confirmDeleteTitle", "Delete lot?")}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("AllStockLots.confirmDeleteBody", "This lot will be permanently deleted and cannot be recovered.")}
+            {t(
+              "AllStockLots.confirmDeleteBody",
+              "This lot will be permanently deleted and cannot be recovered.",
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setPendingDelete(null)} color="inherit">
             {t("common.cancel", "Cancel")}
           </Button>
-          <Button onClick={() => pendingDelete && void handleDelete(pendingDelete)} color="error" variant="contained">
+          <Button
+            onClick={() => pendingDelete && void handleDelete(pendingDelete)}
+            color="error"
+            variant="contained"
+          >
             {t("common.delete", "Delete")}
           </Button>
         </DialogActions>
@@ -738,18 +858,23 @@ function AllocatedStockGridV2() {
   })
 
   const allocatedLots = useMemo(
-    () => (lotsData?.lots ?? []).filter((lot) => lot.quantity_allocated > 0).map((lot) => ({
-      id: lot.lot_id,
-      lot_id: lot.lot_id,
-      game_item_name: lot.game_item_name || t("marketUi.bulkStock.customItem"),
-      variant_display_name: lot.variant.display_name || "—",
-      quantity_allocated: lot.quantity_allocated,
-      quantity_total: lot.quantity_total,
-      location_name: lot.location?.name ?? t("marketUi.bulkStock.unspecified"),
-      listing_id: lot.listing_id,
-      listing_title: lot.listing_title,
-      listing_photo: lot.listing_photo,
-    })),
+    () =>
+      (lotsData?.lots ?? [])
+        .filter((lot) => lot.quantity_allocated > 0)
+        .map((lot) => ({
+          id: lot.lot_id,
+          lot_id: lot.lot_id,
+          game_item_name:
+            lot.game_item_name || t("marketUi.bulkStock.customItem"),
+          variant_display_name: lot.variant.display_name || "—",
+          quantity_allocated: lot.quantity_allocated,
+          quantity_total: lot.quantity_total,
+          location_name:
+            lot.location?.name ?? t("marketUi.bulkStock.unspecified"),
+          listing_id: lot.listing_id,
+          listing_title: lot.listing_title,
+          listing_photo: lot.listing_photo,
+        })),
     [lotsData, t],
   )
 
@@ -759,7 +884,9 @@ function AllocatedStockGridV2() {
       headerName: t("inventory.item", "Item"),
       flex: 1.5,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" fontWeight={600}>{params.value}</Typography>
+        <Typography variant="body2" fontWeight={600}>
+          {params.value}
+        </Typography>
       ),
     },
     {
@@ -784,7 +911,9 @@ function AllocatedStockGridV2() {
       headerName: t("inventory.location", "Location"),
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" color="text.secondary">{params.value}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {params.value}
+        </Typography>
       ),
     },
     {
@@ -797,13 +926,26 @@ function AllocatedStockGridV2() {
         const title = params.value || "—"
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {photo && <Avatar src={photo} variant="rounded" sx={{ width: 28, height: 28 }} />}
+            {photo && (
+              <Avatar
+                src={photo}
+                variant="rounded"
+                sx={{ width: 28, height: 28 }}
+              />
+            )}
             {listingId ? (
-              <UnderlineLink component={Link} to={MARKET_PATHS.listing(listingId)} variant="body2" noWrap>
+              <UnderlineLink
+                component={Link}
+                to={MARKET_PATHS.listing(listingId)}
+                variant="body2"
+                noWrap
+              >
                 {title}
               </UnderlineLink>
             ) : (
-              <Typography variant="body2" color="text.disabled">{title}</Typography>
+              <Typography variant="body2" color="text.disabled">
+                {title}
+              </Typography>
             )}
           </Box>
         )
@@ -824,19 +966,26 @@ function AllocatedStockGridV2() {
           noRowsOverlay: () => (
             <EmptyState
               title={t("stock.noAllocations", "No allocated stock")}
-              description={t("stock.noAllocationsDesc", "Stock will appear here when orders are placed against your listings.")}
+              description={t(
+                "stock.noAllocationsDesc",
+                "Stock will appear here when orders are placed against your listings.",
+              )}
               sx={{ minHeight: 200, pb: 4 }}
             />
           ),
           toolbar: () => (
             <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography variant="h6">{t("stock.allocatedStock", "Allocated Stock")}</Typography>
+              <Typography variant="h6">
+                {t("stock.allocatedStock", "Allocated Stock")}
+              </Typography>
               <Chip label={allocatedLots.length} size="small" color="primary" />
             </Box>
           ),
         }}
         showToolbar
-        sx={{ "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" } }}
+        sx={{
+          "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" },
+        }}
       />
     </Paper>
   )
@@ -846,20 +995,39 @@ function AllocatedStockGridV2() {
  * A lot's quantity with a visible edit affordance: the pencil starts editing
  * the cell (double-click does too).
  */
-function EditableCell({ params, canEdit }: { params: GridRenderCellParams; canEdit: boolean }) {
+function EditableCell({
+  params,
+  canEdit,
+}: {
+  params: GridRenderCellParams
+  canEdit: boolean
+}) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const apiRef = useGridApiContext()
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.5, width: "100%" }}>
-      <Typography variant="body2" fontWeight={600}>{fmt.number(params.value)}</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        gap: 0.5,
+        width: "100%",
+      }}
+    >
+      <Typography variant="body2" fontWeight={600}>
+        {fmt.number(params.value)}
+      </Typography>
       {canEdit && (
         <IconButton
           size="small"
           aria-label={t("AllStockLots.editQuantity", "Edit quantity")}
           onClick={(e) => {
             e.stopPropagation()
-            apiRef.current.startCellEditMode({ id: params.id, field: params.field })
+            apiRef.current.startCellEditMode({
+              id: params.id,
+              field: params.field,
+            })
           }}
           sx={{ color: "text.secondary", p: 0.25 }}
         >

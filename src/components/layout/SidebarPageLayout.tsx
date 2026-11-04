@@ -1,11 +1,5 @@
 import React, { ReactElement, ReactNode } from "react"
-import {
-  Box,
-  Container,
-  Divider,
-  Grid,
-  Stack,
-} from "@mui/material"
+import { Box, Container, Divider, Grid, Stack } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

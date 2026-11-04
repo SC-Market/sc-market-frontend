@@ -30,11 +30,18 @@ const ship: Ship = {
 
 vi.mock("../../../store/api/v2/market", async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
-  useGetShipDetailQuery: () => ({ data: ship, isLoading: false, error: undefined }),
+  useGetShipDetailQuery: () => ({
+    data: ship,
+    isLoading: false,
+    error: undefined,
+  }),
 }))
 
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: (props: { children: React.ReactNode; headerTitle?: string }) => (
+  StandardPageLayout: (props: {
+    children: React.ReactNode
+    headerTitle?: string
+  }) => (
     <div>
       <h1>{props.headerTitle}</h1>
       {props.children}
@@ -49,7 +56,9 @@ vi.mock("../WikiShipBrowser", () => ({
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const app = (

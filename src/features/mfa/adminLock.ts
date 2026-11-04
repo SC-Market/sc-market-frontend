@@ -9,5 +9,8 @@ export type AdminLock = "custom_origin" | "mfa_enrollment" | "mfa_required"
 export function isMfaLockedAdmin(
   profile: { admin_locked?: AdminLock | string | null } | null | undefined,
 ): boolean {
-  return profile?.admin_locked === "mfa_enrollment" || profile?.admin_locked === "mfa_required"
+  return (
+    profile?.admin_locked === "mfa_enrollment" ||
+    profile?.admin_locked === "mfa_required"
+  )
 }

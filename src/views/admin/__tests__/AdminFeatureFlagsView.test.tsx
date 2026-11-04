@@ -39,17 +39,25 @@ describe("AdminFeatureFlagsView", () => {
     mockQuery({ isLoading: true })
     const { container } = renderView()
 
-    expect(container.querySelectorAll(".MuiSkeleton-root").length).toBeGreaterThan(0)
+    expect(
+      container.querySelectorAll(".MuiSkeleton-root").length,
+    ).toBeGreaterThan(0)
     expect(screen.getByRole("list")).toHaveAttribute("aria-busy", "true")
-    expect(screen.queryByText("No feature flags configured")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("No feature flags configured"),
+    ).not.toBeInTheDocument()
   })
 
   it("shows an error with a working retry, not the empty message", () => {
     mockQuery({ isError: true })
     renderView()
 
-    expect(screen.getByText("Failed to load feature flags.")).toBeInTheDocument()
-    expect(screen.queryByText("No feature flags configured")).not.toBeInTheDocument()
+    expect(
+      screen.getByText("Failed to load feature flags."),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText("No feature flags configured"),
+    ).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Retry" }))
     expect(refetch).toHaveBeenCalledTimes(1)
   })
@@ -72,7 +80,9 @@ describe("AdminFeatureFlagsView", () => {
 
     expect(screen.getByText("market V2 redesign")).toBeInTheDocument()
     expect(container.querySelectorAll(".MuiSkeleton-root").length).toBe(0)
-    expect(screen.queryByText("Failed to load feature flags.")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("Failed to load feature flags."),
+    ).not.toBeInTheDocument()
   })
 
   it("shows the empty message when no flags are configured", () => {

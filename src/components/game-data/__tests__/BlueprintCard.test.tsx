@@ -39,14 +39,18 @@ describe("BlueprintCard", () => {
 
   describe("Grid View", () => {
     it("should render blueprint output item name in grid view", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="grid" />,
+      )
 
       expect(screen.getByText("Advanced Laser Cannon")).toBeInTheDocument()
       expect(screen.getByText("Rare")).toBeInTheDocument()
     })
 
     it("should display category in grid view", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="grid" />,
+      )
 
       // Category appears both in subtitle and as a chip
       const weaponsElements = screen.getAllByText("Weapons")
@@ -54,7 +58,9 @@ describe("BlueprintCard", () => {
     })
 
     it("should display mission source count", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="grid" />,
+      )
 
       expect(screen.getByText("3 mission sources")).toBeInTheDocument()
     })
@@ -65,41 +71,56 @@ describe("BlueprintCard", () => {
         mission_count: 1,
       }
 
-      renderWithRouter(<BlueprintCard blueprint={singleBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={singleBlueprint} viewMode="grid" />,
+      )
 
       expect(screen.getByText("1 mission source")).toBeInTheDocument()
     })
 
     it("should format crafting time correctly", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="grid" />,
+      )
       // 180 seconds = 3m
       expect(screen.getByText("3m")).toBeInTheDocument()
       expect(screen.getByText("Craft time")).toBeInTheDocument()
     })
 
     it("should not display crafting time if not provided", () => {
-      const blueprintWithoutTime = { ...mockBlueprint, crafting_time_seconds: undefined }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithoutTime} viewMode="grid" />)
+      const blueprintWithoutTime = {
+        ...mockBlueprint,
+        crafting_time_seconds: undefined,
+      }
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithoutTime} viewMode="grid" />,
+      )
 
       expect(screen.queryByText("Craft time")).not.toBeInTheDocument()
     })
 
     it("should not display rarity if not provided", () => {
       const blueprintWithoutRarity = { ...mockBlueprint, rarity: undefined }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithoutRarity} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithoutRarity} viewMode="grid" />,
+      )
 
       expect(screen.queryByText("Rare")).not.toBeInTheDocument()
     })
 
     it("should not display tier if not provided", () => {
       const blueprintWithoutTier = { ...mockBlueprint, tier: undefined }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithoutTier} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithoutTier} viewMode="grid" />,
+      )
 
       expect(screen.queryByText(/^T\d/)).not.toBeInTheDocument()
     })
 
     it("should display tier chip when tier is provided", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="grid" />,
+      )
 
       expect(screen.getByText("T3")).toBeInTheDocument()
     })
@@ -107,21 +128,30 @@ describe("BlueprintCard", () => {
 
   describe("List View", () => {
     it("should render blueprint output item name in list view", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="list" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="list" />,
+      )
 
       expect(screen.getByText("Advanced Laser Cannon")).toBeInTheDocument()
       expect(screen.getByText("Rare")).toBeInTheDocument()
     })
 
     it("should display mission count in list view", () => {
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} viewMode="list" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} viewMode="list" />,
+      )
 
       expect(screen.getByText("3 msn")).toBeInTheDocument()
     })
 
     it("should not display category if not provided", () => {
-      const blueprintWithoutCategory = { ...mockBlueprint, item_category: undefined }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithoutCategory} viewMode="list" />)
+      const blueprintWithoutCategory = {
+        ...mockBlueprint,
+        item_category: undefined,
+      }
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithoutCategory} viewMode="list" />,
+      )
 
       expect(screen.queryByText("Weapons")).not.toBeInTheDocument()
     })
@@ -130,12 +160,19 @@ describe("BlueprintCard", () => {
   describe("Click Handlers", () => {
     it("should call onClick when card is clicked", () => {
       const handleClick = vi.fn()
-      renderWithRouter(<BlueprintCard blueprint={mockBlueprint} onClick={handleClick} />)
+      renderWithRouter(
+        <BlueprintCard blueprint={mockBlueprint} onClick={handleClick} />,
+      )
 
-      const card = screen.getByText("Advanced Laser Cannon").closest("[class*='MuiCard']")
+      const card = screen
+        .getByText("Advanced Laser Cannon")
+        .closest("[class*='MuiCard']")
       fireEvent.click(card!)
 
-      expect(handleClick).toHaveBeenCalledWith("bp-123", "Advanced Weapon Blueprint")
+      expect(handleClick).toHaveBeenCalledWith(
+        "bp-123",
+        "Advanced Weapon Blueprint",
+      )
     })
 
     it("should not call onClick when bookmark is clicked", () => {
@@ -146,7 +183,7 @@ describe("BlueprintCard", () => {
           blueprint={mockBlueprint}
           onClick={handleClick}
           onBookmarkToggle={handleBookmark}
-        />
+        />,
       )
 
       // Find the bookmark icon button
@@ -161,10 +198,7 @@ describe("BlueprintCard", () => {
   describe("Bookmark Toggle", () => {
     it("should display bookmark border when not owned", () => {
       renderWithRouter(
-        <BlueprintCard
-          blueprint={mockBlueprint}
-          onBookmarkToggle={vi.fn()}
-        />
+        <BlueprintCard blueprint={mockBlueprint} onBookmarkToggle={vi.fn()} />,
       )
 
       expect(screen.getByTestId("BookmarkBorderIcon")).toBeInTheDocument()
@@ -173,10 +207,7 @@ describe("BlueprintCard", () => {
     it("should display filled bookmark when owned", () => {
       const ownedBlueprint = { ...mockBlueprint, user_owns: true }
       renderWithRouter(
-        <BlueprintCard
-          blueprint={ownedBlueprint}
-          onBookmarkToggle={vi.fn()}
-        />
+        <BlueprintCard blueprint={ownedBlueprint} onBookmarkToggle={vi.fn()} />,
       )
 
       expect(screen.getByTestId("BookmarkIcon")).toBeInTheDocument()
@@ -188,7 +219,7 @@ describe("BlueprintCard", () => {
         <BlueprintCard
           blueprint={mockBlueprint}
           onBookmarkToggle={handleBookmark}
-        />
+        />,
       )
 
       const bookmarkIcon = screen.getByTestId("BookmarkBorderIcon")
@@ -205,7 +236,7 @@ describe("BlueprintCard", () => {
         <BlueprintCard
           blueprint={ownedBlueprint}
           onBookmarkToggle={handleBookmark}
-        />
+        />,
       )
 
       const bookmarkIcon = screen.getByTestId("BookmarkIcon")
@@ -219,7 +250,9 @@ describe("BlueprintCard", () => {
       renderWithRouter(<BlueprintCard blueprint={mockBlueprint} />)
 
       expect(screen.queryByTestId("icon-Bookmark")).not.toBeInTheDocument()
-      expect(screen.queryByTestId("icon-BookmarkBorder")).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId("icon-BookmarkBorder"),
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -234,23 +267,35 @@ describe("BlueprintCard", () => {
 
   describe("Edge Cases", () => {
     it("should handle missing icon gracefully", () => {
-      const blueprintWithoutIcon = { ...mockBlueprint, output_item_icon: undefined }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithoutIcon} viewMode="grid" />)
+      const blueprintWithoutIcon = {
+        ...mockBlueprint,
+        output_item_icon: undefined,
+      }
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithoutIcon} viewMode="grid" />,
+      )
 
       // Component should still render the item name
       expect(screen.getByText("Advanced Laser Cannon")).toBeInTheDocument()
     })
 
     it("should handle zero crafting time", () => {
-      const blueprintWithZeroTime = { ...mockBlueprint, crafting_time_seconds: 0 }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithZeroTime} viewMode="grid" />)
+      const blueprintWithZeroTime = {
+        ...mockBlueprint,
+        crafting_time_seconds: 0,
+      }
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithZeroTime} viewMode="grid" />,
+      )
 
       expect(screen.queryByText("Craft time")).not.toBeInTheDocument()
     })
 
     it("should handle zero mission count", () => {
       const blueprintWithZeroMissions = { ...mockBlueprint, mission_count: 0 }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithZeroMissions} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithZeroMissions} viewMode="grid" />,
+      )
 
       expect(screen.getByText("No mission sources")).toBeInTheDocument()
     })
@@ -258,12 +303,17 @@ describe("BlueprintCard", () => {
     it("should handle long output item names", () => {
       const blueprintWithLongName = {
         ...mockBlueprint,
-        output_item_name: "This is a very long item name that should be handled gracefully",
+        output_item_name:
+          "This is a very long item name that should be handled gracefully",
       }
-      renderWithRouter(<BlueprintCard blueprint={blueprintWithLongName} viewMode="grid" />)
+      renderWithRouter(
+        <BlueprintCard blueprint={blueprintWithLongName} viewMode="grid" />,
+      )
 
       expect(
-        screen.getByText("This is a very long item name that should be handled gracefully")
+        screen.getByText(
+          "This is a very long item name that should be handled gracefully",
+        ),
       ).toBeInTheDocument()
     })
   })

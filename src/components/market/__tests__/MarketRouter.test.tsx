@@ -7,9 +7,8 @@ import { MarketRouter } from "../MarketRouter"
 // The V2 page (loaded via React.lazy). Like the real one, it renders the
 // services body through its own Suspense boundary.
 vi.mock("../v2/MarketPageV2", async () => {
-  const { ServiceMarketView } = await import(
-    "../../../views/services/ServiceMarketView.lazy"
-  )
+  const { ServiceMarketView } =
+    await import("../../../views/services/ServiceMarketView.lazy")
   const { useLocation } = await import("react-router-dom")
   return {
     MarketPageV2: function MarketPageV2() {

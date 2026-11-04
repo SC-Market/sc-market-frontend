@@ -95,7 +95,12 @@ export const ROUTE_PREFETCH_MAP: Record<string, string[]> = {
 
   // Game Data - browse → detail prefetch chains
   "/missions": ["/missions/:slug", "/blueprints"],
-  "/blueprints": ["/blueprints/:slug", "/blueprints/inventory", "/missions", "/resources"],
+  "/blueprints": [
+    "/blueprints/:slug",
+    "/blueprints/inventory",
+    "/missions",
+    "/resources",
+  ],
   "/resources": ["/resources/:resource_id"],
   "/crafting/calculator": ["/blueprints", "/resources"],
   "/shopping-lists": ["/blueprints", "/resources"],

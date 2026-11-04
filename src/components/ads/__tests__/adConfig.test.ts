@@ -42,7 +42,11 @@ describe("market ad rotation", () => {
     const out = insertAds(listings(60), (l) => l.listing_id)
     const adAt = out.flatMap((item, i) => ("_isAd" in item ? [i] : []))
     const expected: number[] = []
-    for (let i = AD_FIRST_POSITION; i < 60 + expected.length; i += AD_FREQUENCY + 1) {
+    for (
+      let i = AD_FIRST_POSITION;
+      i < 60 + expected.length;
+      i += AD_FREQUENCY + 1
+    ) {
       expected.push(i)
     }
     expect(adAt).toEqual(expected)

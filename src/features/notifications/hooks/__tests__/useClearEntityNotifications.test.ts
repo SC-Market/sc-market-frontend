@@ -14,9 +14,18 @@ beforeEach(() => vi.clearAllMocks())
 
 describe("useClearEntityNotifications", () => {
   it("clears the entity's message notifications", () => {
-    query.mockReturnValue({ data: { notifications: [{ notification_id: "n1" }, { notification_id: "n2" }] } })
+    query.mockReturnValue({
+      data: {
+        notifications: [{ notification_id: "n1" }, { notification_id: "n2" }],
+      },
+    })
     renderHook(() => useClearEntityNotifications("order_message", "O1"))
-    expect(query).toHaveBeenCalledWith({ page: 0, pageSize: 100, action: "order_message", entityId: "O1" })
+    expect(query).toHaveBeenCalledWith({
+      page: 0,
+      pageSize: 100,
+      action: "order_message",
+      entityId: "O1",
+    })
     expect(deleteNotifications).toHaveBeenCalledWith(["n1", "n2"])
   })
 

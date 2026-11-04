@@ -48,7 +48,9 @@ vi.mock("../../../store/api/v2/market", () => ({
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const { CustomerList } = await import("../Customers")
@@ -59,7 +61,10 @@ describe("org customers", () => {
       <ThemeProvider theme={mainTheme}>
         <MemoryRouter initialEntries={["/org/TESTORG/members"]}>
           <Routes>
-            <Route path="/org/:contractor_id/members" element={<CustomerList />} />
+            <Route
+              path="/org/:contractor_id/members"
+              element={<CustomerList />}
+            />
           </Routes>
         </MemoryRouter>
       </ThemeProvider>,

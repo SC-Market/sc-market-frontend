@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useSearchOrdersQuery } from "../api/ordersApi"
 import { useDebounce } from "../../../hooks/useDebounce"
-import type { OrderSearchSortMethod, OrderStatusFilter, OrderTotalCounts, OrderStub } from "../domain/types"
+import type {
+  OrderSearchSortMethod,
+  OrderStatusFilter,
+  OrderTotalCounts,
+  OrderStub,
+} from "../domain/types"
 import { isAwaitingData } from "../../../util/queryLoading"
 
 export interface UseOrderSearchParams {
@@ -23,7 +28,9 @@ export interface OrderItemCounts {
 }
 
 /** The status tabs' counts, from the per-status counts. */
-export function toTotalCounts(counts: OrderItemCounts | undefined): OrderTotalCounts {
+export function toTotalCounts(
+  counts: OrderItemCounts | undefined,
+): OrderTotalCounts {
   const c = counts ?? {}
   const fulfilled = c.fulfilled || 0
   const inProgress = c["in-progress"] || 0
@@ -47,7 +54,7 @@ export function toTotalCounts(counts: OrderItemCounts | undefined): OrderTotalCo
  */
 export function useOrderSearchState(unassigned?: boolean) {
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>(
-    unassigned ? "unassigned" : "active"
+    unassigned ? "unassigned" : "active",
   )
   const [pageSize, setPageSize] = useState(5)
   const [page, setPage] = useState(0)
@@ -58,7 +65,9 @@ export function useOrderSearchState(unassigned?: boolean) {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [buyerUsername, setBuyerUsername] = useState("")
   const [sellerUsername, setSellerUsername] = useState("")
-  const [hasMarketListings, setHasMarketListings] = useState<boolean | undefined>(undefined)
+  const [hasMarketListings, setHasMarketListings] = useState<
+    boolean | undefined
+  >(undefined)
   const [hasService, setHasService] = useState<boolean | undefined>(undefined)
 
   const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
@@ -67,7 +76,12 @@ export function useOrderSearchState(unassigned?: boolean) {
   // Reset page when filters change
   useEffect(() => {
     setPage(0)
-  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   const activeFiltersCount = useMemo(() => {
     let count = 0
@@ -76,7 +90,12 @@ export function useOrderSearchState(unassigned?: boolean) {
     if (hasMarketListings !== undefined) count++
     if (hasService !== undefined) count++
     return count
-  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   const clearFilters = () => {
     setBuyerUsername("")
@@ -87,18 +106,28 @@ export function useOrderSearchState(unassigned?: boolean) {
 
   return {
     // Pagination
-    page, setPage,
-    pageSize, setPageSize,
-    order, setOrder,
-    orderBy, setOrderBy,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    order,
+    setOrder,
+    orderBy,
+    setOrderBy,
     // Status filter
-    statusFilter, setStatusFilter,
+    statusFilter,
+    setStatusFilter,
     // Advanced filters
-    filtersOpen, setFiltersOpen,
-    buyerUsername, setBuyerUsername,
-    sellerUsername, setSellerUsername,
-    hasMarketListings, setHasMarketListings,
-    hasService, setHasService,
+    filtersOpen,
+    setFiltersOpen,
+    buyerUsername,
+    setBuyerUsername,
+    sellerUsername,
+    setSellerUsername,
+    hasMarketListings,
+    setHasMarketListings,
+    hasService,
+    setHasService,
     debouncedBuyerUsername,
     debouncedSellerUsername,
     activeFiltersCount,
@@ -118,13 +147,26 @@ export interface OrderSearchResult extends OrderSearchState {
   totalCounts: OrderTotalCounts
 }
 
-export function useOrderSearch(params: UseOrderSearchParams): OrderSearchResult {
+export function useOrderSearch(
+  params: UseOrderSearchParams,
+): OrderSearchResult {
   const { mine, assigned, unassigned, contractor, shop_id, username } = params
   const state = useOrderSearchState(unassigned)
-  const { statusFilter, setStatusFilter, page, pageSize, orderBy, order } = state
+  const { statusFilter, setStatusFilter, page, pageSize, orderBy, order } =
+    state
 
-  const { data: orders, currentData, isLoading, isFetching } = useSearchOrdersQuery({
-    status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
+  const {
+    data: orders,
+    currentData,
+    isLoading,
+    isFetching,
+  } = useSearchOrdersQuery({
+    status:
+      statusFilter === "all"
+        ? undefined
+        : statusFilter === "unassigned"
+          ? "active"
+          : statusFilter,
     index: page,
     page_size: pageSize,
     customer: mine ? username : undefined,
@@ -134,22 +176,43 @@ export function useOrderSearch(params: UseOrderSearchParams): OrderSearchResult 
     shop_id,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
-    buyer_username: !mine && state.debouncedBuyerUsername ? state.debouncedBuyerUsername : undefined,
-    seller_username: mine && state.debouncedSellerUsername ? state.debouncedSellerUsername : undefined,
+    buyer_username:
+      !mine && state.debouncedBuyerUsername
+        ? state.debouncedBuyerUsername
+        : undefined,
+    seller_username:
+      mine && state.debouncedSellerUsername
+        ? state.debouncedSellerUsername
+        : undefined,
     has_market_listings: state.hasMarketListings,
     has_service: state.hasService,
   })
 
-  const totalCounts = useMemo(() => toTotalCounts(orders?.item_counts), [orders])
+  const totalCounts = useMemo(
+    () => toTotalCounts(orders?.item_counts),
+    [orders],
+  )
 
   // Auto-switch from "unassigned" to "active" on first load if there are 0 unclaimed items
   const hasAutoSwitched = useRef(false)
   useEffect(() => {
-    if (unassigned && !hasAutoSwitched.current && !isLoading && totalCounts.unassigned === 0 && statusFilter === "unassigned") {
+    if (
+      unassigned &&
+      !hasAutoSwitched.current &&
+      !isLoading &&
+      totalCounts.unassigned === 0 &&
+      statusFilter === "unassigned"
+    ) {
       hasAutoSwitched.current = true
       setStatusFilter("active")
     }
-  }, [unassigned, isLoading, totalCounts.unassigned, statusFilter, setStatusFilter])
+  }, [
+    unassigned,
+    isLoading,
+    totalCounts.unassigned,
+    statusFilter,
+    setStatusFilter,
+  ])
 
   return {
     ...state,

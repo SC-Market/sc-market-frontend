@@ -21,15 +21,25 @@ function setup(upstream: (url: string) => Promise<Response>) {
   const cache = new MemoryCache()
   const pending: Promise<unknown>[] = []
   const next = vi.fn(async () => new Response("NEXT"))
-  const run = async (path: string, origin = "https://sc-market.space", method = "GET") => {
+  const run = async (
+    path: string,
+    origin = "https://sc-market.space",
+    method = "GET",
+  ) => {
     const res = await handleSitemapRequest(
       {
         request: new Request(`${origin}${path}`, { method }),
-        env: { ASSETS: { fetch: async () => new Response("") }, VITE_BACKEND_URL: API },
+        env: {
+          ASSETS: { fetch: async () => new Response("") },
+          VITE_BACKEND_URL: API,
+        },
         next,
         waitUntil: (p) => pending.push(p),
       },
-      { cache: cache as unknown as Cache, fetch: fetchSpy as unknown as typeof fetch },
+      {
+        cache: cache as unknown as Cache,
+        fetch: fetchSpy as unknown as typeof fetch,
+      },
     )
     await Promise.all(pending)
     return res
@@ -39,13 +49,19 @@ function setup(upstream: (url: string) => Promise<Response>) {
 
 describe("main-host sitemap proxy", () => {
   it("serves the index with its sections on the main host, edge-cached", async () => {
-    const { run, fetchSpy } = setup(async () => new Response(INDEX, { status: 200 }))
+    const { run, fetchSpy } = setup(
+      async () => new Response(INDEX, { status: 200 }),
+    )
     const res = await run("/sitemap.xml")
     expect(res.status).toBe(200)
-    expect(res.headers.get("Content-Type")).toBe("application/xml; charset=utf-8")
+    expect(res.headers.get("Content-Type")).toBe(
+      "application/xml; charset=utf-8",
+    )
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=3600")
     const body = await res.text()
-    expect(body).toContain("<loc>https://sc-market.space/sitemap-market-0.xml</loc>")
+    expect(body).toContain(
+      "<loc>https://sc-market.space/sitemap-market-0.xml</loc>",
+    )
     expect(body).not.toContain(API)
     await run("/sitemap.xml")
     expect(fetchSpy).toHaveBeenCalledOnce()
@@ -59,7 +75,10 @@ describe("main-host sitemap proxy", () => {
       `<loc>${API}/sitemap-market-0.xml</loc><lastmod>${lastmod}</lastmod>`,
     )
     const lastModified = "Thu, 29 Oct 2026 12:30:00 GMT"
-    const { run } = setup(async () => new Response(index, { headers: { "Last-Modified": lastModified } }))
+    const { run } = setup(
+      async () =>
+        new Response(index, { headers: { "Last-Modified": lastModified } }),
+    )
     const res = await run("/sitemap.xml")
     expect(await res.text()).toContain(
       `<loc>https://sc-market.space/sitemap-market-0.xml</loc><lastmod>${lastmod}</lastmod></sitemap>`,
@@ -91,7 +110,13 @@ describe("main-host sitemap proxy", () => {
   })
 
   it("an unknown section is a 404; an API failure a 503 with Retry-After, not cached", async () => {
-    expect((await setup(async () => new Response("{}", { status: 404 })).run("/sitemap-nope-0.xml")).status).toBe(404)
+    expect(
+      (
+        await setup(async () => new Response("{}", { status: 404 })).run(
+          "/sitemap-nope-0.xml",
+        )
+      ).status,
+    ).toBe(404)
     const failing = setup(async () => new Response("oops", { status: 500 }))
     const res = await failing.run("/sitemap.xml")
     expect(res.status).toBe(503)
@@ -111,7 +136,11 @@ describe("main-host sitemap proxy", () => {
   it("robots.txt points at the main-host sitemap and keeps AI crawlers allowed", () => {
     expect(robotsTxt).toContain("Sitemap: https://sc-market.space/sitemap.xml")
     expect(robotsTxt).toContain("Disallow: /error")
-    expect(robotsTxt).toMatch(/User-agent: \*\nContent-Signal: search=yes, ai-input=yes, ai-train=yes/)
-    expect(robotsTxt).not.toMatch(/User-agent: (GPTBot|ClaudeBot|Google-Extended)/)
+    expect(robotsTxt).toMatch(
+      /User-agent: \*\nContent-Signal: search=yes, ai-input=yes, ai-train=yes/,
+    )
+    expect(robotsTxt).not.toMatch(
+      /User-agent: (GPTBot|ClaudeBot|Google-Extended)/,
+    )
   })
 })

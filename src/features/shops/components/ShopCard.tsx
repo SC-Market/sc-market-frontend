@@ -10,7 +10,11 @@ import {
   Typography,
   Fade,
 } from "@mui/material"
-import { ListAltRounded, ShoppingBagRounded, DesignServicesRounded } from "@mui/icons-material"
+import {
+  ListAltRounded,
+  ShoppingBagRounded,
+  DesignServicesRounded,
+} from "@mui/icons-material"
 import type { ShopPublicResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
 import { useTranslation } from "react-i18next"
@@ -34,13 +38,29 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
         <CardActionArea
           component={RouterLink}
           to={SHOP_PATHS.profile(shop.slug)}
-          sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+          }}
         >
-          <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1, p: 2 }}>
-
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              flex: 1,
+              p: 2,
+            }}
+          >
             {/* Identity: logo + name + owner */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Avatar src={shop.logo_url || undefined} variant="rounded" sx={{ width: 48, height: 48 }}>
+              <Avatar
+                src={shop.logo_url || undefined}
+                variant="rounded"
+                sx={{ width: 48, height: 48 }}
+              >
                 {shop.name[0]}
               </Avatar>
               <Box sx={{ minWidth: 0, flex: 1 }}>
@@ -48,14 +68,31 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                   {shop.name}
                 </Typography>
                 {shop.owner && (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, minWidth: 0 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      minWidth: 0,
+                    }}
+                  >
                     <Avatar
                       src={shop.owner.avatar_url || undefined}
-                      sx={{ width: 16, height: 16, fontSize: "0.6rem", flexShrink: 0 }}
+                      sx={{
+                        width: 16,
+                        height: 16,
+                        fontSize: "0.6rem",
+                        flexShrink: 0,
+                      }}
                     >
                       {shop.owner.name[0]}
                     </Avatar>
-                    <Typography variant="caption" color="text.secondary" noWrap sx={{ minWidth: 0 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      noWrap
+                      sx={{ minWidth: 0 }}
+                    >
                       {t("shops.card.byOwner", { name: shop.owner.name })}
                     </Typography>
                   </Box>
@@ -65,7 +102,12 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
 
             {/* Rating */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Rating value={shop.rating || 0} precision={0.5} readOnly size="small" />
+              <Rating
+                value={shop.rating || 0}
+                precision={0.5}
+                readOnly
+                size="small"
+              />
               <Typography variant="caption" color="text.secondary">
                 ({shop.rating_count})
               </Typography>
@@ -75,7 +117,14 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
             {!compact && shop.tags.length > 0 && (
               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                 {shop.tags.slice(0, 3).map((tag) => (
-                  <Chip key={tag} label={tag} size="small" variant="outlined" color="primary" sx={{ fontSize: "0.65rem", height: 20 }} />
+                  <Chip
+                    key={tag}
+                    label={tag}
+                    size="small"
+                    variant="outlined"
+                    color="primary"
+                    sx={{ fontSize: "0.65rem", height: 20 }}
+                  />
                 ))}
               </Box>
             )}
@@ -84,7 +133,9 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
             <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
               {!!shop.listing_count && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                  <ListAltRounded sx={{ fontSize: 13, color: "text.disabled" }} />
+                  <ListAltRounded
+                    sx={{ fontSize: 13, color: "text.disabled" }}
+                  />
                   <Typography variant="caption" color="text.secondary">
                     {t("shops.listingCount", { count: shop.listing_count })}
                   </Typography>
@@ -92,7 +143,9 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
               )}
               {!!shop.service_count && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                  <DesignServicesRounded sx={{ fontSize: 13, color: "text.disabled" }} />
+                  <DesignServicesRounded
+                    sx={{ fontSize: 13, color: "text.disabled" }}
+                  />
                   <Typography variant="caption" color="text.secondary">
                     {t("shops.serviceCount", { count: shop.service_count })}
                   </Typography>
@@ -100,7 +153,9 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
               )}
               {!!shop.total_sales && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                  <ShoppingBagRounded sx={{ fontSize: 13, color: "text.disabled" }} />
+                  <ShoppingBagRounded
+                    sx={{ fontSize: 13, color: "text.disabled" }}
+                  />
                   <Typography variant="caption" color="text.secondary">
                     {t("shops.saleCount", { count: shop.total_sales })}
                   </Typography>
@@ -112,7 +167,13 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
             {!compact && shop.supported_languages.length > 1 && (
               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                 {shop.supported_languages.map((lang) => (
-                  <Chip key={lang} label={lang.toUpperCase()} size="small" variant="outlined" sx={{ fontSize: "0.6rem", height: 18 }} />
+                  <Chip
+                    key={lang}
+                    label={lang.toUpperCase()}
+                    size="small"
+                    variant="outlined"
+                    sx={{ fontSize: "0.6rem", height: 18 }}
+                  />
                 ))}
               </Box>
             )}
@@ -135,7 +196,6 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                 {shop.description}
               </Typography>
             )}
-
           </CardContent>
         </CardActionArea>
       </Card>

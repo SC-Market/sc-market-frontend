@@ -11,7 +11,9 @@ const h = vi.hoisted(() => ({
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 vi.mock("../../../hooks/login/useSession", () => ({
   useSession: () => h.session,
@@ -82,7 +84,9 @@ describe("WatchPriceButton", () => {
     fireEvent.click(
       screen.getByRole("button", { name: /Watch price|Watching/ }),
     )
-    const prompt = screen.getByRole("dialog", { name: "Sign in to watch prices" })
+    const prompt = screen.getByRole("dialog", {
+      name: "Sign in to watch prices",
+    })
     fireEvent.click(within(prompt).getByRole("button", { name: "Sign in" }))
     expect(screen.getByTestId("login-page").textContent).toBe(
       "?redirect=%2Fwiki%2Fitems%2Fmedical-supplies",
@@ -132,7 +136,9 @@ describe("WatchPriceButton", () => {
       </MemoryRouter>,
     )
     fireEvent.click(screen.getByRole("button", { name: "Watch price" }))
-    fireEvent.mouseDown(screen.getByRole("combobox", { name: "Minimum quality" }))
+    fireEvent.mouseDown(
+      screen.getByRole("combobox", { name: "Minimum quality" }),
+    )
     fireEvent.click(screen.getByRole("option", { name: "Tier 3 or better" }))
     const dialog = screen.getByRole("dialog", { name: "Watch price" })
     fireEvent.click(within(dialog).getByRole("button", { name: "Watch price" }))
@@ -148,7 +154,9 @@ describe("WatchPriceButton", () => {
   it("hides the quality choice for items without quality tiers", () => {
     renderButton()
     fireEvent.click(screen.getByRole("button", { name: "Watch price" }))
-    expect(screen.queryByRole("combobox", { name: "Minimum quality" })).toBeNull()
+    expect(
+      screen.queryByRole("combobox", { name: "Minimum quality" }),
+    ).toBeNull()
   })
 
   it("reads Paused · Edit for a paused watch", () => {

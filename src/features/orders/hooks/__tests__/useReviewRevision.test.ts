@@ -4,9 +4,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const alert = vi.fn()
 const requestRevision = vi.fn()
 const updateReview = vi.fn()
-vi.mock("../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => alert }))
+vi.mock("../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => alert,
+}))
 vi.mock("../../api/ordersApi", () => ({
-  useRequestReviewRevisionMutation: () => [requestRevision, { isLoading: false }],
+  useRequestReviewRevisionMutation: () => [
+    requestRevision,
+    { isLoading: false },
+  ],
   useUpdateOrderReviewMutation: () => [updateReview, { isLoading: false }],
 }))
 

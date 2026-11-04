@@ -251,7 +251,9 @@ const hasTimeFields = (o: Intl.DateTimeFormatOptions) =>
  * say so, "14:00 UTC", so the text is true before the browser switches to
  * the visitor's zone.
  */
-function labelUtc(options: Intl.DateTimeFormatOptions): Intl.DateTimeFormatOptions {
+function labelUtc(
+  options: Intl.DateTimeFormatOptions,
+): Intl.DateTimeFormatOptions {
   if (
     options.timeZone === "UTC" &&
     options.timeZoneName === undefined &&
@@ -405,7 +407,9 @@ export function formatDuration(
     const count = Math.floor(rest / size)
     if (count > 0 || (unit === "second" && parts.length === 0)) {
       parts.push(
-        numberFormat(locale, { style: "unit", unit, unitDisplay }).format(count),
+        numberFormat(locale, { style: "unit", unit, unitDisplay }).format(
+          count,
+        ),
       )
       rest -= count * size
     }

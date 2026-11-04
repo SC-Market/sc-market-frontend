@@ -11,18 +11,25 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import type { Mock } from "vitest"
 import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
-import { mockMutationHook, querySuccess } from "../../../../../__tests__/rtkQueryMocks"
+import {
+  mockMutationHook,
+  querySuccess,
+} from "../../../../../__tests__/rtkQueryMocks"
 import type { BuyOrderFulfillmentOption } from "../../../../../store/api/v2/market"
 
 type MarketV2Module = typeof import("../../../../../store/api/v2/market")
 type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const issueAlert = vi.fn()
-vi.mock("../../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => issueAlert }))
+vi.mock("../../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => issueAlert,
+}))
 
 const navigate = vi.fn()
 vi.mock("react-router-dom", async () => ({
@@ -37,7 +44,9 @@ const h = vi.hoisted(() => ({
 
 vi.mock("../../../../../store/api/v2/market", () => ({
   useGetFulfillmentOptionsQuery: () =>
-    querySuccess<MarketV2Endpoints["getFulfillmentOptions"]>({ options: h.options }),
+    querySuccess<MarketV2Endpoints["getFulfillmentOptions"]>({
+      options: h.options,
+    }),
   useFulfillBuyOrderMutation: () => {
     const hook = mockMutationHook<MarketV2Endpoints["fulfillBuyOrder"]>()
     return [h.trigger, hook[1]]
@@ -46,7 +55,9 @@ vi.mock("../../../../../store/api/v2/market", () => ({
 
 import { FulfillBuyOrderDialog } from "../FulfillBuyOrderDialog"
 
-function option(over: Partial<BuyOrderFulfillmentOption>): BuyOrderFulfillmentOption {
+function option(
+  over: Partial<BuyOrderFulfillmentOption>,
+): BuyOrderFulfillmentOption {
   return {
     shop_id: "shop-1",
     shop_name: "Henry's Shop",
@@ -69,7 +80,12 @@ function renderDialog() {
     <ThemeProvider theme={createTheme()}>
       <MemoryRouter>
         <FulfillBuyOrderDialog
-          buyOrder={{ buy_order_id: "bo-1", game_item_name: "Quantanium", quantity: 10, quantity_fulfilled: 2 }}
+          buyOrder={{
+            buy_order_id: "bo-1",
+            game_item_name: "Quantanium",
+            quantity: 10,
+            quantity_fulfilled: 2,
+          }}
           open
           onClose={onClose}
         />
@@ -81,7 +97,9 @@ function renderDialog() {
 describe("FulfillBuyOrderDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    h.trigger = vi.fn(() => ({ unwrap: () => Promise.resolve({ order_id: "order-9" }) }))
+    h.trigger = vi.fn(() => ({
+      unwrap: () => Promise.resolve({ order_id: "order-9" }),
+    }))
   })
 
   it("fulfills from the picked listing variant, capped at its stock, and opens the order", async () => {
@@ -94,7 +112,11 @@ describe("FulfillBuyOrderDialog", () => {
     await waitFor(() => expect(h.trigger).toHaveBeenCalledTimes(1))
     expect(h.trigger).toHaveBeenCalledWith({
       id: "bo-1",
-      fulfillBuyOrderRequest: { listing_id: "listing-1", variant_id: "variant-1", quantity: 3 },
+      fulfillBuyOrderRequest: {
+        listing_id: "listing-1",
+        variant_id: "variant-1",
+        quantity: 3,
+      },
     })
     await waitFor(() => expect(navigate).toHaveBeenCalledWith("/order/order-9"))
   })
@@ -110,7 +132,9 @@ describe("FulfillBuyOrderDialog", () => {
     ]
     renderDialog()
 
-    expect(screen.getByText("Listing price 500 is above the buyer's maximum of 400")).toBeInTheDocument()
+    expect(
+      screen.getByText("Listing price 500 is above the buyer's maximum of 400"),
+    ).toBeInTheDocument()
     expect(screen.getByRole("radio")).toBeDisabled()
     expect(screen.getByRole("button", { name: "Fulfill" })).toBeDisabled()
   })
@@ -118,7 +142,9 @@ describe("FulfillBuyOrderDialog", () => {
   it("offers to create a listing when the seller has none of the item", () => {
     h.options = []
     renderDialog()
-    expect(screen.getByRole("link", { name: "Create a listing" })).toHaveAttribute("href", "/market/create")
+    expect(
+      screen.getByRole("link", { name: "Create a listing" }),
+    ).toHaveAttribute("href", "/market/create")
     expect(screen.getByRole("button", { name: "Fulfill" })).toBeDisabled()
   })
 
@@ -126,7 +152,12 @@ describe("FulfillBuyOrderDialog", () => {
     h.options = [option({})]
     h.trigger = vi.fn(() => ({
       unwrap: () =>
-        Promise.reject({ status: 400, data: { error: { code: "VALIDATION_ERROR", message: "Insufficient stock" } } }),
+        Promise.reject({
+          status: 400,
+          data: {
+            error: { code: "VALIDATION_ERROR", message: "Insufficient stock" },
+          },
+        }),
     }))
     renderDialog()
     fireEvent.click(screen.getByRole("button", { name: "Fulfill" }))

@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest"
 import { isListingNew, LISTING_NEW_DAYS } from "../listingBadges"
 
 const now = new Date("2026-11-03T12:00:00Z")
-const hoursAgo = (h: number) => new Date(now.getTime() - h * 3600_000).toISOString()
+const hoursAgo = (h: number) =>
+  new Date(now.getTime() - h * 3600_000).toISOString()
 
 describe("isListingNew", () => {
   it("uses a 3-day window", () => {

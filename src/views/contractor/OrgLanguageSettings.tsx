@@ -58,7 +58,10 @@ export function OrgLanguageSettings() {
         severity: "success",
       })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("settings.languages.saveError", "Failed to update languages")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("settings.languages.saveError", "Failed to update languages")
       issueAlert({
         message,
         severity: "error",

@@ -137,10 +137,7 @@ export function StillSellingFeedback({
   )
 
   return (
-    <Box
-      sx={{ width: "100%" }}
-      data-testid="still-selling-feedback"
-    >
+    <Box sx={{ width: "100%" }} data-testid="still-selling-feedback">
       <Typography variant="h6" component="h2" gutterBottom>
         {pause
           ? t("stillSellingPage.feedback.pauseQuestion", "Mind telling us why?")
@@ -199,7 +196,10 @@ export function StillSellingFeedback({
           textField(
             easier,
             setEasier,
-            t("stillSellingPage.feedback.easierLabel", "Your thoughts (optional)"),
+            t(
+              "stillSellingPage.feedback.easierLabel",
+              "Your thoughts (optional)",
+            ),
           )
         )}
         {failed && (

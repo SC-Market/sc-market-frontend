@@ -23,23 +23,36 @@ import { extractErrorMessage } from "../../../store/api-utils"
  * (or that fallback); without it, the error goes to the alert as is (the
  * compact form).
  */
-export function useCreateBuyOrder(successMessage: string, failedMessage?: string) {
+export function useCreateBuyOrder(
+  successMessage: string,
+  failedMessage?: string,
+) {
   const issueAlert = useAlertHook()
-  const [createStandingBuyOrder, { isLoading }] = useCreateStandingBuyOrderMutation()
+  const [createStandingBuyOrder, { isLoading }] =
+    useCreateStandingBuyOrderMutation()
 
   const create = useCallback(
     async (request: CreateTargetedBuyOrderRequest): Promise<boolean> => {
       try {
-        await createStandingBuyOrder({ createTargetedBuyOrderRequest: request }).unwrap()
+        await createStandingBuyOrder({
+          createTargetedBuyOrderRequest: request,
+        }).unwrap()
         issueAlert({ message: successMessage, severity: "success" })
         return true
       } catch (error) {
         if (failedMessage === undefined) {
           issueAlert(error as UnwrappedErrorInterface)
         } else {
-          const err = error as { data?: { message?: string; error?: string }; message?: string }
+          const err = error as {
+            data?: { message?: string; error?: string }
+            message?: string
+          }
           issueAlert({
-            message: err?.data?.message || err?.data?.error || err?.message || failedMessage,
+            message:
+              err?.data?.message ||
+              err?.data?.error ||
+              err?.message ||
+              failedMessage,
             severity: "error",
           })
         }
@@ -62,10 +75,15 @@ export function useCancelBuyOrder(failedMessage: string) {
     async (buyOrderId: string) => {
       try {
         await cancelBuyOrder({ id: buyOrderId }).unwrap()
-        issueAlert({ message: t("MarketAggregateView.cancelled"), severity: "success" })
+        issueAlert({
+          message: t("MarketAggregateView.cancelled"),
+          severity: "success",
+        })
       } catch (err) {
         issueAlert({
-          message: (err as { data?: { message?: string } })?.data?.message || failedMessage,
+          message:
+            (err as { data?: { message?: string } })?.data?.message ||
+            failedMessage,
           severity: "error",
         })
       }
@@ -83,19 +101,29 @@ export function useFulfillBuyOrder() {
   const [fulfillBuyOrder, { isLoading }] = useFulfillBuyOrderMutation()
 
   const fulfill = useCallback(
-    async (buyOrderId: string, request: FulfillBuyOrderRequest): Promise<string | null> => {
+    async (
+      buyOrderId: string,
+      request: FulfillBuyOrderRequest,
+    ): Promise<string | null> => {
       try {
         const result = await fulfillBuyOrder({
           id: buyOrderId,
           fulfillBuyOrderRequest: request,
         }).unwrap()
-        issueAlert({ message: t("buyorder.fulfilled", "Order created"), severity: "success" })
+        issueAlert({
+          message: t("buyorder.fulfilled", "Order created"),
+          severity: "success",
+        })
         return result.order_id
       } catch (err) {
         const reason = extractErrorMessage((err as { data?: unknown })?.data)
         issueAlert({
           message: reason
-            ? t("buyorder.fulfillFailedReason", "Could not fulfill the buy order: {{reason}}", { reason })
+            ? t(
+                "buyorder.fulfillFailedReason",
+                "Could not fulfill the buy order: {{reason}}",
+                { reason },
+              )
             : t("buyorder.fulfillFailed", "Could not fulfill the buy order"),
           severity: "error",
         })

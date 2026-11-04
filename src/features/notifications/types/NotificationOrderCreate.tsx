@@ -16,7 +16,11 @@ interface OrderEntity {
   customer: string
   cost: string | number
   title: string
-  market_listings?: Array<{ listing_id: string; quantity: number; listing?: { details?: { title?: string } } }>
+  market_listings?: Array<{
+    listing_id: string
+    quantity: number
+    listing?: { details?: { title?: string } }
+  }>
   service?: { title: string } | null
 }
 
@@ -43,7 +47,11 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
       >
         <UnderlineLink>{order.customer}</UnderlineLink>
       </Link>
-      <Stack direction="row" spacing={0.5} sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+      <Stack
+        direction="row"
+        spacing={0.5}
+        sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}
+      >
         {order.cost && (
           <Chip
             label={fmt.price(Number(order.cost))}

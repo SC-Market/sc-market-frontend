@@ -103,15 +103,18 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
   }, [state, updateStateBuffer])
 
   const fullPost: RecruitingPost | null = useMemo(
-    () => contractor ? ({
-      ...stateBuffer,
-      post_id: "",
-      contractor,
-      timestamp: Date.now(),
-      comments: [],
-      upvotes: 25,
-      downvotes: 4,
-    }) : null,
+    () =>
+      contractor
+        ? {
+            ...stateBuffer,
+            post_id: "",
+            contractor,
+            timestamp: Date.now(),
+            comments: [],
+            upvotes: 25,
+            downvotes: 4,
+          }
+        : null,
     [stateBuffer, contractor],
   )
 

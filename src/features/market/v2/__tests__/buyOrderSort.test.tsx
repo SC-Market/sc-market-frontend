@@ -23,7 +23,9 @@ vi.mock("../../../../store/api/v2/market", async () => {
 })
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const theme = createTheme({
@@ -38,14 +40,29 @@ describe("buyOrderSortArgs", () => {
   const args = (qs: string) => buyOrderSortArgs(new URLSearchParams(qs))
 
   it("maps the sidebar's sort values to the buy-order search keys", () => {
-    expect(args("sort_by=price&sort_order=asc")).toEqual({ sortBy: "price_per_unit", sortOrder: "asc" })
-    expect(args("sort_by=price&sort_order=desc")).toEqual({ sortBy: "price_per_unit", sortOrder: "desc" })
-    expect(args("sort_by=created_at&sort_order=asc")).toEqual({ sortBy: "created_at", sortOrder: "asc" })
-    expect(args("sort_by=quality&sort_order=desc")).toEqual({ sortBy: "quality_tier_min", sortOrder: "desc" })
+    expect(args("sort_by=price&sort_order=asc")).toEqual({
+      sortBy: "price_per_unit",
+      sortOrder: "asc",
+    })
+    expect(args("sort_by=price&sort_order=desc")).toEqual({
+      sortBy: "price_per_unit",
+      sortOrder: "desc",
+    })
+    expect(args("sort_by=created_at&sort_order=asc")).toEqual({
+      sortBy: "created_at",
+      sortOrder: "asc",
+    })
+    expect(args("sort_by=quality&sort_order=desc")).toEqual({
+      sortBy: "quality_tier_min",
+      sortOrder: "desc",
+    })
   })
 
   it("defaults the order to desc, like the sidebar select", () => {
-    expect(args("sort_by=price")).toEqual({ sortBy: "price_per_unit", sortOrder: "desc" })
+    expect(args("sort_by=price")).toEqual({
+      sortBy: "price_per_unit",
+      sortOrder: "desc",
+    })
   })
 
   it("sends nothing for no sort or a sort buy orders don't support", () => {
@@ -56,8 +73,12 @@ describe("buyOrderSortArgs", () => {
 
 describe("MarketSearchAreaV2 sort options", () => {
   beforeEach(() => {
-    vi.mocked(useSearchListingsQuery).mockReturnValue({ data: undefined } as never)
-    vi.mocked(useSearchResourcesQuery).mockReturnValue({ data: undefined } as never)
+    vi.mocked(useSearchListingsQuery).mockReturnValue({
+      data: undefined,
+    } as never)
+    vi.mocked(useSearchResourcesQuery).mockReturnValue({
+      data: undefined,
+    } as never)
     vi.mocked(useGetCategoriesQuery).mockReturnValue({ data: [] } as never)
   })
 

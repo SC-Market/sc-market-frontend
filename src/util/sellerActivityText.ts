@@ -6,7 +6,9 @@ import { formatNumber } from "./format/format"
  * edge bridge's listing and shop pages). Coarse by design: the API only
  * gives buckets, never timestamps. Null when there is nothing to say.
  */
-export function sellerActivityText(activity: SellerActivity | null | undefined): string | null {
+export function sellerActivityText(
+  activity: SellerActivity | null | undefined,
+): string | null {
   if (!activity) return null
   const lastSeen = {
     today: "active today",
@@ -25,7 +27,9 @@ export function sellerActivityText(activity: SellerActivity | null | undefined):
     activity.last_seen ? lastSeen[activity.last_seen] : null,
     activity.reply_time
       ? `${reply[activity.reply_time]}${
-          activity.reply_sample_size ? ` (${activity.reply_sample_size} order and offer chats, last 90 days)` : ""
+          activity.reply_sample_size
+            ? ` (${activity.reply_sample_size} order and offer chats, last 90 days)`
+            : ""
         }`
       : null,
     activity.completed_orders > 0

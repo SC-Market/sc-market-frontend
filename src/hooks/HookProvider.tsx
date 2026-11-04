@@ -68,9 +68,10 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const hydrated = useHydrated()
   const { theme: renderedTheme, whiteLabel: requestWhiteLabel } =
     useRequestContext()
-  const [useLightTheme, setUseLightTheme] = useHydratedInitialState<ThemeChoice>(
-    hydrated ? cookies.theme || "system" : renderedTheme,
-  )
+  const [useLightTheme, setUseLightTheme] =
+    useHydratedInitialState<ThemeChoice>(
+      hydrated ? cookies.theme || "system" : renderedTheme,
+    )
   const location = useLocation()
   const { i18n } = useTranslation()
   const dispatch = useAppDispatch()
@@ -92,20 +93,28 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       return prefersLight ? "light" : "dark"
     }
     // If it's a custom theme name, return it as-is (for dev mode or admins)
-    if ((isDev || isAdmin || useLightTheme === "CLEAN_DARK") && CUSTOM_THEMES.has(useLightTheme)) {
+    if (
+      (isDev || isAdmin || useLightTheme === "CLEAN_DARK") &&
+      CUSTOM_THEMES.has(useLightTheme)
+    ) {
       return useLightTheme
     }
     return useLightTheme
   }, [useLightTheme, prefersLight, isDev, isAdmin])
 
   // Track dynamically-fetched org theme (populated by background revalidation)
-  const [dynamicOrgTheme, setDynamicOrgTheme] = useState<ReturnType<typeof getCachedOrgTheme>>(null)
+  const [dynamicOrgTheme, setDynamicOrgTheme] =
+    useState<ReturnType<typeof getCachedOrgTheme>>(null)
 
-  const resolvedMode = actualTheme === "light" ? ("light" as const) : ("dark" as const)
+  const resolvedMode =
+    actualTheme === "light" ? ("light" as const) : ("dark" as const)
 
   const baseTheme = useMemo(() => {
     // In dev mode or for admins, check if a custom theme is selected
-    if ((isDev || isAdmin || useLightTheme === "CLEAN_DARK") && CUSTOM_THEMES.has(useLightTheme)) {
+    if (
+      (isDev || isAdmin || useLightTheme === "CLEAN_DARK") &&
+      CUSTOM_THEMES.has(useLightTheme)
+    ) {
       const customTheme = CUSTOM_THEMES.get(useLightTheme)
       if (customTheme) return customTheme
     }
@@ -124,10 +133,22 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       if (cached) return cached
     }
     return actualTheme === "light" ? CLEAN_theme : mainTheme
-  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode, customOrg, requestWhiteLabel])
+  }, [
+    actualTheme,
+    location.pathname,
+    isDev,
+    isAdmin,
+    useLightTheme,
+    dynamicOrgTheme,
+    resolvedMode,
+    customOrg,
+    requestWhiteLabel,
+  ])
 
   // Start proactive JWT refresh (every 13 min + on tab visibility change)
-  useEffect(() => { startProactiveRefresh() }, [])
+  useEffect(() => {
+    startProactiveRefresh()
+  }, [])
 
   // Background: resolve domain + fetch theme for white-label sites
   useEffect(() => {
@@ -162,7 +183,6 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
         // Step 4: Build and apply theme
         const built = buildOrgTheme(theme_data, resolvedMode)
         setDynamicOrgTheme(built)
-
       } catch {
         // API unavailable — cached/hardcoded theme continues to work
       }
@@ -209,7 +229,9 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   // "dark" (or custom) theme before the re-seed could read it.
   const themeRef = useRef(useLightTheme)
   themeRef.current = useLightTheme
-  const setTheme = useCallback<React.Dispatch<React.SetStateAction<ThemeChoice>>>(
+  const setTheme = useCallback<
+    React.Dispatch<React.SetStateAction<ThemeChoice>>
+  >(
     (next) => {
       const value = typeof next === "function" ? next(themeRef.current) : next
       if (value === "system") {
@@ -270,7 +292,10 @@ export function HookProvider(props: { children: React.ReactElement }) {
     if (error === "account_not_found") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.accountNotFound", "No account found with this login method. Please sign up or try a different login method.")
+        t(
+          "auth.accountNotFound",
+          "No account found with this login method. Please sign up or try a different login method.",
+        )
     } else if (error === "account_already_exists") {
       errorMessage =
         searchParams.get("error_description") ||
@@ -291,11 +316,17 @@ export function HookProvider(props: { children: React.ReactElement }) {
     } else if (isCitizenIdEnabled && error === "citizenid_auth_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.authFailed", "Citizen iD authentication failed. Please try again or use a different login method.")
+        t(
+          "auth.authFailed",
+          "Citizen iD authentication failed. Please try again or use a different login method.",
+        )
     } else if (isCitizenIdEnabled && error === "citizenid_login_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.loginFailed", "Failed to sign in with Citizen iD. Please try again or use a different login method.")
+        t(
+          "auth.loginFailed",
+          "Failed to sign in with Citizen iD. Please try again or use a different login method.",
+        )
     } else if (isCitizenIdEnabled && error === "citizenid_oauth_error") {
       errorMessage =
         searchParams.get("error_description") ||
@@ -348,35 +379,35 @@ export function HookProvider(props: { children: React.ReactElement }) {
 
   return (
     <CustomDomainContext.Provider value={customDomain}>
-    <CookiesProvider>
-      <ThemeProviderWrapper>
-        <AlertHookContext.Provider value={[alert, issueAlert]}>
-          <CurrentOrgProvider>
-            <ServiceSearchContext.Provider value={useState({ query: "" })}>
-              <CurrentChatIDContext.Provider
-                value={useState<string | null | undefined>(undefined)}
-              >
-                <CurrentChatContext.Provider
-                  value={useState<Chat | null | undefined>(undefined)}
+      <CookiesProvider>
+        <ThemeProviderWrapper>
+          <AlertHookContext.Provider value={[alert, issueAlert]}>
+            <CurrentOrgProvider>
+              <ServiceSearchContext.Provider value={useState({ query: "" })}>
+                <CurrentChatIDContext.Provider
+                  value={useState<string | null | undefined>(undefined)}
                 >
-                  <CurrentChatMessagesContext.Provider
-                    value={useState<Message[]>([])}
+                  <CurrentChatContext.Provider
+                    value={useState<Chat | null | undefined>(undefined)}
                   >
-                    <CssBaseline key="css-baseline" />
-                    {props.children}
-                    <AdminMfaHost />
-                    <AlertSnackbar
-                      alert={alert}
-                      onClose={() => issueAlert(null)}
-                    />
-                  </CurrentChatMessagesContext.Provider>
-                </CurrentChatContext.Provider>
-              </CurrentChatIDContext.Provider>
-            </ServiceSearchContext.Provider>
-          </CurrentOrgProvider>
-        </AlertHookContext.Provider>
-      </ThemeProviderWrapper>
-    </CookiesProvider>
+                    <CurrentChatMessagesContext.Provider
+                      value={useState<Message[]>([])}
+                    >
+                      <CssBaseline key="css-baseline" />
+                      {props.children}
+                      <AdminMfaHost />
+                      <AlertSnackbar
+                        alert={alert}
+                        onClose={() => issueAlert(null)}
+                      />
+                    </CurrentChatMessagesContext.Provider>
+                  </CurrentChatContext.Provider>
+                </CurrentChatIDContext.Provider>
+              </ServiceSearchContext.Provider>
+            </CurrentOrgProvider>
+          </AlertHookContext.Provider>
+        </ThemeProviderWrapper>
+      </CookiesProvider>
     </CustomDomainContext.Provider>
   )
 }

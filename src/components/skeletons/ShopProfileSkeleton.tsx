@@ -143,7 +143,11 @@ export function ShopProfileSkeleton() {
 
           <Grid item xs={12}>
             <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-              <Tabs value={0} aria-label={t("shops.profile.tabsLabel")} variant="scrollable">
+              <Tabs
+                value={0}
+                aria-label={t("shops.profile.tabsLabel")}
+                variant="scrollable"
+              >
                 <HapticTab
                   label={<Skeleton width={60} />}
                   icon={<StorefrontRounded />}

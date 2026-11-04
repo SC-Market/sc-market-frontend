@@ -10,5 +10,6 @@ export const CONTENT_ASSET_PATHS = {
   index: "/content/bridge/index.json",
   about: "/content/bridge/about.json",
   category: (category: string) => `/content/bridge/guides/${category}.json`,
-  guide: (category: string, slug: string) => `/content/bridge/guides/${category}/${slug}.json`,
+  guide: (category: string, slug: string) =>
+    `/content/bridge/guides/${category}/${slug}.json`,
 } as const

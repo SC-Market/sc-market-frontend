@@ -105,13 +105,19 @@ export function useResolveScope(scope: WidgetScope): ResolvedScope {
             unavailable: true,
             label: t("dashboardUi.scope.unavailableOrg"),
           }
-        return { spectrumId: org.spectrum_id, label: org.name || org.spectrum_id }
+        return {
+          spectrumId: org.spectrum_id,
+          label: org.name || org.spectrum_id,
+        }
       }
 
       case "specific_shop": {
         const shop = myShops?.find((s) => s.shop_id === scope.shopId)
         if (!shop)
-          return { unavailable: true, label: t("dashboardUi.scope.unavailableShop") }
+          return {
+            unavailable: true,
+            label: t("dashboardUi.scope.unavailableShop"),
+          }
         return { shopId: shop.shop_id, label: shop.name }
       }
 

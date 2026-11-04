@@ -45,7 +45,11 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
           ? userApi.endpoints.profileSearchUsers.initiate(query)
           : contractorsApi.endpoints.searchContractors.initiate({ query })
 
-      const dispatchResult = dispatch(endpoint as ReturnType<typeof userApi.endpoints.profileSearchUsers.initiate>)
+      const dispatchResult = dispatch(
+        endpoint as ReturnType<
+          typeof userApi.endpoints.profileSearchUsers.initiate
+        >,
+      )
       dispatchResult
         .then((result: { data?: User[] | Contractor[] }) => {
           const data = result.data

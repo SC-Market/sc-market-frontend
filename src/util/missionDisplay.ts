@@ -42,11 +42,18 @@ const MISSION_TYPE_LABELS: Record<string, [string, string]> = {
  * without it the English label is returned. Codes are matched case- and
  * space-insensitively ("Bounty Hunter" and "bountyhunter" are the same type).
  */
-export function getMissionTypeLabel(type: string | null | undefined, t?: TFunction): string {
+export function getMissionTypeLabel(
+  type: string | null | undefined,
+  t?: TFunction,
+): string {
   if (!type) return t ? t("missionsUi.unknown") : "Unknown"
   const known = MISSION_TYPE_LABELS[type.toLowerCase().replace(/\s+/g, "")]
-  if (known) return t ? t(`gameTaxonomyUi.missionTypes.${known[0]}`, known[1]) : known[1]
-  return type.replace(/^missiontype\./, "").replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  if (known)
+    return t ? t(`gameTaxonomyUi.missionTypes.${known[0]}`, known[1]) : known[1]
+  return type
+    .replace(/^missiontype\./, "")
+    .replace(/[_-]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 /**
@@ -56,16 +63,19 @@ export function getMissionTypeLabel(type: string | null | undefined, t?: TFuncti
  */
 export function formatMissionNameText(name: string | null | undefined): string {
   if (!name) return "Unknown Mission"
-  return name.replace(/<\/?em\d*>/gi, "").replace(/~mission\(([^)]+)\)/g, (_, inner) => {
-    if (inner === "Contractor" || inner.startsWith("Contractor|")) return "Various"
-    const key = inner.split("|").pop() || inner
-    const label = key
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      .replace(/[_]/g, " ")
-      .trim()
-      .toUpperCase()
-    return `[${label}]`
-  })
+  return name
+    .replace(/<\/?em\d*>/gi, "")
+    .replace(/~mission\(([^)]+)\)/g, (_, inner) => {
+      if (inner === "Contractor" || inner.startsWith("Contractor|"))
+        return "Various"
+      const key = inner.split("|").pop() || inner
+      const label = key
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/[_]/g, " ")
+        .trim()
+        .toUpperCase()
+      return `[${label}]`
+    })
 }
 
 /**
@@ -73,11 +83,17 @@ export function formatMissionNameText(name: string | null | undefined): string {
  * - Replace ~mission(TargetName) style placeholders with readable [Target Name]
  * - Clean up escaped newlines
  */
-export function formatMissionDescription(text: string | null | undefined): string {
+export function formatMissionDescription(
+  text: string | null | undefined,
+): string {
   if (!text) return ""
   return text
     .replace(/~mission\(([^|)]+)\|?[^)]*\)/g, (_, key) => {
-      const label = key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_|]/g, " ").trim().toUpperCase()
+      const label = key
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/[_|]/g, " ")
+        .trim()
+        .toUpperCase()
       return `[${label}]`
     })
     .replace(/\\n/g, "\n")
@@ -88,7 +104,10 @@ export function formatMissionDescription(text: string | null | undefined): strin
  * A mission's credit reward: "—" for none, abbreviated from 1,000 up in the
  * locale's short form ("1.5K aUEC", "10K aUEC", "1.5M aUEC" in English).
  */
-export function formatCredits(amount: number | null | undefined, locale: string): string {
+export function formatCredits(
+  amount: number | null | undefined,
+  locale: string,
+): string {
   if (amount === null || amount === undefined || amount === 0) return "—"
   if (amount >= 1_000) {
     return `${formatNumber(amount, locale, { notation: "compact", maximumFractionDigits: 1 })} aUEC`

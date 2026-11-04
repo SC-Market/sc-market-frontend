@@ -1,9 +1,9 @@
 import "../../../util/i18n"
 /**
  * ShoppingList Component Tests
- * 
+ *
  * Tests for the ShoppingList component including display, sorting, and CSV export.
- * 
+ *
  * Task 14.4 - Create ShoppingList component tests
  * Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6
  */
@@ -41,13 +41,17 @@ const mockTheme = createTheme({
 // Mock the Page component to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", async () => {
   return {
-    Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Page: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   }
 })
 
 // Mock StandardPageLayout to avoid serviceApi/profileApi dependencies
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  StandardPageLayout: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }))
 
 // Mock Footer to avoid AlertHookContext dependency
@@ -76,12 +80,18 @@ function createTestStore() {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
 // Helper to render with providers
-function renderWithProviders(ui: React.ReactElement, { store = createTestStore() } = {}) {
+function renderWithProviders(
+  ui: React.ReactElement,
+  { store = createTestStore() } = {},
+) {
   const currentOrgState: React.ContextType<typeof CurrentOrgContext> = [
     null,
     vi.fn(),
@@ -102,7 +112,7 @@ function renderWithProviders(ui: React.ReactElement, { store = createTestStore()
           </DrawerOpenContext.Provider>
         </BrowserRouter>
       </ThemeProvider>
-    </Provider>
+    </Provider>,
   )
 }
 
@@ -189,8 +199,13 @@ describe("ShoppingList", () => {
 
   describe("Display Requirements", () => {
     it("should display materials with quantities (Requirement 9.1, 9.2)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -207,8 +222,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display in-stock vs to-acquire quantities (Requirement 9.2)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -227,8 +247,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display estimated costs (Requirement 9.3)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -242,8 +267,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display acquisition methods (Requirement 9.4)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -255,8 +285,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display summary statistics", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -273,8 +308,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display quality tiers when specified", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -286,8 +326,13 @@ describe("ShoppingList", () => {
     })
 
     it("should display stock status indicators", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -303,8 +348,13 @@ describe("ShoppingList", () => {
     it("should sort by material name", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -328,8 +378,13 @@ describe("ShoppingList", () => {
     it("should sort by quantity", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -352,8 +407,13 @@ describe("ShoppingList", () => {
     it("should toggle sort order on second click", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -381,8 +441,13 @@ describe("ShoppingList", () => {
     it("should export shopping list to CSV", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       // Mock URL.createObjectURL
@@ -410,17 +475,21 @@ describe("ShoppingList", () => {
       const realRemoveChild = document.body.removeChild.bind(document.body)
       const mockAppendChild = vi
         .spyOn(document.body, "appendChild")
-        .mockImplementation(<T extends Node>(node: T): T =>
-          (node as Node) === mockLink ? node : realAppendChild(node),
+        .mockImplementation(
+          <T extends Node>(node: T): T =>
+            (node as Node) === mockLink ? node : realAppendChild(node),
         )
       const mockRemoveChild = vi
         .spyOn(document.body, "removeChild")
-        .mockImplementation(<T extends Node>(node: T): T =>
-          (node as Node) === mockLink ? node : realRemoveChild(node),
+        .mockImplementation(
+          <T extends Node>(node: T): T =>
+            (node as Node) === mockLink ? node : realRemoveChild(node),
         )
 
       // Click export button
-      const exportButton = screen.getByRole("button", { name: /Export to CSV/i })
+      const exportButton = screen.getByRole("button", {
+        name: /Export to CSV/i,
+      })
       await user.click(exportButton)
 
       // Verify CSV was created and downloaded
@@ -431,7 +500,10 @@ describe("ShoppingList", () => {
     })
 
     it("should disable export button when no materials", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
         querySuccess<typeof marketV2Api.endpoints.generateShoppingList>({
           ...mockShoppingListData,
           materials_needed: [],
@@ -440,7 +512,9 @@ describe("ShoppingList", () => {
 
       renderWithProviders(<ShoppingList />)
 
-      const exportButton = screen.getByRole("button", { name: /Export to CSV/i })
+      const exportButton = screen.getByRole("button", {
+        name: /Export to CSV/i,
+      })
       expect(exportButton).toBeDisabled()
     })
   })
@@ -449,20 +523,30 @@ describe("ShoppingList", () => {
     it("should navigate back to wishlist detail", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
 
-      const backButton = screen.getByRole("button", { name: /Back to Wishlist/i })
+      const backButton = screen.getByRole("button", {
+        name: /Back to Wishlist/i,
+      })
       await user.click(backButton)
 
       expect(mockNavigate).toHaveBeenCalledWith("/shopping-lists/wishlist-1")
     })
 
     it("should display link back to wishlist in error state", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
         queryError<typeof marketV2Api.endpoints.generateShoppingList>({
           status: 404,
           data: { message: "Not found" },
@@ -471,13 +555,18 @@ describe("ShoppingList", () => {
 
       renderWithProviders(<ShoppingList />)
 
-      expect(screen.getByRole("button", { name: /Back to Wishlist/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Back to Wishlist/i }),
+      ).toBeInTheDocument()
     })
   })
 
   describe("Loading and Error States", () => {
     it("should display loading spinner", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
         queryLoading<typeof marketV2Api.endpoints.generateShoppingList>(),
       )
 
@@ -487,7 +576,10 @@ describe("ShoppingList", () => {
     })
 
     it("should display error message on failure", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
         queryError<typeof marketV2Api.endpoints.generateShoppingList>({
           status: 500,
           data: { message: "Server error" },
@@ -496,11 +588,16 @@ describe("ShoppingList", () => {
 
       renderWithProviders(<ShoppingList />)
 
-      expect(screen.getByText(/Failed to load shopping list/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Failed to load shopping list/i),
+      ).toBeInTheDocument()
     })
 
     it("should display empty state when no materials needed", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
         querySuccess<typeof marketV2Api.endpoints.generateShoppingList>({
           ...mockShoppingListData,
           materials_needed: [],
@@ -510,28 +607,43 @@ describe("ShoppingList", () => {
       renderWithProviders(<ShoppingList />)
 
       expect(screen.getByText("No materials needed")).toBeInTheDocument()
-      expect(screen.getByText(/Add craftable items to your wishlist/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Add craftable items to your wishlist/i),
+      ).toBeInTheDocument()
     })
   })
 
   describe("Material Details", () => {
     it("should display material icons", () => {
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
 
       const aluminumIcon = screen.getByAltText("Aluminum")
       expect(aluminumIcon).toBeInTheDocument()
-      expect(aluminumIcon).toHaveAttribute("src", "https://example.com/aluminum.png")
+      expect(aluminumIcon).toHaveAttribute(
+        "src",
+        "https://example.com/aluminum.png",
+      )
     })
 
     it("should show tooltip with used-by items on info button hover", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -566,13 +678,20 @@ describe("ShoppingList", () => {
         dispatchEvent: vi.fn(),
       }))
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(mockShoppingListData),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          mockShoppingListData,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
 
-      expect(screen.getByText(/Rotate your device or view on desktop/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Rotate your device or view on desktop/i),
+      ).toBeInTheDocument()
     })
   })
 
@@ -589,8 +708,13 @@ describe("ShoppingList", () => {
         ],
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(dataWithNoCost),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          dataWithNoCost,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -620,8 +744,13 @@ describe("ShoppingList", () => {
         ],
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(dataWithMultipleItems),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          dataWithMultipleItems,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)
@@ -636,8 +765,13 @@ describe("ShoppingList", () => {
         total_estimated_cost: 0,
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue(
-        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(dataWithZeroCost),
+      vi.spyOn(
+        marketV2ApiHooks,
+        "useGenerateShoppingListQuery",
+      ).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.generateShoppingList>(
+          dataWithZeroCost,
+        ),
       )
 
       renderWithProviders(<ShoppingList />)

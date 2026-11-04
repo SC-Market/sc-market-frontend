@@ -67,7 +67,12 @@ export function SupportersSection() {
         {t("landing.supporters")}
       </Typography>
       <Box
-        sx={{ display: "flex", alignItems: "center", gap: 2.5, flexWrap: "wrap" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2.5,
+          flexWrap: "wrap",
+        }}
       >
         {SUPPORTERS.map((supporter) => (
           <MaterialLink

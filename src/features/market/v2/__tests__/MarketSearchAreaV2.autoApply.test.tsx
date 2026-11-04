@@ -23,7 +23,9 @@ vi.mock("../../../../store/api/v2/market", async () => {
 })
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const theme = createTheme({
@@ -34,7 +36,11 @@ const theme = createTheme({
 const CATEGORIES = [
   { category: "Armor", subcategory: "Helmet", game_item_categories: "" },
   { category: "Armor", subcategory: "Torso", game_item_categories: "" },
-  { category: "Weapons", subcategory: "Ranged Weapon", game_item_categories: "" },
+  {
+    category: "Weapons",
+    subcategory: "Ranged Weapon",
+    game_item_categories: "",
+  },
 ]
 
 function LocationLog({ log }: { log: string[] }) {
@@ -69,9 +75,15 @@ const itemTypeInput = () => screen.getByRole("combobox", { name: "Item Type" })
 describe("MarketSearchAreaV2 auto-apply", () => {
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] })
-    vi.mocked(useSearchListingsQuery).mockReturnValue({ data: undefined } as never)
-    vi.mocked(useSearchResourcesQuery).mockReturnValue({ data: undefined } as never)
-    vi.mocked(useGetCategoriesQuery).mockReturnValue({ data: CATEGORIES } as never)
+    vi.mocked(useSearchListingsQuery).mockReturnValue({
+      data: undefined,
+    } as never)
+    vi.mocked(useSearchResourcesQuery).mockReturnValue({
+      data: undefined,
+    } as never)
+    vi.mocked(useGetCategoriesQuery).mockReturnValue({
+      data: CATEGORIES,
+    } as never)
   })
   afterEach(() => {
     vi.useRealTimers()
@@ -110,7 +122,9 @@ describe("MarketSearchAreaV2 auto-apply", () => {
       fireEvent.mouseDown(itemTypeInput())
       const listbox = screen.getByRole("listbox")
       expect(
-        within(listbox).getAllByRole("option").map((o) => o.textContent),
+        within(listbox)
+          .getAllByRole("option")
+          .map((o) => o.textContent),
       ).toEqual(["Helmet", "Torso", "Ranged Weapon"])
       expect(within(listbox).getByText("Armor")).toBeInTheDocument()
       expect(within(listbox).getByText("Weapons")).toBeInTheDocument()
@@ -159,8 +173,12 @@ describe("MarketSearchAreaV2 auto-apply", () => {
 
     it("clearing applies immediately and drops the legacy alias", () => {
       const { applies } = setup("/market?type=Helmet")
-      const root = itemTypeInput().closest(".MuiAutocomplete-root") as HTMLElement
-      fireEvent.click(root.querySelector('button[aria-label="Clear"]') as HTMLElement)
+      const root = itemTypeInput().closest(
+        ".MuiAutocomplete-root",
+      ) as HTMLElement
+      fireEvent.click(
+        root.querySelector('button[aria-label="Clear"]') as HTMLElement,
+      )
       expect(applies()).toEqual(["PUSH ?page=1"])
     })
   })

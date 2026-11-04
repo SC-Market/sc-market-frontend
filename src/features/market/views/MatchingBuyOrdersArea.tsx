@@ -16,9 +16,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { Section } from "../../../components/paper/Section"
 import { MARKET_PATHS } from "../../../routes/paths"
-import {
-  useGetMatchesForSellerQuery,
-} from "../../../store/api/v2/market"
+import { useGetMatchesForSellerQuery } from "../../../store/api/v2/market"
 import { remainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
 
@@ -34,7 +32,10 @@ export function MatchingBuyOrdersArea({
 } = {}) {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const { data, isLoading } = useGetMatchesForSellerQuery({ page: 1, pageSize: 5 })
+  const { data, isLoading } = useGetMatchesForSellerQuery({
+    page: 1,
+    pageSize: 5,
+  })
   const orders = data?.buy_orders || []
 
   if (isLoading) return null
@@ -69,7 +70,9 @@ export function MatchingBuyOrdersArea({
               <TableCell>{t("marketUi.tables.item")}</TableCell>
               <TableCell>{t("marketUi.tables.buyer")}</TableCell>
               <TableCell align="right">{t("marketUi.tables.price")}</TableCell>
-              <TableCell align="right">{t("marketUi.tables.qtyRemaining")}</TableCell>
+              <TableCell align="right">
+                {t("marketUi.tables.qtyRemaining")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,7 +98,11 @@ export function MatchingBuyOrdersArea({
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Typography variant="body2" color="primary" fontWeight="bold">
+                    <Typography
+                      variant="body2"
+                      color="primary"
+                      fontWeight="bold"
+                    >
                       {fmt.number(order.price_per_unit)} aUEC
                     </Typography>
                   </TableCell>
@@ -112,7 +119,12 @@ export function MatchingBuyOrdersArea({
       </TableContainer>
       {(data?.total || 0) > 5 && (
         <Box sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}>
-          <Button component={RouterLink} to={MARKET_PATHS.buyOrders} size="small" color="secondary">
+          <Button
+            component={RouterLink}
+            to={MARKET_PATHS.buyOrders}
+            size="small"
+            color="secondary"
+          >
             {t("dashboard.viewAll", "View All")} ({data?.total})
           </Button>
         </Box>

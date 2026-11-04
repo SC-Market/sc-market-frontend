@@ -139,11 +139,7 @@
       ]
     }
   ],
-  "categories": [
-    "games",
-    "shopping",
-    "social"
-  ],
+  "categories": ["games", "shopping", "social"],
   "widgets": [
     {
       "name": "Recent Orders",

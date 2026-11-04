@@ -63,12 +63,17 @@ export function PriceComparisonAlert({
               <TrendingUpIcon />
             )
           }
-          label={t("marketV2.vsAvg", { pct: `${priceComparison.percentVsAvg > 0 ? "+" : ""}${priceComparison.percentVsAvg.toFixed(1)}`, avg: fmt.number(priceComparison.avgPrice) })}
+          label={t("marketV2.vsAvg", {
+            pct: `${priceComparison.percentVsAvg > 0 ? "+" : ""}${priceComparison.percentVsAvg.toFixed(1)}`,
+            avg: fmt.number(priceComparison.avgPrice),
+          })}
           color={priceComparison.isBelowAvg ? "success" : "default"}
           size="small"
         />
         <Chip
-          label={t("marketV2.lowest", { price: fmt.number(priceComparison.minPrice) })}
+          label={t("marketV2.lowest", {
+            price: fmt.number(priceComparison.minPrice),
+          })}
           color={priceComparison.isLowest ? "success" : "default"}
           size="small"
         />

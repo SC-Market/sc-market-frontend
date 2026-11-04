@@ -30,7 +30,14 @@ interface Props {
   isShareable: boolean
 }
 
-export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, minStanding, isShareable }: Props) {
+export function MissionRankCalculator({
+  reputationReward,
+  rewardScope,
+  rewardFaction,
+  requiredRank,
+  minStanding,
+  isShareable,
+}: Props) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const [crewSize, setCrewSize] = useState(1)
@@ -56,7 +63,10 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
   }, [ranks])
   const isNegativeRep = xpPerRun < 0 || ranksDescend
 
-  const displayRanks = useMemo(() => isNegativeRep ? [...ranks].reverse() : ranks, [ranks, isNegativeRep])
+  const displayRanks = useMemo(
+    () => (isNegativeRep ? [...ranks].reverse() : ranks),
+    [ranks, isNegativeRep],
+  )
 
   // Find the min rank index — match by standing code first, then threshold
   const minRankIndex = useMemo(() => {
@@ -66,26 +76,45 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
     }
     if (requiredRank == null) return 0
     const idx = displayRanks.findIndex((r) => {
-      return isNegativeRep ? r.threshold <= requiredRank : r.threshold >= requiredRank
+      return isNegativeRep
+        ? r.threshold <= requiredRank
+        : r.threshold >= requiredRank
     })
     return idx >= 0 ? idx : 0
   }, [minStanding, requiredRank, displayRanks, isNegativeRep])
 
-  if (isLoading) return <Typography variant="body2" color="text.secondary">{t("missionToolsUi.loadingRanks")}</Typography>
-  if (!ranks.length) return <Alert severity="info">{t("missionToolsUi.noRankData", { scope: scopeDisplayName })}</Alert>
+  if (isLoading)
+    return (
+      <Typography variant="body2" color="text.secondary">
+        {t("missionToolsUi.loadingRanks")}
+      </Typography>
+    )
+  if (!ranks.length)
+    return (
+      <Alert severity="info">
+        {t("missionToolsUi.noRankData", { scope: scopeDisplayName })}
+      </Alert>
+    )
 
   return (
     <Box>
       {isNegativeRep && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          <Trans i18nKey="missionToolsUi.negativeRepWarning" components={{ strong: <strong /> }} />
+          <Trans
+            i18nKey="missionToolsUi.negativeRepWarning"
+            components={{ strong: <strong /> }}
+          />
         </Alert>
       )}
       {/* Crew size slider */}
       {isShareable && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="body2" gutterBottom>
-            <Trans i18nKey="missionToolsUi.crewSizeValue" values={{ size: crewSize }} components={{ strong: <strong /> }} />{" "}
+            <Trans
+              i18nKey="missionToolsUi.crewSizeValue"
+              values={{ size: crewSize }}
+              components={{ strong: <strong /> }}
+            />{" "}
             {crewSize > 1 && t("missionToolsUi.xpEach", { xp: xpPerRun })}
           </Typography>
           <Slider
@@ -94,7 +123,11 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
             onChange={(_, v) => setCrewSize(v as number)}
             min={1}
             max={8}
-            marks={[{ value: 1, label: "1" }, { value: 4, label: "4" }, { value: 8, label: "8" }]}
+            marks={[
+              { value: 1, label: "1" },
+              { value: 4, label: "4" },
+              { value: 8, label: "8" },
+            ]}
             valueLabelDisplay="auto"
             size="small"
             sx={{ maxWidth: 300 }}
@@ -103,9 +136,25 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
       )}
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-        <Trans i18nKey="missionToolsUi.xpPerRunTowards" values={{ xp: xpPerRun }} components={{ strong: <strong /> }} />{" "}
-        {rewardFaction && <Chip label={rewardFaction} size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem", mr: 0.5 }} />}
-        <Chip label={scopeDisplayName} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />
+        <Trans
+          i18nKey="missionToolsUi.xpPerRunTowards"
+          values={{ xp: xpPerRun }}
+          components={{ strong: <strong /> }}
+        />{" "}
+        {rewardFaction && (
+          <Chip
+            label={rewardFaction}
+            size="small"
+            color="secondary"
+            sx={{ height: 20, fontSize: "0.7rem", mr: 0.5 }}
+          />
+        )}
+        <Chip
+          label={scopeDisplayName}
+          size="small"
+          color="primary"
+          sx={{ height: 20, fontSize: "0.7rem" }}
+        />
       </Typography>
 
       <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
@@ -113,8 +162,12 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
           <TableRow>
             <TableCell>{t("missionToolsUi.rank")}</TableCell>
             <TableCell align="right">{t("missionToolsUi.xpNeeded")}</TableCell>
-            <TableCell align="right">{t("missionToolsUi.runsToReach")}</TableCell>
-            <TableCell align="right">{t("missionToolsUi.totalXpAtRank")}</TableCell>
+            <TableCell align="right">
+              {t("missionToolsUi.runsToReach")}
+            </TableCell>
+            <TableCell align="right">
+              {t("missionToolsUi.totalXpAtRank")}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -127,7 +180,8 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
               ? minThreshold - rank.threshold
               : rank.threshold - minThreshold
             const absXpPerRun = Math.abs(xpPerRun) || 1
-            const runsNeeded = xpFromMin > 0 ? Math.ceil(xpFromMin / absXpPerRun) : 0
+            const runsNeeded =
+              xpFromMin > 0 ? Math.ceil(xpFromMin / absXpPerRun) : 0
 
             return (
               <TableRow
@@ -139,24 +193,44 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
               >
                 <TableCell>
                   <Stack direction="row" spacing={0.5} alignItems="center">
-                    <Typography variant="body2" fontWeight={isBelowMin ? 400 : 600}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={isBelowMin ? 400 : 600}
+                    >
                       {rank.standing_display_name}
                     </Typography>
                     {isBelowMin && (
-                      <Chip label={t("missionToolsUi.locked")} size="small" variant="outlined" sx={{ height: 16, fontSize: "0.6rem" }} />
+                      <Chip
+                        label={t("missionToolsUi.locked")}
+                        size="small"
+                        variant="outlined"
+                        sx={{ height: 16, fontSize: "0.6rem" }}
+                      />
                     )}
                     {i === minRankIndex && (
-                      <Chip label={t("missionToolsUi.minBadge")} size="small" color="warning" sx={{ height: 16, fontSize: "0.6rem" }} />
+                      <Chip
+                        label={t("missionToolsUi.minBadge")}
+                        size="small"
+                        color="warning"
+                        sx={{ height: 16, fontSize: "0.6rem" }}
+                      />
                     )}
                   </Stack>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2" color={isBelowMin ? "text.secondary" : "text.primary"}>
+                  <Typography
+                    variant="body2"
+                    color={isBelowMin ? "text.secondary" : "text.primary"}
+                  >
                     {isBelowMin ? "—" : fmt.number(xpFromMin)}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2" color={isBelowMin ? "text.secondary" : "success.main"} fontWeight={600}>
+                  <Typography
+                    variant="body2"
+                    color={isBelowMin ? "text.secondary" : "success.main"}
+                    fontWeight={600}
+                  >
                     {isBelowMin ? "—" : runsNeeded}
                   </Typography>
                 </TableCell>

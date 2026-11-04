@@ -53,8 +53,7 @@ export function MuiLineChart({
           scaleType: xAxisType === "time" ? "time" : "point",
           valueFormatter:
             xAxisType === "time"
-              ? (value: Date | number | string) =>
-                  fmt.date(value)
+              ? (value: Date | number | string) => fmt.date(value)
               : (value: Date | number | string) => fmt.integer(Number(value)),
         },
       ]}
@@ -80,7 +79,7 @@ interface MuiAreaChartProps extends MuiLineChartProps {
   gradient?: boolean
   rightYAxis?: boolean
   colors?: string[]
-  xTickInterval?: number  // show every Nth x tick label (default: show all)
+  xTickInterval?: number // show every Nth x tick label (default: show all)
   xValueFormatter?: (value: Date | number | string) => string
 }
 
@@ -131,7 +130,7 @@ export function MuiAreaChart({
   const defaultXFormatter =
     xAxisType === "time"
       ? (value: Date | number | string) => fmt.date(value)
-      : (value: Date | number | string) => String(value)  // category labels are already formatted strings
+      : (value: Date | number | string) => String(value) // category labels are already formatted strings
 
   return (
     <LineChart
@@ -140,7 +139,12 @@ export function MuiAreaChart({
           data: xData,
           scaleType: xAxisType === "time" ? "time" : "point",
           valueFormatter: xValueFormatter ?? defaultXFormatter,
-          ...(xTickInterval != null ? { tickInterval: (_: unknown, index: number) => index % xTickInterval === 0 } : {}),
+          ...(xTickInterval != null
+            ? {
+                tickInterval: (_: unknown, index: number) =>
+                  index % xTickInterval === 0,
+              }
+            : {}),
         },
       ]}
       yAxis={yAxisConfig}

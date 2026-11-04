@@ -26,7 +26,8 @@ import { ORDER_PATHS } from "../../../routes/paths"
 export function useCartItemActions(cartItemId: string) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
-  const [updateCartItem, { isLoading: isUpdating }] = useUpdateCartItemMutation()
+  const [updateCartItem, { isLoading: isUpdating }] =
+    useUpdateCartItemMutation()
 
   const changeQuantity = useCallback(
     async (quantity: number) => {
@@ -43,7 +44,9 @@ export function useCartItemActions(cartItemId: string) {
       } catch (error) {
         issueAlert({
           message:
-            error instanceof Error ? error.message : t("marketV2.updateQuantityFailed"),
+            error instanceof Error
+              ? error.message
+              : t("marketV2.updateQuantityFailed"),
           severity: "error",
         })
       }
@@ -59,7 +62,8 @@ export function useCartActions() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
-  const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
+  const [removeCartItem, { isLoading: isRemoving }] =
+    useRemoveCartItemMutation()
   const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
 
   const removeItem = useCallback(
@@ -73,7 +77,9 @@ export function useCartActions() {
       } catch (error) {
         issueAlert({
           message:
-            error instanceof Error ? error.message : t("marketV2.removeItemFailed"),
+            error instanceof Error
+              ? error.message
+              : t("marketV2.removeItemFailed"),
           severity: "error",
         })
       }
@@ -94,7 +100,9 @@ export function useCartActions() {
       try {
         const result = await checkoutCart({
           checkoutCartRequest: {
-            confirm_price_changes: args.items.some((item) => item.price_changed),
+            confirm_price_changes: args.items.some(
+              (item) => item.price_changed,
+            ),
             note: args.note || undefined,
             shop_id: args.shopId,
           },
@@ -130,7 +138,8 @@ export function useAddToCart() {
     async (request: AddToCartRequest, successMessage?: string) => {
       try {
         await addToCart({ addToCartRequest: request }).unwrap()
-        if (successMessage) issueAlert({ message: successMessage, severity: "success" })
+        if (successMessage)
+          issueAlert({ message: successMessage, severity: "success" })
         return true
       } catch (err) {
         issueAlert(err as UnwrappedErrorInterface)

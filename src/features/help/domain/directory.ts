@@ -24,7 +24,10 @@ export function buildDirectory(index: ContentIndex): ContentDirectory {
       link: { href: HELP_PATHS.category(category.id), text: category.title },
       guides: index.guides
         .filter((g) => g.category === category.id)
-        .map((g) => ({ href: HELP_PATHS.guide(g.category, g.slug), text: g.title })),
+        .map((g) => ({
+          href: HELP_PATHS.guide(g.category, g.slug),
+          text: g.title,
+        })),
     })),
     about: { href: HELP_PATHS.about, text: index.about.title },
   }

@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -15,7 +15,10 @@ import {
   queryLoading,
   querySuccess,
 } from "../../../../../__tests__/rtkQueryMocks"
-import type { MuiBarChart, MuiLineChart } from "../../../../../components/charts/MuiCharts"
+import type {
+  MuiBarChart,
+  MuiLineChart,
+} from "../../../../../components/charts/MuiCharts"
 
 type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>
 type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>
@@ -67,7 +70,9 @@ vi.mock("../../../../../components/paper/Section", () => ({
 
 // Mock i18next
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock MUI theme
@@ -203,7 +208,7 @@ describe("SellerAnalyticsV2", () => {
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
       expect(
-        screen.getByText("Loading seller analytics...")
+        screen.getByText("Loading seller analytics..."),
       ).toBeInTheDocument()
     })
   })
@@ -220,7 +225,7 @@ describe("SellerAnalyticsV2", () => {
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
       expect(
-        screen.getByText("Error loading seller analytics")
+        screen.getByText("Error loading seller analytics"),
       ).toBeInTheDocument()
     })
   })
@@ -239,7 +244,7 @@ describe("SellerAnalyticsV2", () => {
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
       expect(
-        screen.getByText("No seller analytics data available")
+        screen.getByText("No seller analytics data available"),
       ).toBeInTheDocument()
     })
   })
@@ -256,7 +261,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Sales Volume by Quality Tier")
+          screen.getByText("Sales Volume by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -280,7 +285,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Sales Volume by Quality Tier")
+          screen.getByText("Sales Volume by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -302,7 +307,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Average Sale Price by Quality Tier")
+          screen.getByText("Average Sale Price by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -312,7 +317,7 @@ describe("SellerAnalyticsV2", () => {
 
       // Check that average sale price series has correct number of data points
       const avgPriceSeries = screen.getByText(
-        /Average Sale Price: 5 data points/
+        /Average Sale Price: 5 data points/,
       )
       expect(avgPriceSeries).toBeInTheDocument()
     })
@@ -330,7 +335,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Time to Sale by Quality Tier")
+          screen.getByText("Time to Sale by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -340,7 +345,7 @@ describe("SellerAnalyticsV2", () => {
 
       // Check that time to sale series has correct number of data points
       const timeToSaleSeries = screen.getByText(
-        /Average Time to Sale \(hours\): 5 data points/
+        /Average Time to Sale \(hours\): 5 data points/,
       )
       expect(timeToSaleSeries).toBeInTheDocument()
     })
@@ -358,7 +363,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Current Inventory Distribution")
+          screen.getByText("Current Inventory Distribution"),
         ).toBeInTheDocument()
       })
 
@@ -368,7 +373,7 @@ describe("SellerAnalyticsV2", () => {
 
       // Check that inventory distribution series has correct number of data points
       const inventorySeries = screen.getByText(
-        /Quantity Available: 5 data points/
+        /Quantity Available: 5 data points/,
       )
       expect(inventorySeries).toBeInTheDocument()
     })
@@ -386,7 +391,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Price Premium by Quality Tier")
+          screen.getByText("Price Premium by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -396,7 +401,7 @@ describe("SellerAnalyticsV2", () => {
 
       // Check that price premium series has correct number of data points
       const pricePremiumSeries = screen.getByText(
-        /Price Premium \(%\): 5 data points/
+        /Price Premium \(%\): 5 data points/,
       )
       expect(pricePremiumSeries).toBeInTheDocument()
     })
@@ -412,14 +417,14 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Price Premium by Quality Tier")
+          screen.getByText("Price Premium by Quality Tier"),
         ).toBeInTheDocument()
       })
 
       // Verify that price premiums are displayed
       // Tier 1: 0%, Tier 2: 50%, Tier 3: 100%, Tier 4: 200%, Tier 5: 400%
       const pricePremiumSeries = screen.getByText(
-        /Price Premium \(%\): 5 data points/
+        /Price Premium \(%\): 5 data points/,
       )
       expect(pricePremiumSeries).toBeInTheDocument()
     })
@@ -515,7 +520,7 @@ describe("SellerAnalyticsV2", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Sales Volume by Quality Tier")
+          screen.getByText("Sales Volume by Quality Tier"),
         ).toBeInTheDocument()
       })
 
@@ -539,21 +544,21 @@ describe("SellerAnalyticsV2", () => {
       await waitFor(() => {
         // Should not display sales-related charts
         expect(
-          screen.queryByText("Sales Volume by Quality Tier")
+          screen.queryByText("Sales Volume by Quality Tier"),
         ).not.toBeInTheDocument()
         expect(
-          screen.queryByText("Average Sale Price by Quality Tier")
+          screen.queryByText("Average Sale Price by Quality Tier"),
         ).not.toBeInTheDocument()
         expect(
-          screen.queryByText("Time to Sale by Quality Tier")
+          screen.queryByText("Time to Sale by Quality Tier"),
         ).not.toBeInTheDocument()
 
         // Should still display inventory and price premium charts
         expect(
-          screen.getByText("Current Inventory Distribution")
+          screen.getByText("Current Inventory Distribution"),
         ).toBeInTheDocument()
         expect(
-          screen.getByText("Price Premium by Quality Tier")
+          screen.getByText("Price Premium by Quality Tier"),
         ).toBeInTheDocument()
       })
     })
@@ -573,21 +578,21 @@ describe("SellerAnalyticsV2", () => {
       await waitFor(() => {
         // Should display sales-related charts
         expect(
-          screen.getByText("Sales Volume by Quality Tier")
+          screen.getByText("Sales Volume by Quality Tier"),
         ).toBeInTheDocument()
         expect(
-          screen.getByText("Average Sale Price by Quality Tier")
+          screen.getByText("Average Sale Price by Quality Tier"),
         ).toBeInTheDocument()
         expect(
-          screen.getByText("Time to Sale by Quality Tier")
+          screen.getByText("Time to Sale by Quality Tier"),
         ).toBeInTheDocument()
 
         // Should not display inventory and price premium charts
         expect(
-          screen.queryByText("Current Inventory Distribution")
+          screen.queryByText("Current Inventory Distribution"),
         ).not.toBeInTheDocument()
         expect(
-          screen.queryByText("Price Premium by Quality Tier")
+          screen.queryByText("Price Premium by Quality Tier"),
         ).not.toBeInTheDocument()
       })
     })

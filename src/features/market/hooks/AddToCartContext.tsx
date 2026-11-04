@@ -2,7 +2,10 @@ import React, { createContext, useCallback, useContext, useState } from "react"
 import { AddToCartDrawer } from "../v2/components/AddToCartDrawer"
 import { CartDrawer } from "../../../components/navbar/CartDrawer"
 
-type CartDrawerMode = { type: "add"; listingId: string } | { type: "preview" } | null
+type CartDrawerMode =
+  | { type: "add"; listingId: string }
+  | { type: "preview" }
+  | null
 
 interface CartDrawerContextValue {
   openAddToCart: (listingId: string) => void
@@ -18,7 +21,11 @@ const CartDrawerContext = createContext<CartDrawerContextValue>({
 
 export const useCartDrawer = () => useContext(CartDrawerContext)
 
-export function CartDrawerProvider({ children }: { children: React.ReactNode }) {
+export function CartDrawerProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [mode, setMode] = useState<CartDrawerMode>(null)
 
   const openAddToCart = useCallback((listingId: string) => {
@@ -34,7 +41,9 @@ export function CartDrawerProvider({ children }: { children: React.ReactNode }) 
   }, [])
 
   return (
-    <CartDrawerContext.Provider value={{ openAddToCart, openCartPreview, closeCartDrawer }}>
+    <CartDrawerContext.Provider
+      value={{ openAddToCart, openCartPreview, closeCartDrawer }}
+    >
       {children}
       {mode?.type === "add" && (
         <AddToCartDrawer
@@ -44,10 +53,7 @@ export function CartDrawerProvider({ children }: { children: React.ReactNode }) 
         />
       )}
       {mode?.type === "preview" && (
-        <CartDrawer
-          open={true}
-          onClose={closeCartDrawer}
-        />
+        <CartDrawer open={true} onClose={closeCartDrawer} />
       )}
     </CartDrawerContext.Provider>
   )

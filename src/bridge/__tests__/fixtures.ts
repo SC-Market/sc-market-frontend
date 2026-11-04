@@ -32,7 +32,10 @@ export const resource = {
     can_be_salvaged: false,
     can_be_looted: false,
     base_value: 6000,
-    mining_locations: [{ location_detail: "Aberdeen" }, { planet_moon: "Daymar" }],
+    mining_locations: [
+      { location_detail: "Aberdeen" },
+      { planet_moon: "Daymar" },
+    ],
     purchase_locations: [{ station: "Area18", average_price: 30 }],
   },
   blueprints_requiring: [{ blueprint_id: "b1", output_item_name: "Arrowhead" }],
@@ -84,7 +87,10 @@ export const blueprint = {
     rarity: "Rare",
     icon_url: null,
   },
-  output_item: { name: "Arrowhead Sniper Rifle", icon_url: "https://cdn.example/a.png" },
+  output_item: {
+    name: "Arrowhead Sniper Rifle",
+    icon_url: "https://cdn.example/a.png",
+  },
   ingredients: [{ game_item: { name: "Gold" } }, { slot_name: "Barrel" }],
 } as unknown as BlueprintDetailResponse
 
@@ -112,15 +118,35 @@ export function listing(title = "Pristine Medal"): GetListingDetailResponse {
       created_at: "2026-10-30T15:14:45.905Z",
       updated_at: "2026-10-30T15:14:45.905Z",
     },
-    seller: { shop_id: "s1", name: "Hades", slug: "hades-svk-shop", rating: 5, languages: [] },
+    seller: {
+      shop_id: "s1",
+      name: "Hades",
+      slug: "hades-svk-shop",
+      rating: 5,
+      languages: [],
+    },
     items: [
       {
         item_id: "i1",
-        game_item: { id: "1954c364-aaaa-bbbb-cccc-000000000000", name: "Pristine Medal", type: "Other" },
+        game_item: {
+          id: "1954c364-aaaa-bbbb-cccc-000000000000",
+          name: "Pristine Medal",
+          type: "Other",
+        },
         pricing_mode: "unified",
         // The API sends numeric columns as strings.
         base_price: "12000",
-        variants: [{ variant_id: "v1", attributes: {}, display_name: "Standard", short_name: "Std", quantity: 3, price: "12000", locations: [] }],
+        variants: [
+          {
+            variant_id: "v1",
+            attributes: {},
+            display_name: "Standard",
+            short_name: "Std",
+            quantity: 3,
+            price: "12000",
+            locations: [],
+          },
+        ],
       },
     ],
   } as unknown as GetListingDetailResponse
@@ -164,19 +190,27 @@ export function user(displayName = "Jacked Citizen"): User {
   } as unknown as User
 }
 
-export function recruitingPost(title = "Join us"): GetRecruitingPostByIdApiResponse {
+export function recruitingPost(
+  title = "Join us",
+): GetRecruitingPostByIdApiResponse {
   return {
     data: {
       post_id: "c5c4c88a-430e-4b56-a5f2-47542ad12762",
       title,
       body: "We mine.",
       timestamp: "2026-01-02T03:04:05.000Z",
-      contractor: { name: "Narco", spectrum_id: "NARCO", avatar: "https://cdn.example/av.png" },
+      contractor: {
+        name: "Narco",
+        spectrum_id: "NARCO",
+        avatar: "https://cdn.example/av.png",
+      },
     },
   } as unknown as GetRecruitingPostByIdApiResponse
 }
 
-export function manufacturer(displayName: string | null = "Clark Defense Systems"): WikiManufacturerDetail {
+export function manufacturer(
+  displayName: string | null = "Clark Defense Systems",
+): WikiManufacturerDetail {
   return {
     manufacturer: "cds",
     display_name: displayName,
@@ -201,9 +235,30 @@ export function aggregate(name = "Medal"): GetGameItemListingsResponse {
     quality_distribution: [],
     listings: [
       // Two variant rows of one listing, plus a second shop.
-      { listing_id: "l1", variant_id: "v1", title: `${name} pristine`, shop_name: "Hades", shop_slug: "hades", price: 1000 },
-      { listing_id: "l1", variant_id: "v2", title: `${name} pristine`, shop_name: "Hades", shop_slug: "hades", price: 1500 },
-      { listing_id: "l2", variant_id: "v3", title: `${name} worn`, shop_name: "Narco", shop_slug: "narco", price: 250000 },
+      {
+        listing_id: "l1",
+        variant_id: "v1",
+        title: `${name} pristine`,
+        shop_name: "Hades",
+        shop_slug: "hades",
+        price: 1000,
+      },
+      {
+        listing_id: "l1",
+        variant_id: "v2",
+        title: `${name} pristine`,
+        shop_name: "Hades",
+        shop_slug: "hades",
+        price: 1500,
+      },
+      {
+        listing_id: "l2",
+        variant_id: "v3",
+        title: `${name} worn`,
+        shop_name: "Narco",
+        shop_slug: "narco",
+        price: 250000,
+      },
     ],
     total: 3,
     page: 1,
@@ -221,8 +276,21 @@ export function bundle(title = "Starter Bundle"): GetListingDetailResponse {
     },
     seller: { shop_id: "s1", name: "Hades", slug: "hades-svk-shop", rating: 5 },
     items: [
-      { item_id: "i1", game_item: { id: "g1", name: "Medpen", type: "Medical", image_url: "https://cdn.example/pen.png" }, variants: [] },
-      { item_id: "i2", game_item: { id: "g2", name: "Helmet", type: "Armor" }, variants: [] },
+      {
+        item_id: "i1",
+        game_item: {
+          id: "g1",
+          name: "Medpen",
+          type: "Medical",
+          image_url: "https://cdn.example/pen.png",
+        },
+        variants: [],
+      },
+      {
+        item_id: "i2",
+        game_item: { id: "g2", name: "Helmet", type: "Armor" },
+        variants: [],
+      },
     ],
   } as unknown as GetListingDetailResponse
 }
@@ -242,8 +310,16 @@ export function wikiItems(count: number): SearchWikiItemsResponse {
 }
 
 export const manufacturers = [
-  { manufacturer: "paint_x_logo", display_name: "Ace Astrogation", item_count: 1 },
-  { manufacturer: "cds", display_name: "Clark Defense Systems", item_count: 517 },
+  {
+    manufacturer: "paint_x_logo",
+    display_name: "Ace Astrogation",
+    item_count: 1,
+  },
+  {
+    manufacturer: "cds",
+    display_name: "Clark Defense Systems",
+    item_count: 517,
+  },
   { manufacturer: "rsi", display_name: null, item_count: 370 },
 ] as WikiManufacturerSearchResult[]
 
@@ -258,10 +334,16 @@ export function acquisition(): ItemAcquisitionDocument {
         license: "CC-BY-4.0",
         url: "https://creativecommons.org/licenses/by/4.0/",
         attribution: "Data: SC Market (sc-market.space)",
-        notice: "Game data © Cloud Imperium Games; aggregation and price data by SC Market, CC BY 4.0.",
+        notice:
+          "Game data © Cloud Imperium Games; aggregation and price data by SC Market, CC BY 4.0.",
       },
     },
-    item: { id: "9bb3a108-3556-4934-ae04-9a117e5432a2", slug: "9bb3a108--siebe-helmet", name: "Siebe Helmet", type: "Helmet" },
+    item: {
+      id: "9bb3a108-3556-4934-ae04-9a117e5432a2",
+      slug: "9bb3a108--siebe-helmet",
+      name: "Siebe Helmet",
+      type: "Helmet",
+    },
     as_of: "2026-11-01T02:47:24.741Z",
     freshness: {
       as_of: "2026-11-01T02:47:24.741Z",
@@ -283,9 +365,15 @@ export function acquisition(): ItemAcquisitionDocument {
         highest_ask: 1000000,
         outliers_excluded: 0,
       },
-      trend_30d: { days_with_data: 1, median_30d: null, change_pct: null, daily: [] },
+      trend_30d: {
+        days_with_data: 1,
+        median_30d: null,
+        change_pct: null,
+        daily: [],
+      },
       sales_30d: { count: 0, median_price: null },
-      summary: "As of 2026-11-01, SC Market player listings for Siebe Helmet: lowest ask 450,000 aUEC, median ask 650,000 aUEC.",
+      summary:
+        "As of 2026-11-01, SC Market player listings for Siebe Helmet: lowest ask 450,000 aUEC, median ask 650,000 aUEC.",
       links: {
         page: "https://sc-market.space/market/aggregate/9bb3a108--siebe-helmet",
         json: "https://api.sc-market.space/api/public/prices/9bb3a108--siebe-helmet.json",
@@ -299,7 +387,14 @@ export function acquisition(): ItemAcquisitionDocument {
       lowest_ask: 450000,
       page: "https://sc-market.space/market/aggregate/9bb3a108--siebe-helmet",
       top: [
-        { listing_id: "5e2d1f98-5d8f-4d55-969a-e32b006684f4", slug: "5e2d1f98--siebe-helmet", title: "Siebe Helmet", price: 450000, quantity_available: 1, sale_type: "fixed" },
+        {
+          listing_id: "5e2d1f98-5d8f-4d55-969a-e32b006684f4",
+          slug: "5e2d1f98--siebe-helmet",
+          title: "Siebe Helmet",
+          price: 450000,
+          quantity_available: 1,
+          sale_type: "fixed",
+        },
       ],
     },
     missions: {
@@ -337,7 +432,15 @@ export function acquisition(): ItemAcquisitionDocument {
           crafting_time_seconds: 390,
           mission_count: 1,
           ingredients: [
-            { game_item_id: "51c80361-1734-47ae-83ba-c3a6817f815a", slug: "51c80361--stileron", name: "Stileron", quantity: 0.08, quantity_scu: 0.08, min_quality: null, slot_display_name: "Shell" },
+            {
+              game_item_id: "51c80361-1734-47ae-83ba-c3a6817f815a",
+              slug: "51c80361--stileron",
+              name: "Stileron",
+              quantity: 0.08,
+              quantity_scu: 0.08,
+              min_quality: null,
+              slot_display_name: "Shell",
+            },
           ],
         },
       ],

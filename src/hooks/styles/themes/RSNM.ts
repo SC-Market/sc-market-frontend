@@ -42,4 +42,8 @@ export const rsnmThemeOptions: ThemeOptions = {
   navKind: "outlined",
 }
 
-export const RSNM_theme = createAppTheme(themeBase, mainThemeOptions, rsnmThemeOptions)
+export const RSNM_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  rsnmThemeOptions,
+)

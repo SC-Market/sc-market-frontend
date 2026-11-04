@@ -49,7 +49,9 @@ export function InsufficientStockDialog({
       <DialogTitle>
         <Stack direction="row" spacing={1} alignItems="center">
           <WarningRounded color="warning" />
-          <Typography variant="h6">{t("allocationUi.insufficient.title")}</Typography>
+          <Typography variant="h6">
+            {t("allocationUi.insufficient.title")}
+          </Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>

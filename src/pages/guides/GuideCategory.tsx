@@ -1,6 +1,11 @@
 import React from "react"
 import { Card, CardActionArea, Grid, Typography } from "@mui/material"
-import { Link as RouterLink, Navigate, useLocation, useParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  Navigate,
+  useLocation,
+  useParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { HelpLayout } from "../../features/help/components/HelpLayout"
 import { findCategory, guidesIn } from "../../features/help/content"
@@ -17,12 +22,23 @@ export function GuideCategory() {
   // A moved guide or category (the edge answers these with a 301 first).
   const moved = guideRedirectTarget(location.pathname)
   const category = findCategory(categoryId)
-  const helpCrumb = { label: t("help.hubTitle", HELP_HUB_NAME), href: HELP_PATHS.hub }
+  const helpCrumb = {
+    label: t("help.hubTitle", HELP_HUB_NAME),
+    href: HELP_PATHS.hub,
+  }
 
-  if (moved) return <Navigate to={`${moved}${location.search}${location.hash}`} replace />
+  if (moved)
+    return (
+      <Navigate to={`${moved}${location.search}${location.hash}`} replace />
+    )
   if (!category) {
     return (
-      <HelpLayout head={null} path={HELP_PATHS.category(categoryId ?? "")} headerTitle={null} breadcrumbs={[helpCrumb]}>
+      <HelpLayout
+        head={null}
+        path={HELP_PATHS.category(categoryId ?? "")}
+        headerTitle={null}
+        breadcrumbs={[helpCrumb]}
+      >
         <PageBody404 />
       </HelpLayout>
     )
@@ -44,7 +60,11 @@ export function GuideCategory() {
       {guides.map((guide) => (
         <Grid item xs={12} key={guide.id}>
           <Card>
-            <CardActionArea component={RouterLink} to={HELP_PATHS.guide(guide.category, guide.slug)} sx={{ p: 2 }}>
+            <CardActionArea
+              component={RouterLink}
+              to={HELP_PATHS.guide(guide.category, guide.slug)}
+              sx={{ p: 2 }}
+            >
               <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>
                 {guide.title}
               </Typography>

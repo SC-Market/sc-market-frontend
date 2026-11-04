@@ -1,13 +1,7 @@
 import { useTranslation } from "react-i18next"
 import React, { useState } from "react"
 import { FlatSection } from "../paper/Section"
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Grid,
-} from "@mui/material"
+import { FormControl, InputLabel, Select, MenuItem, Grid } from "@mui/material"
 import { PreferenceSection } from "./PreferenceSection"
 import type { EmailPreference } from "../../features/email/domain/types"
 import type { PushPreference } from "../../features/push-notifications/domain/types"

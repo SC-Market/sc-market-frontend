@@ -12,7 +12,9 @@ declare module "virtual:help-content" {
   /** Keyed by guide id ("buying/buy-an-item") or "about". */
   export const bodies: Record<
     string,
-    () => Promise<{ default: import("./features/help/domain/types").ContentBody }>
+    () => Promise<{
+      default: import("./features/help/domain/types").ContentBody
+    }>
   >
 }
 

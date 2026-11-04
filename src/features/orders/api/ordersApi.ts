@@ -47,19 +47,21 @@ export const ordersApi = serviceApi.injectEndpoints({
       ],
       transformResponse: unwrapResponse,
     }),
-    assignOrder: builder.mutation<void, { order_id: string; username: string }>({
-      query: (arg) => ({
-        url: `/api/orders/${arg.order_id}`,
-        method: "PUT",
-        body: { assigned_to: arg.username },
-      }),
-      invalidatesTags: [
-        { type: "Order" as const },
-        "Order" as const,
-        { type: "Order" },
-        "Chat" as const,
-      ],
-    }),
+    assignOrder: builder.mutation<void, { order_id: string; username: string }>(
+      {
+        query: (arg) => ({
+          url: `/api/orders/${arg.order_id}`,
+          method: "PUT",
+          body: { assigned_to: arg.username },
+        }),
+        invalidatesTags: [
+          { type: "Order" as const },
+          "Order" as const,
+          { type: "Order" },
+          "Chat" as const,
+        ],
+      },
+    ),
     unassignOrder: builder.mutation<void, { order_id: string }>({
       query: (arg) => ({
         url: `/api/orders/${arg.order_id}`,
@@ -270,7 +272,10 @@ export const ordersApi = serviceApi.injectEndpoints({
 const ordersMetricsApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getContractorOrderMetrics: builder.query<ContractorOrderMetrics, { spectrumId: string; shopId?: string }>({
+    getContractorOrderMetrics: builder.query<
+      ContractorOrderMetrics,
+      { spectrumId: string; shopId?: string }
+    >({
       query: ({ spectrumId, shopId }) => {
         const params = shopId ? `?shop_id=${shopId}` : ""
         return `/api/orders/contractor/${spectrumId}/metrics${params}`
@@ -280,9 +285,19 @@ const ordersMetricsApi = serviceApi.injectEndpoints({
     }),
     getContractorOrderData: builder.query<
       ContractorOrderData,
-      { spectrum_id: string; include_trends?: boolean; assigned_only?: boolean; shop_id?: string }
+      {
+        spectrum_id: string
+        include_trends?: boolean
+        assigned_only?: boolean
+        shop_id?: string
+      }
     >({
-      query: ({ spectrum_id, include_trends = true, assigned_only = false, shop_id }) => {
+      query: ({
+        spectrum_id,
+        include_trends = true,
+        assigned_only = false,
+        shop_id,
+      }) => {
         const params = new URLSearchParams()
         if (include_trends) params.append("include_trends", "true")
         if (assigned_only) params.append("assigned_only", "true")

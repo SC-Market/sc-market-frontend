@@ -50,9 +50,22 @@ function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
     <Grid container spacing={2} sx={{ mb: 3 }}>
       {[
         { label: t("shops.mine.totalShops"), value: totalShops.toString() },
-        { label: t("shops.mine.activeShops"), value: activeShops.toString(), color: "success.main" },
-        { label: t("shops.mine.customOrders"), value: shops.filter((s) => s.accepts_custom_orders).length.toString() },
-        { label: t("shops.mine.languages"), value: [...new Set(shops.flatMap((s) => s.supported_languages))].length.toString(), color: "secondary.main" },
+        {
+          label: t("shops.mine.activeShops"),
+          value: activeShops.toString(),
+          color: "success.main",
+        },
+        {
+          label: t("shops.mine.customOrders"),
+          value: shops.filter((s) => s.accepts_custom_orders).length.toString(),
+        },
+        {
+          label: t("shops.mine.languages"),
+          value: [
+            ...new Set(shops.flatMap((s) => s.supported_languages)),
+          ].length.toString(),
+          color: "secondary.main",
+        },
       ].map((stat) => (
         <Grid item xs={6} md={3} key={stat.label}>
           <Card
@@ -121,7 +134,9 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
     >
       <CardContent sx={{ p: 3 }}>
         {/* Header: Logo + Name + Status + Owner badge */}
-        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 2.5 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 2.5 }}
+        >
           <Avatar
             src={shop.logo_url || undefined}
             variant="rounded"
@@ -137,30 +152,39 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           </Avatar>
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              sx={{ mb: 0.5 }}
+            >
               <Typography variant="h5" fontWeight={700} noWrap>
                 {shop.name}
               </Typography>
               <Chip
-                label={shop.status === "active" ? t("shops.mine.active") : shop.status}
+                label={
+                  shop.status === "active"
+                    ? t("shops.mine.active")
+                    : shop.status
+                }
                 size="small"
                 color={shop.status === "active" ? "success" : "default"}
                 variant="outlined"
                 sx={{ fontWeight: 600, textTransform: "capitalize" }}
               />
             </Stack>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              
-            >
+            <Typography variant="body2" color="text.secondary">
               /shops/{shop.slug}
             </Typography>
           </Box>
 
           <Chip
             icon={isPersonal ? <Person /> : <Groups />}
-            label={isPersonal ? t("shops.mine.personal") : t("shops.mine.organization")}
+            label={
+              isPersonal
+                ? t("shops.mine.personal")
+                : t("shops.mine.organization")
+            }
             size="small"
             variant="outlined"
             sx={{ flexShrink: 0 }}
@@ -185,7 +209,11 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Typography variant="h6" fontWeight={700} color="primary.main">
               {shop.tags.length}
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+            >
               {t("shops.mine.tags")}
             </Typography>
           </Box>
@@ -193,15 +221,25 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Typography variant="h6" fontWeight={700}>
               {shop.supported_languages.length}
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+            >
               {t("shops.mine.languages")}
             </Typography>
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h6" fontWeight={700}>
-              {shop.accepts_custom_orders ? t("shops.mine.yes") : t("shops.mine.no")}
+              {shop.accepts_custom_orders
+                ? t("shops.mine.yes")
+                : t("shops.mine.no")}
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+            >
               {t("shops.mine.customOrders")}
             </Typography>
           </Box>
@@ -209,14 +247,22 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Typography variant="h6" fontWeight={700}>
               {shop.status === "active" ? t("shops.mine.live") : shop.status}
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+            >
               {t("shops.mine.status")}
             </Typography>
           </Box>
         </Box>
 
         {/* Action buttons */}
-        <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: "wrap", gap: 1 }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ mb: 2, flexWrap: "wrap", gap: 1 }}
+        >
           <Button
             variant="outlined"
             size="small"
@@ -252,7 +298,11 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             gap: 1,
           }}
         >
-          <Stack direction="row" spacing={0.5} sx={{ flexWrap: "wrap", gap: 0.5 }}>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ flexWrap: "wrap", gap: 0.5 }}
+          >
             {shop.tags.length > 0 ? (
               shop.tags.map((tag) => (
                 <Chip
@@ -264,7 +314,11 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
                 />
               ))
             ) : (
-              <Typography variant="caption" color="text.secondary" fontStyle="italic">
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                fontStyle="italic"
+              >
                 {t("shops.mine.noTags")}
               </Typography>
             )}
@@ -273,7 +327,12 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           <Stack direction="row" alignItems="center" spacing={0.5}>
             <CalendarToday sx={{ fontSize: 14, color: "text.secondary" }} />
             <Typography variant="caption" color="text.secondary">
-              {t("shops.mine.created", { date: fmt.date(shop.created_at, { month: "short", year: "numeric" }) })}
+              {t("shops.mine.created", {
+                date: fmt.date(shop.created_at, {
+                  month: "short",
+                  year: "numeric",
+                }),
+              })}
             </Typography>
           </Stack>
         </Box>
@@ -285,25 +344,52 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
 function LoadingSkeleton() {
   return (
     <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <Skeleton variant="text" width={200} height={40} />
-        <Skeleton variant="rectangular" width={140} height={36} sx={{ borderRadius: 1 }} />
+        <Skeleton
+          variant="rectangular"
+          width={140}
+          height={36}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {[1, 2, 3, 4].map((i) => (
           <Grid item xs={6} md={3} key={i}>
-            <Skeleton variant="rectangular" height={80} sx={{ borderRadius: 2 }} />
+            <Skeleton
+              variant="rectangular"
+              height={80}
+              sx={{ borderRadius: 2 }}
+            />
           </Grid>
         ))}
       </Grid>
       {[1, 2].map((i) => (
-        <Skeleton key={i} variant="rectangular" height={240} sx={{ borderRadius: 2, mb: 2 }} />
+        <Skeleton
+          key={i}
+          variant="rectangular"
+          height={240}
+          sx={{ borderRadius: 2, mb: 2 }}
+        />
       ))}
     </Container>
   )
 }
 
-function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; isCreating: boolean }) {
+function EmptyState({
+  onCreateClick,
+  isCreating,
+}: {
+  onCreateClick: () => void
+  isCreating: boolean
+}) {
   const { t } = useTranslation()
   return (
     <Box
@@ -347,7 +433,12 @@ function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; 
             t("shops.mine.featureListings"),
             t("shops.mine.featureAnalytics"),
           ].map((feature) => (
-            <Stack key={feature} direction="row" alignItems="center" spacing={1}>
+            <Stack
+              key={feature}
+              direction="row"
+              alignItems="center"
+              spacing={1}
+            >
               <Box
                 component="span"
                 sx={{ color: "primary.main", fontSize: 16, lineHeight: 1 }}
@@ -393,9 +484,22 @@ export function MyShops() {
   return (
     <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
       {/* Page header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3, flexWrap: "wrap", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          mb: 3,
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
         <Box>
-          <Typography variant="h4" fontWeight={700} sx={{ textTransform: "uppercase", letterSpacing: "0.03em" }}>
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            sx={{ textTransform: "uppercase", letterSpacing: "0.03em" }}
+          >
             {t("shops.mine.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>

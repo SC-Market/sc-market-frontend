@@ -83,12 +83,16 @@ export const ORG_PATHS = {
   manageDiscord: (spectrumId: string) => `/org/${spectrumId}/manage/discord`,
   manageMarket: (spectrumId: string) => `/org/${spectrumId}/manage/market`,
   manageSettings: (spectrumId: string) => `/org/${spectrumId}/manage/settings`,
-  manageBlocklist: (spectrumId: string) => `/org/${spectrumId}/manage/blocklist`,
+  manageBlocklist: (spectrumId: string) =>
+    `/org/${spectrumId}/manage/blocklist`,
   manageAudit: (spectrumId: string) => `/org/${spectrumId}/manage/audit`,
-  manageCustomers: (spectrumId: string) => `/org/${spectrumId}/manage/customers`,
+  manageCustomers: (spectrumId: string) =>
+    `/org/${spectrumId}/manage/customers`,
   manageTheme: (spectrumId: string) => `/org/${spectrumId}/manage/theme`,
-  manageStorefront: (spectrumId: string) => `/org/${spectrumId}/manage/storefront`,
-  manageAnalytics: (spectrumId: string) => `/org/${spectrumId}/manage/analytics`,
+  manageStorefront: (spectrumId: string) =>
+    `/org/${spectrumId}/manage/storefront`,
+  manageAnalytics: (spectrumId: string) =>
+    `/org/${spectrumId}/manage/analytics`,
   members: (spectrumId: string) => `/org/${spectrumId}/members`,
   orders: (spectrumId: string) => `/org/${spectrumId}/orders`,
   money: (spectrumId: string) => `/org/${spectrumId}/money`,
@@ -99,7 +103,8 @@ export const ORG_PATHS = {
   // register lives in PATHS.orgRegister (canonical)
   /** Public org profile */
   profile: (spectrumId: string) => `/contractor/${spectrumId}`,
-  profileTab: (spectrumId: string, tab: string) => `/contractor/${spectrumId}/${tab}`,
+  profileTab: (spectrumId: string, tab: string) =>
+    `/contractor/${spectrumId}/${tab}`,
 } as const
 
 export const USER_PATHS = {
@@ -128,7 +133,9 @@ export const MARKET_PATHS = {
   listing: (id: string, title?: string) =>
     title ? `/market/${formatShortSlug(id, title)}` : `/market/${id}`,
   aggregate: (gameItemId: string, name?: string) =>
-    name ? `/market/aggregate/${formatShortSlug(gameItemId, name)}` : `/market/aggregate/${gameItemId}`,
+    name
+      ? `/market/aggregate/${formatShortSlug(gameItemId, name)}`
+      : `/market/aggregate/${gameItemId}`,
   shops: "/shops",
   // per-shop profile lives in SHOP_PATHS.profile (canonical)
 } as const
@@ -161,7 +168,9 @@ export const WIKI_PATHS = {
   ship: (id: string, name?: string) =>
     name ? `/wiki/ships/${formatShortSlug(id, name)}` : `/wiki/ships/${id}`,
   commodity: (id: string, name?: string) =>
-    name ? `/wiki/commodities/${formatShortSlug(id, name)}` : `/wiki/commodities/${id}`,
+    name
+      ? `/wiki/commodities/${formatShortSlug(id, name)}`
+      : `/wiki/commodities/${id}`,
   manufacturer: (code: string) => `/wiki/manufacturers/${code}`,
 } as const
 
@@ -169,10 +178,13 @@ export const GAME_DATA_PATHS = {
   missions: "/missions",
   mission: (slug: string) => `/missions/${slug}`,
   /** Mission hub index: /missions/givers, /missions/factions, /missions/types, /missions/systems. */
-  missionHubs: (kind: "givers" | "factions" | "types" | "systems") => `/missions/${kind}`,
+  missionHubs: (kind: "givers" | "factions" | "types" | "systems") =>
+    `/missions/${kind}`,
   /** One mission hub (slugs from GET /game-data/missions/hubs). */
-  missionHub: (kind: "givers" | "factions" | "types" | "systems", slug: string) =>
-    `/missions/${kind}/${encodeURIComponent(slug)}`,
+  missionHub: (
+    kind: "givers" | "factions" | "types" | "systems",
+    slug: string,
+  ) => `/missions/${kind}/${encodeURIComponent(slug)}`,
   blueprints: "/blueprints",
   blueprint: (slug: string) => `/blueprints/${slug}`,
   blueprintInventory: "/blueprints/inventory",

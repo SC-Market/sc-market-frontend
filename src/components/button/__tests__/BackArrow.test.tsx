@@ -5,7 +5,9 @@ import { BackArrow } from "../BackArrow"
 
 // Mock i18n
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const mockNavigate = vi.fn()

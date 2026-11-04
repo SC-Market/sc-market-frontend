@@ -17,7 +17,10 @@ import { canEditShopListings } from "../../shops/domain/shopPermissions"
 
 export function canManageListing(
   shopId: string | null | undefined,
-  myShops: ReadonlyArray<Pick<ShopResponse, "shop_id" | "permissions">> | null | undefined,
+  myShops:
+    | ReadonlyArray<Pick<ShopResponse, "shop_id" | "permissions">>
+    | null
+    | undefined,
 ): boolean {
   if (!shopId || !myShops) return false
   const shop = myShops.find((s) => s.shop_id === shopId)

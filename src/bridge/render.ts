@@ -94,8 +94,9 @@ export function isPartnerHref(href: string): boolean {
  */
 export function isDataFeedHref(href: string): boolean {
   return (
-    /^https:\/\/api\.sc-market\.space\/api\/public\/(?:items|prices)\/[a-z0-9-]{1,200}\.json$/.test(href) ||
-    href === "https://creativecommons.org/licenses/by/4.0/"
+    /^https:\/\/api\.sc-market\.space\/api\/public\/(?:items|prices)\/[a-z0-9-]{1,200}\.json$/.test(
+      href,
+    ) || href === "https://creativecommons.org/licenses/by/4.0/"
   )
 }
 
@@ -110,14 +111,21 @@ export function isDeveloperHref(href: string): boolean {
  */
 export const DEVELOPER_SUMMARY_BLOCKS: SummaryBlock[] = [
   { tag: "h2", text: DEVELOPERS_HEADING.label },
-  { tag: "ul", links: DEVELOPER_LINKS.map((l) => ({ href: l.href, text: l.label })) },
+  {
+    tag: "ul",
+    links: DEVELOPER_LINKS.map((l) => ({ href: l.href, text: l.label })),
+  },
 ]
 
 /**
  * Markup appended to <head>: the page's meta/canonical/JSON-LD, plus
  * robots noindex for unknown entities.
  */
-export function headMarkup(head: PageHead | null, canonical: string | null, noindex: boolean): string {
+export function headMarkup(
+  head: PageHead | null,
+  canonical: string | null,
+  noindex: boolean,
+): string {
   const parts: string[] = []
   if (noindex) parts.push(`<meta name="robots" content="noindex">`)
   if (canonical) {
@@ -133,8 +141,12 @@ export function headMarkup(head: PageHead | null, canonical: string | null, noin
   for (const data of head?.jsonLd ?? []) {
     // The BreadcrumbList carries its Unhead key, so the browser adopts it
     // instead of adding the layout's own (pageHead.ts BREADCRUMB_JSONLD_KEY).
-    const hid = isBreadcrumbJsonLd(data) ? ` data-hid="${BREADCRUMB_JSONLD_KEY}"` : ""
-    parts.push(`<script type="application/ld+json"${hid}>${serializeJsonLd(data)}</script>`)
+    const hid = isBreadcrumbJsonLd(data)
+      ? ` data-hid="${BREADCRUMB_JSONLD_KEY}"`
+      : ""
+    parts.push(
+      `<script type="application/ld+json"${hid}>${serializeJsonLd(data)}</script>`,
+    )
   }
   return parts.join("")
 }
@@ -168,7 +180,10 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
               ? ` rel="noopener"`
               : ""
         chunks.push(
-          { content: `<li><a href="${escapeAttribute(link.href)}"${rel}>`, html: true },
+          {
+            content: `<li><a href="${escapeAttribute(link.href)}"${rel}>`,
+            html: true,
+          },
           { content: link.text, html: false },
           { content: "</a></li>", html: true },
         )
@@ -178,16 +193,23 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
     }
     if (block.tag === "external") {
       if (!isPartnerHref(block.href) && !isDataFeedHref(block.href)) continue
-      const rel = block.href.startsWith("https://creativecommons.org/") ? "license noopener" : "noopener"
+      const rel = block.href.startsWith("https://creativecommons.org/")
+        ? "license noopener"
+        : "noopener"
       chunks.push(
-        { content: `<p><a href="${escapeAttribute(block.href)}" rel="${rel}">`, html: true },
+        {
+          content: `<p><a href="${escapeAttribute(block.href)}" rel="${rel}">`,
+          html: true,
+        },
         { content: block.text, html: false },
         { content: "</a></p>", html: true },
       )
       continue
     }
     if ("items" in block) {
-      const items = block.items.filter((item) => item.trim() !== "").slice(0, MAX_SUMMARY_LINKS)
+      const items = block.items
+        .filter((item) => item.trim() !== "")
+        .slice(0, MAX_SUMMARY_LINKS)
       if (items.length === 0) continue
       const tag = block.tag === "ol" ? "ol" : "ul"
       chunks.push({ content: `<${tag}>`, html: true })
@@ -223,14 +245,22 @@ export function relatedLinkBlocks(blocks: SummaryBlock[]): SummaryBlock[] {
   blocks.forEach((block, i) => {
     if (block.tag !== "ul" && block.tag !== "external") return
     const before = blocks[i - 1]
-    if (block.tag === "ul" && before && (before.tag === "h2" || before.tag === "h3")) kept.push(before)
+    if (
+      block.tag === "ul" &&
+      before &&
+      (before.tag === "h2" || before.tag === "h3")
+    )
+      kept.push(before)
     kept.push(block)
   })
   return kept
 }
 
 function escapeText(value: string): string {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
 }
 
 /**
@@ -243,8 +273,11 @@ export function relatedLinksHtml(blocks: SummaryBlock[]): string {
   const related = relatedLinkBlocks(blocks)
   // summaryChunks wraps the blocks in <main …>…</main>; keep only the inside.
   const inner = summaryChunks(related).slice(1, -1)
-  if (!inner.some((chunk) => chunk.html && chunk.content.includes("<a "))) return ""
-  const body = inner.map((chunk) => (chunk.html ? chunk.content : escapeText(chunk.content))).join("")
+  if (!inner.some((chunk) => chunk.html && chunk.content.includes("<a ")))
+    return ""
+  const body = inner
+    .map((chunk) => (chunk.html ? chunk.content : escapeText(chunk.content)))
+    .join("")
   return `<nav ${BRIDGE_SUMMARY_ATTRIBUTE} aria-label="Related pages" style="max-width:720px;margin:0 auto;padding:16px">${body}</nav>`
 }
 
@@ -283,7 +316,10 @@ export function rewriteShell(
       element(el) {
         const name = el.getAttribute("name")
         const property = el.getAttribute("property")
-        if ((name && metaKeys.has(name)) || (property && metaKeys.has(property))) {
+        if (
+          (name && metaKeys.has(name)) ||
+          (property && metaKeys.has(property))
+        ) {
           el.remove()
         }
       },
@@ -295,9 +331,12 @@ export function rewriteShell(
     })
     .on("head", {
       element(el) {
-        el.append(headMarkup(doc?.head ?? null, doc?.canonical ?? null, noindex), {
-          html: true,
-        })
+        el.append(
+          headMarkup(doc?.head ?? null, doc?.canonical ?? null, noindex),
+          {
+            html: true,
+          },
+        )
       },
     })
 
@@ -310,7 +349,10 @@ export function rewriteShell(
       })
       .on("div#root", {
         element(el) {
-          for (const chunk of summaryChunks([...doc.summary, ...DEVELOPER_SUMMARY_BLOCKS])) {
+          for (const chunk of summaryChunks([
+            ...doc.summary,
+            ...DEVELOPER_SUMMARY_BLOCKS,
+          ])) {
             el.append(chunk.content, { html: chunk.html })
           }
         },

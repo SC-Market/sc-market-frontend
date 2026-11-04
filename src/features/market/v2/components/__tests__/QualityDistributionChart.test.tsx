@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -32,7 +32,9 @@ vi.mock("@mui/x-charts/BarChart", () => ({
             key={idx}
             data-testid={`bar-${idx}`}
             data-value={value}
-            onClick={() => onAxisClick?.(null, { axisValue: xAxis?.[0]?.data?.[idx] })}
+            onClick={() =>
+              onAxisClick?.(null, { axisValue: xAxis?.[0]?.data?.[idx] })
+            }
           />
         ))}
       </svg>
@@ -42,7 +44,9 @@ vi.mock("@mui/x-charts/BarChart", () => ({
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 describe("QualityDistributionChart", () => {
@@ -116,7 +120,7 @@ describe("QualityDistributionChart", () => {
     return render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>{ui}</ThemeProvider>
-      </Provider>
+      </Provider>,
     )
   }
 
@@ -129,9 +133,13 @@ describe("QualityDistributionChart", () => {
       queryLoading<typeof marketV2Api.endpoints.getQualityDistribution>(),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
-    expect(screen.getByText(/loading quality distribution/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/loading quality distribution/i),
+    ).toBeInTheDocument()
   })
 
   it("renders error state", () => {
@@ -142,10 +150,12 @@ describe("QualityDistributionChart", () => {
       }),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     expect(
-      screen.getByText(/error loading quality distribution/i)
+      screen.getByText(/error loading quality distribution/i),
     ).toBeInTheDocument()
   })
 
@@ -159,10 +169,12 @@ describe("QualityDistributionChart", () => {
       }),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     expect(
-      screen.getByText(/no quality distribution data available/i)
+      screen.getByText(/no quality distribution data available/i),
     ).toBeInTheDocument()
   })
 
@@ -186,10 +198,12 @@ describe("QualityDistributionChart", () => {
       }),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     expect(
-      screen.getByText(/no quality distribution data available/i)
+      screen.getByText(/no quality distribution data available/i),
     ).toBeInTheDocument()
   })
 
@@ -200,7 +214,9 @@ describe("QualityDistributionChart", () => {
       ),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     // Wait for chart to render
     await waitFor(() => {
@@ -246,7 +262,9 @@ describe("QualityDistributionChart", () => {
       ),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     // All 5 tiers should be displayed even if some have 0 quantity
     await waitFor(() => {
@@ -271,7 +289,7 @@ describe("QualityDistributionChart", () => {
       <QualityDistributionChart
         gameItemId={mockGameItemId}
         onTierClick={mockOnTierClick}
-      />
+      />,
     )
 
     await waitFor(() => {
@@ -293,7 +311,7 @@ describe("QualityDistributionChart", () => {
     )
 
     renderWithProviders(
-      <QualityDistributionChart gameItemId={mockGameItemId} height={300} />
+      <QualityDistributionChart gameItemId={mockGameItemId} height={300} />,
     )
 
     // Check that height is passed to chart
@@ -308,7 +326,7 @@ describe("QualityDistributionChart", () => {
     )
 
     const { container } = renderWithProviders(
-      <QualityDistributionChart gameItemId={mockGameItemId} width={600} />
+      <QualityDistributionChart gameItemId={mockGameItemId} width={600} />,
     )
 
     // Check that the container has the correct width
@@ -323,7 +341,9 @@ describe("QualityDistributionChart", () => {
       ),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     expect(screen.getByTestId("chart-height")).toHaveTextContent("400")
   })
@@ -336,7 +356,7 @@ describe("QualityDistributionChart", () => {
     )
 
     const { container } = renderWithProviders(
-      <QualityDistributionChart gameItemId={mockGameItemId} />
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
     )
 
     const chartContainer = container.querySelector("div")
@@ -345,13 +365,17 @@ describe("QualityDistributionChart", () => {
 
   it("passes correct gameItemId to API query", () => {
     const customGameItemId = "custom-game-item-id"
-    const spy = vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
-      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
-        mockDistributionData,
-      ),
-    )
+    const spy = vi
+      .spyOn(marketV2Api, "useGetQualityDistributionQuery")
+      .mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+          mockDistributionData,
+        ),
+      )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={customGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={customGameItemId} />,
+    )
 
     expect(spy).toHaveBeenCalledWith({
       gameItemId: customGameItemId,
@@ -365,7 +389,9 @@ describe("QualityDistributionChart", () => {
       ),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     await waitFor(() => {
       // Check for Y-axis label
@@ -380,7 +406,9 @@ describe("QualityDistributionChart", () => {
       ),
     )
 
-    renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
+    renderWithProviders(
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
+    )
 
     // V1 charts use 400px height by default
     expect(screen.getByTestId("chart-height")).toHaveTextContent("400")
@@ -395,7 +423,7 @@ describe("QualityDistributionChart", () => {
 
     // Render component
     const { container } = renderWithProviders(
-      <QualityDistributionChart gameItemId={mockGameItemId} />
+      <QualityDistributionChart gameItemId={mockGameItemId} />,
     )
 
     // Chart should render without errors

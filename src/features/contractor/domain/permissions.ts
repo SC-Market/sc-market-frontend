@@ -22,7 +22,10 @@ export function has_permission(
   if (!userContractor?.roles?.length) return false
 
   // Org owner has all permissions
-  if (contractor.owner_role && userContractor.roles.includes(contractor.owner_role)) {
+  if (
+    contractor.owner_role &&
+    userContractor.roles.includes(contractor.owner_role)
+  ) {
     return true
   }
 

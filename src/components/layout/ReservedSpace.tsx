@@ -39,8 +39,7 @@ export function ReservedSpace({
         width: width || "100%",
         position: "relative",
         ...(showSkeleton && {
-          backgroundColor: (theme) =>
-            theme.palette.background.subtleDivider,
+          backgroundColor: (theme) => theme.palette.background.subtleDivider,
           animation: "pulse 1.5s ease-in-out infinite",
           "@keyframes pulse": {
             "0%, 100%": {

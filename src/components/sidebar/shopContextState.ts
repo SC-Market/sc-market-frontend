@@ -16,8 +16,11 @@ export function withShopContext(slug: string): ShopContextState {
 
 /** The shop slug a navigation asked the sidebar to stay in, if any. */
 export function shopContextFromState(state: unknown): string | null {
-  if (typeof state !== "object" || state === null || !("shopContext" in state)) return null
-  return typeof state.shopContext === "string" && state.shopContext ? state.shopContext : null
+  if (typeof state !== "object" || state === null || !("shopContext" in state))
+    return null
+  return typeof state.shopContext === "string" && state.shopContext
+    ? state.shopContext
+    : null
 }
 
 /*

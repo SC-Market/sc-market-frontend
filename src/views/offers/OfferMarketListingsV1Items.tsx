@@ -19,7 +19,11 @@ import { Section } from "../../components/paper/Section"
 import type { OfferMarketListingV1 } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
 
-export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListingV1[] }) {
+export function OfferMarketListingsV1Items({
+  items,
+}: {
+  items: OfferMarketListingV1[]
+}) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   if (!items.length) return null
@@ -33,9 +37,15 @@ export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListin
           <TableHead>
             <TableRow>
               <TableCell>{t("marketUi.offerItems.colItem")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colQty")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colUnitPrice")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colSubtotal")}</TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colQty")}
+              </TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colUnitPrice")}
+              </TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colSubtotal")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,7 +53,11 @@ export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListin
               <TableRow
                 key={item.listing_id}
                 hover
-                sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
+                sx={{
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
                 component={Link}
                 to={`/listing/${item.listing_id}`}
               >
@@ -63,7 +77,9 @@ export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListin
             ))}
             <TableRow>
               <TableCell colSpan={3} align="right">
-                <Typography variant="subtitle2">{t("marketUi.offerItems.total")}</Typography>
+                <Typography variant="subtitle2">
+                  {t("marketUi.offerItems.total")}
+                </Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6" color="primary" fontWeight={700}>

@@ -3,7 +3,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const alert = vi.fn()
 const navigate = vi.fn()
-vi.mock("../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => alert }))
+vi.mock("../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => alert,
+}))
 vi.mock("react-router-dom", () => ({ useNavigate: () => navigate }))
 vi.mock("../../api/offerApi", () => ({
   useAssignOfferMutation: vi.fn(),
@@ -13,18 +15,35 @@ vi.mock("../../api/offerApi", () => ({
 
 import * as offerApi from "../../api/offerApi"
 import type { CounterOfferBody } from "../../domain/types"
-import { useClaimOffer, useCounterOfferSubmit, useOfferAssignment } from "../useOfferActions"
+import {
+  useClaimOffer,
+  useCounterOfferSubmit,
+  useOfferAssignment,
+} from "../useOfferActions"
 
-type Hook<K extends keyof typeof offerApi> = typeof offerApi[K] extends (...a: never[]) => infer R ? R : never
+type Hook<K extends keyof typeof offerApi> = (typeof offerApi)[K] extends (
+  ...a: never[]
+) => infer R
+  ? R
+  : never
 const assign = vi.fn()
 const unassign = vi.fn()
 const counter = vi.fn()
 
 beforeEach(() => {
   vi.clearAllMocks()
-  vi.mocked(offerApi.useAssignOfferMutation).mockReturnValue([assign, {}] as unknown as Hook<"useAssignOfferMutation">)
-  vi.mocked(offerApi.useUnassignOfferMutation).mockReturnValue([unassign, {}] as unknown as Hook<"useUnassignOfferMutation">)
-  vi.mocked(offerApi.useCounterOfferMutation).mockReturnValue([counter, { isLoading: false }] as unknown as Hook<"useCounterOfferMutation">)
+  vi.mocked(offerApi.useAssignOfferMutation).mockReturnValue([
+    assign,
+    {},
+  ] as unknown as Hook<"useAssignOfferMutation">)
+  vi.mocked(offerApi.useUnassignOfferMutation).mockReturnValue([
+    unassign,
+    {},
+  ] as unknown as Hook<"useUnassignOfferMutation">)
+  vi.mocked(offerApi.useCounterOfferMutation).mockReturnValue([
+    counter,
+    { isLoading: false },
+  ] as unknown as Hook<"useCounterOfferMutation">)
 })
 
 describe("useClaimOffer", () => {
@@ -33,19 +52,28 @@ describe("useClaimOffer", () => {
     const { result } = renderHook(() => useClaimOffer())
     await result.current("S1", "me")
     expect(assign).toHaveBeenCalledWith({ session_id: "S1", username: "me" })
-    expect(alert).toHaveBeenCalledWith(expect.objectContaining({ severity: "success" }))
+    expect(alert).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: "success" }),
+    )
   })
 })
 
 describe("useOfferAssignment", () => {
   it("assigns, and explains a failure", async () => {
-    assign.mockResolvedValueOnce({ data: {} }).mockResolvedValueOnce({ error: { status: 400, data: { error: "Not a member" } } })
+    assign.mockResolvedValueOnce({ data: {} }).mockResolvedValueOnce({
+      error: { status: 400, data: { error: "Not a member" } },
+    })
     const { result } = renderHook(() => useOfferAssignment("S1"))
     await result.current.assign("bob")
     expect(assign).toHaveBeenCalledWith({ session_id: "S1", username: "bob" })
-    expect(alert).toHaveBeenLastCalledWith(expect.objectContaining({ severity: "success" }))
+    expect(alert).toHaveBeenLastCalledWith(
+      expect.objectContaining({ severity: "success" }),
+    )
     await result.current.assign("bob")
-    expect(alert).toHaveBeenLastCalledWith({ message: expect.stringContaining("Not a member"), severity: "error" })
+    expect(alert).toHaveBeenLastCalledWith({
+      message: expect.stringContaining("Not a member"),
+      severity: "error",
+    })
   })
 
   it("unassigns", async () => {

@@ -71,11 +71,12 @@ export type MutationStateOf<E extends AnyMutationEndpoint> =
 export type MockQueryError = FetchBaseQueryError | SerializedError
 
 /** The `refetch` member of a query hook result. */
-type AnyRefetch<E extends AnyQueryEndpoint> = QueryResultOf<E> extends {
-  refetch: infer R
-}
-  ? R
-  : never
+type AnyRefetch<E extends AnyQueryEndpoint> =
+  QueryResultOf<E> extends {
+    refetch: infer R
+  }
+    ? R
+    : never
 
 const BASE_TIMESTAMP = 1700000000000
 
@@ -85,9 +86,7 @@ const BASE_TIMESTAMP = 1700000000000
  * return value — they only assert refetch was called — so the spy is narrowed
  * here, once, instead of at every call site.
  */
-function asRefetch<E extends AnyQueryEndpoint>(
-  spy: () => void,
-): AnyRefetch<E> {
+function asRefetch<E extends AnyQueryEndpoint>(spy: () => void): AnyRefetch<E> {
   return spy as unknown as AnyRefetch<E>
 }
 
@@ -229,7 +228,9 @@ export function mockMutationTrigger<E extends AnyMutationEndpoint>(
 }
 
 /** The idle state half of a `[trigger, state]` mutation hook tuple. */
-export function mutationIdle<E extends AnyMutationEndpoint>(): MutationStateOf<E> {
+export function mutationIdle<
+  E extends AnyMutationEndpoint,
+>(): MutationStateOf<E> {
   return {
     data: undefined,
     error: undefined,
@@ -243,7 +244,9 @@ export function mutationIdle<E extends AnyMutationEndpoint>(): MutationStateOf<E
 }
 
 /** The in-flight state half of a `[trigger, state]` mutation hook tuple. */
-export function mutationLoading<E extends AnyMutationEndpoint>(): MutationStateOf<E> {
+export function mutationLoading<
+  E extends AnyMutationEndpoint,
+>(): MutationStateOf<E> {
   return {
     data: undefined,
     error: undefined,

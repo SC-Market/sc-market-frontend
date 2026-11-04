@@ -22,9 +22,7 @@ import {
 import { StorefrontRounded, AddBusinessRounded } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
-import {
-  useGetMyShopsQuery,
-} from "../../../store/api/v2/market"
+import { useGetMyShopsQuery } from "../../../store/api/v2/market"
 import { canEditShopListings } from "../domain/shopPermissions"
 import { useQuickCreateShop } from "../hooks/useShopActions"
 
@@ -36,15 +34,25 @@ interface ShopSelectorProps {
   id?: string
 }
 
-export function ShopSelector({ value, onChange, label, helperText, id }: ShopSelectorProps) {
+export function ShopSelector({
+  value,
+  onChange,
+  label,
+  helperText,
+  id,
+}: ShopSelectorProps) {
   const { t } = useTranslation()
 
   const { data: shops, isLoading, isError, refetch } = useGetMyShopsQuery()
-  const { create: quickCreateShop, isLoading: isCreating } = useQuickCreateShop()
+  const { create: quickCreateShop, isLoading: isCreating } =
+    useQuickCreateShop()
 
   // The user's shops they can list in (personal and org-owned)
   const filteredShops = useMemo(
-    () => (shops || []).filter((s) => s.status !== "archived" && canEditShopListings(s)),
+    () =>
+      (shops || []).filter(
+        (s) => s.status !== "archived" && canEditShopListings(s),
+      ),
     [shops],
   )
 
@@ -91,7 +99,7 @@ export function ShopSelector({ value, onChange, label, helperText, id }: ShopSel
         <Typography variant="body2" color="text.secondary">
           {t(
             "ShopSelector.noPersonalShops",
-            "You don't have a personal shop yet. Create one to start selling."
+            "You don't have a personal shop yet. Create one to start selling.",
           )}
         </Typography>
         <LoadingButton
@@ -121,7 +129,10 @@ export function ShopSelector({ value, onChange, label, helperText, id }: ShopSel
       color="secondary"
       helperText={
         helperText ??
-        t("ShopSelector.helperText", "Select which shop this listing belongs to")
+        t(
+          "ShopSelector.helperText",
+          "Select which shop this listing belongs to",
+        )
       }
       SelectProps={{
         renderValue: (selected) => {

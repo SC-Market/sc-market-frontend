@@ -49,7 +49,10 @@ export function LandingGameData() {
     },
   ]
   return (
-    <LandingSection labelledBy="landing-game-data-title" testId="landing-game-data">
+    <LandingSection
+      labelledBy="landing-game-data-title"
+      testId="landing-game-data"
+    >
       <LandingSectionHeader
         id="landing-game-data-title"
         title={t("landing.gameDataHeading")}

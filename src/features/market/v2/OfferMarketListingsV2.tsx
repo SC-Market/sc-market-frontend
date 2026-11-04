@@ -10,7 +10,10 @@ import {
   Box,
 } from "@mui/material"
 import { Stack } from "@mui/system"
-import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
+import {
+  HeadCell,
+  PaginatedTable,
+} from "../../../components/table/PaginatedTable"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -20,7 +23,7 @@ import { useFormatters } from "../../../util/format"
 
 /**
  * ListingRowItemV2 - Extended row item with variant details
- * 
+ *
  * Requirements: 27.4-27.7
  * - Display variant details for each order item
  * - Show quality_tier with visual indicators
@@ -40,12 +43,12 @@ interface ListingRowItemV2 {
 
 /**
  * OfferListingRowItemV2 - Individual row component with variant display
- * 
+ *
  * Maintains visual parity with V1 OfferListingRowItem while adding:
  * - Quality tier badge
  * - Variant display name
  * - Variant attributes in readable format
- * 
+ *
  * Requirements: 27.2, 27.5
  */
 export function OfferListingRowItemV2(props: {
@@ -74,7 +77,9 @@ export function OfferListingRowItemV2(props: {
               {row.title}
             </Typography>
             {/* Variant details with quality badge */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 0.5 }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 1, mt: 0.5 }}
+            >
               {row.quality_tier && (
                 <QualityBadge tier={row.quality_tier} size="small" />
               )}
@@ -85,9 +90,7 @@ export function OfferListingRowItemV2(props: {
           </Box>
         </TableCell>
         <TableCell align={"right"}>{fmt.number(row.quantity)}</TableCell>
-        <TableCell align={"right"}>
-          {fmt.number(row.unit_price)} aUEC
-        </TableCell>
+        <TableCell align={"right"}>{fmt.number(row.unit_price)} aUEC</TableCell>
         <TableCell align={"right"}>{fmt.number(row.total)} aUEC</TableCell>
       </TableRow>
     </Fade>
@@ -137,13 +140,13 @@ interface OfferMarketListingsV2Props {
 
 /**
  * OfferMarketListingsV2 - Order display component with variant support
- * 
+ *
  * Displays order items in a read-only table format with variant details.
  * Maintains 100% visual parity with V1 OfferMarketListings while adding:
  * - Quality tier badges for each item
  * - Variant display names (e.g., "Tier 5 (95.5%) - Crafted")
  * - Per-variant pricing display
- * 
+ *
  * Requirements: 27.1-27.12
  * - 27.1: Provide OfferMarketListingsV2 React component
  * - 27.2: Maintain visual parity with V1 OfferMarketListings
@@ -152,7 +155,7 @@ interface OfferMarketListingsV2Props {
  * - 27.5: Show quality_tier with visual indicators (QualityBadge)
  * - 27.6: Display variant attributes in readable format (display_name)
  * - 27.7: Show per-variant pricing
- * 
+ *
  * Visual Parity Details:
  * - Grid item xs={12} lg={8} md={12}
  * - Paper with padding: 2
@@ -162,7 +165,7 @@ interface OfferMarketListingsV2Props {
  * - Fade animation with staggered delay (50 + 50 * index)ms
  * - Total section with Table maxWidth: 350
  * - Empty state with subtitle2 message
- * 
+ *
  * @example
  * ```tsx
  * <OfferMarketListingsV2

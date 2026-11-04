@@ -53,7 +53,14 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {fmt.dateTime(contract.timestamp, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
+                  {fmt.dateTime(contract.timestamp, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -10,7 +10,11 @@
  * through a ContentSource (ASSETS on Cloudflare, build/client at build time).
  */
 import { canonicalRedirect, resolvePage } from "../bridge/handler"
-import { headMarkup, relatedLinksHtml, type HtmlRewriterConstructor } from "../bridge/render"
+import {
+  headMarkup,
+  relatedLinksHtml,
+  type HtmlRewriterConstructor,
+} from "../bridge/render"
 import { matchBridgeRoute } from "../bridge/routes"
 import type { ContentSource } from "./contentSource"
 
@@ -66,10 +70,13 @@ export async function bridgeHeadTags(
     options.waitUntil ?? (() => {}),
     match ?? undefined,
   )
-  if (outcome.kind === "notFound") return { kind: "notFound", status: outcome.status ?? 404 }
+  if (outcome.kind === "notFound")
+    return { kind: "notFound", status: outcome.status ?? 404 }
   if (outcome.kind !== "page") return { kind: "none", reason: outcome.reason }
   const { doc } = outcome
-  const redirect = match ? canonicalRedirect(url, match.route.kind, match.params, doc) : null
+  const redirect = match
+    ? canonicalRedirect(url, match.route.kind, match.params, doc)
+    : null
   if (redirect) return { kind: "redirect", location: redirect.toString() }
   return {
     kind: "page",

@@ -52,8 +52,18 @@ interface ColorField {
 }
 
 const COLOR_FIELDS: ColorField[] = [
-  { key: "primary", labelKey: "chromeUi.themeEditor.primary", fallback: "Primary", path: ["palette", "primary", "main"] },
-  { key: "primaryContrast", labelKey: "chromeUi.themeEditor.primaryContrast", fallback: "Button Text", path: ["palette", "primary", "contrastText"] },
+  {
+    key: "primary",
+    labelKey: "chromeUi.themeEditor.primary",
+    fallback: "Primary",
+    path: ["palette", "primary", "main"],
+  },
+  {
+    key: "primaryContrast",
+    labelKey: "chromeUi.themeEditor.primaryContrast",
+    fallback: "Button Text",
+    path: ["palette", "primary", "contrastText"],
+  },
   {
     key: "primaryDark",
     labelKey: "chromeUi.themeEditor.primaryDark",
@@ -63,9 +73,24 @@ const COLOR_FIELDS: ColorField[] = [
     usageNoteFallback:
       "MUI uses this for contained primary buttons on hover — not the “Menu & list hover” color.",
   },
-  { key: "secondary", labelKey: "chromeUi.themeEditor.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
-  { key: "bgDefault", labelKey: "chromeUi.themeEditor.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
-  { key: "bgPaper", labelKey: "chromeUi.themeEditor.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
+  {
+    key: "secondary",
+    labelKey: "chromeUi.themeEditor.secondary",
+    fallback: "Secondary",
+    path: ["palette", "secondary", "main"],
+  },
+  {
+    key: "bgDefault",
+    labelKey: "chromeUi.themeEditor.bgDefault",
+    fallback: "Background",
+    path: ["palette", "background", "default"],
+  },
+  {
+    key: "bgPaper",
+    labelKey: "chromeUi.themeEditor.bgPaper",
+    fallback: "Paper",
+    path: ["palette", "background", "paper"],
+  },
   {
     key: "bgSidebar",
     labelKey: "chromeUi.themeEditor.bgSidebar",
@@ -75,10 +100,30 @@ const COLOR_FIELDS: ColorField[] = [
     usageNoteFallback:
       "Dark-mode listing thumbnails and photo-picker surfaces (e.g. SelectPhotosArea) fade toward this color.",
   },
-  { key: "bgNavbar", labelKey: "chromeUi.themeEditor.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
-  { key: "textPrimary", labelKey: "chromeUi.themeEditor.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
-  { key: "textSecondary", labelKey: "chromeUi.themeEditor.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
-  { key: "outline", labelKey: "chromeUi.themeEditor.outline", fallback: "Border Color", path: ["palette", "outline", "main"] },
+  {
+    key: "bgNavbar",
+    labelKey: "chromeUi.themeEditor.bgNavbar",
+    fallback: "Navbar",
+    path: ["palette", "background", "navbar"],
+  },
+  {
+    key: "textPrimary",
+    labelKey: "chromeUi.themeEditor.textPrimary",
+    fallback: "Text",
+    path: ["palette", "text", "primary"],
+  },
+  {
+    key: "textSecondary",
+    labelKey: "chromeUi.themeEditor.textSecondary",
+    fallback: "Text Secondary",
+    path: ["palette", "text", "secondary"],
+  },
+  {
+    key: "outline",
+    labelKey: "chromeUi.themeEditor.outline",
+    fallback: "Border Color",
+    path: ["palette", "outline", "main"],
+  },
   {
     key: "actionHover",
     labelKey: "chromeUi.themeEditor.actionHover",
@@ -91,10 +136,30 @@ const COLOR_FIELDS: ColorField[] = [
 ]
 
 const BORDER_RADIUS_FIELDS = [
-  { key: "topLevel", labelKey: "chromeUi.themeEditor.borderRadiusTopLevel", fallback: "Cards", path: ["borderRadius", "topLevel"] },
-  { key: "button", labelKey: "chromeUi.themeEditor.borderRadiusButton", fallback: "Buttons", path: ["borderRadius", "button"] },
-  { key: "chip", labelKey: "chromeUi.themeEditor.borderRadiusChip", fallback: "Chips", path: ["borderRadius", "chip"] },
-  { key: "image", labelKey: "chromeUi.themeEditor.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
+  {
+    key: "topLevel",
+    labelKey: "chromeUi.themeEditor.borderRadiusTopLevel",
+    fallback: "Cards",
+    path: ["borderRadius", "topLevel"],
+  },
+  {
+    key: "button",
+    labelKey: "chromeUi.themeEditor.borderRadiusButton",
+    fallback: "Buttons",
+    path: ["borderRadius", "button"],
+  },
+  {
+    key: "chip",
+    labelKey: "chromeUi.themeEditor.borderRadiusChip",
+    fallback: "Chips",
+    path: ["borderRadius", "chip"],
+  },
+  {
+    key: "image",
+    labelKey: "chromeUi.themeEditor.borderRadiusImage",
+    fallback: "Images",
+    path: ["borderRadius", "image"],
+  },
 ]
 
 function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
@@ -106,11 +171,17 @@ function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
   return current
 }
 
-function setNestedValue(obj: Record<string, unknown>, path: string[], value: unknown): Record<string, unknown> {
+function setNestedValue(
+  obj: Record<string, unknown>,
+  path: string[],
+  value: unknown,
+): Record<string, unknown> {
   const result = { ...obj }
   let current: Record<string, unknown> = result
   for (let i = 0; i < path.length - 1; i++) {
-    current[path[i]] = { ...((current[path[i]] as Record<string, unknown>) || {}) }
+    current[path[i]] = {
+      ...((current[path[i]] as Record<string, unknown>) || {}),
+    }
     current = current[path[i]] as Record<string, unknown>
   }
   current[path[path.length - 1]] = value
@@ -154,11 +225,17 @@ export function ThemeEditor({
   const [isResetting, setIsResetting] = useState(false)
 
   const currentMode = themeData[editMode]
-  const components = currentMode?.components as Record<string, { defaultProps?: Record<string, unknown> }> | undefined
-  const paperVariant = (components?.MuiPaper?.defaultProps?.variant as string) ?? "outlined"
-  const cardVariant = (components?.MuiCard?.defaultProps?.variant as string) ?? "outlined"
-  const paperElevation = (components?.MuiPaper?.defaultProps?.elevation as number) ?? 4
-  const cardElevation = (components?.MuiCard?.defaultProps?.elevation as number) ?? 4
+  const components = currentMode?.components as
+    | Record<string, { defaultProps?: Record<string, unknown> }>
+    | undefined
+  const paperVariant =
+    (components?.MuiPaper?.defaultProps?.variant as string) ?? "outlined"
+  const cardVariant =
+    (components?.MuiCard?.defaultProps?.variant as string) ?? "outlined"
+  const paperElevation =
+    (components?.MuiPaper?.defaultProps?.elevation as number) ?? 4
+  const cardElevation =
+    (components?.MuiCard?.defaultProps?.elevation as number) ?? 4
   const navKind = (currentMode?.navKind as string) ?? "outlined"
   const borderRadiusUnit = (currentMode?.borderRadiusUnit as string) ?? "px"
 
@@ -176,8 +253,13 @@ export function ThemeEditor({
     (component: string, variant: string) => {
       setThemeData((prev) => {
         const mode = prev[editMode]
-        const prevComponents = (mode?.components as Record<string, { defaultProps?: Record<string, unknown> }>) || {}
-        const prevElevation = prevComponents[component]?.defaultProps?.elevation ?? 4
+        const prevComponents =
+          (mode?.components as Record<
+            string,
+            { defaultProps?: Record<string, unknown> }
+          >) || {}
+        const prevElevation =
+          prevComponents[component]?.defaultProps?.elevation ?? 4
         return {
           ...prev,
           [editMode]: {
@@ -187,7 +269,9 @@ export function ThemeEditor({
               [component]: {
                 defaultProps: {
                   variant,
-                  ...(variant === "elevation" ? { elevation: prevElevation } : {}),
+                  ...(variant === "elevation"
+                    ? { elevation: prevElevation }
+                    : {}),
                 },
               },
             },
@@ -202,7 +286,11 @@ export function ThemeEditor({
     (component: string, elevation: number) => {
       setThemeData((prev) => {
         const mode = prev[editMode]
-        const prevComponents = (mode?.components as Record<string, { defaultProps?: Record<string, unknown> }>) || {}
+        const prevComponents =
+          (mode?.components as Record<
+            string,
+            { defaultProps?: Record<string, unknown> }
+          >) || {}
         return {
           ...prev,
           [editMode]: {
@@ -229,9 +317,15 @@ export function ThemeEditor({
         theme_data: stripBackgroundOverlayKeys(themeData),
         favicon_url: faviconUrl || null,
       })
-      issueAlert({ severity: "success", message: t("theme.saveSuccess", "Theme saved successfully") })
+      issueAlert({
+        severity: "success",
+        message: t("theme.saveSuccess", "Theme saved successfully"),
+      })
     } catch {
-      issueAlert({ severity: "error", message: t("theme.saveError", "Failed to save theme") })
+      issueAlert({
+        severity: "error",
+        message: t("theme.saveError", "Failed to save theme"),
+      })
     }
   }
 
@@ -241,9 +335,15 @@ export function ThemeEditor({
       await onReset()
       setThemeData({ light: {}, dark: {} })
       setFaviconUrl("")
-      issueAlert({ severity: "success", message: t("theme.resetSuccess", "Theme reset to default") })
+      issueAlert({
+        severity: "success",
+        message: t("theme.resetSuccess", "Theme reset to default"),
+      })
     } catch {
-      issueAlert({ severity: "error", message: t("theme.resetError", "Failed to reset theme") })
+      issueAlert({
+        severity: "error",
+        message: t("theme.resetError", "Failed to reset theme"),
+      })
     } finally {
       setIsResetting(false)
       setResetDialogOpen(false)
@@ -275,22 +375,55 @@ export function ThemeEditor({
               const primary = themeObj.palette?.primary?.main || "#888"
               const bg = themeObj.palette?.background?.default || "#1A1A2E"
               return (
-                <Tooltip key={name} title={name.replace(/_/g, " ")} placement="top">
+                <Tooltip
+                  key={name}
+                  title={name.replace(/_/g, " ")}
+                  placement="top"
+                >
                   <Box
                     onClick={() => {
                       const p = themeObj.palette
                       const mode = p?.mode || "dark"
-                      const bg = p?.background as { default?: string; paper?: string; sidebar?: string; navbar?: string } | undefined
-                      const outline = (p as { outline?: { main?: string } } | undefined)?.outline
+                      const bg = p?.background as
+                        | {
+                            default?: string
+                            paper?: string
+                            sidebar?: string
+                            navbar?: string
+                          }
+                        | undefined
+                      const outline = (
+                        p as { outline?: { main?: string } } | undefined
+                      )?.outline
                       const thm = themeObj as unknown as ThemeModeData
                       const preset: ThemeModeData = {
                         palette: {
                           mode,
-                          ...(p?.primary?.main && { primary: { main: p.primary.main, contrastText: p.primary.contrastText } }),
-                          ...(p?.secondary?.main && { secondary: { main: p.secondary.main, contrastText: p.secondary.contrastText } }),
-                          background: { default: bg?.default, paper: bg?.paper, sidebar: bg?.sidebar, navbar: bg?.navbar },
-                          text: { primary: p?.text?.primary, secondary: p?.text?.secondary },
-                          ...(outline?.main && { outline: { main: outline.main } }),
+                          ...(p?.primary?.main && {
+                            primary: {
+                              main: p.primary.main,
+                              contrastText: p.primary.contrastText,
+                            },
+                          }),
+                          ...(p?.secondary?.main && {
+                            secondary: {
+                              main: p.secondary.main,
+                              contrastText: p.secondary.contrastText,
+                            },
+                          }),
+                          background: {
+                            default: bg?.default,
+                            paper: bg?.paper,
+                            sidebar: bg?.sidebar,
+                            navbar: bg?.navbar,
+                          },
+                          text: {
+                            primary: p?.text?.primary,
+                            secondary: p?.text?.secondary,
+                          },
+                          ...(outline?.main && {
+                            outline: { main: outline.main },
+                          }),
                           action: { hover: p?.action?.hover },
                         },
                         navKind: thm.navKind,
@@ -298,11 +431,18 @@ export function ThemeEditor({
                       setThemeData((prev) => ({ ...prev, [editMode]: preset }))
                     }}
                     sx={{
-                      width: 22, height: 22, borderRadius: 0.5, cursor: "pointer",
-                      border: "1px solid", borderColor: "divider",
+                      width: 22,
+                      height: 22,
+                      borderRadius: 0.5,
+                      cursor: "pointer",
+                      border: "1px solid",
+                      borderColor: "divider",
                       background: `linear-gradient(to right, ${primary} 50%, ${bg} 50%)`,
                       transition: "transform 0.15s, box-shadow 0.15s",
-                      "&:hover": { transform: "scale(1.2)", boxShadow: `0 0 8px ${primary}` },
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        boxShadow: `0 0 8px ${primary}`,
+                      },
                       flexShrink: 0,
                     }}
                   />
@@ -322,9 +462,18 @@ export function ThemeEditor({
                   <input
                     type="color"
                     aria-label={t(field.labelKey, field.fallback)}
-                    value={(getNestedValue(currentMode, field.path) as string) || "#000000"}
+                    value={
+                      (getNestedValue(currentMode, field.path) as string) ||
+                      "#000000"
+                    }
                     onChange={(e) => updateValue(field.path, e.target.value)}
-                    style={{ width: 32, height: 32, border: "none", cursor: "pointer", flexShrink: 0 }}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      border: "none",
+                      cursor: "pointer",
+                      flexShrink: 0,
+                    }}
                   />
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="caption" display="block" noWrap>
@@ -333,7 +482,9 @@ export function ThemeEditor({
                     <TextField
                       size="small"
                       inputProps={{
-                        "aria-label": t("appUi.themeEditor.hexAria", { label: t(field.labelKey, field.fallback) }),
+                        "aria-label": t("appUi.themeEditor.hexAria", {
+                          label: t(field.labelKey, field.fallback),
+                        }),
                       }}
                       value={getNestedValue(currentMode, field.path) ?? ""}
                       onChange={(e) => updateValue(field.path, e.target.value)}
@@ -361,55 +512,101 @@ export function ThemeEditor({
           <Grid container spacing={1.5}>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel id={`${labelIds}-paperStyle`}>{t("theme.paperStyle", "Paper Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-paperStyle`}>
+                  {t("theme.paperStyle", "Paper Style")}
+                </InputLabel>
                 <Select
                   labelId={`${labelIds}-paperStyle`}
                   value={paperVariant}
                   label={t("theme.paperStyle", "Paper Style")}
-                  onChange={(e) => updateComponentVariant("MuiPaper", e.target.value)}
+                  onChange={(e) =>
+                    updateComponentVariant("MuiPaper", e.target.value)
+                  }
                 >
-                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
-                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
+                  <MenuItem value="outlined">
+                    {t("theme.outlined", "Outlined")}
+                  </MenuItem>
+                  <MenuItem value="elevation">
+                    {t("theme.elevation", "Elevation")}
+                  </MenuItem>
                 </Select>
               </FormControl>
               {paperVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
-                  <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" aria-label={t("appUi.themeEditor.paperElevation")} min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
+                  <Typography variant="caption">
+                    {t("theme.elevationLevel", "Elevation Level")}
+                  </Typography>
+                  <Slider
+                    size="small"
+                    aria-label={t("appUi.themeEditor.paperElevation")}
+                    min={0}
+                    max={24}
+                    value={paperElevation}
+                    onChange={(_, v) =>
+                      updateComponentElevation("MuiPaper", v as number)
+                    }
+                    valueLabelDisplay="auto"
+                  />
                 </Box>
               )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel id={`${labelIds}-cardStyle`}>{t("theme.cardStyle", "Card Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-cardStyle`}>
+                  {t("theme.cardStyle", "Card Style")}
+                </InputLabel>
                 <Select
                   labelId={`${labelIds}-cardStyle`}
                   value={cardVariant}
                   label={t("theme.cardStyle", "Card Style")}
-                  onChange={(e) => updateComponentVariant("MuiCard", e.target.value)}
+                  onChange={(e) =>
+                    updateComponentVariant("MuiCard", e.target.value)
+                  }
                 >
-                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
-                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
+                  <MenuItem value="outlined">
+                    {t("theme.outlined", "Outlined")}
+                  </MenuItem>
+                  <MenuItem value="elevation">
+                    {t("theme.elevation", "Elevation")}
+                  </MenuItem>
                 </Select>
               </FormControl>
               {cardVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
-                  <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" aria-label={t("appUi.themeEditor.cardElevation")} min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
+                  <Typography variant="caption">
+                    {t("theme.elevationLevel", "Elevation Level")}
+                  </Typography>
+                  <Slider
+                    size="small"
+                    aria-label={t("appUi.themeEditor.cardElevation")}
+                    min={0}
+                    max={24}
+                    value={cardElevation}
+                    onChange={(_, v) =>
+                      updateComponentElevation("MuiCard", v as number)
+                    }
+                    valueLabelDisplay="auto"
+                  />
                 </Box>
               )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel id={`${labelIds}-navStyle`}>{t("theme.navStyle", "Nav Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-navStyle`}>
+                  {t("theme.navStyle", "Nav Style")}
+                </InputLabel>
                 <Select
                   labelId={`${labelIds}-navStyle`}
                   value={navKind}
                   label={t("theme.navStyle", "Nav Style")}
                   onChange={(e) => updateValue(["navKind"], e.target.value)}
                 >
-                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
-                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
+                  <MenuItem value="outlined">
+                    {t("theme.outlined", "Outlined")}
+                  </MenuItem>
+                  <MenuItem value="elevation">
+                    {t("theme.elevation", "Elevation")}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -421,12 +618,16 @@ export function ThemeEditor({
           </Typography>
           <Box sx={{ mb: 1 }}>
             <FormControl size="small" sx={{ minWidth: 100 }}>
-              <InputLabel id={`${labelIds}-unit`}>{t("theme.unit", "Unit")}</InputLabel>
+              <InputLabel id={`${labelIds}-unit`}>
+                {t("theme.unit", "Unit")}
+              </InputLabel>
               <Select
-                  labelId={`${labelIds}-unit`}
+                labelId={`${labelIds}-unit`}
                 value={borderRadiusUnit}
                 label={t("theme.unit", "Unit")}
-                onChange={(e) => updateValue(["borderRadiusUnit"], e.target.value)}
+                onChange={(e) =>
+                  updateValue(["borderRadiusUnit"], e.target.value)
+                }
               >
                 <MenuItem value="px">px</MenuItem>
                 <MenuItem value="rem">rem</MenuItem>
@@ -445,9 +646,24 @@ export function ThemeEditor({
                   size="small"
                   aria-label={t(field.labelKey, field.fallback)}
                   min={0}
-                  max={borderRadiusUnit === "px" ? 32 : borderRadiusUnit === "%" ? 50 : 3}
-                  step={borderRadiusUnit === "px" ? 1 : borderRadiusUnit === "%" ? 1 : 0.125}
-                  value={(getNestedValue(currentMode, field.path) as number) ?? (borderRadiusUnit === "px" ? 3 : 0.375)}
+                  max={
+                    borderRadiusUnit === "px"
+                      ? 32
+                      : borderRadiusUnit === "%"
+                        ? 50
+                        : 3
+                  }
+                  step={
+                    borderRadiusUnit === "px"
+                      ? 1
+                      : borderRadiusUnit === "%"
+                        ? 1
+                        : 0.125
+                  }
+                  value={
+                    (getNestedValue(currentMode, field.path) as number) ??
+                    (borderRadiusUnit === "px" ? 3 : 0.375)
+                  }
                   onChange={(_, v) => updateValue(field.path, v as number)}
                   valueLabelDisplay="auto"
                   valueLabelFormat={(v) => `${v}${borderRadiusUnit}`}
@@ -480,7 +696,9 @@ export function ThemeEditor({
                 src={faviconUrl}
                 alt={t("appUi.themeEditor.faviconAlt")}
                 style={{ width: 24, height: 24 }}
-                onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).style.display = "none"
+                }}
               />
             )}
             <TextField
@@ -510,7 +728,9 @@ export function ThemeEditor({
       <Grid item xs={12}>
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
           <Button
-            startIcon={isResetting ? <CircularProgress size={16} /> : <RestoreRounded />}
+            startIcon={
+              isResetting ? <CircularProgress size={16} /> : <RestoreRounded />
+            }
             onClick={() => setResetDialogOpen(true)}
             color="error"
             disabled={isResetting}
@@ -519,21 +739,34 @@ export function ThemeEditor({
           </Button>
           <Button
             variant="contained"
-            startIcon={isSaving ? <CircularProgress size={16} color="inherit" /> : <SaveRounded />}
+            startIcon={
+              isSaving ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : (
+                <SaveRounded />
+              )
+            }
             onClick={handleSave}
             disabled={isSaving}
           >
-            {isSaving ? t("theme.saving", "Saving...") : t("theme.save", "Save Theme")}
+            {isSaving
+              ? t("theme.saving", "Saving...")
+              : t("theme.save", "Save Theme")}
           </Button>
         </Box>
       </Grid>
 
       {/* Reset confirmation dialog */}
       <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
-        <DialogTitle>{t("theme.resetConfirmTitle", "Reset Theme?")}</DialogTitle>
+        <DialogTitle>
+          {t("theme.resetConfirmTitle", "Reset Theme?")}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("theme.resetConfirmMessage", "This will remove all custom theme settings and revert to the default theme. This action cannot be undone.")}
+            {t(
+              "theme.resetConfirmMessage",
+              "This will remove all custom theme settings and revert to the default theme. This action cannot be undone.",
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

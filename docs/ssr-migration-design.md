@@ -3,6 +3,7 @@
 Status: Draft for review, assumptions validated 2026-10-23 (see §7) · Scope: `frontend/` (plus backend asks)
 
 **Decided so far:**
+
 - Ship the bridge (§1a). **Done:** live since 2026-10-23, covering the homepage, 14 hubs, entity and game-data detail pages.
 - Render on-demand + cache instead of prerendering all game data (§5 Phase 3).
 - **SSR runs in a Cloudflare Worker (§1b option A).** Decided 2026-10-24.
@@ -42,17 +43,17 @@ The Express API stays a JSON API in every option. What changes is **who turns th
 
 ![What crawlers see over time](diagrams/4-bridge-vs-no-bridge.png)
 
-| | No bridge | Bridge |
-|---|---|---|
-| Crawlers before Phase 4 | Empty shell for ~2 weeks of dev time (Phases 1–2), then hub pages only (Phase 3) | Real title/meta/JSON-LD + summary text on all public pages after ~3–4 days |
-| Crawlers after Phase 4 | Full HTML | Full HTML (the bridge is removed prefix by prefix as SSR covers it) |
-| Discord/Twitter link previews | Generic until Phase 3/4 | Correct per-page preview after ~2 days |
-| Extra code | None | One Function (~1 file + `_routes.json`), reusing `answerContent.ts` builders (4 page types today; listing/shop/org/user/recruiting/blueprint/mission need head builders); deleted after Phase 4 |
-| Express changes | Service token (needed for Phase 3/4 anyway) | Same service token, earlier |
-| Cost | — | Measured 0.1–0.3 ms CPU per rewrite (workerd), so Free works: 100k requests/day, 10 ms CPU, 50 subrequests. Every public page load counts, logged-in included. Set **fail open** so over-quota serves the plain shell |
-| What it doesn't give | — | Rendered page body beyond the summary; real 404s are possible but need care |
-| Risk | Visibility delayed weeks | Small: HTML is the same for humans and bots, so no cloaking question (the summary must be visible); failure falls back to the plain shell |
-| Gotchas | — | Function responses skip `_headers`/`_redirects`: set `Cache-Control`, `Link`, CORS in code. Fetch the shell via `env.ASSETS.fetch("/")` (pretty path, not `/index.html`) |
+|                               | No bridge                                                                        | Bridge                                                                                                                                                                                                                |
+| ----------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Crawlers before Phase 4       | Empty shell for ~2 weeks of dev time (Phases 1–2), then hub pages only (Phase 3) | Real title/meta/JSON-LD + summary text on all public pages after ~3–4 days                                                                                                                                            |
+| Crawlers after Phase 4        | Full HTML                                                                        | Full HTML (the bridge is removed prefix by prefix as SSR covers it)                                                                                                                                                   |
+| Discord/Twitter link previews | Generic until Phase 3/4                                                          | Correct per-page preview after ~2 days                                                                                                                                                                                |
+| Extra code                    | None                                                                             | One Function (~1 file + `_routes.json`), reusing `answerContent.ts` builders (4 page types today; listing/shop/org/user/recruiting/blueprint/mission need head builders); deleted after Phase 4                       |
+| Express changes               | Service token (needed for Phase 3/4 anyway)                                      | Same service token, earlier                                                                                                                                                                                           |
+| Cost                          | —                                                                                | Measured 0.1–0.3 ms CPU per rewrite (workerd), so Free works: 100k requests/day, 10 ms CPU, 50 subrequests. Every public page load counts, logged-in included. Set **fail open** so over-quota serves the plain shell |
+| What it doesn't give          | —                                                                                | Rendered page body beyond the summary; real 404s are possible but need care                                                                                                                                           |
+| Risk                          | Visibility delayed weeks                                                         | Small: HTML is the same for humans and bots, so no cloaking question (the summary must be visible); failure falls back to the plain shell                                                                             |
+| Gotchas                       | —                                                                                | Function responses skip `_headers`/`_redirects`: set `Cache-Control`, `Link`, CORS in code. Fetch the shell via `env.ASSETS.fetch("/")` (pretty path, not `/index.html`)                                              |
 
 ## 1b. Where SSR runs: hosting options
 
@@ -76,17 +77,17 @@ All four options keep static assets and private pages on Cloudflare. Only **publ
 
 ![Option D: sidecar](diagrams/8-opt-sidecar.png)
 
-| | A. Edge Worker | B. In Express | C. Separate Lightsail | D. Sidecar |
-|---|---|---|---|---|
-| Extra infra | Workers Paid ($5/mo) | none | +$7–15/mo service | none |
-| CPU for renders | Cloudflare's; no effect on API | **shares the API's single vCPU** with requests + background jobs | its own | **shares the single vCPU** |
-| Crawl spike impact on users | none on the API (edge cache absorbs most) | bots slow the API for everyone | isolated | bots slow the API for everyone |
-| Data access | HTTPS to API | in-process (fastest; could skip HTTP) | HTTPS to API | localhost |
-| Deploy coupling | frontend deploys alone | **frontend release = backend release**; frontend build inside backend image | frontend deploys alone | Lightsail deploys all containers together |
-| Failure blast radius | SSR down → fall back to SPA shell | API down → site and API both down | isolated | API down → both down |
-| Render limits | Free: 10 ms CPU (MUI pages need 25–50 ms warm) → Workers Paid; 1 s startup, 128 MB memory, 64 MiB bundle | none | none | none |
-| Edge caching | built in | Cloudflare cache rule needed | Cloudflare cache rule needed | Cloudflare cache rule needed |
-| Bridge reuse | bridge grows into it | bridge thrown away | bridge thrown away | bridge thrown away |
+|                             | A. Edge Worker                                                                                           | B. In Express                                                               | C. Separate Lightsail        | D. Sidecar                                |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------- | ----------------------------------------- |
+| Extra infra                 | Workers Paid ($5/mo)                                                                                     | none                                                                        | +$7–15/mo service            | none                                      |
+| CPU for renders             | Cloudflare's; no effect on API                                                                           | **shares the API's single vCPU** with requests + background jobs            | its own                      | **shares the single vCPU**                |
+| Crawl spike impact on users | none on the API (edge cache absorbs most)                                                                | bots slow the API for everyone                                              | isolated                     | bots slow the API for everyone            |
+| Data access                 | HTTPS to API                                                                                             | in-process (fastest; could skip HTTP)                                       | HTTPS to API                 | localhost                                 |
+| Deploy coupling             | frontend deploys alone                                                                                   | **frontend release = backend release**; frontend build inside backend image | frontend deploys alone       | Lightsail deploys all containers together |
+| Failure blast radius        | SSR down → fall back to SPA shell                                                                        | API down → site and API both down                                           | isolated                     | API down → both down                      |
+| Render limits               | Free: 10 ms CPU (MUI pages need 25–50 ms warm) → Workers Paid; 1 s startup, 128 MB memory, 64 MiB bundle | none                                                                        | none                         | none                                      |
+| Edge caching                | built in                                                                                                 | Cloudflare cache rule needed                                                | Cloudflare cache rule needed | Cloudflare cache rule needed              |
+| Bridge reuse                | bridge grows into it                                                                                     | bridge thrown away                                                          | bridge thrown away           | bridge thrown away                        |
 
 **Decision (2026-10-24): A, the Cloudflare Worker.** C stays the fallback if Worker CPU/startup limits bite in Phase 4.
 
@@ -103,15 +104,17 @@ SSR only produces the first page of a visit; every later click is client-side. P
 - **No server-side auth:** auth cookies stay host-only on the API domain; the renderer never sees or forwards user credentials.
 
 Rejected alternatives:
-- *CSR for logged-in users (hint cookie):* two first-load paths to maintain, and slower first paint for the users who use the site most.
-- *Personalized SSR:* would need the auth cookie on `.sc-market.space` and credential forwarding through the edge; nothing is cacheable and it adds security surface.
-- *User-agent split (bots get SSR):* Google's "dynamic rendering" workaround; not recommended.
+
+- _CSR for logged-in users (hint cookie):_ two first-load paths to maintain, and slower first paint for the users who use the site most.
+- _Personalized SSR:_ would need the auth cookie on `.sc-market.space` and credential forwarding through the edge; nothing is cacheable and it adds security surface.
+- _User-agent split (bots get SSR):_ Google's "dynamic rendering" workaround; not recommended.
 
 ![Public route request flow](diagrams/9-csr-ssr-split.png)
 
 ## 2. Goals / non-goals
 
 **Goals**
+
 - Real HTML (content, `<title>`, meta/OG, JSON-LD, canonical) for public pages: `/market/:id`, `/market/aggregate/:id`, `/shops/:slug[/:tab]`, `/contractor/:id[/:tab]`, `/user/:username`, `/recruiting/post/:id`, `/wiki/**`, `/mining/**`, `/blueprints/**`, `/missions/**`, `/resources/**`, plus list/hub pages.
 - Correct HTTP status for crawlers (404 for unknown listing, not 200 shell).
 - Hreflang-ready: per-language crawlable URLs (`?lng=de`, see §3.5).
@@ -119,6 +122,7 @@ Rejected alternatives:
 - Keep Cloudflare invocation cost bounded: route-scoped only, never a root `_middleware`.
 
 **Non-goals**
+
 - SSR for authenticated or private routes (dashboard, orders, messaging, admin, settings). They stay SPA.
 - Server-side auth/session.
 - Changing the service worker. `src/sw.ts` stays push-only with no precache or fetch handler (it purges caches on activate). Nothing in this plan adds a precache.
@@ -127,6 +131,7 @@ Rejected alternatives:
 ## 3. Current state (checked in code)
 
 ### 3.1 Routing and entry
+
 - `src/App.tsx` (1,300 lines): `createBrowserRouter` at L150, `RouterProvider` at L147. It has 165 `path:` entries and 154 `lazy:` routes, all wrapped in `retryDynamicImport`. No `loader`s and no v7 future flags. Nested relative children sit under `/org/:contractor_id` and `/shop/:shopSlug`, and the only splat is `/*` (L1291), so `v7_relativeSplatPath` is low risk.
 - `src/index.tsx`: `createRoot`, `UnheadProvider` (client `createHead` with the titleTemplate), Bugsnag, the `vite:preloadError` handler, and `initPWA()` delayed by 2s.
 - `index.html` holds the meta tags, font preloads, an inline stale-chunk guard `<script>` and inline `<style>`. In framework mode all of this moves into `root.tsx` `Layout`.
@@ -134,26 +139,29 @@ Rejected alternatives:
 - `devDependencies` still contains `@types/react-router-dom@^5.3.3` (stale v5 types). Remove it in Phase 1.
 
 ### 3.2 Data layer (RTK Query)
+
 - `src/store/store.ts` creates a **module-level singleton store** (L11) and, at import time, seeds `profileGetUserProfile` from localStorage (L31-41, `features/profile/profileCache.ts`).
 - 3 API slices: `serviceApi`, `generatedApi`, `generatedApiV2`. All use `fetchBaseQuery({ credentials: "include" })` plus a 401→`refreshAuth()` retry. Codegen output in `src/store/api/**` is about 26k lines.
 - 407 non-generated files call `use*Query` hooks. There are no route loaders anywhere.
 - 19 files import the singleton from `store/store`, 14 of them as `{ store }` for direct `dispatch`. Examples: `App.tsx`, `HookProvider.tsx`, `useFeatureFlag.ts`, `profileApi.ts`, `optimisticUpdates.ts`, `reducerInjection.ts`. On the server these must use a per-request store.
 
 ### 3.3 Browser globals (module-level vs render-time matters)
+
 Counts exclude tests: `window.` appears 148 times in 72 files (53 are `window.location`), localStorage/sessionStorage in 23 files, `document.` in 25, `navigator.` in 26. Most of it is inside effects or handlers and is harmless. What actually breaks SSR:
 
-| Kind | Where | Effect on server |
-|---|---|---|
-| **Module-level** | `hooks/contractor/CustomDomain.ts:5` `const hostname = window.location.hostname` (imported by `HookProvider`, `Page.tsx`, `LandingPage`, sidebar, `WhiteLabelAuthGate`, …) | **Crashes at import.** This breaks even the Phase 2 SPA-mode build, because RR renders the root at build time. |
-| Module-level (guarded) | `store/store.ts:31` `loadProfileCache()` (try/catch), `util/i18n.ts:164` (`typeof window` guard), `index.tsx:39` | Safe, but the profile seed causes a hydration mismatch (§3.4) |
-| **Render-time, unguarded** | `pages/wiki/WikiItemBrowser.tsx:164-165`, `pages/blueprints/BlueprintBrowser.tsx:110` (`useState(() => localStorage…)`), `LoggedInRoute.tsx:36` (`window.location.href =` during render) | ReferenceError during SSR of game-data pages. `BlueprintDetailGate` renders `BlueprintBrowser` on "desktop", which is what the server picks. |
-| Render-time, try/catch | `useFeatureFlag.ts:47-53`, `useViewMode.tsx:10-12`, `useDashboardConfig.ts:28-30`, `themeCache.ts:24-30`, `MobileBottomNav.tsx:205` | No crash. Server uses defaults, and the client gets a hydration mismatch (e.g. `nav_v2` in `Root.tsx:26`) |
-| Media queries | `useMediaQuery` in 129 files, `noSsr` used nowhere. `HookProvider.tsx:53` resolves "system" theme via `prefers-color-scheme` | MUI default (`noSsr:false`) is hydration-safe but renders the `false` branch first. That means desktop layout and dark theme for "system" users, which causes a layout or theme flip. `BlueprintDetailGate` swaps page vs modal on this. |
-| Socket | `MessagesBody.tsx:30`, `MessagesBodyMobile.tsx:1031` `io(...)` at module level | `autoConnect:false`, so safe |
+| Kind                       | Where                                                                                                                                                                                    | Effect on server                                                                                                                                                                                                                         |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Module-level**           | `hooks/contractor/CustomDomain.ts:5` `const hostname = window.location.hostname` (imported by `HookProvider`, `Page.tsx`, `LandingPage`, sidebar, `WhiteLabelAuthGate`, …)               | **Crashes at import.** This breaks even the Phase 2 SPA-mode build, because RR renders the root at build time.                                                                                                                           |
+| Module-level (guarded)     | `store/store.ts:31` `loadProfileCache()` (try/catch), `util/i18n.ts:164` (`typeof window` guard), `index.tsx:39`                                                                         | Safe, but the profile seed causes a hydration mismatch (§3.4)                                                                                                                                                                            |
+| **Render-time, unguarded** | `pages/wiki/WikiItemBrowser.tsx:164-165`, `pages/blueprints/BlueprintBrowser.tsx:110` (`useState(() => localStorage…)`), `LoggedInRoute.tsx:36` (`window.location.href =` during render) | ReferenceError during SSR of game-data pages. `BlueprintDetailGate` renders `BlueprintBrowser` on "desktop", which is what the server picks.                                                                                             |
+| Render-time, try/catch     | `useFeatureFlag.ts:47-53`, `useViewMode.tsx:10-12`, `useDashboardConfig.ts:28-30`, `themeCache.ts:24-30`, `MobileBottomNav.tsx:205`                                                      | No crash. Server uses defaults, and the client gets a hydration mismatch (e.g. `nav_v2` in `Root.tsx:26`)                                                                                                                                |
+| Media queries              | `useMediaQuery` in 129 files, `noSsr` used nowhere. `HookProvider.tsx:53` resolves "system" theme via `prefers-color-scheme`                                                             | MUI default (`noSsr:false`) is hydration-safe but renders the `false` branch first. That means desktop layout and dark theme for "system" users, which causes a layout or theme flip. `BlueprintDetailGate` swaps page vs modal on this. |
+| Socket                     | `MessagesBody.tsx:30`, `MessagesBodyMobile.tsx:1031` `io(...)` at module level                                                                                                           | `autoConnect:false`, so safe                                                                                                                                                                                                             |
 
 Rough total: about 10 files need real changes for SSR safety, plus a lint rule (`no-restricted-globals` outside effects) to stop regressions. That's far fewer than the 72/23 raw counts suggest.
 
 ### 3.4 Auth, theme, flags, i18n on the server
+
 - **Auth:** the session cookie is not visible to the frontend origin (see §1). SSR renders logged-out. On the client, the store seeds the cached profile before hydration (`store.ts:31`), so the first client render is logged-in and **mismatches** the server HTML. Fix: seed the cached profile after hydration (in an effect, or `onAllReady`), not at module import.
 - **Theme:** the `theme` cookie (`react-cookie`, `HookProvider.tsx:52`) is a frontend-domain cookie, so the Worker can read it. Only `"system"` users need a client-side resolve.
 - **Feature flags:** localStorage-first (`useFeatureFlag.ts`). The server should render anonymous defaults, and the client should apply the stored overrides after hydration.
@@ -161,6 +169,7 @@ Rough total: about 10 files need real changes for SSR safety, plus a lint rule (
 - **White-label domains:** `CURRENT_CUSTOM_ORG` comes from `window.location.hostname`. On the server it comes from the request `Host`.
 
 ### 3.5 Hosting, crawl surface, API limits
+
 - Cloudflare Pages, pure static. There's no `functions/` and no `wrangler.*`. `public/_redirects` sends `/* → /index.html 200` (memory notes say CF's implicit SPA fallback beats the `/assets/*` 404 rule). `public/_headers` sets `no-cache` only on `/index.html`, immutable on `/assets/*`, and `no-store` on `/sw.js`.
 - The last local `dist/` has 1,038 files. Client JS is about 7.0 MB raw / 1.96 MB gzip across 528 assets, a rough proxy for SSR bundle size.
 - The sitemap (`backend/src/services/sitemap/sitemap.service.ts` ~L200-240) caps game data at items 10k, ships 2k, missions 5k, blueprints 5k, resources 5k (×2 URLs: `/resources/` and `/wiki/commodities/`), manufacturers 500, ores 500. That's **up to ~33k game-data URLs**, before listings, shops, orgs and users.
@@ -168,15 +177,15 @@ Rough total: about 10 files need real changes for SSR safety, plus a lint rule (
 
 ## 4. Options compared
 
-| | A. **RR framework mode (recommended)** | B. RR data-mode + hand-rolled SSR | C. Vike (+vike-react) | D. vite-react-ssg | E. Bridge: route-scoped CF Function injects head + summary (HTMLRewriter) | F. Next.js |
-|---|---|---|---|---|---|---|
-| Fit with current code | Same router and APIs. Route objects → `routes.ts` modules | Keeps `createBrowserRouter` route objects as-is (`createStaticHandler`) | Replaces router; filesystem routing, own data hooks | Peer dep **`react-router-dom ^6`** only, pre-1.0 (0.9.2) → dead end with RR v8 | No app change | Rewrite (router, data, head) |
-| SSG + SSR + SPA fallback per route | Yes, built in (`ssr`, `prerender`, `__spa-fallback.html`) | DIY (manifest, prerender script, asset injection) | Yes | SSG only | Head + summary only | Yes |
-| Cloudflare | First-party (`@cloudflare/vite-plugin`, Workers) | DIY Worker | Adapter | Static only | Route-scoped Pages Function | OpenNext adapter |
-| Users get faster LCP too | Yes | Yes | Yes | Yes (SSG pages) | Slightly (correct head on first byte) | Yes |
-| Duplicate render logic | None | None | None | None | Small: head/summary builders shared with the SPA (`answerContent.ts`); same HTML for humans and bots | None |
-| Effort | ~4-6 wks total, phased | Similar, more bespoke code to own | 6-8 wks, high churn | Blocked | **~2-4 days** | Months |
-| Verdict | **Go** | Fallback if routes.ts conversion proves too costly | No: router swap across 315 files for no gain over A | No | **Optional bridge** for Bing/AI/social now | Rejected (previous decision stands) |
+|                                    | A. **RR framework mode (recommended)**                    | B. RR data-mode + hand-rolled SSR                                       | C. Vike (+vike-react)                               | D. vite-react-ssg                                                              | E. Bridge: route-scoped CF Function injects head + summary (HTMLRewriter)                            | F. Next.js                          |
+| ---------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Fit with current code              | Same router and APIs. Route objects → `routes.ts` modules | Keeps `createBrowserRouter` route objects as-is (`createStaticHandler`) | Replaces router; filesystem routing, own data hooks | Peer dep **`react-router-dom ^6`** only, pre-1.0 (0.9.2) → dead end with RR v8 | No app change                                                                                        | Rewrite (router, data, head)        |
+| SSG + SSR + SPA fallback per route | Yes, built in (`ssr`, `prerender`, `__spa-fallback.html`) | DIY (manifest, prerender script, asset injection)                       | Yes                                                 | SSG only                                                                       | Head + summary only                                                                                  | Yes                                 |
+| Cloudflare                         | First-party (`@cloudflare/vite-plugin`, Workers)          | DIY Worker                                                              | Adapter                                             | Static only                                                                    | Route-scoped Pages Function                                                                          | OpenNext adapter                    |
+| Users get faster LCP too           | Yes                                                       | Yes                                                                     | Yes                                                 | Yes (SSG pages)                                                                | Slightly (correct head on first byte)                                                                | Yes                                 |
+| Duplicate render logic             | None                                                      | None                                                                    | None                                                | None                                                                           | Small: head/summary builders shared with the SPA (`answerContent.ts`); same HTML for humans and bots | None                                |
+| Effort                             | ~4-6 wks total, phased                                    | Similar, more bespoke code to own                                       | 6-8 wks, high churn                                 | Blocked                                                                        | **~2-4 days**                                                                                        | Months                              |
+| Verdict                            | **Go**                                                    | Fallback if routes.ts conversion proves too costly                      | No: router swap across 315 files for no gain over A | No                                                                             | **Optional bridge** for Bing/AI/social now                                                           | Rejected (previous decision stands) |
 
 Notes on E: HTML is served by CF Pages, not Express, so the bridge has to live at the edge: a Pages Function scoped by `_routes.json` (e.g. `/market/*`, `/shops/*`, `/wiki/*`). It runs on **every** document request to those prefixes, from humans too. Earlier drafts had Express render bot-only HTML; that was dropped. Express never serves HTML, and a bot-only template would drift from the UI. Instead the Function calls the existing JSON API and injects the head and summary into `index.html` for every visitor.
 
@@ -185,6 +194,7 @@ Notes on E: HTML is served by CF Pages, not Express, so the bridge has to live a
 Estimates are focused dev-days for one senior dev. Every phase ships to `main` independently, and CF Pages "rollback deployment" is the instant rollback for all of them.
 
 ### Phase 1: v6.30 → v7.18 library mode (≈1.5-2 days)
+
 - **Scope:**
   - Enable the v6 future flags (`v7_startTransition`, `v7_relativeSplatPath`, `v7_fetcherPersist`, `v7_normalizeFormMethod`, `v7_partialHydration`, `v7_skipActionErrorRevalidation`) and fix warnings. Then bump to `react-router@7.18`.
   - Codemod `react-router-dom` → `react-router` / `react-router/dom` in 315 files, as v8 requires.
@@ -195,6 +205,7 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - **Rollback:** revert one commit.
 
 ### Phase 2: framework mode, `ssr:false` SPA mode, RR v8 (≈5-8 days)
+
 - **Scope:**
   - Add `react-router.config.ts` (`ssr:false`).
   - Add `app/root.tsx` `Layout`, porting `index.html` head, fonts, the inline guard script, and `<Meta/><Links/><Scripts/>`. `UnheadProvider` stays.
@@ -213,6 +224,7 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - **Rollback:** CF Pages rollback. Keep the branch-free history so one revert restores `index.html` and `App.tsx`.
 
 **Phase 2 as built (branch `feat/rr-framework-mode`, React Router 7.18, not v8 yet):**
+
 - `react-router.config.ts` (`ssr:false`, `appDirectory: "src"`), `src/root.tsx`, `src/entry.client.tsx`, `src/entry.server.tsx`. `npm run build` = `react-router build` + `scripts/build/finalize.ts` (lays `build/client` out as `dist/`, inlines the entry CSS, builds `sw.js`, checks the shell) + the asset carry-over. Pages settings unchanged.
 - The `<head>` is NOT React: `src/document/document.html` (was `index.html`) is filled by `entry.server.tsx`, and React hydrates `<div id="root">` only. That keeps the bridge's HTMLRewriter edits (title/meta/JSON-LD) out of React's way; the bridge's summary carries `data-bridge-summary` and the client removes it before hydrating.
 - Adding a route: an entry in `src/routes.ts`, a module under `src/routes/{pages,elements,layouts}` (a page module is `definePage("Name")`), and for a page an entry in `src/app/pages.ts` (its `import()`). Components route modules render come from `src/app/shell.ts`.
@@ -221,6 +233,7 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - Service worker: built on its own, no workbox; build + CI fail on any precache/route/fetch handler.
 
 ### Phase 3: prerender hub pages and a bounded game-data set (≈4-6 days incl. backend ask)
+
 - **Decision: prerender hubs only.** "Prerender all game-data pages" doesn't fit:
   - The live sitemap has ~15.5k game-data URLs (items capped at 10k of 11,555), ×2 files (`.html` + `.data` for routes with a server loader), ×N per locale, against 20k files per site on Free (100k on paid) and a 20-minute Pages build timeout.
   - Every game patch invalidates all of them, and item pages show live listings/prices that go stale immediately.
@@ -240,6 +253,7 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - **Rollback:** remove paths from `prerender`, so they fall back to the SPA.
 
 **Phase 3 as built (branch `feat/rr-prerender`; per-page details in `docs/prerender.md`):**
+
 - Prerendered: `/`, the game-data hubs (`/wiki`, its 6 lists, `/mining`, `/mining/locations`, `/resources`), `/guides` with every category and guide, and `/about`. No detail pages (Phase 4). `/blueprints` and `/missions` stay on the bridge until their cards are links. Hub cards are now real links (crawlable).
 - No CF changes: still `ssr:false`, a static build plus the existing Pages Function. Pages are written as `<path>.html` and the homepage as `__home.html` (`_redirects` rewrites `/` to it); `index.html` stays the SPA shell behind `/* /index.html 200`, the only catch-all Pages serves after existing files (a catch-all to another file, e.g. `__spa-fallback.html`, is served for every path, assets included: seen on the first preview). `_routes.json` excludes the prerendered paths (62 of 100 rules); `_headers` gets no-cache per page.
 - Data: no loaders and no backend ask. The build renders each page on a fresh store with RTK Query's server-side hooks and waits for its queries (`entry.server.tsx`). Only the game-data endpoints in `PRERENDERABLE_ENDPOINTS` are shipped (JSON next to `#root`, `extractRehydrationInfo` on all 3 slices); everything live renders as loading and is fetched by the browser, so the homepage's live sections are skeletons in the HTML.
@@ -252,6 +266,7 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - Measured locally (dev build, 390 and 1440: the homepage, every hub, /guides, a category, a guide and /about; the guide also with a cold cache): CLS 0, no hydration warnings. On the preview vs production (/, /wiki, a guide; 390 and 1440; HTML uncached, assets warm): CLS 0 on both; LCP 108-216 ms vs 336-1328 ms; cold homepage at 390: LCP 252 ms vs 292 ms.
 
 ### Phase 4: runtime SSR for listings/shops/orgs/users and the game-data long tail (≈8-12 days)
+
 - **Scope:**
   - Move to Workers + `@cloudflare/vite-plugin`. Workers static assets with `run_worker_first` limited to the public prefixes, or Pages with a `_routes.json` include list. Never a catch-all.
   - Make `makeStore()` per request and refactor the 14 direct `store` importers to `useDispatch` / `useStore`.
@@ -296,36 +311,36 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 
 Five subagents checked this doc against primary sources (vendor docs, npm, the code, the live API, and a render-cost spike in `/tmp/ssr-spike`). Corrections are already applied above; this table records what changed.
 
-| Area | Assumption in the original draft | Result |
-|---|---|---|
-| Crawlers | Bingbot doesn't run JS | **Wrong.** Googlebot and Bingbot render JS; AI crawlers and link-preview bots don't |
-| React Router | v8.0.0 on 2026-06-17, latest 8.5.0; React ≥ 19.2.7, Node ≥ 22.22 | Confirmed. Vite ≥ 7 is framework-mode only; v8 is ESM-only |
-| React Router | v6 → v7 flags → v8 | **Incomplete.** v7's `v8_*` flags must be adopted first; no official codemod |
-| React Router | Prerender writes `.html` + `.data` per path | `.data` only for routes with a server loader; `__spa-fallback.html` only when `/` is prerendered |
-| React Router | SPA mode renders only the root at build time | Once `prerender` is on, **every route module** is imported into the server build |
-| Emotion | Per-request cache + extraction, streaming for humans | **Conflict.** Extraction needs a complete render (emotion#2800). Inline Emotion styles do stream, measured at the same CPU |
-| PWA | Keep VitePWA if it cooperates | No official RR framework support (vite-plugin-pwa#809 open). Separate `sw.ts` build is the default |
-| Cloudflare | Pages limit 20k files per deployment | **Per site:** 20k Free, 100k paid (needs `PAGES_WRANGLER_MAJOR_VERSION=4`) |
-| Cloudflare | Build image runs Node ≥ 22.22 | **Wrong.** Default is 22.16; pin with `.node-version`/`NODE_VERSION` |
-| Cloudflare | Worker bundle limit 10 MB compressed | **Out of date.** 64 MiB uncompressed since 2026-09-04; startup (1 s) and memory (128 MB) are the real limits |
-| Cloudflare | Workers Free 10 ms CPU; Paid $5 with 10M req + 30M CPU-ms | Confirmed |
-| Cloudflare | `@cloudflare/vite-plugin` covers SSR + prerender | **SSR only:** prerender and SPA mode aren't supported by the plugin |
-| Cloudflare | Cache API for long-tail HTML | Works, but per data center; consider Workers Cache (tiered) and its billing |
-| Cloudflare | (missed) | 20-minute build timeout; 50 subrequests per request on Free; `_headers`/`_redirects` don't apply to Function responses |
-| Backend | 120 anon req/min limits every SSR fetch | **Wrong for v2:** v2 (game data, listings, shops) has no rate limit today. Same-zone Worker calls are keyed by the visitor IP |
-| Backend | One session cookie | Four auth cookies, all host-only on the API domain |
-| Backend | Service token = existing API token | **No:** `scm_` tokens log in as a user and personalize responses; SSR needs a non-user service identity via an established mechanism (not a home-made secret) |
-| Backend | Unknown entities return 404 | v2 yes; **v1 returns 400** (contractors, users) |
-| Backend | ~33k game-data URLs | Cap is 33k; **live is 15.5k** (items truncated at 10k of 11,555). Total sitemap ≈ 57.5k, users are the largest section |
-| Backend | 2–3 queries per page | Item page 5; commodity 2; ship/ore/location/blueprint/mission render the browser on desktop |
-| Backend | (missed) | No `Cache-Control` on game-data endpoints; anonymous shell fires `/api/profile` + `/api/v2/shops/mine` → 401 → refresh (~3 wasted calls per page today) |
-| Frontend | ~10 files need SSR-safety changes | **~18**, including `useFeatureFlag.ts` (crashes every page: L53 outside the try), WhiteLabelAuthGate, WikiManufacturerList, MissionSearch, Sidebar, StandardPageLayout |
-| Frontend | One desktop/mobile gate | **Five** detail gates render "browser + modal" on desktop → no entity content in server HTML |
-| Frontend | 407 files use RTK hooks; 14 `{ store }` importers; ~100 route wrappers | 290 files; 12 runtime importers + `reducerInjection.ts`; ~45 wrappers + default exports, or ~130 generated |
-| Frontend | Sockets are safe | Safe for SSR, but two live connections can happen today (existing bug, fixed on the side-effects branch) |
-| Frontend | Theme cookie readable by the Worker | Yes, but `SameSite=Strict`: not sent on arrivals from Google/Discord, so first SSR hit uses the default theme |
-| Performance | MUI render > 10 ms; ~50 ms | Confirmed: ~10 ms on M3 Pro locally → 25–50 ms warm, 100 ms+ cold on Workers |
-| Performance | Bridge cost | 0.1–0.3 ms CPU per rewrite: fits Free |
-| Estimates | 19–28 dev-days | **26–40 dev-days** |
+| Area         | Assumption in the original draft                                       | Result                                                                                                                                                                 |
+| ------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Crawlers     | Bingbot doesn't run JS                                                 | **Wrong.** Googlebot and Bingbot render JS; AI crawlers and link-preview bots don't                                                                                    |
+| React Router | v8.0.0 on 2026-06-17, latest 8.5.0; React ≥ 19.2.7, Node ≥ 22.22       | Confirmed. Vite ≥ 7 is framework-mode only; v8 is ESM-only                                                                                                             |
+| React Router | v6 → v7 flags → v8                                                     | **Incomplete.** v7's `v8_*` flags must be adopted first; no official codemod                                                                                           |
+| React Router | Prerender writes `.html` + `.data` per path                            | `.data` only for routes with a server loader; `__spa-fallback.html` only when `/` is prerendered                                                                       |
+| React Router | SPA mode renders only the root at build time                           | Once `prerender` is on, **every route module** is imported into the server build                                                                                       |
+| Emotion      | Per-request cache + extraction, streaming for humans                   | **Conflict.** Extraction needs a complete render (emotion#2800). Inline Emotion styles do stream, measured at the same CPU                                             |
+| PWA          | Keep VitePWA if it cooperates                                          | No official RR framework support (vite-plugin-pwa#809 open). Separate `sw.ts` build is the default                                                                     |
+| Cloudflare   | Pages limit 20k files per deployment                                   | **Per site:** 20k Free, 100k paid (needs `PAGES_WRANGLER_MAJOR_VERSION=4`)                                                                                             |
+| Cloudflare   | Build image runs Node ≥ 22.22                                          | **Wrong.** Default is 22.16; pin with `.node-version`/`NODE_VERSION`                                                                                                   |
+| Cloudflare   | Worker bundle limit 10 MB compressed                                   | **Out of date.** 64 MiB uncompressed since 2026-09-04; startup (1 s) and memory (128 MB) are the real limits                                                           |
+| Cloudflare   | Workers Free 10 ms CPU; Paid $5 with 10M req + 30M CPU-ms              | Confirmed                                                                                                                                                              |
+| Cloudflare   | `@cloudflare/vite-plugin` covers SSR + prerender                       | **SSR only:** prerender and SPA mode aren't supported by the plugin                                                                                                    |
+| Cloudflare   | Cache API for long-tail HTML                                           | Works, but per data center; consider Workers Cache (tiered) and its billing                                                                                            |
+| Cloudflare   | (missed)                                                               | 20-minute build timeout; 50 subrequests per request on Free; `_headers`/`_redirects` don't apply to Function responses                                                 |
+| Backend      | 120 anon req/min limits every SSR fetch                                | **Wrong for v2:** v2 (game data, listings, shops) has no rate limit today. Same-zone Worker calls are keyed by the visitor IP                                          |
+| Backend      | One session cookie                                                     | Four auth cookies, all host-only on the API domain                                                                                                                     |
+| Backend      | Service token = existing API token                                     | **No:** `scm_` tokens log in as a user and personalize responses; SSR needs a non-user service identity via an established mechanism (not a home-made secret)          |
+| Backend      | Unknown entities return 404                                            | v2 yes; **v1 returns 400** (contractors, users)                                                                                                                        |
+| Backend      | ~33k game-data URLs                                                    | Cap is 33k; **live is 15.5k** (items truncated at 10k of 11,555). Total sitemap ≈ 57.5k, users are the largest section                                                 |
+| Backend      | 2–3 queries per page                                                   | Item page 5; commodity 2; ship/ore/location/blueprint/mission render the browser on desktop                                                                            |
+| Backend      | (missed)                                                               | No `Cache-Control` on game-data endpoints; anonymous shell fires `/api/profile` + `/api/v2/shops/mine` → 401 → refresh (~3 wasted calls per page today)                |
+| Frontend     | ~10 files need SSR-safety changes                                      | **~18**, including `useFeatureFlag.ts` (crashes every page: L53 outside the try), WhiteLabelAuthGate, WikiManufacturerList, MissionSearch, Sidebar, StandardPageLayout |
+| Frontend     | One desktop/mobile gate                                                | **Five** detail gates render "browser + modal" on desktop → no entity content in server HTML                                                                           |
+| Frontend     | 407 files use RTK hooks; 14 `{ store }` importers; ~100 route wrappers | 290 files; 12 runtime importers + `reducerInjection.ts`; ~45 wrappers + default exports, or ~130 generated                                                             |
+| Frontend     | Sockets are safe                                                       | Safe for SSR, but two live connections can happen today (existing bug, fixed on the side-effects branch)                                                               |
+| Frontend     | Theme cookie readable by the Worker                                    | Yes, but `SameSite=Strict`: not sent on arrivals from Google/Discord, so first SSR hit uses the default theme                                                          |
+| Performance  | MUI render > 10 ms; ~50 ms                                             | Confirmed: ~10 ms on M3 Pro locally → 25–50 ms warm, 100 ms+ cold on Workers                                                                                           |
+| Performance  | Bridge cost                                                            | 0.1–0.3 ms CPU per rewrite: fits Free                                                                                                                                  |
+| Estimates    | 19–28 dev-days                                                         | **26–40 dev-days**                                                                                                                                                     |
 
 **Outside sanity check (Google AI overview, not authoritative):** consistent with this plan. Two ideas kept: use `api.util.getRunningQueriesThunk()` in tests to assert the prefetch functions cover every first-render query; escape any hand-serialized state. Future option, not planned: MUI's Base UI with zero-runtime CSS would remove Emotion's runtime and the streaming limitation, but it's a full restyle.

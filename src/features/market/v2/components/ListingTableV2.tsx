@@ -18,9 +18,12 @@ import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { SHOP_PATHS } from "../../../../routes/paths"
 
-
 import { useFormatters } from "../../../../util/format"
-export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }) {
+export function ListingTableV2({
+  listings,
+}: {
+  listings: ListingSearchResult[]
+}) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   return (
@@ -48,26 +51,58 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 />
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={formatMarketUrl(l)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
+                <MuiLink
+                  component={RouterLink}
+                  to={formatMarketUrl(l)}
+                  underline="hover"
+                  color="text.primary"
+                  fontWeight="bold"
+                  variant="body2"
+                >
                   {l.title}
                 </MuiLink>
                 {l.visibility === "private" && (
-                  <Chip label={t("market.internalListing")} color="warning" size="small" sx={{ ml: 0.5, height: 16, fontSize: "0.6rem", fontWeight: "bold", textTransform: "uppercase" }} />
+                  <Chip
+                    label={t("market.internalListing")}
+                    color="warning"
+                    size="small"
+                    sx={{
+                      ml: 0.5,
+                      height: 16,
+                      fontSize: "0.6rem",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                    }}
+                  />
                 )}
               </TableCell>
               <TableCell sx={{ whiteSpace: "nowrap" }}>
-                <Typography variant="body2" color="primary" fontWeight="bold">{l.price_min === l.price_max ? `${fmt.number(l.price_min)} aUEC` : `${fmt.number(l.price_min)} – ${fmt.number(l.price_max)} aUEC`}</Typography>
+                <Typography variant="body2" color="primary" fontWeight="bold">
+                  {l.price_min === l.price_max
+                    ? `${fmt.number(l.price_min)} aUEC`
+                    : `${fmt.number(l.price_min)} – ${fmt.number(l.price_max)} aUEC`}
+                </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2">{fmt.number(l.quantity_available)}</Typography>
+                <Typography variant="body2">
+                  {fmt.number(l.quantity_available)}
+                </Typography>
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={SHOP_PATHS.profile(l.shop_slug)} underline="hover" color="text.secondary" variant="caption">
+                <MuiLink
+                  component={RouterLink}
+                  to={SHOP_PATHS.profile(l.shop_slug)}
+                  underline="hover"
+                  color="text.secondary"
+                  variant="caption"
+                >
                   {l.shop_name}
                 </MuiLink>
               </TableCell>
               <TableCell>
-                <Typography variant="caption" color="text.secondary">{l.shop_rating.toFixed(1)}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {l.shop_rating.toFixed(1)}
+                </Typography>
               </TableCell>
             </TableRow>
           ))}

@@ -35,20 +35,39 @@ export function AccountLinks() {
   const isMobile = useIsMobile()
 
   const {
-    isLoading, isUnlinking, isSettingPrimary,
-    errorMessage, setErrorMessage,
-    accountUsername, setAccountUsername,
-    citizenIDUsername, setCitizenIDUsername,
-    authProviders, hasDiscord, hasCitizenID, primaryProvider,
-    unlinkDialog, handleUnlinkClick, handleConfirmUnlink, handleCancelUnlink,
-    handleSetPrimary, getProviderName,
+    isLoading,
+    isUnlinking,
+    isSettingPrimary,
+    errorMessage,
+    setErrorMessage,
+    accountUsername,
+    setAccountUsername,
+    citizenIDUsername,
+    setCitizenIDUsername,
+    authProviders,
+    hasDiscord,
+    hasCitizenID,
+    primaryProvider,
+    unlinkDialog,
+    handleUnlinkClick,
+    handleConfirmUnlink,
+    handleCancelUnlink,
+    handleSetPrimary,
+    getProviderName,
   } = useAccountLinks()
 
   const getProviderIcon = (providerType: string) => {
     switch (providerType) {
-      case "discord": return <Discord />
-      case "citizenid": return isCitizenIdEnabled ? <CitizenIDLogo height={24} /> : <AccountCircleIcon />
-      default: return <AccountCircleIcon />
+      case "discord":
+        return <Discord />
+      case "citizenid":
+        return isCitizenIdEnabled ? (
+          <CitizenIDLogo height={24} />
+        ) : (
+          <AccountCircleIcon />
+        )
+      default:
+        return <AccountCircleIcon />
     }
   }
   return (

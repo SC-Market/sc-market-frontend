@@ -26,7 +26,9 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 import { useFormatters } from "../../util/format"
-export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response }) {
+export function OfferDetailsEditArea(props: {
+  session: GetOfferSessionV2Response
+}) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
@@ -79,7 +81,14 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {fmt.dateTime(session.offers[0].created_at, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
+                  {fmt.dateTime(session.offers[0].created_at, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </Stack>
               </TableCell>
             </TableRow>
@@ -92,7 +101,9 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   <TextField
-                    inputProps={{ "aria-label": t("OfferDetailsEditArea.title") }}
+                    inputProps={{
+                      "aria-label": t("OfferDetailsEditArea.title"),
+                    }}
                     value={body.title}
                     onChange={(event) =>
                       setBody({ ...body, title: event.target.value })
@@ -197,7 +208,9 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
                       size="small"
                       label={t("OfferDetailsEditArea.paymentType")}
                       value={body.payment_type}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>,
+                      ) => {
                         setBody({ ...body, payment_type: event.target.value })
                       }}
                       SelectProps={{

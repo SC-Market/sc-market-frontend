@@ -1,6 +1,6 @@
 /**
  * FilterSidebarLayout - Persistent sidebar on desktop, BottomSheet on mobile
- * 
+ *
  * Renders filter content in a sticky sidebar (300px) on desktop,
  * and in a BottomSheet triggered by a FiltersFAB on mobile.
  */
@@ -53,7 +53,11 @@ export function FilterSidebarLayout({
   }
 
   return (
-    <Grid container spacing={theme.layoutSpacing?.layout ?? 2} sx={{ flexWrap: "nowrap" }}>
+    <Grid
+      container
+      spacing={theme.layoutSpacing?.layout ?? 2}
+      sx={{ flexWrap: "nowrap" }}
+    >
       <Grid item sx={{ width: sidebarWidth, flexShrink: 0 }}>
         <Paper
           sx={{
@@ -71,9 +75,7 @@ export function FilterSidebarLayout({
         </Paper>
       </Grid>
       <Grid item xs sx={{ minWidth: 0 }}>
-        <Box sx={{ overflow: "hidden" }}>
-          {children}
-        </Box>
+        <Box sx={{ overflow: "hidden" }}>{children}</Box>
       </Grid>
     </Grid>
   )

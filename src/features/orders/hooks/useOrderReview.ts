@@ -4,7 +4,10 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { extractErrorMessage } from "../../../store/api-utils"
 
-export function useOrderReview(orderId: string, role: "customer" | "contractor") {
+export function useOrderReview(
+  orderId: string,
+  role: "customer" | "contractor",
+) {
   const [content, setContent] = useState("")
   const [rating, setRating] = useState(0)
   const issueAlert = useAlertHook()
@@ -20,11 +23,15 @@ export function useOrderReview(orderId: string, role: "customer" | "contractor")
     })
 
     if ("data" in res && !("error" in res)) {
-      issueAlert({ message: t("orderReviewArea.alert.success"), severity: "success" })
+      issueAlert({
+        message: t("orderReviewArea.alert.success"),
+        severity: "success",
+      })
       setContent("")
     } else {
       // RTK puts the server body under error.data ({ error: { code, message } }).
-      const error = "error" in res ? (res.error as { data?: unknown }) : undefined
+      const error =
+        "error" in res ? (res.error as { data?: unknown }) : undefined
       issueAlert({
         message: `${t("orderReviewArea.alert.error")} ${extractErrorMessage(error?.data) || ""}`,
         severity: "error",

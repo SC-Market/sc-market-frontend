@@ -69,7 +69,6 @@ function serverMessage(error: unknown): string | undefined {
   return typeof inner.message === "string" ? inner.message : undefined
 }
 
-
 function StatusChip({ status }: { status: PublicApiTokenSummary["status"] }) {
   const { t } = useTranslation()
   const color =

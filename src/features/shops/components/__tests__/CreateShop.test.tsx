@@ -33,12 +33,16 @@ vi.mock("../../../../store/api/v2/market", () => ({
 }))
 vi.mock("../../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({
-    data: { contractors: [{ spectrum_id: "TESTORG", name: "Test Org", roles: [] }] },
+    data: {
+      contractors: [{ spectrum_id: "TESTORG", name: "Test Org", roles: [] }],
+    },
   }),
 }))
 vi.mock("../../../contractor/api/contractorApi", () => ({
-  useGetContractorBySpectrumIDQuery: (spectrumId: string, opts: { skip: boolean }) =>
-    orgQuery(spectrumId, opts),
+  useGetContractorBySpectrumIDQuery: (
+    spectrumId: string,
+    opts: { skip: boolean },
+  ) => orgQuery(spectrumId, opts),
 }))
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
@@ -49,10 +53,14 @@ import { CreateShop } from "../CreateShop"
 describe("CreateShop", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    orgQuery.mockImplementation((spectrumId: string, { skip }: { skip: boolean }) =>
-      skip
-        ? { data: undefined, isFetching: false }
-        : { data: { spectrum_id: spectrumId, contractor_id: ORG_ID }, isFetching: false },
+    orgQuery.mockImplementation(
+      (spectrumId: string, { skip }: { skip: boolean }) =>
+        skip
+          ? { data: undefined, isFetching: false }
+          : {
+              data: { spectrum_id: spectrumId, contractor_id: ORG_ID },
+              isFetching: false,
+            },
     )
   })
 
@@ -65,9 +73,13 @@ describe("CreateShop", () => {
       </ThemeProvider>,
     )
 
-    fireEvent.change(screen.getByLabelText(/Shop Name/), { target: { value: "Org Shop" } })
+    fireEvent.change(screen.getByLabelText(/Shop Name/), {
+      target: { value: "Org Shop" },
+    })
     fireEvent.click(screen.getByLabelText("Organization shop"))
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "TESTORG" } })
+    fireEvent.change(screen.getByLabelText("Organization"), {
+      target: { value: "TESTORG" },
+    })
 
     fireEvent.mouseDown(screen.getByLabelText("Tags"))
     fireEvent.click(await screen.findByText("Mining"))
@@ -96,11 +108,15 @@ describe("CreateShop", () => {
         </MemoryRouter>
       </ThemeProvider>,
     )
-    fireEvent.change(screen.getByLabelText(/Shop Name/), { target: { value: "My Shop" } })
+    fireEvent.change(screen.getByLabelText(/Shop Name/), {
+      target: { value: "My Shop" },
+    })
     fireEvent.click(screen.getByRole("button", { name: /Create Shop/ }))
 
     await waitFor(() => expect(createShop).toHaveBeenCalled())
-    expect(createShop.mock.calls[0][0].createShopRequest.contractor_id).toBeUndefined()
+    expect(
+      createShop.mock.calls[0][0].createShopRequest.contractor_id,
+    ).toBeUndefined()
   })
 
   it("checks the slug for the org and offers the 409's suggestions as chips", async () => {
@@ -126,9 +142,13 @@ describe("CreateShop", () => {
         </MemoryRouter>
       </ThemeProvider>,
     )
-    fireEvent.change(screen.getByLabelText(/Shop Name/), { target: { value: "Org Shop" } })
+    fireEvent.change(screen.getByLabelText(/Shop Name/), {
+      target: { value: "Org Shop" },
+    })
     fireEvent.click(screen.getByLabelText("Organization shop"))
-    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "TESTORG" } })
+    fireEvent.change(screen.getByLabelText("Organization"), {
+      target: { value: "TESTORG" },
+    })
 
     await waitFor(() =>
       expect(availability).toHaveBeenCalledWith({
@@ -143,6 +163,8 @@ describe("CreateShop", () => {
     fireEvent.click(screen.getByRole("button", { name: /Create Shop/ }))
 
     await waitFor(() => expect(createShop).toHaveBeenCalledTimes(2))
-    expect(createShop.mock.calls[1][0].createShopRequest.slug).toBe("org-shop-testorg")
+    expect(createShop.mock.calls[1][0].createShopRequest.slug).toBe(
+      "org-shop-testorg",
+    )
   })
 })

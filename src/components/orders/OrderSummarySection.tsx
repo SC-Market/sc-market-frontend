@@ -35,7 +35,9 @@ export function OrderSummarySection({
       <Stack spacing={1} sx={{ mt: 1 }}>
         {market_listings.map(({ listing, quantity }) => {
           const subtotal = quantity * +listing.listing.price
-          const isNew = offerChanges?.addedListings.has(listing.listing.listing_id)
+          const isNew = offerChanges?.addedListings.has(
+            listing.listing.listing_id,
+          )
           const quantityChange = offerChanges?.quantityChanges.get(
             listing.listing.listing_id,
           )
@@ -52,7 +54,10 @@ export function OrderSummarySection({
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box>
                   <Link
-                    href={formatMarketUrl({ listing_id: listing.listing.listing_id, title: listing.details.title })}
+                    href={formatMarketUrl({
+                      listing_id: listing.listing.listing_id,
+                      title: listing.details.title,
+                    })}
                     sx={{ textDecoration: "none" }}
                   >
                     {listing.details.title}
@@ -98,7 +103,11 @@ export function OrderSummarySection({
           <Typography variant="subtitle2" color="text.secondary">
             {t("orderSummary.total", "Total")}
           </Typography>
-          <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            fontWeight="bold"
+          >
             {fmt.number(listingsTotal)}{" "}
             <Typography
               variant="subtitle2"

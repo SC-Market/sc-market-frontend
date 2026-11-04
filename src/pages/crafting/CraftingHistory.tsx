@@ -19,7 +19,10 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
 
-const TIER_COLORS: Record<number, "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"> = {
+const TIER_COLORS: Record<
+  number,
+  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+> = {
   1: "default",
   2: "success",
   3: "info",
@@ -55,24 +58,34 @@ export function CraftingHistory() {
                 <TableHead>
                   <TableRow>
                     <TableCell>{t("crafting.date", "Date")}</TableCell>
-                    <TableCell>{t("crafting.blueprint", "Blueprint")}</TableCell>
-                    <TableCell>{t("crafting.output_item", "Output Item")}</TableCell>
+                    <TableCell>
+                      {t("crafting.blueprint", "Blueprint")}
+                    </TableCell>
+                    <TableCell>
+                      {t("crafting.output_item", "Output Item")}
+                    </TableCell>
                     <TableCell>{t("crafting.quality", "Quality")}</TableCell>
-                    <TableCell align="right">{t("crafting.quantity", "Qty")}</TableCell>
-                    <TableCell align="center">{t("crafting.critical", "Critical")}</TableCell>
-                    <TableCell align="right">{t("crafting.cost", "Cost")}</TableCell>
+                    <TableCell align="right">
+                      {t("crafting.quantity", "Qty")}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t("crafting.critical", "Critical")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {t("crafting.cost", "Cost")}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.history.map((row) => (
                     <TableRow key={row.session_id}>
-                      <TableCell>
-                        {fmt.date(row.crafting_date)}
-                      </TableCell>
+                      <TableCell>{fmt.date(row.crafting_date)}</TableCell>
                       <TableCell>{row.blueprint_name}</TableCell>
                       <TableCell>{row.output_item_name}</TableCell>
                       <TableCell>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
                           <Chip
                             label={`T${row.output_quality_tier}`}
                             size="small"
@@ -96,7 +109,10 @@ export function CraftingHistory() {
                     <TableRow>
                       <TableCell colSpan={7} align="center">
                         <Typography color="text.secondary" sx={{ py: 2 }}>
-                          {t("crafting.no_history", "No crafting history found.")}
+                          {t(
+                            "crafting.no_history",
+                            "No crafting history found.",
+                          )}
                         </Typography>
                       </TableCell>
                     </TableRow>

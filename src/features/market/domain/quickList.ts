@@ -3,7 +3,10 @@
  * Publish). The rules behind the dialog; the listing itself is made by the
  * shared listing rules (listingDraft.ts). Pure: no React, no store.
  */
-import type { PriceOracleItem, ShopResponse } from "../../../store/api/v2/market"
+import type {
+  PriceOracleItem,
+  ShopResponse,
+} from "../../../store/api/v2/market"
 import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import {
   emptyListingDraft,
@@ -52,7 +55,9 @@ export interface QuickListForm {
   visibility: ListingDraft["visibility"]
 }
 
-export function emptyQuickListForm(item: QuickListItem | null = null): QuickListForm {
+export function emptyQuickListForm(
+  item: QuickListItem | null = null,
+): QuickListForm {
   return {
     item,
     price: 0,
@@ -84,15 +89,24 @@ export function nextQuickListForm(previous: QuickListForm): QuickListForm {
     price: 0,
     quantity: 1,
     qualityTier: undefined,
-    batches: previous.batches.map((b) => ({ ...b, quantity: 1, price: undefined })),
+    batches: previous.batches.map((b) => ({
+      ...b,
+      quantity: 1,
+      price: undefined,
+    })),
     description: "",
   }
 }
 
 /** Units in stock: the simple quantity, or the batches' total. */
-export function quickListTotal(form: Pick<QuickListForm, "stockMode" | "quantity" | "batches">): number {
+export function quickListTotal(
+  form: Pick<QuickListForm, "stockMode" | "quantity" | "batches">,
+): number {
   if (form.stockMode === "simple") return form.quantity
-  return form.batches.reduce((sum, b) => sum + (b.quantity > 0 ? b.quantity : 0), 0)
+  return form.batches.reduce(
+    (sum, b) => sum + (b.quantity > 0 ? b.quantity : 0),
+    0,
+  )
 }
 
 /** The listing draft the form describes, titled after the item. */
@@ -134,7 +148,9 @@ export interface MarketPriceHint {
   listings: number
 }
 
-export function marketPriceHint(stats: PriceOracleItem | null | undefined): MarketPriceHint | null {
+export function marketPriceHint(
+  stats: PriceOracleItem | null | undefined,
+): MarketPriceHint | null {
   if (!stats) return null
   const { current, trend_30d } = stats
   const median = current.median_ask ?? trend_30d.median_30d
@@ -147,7 +163,9 @@ export function marketPriceHint(stats: PriceOracleItem | null | undefined): Mark
  * median, else the lowest ask. Null when the item has no market yet (the
  * seller types one).
  */
-export function suggestedQuickListPrice(stats: PriceOracleItem | null | undefined): number | null {
+export function suggestedQuickListPrice(
+  stats: PriceOracleItem | null | undefined,
+): number | null {
   const hint = marketPriceHint(stats)
   if (!hint) return null
   const price = hint.median ?? hint.low
@@ -158,7 +176,9 @@ export function suggestedQuickListPrice(stats: PriceOracleItem | null | undefine
 export function quickListShops(
   myShops: ReadonlyArray<ShopResponse> | null | undefined,
 ): ShopResponse[] {
-  return (myShops ?? []).filter((shop) => shop.status !== "archived" && canEditShopListings(shop))
+  return (myShops ?? []).filter(
+    (shop) => shop.status !== "archived" && canEditShopListings(shop),
+  )
 }
 
 /**
@@ -173,11 +193,14 @@ export function resolveSellingAsShop(args: {
   lastShopId: string | null
 }): string | null {
   const { shops } = args
-  const bySlug = (slug: string | null) => (slug ? shops.find((s) => s.slug === slug) : undefined)
+  const bySlug = (slug: string | null) =>
+    slug ? shops.find((s) => s.slug === slug) : undefined
   const shop =
     bySlug(args.pageShopSlug) ??
     bySlug(args.sidebarShopSlug) ??
-    (args.lastShopId ? shops.find((s) => s.shop_id === args.lastShopId) : undefined) ??
+    (args.lastShopId
+      ? shops.find((s) => s.shop_id === args.lastShopId)
+      : undefined) ??
     shops[0]
   return shop?.shop_id ?? null
 }
@@ -195,9 +218,12 @@ export function parseLastShops(raw: string | null): Record<string, string> {
   if (!raw) return {}
   try {
     const value: unknown = JSON.parse(raw)
-    if (typeof value !== "object" || value === null || Array.isArray(value)) return {}
+    if (typeof value !== "object" || value === null || Array.isArray(value))
+      return {}
     return Object.fromEntries(
-      Object.entries(value).filter((e): e is [string, string] => typeof e[1] === "string"),
+      Object.entries(value).filter(
+        (e): e is [string, string] => typeof e[1] === "string",
+      ),
     )
   } catch {
     return {}

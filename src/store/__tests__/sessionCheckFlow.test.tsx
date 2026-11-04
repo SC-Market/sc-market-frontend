@@ -67,9 +67,7 @@ function Probe() {
   )
 }
 
-function renderApp(
-  seed?: (store: ReturnType<typeof makeStore>) => void,
-) {
+function renderApp(seed?: (store: ReturnType<typeof makeStore>) => void) {
   const store = makeStore({ networkEnv: browserNetworkEnv })
   // Same boot order as src/entry.client.tsx.
   void browserNetworkEnv.checkSession()
@@ -169,7 +167,11 @@ describe("logged-in user", () => {
     const seen: string[] = []
     const observer = new MutationObserver(() => seen.push(probe() ?? ""))
     renderApp(seedCachedProfile)
-    observer.observe(document.body, { subtree: true, characterData: true, childList: true })
+    observer.observe(document.body, {
+      subtree: true,
+      characterData: true,
+      childList: true,
+    })
     await waitFor(() => expect(probe()).toBe("authenticated:tester:-"))
     // Nothing auth-only went out before the check answered.
     expect(requests).toEqual(["GET /api/auth/session"])
@@ -271,9 +273,9 @@ describe("logged-in user", () => {
     await expect(refreshAuth()).resolves.toBe(false)
     resetRefreshBackoff()
     await expect(refreshAuth()).resolves.toBe(false)
-    expect(
-      requests.filter((r) => r === "POST /api/auth/refresh"),
-    ).toHaveLength(1)
+    expect(requests.filter((r) => r === "POST /api/auth/refresh")).toHaveLength(
+      1,
+    )
   })
 })
 

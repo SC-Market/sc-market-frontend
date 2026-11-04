@@ -19,15 +19,15 @@ into the pages under `/guides` and `/about`. A content error fails the build.
 ## Frontmatter
 
 ```yaml
-title: Buy an item               # required, task-shaped
-description: First sentence…     # required, at most 160 characters
-order: 10                        # sort order within the category
-updated: 2026-10-25              # required; shown on the page, sitemap lastmod
-author: Khuzdul                  # optional (default Khuzdul)
-keywords: [buy, cart]            # optional
+title: Buy an item # required, task-shaped
+description: First sentence… # required, at most 160 characters
+order: 10 # sort order within the category
+updated: 2026-10-25 # required; shown on the page, sitemap lastmod
+author: Khuzdul # optional (default Khuzdul)
+keywords: [buy, cart] # optional
 related: [buying/how-orders-work] # optional "Next steps" (guide ids)
-howto: true                      # optional: HowTo JSON-LD from "## Steps"
-draft: true                      # optional: only shown by the dev server
+howto: true # optional: HowTo JSON-LD from "## Steps"
+draft: true # optional: only shown by the dev server
 ```
 
 ## Style
@@ -55,11 +55,11 @@ plain words. Leave out internal refactors, and never describe a security fix
 in a way that helps an attacker. Entry text is English only.
 
 ```yaml
-title: Price alerts and a faster market  # required
-date: 2026-11-02                         # required; the file name, never in the future once published
-summary: One or two sentences…           # required, at most 160 characters (meta/OG, index card)
-tags: [market, orders]                   # optional
-status: draft                            # required: draft or published
+title: Price alerts and a faster market # required
+date: 2026-11-02 # required; the file name, never in the future once published
+summary: One or two sentences… # required, at most 160 characters (meta/OG, index card)
+tags: [market, orders] # optional
+status: draft # required: draft or published
 ```
 
 Only `status: published` entries are built. A draft is dropped before

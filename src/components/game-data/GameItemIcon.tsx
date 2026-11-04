@@ -1,9 +1,9 @@
 /**
  * GameItemIcon - Display icon for game items
- * 
+ *
  * Shows item icon with fallback to placeholder.
  * Supports various sizes and loading states.
- * 
+ *
  * Requirements: 48.1-48.10
  */
 
@@ -28,7 +28,7 @@ interface GameItemIconProps {
 
 /**
  * GameItemIcon Component
- * 
+ *
  * Features:
  * - Displays item icon with fallback (48.1)
  * - Supports multiple sizes (48.2)

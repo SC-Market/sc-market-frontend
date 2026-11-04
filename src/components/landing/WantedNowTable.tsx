@@ -277,13 +277,24 @@ export function WantedNowTable(props: {
               {t("landing.wantedNowItem")}
             </TableCell>
             <TableCell
-              sx={{ fontWeight: 500, py: 1.25, px: 2, width: "24%", ...BUYER_CELL_SX }}
+              sx={{
+                fontWeight: 500,
+                py: 1.25,
+                px: 2,
+                width: "24%",
+                ...BUYER_CELL_SX,
+              }}
             >
               {t("landing.wantedNowBuyer")}
             </TableCell>
             <TableCell
               align="right"
-              sx={{ fontWeight: 500, py: 1.25, px: 2, width: { xs: "38%", sm: "28%" } }}
+              sx={{
+                fontWeight: 500,
+                py: 1.25,
+                px: 2,
+                width: { xs: "38%", sm: "28%" },
+              }}
             >
               {t("landing.wantedNowPrice")}
             </TableCell>
@@ -302,7 +313,9 @@ export function WantedNowTable(props: {
                   i > 0 ? (
                     <FillerRow key={`free-${i}`} />
                   ) : orders === null ? (
-                    <FillerRow key="error">{t("landing.wantedNowError")}</FillerRow>
+                    <FillerRow key="error">
+                      {t("landing.wantedNowError")}
+                    </FillerRow>
                   ) : (
                     <PostBuyOrderRow key="post" />
                   ),

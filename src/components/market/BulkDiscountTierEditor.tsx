@@ -35,7 +35,11 @@ export function BulkDiscountTierEditor({
     onChange(tiers.filter((_, i) => i !== index))
   }
 
-  const updateTier = (index: number, field: keyof BulkDiscountTier, value: number) => {
+  const updateTier = (
+    index: number,
+    field: keyof BulkDiscountTier,
+    value: number,
+  ) => {
     const updated = tiers.map((tier, i) =>
       i === index ? { ...tier, [field]: value } : tier,
     )
@@ -80,10 +84,14 @@ export function BulkDiscountTierEditor({
               sx={{ width: 110 }}
             />
             <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-              {t("market.bulkDiscountSummary", "Buy {{qty}}+ get {{pct}}% off", {
-                qty: tier.min_quantity,
-                pct: tier.discount_percent,
-              })}
+              {t(
+                "market.bulkDiscountSummary",
+                "Buy {{qty}}+ get {{pct}}% off",
+                {
+                  qty: tier.min_quantity,
+                  pct: tier.discount_percent,
+                },
+              )}
             </Typography>
             <IconButton
               size="small"
@@ -97,12 +105,7 @@ export function BulkDiscountTierEditor({
           </Stack>
         ))}
       </Stack>
-      <Button
-        size="small"
-        startIcon={<Add />}
-        onClick={addTier}
-        sx={{ mt: 1 }}
-      >
+      <Button size="small" startIcon={<Add />} onClick={addTier} sx={{ mt: 1 }}>
         {t("market.addDiscountTier", "Add Tier")}
       </Button>
     </Box>

@@ -3,16 +3,37 @@
  */
 import React from "react"
 import {
-  Typography, Chip, Stack, Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer,
+  Typography,
+  Chip,
+  Stack,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  TableContainer,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
-import type { LocationDetailResponse, LocationMiningGroup } from "../../store/api/v2/market"
+import {
+  RocketLaunchRounded,
+  DirectionsCarRounded,
+  PanToolRounded,
+} from "@mui/icons-material"
+import type {
+  LocationDetailResponse,
+  LocationMiningGroup,
+} from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
 
 import { useFormatters } from "../../util/format"
 const RARITY_COLORS: Record<string, string> = {
-  common: "#9e9e9e", uncommon: "#4caf50", rare: "#2196f3", epic: "#9c27b0", legendary: "#ff9800",
+  common: "#9e9e9e",
+  uncommon: "#4caf50",
+  rare: "#2196f3",
+  epic: "#9c27b0",
+  legendary: "#ff9800",
 }
 
 function friendlyName(name: string): string {
@@ -22,9 +43,12 @@ function friendlyName(name: string): string {
 function groupIcon(groupName: string) {
   const g = (groupName || "").toLowerCase()
   const sx = { fontSize: 18, mr: 0.5, verticalAlign: "text-bottom" }
-  if (g.includes("ship")) return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
-  if (g.includes("ground") || g.includes("vehicle")) return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
-  if (g.includes("fps") || g.includes("hand")) return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+  if (g.includes("ship"))
+    return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+  if (g.includes("ground") || g.includes("vehicle"))
+    return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+  if (g.includes("fps") || g.includes("hand"))
+    return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
   return null
 }
 
@@ -37,10 +61,22 @@ export function LocationDetailContent({ location }: Props) {
   return (
     <Stack spacing={2}>
       {/* Header chips */}
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        flexWrap="wrap"
+        useFlexGap
+        alignItems="center"
+      >
         <Chip label={location.system} size="small" color="primary" />
         <Chip label={location.locationType} size="small" variant="outlined" />
-        {location.hasRefinery && <Chip label={t("miningUi.location.refinery")} size="small" color="success" />}
+        {location.hasRefinery && (
+          <Chip
+            label={t("miningUi.location.refinery")}
+            size="small"
+            color="success"
+          />
+        )}
       </Stack>
 
       {/* Mining groups */}
@@ -51,10 +87,27 @@ export function LocationDetailContent({ location }: Props) {
       {/* Amenities */}
       {(location.amenities || []).length > 0 && (
         <Section title={t("miningUi.location.amenities")}>
-          <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5} sx={{ pt: 1 }}>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            flexWrap="wrap"
+            gap={0.5}
+            sx={{ pt: 1 }}
+          >
             {location.amenities.map((a) => (
-              <Chip key={a} label={a} size="small"
-                color={a.toLowerCase().includes("refinery") ? "success" : a.toLowerCase().includes("hospital") || a.toLowerCase().includes("clinic") ? "info" : "default"} />
+              <Chip
+                key={a}
+                label={a}
+                size="small"
+                color={
+                  a.toLowerCase().includes("refinery")
+                    ? "success"
+                    : a.toLowerCase().includes("hospital") ||
+                        a.toLowerCase().includes("clinic")
+                      ? "info"
+                      : "default"
+                }
+              />
             ))}
           </Stack>
         </Section>
@@ -66,45 +119,102 @@ export function LocationDetailContent({ location }: Props) {
 function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const sorted = [...(group.ores || [])].sort((a, b) => b.relativeProbability - a.relativeProbability)
+  const sorted = [...(group.ores || [])].sort(
+    (a, b) => b.relativeProbability - a.relativeProbability,
+  )
   return (
     <Paper>
       <Box sx={{ p: 2, pb: 1, display: "flex", alignItems: "center" }}>
         {groupIcon(group.groupName)}
-        <Typography variant="subtitle2">{t("miningUi.location.groupWithWeight", { group: group.groupName, weight: group.groupProbability })}</Typography>
+        <Typography variant="subtitle2">
+          {t("miningUi.location.groupWithWeight", {
+            group: group.groupName,
+            weight: group.groupProbability,
+          })}
+        </Typography>
       </Box>
       <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>{t("miningUi.location.colOre")}</TableCell>
-              <TableCell align="center">{t("miningUi.location.colRarity")}</TableCell>
-              <TableCell align="right">{t("miningUi.location.colProbability")}</TableCell>
-              <TableCell align="right">{t("miningUi.location.colPrice")}</TableCell>
-              <TableCell align="right">{t("miningUi.location.colEstValue")}</TableCell>
+              <TableCell align="center">
+                {t("miningUi.location.colRarity")}
+              </TableCell>
+              <TableCell align="right">
+                {t("miningUi.location.colProbability")}
+              </TableCell>
+              <TableCell align="right">
+                {t("miningUi.location.colPrice")}
+              </TableCell>
+              <TableCell align="right">
+                {t("miningUi.location.colEstValue")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {sorted.map((ore) => {
-              const name = ore.displayName || (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName))
+              const name =
+                ore.displayName ||
+                (ore.resourceName
+                  ? friendlyName(ore.resourceName)
+                  : friendlyName(ore.elementName || ore.presetName))
               const rarity = ore.rarity || "common"
               return (
                 <TableRow key={ore.presetName} hover>
                   <TableCell>
-                    <Typography variant="body2" fontWeight={600}>{name}</Typography>
+                    <Typography variant="body2" fontWeight={600}>
+                      {name}
+                    </Typography>
                     {(ore.instability != null || ore.resistance != null) && (
-                      <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-                        {[ore.instability != null ? t("miningUi.location.instShort", { value: ore.instability }) : null, ore.resistance != null ? t("miningUi.location.resShort", { value: `${(ore.resistance * 100).toFixed(0)}%` }) : null].filter(Boolean).join(" · ")}
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontSize: "0.65rem" }}
+                      >
+                        {[
+                          ore.instability != null
+                            ? t("miningUi.location.instShort", {
+                                value: ore.instability,
+                              })
+                            : null,
+                          ore.resistance != null
+                            ? t("miningUi.location.resShort", {
+                                value: `${(ore.resistance * 100).toFixed(0)}%`,
+                              })
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </Typography>
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    <Chip label={rarity.charAt(0).toUpperCase() + rarity.slice(1)} size="small"
-                      sx={{ bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22", color: RARITY_COLORS[rarity] || "#9e9e9e", fontWeight: 600, height: 20, fontSize: "0.7rem" }} />
+                    <Chip
+                      label={rarity.charAt(0).toUpperCase() + rarity.slice(1)}
+                      size="small"
+                      sx={{
+                        bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22",
+                        color: RARITY_COLORS[rarity] || "#9e9e9e",
+                        fontWeight: 600,
+                        height: 20,
+                        fontSize: "0.7rem",
+                      }}
+                    />
                   </TableCell>
-                  <TableCell align="right">{ore.relativeProbability.toFixed(1)}%</TableCell>
-                  <TableCell align="right">{ore.marketPrice != null ? fmt.number(ore.marketPrice) : "—"}</TableCell>
-                  <TableCell align="right">{ore.estimatedValue != null ? fmt.number(ore.estimatedValue) : "—"}</TableCell>
+                  <TableCell align="right">
+                    {ore.relativeProbability.toFixed(1)}%
+                  </TableCell>
+                  <TableCell align="right">
+                    {ore.marketPrice != null
+                      ? fmt.number(ore.marketPrice)
+                      : "—"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {ore.estimatedValue != null
+                      ? fmt.number(ore.estimatedValue)
+                      : "—"}
+                  </TableCell>
                 </TableRow>
               )
             })}

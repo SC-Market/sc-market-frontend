@@ -1,10 +1,6 @@
 import React from "react"
 
-export type ThemeChoice =
-  | "light"
-  | "dark"
-  | "system"
-  | (string & {})
+export type ThemeChoice = "light" | "dark" | "system" | (string & {})
 
 export const LightThemeContext = React.createContext<
   [ThemeChoice, React.Dispatch<React.SetStateAction<ThemeChoice>>] | null

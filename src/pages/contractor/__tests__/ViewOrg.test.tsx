@@ -49,7 +49,9 @@ vi.mock("../../../features/contractor/api/contractorApi", () => ({
 
 // Mock i18next
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock the Page component

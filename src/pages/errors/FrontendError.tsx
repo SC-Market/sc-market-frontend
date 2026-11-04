@@ -202,8 +202,8 @@ export function FrontendErrorBody() {
                 onClick={handleGoBack}
               >
                 {routeError
-                ? t("frontendError.retry", "Try again")
-                : t("frontendError.goBackToPage", "Go Back to Page")}
+                  ? t("frontendError.retry", "Try again")
+                  : t("frontendError.goBackToPage", "Go Back to Page")}
               </Button>
             </Grid>
           )}

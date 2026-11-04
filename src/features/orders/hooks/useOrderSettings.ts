@@ -13,7 +13,10 @@ import {
   useDeleteContractorOrderSettingMutation,
 } from "../api/orderSettingsApi"
 
-export function useOrderSettings(entityType: "user" | "contractor", entityId?: string) {
+export function useOrderSettings(
+  entityType: "user" | "contractor",
+  entityId?: string,
+) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [offerMessage, setOfferMessage] = useState("")
@@ -485,12 +488,12 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
           : settingType === "require_availability"
             ? requireAvailabilitySettingId
             : settingType === "min_order_size"
-                  ? minOrderSizeSettingId
-                  : settingType === "max_order_size"
-                    ? maxOrderSizeSettingId
-                    : settingType === "min_order_value"
-                      ? minOrderValueSettingId
-                      : maxOrderValueSettingId
+              ? minOrderSizeSettingId
+              : settingType === "max_order_size"
+                ? maxOrderSizeSettingId
+                : settingType === "min_order_value"
+                  ? minOrderValueSettingId
+                  : maxOrderValueSettingId
 
     if (!settingId) {
       setSaving(false)
@@ -575,20 +578,48 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       })
   }
 
-
   return {
-    isLoading, settings, userError, contractorError,
-    offerMessage, setOfferMessage, offerEnabled, setOfferEnabled,
-    orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
-    requireAvailabilityEnabled, setRequireAvailabilityEnabled,
-    minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
-    maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
-    minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
-    maxOrderValue, setMaxOrderValue, maxOrderValueEnabled, setMaxOrderValueEnabled,
-    saving, error, success,
-    handleSave, handleDelete,
-    offerSettingId, orderSettingId,
+    isLoading,
+    settings,
+    userError,
+    contractorError,
+    offerMessage,
+    setOfferMessage,
+    offerEnabled,
+    setOfferEnabled,
+    orderMessage,
+    setOrderMessage,
+    orderEnabled,
+    setOrderEnabled,
+    requireAvailabilityEnabled,
+    setRequireAvailabilityEnabled,
+    minOrderSize,
+    setMinOrderSize,
+    minOrderSizeEnabled,
+    setMinOrderSizeEnabled,
+    maxOrderSize,
+    setMaxOrderSize,
+    maxOrderSizeEnabled,
+    setMaxOrderSizeEnabled,
+    minOrderValue,
+    setMinOrderValue,
+    minOrderValueEnabled,
+    setMinOrderValueEnabled,
+    maxOrderValue,
+    setMaxOrderValue,
+    maxOrderValueEnabled,
+    setMaxOrderValueEnabled,
+    saving,
+    error,
+    success,
+    handleSave,
+    handleDelete,
+    offerSettingId,
+    orderSettingId,
     requireAvailabilitySettingId,
-    minOrderSizeSettingId, maxOrderSizeSettingId, minOrderValueSettingId, maxOrderValueSettingId,
+    minOrderSizeSettingId,
+    maxOrderSizeSettingId,
+    minOrderValueSettingId,
+    maxOrderValueSettingId,
   }
 }

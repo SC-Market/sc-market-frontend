@@ -51,7 +51,12 @@ const TEXT_ATTRS = new Set([
   "emptyText",
   "emptyMessage",
 ])
-const ALERT_CALLS = new Set(["issueAlert", "enqueueSnackbar", "toast", "notify"])
+const ALERT_CALLS = new Set([
+  "issueAlert",
+  "enqueueSnackbar",
+  "toast",
+  "notify",
+])
 
 // Strings that are the same in every language: product and game proper nouns,
 // units and symbols. Compared against the whole trimmed string.
@@ -97,15 +102,26 @@ const ALLOW = new Set(
 )
 // Proper nouns stripped from a string before deciding it needs translating,
 // so "aUEC (" or "{price} aUEC" do not count but "aUEC available" does.
-const NOUN_RE = /\b(aUEC|UEC|SCU|RSI|SC Market|SC Orgs|Star Citizen|Citizen iD|Discord)\b/g
-const ENTITY_RE = /&(nbsp|amp|lt|gt|quot|apos|middot|mdash|ndash|hellip|times|#\d+|#x[0-9a-f]+);/gi
+const NOUN_RE =
+  /\b(aUEC|UEC|SCU|RSI|SC Market|SC Orgs|Star Citizen|Citizen iD|Discord)\b/g
+const ENTITY_RE =
+  /&(nbsp|amp|lt|gt|quot|apos|middot|mdash|ndash|hellip|times|#\d+|#x[0-9a-f]+);/gi
 
 // [area, path regex]; first match wins. The order of AREAS is the traffic
 // ranking used for the report.
 const AREAS = [
-  ["home", /(^|\/)(landing|home|LandingPage|HomePage|Footer|footer|navbar|sidebar|layout|app\/AppLayout)/i],
-  ["auth", /(login|signup|sign-up|onboard|authenticate|AuthenticateRSI|Register|auth\/)/i],
-  ["market", /(market|listing|aggregate|cart|buy-?order|item|blueprint|crafting)/i],
+  [
+    "home",
+    /(^|\/)(landing|home|LandingPage|HomePage|Footer|footer|navbar|sidebar|layout|app\/AppLayout)/i,
+  ],
+  [
+    "auth",
+    /(login|signup|sign-up|onboard|authenticate|AuthenticateRSI|Register|auth\/)/i,
+  ],
+  [
+    "market",
+    /(market|listing|aggregate|cart|buy-?order|item|blueprint|crafting)/i,
+  ],
   ["shop", /(shop|storefront|seller)/i],
   ["orgs", /(contractor|org|recruit|member)/i],
   ["contracts", /(contract|offer|mission|service)/i],
@@ -131,7 +147,10 @@ function walk(dir, out = []) {
       if (name === "__tests__" || name === "__mocks__" || name === "stories")
         continue
       walk(p, out)
-    } else if (/\.(tsx|ts)$/.test(name) && !/\.(test|spec|stories|d)\.tsx?$/.test(name)) {
+    } else if (
+      /\.(tsx|ts)$/.test(name) &&
+      !/\.(test|spec|stories|d)\.tsx?$/.test(name)
+    ) {
       out.push(p)
     }
   }
@@ -162,7 +181,9 @@ const IGNORE_FILE = join(ROOT, "scripts", "i18n-hardcoded-ignore.json")
 export const IGNORES = JSON.parse(readFileSync(IGNORE_FILE, "utf8"))
 for (const e of IGNORES) {
   if (!e.file || !e.text || !(e.reason ?? "").trim())
-    throw new Error(`${IGNORE_FILE}: every entry needs file, text and reason: ${JSON.stringify(e)}`)
+    throw new Error(
+      `${IGNORE_FILE}: every entry needs file, text and reason: ${JSON.stringify(e)}`,
+    )
 }
 const usedIgnores = new Set()
 /** Is `text` (whitespace-collapsed) in `file` (repo-relative) on the ignore list? */
@@ -199,7 +220,9 @@ function scanFile(file) {
     if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n))
       return [n.text]
     if (ts.isTemplateExpression(n))
-      return [[n.head.text, ...n.templateSpans.map((s) => s.literal.text)].join(" ")]
+      return [
+        [n.head.text, ...n.templateSpans.map((s) => s.literal.text)].join(" "),
+      ]
     if (ts.isJsxExpression(n) || ts.isParenthesizedExpression(n))
       return literals(n.expression)
     if (ts.isConditionalExpression(n))
@@ -247,7 +270,8 @@ function scanFile(file) {
     // children of <Trans components={{ x: <b>placeholder</b> }} /> are
     // replaced by the translation
     for (let p = node.parent; p; p = p.parent) {
-      if (ts.isJsxAttribute(p) && p.name.getText(sf) === "components") return true
+      if (ts.isJsxAttribute(p) && p.name.getText(sf) === "components")
+        return true
     }
     const el = node.parent
     if (!el || !ts.isJsxElement(el)) return false
@@ -300,11 +324,22 @@ function scanFile(file) {
 
 // Files reachable from the route table and app shell through relative
 // imports. Unreachable files are dead code and are reported separately.
-const ENTRIES = ["src/root.tsx", "src/entry.client.tsx", "src/routes.ts", "src/app/pages.ts"]
+const ENTRIES = [
+  "src/root.tsx",
+  "src/entry.client.tsx",
+  "src/routes.ts",
+  "src/app/pages.ts",
+]
 const IMPORT_RE = /(?:from\s+|import\s*\(\s*|import\s+)["'](\.[^"']+)["']/g
 function resolveImport(fromFile, spec) {
   const base = join(dirname(fromFile), spec)
-  for (const c of [base, `${base}.tsx`, `${base}.ts`, join(base, "index.tsx"), join(base, "index.ts")]) {
+  for (const c of [
+    base,
+    `${base}.tsx`,
+    `${base}.ts`,
+    join(base, "index.tsx"),
+    join(base, "index.ts"),
+  ]) {
     try {
       if (statSync(c).isFile()) return c
     } catch {
@@ -386,7 +421,9 @@ if (isMain) {
   if (args.includes("--json")) {
     console.log(JSON.stringify(results, null, 2))
   } else {
-    const byArea = new Map(AREAS.map(([a]) => [a, { files: 0, hits: 0, kinds: {} }]))
+    const byArea = new Map(
+      AREAS.map(([a]) => [a, { files: 0, hits: 0, kinds: {} }]),
+    )
     for (const r of results) {
       const a = byArea.get(r.area)
       a.files++
@@ -397,8 +434,12 @@ if (isMain) {
       }
     }
     const total = results.reduce((n, r) => n + r.hits.length, 0)
-    console.log(`Hard-coded user-facing strings: ${total} in ${results.length} files`)
-    console.log("area        files  strings  (jsx-text / attr / alert / document.title)")
+    console.log(
+      `Hard-coded user-facing strings: ${total} in ${results.length} files`,
+    )
+    console.log(
+      "area        files  strings  (jsx-text / attr / alert / document.title)",
+    )
     for (const [area, a] of byArea) {
       if (!a.hits) continue
       const k = a.kinds
@@ -410,14 +451,22 @@ if (isMain) {
     if (args.includes("--files") || args.includes("--list")) {
       const order = (a) => AREAS.findIndex(([n]) => n === a)
       const sorted = [...results].sort(
-        (x, y) => order(x.area) - order(y.area) || y.hits.length - x.hits.length,
+        (x, y) =>
+          order(x.area) - order(y.area) || y.hits.length - x.hits.length,
       )
       console.log("")
-      for (const r of sorted.slice(0, args.includes("--list") ? Infinity : max)) {
-        console.log(`${String(r.hits.length).padStart(4)}  [${r.area}] ${r.file}`)
+      for (const r of sorted.slice(
+        0,
+        args.includes("--list") ? Infinity : max,
+      )) {
+        console.log(
+          `${String(r.hits.length).padStart(4)}  [${r.area}] ${r.file}`,
+        )
         if (args.includes("--list")) {
           for (const h of r.hits)
-            console.log(`        ${r.file}:${h.line}  ${h.kind}  ${JSON.stringify(h.text)}`)
+            console.log(
+              `        ${r.file}:${h.line}  ${h.kind}  ${JSON.stringify(h.text)}`,
+            )
         }
       }
     }

@@ -3,7 +3,9 @@ import { shopContextFromState, withShopContext } from "../shopContextState"
 
 describe("shop context router state", () => {
   it("round-trips the shop slug", () => {
-    expect(shopContextFromState(withShopContext("test-alloc-manual"))).toBe("test-alloc-manual")
+    expect(shopContextFromState(withShopContext("test-alloc-manual"))).toBe(
+      "test-alloc-manual",
+    )
   })
 
   it("ignores state without a shop", () => {

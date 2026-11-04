@@ -1,4 +1,7 @@
-import type { ShopResponse, UpdateShopRequest } from "../../../store/api/v2/market"
+import type {
+  ShopResponse,
+  UpdateShopRequest,
+} from "../../../store/api/v2/market"
 
 /**
  * The Shop Settings form's editable copy of a shop. It is made from the shop
@@ -74,7 +77,8 @@ export function settingsDraftToUpdateRequest(
   const req: UpdateShopRequest = {}
   if (draft.name !== base.name) req.name = draft.name
   if (draft.slug !== base.slug) req.slug = draft.slug
-  if (draft.description !== base.description) req.description = draft.description
+  if (draft.description !== base.description)
+    req.description = draft.description
   if (!sameList(draft.tags, base.tags)) req.tags = draft.tags
   if (!sameList(draft.supportedLanguages, base.supportedLanguages)) {
     req.supported_languages = draft.supportedLanguages
@@ -111,6 +115,8 @@ export function isSettingsDraftDirty(
  * The draft to compare against after a successful save: what was saved, with
  * the uploaded images now the shop's current ones.
  */
-export function savedSettingsDraft(draft: ShopSettingsDraft): ShopSettingsDraft {
+export function savedSettingsDraft(
+  draft: ShopSettingsDraft,
+): ShopSettingsDraft {
   return { ...draft, logo: null, banner: null }
 }

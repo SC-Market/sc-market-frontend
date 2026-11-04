@@ -8,7 +8,9 @@ describe("lazyWithRetry", () => {
     const factory = vi
       .fn()
       .mockRejectedValueOnce(
-        new TypeError("Failed to fetch dynamically imported module: http://localhost/assets/Hello-x.js"),
+        new TypeError(
+          "Failed to fetch dynamically imported module: http://localhost/assets/Hello-x.js",
+        ),
       )
       .mockResolvedValue({ default: () => <p>hello</p> })
     const Hello = lazyWithRetry(factory)
@@ -20,7 +22,9 @@ describe("lazyWithRetry", () => {
     )
 
     expect(screen.getByText("loading")).toBeInTheDocument()
-    expect(await screen.findByText("hello", undefined, { timeout: 3000 })).toBeInTheDocument()
+    expect(
+      await screen.findByText("hello", undefined, { timeout: 3000 }),
+    ).toBeInTheDocument()
     expect(factory).toHaveBeenCalledTimes(2)
   })
 })

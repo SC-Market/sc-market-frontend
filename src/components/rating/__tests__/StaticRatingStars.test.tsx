@@ -14,14 +14,18 @@ describe("StaticRatingStars", () => {
   })
 
   it("uses the singular for one star and 0 for no rating", () => {
-    const { rerender } = render(<StaticRatingStars value={1} emptyColor="#777" />)
+    const { rerender } = render(
+      <StaticRatingStars value={1} emptyColor="#777" />,
+    )
     expect(screen.getByRole("img", { name: "1 Star" })).toBeInTheDocument()
     rerender(<StaticRatingStars value={0} emptyColor="#777" />)
     expect(screen.getByRole("img", { name: "0 Stars" })).toBeInTheDocument()
   })
 
   it("fills the stars to the rating, clamped to 0-5", () => {
-    const { rerender } = render(<StaticRatingStars value={2.5} emptyColor="#777" />)
+    const { rerender } = render(
+      <StaticRatingStars value={2.5} emptyColor="#777" />,
+    )
     expect(filledWidth()).toBe("50%")
     rerender(<StaticRatingStars value={7} emptyColor="#777" />)
     expect(filledWidth()).toBe("100%")
@@ -30,7 +34,9 @@ describe("StaticRatingStars", () => {
   })
 
   it("draws five stars in each layer", () => {
-    const { container } = render(<StaticRatingStars value={3} emptyColor="#777" />)
+    const { container } = render(
+      <StaticRatingStars value={3} emptyColor="#777" />,
+    )
     const svgs = container.querySelectorAll("svg")
     expect(svgs).toHaveLength(2)
     svgs.forEach((svg) => expect(svg.querySelectorAll("path")).toHaveLength(5))

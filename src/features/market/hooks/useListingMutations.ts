@@ -11,7 +11,10 @@ import {
   type CreateListingRequest,
   type UpdateListingRequest,
 } from "../../../store/api/v2/market"
-import { listingApiError, type ListingFormError } from "../domain/listingFormErrors"
+import {
+  listingApiError,
+  type ListingFormError,
+} from "../domain/listingFormErrors"
 
 export type ListingSaveResult =
   | { ok: true; listingId: string }
@@ -29,14 +32,21 @@ export function useCreateListingSubmit(successMessage?: string) {
   const submit = useCallback(
     async (request: CreateListingRequest): Promise<ListingSaveResult> => {
       try {
-        const result = await createListing({ createListingRequest: request }).unwrap()
+        const result = await createListing({
+          createListingRequest: request,
+        }).unwrap()
         issueAlert({
-          message: successMessage ?? t("CreateListingV2.success", "Listing created successfully"),
+          message:
+            successMessage ??
+            t("CreateListingV2.success", "Listing created successfully"),
           severity: "success",
         })
         return { ok: true, listingId: result.listing_id }
       } catch (e) {
-        const error = listingApiError(e, t("CreateListingV2.error", "Failed to create listing"))
+        const error = listingApiError(
+          e,
+          t("CreateListingV2.error", "Failed to create listing"),
+        )
         issueAlert({ message: error.message, severity: "error" })
         return { ok: false, error }
       }
@@ -54,7 +64,10 @@ export function useUpdateListingSubmit() {
   const [updateListing, { isLoading }] = useUpdateListingMutation()
 
   const submit = useCallback(
-    async (id: string, request: UpdateListingRequest): Promise<ListingSaveResult> => {
+    async (
+      id: string,
+      request: UpdateListingRequest,
+    ): Promise<ListingSaveResult> => {
       try {
         await updateListing({ id, updateListingRequest: request }).unwrap()
         issueAlert({
@@ -63,7 +76,10 @@ export function useUpdateListingSubmit() {
         })
         return { ok: true, listingId: id }
       } catch (e) {
-        const error = listingApiError(e, t("EditListingV2.error", "Failed to update listing"))
+        const error = listingApiError(
+          e,
+          t("EditListingV2.error", "Failed to update listing"),
+        )
         issueAlert({ message: error.message, severity: "error" })
         return { ok: false, error }
       }
@@ -100,16 +116,33 @@ export function useListingStatusActions() {
   )
 
   const activate = useCallback(
-    (id: string) => setStatus(id, "active", t("marketV2.activated"), t("marketV2.activateFailed")),
+    (id: string) =>
+      setStatus(
+        id,
+        "active",
+        t("marketV2.activated"),
+        t("marketV2.activateFailed"),
+      ),
     [setStatus, t],
   )
   const deactivate = useCallback(
     (id: string) =>
-      setStatus(id, "inactive", t("marketV2.deactivated"), t("marketV2.deactivateFailed")),
+      setStatus(
+        id,
+        "inactive",
+        t("marketV2.deactivated"),
+        t("marketV2.deactivateFailed"),
+      ),
     [setStatus, t],
   )
   const archive = useCallback(
-    (id: string) => setStatus(id, "cancelled", t("marketV2.archived"), t("marketV2.archiveFailed")),
+    (id: string) =>
+      setStatus(
+        id,
+        "cancelled",
+        t("marketV2.archived"),
+        t("marketV2.archiveFailed"),
+      ),
     [setStatus, t],
   )
 
@@ -129,10 +162,15 @@ export function useQuickEditListing() {
     async (id: string, request: UpdateListingRequest): Promise<boolean> => {
       try {
         await updateListing({ id, updateListingRequest: request }).unwrap()
-        issueAlert({ message: t("quickEdit.saved", "Changes saved"), severity: "success" })
+        issueAlert({
+          message: t("quickEdit.saved", "Changes saved"),
+          severity: "success",
+        })
         return true
       } catch (error) {
-        const err = error as { data?: { error?: { message?: string }; message?: string } }
+        const err = error as {
+          data?: { error?: { message?: string }; message?: string }
+        }
         issueAlert({
           message:
             err?.data?.error?.message ||

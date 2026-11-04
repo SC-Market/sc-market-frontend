@@ -24,14 +24,24 @@ export interface QueryIndexing {
 export function queryIndexing(params: URLSearchParams): QueryIndexing {
   const search = params.toString()
   if (!hasPageQuery(search)) return { hasQuery: false, pageNumber: null }
-  const meaningful = [...params.keys()].filter((key) => hasPageQuery(`${encodeURIComponent(key)}=`))
-  if (meaningful.length !== 1 || meaningful[0] !== "page" || params.getAll("page").length !== 1) {
+  const meaningful = [...params.keys()].filter((key) =>
+    hasPageQuery(`${encodeURIComponent(key)}=`),
+  )
+  if (
+    meaningful.length !== 1 ||
+    meaningful[0] !== "page" ||
+    params.getAll("page").length !== 1
+  ) {
     return { hasQuery: true, pageNumber: null }
   }
   const raw = params.get("page") ?? ""
-  if (!/^[1-9][0-9]{0,3}$/.test(raw)) return { hasQuery: true, pageNumber: null }
+  if (!/^[1-9][0-9]{0,3}$/.test(raw))
+    return { hasQuery: true, pageNumber: null }
   const n = Number(raw)
-  return { hasQuery: true, pageNumber: n >= 2 && n <= MAX_INDEXED_PAGE ? n : null }
+  return {
+    hasQuery: true,
+    pageNumber: n >= 2 && n <= MAX_INDEXED_PAGE ? n : null,
+  }
 }
 
 /** Path plus `?page=N` (page 1 is the bare path). */
@@ -53,9 +63,14 @@ export const PAGINATED_PATHS: readonly string[] = [
 ]
 
 /** Paginated hubs with a path parameter: the mission hubs (/missions/givers/<slug>, …). */
-export const PAGINATED_PATTERNS: readonly RegExp[] = [/^\/missions\/(?:givers|factions|types|systems)\/[^/]+$/]
+export const PAGINATED_PATTERNS: readonly RegExp[] = [
+  /^\/missions\/(?:givers|factions|types|systems)\/[^/]+$/,
+]
 
 export function isPaginatedPath(pathname: string): boolean {
   const path = pathname.replace(/\/+$/, "") || "/"
-  return PAGINATED_PATHS.includes(path) || PAGINATED_PATTERNS.some((pattern) => pattern.test(path))
+  return (
+    PAGINATED_PATHS.includes(path) ||
+    PAGINATED_PATTERNS.some((pattern) => pattern.test(path))
+  )
 }

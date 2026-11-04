@@ -642,7 +642,9 @@ export function ServiceView(props: {
                         ? SHOP_PATHS.profile(service.shop.slug)
                         : service.user?.username
                           ? USER_PATHS.profile(service.user.username)
-                          : ORG_PATHS.profile(service.contractor?.spectrum_id ?? "")
+                          : ORG_PATHS.profile(
+                              service.contractor?.spectrum_id ?? "",
+                            )
                     }
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
@@ -684,7 +686,9 @@ export function ServiceView(props: {
                 <>
                   {amRelated ? (
                     <Link to={ORDER_PATHS.serviceEdit(service.service_id)}>
-                      <IconButton aria-label={t("serviceView.edit", "Edit service")}>
+                      <IconButton
+                        aria-label={t("serviceView.edit", "Edit service")}
+                      >
                         <CreateRounded
                           sx={{ color: theme.palette.background.light }}
                         />

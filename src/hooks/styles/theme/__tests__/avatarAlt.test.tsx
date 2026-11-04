@@ -20,7 +20,7 @@ const themes: [string, Theme][] = [
 ]
 
 describe.each(themes)("%s theme avatar alt", (_name, theme) => {
-  it("an avatar image without an alt is decorative (alt=\"\")", () => {
+  it('an avatar image without an alt is decorative (alt="")', () => {
     const { container } = render(
       <ThemeProvider theme={theme}>
         <Avatar src="https://example.com/a.png" />

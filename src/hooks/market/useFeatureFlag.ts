@@ -37,7 +37,10 @@ export interface UseFeatureFlagReturn {
   setFlag: (flagName: string, enabled: boolean) => Promise<void>
 }
 
-const DEFAULT_FLAGS: FeatureFlags = { market_v2_redesign: false, customizable_dashboard: false }
+const DEFAULT_FLAGS: FeatureFlags = {
+  market_v2_redesign: false,
+  customizable_dashboard: false,
+}
 const STORAGE_KEY = "feature_flags"
 /** Written by the retired market_v2 flag; removed on sight, never read. */
 const LEGACY_MARKET_VERSION_KEY = "market_version"
@@ -126,22 +129,31 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(serverFlags))
           // Update state only if changed (avoids re-renders)
           setFlags((prev) => {
-            const changed = Object.keys(serverFlags).some((k) => prev[k] !== serverFlags[k])
+            const changed = Object.keys(serverFlags).some(
+              (k) => prev[k] !== serverFlags[k],
+            )
             return changed ? serverFlags : prev
           })
         }
 
-        if (data?.has_override !== undefined) setHasOverride(!!data.has_override)
+        if (data?.has_override !== undefined)
+          setHasOverride(!!data.has_override)
         if (data?.overridden_flags) setOverriddenFlags(data.overridden_flags)
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error("Failed to fetch feature flags"))
+          setError(
+            err instanceof Error
+              ? err
+              : new Error("Failed to fetch feature flags"),
+          )
         }
       }
     }
 
     void sync()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [profile?.username, dispatch])
 
   const setFlag = useCallback(

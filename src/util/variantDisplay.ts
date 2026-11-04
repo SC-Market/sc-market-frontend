@@ -16,6 +16,8 @@ export function formatCraftedSource(source: string): string {
 }
 
 /** Whether this source value should be displayed as a chip */
-export function hasDisplayableSource(source: string | undefined | null): boolean {
+export function hasDisplayableSource(
+  source: string | undefined | null,
+): boolean {
   return !!source && source !== "unknown"
 }

@@ -21,7 +21,11 @@ vi.mock("../../../store/api/v2/market", async (importOriginal) => {
   return {
     ...actual,
     useGetGameEventsQuery: () => ({
-      data: { events: [{ event_code: "EVT1", event_name: "Holiday Event", mission_count: 3 }] },
+      data: {
+        events: [
+          { event_code: "EVT1", event_name: "Holiday Event", mission_count: 3 },
+        ],
+      },
       isLoading: false,
     }),
   }
@@ -169,7 +173,7 @@ describe("MissionFilters", () => {
 
       // "Legal" appears as both label and option; check for the menu item role
       const options = screen.getAllByRole("option")
-      const optionTexts = options.map(o => o.textContent)
+      const optionTexts = options.map((o) => o.textContent)
       expect(optionTexts).toContain("Legal")
       expect(optionTexts).toContain("Illegal")
     })
@@ -182,7 +186,7 @@ describe("MissionFilters", () => {
       fireEvent.mouseDown(legalSelect)
       // Click the "Legal" option (menu item)
       const options = screen.getAllByRole("option")
-      const legalOption = options.find(o => o.textContent === "Legal")
+      const legalOption = options.find((o) => o.textContent === "Legal")
       fireEvent.click(legalOption!)
 
       expect(mockHandlers.onLegalStatusChange).toHaveBeenCalledWith("LEGAL")

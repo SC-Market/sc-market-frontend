@@ -4,7 +4,11 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { ORG_PATHS, PATHS } from "../../routes/paths"
 
 type SingleArgOrgPath = {
-  [K in keyof typeof ORG_PATHS]: (typeof ORG_PATHS)[K] extends (id: string) => string ? K : never
+  [K in keyof typeof ORG_PATHS]: (typeof ORG_PATHS)[K] extends (
+    id: string,
+  ) => string
+    ? K
+    : never
 }[keyof typeof ORG_PATHS]
 
 /**

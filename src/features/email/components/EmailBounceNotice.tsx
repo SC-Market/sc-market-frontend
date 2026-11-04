@@ -21,7 +21,10 @@ interface EmailBounceNoticeProps {
  * re-verifies it (POST /email/deliverability/reverify; following the link
  * clears the bounce) or changes it.
  */
-export function EmailBounceNotice({ email, onEditEmail }: EmailBounceNoticeProps) {
+export function EmailBounceNotice({
+  email,
+  onEditEmail,
+}: EmailBounceNoticeProps) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const { data, refetch } = useGetEmailDeliverabilityQuery(undefined, {
@@ -78,11 +81,7 @@ export function EmailBounceNotice({ email, onEditEmail }: EmailBounceNoticeProps
   }
 
   return (
-    <Alert
-      severity="warning"
-      sx={{ mb: 2 }}
-      data-testid="email-bounce-notice"
-    >
+    <Alert severity="warning" sx={{ mb: 2 }} data-testid="email-bounce-notice">
       <AlertTitle>{t("settings.email.bounce.title")}</AlertTitle>
       {data.bounce_type && reasons[data.bounce_type]}
       {result?.kind === "sent" && (

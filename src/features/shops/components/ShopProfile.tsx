@@ -59,7 +59,10 @@ import { SHOP_LISTINGS_PAGE_SIZE, useShopTab } from "../hooks/useShopTab"
 import { ServiceListings } from "../../services/components/ServiceListings"
 import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
-import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
+import {
+  HeadCell,
+  PaginatedTable,
+} from "../../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
 import { useMemo, useState, MouseEventHandler } from "react"
@@ -90,13 +93,20 @@ import { useFormatters } from "../../../util/format"
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
-  const { data: shop, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetShopQuery(
-    { slug: slug! },
-    { skip: !slug },
-  )
+  const {
+    data: shop,
+    isLoading,
+    error,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useGetShopQuery({ slug: slug! }, { skip: !slug })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
   const currentTab = useShopTab()
   const { t } = useTranslation()
@@ -106,7 +116,9 @@ export function ShopProfile() {
   if (error || !shop) {
     return (
       <Container maxWidth="lg" sx={{ py: 8, textAlign: "center" }}>
-        <StorefrontRounded sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
+        <StorefrontRounded
+          sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
+        />
         <Typography variant="h5">{t("shops.profile.notFound")}</Typography>
       </Container>
     )
@@ -173,7 +185,10 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
       : USER_PATHS.profile(shop.owner.slug)
     : null
 
-  const memberSince = fmt.date(shop.created_at, { year: "numeric", month: "short" })
+  const memberSince = fmt.date(shop.created_at, {
+    year: "numeric",
+    month: "short",
+  })
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
@@ -209,7 +224,12 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color="text.primary" variant="h6" component="h1" fontWeight={700}>
+          <Typography
+            color="text.primary"
+            variant="h6"
+            component="h1"
+            fontWeight={700}
+          >
             {shop.name}
           </Typography>
           <ShareButton title={`${shop.name} - SC Market`} />
@@ -227,7 +247,10 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
                     to={ownerLink}
                     variant="body2"
                     color="primary"
-                    sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                    sx={{
+                      textDecoration: "none",
+                      "&:hover": { textDecoration: "underline" },
+                    }}
                   />
                 ),
               }}
@@ -265,11 +288,18 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
               color="default"
             />
           )}
-          <Chip size="small" label={t("shops.profile.since", { date: memberSince })} color="default" />
+          <Chip
+            size="small"
+            label={t("shops.profile.since", { date: memberSince })}
+            color="default"
+          />
         </Stack>
 
         {/* Seller activity (sales are shown above) */}
-        <SellerStatusBadge activity={shop.activity} showCompletedOrders={false} />
+        <SellerStatusBadge
+          activity={shop.activity}
+          showCompletedOrders={false}
+        />
       </Stack>
     </Stack>
   )
@@ -410,11 +440,19 @@ interface ShopPublicResponseWithMetrics extends ShopPublicResponse {
   }
 }
 
-function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicResponse }) {
+function ShopTabs(props: {
+  slug: string
+  currentTab: number
+  shop: ShopPublicResponse
+}) {
   const { t } = useTranslation()
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-      <Tabs value={props.currentTab} variant="scrollable" aria-label={t("shops.profile.tabsLabel")}>
+      <Tabs
+        value={props.currentTab}
+        variant="scrollable"
+        aria-label={t("shops.profile.tabsLabel")}
+      >
         <HapticTab
           label={t("shops.profile.tabListings")}
           component={Link}
@@ -480,7 +518,9 @@ function ShopTabContent(props: {
 
 export function ShopListingsTab(props: { slug: string }) {
   const [search, setSearch] = useState("")
-  const [sortBy, setSortBy] = useState<"created_at" | "price" | "quantity">("created_at")
+  const [sortBy, setSortBy] = useState<"created_at" | "price" | "quantity">(
+    "created_at",
+  )
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [page, setPage] = useState(1)
   const pageSize = SHOP_LISTINGS_PAGE_SIZE
@@ -492,7 +532,12 @@ export function ShopListingsTab(props: { slug: string }) {
   const isAdmin = isSiteAdmin(profile)
   const [showUnlisted, setShowUnlisted] = useState(false)
 
-  const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchListingsQuery({
+  const {
+    data,
+    isLoading,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useSearchListingsQuery({
     shopSlug: props.slug,
     page,
     pageSize,
@@ -503,7 +548,11 @@ export function ShopListingsTab(props: { slug: string }) {
   })
   // Shop listings tab: primary content.
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
   // Only the first screen of cards in the first commit; the rest right after
   // (components/grid/firstScreen.tsx). Grid spacing={2}: a 16px row gap.
@@ -523,9 +572,18 @@ export function ShopListingsTab(props: { slug: string }) {
           size="small"
           placeholder={t("shops.profile.searchListings")}
           value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            setPage(1)
+          }}
           sx={{ flex: 1 }}
-          InputProps={{ startAdornment: <InputAdornment position="start"><SearchRounded fontSize="small" /></InputAdornment> }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchRounded fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           select
@@ -539,16 +597,31 @@ export function ShopListingsTab(props: { slug: string }) {
           }}
           value={`${sortBy}-${sortOrder}`}
           onChange={(e) => {
-            const [s, o] = e.target.value.split("-") as ["created_at" | "price" | "quantity", "asc" | "desc"]
-            setSortBy(s); setSortOrder(o); setPage(1)
+            const [s, o] = e.target.value.split("-") as [
+              "created_at" | "price" | "quantity",
+              "asc" | "desc",
+            ]
+            setSortBy(s)
+            setSortOrder(o)
+            setPage(1)
           }}
           sx={{ minWidth: 140 }}
         >
-          <MenuItem value="created_at-desc">{t("shops.profile.sortNewest")}</MenuItem>
-          <MenuItem value="created_at-asc">{t("shops.profile.sortOldest")}</MenuItem>
-          <MenuItem value="price-asc">{t("shops.profile.sortPriceLow")}</MenuItem>
-          <MenuItem value="price-desc">{t("shops.profile.sortPriceHigh")}</MenuItem>
-          <MenuItem value="quantity-desc">{t("shops.profile.sortMostStock")}</MenuItem>
+          <MenuItem value="created_at-desc">
+            {t("shops.profile.sortNewest")}
+          </MenuItem>
+          <MenuItem value="created_at-asc">
+            {t("shops.profile.sortOldest")}
+          </MenuItem>
+          <MenuItem value="price-asc">
+            {t("shops.profile.sortPriceLow")}
+          </MenuItem>
+          <MenuItem value="price-desc">
+            {t("shops.profile.sortPriceHigh")}
+          </MenuItem>
+          <MenuItem value="quantity-desc">
+            {t("shops.profile.sortMostStock")}
+          </MenuItem>
         </TextField>
         {isAdmin && (
           <FormControlLabel
@@ -556,7 +629,10 @@ export function ShopListingsTab(props: { slug: string }) {
               <Switch
                 size="small"
                 checked={showUnlisted}
-                onChange={(e) => { setShowUnlisted(e.target.checked); setPage(1) }}
+                onChange={(e) => {
+                  setShowUnlisted(e.target.checked)
+                  setPage(1)
+                }}
               />
             }
             label={t("market.showUnlistedAdmin", "Show unlisted (admin)")}
@@ -569,13 +645,19 @@ export function ShopListingsTab(props: { slug: string }) {
         <ShopListingsGridSkeleton />
       ) : !data?.listings.length ? (
         <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
-          {search ? t("shops.profile.noMatches") : t("shops.profile.noListings")}
+          {search
+            ? t("shops.profile.noMatches")
+            : t("shops.profile.noListings")}
         </Typography>
       ) : (
         <>
           <Grid container spacing={2}>
             {data.listings.map((listing, index) => (
-              <Grid item {...SHOP_LISTING_GRID_BREAKPOINTS} key={listing.listing_id}>
+              <Grid
+                item
+                {...SHOP_LISTING_GRID_BREAKPOINTS}
+                key={listing.listing_id}
+              >
                 {index >= rendered ? (
                   <CardStub
                     height={LISTING_CARD_HEIGHT}
@@ -620,14 +702,22 @@ function ShopServicesTab(props: { shop: ShopPublicResponse }) {
     : {}
 
   return (
-    <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+    <Grid
+      container
+      spacing={theme.layoutSpacing.layout}
+      justifyContent="center"
+    >
       <Grid item xs={12} md={3} sx={{ display: { xs: "none", md: "block" } }}>
         <Paper sx={{ padding: 1 }}>
           <ServiceSearchArea />
         </Paper>
       </Grid>
       <Grid item xs={12} md={9}>
-        <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+        <Grid
+          container
+          spacing={theme.layoutSpacing.layout}
+          justifyContent="center"
+        >
           <ServiceListings {...ownerFilter} />
         </Grid>
       </Grid>
@@ -741,7 +831,11 @@ function ShopReviewRow(props: {
           }}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            {fmt.date(row.timestamp, { year: "numeric", month: "long", day: "numeric" })}
+            {fmt.date(row.timestamp, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </Typography>
           <Typography variant="subtitle1">{row.comment}</Typography>
         </Box>
@@ -813,7 +907,9 @@ function ShopAboutTab(props: { shop: ShopPublicResponse }) {
         {shop.description ? (
           <MarkdownRender text={shop.description} />
         ) : (
-          <Typography color="text.secondary">{t("shops.profile.noDescription")}</Typography>
+          <Typography color="text.secondary">
+            {t("shops.profile.noDescription")}
+          </Typography>
         )}
       </Grid>
       {shop.owner && (
@@ -831,15 +927,15 @@ function ShopOrderTab(props: { shop: ShopPublicResponse }) {
 
   const contractorId =
     shop.owner?.type === "contractor" ? shop.owner.slug : undefined
-  const assignedTo =
-    shop.owner?.type === "user" ? shop.owner.slug : undefined
+  const assignedTo = shop.owner?.type === "user" ? shop.owner.slug : undefined
 
   return (
-    <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
-      <CreateOrderForm
-        contractor_id={contractorId}
-        assigned_to={assignedTo}
-      />
+    <Grid
+      container
+      spacing={theme.layoutSpacing.layout}
+      justifyContent="center"
+    >
+      <CreateOrderForm contractor_id={contractorId} assigned_to={assignedTo} />
     </Grid>
   )
 }

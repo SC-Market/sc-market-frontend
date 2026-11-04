@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 /**
  * StockManagerV2 Component Tests
  *
@@ -9,47 +9,54 @@ import "./setup";
  * structure and data plumbing.
  */
 
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { configureStore } from "@reduxjs/toolkit";
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import type { MyListingItem } from "../../../../store/api/v2/market";
-import { marketV2Api } from "../../../../store/api/v2/market";
-import { serviceApi } from "../../../../store/service";
+import React from "react"
+import { render, screen, waitFor } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { MemoryRouter } from "react-router-dom"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import { configureStore } from "@reduxjs/toolkit"
+import { describe, it, expect, beforeEach, vi } from "vitest"
+import type { MyListingItem } from "../../../../store/api/v2/market"
+import { marketV2Api } from "../../../../store/api/v2/market"
+import { serviceApi } from "../../../../store/service"
 import {
   mockMutationHook,
   queryLoading,
   querySuccess,
-} from "../../../../__tests__/rtkQueryMocks";
-import type { QueryResultOf } from "../../../../__tests__/rtkQueryMocks";
-import type { ThemedDataGrid } from "../../../../components/grid/ThemedDataGrid";
-import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
-import type { Page } from "../../../../components/metadata/Page";
+} from "../../../../__tests__/rtkQueryMocks"
+import type { QueryResultOf } from "../../../../__tests__/rtkQueryMocks"
+import type { ThemedDataGrid } from "../../../../components/grid/ThemedDataGrid"
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
+import type { Page } from "../../../../components/metadata/Page"
 
 /** The generated market API module, used to derive endpoint result types. */
-type MarketV2Module = typeof import("../../../../store/api/v2/market");
-type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
-type ThemedDataGridProps = React.ComponentProps<typeof ThemedDataGrid>;
-type PageProps = React.ComponentProps<typeof Page>;
+type MarketV2Module = typeof import("../../../../store/api/v2/market")
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
+type ThemedDataGridProps = React.ComponentProps<typeof ThemedDataGrid>
+type PageProps = React.ComponentProps<typeof Page>
 
 const testTheme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-});
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
+})
 
 // Control the listings query result at module level. Typed against the
 // generated endpoint so the stubbed `data` stays contract-checked.
 let myListingsReturn: QueryResultOf<MarketV2Endpoints["getMyListings"]> =
-  queryLoading<MarketV2Endpoints["getMyListings"]>();
+  queryLoading<MarketV2Endpoints["getMyListings"]>()
 
 vi.mock("../../../../store/api/v2/market", async () => {
   const actual = await vi.importActual<MarketV2Module>(
     "../../../../store/api/v2/market",
-  );
+  )
   return {
     ...actual,
     useGetMyListingsQuery: () => myListingsReturn,
@@ -63,8 +70,8 @@ vi.mock("../../../../store/api/v2/market", async () => {
       mockMutationHook<MarketV2Endpoints["createListing"]>(),
     useUpdateStockLotMutation: () =>
       mockMutationHook<MarketV2Endpoints["updateStockLot"]>(),
-  };
-});
+  }
+})
 
 // Mock the lazy data grid so the grid does not suspend forever in tests.
 vi.mock("../../../../components/grid/ThemedDataGrid", () => ({
@@ -77,14 +84,14 @@ vi.mock("../../../../components/grid/ThemedDataGrid", () => ({
       ))}
     </div>
   ),
-}));
+}))
 
 // Mock the heavy sidebar search area.
 vi.mock("../ListingSearchV2", () => ({
   MarketSearchAreaV2: () => <div data-testid="market-search-area" />,
-}));
+}))
 
-import { StockManagerV2 } from "../StockManagerV2";
+import { StockManagerV2 } from "../StockManagerV2"
 
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children, isLoading }: StandardPageLayoutProps) => (
@@ -93,16 +100,16 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/metadata/Page", () => ({
   Page: ({ children }: PageProps) => <>{children}</>,
   shouldShowErrorPage: () => false,
-}));
+}))
 
 // Whether the viewer may manage the shop (an org member without
 // manage_market may not).
-const shopAccess = vi.hoisted(() => ({ canManage: true }));
+const shopAccess = vi.hoisted(() => ({ canManage: true }))
 const routeShop = () => ({
   shop: {
     shop_id: "shop-1",
@@ -115,18 +122,20 @@ const routeShop = () => ({
       manage_orders: false,
     },
   },
-});
+})
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
   useShopRouteContext: () => routeShop(),
   useOptionalShopRouteContext: () => routeShop(),
-}));
+}))
 
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
-}));
+}))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const createMockStore = () =>
@@ -136,8 +145,11 @@ const createMockStore = () =>
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
-  });
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
+  })
 
 const mockListings: MyListingItem[] = [
   {
@@ -166,10 +178,10 @@ const mockListings: MyListingItem[] = [
     quality_tier_min: 2,
     quality_tier_max: 2,
   },
-];
+]
 
 const renderPage = () => {
-  const store = createMockStore();
+  const store = createMockStore()
   return render(
     <ThemeProvider theme={testTheme}>
       <MemoryRouter>
@@ -178,50 +190,50 @@ const renderPage = () => {
         </Provider>
       </MemoryRouter>
     </ThemeProvider>,
-  );
-};
+  )
+}
 
 describe("StockManagerV2", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    shopAccess.canManage = true;
+    vi.clearAllMocks()
+    shopAccess.canManage = true
     myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
       listings: mockListings,
       total: 2,
       page: 1,
       page_size: 20,
-    });
-  });
+    })
+  })
 
   it("renders loading state initially", () => {
-    myListingsReturn = queryLoading<MarketV2Endpoints["getMyListings"]>();
-    renderPage();
-    expect(screen.getByRole("progressbar")).toBeInTheDocument();
-  });
+    myListingsReturn = queryLoading<MarketV2Endpoints["getMyListings"]>()
+    renderPage()
+    expect(screen.getByRole("progressbar")).toBeInTheDocument()
+  })
 
   it("renders the manage listings header and create button", async () => {
-    renderPage();
+    renderPage()
     await waitFor(() =>
       expect(screen.getAllByText("Manage Listings").length).toBeGreaterThan(0),
-    );
-    expect(screen.getByText("Create Listing")).toBeInTheDocument();
-  });
+    )
+    expect(screen.getByText("Create Listing")).toBeInTheDocument()
+  })
 
   it("renders the sidebar search area", async () => {
-    renderPage();
+    renderPage()
     await waitFor(() =>
       expect(screen.getByTestId("market-search-area")).toBeInTheDocument(),
-    );
-  });
+    )
+  })
 
   it("renders a data grid populated with the shop's listings", async () => {
-    renderPage();
+    renderPage()
     await waitFor(() =>
       expect(screen.getByTestId("stock-data-grid")).toBeInTheDocument(),
-    );
-    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
-    expect(screen.getByText("Standard Ship Components")).toBeInTheDocument();
-  });
+    )
+    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument()
+    expect(screen.getByText("Standard Ship Components")).toBeInTheDocument()
+  })
 
   it("renders an empty data grid when there are no listings", async () => {
     myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
@@ -229,39 +241,41 @@ describe("StockManagerV2", () => {
       total: 0,
       page: 1,
       page_size: 20,
-    });
-    renderPage();
+    })
+    renderPage()
     await waitFor(() =>
       expect(screen.getByTestId("stock-data-grid")).toBeInTheDocument(),
-    );
-    expect(screen.queryAllByTestId("stock-row")).toHaveLength(0);
-  });
+    )
+    expect(screen.queryAllByTestId("stock-row")).toHaveLength(0)
+  })
 
   it("links to the archived listings view", async () => {
-    renderPage();
+    renderPage()
     await waitFor(() =>
       expect(screen.getByText("Archived Listings")).toBeInTheDocument(),
-    );
-  });
+    )
+  })
 
   it("offers the UEX import to people who manage the shop", async () => {
-    renderPage();
+    renderPage()
     await waitFor(() =>
       expect(screen.getByText("Import from UEX")).toBeInTheDocument(),
-    );
-  });
+    )
+  })
 
   // Regression: org members without manage_market saw every create and edit
   // action, and only got a 403 when they saved.
   it("hides create, import and edit actions from members who can't manage the shop", async () => {
-    shopAccess.canManage = false;
-    renderPage();
+    shopAccess.canManage = false
+    renderPage()
     await waitFor(() =>
-      expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument(),
-    );
-    expect(screen.queryByText("Create Listing")).not.toBeInTheDocument();
-    expect(screen.queryByText("Import from UEX")).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/ask an org admin for the Manage Market permission/i),
+      ).toBeInTheDocument(),
+    )
+    expect(screen.queryByText("Create Listing")).not.toBeInTheDocument()
+    expect(screen.queryByText("Import from UEX")).not.toBeInTheDocument()
     // The listings are still shown
-    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
-  });
-});
+    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument()
+  })
+})

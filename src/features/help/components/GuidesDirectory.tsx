@@ -31,14 +31,19 @@ function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
   const current = pathname.replace(/\/+$/, "") || "/"
   const currentCategory = helpIndex.categories.find(
-    (c) => current === HELP_PATHS.category(c.id) || current.startsWith(`${HELP_PATHS.category(c.id)}/`),
+    (c) =>
+      current === HELP_PATHS.category(c.id) ||
+      current.startsWith(`${HELP_PATHS.category(c.id)}/`),
   )?.id
   const [open, setOpen] = useState<Record<string, boolean>>(() =>
     currentCategory ? { [currentCategory]: true } : {},
   )
   // Navigating into another category expands it too.
   useEffect(() => {
-    if (currentCategory) setOpen((o) => (o[currentCategory] ? o : { ...o, [currentCategory]: true }))
+    if (currentCategory)
+      setOpen((o) =>
+        o[currentCategory] ? o : { ...o, [currentCategory]: true },
+      )
   }, [currentCategory])
 
   const link = (to: string, label: string, depth: 0 | 1, bold = false) => (
@@ -53,13 +58,21 @@ function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
     >
       <ListItemText
         primary={label}
-        primaryTypographyProps={{ variant: "body2", fontWeight: bold ? 700 : undefined }}
+        primaryTypographyProps={{
+          variant: "body2",
+          fontWeight: bold ? 700 : undefined,
+        }}
       />
     </ListItemButton>
   )
 
   return (
-    <List dense disablePadding component="nav" aria-label={t("appUi.help.allGuides")}>
+    <List
+      dense
+      disablePadding
+      component="nav"
+      aria-label={t("appUi.help.allGuides")}
+    >
       {link(HELP_PATHS.hub, HELP_HUB_NAME, 0, true)}
       {helpIndex.categories.map((category) => {
         const expanded = !!open[category.id]
@@ -68,7 +81,12 @@ function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
           <Box key={category.id}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                {link(HELP_PATHS.category(category.id), category.title, 0, true)}
+                {link(
+                  HELP_PATHS.category(category.id),
+                  category.title,
+                  0,
+                  true,
+                )}
               </Box>
               <Button
                 size="small"
@@ -76,15 +94,25 @@ function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
                 aria-expanded={expanded}
                 aria-controls={listId}
                 aria-label={`${expanded ? "Collapse" : "Expand"} ${category.title}`}
-                onClick={() => setOpen((o) => ({ ...o, [category.id]: !expanded }))}
+                onClick={() =>
+                  setOpen((o) => ({ ...o, [category.id]: !expanded }))
+                }
                 sx={{ minWidth: 32, px: 0.5 }}
               >
-                {expanded ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+                {expanded ? (
+                  <ExpandLessRounded fontSize="small" />
+                ) : (
+                  <ExpandMoreRounded fontSize="small" />
+                )}
               </Button>
             </Box>
             <Collapse in={expanded} id={listId}>
               {guidesIn(category.id).map((guide) =>
-                link(HELP_PATHS.guide(guide.category, guide.slug), guide.title, 1),
+                link(
+                  HELP_PATHS.guide(guide.category, guide.slug),
+                  guide.title,
+                  1,
+                ),
               )}
             </Collapse>
           </Box>
@@ -100,7 +128,13 @@ export function GuidesDirectory() {
   return (
     <Paper
       variant="outlined"
-      sx={{ p: 1, position: "sticky", top: 88, maxHeight: "calc(100vh - 112px)", overflowY: "auto" }}
+      sx={{
+        p: 1,
+        position: "sticky",
+        top: 88,
+        maxHeight: "calc(100vh - 112px)",
+        overflowY: "auto",
+      }}
     >
       <DirectoryList />
     </Paper>

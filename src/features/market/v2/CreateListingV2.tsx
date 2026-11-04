@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react"
 import {
   Grid,
   TextField,
@@ -13,32 +13,36 @@ import {
   RadioGroup,
   FormControl,
   Collapse,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { NumericFormat } from "react-number-format";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { AddCircleOutlineRounded, DeleteOutline, ExpandMoreRounded } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
-import { FormPaper } from "../../../components/paper/FormPaper";
-import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
-import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
-import { formatMarketUrl } from "../domain/urls";
-import { getQualityMode } from "../../../util/qualityMode";
-import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
-import { LocationSelector } from "../components/stock/LocationSelector";
-import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
-import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
-import { useSearchResourcesQuery } from "../../../store/api/v2/market";
-import { useCreateListingSubmit } from "../hooks/useListingMutations";
-import { useListingPhotoUploads } from "../hooks/useListingPhotoUploads";
-import { useAlertHook } from "../../../hooks/alert/AlertHook";
-import { useGetUserProfileQuery } from "../../profile/api/profileApi";
-import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute";
-import { Alert, InputAdornment } from "@mui/material";
-import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
+} from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { NumericFormat } from "react-number-format"
+import LoadingButton from "@mui/lab/LoadingButton"
+import {
+  AddCircleOutlineRounded,
+  DeleteOutline,
+  ExpandMoreRounded,
+} from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import { FormPaper } from "../../../components/paper/FormPaper"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
+import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
+import { formatMarketUrl } from "../domain/urls"
+import { getQualityMode } from "../../../util/qualityMode"
+import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
+import { LocationSelector } from "../components/stock/LocationSelector"
+import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor"
+import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
+import { useSearchResourcesQuery } from "../../../store/api/v2/market"
+import { useCreateListingSubmit } from "../hooks/useListingMutations"
+import { useListingPhotoUploads } from "../hooks/useListingPhotoUploads"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
+import { Alert, InputAdornment } from "@mui/material"
+import { PriceComparisonAlert } from "../components/PriceComparisonAlert"
 import { HelpLink } from "../../help/components/HelpLink"
 import { HelpTip } from "../../help/components/HelpTip"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
@@ -63,35 +67,43 @@ import {
  * Stock lot form data with variant attributes
  */
 interface StockLotFormData {
-  id: string;
-  quantity: number;
-  quality_tier?: number;
-  quality_value?: number;
-  crafted_source?: CraftedSource;
-  location_id?: string;
-  price?: number;
-  notes?: string;
-  listed?: boolean;
+  id: string
+  quantity: number
+  quality_tier?: number
+  quality_value?: number
+  crafted_source?: CraftedSource
+  location_id?: string
+  price?: number
+  notes?: string
+  listed?: boolean
 }
 
 export function CreateListingV2() {
-  const { t } = useTranslation();
-  const theme = useTheme<ExtendedTheme>();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const issueAlert = useAlertHook();
-  const { data: profile } = useGetUserProfileQuery();
-  const { shop } = useShopRouteContext();
-  const isVerified = profile?.rsi_confirmed;
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const issueAlert = useAlertHook()
+  const { data: profile } = useGetUserProfileQuery()
+  const { shop } = useShopRouteContext()
+  const isVerified = profile?.rsi_confirmed
 
   // Form state — prefilled from ?game_item_id=&game_item_name=&game_item_type= query params
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [gameItemId, setGameItemId] = useState<string | null>(searchParams.get("game_item_id"));
-  const [gameItemName, setGameItemName] = useState<string | null>(searchParams.get("game_item_name"));
-  const [gameItemType, setGameItemType] = useState<string | null>(searchParams.get("game_item_type"));
-  const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
-  const [basePrice, setBasePrice] = useState<number>(0);
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [gameItemId, setGameItemId] = useState<string | null>(
+    searchParams.get("game_item_id"),
+  )
+  const [gameItemName, setGameItemName] = useState<string | null>(
+    searchParams.get("game_item_name"),
+  )
+  const [gameItemType, setGameItemType] = useState<string | null>(
+    searchParams.get("game_item_type"),
+  )
+  const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">(
+    "unified",
+  )
+  const [basePrice, setBasePrice] = useState<number>(0)
   const {
     photos,
     setPhotos,
@@ -100,36 +112,44 @@ export function CreateListingV2() {
     isUploading,
     handleFileUpload,
     handleRemoveUploadedImage,
-  } = useListingPhotoUploads();
-  const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">("");
-  const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit");
-  const [minOrderQuantity, setMinOrderQuantity] = useState<number | null>(null);
-  const [maxOrderQuantity, setMaxOrderQuantity] = useState<number | null>(null);
-  const [minOrderValue, setMinOrderValue] = useState<number | null>(null);
-  const [maxOrderValue, setMaxOrderValue] = useState<number | null>(null);
-  const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
-  const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">("fixed");
-  const [listingStatus, setListingStatus] = useState<"active" | "inactive">("active");
-  const [visibility, setVisibility] = useState<"public" | "private">("public");
-  const [auctionEndTime, setAuctionEndTime] = useState<string>("");
-  const [minBidIncrement, setMinBidIncrement] = useState<number>(1000);
-  const [reservePrice, setReservePrice] = useState<number | null>(null);
+  } = useListingPhotoUploads()
+  const [pickupMethod, setPickupMethod] = useState<
+    "delivery" | "pickup" | "any" | ""
+  >("")
+  const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit")
+  const [minOrderQuantity, setMinOrderQuantity] = useState<number | null>(null)
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState<number | null>(null)
+  const [minOrderValue, setMinOrderValue] = useState<number | null>(null)
+  const [maxOrderValue, setMaxOrderValue] = useState<number | null>(null)
+  const [bulkDiscountTiers, setBulkDiscountTiers] = useState<
+    Array<{ min_quantity: number; discount_percent: number }>
+  >([])
+  const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">(
+    "fixed",
+  )
+  const [listingStatus, setListingStatus] = useState<"active" | "inactive">(
+    "active",
+  )
+  const [visibility, setVisibility] = useState<"public" | "private">("public")
+  const [auctionEndTime, setAuctionEndTime] = useState<string>("")
+  const [minBidIncrement, setMinBidIncrement] = useState<number>(1000)
+  const [reservePrice, setReservePrice] = useState<number | null>(null)
 
   // Advanced section toggle
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false)
 
   // The error being shown: next to its field, and above the submit button
-  const [formError, setFormError] = useState<ListingFormError | null>(null);
+  const [formError, setFormError] = useState<ListingFormError | null>(null)
   const fieldError = (field: ListingFormField) =>
-    formError?.field === field ? formError.message : undefined;
+    formError?.field === field ? formError.message : undefined
   const clearError = (field: ListingFormField) =>
-    setFormError((prev) => (prev?.field === field ? null : prev));
+    setFormError((prev) => (prev?.field === field ? null : prev))
   const showError = (error: ListingFormError) => {
-    setFormError(error);
+    setFormError(error)
     // The auction end time lives under "More options"
-    if (error.field === "auction_end_time") setShowAdvanced(true);
-    focusListingField(error.field);
-  };
+    if (error.field === "auction_end_time") setShowAdvanced(true)
+    focusListingField(error.field)
+  }
 
   // Stock lots state
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([
@@ -144,7 +164,7 @@ export function CreateListingV2() {
       notes: undefined,
       listed: true,
     },
-  ]);
+  ])
 
   // Fetch quality bands for commodity items
   const qualityMode = getQualityMode(gameItemType)
@@ -155,7 +175,7 @@ export function CreateListingV2() {
   const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
   // RTK Query mutations
-  const { submit: submitListing, isLoading } = useCreateListingSubmit();
+  const { submit: submitListing, isLoading } = useCreateListingSubmit()
 
   // Add new stock lot
   const handleAddStockLot = useCallback(() => {
@@ -172,23 +192,27 @@ export function CreateListingV2() {
         notes: undefined,
         listed: true,
       },
-    ]);
-  }, []);
+    ])
+  }, [])
 
   // Remove stock lot
   const handleRemoveStockLot = useCallback((id: string) => {
-    setStockLots((prev) => prev.filter((lot) => lot.id !== id));
-  }, []);
+    setStockLots((prev) => prev.filter((lot) => lot.id !== id))
+  }, [])
 
   // Update stock lot field
   const handleUpdateStockLot = useCallback(
-    (id: string, field: keyof StockLotFormData, value: StockLotFormData[keyof StockLotFormData]) => {
+    (
+      id: string,
+      field: keyof StockLotFormData,
+      value: StockLotFormData[keyof StockLotFormData],
+    ) => {
       setStockLots((prev) =>
-        prev.map((lot) => (lot.id === id ? { ...lot, [field]: value } : lot))
-      );
+        prev.map((lot) => (lot.id === id ? { ...lot, [field]: value } : lot)),
+      )
     },
-    []
-  );
+    [],
+  )
 
   // The form as a draft: the rules and the request are shared with Quick List
   const draft: ListingDraft = {
@@ -220,35 +244,41 @@ export function CreateListingV2() {
     visibility,
     photoResourceIds,
     externalPhotoUrls: photos,
-  };
+  }
 
   // Submit form
   const handleSubmit = async (event: React.FormEvent) => {
-      event.preventDefault();
+    event.preventDefault()
 
-      const issue = validateListingDraft(draft);
-      if (issue || !draft.gameItemId) {
-        const validationError = listingDraftIssueError(issue ?? { code: "gameItemRequired" }, t);
-        showError(validationError);
-        issueAlert({
-          message: validationError.message,
-          severity: "error",
-        });
-        return;
-      }
-      setFormError(null);
+    const issue = validateListingDraft(draft)
+    if (issue || !draft.gameItemId) {
+      const validationError = listingDraftIssueError(
+        issue ?? { code: "gameItemRequired" },
+        t,
+      )
+      showError(validationError)
+      issueAlert({
+        message: validationError.message,
+        severity: "error",
+      })
+      return
+    }
+    setFormError(null)
 
-      const request = buildCreateListingRequest({ ...draft, gameItemId: draft.gameItemId }, shop);
+    const request = buildCreateListingRequest(
+      { ...draft, gameItemId: draft.gameItemId },
+      shop,
+    )
 
-      const result = await submitListing(request);
-      if (!result.ok) {
-        showError(result.error);
-        return;
-      }
-      navigate(formatMarketUrl({ listing_id: result.listingId, title }), {
-        state: withShopContext(shop.slug),
-      });
-  };
+    const result = await submitListing(request)
+    if (!result.ok) {
+      showError(result.error)
+      return
+    }
+    navigate(formatMarketUrl({ listing_id: result.listingId, title }), {
+      state: withShopContext(shop.slug),
+    })
+  }
 
   // Org members without manage_market can't create listings: say so up
   // front instead of letting the save fail with a 403
@@ -263,7 +293,7 @@ export function CreateListingV2() {
           <ShopManageAccessNotice />
         </Grid>
       </StandardPageLayout>
-    );
+    )
   }
 
   return (
@@ -279,632 +309,744 @@ export function CreateListingV2() {
       headerActions={<HelpLink guide="sellItems" />}
     >
       <Grid item xs={12}>
-      <form onSubmit={handleSubmit} noValidate>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          {/* Verification Warning */}
-          {profile && !isVerified && (
-            <Grid item xs={12}>
-              <Alert severity="warning">
-                {t(
-                  "market.verificationRequired",
-                  "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
-                )}
-              </Alert>
-            </Grid>
-          )}
+        <form onSubmit={handleSubmit} noValidate>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            {/* Verification Warning */}
+            {profile && !isVerified && (
+              <Grid item xs={12}>
+                <Alert severity="warning">
+                  {t(
+                    "market.verificationRequired",
+                    "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
+                  )}
+                </Alert>
+              </Grid>
+            )}
 
-          {/* ============================================================ */}
-          {/* ESSENTIAL FIELDS — always visible                            */}
-          {/* ============================================================ */}
+            {/* ============================================================ */}
+            {/* ESSENTIAL FIELDS — always visible                            */}
+            {/* ============================================================ */}
 
-          {/* About Section */}
-          <FormPaper title={t("CreateListingV2.about", "About")}>
-            <Grid item xs={12}>
-              <GameItemSearchAutocomplete
-                required
-                errorText={fieldError("game_item_id")}
-                value={gameItemName}
-                onChange={(itemName, itemType, itemId) => {
-                  clearError("game_item_id");
-                  setGameItemName(itemName);
-                  setGameItemId(itemId);
-                  setGameItemType(itemType);
-                  setQuantityUnit(quantityUnitFor(itemType));
-                  if (!title && itemName) {
-                    setTitle(itemName);
+            {/* About Section */}
+            <FormPaper title={t("CreateListingV2.about", "About")}>
+              <Grid item xs={12}>
+                <GameItemSearchAutocomplete
+                  required
+                  errorText={fieldError("game_item_id")}
+                  value={gameItemName}
+                  onChange={(itemName, itemType, itemId) => {
+                    clearError("game_item_id")
+                    setGameItemName(itemName)
+                    setGameItemId(itemId)
+                    setGameItemType(itemType)
+                    setQuantityUnit(quantityUnitFor(itemType))
+                    if (!title && itemName) {
+                      setTitle(itemName)
+                    }
+                  }}
+                  label={t(
+                    "CreateListingV2.selectGameItem",
+                    "Select Game Item",
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  id={LISTING_FIELD_IDS.title}
+                  label={t("CreateListingV2.title", "Title")}
+                  value={title}
+                  onChange={(e) => {
+                    clearError("title")
+                    setTitle(e.target.value)
+                  }}
+                  color="secondary"
+                  required
+                  error={!!fieldError("title")}
+                  inputProps={{
+                    maxLength: 500,
+                    "aria-label": t(
+                      "CreateListingV2.titleAriaLabel",
+                      "Enter listing title",
+                    ),
+                  }}
+                  helperText={
+                    fieldError("title") ??
+                    (title.length > 450 ? `${title.length}/500` : undefined)
                   }
-                }}
-                label={t("CreateListingV2.selectGameItem", "Select Game Item")}
-              />
-            </Grid>
+                />
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                id={LISTING_FIELD_IDS.title}
-                label={t("CreateListingV2.title", "Title")}
-                value={title}
-                onChange={(e) => {
-                  clearError("title");
-                  setTitle(e.target.value);
-                }}
-                color="secondary"
-                required
-                error={!!fieldError("title")}
-                inputProps={{
-                  maxLength: 500,
-                  "aria-label": t("CreateListingV2.titleAriaLabel", "Enter listing title"),
-                }}
-                helperText={
-                  fieldError("title") ?? (title.length > 450 ? `${title.length}/500` : undefined)
-                }
-              />
-            </Grid>
+              <Grid item xs={12}>
+                <MarkdownEditor
+                  onChange={(value: string) => {
+                    clearError("description")
+                    setDescription(value)
+                  }}
+                  value={description}
+                  TextFieldProps={{
+                    id: LISTING_FIELD_IDS.description,
+                    label: t(
+                      "CreateListingV2.descriptionOptional",
+                      "Description (optional)",
+                    ),
+                    error: !!fieldError("description"),
+                    helperText:
+                      fieldError("description") ??
+                      (description.length > 1900
+                        ? `${description.length}/2000`
+                        : t(
+                            "CreateListingV2.descriptionHelp",
+                            "Provide a detailed description (markdown supported)",
+                          )),
+                    inputProps: { maxLength: 2000 },
+                  }}
+                  variant="vertical"
+                />
+              </Grid>
 
-            <Grid item xs={12}>
-              <MarkdownEditor
-                onChange={(value: string) => {
-                  clearError("description");
-                  setDescription(value);
-                }}
-                value={description}
-                TextFieldProps={{
-                  id: LISTING_FIELD_IDS.description,
-                  label: t("CreateListingV2.descriptionOptional", "Description (optional)"),
-                  error: !!fieldError("description"),
-                  helperText:
-                    fieldError("description") ??
-                    (description.length > 1900
-                      ? `${description.length}/2000`
-                      : t(
-                          "CreateListingV2.descriptionHelp",
-                          "Provide a detailed description (markdown supported)"
-                        )),
-                  inputProps: { maxLength: 2000 },
-                }}
-                variant="vertical"
-              />
-            </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  color="text.secondary"
+                  variant="body2"
+                  sx={{ mb: 1 }}
+                >
+                  {t("CreateListingV2.imageHint", "Add photos to your listing")}{" "}
+                  {t(
+                    "CreateListingV2.imageSizeLimit",
+                    "(Large images are optimized automatically)",
+                  )}
+                </Typography>
+                <SelectPhotosArea
+                  setPhotos={setPhotos}
+                  photos={photos}
+                  onFileUpload={handleFileUpload}
+                  onAlert={(severity, message) =>
+                    issueAlert({ severity, message })
+                  }
+                  onImageUploaded={(resourceId, url) => {
+                    // Already handled in handleFileUpload
+                  }}
+                  uploadedImages={uploadedImages}
+                  onRemoveUploadedImage={handleRemoveUploadedImage}
+                />
+              </Grid>
+            </FormPaper>
 
-            <Grid item xs={12}>
-              <Typography color="text.secondary" variant="body2" sx={{ mb: 1 }}>
-                {t("CreateListingV2.imageHint", "Add photos to your listing")}{" "}
-                {t(
-                  "CreateListingV2.imageSizeLimit",
-                  "(Large images are optimized automatically)",
-                )}
-              </Typography>
-              <SelectPhotosArea
-                setPhotos={setPhotos}
-                photos={photos}
-                onFileUpload={handleFileUpload}
-                onAlert={(severity, message) => issueAlert({ severity, message })}
-                onImageUploaded={(resourceId, url) => {
-                  // Already handled in handleFileUpload
-                }}
-                uploadedImages={uploadedImages}
-                onRemoveUploadedImage={handleRemoveUploadedImage}
-              />
-            </Grid>
-          </FormPaper>
-
-          {/* Pricing & Quantity — simplified view */}
-          <FormPaper title={t("CreateListingV2.pricing", "Pricing & Quantity")}>
-            <Grid item xs={12} sm={6}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                size="small"
-                fullWidth
-                onValueChange={(values) => {
-                  clearError("base_price");
-                  setBasePrice(values.floatValue || 0);
-                }}
-                id={LISTING_FIELD_IDS.base_price}
-                label={t("CreateListingV2.basePrice", "Price")}
-                value={basePrice}
-                color="secondary"
-                InputProps={{
-                  endAdornment: <Typography>aUEC</Typography>,
-                  inputMode: "numeric",
-                }}
-                required
-                error={!!fieldError("base_price")}
-                helperText={fieldError("base_price")}
-                inputProps={{
-                  "aria-label": t(
-                    "CreateListingV2.basePriceAriaLabel",
-                    "Enter price"
-                  ),
-                }}
-              />
-              {gameItemId && basePrice > 0 && (
-                <PriceComparisonAlert gameItemId={gameItemId} currentPrice={basePrice} />
-              )}
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                size="small"
-                fullWidth
-                onValueChange={(values) => {
-                  clearError("quantity");
-                  handleUpdateStockLot(stockLots[0]?.id, "quantity", values.floatValue || 0);
-                }}
-                id={LISTING_FIELD_IDS.quantity}
-                label={t("CreateListingV2.quantity", "Quantity")}
-                value={stockLots[0]?.quantity ?? 1}
-                color="secondary"
-                required
-                error={!!fieldError("quantity")}
-                helperText={fieldError("quantity")}
-                inputProps={{
-                  inputMode: "numeric",
-                  "aria-label": t("CreateListingV2.quantityAriaLabel", "Enter quantity"),
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <HelpTip
-                        label={t("CreateListingV2.quantity", "Quantity")}
-                        title={t("help.tips.listingQuantity")}
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-          </FormPaper>
-
-          {/* ============================================================ */}
-          {/* ADVANCED OPTIONS — collapsed by default                      */}
-          {/* ============================================================ */}
-
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => setShowAdvanced((prev) => !prev)}
-              endIcon={
-                <ExpandMoreRounded
-                  sx={{
-                    transform: showAdvanced ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "transform 0.2s",
+            {/* Pricing & Quantity — simplified view */}
+            <FormPaper
+              title={t("CreateListingV2.pricing", "Pricing & Quantity")}
+            >
+              <Grid item xs={12} sm={6}>
+                <NumericFormat
+                  decimalScale={0}
+                  allowNegative={false}
+                  customInput={TextField}
+                  thousandSeparator
+                  size="small"
+                  fullWidth
+                  onValueChange={(values) => {
+                    clearError("base_price")
+                    setBasePrice(values.floatValue || 0)
+                  }}
+                  id={LISTING_FIELD_IDS.base_price}
+                  label={t("CreateListingV2.basePrice", "Price")}
+                  value={basePrice}
+                  color="secondary"
+                  InputProps={{
+                    endAdornment: <Typography>aUEC</Typography>,
+                    inputMode: "numeric",
+                  }}
+                  required
+                  error={!!fieldError("base_price")}
+                  helperText={fieldError("base_price")}
+                  inputProps={{
+                    "aria-label": t(
+                      "CreateListingV2.basePriceAriaLabel",
+                      "Enter price",
+                    ),
                   }}
                 />
-              }
-              sx={{ textTransform: "none", fontWeight: "bold" }}
+                {gameItemId && basePrice > 0 && (
+                  <PriceComparisonAlert
+                    gameItemId={gameItemId}
+                    currentPrice={basePrice}
+                  />
+                )}
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <NumericFormat
+                  decimalScale={0}
+                  allowNegative={false}
+                  customInput={TextField}
+                  thousandSeparator
+                  size="small"
+                  fullWidth
+                  onValueChange={(values) => {
+                    clearError("quantity")
+                    handleUpdateStockLot(
+                      stockLots[0]?.id,
+                      "quantity",
+                      values.floatValue || 0,
+                    )
+                  }}
+                  id={LISTING_FIELD_IDS.quantity}
+                  label={t("CreateListingV2.quantity", "Quantity")}
+                  value={stockLots[0]?.quantity ?? 1}
+                  color="secondary"
+                  required
+                  error={!!fieldError("quantity")}
+                  helperText={fieldError("quantity")}
+                  inputProps={{
+                    inputMode: "numeric",
+                    "aria-label": t(
+                      "CreateListingV2.quantityAriaLabel",
+                      "Enter quantity",
+                    ),
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <HelpTip
+                          label={t("CreateListingV2.quantity", "Quantity")}
+                          title={t("help.tips.listingQuantity")}
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </FormPaper>
+
+            {/* ============================================================ */}
+            {/* ADVANCED OPTIONS — collapsed by default                      */}
+            {/* ============================================================ */}
+
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", justifyContent: "flex-end" }}
             >
-              {showAdvanced
-                ? t("CreateListingV2.hideMoreOptions", "Hide options")
-                : t("CreateListingV2.showMoreOptions", "More options")}
-            </Button>
-          </Grid>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setShowAdvanced((prev) => !prev)}
+                endIcon={
+                  <ExpandMoreRounded
+                    sx={{
+                      transform: showAdvanced
+                        ? "rotate(180deg)"
+                        : "rotate(0deg)",
+                      transition: "transform 0.2s",
+                    }}
+                  />
+                }
+                sx={{ textTransform: "none", fontWeight: "bold" }}
+              >
+                {showAdvanced
+                  ? t("CreateListingV2.hideMoreOptions", "Hide options")
+                  : t("CreateListingV2.showMoreOptions", "More options")}
+              </Button>
+            </Grid>
 
-          <Grid item xs={12}>
-            <Collapse in={showAdvanced}>
-              <Grid container spacing={theme.layoutSpacing.layout}>
-
-                {/* Pickup Method */}
-                <FormPaper title={t("CreateListingV2.pickupMethod", "Pickup Method")}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      select
-                      fullWidth
-                      size="small"
-                      label={t("CreateListingV2.pickupMethod", "Pickup Method")}
-                      value={pickupMethod}
-                      onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
-                      helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
-                    >
-                      <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
-                      <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
-                      <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
-                      <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
-                    </TextField>
-                  </Grid>
-                </FormPaper>
-
-                {/* Listing Options */}
-                <FormPaper title={t("CreateListingV2.listingOptions", "Listing Options")}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      select
-                      fullWidth
-                      size="small"
-                      label={t("CreateListingV2.listingStatus", "Listing Status")}
-                      value={listingStatus}
-                      onChange={(e) => setListingStatus(e.target.value as "active" | "inactive")}
-                      helperText={listingStatus === "inactive"
-                        ? t("CreateListingV2.inactiveHelp", "Listing will be saved as a draft and won't be visible to buyers")
-                        : t("CreateListingV2.activeHelp", "Listing will be immediately visible to buyers")
-                      }
-                    >
-                      <MenuItem value="active">{t("CreateListingV2.active", "Active")}</MenuItem>
-                      <MenuItem value="inactive">{t("CreateListingV2.inactive", "Inactive (Draft)")}</MenuItem>
-                    </TextField>
-                  </Grid>
-                  {shop.is_org_owned && (
+            <Grid item xs={12}>
+              <Collapse in={showAdvanced}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
+                  {/* Pickup Method */}
+                  <FormPaper
+                    title={t("CreateListingV2.pickupMethod", "Pickup Method")}
+                  >
                     <Grid item xs={12} sm={6}>
                       <TextField
                         select
                         fullWidth
                         size="small"
-                        label={t("market.visibility", "Visibility")}
-                        value={visibility}
-                        onChange={(e) => setVisibility(e.target.value as "public" | "private")}
-                        helperText={visibility === "private"
-                          ? t("market.visibilityPrivateHelp", "Only visible to organization members")
-                          : t("market.visibilityPublicHelp", "Visible to all buyers")
-                        }
-                      >
-                        <MenuItem value="public">{t("market.visibilityPublic", "Public")}</MenuItem>
-                        <MenuItem value="private">{t("market.visibilityPrivate", "Private (org members only)")}</MenuItem>
-                      </TextField>
-                    </Grid>
-                  )}
-                  {!gameItemId && (
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        select
-                        fullWidth
-                        size="small"
-                        label={t("CreateListingV2.quantityUnit", "Quantity Unit")}
-                        value={quantityUnit}
-                        onChange={(e) => setQuantityUnit(e.target.value as "unit" | "scu")}
-                        helperText={
-                          quantityUnit === "scu"
-                            ? t("CreateListingV2.scuHelp", "Quantities measured in cSCU (100 cSCU = 1 SCU)")
-                            : t("CreateListingV2.unitHelp", "Discrete items (weapons, armor, components)")
-                        }
-                      >
-                        <MenuItem value="unit">{t("CreateListingV2.unitDiscrete", "Units (discrete items)")}</MenuItem>
-                        <MenuItem value="scu">{t("CreateListingV2.unitSCU", "SCU (cargo / commodities)")}</MenuItem>
-                      </TextField>
-                    </Grid>
-                  )}
-                </FormPaper>
-
-                {/* Sale Type */}
-                <FormPaper title={t("CreateListingV2.saleType", "Sale Type")}>
-                  <Grid item xs={12}>
-                    <FormControl component="fieldset">
-                      <RadioGroup
-                        row
-                        value={saleType}
-                        onChange={(e) => setSaleType(e.target.value as "fixed" | "auction" | "negotiable")}
-                      >
-                        <FormControlLabel value="fixed" control={<Radio color="secondary" />} label={t("CreateListingV2.fixed", "Fixed Price")} />
-                        <FormControlLabel value="auction" control={<Radio color="secondary" />} label={t("CreateListingV2.auction", "Auction")} />
-                        <FormControlLabel value="negotiable" control={<Radio color="secondary" />} label={t("CreateListingV2.negotiable", "Negotiable")} />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  {saleType === "auction" && (
-                    <>
-                      <Grid item xs={12}>
-                        <HelpLink guide="auctions">
-                          {t("CreateListingV2.auctionHelp", "How auctions work")}
-                        </HelpLink>
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          id={LISTING_FIELD_IDS.auction_end_time}
-                          label={t("CreateListingV2.auctionEndTime", "Auction End Time")}
-                          type="datetime-local"
-                          value={auctionEndTime}
-                          onChange={(e) => {
-                            clearError("auction_end_time");
-                            setAuctionEndTime(e.target.value);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          required
-                          error={!!fieldError("auction_end_time")}
-                          helperText={fieldError("auction_end_time")}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label={t("CreateListingV2.minBidIncrement", "Min Bid Increment (aUEC)")}
-                          type="number"
-                          value={minBidIncrement}
-                          onChange={(e) => setMinBidIncrement(parseInt(e.target.value) || 0)}
-                          inputProps={{ min: 1 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label={t("CreateListingV2.reservePrice", "Reserve Price (optional)")}
-                          type="number"
-                          value={reservePrice ?? ""}
-                          onChange={(e) => setReservePrice(e.target.value ? parseInt(e.target.value) : null)}
-                          helperText={t("CreateListingV2.reservePriceHelp", "Auction won't sell below this price")}
-                        />
-                      </Grid>
-                    </>
-                  )}
-                </FormPaper>
-
-                {/* Pricing Mode */}
-                <FormPaper title={t("CreateListingV2.pricingMode", "Pricing Mode")}>
-                  <Grid item xs={12}>
-                    <FormControl component="fieldset">
-                      <RadioGroup
-                        row
-                        value={pricingMode}
+                        label={t(
+                          "CreateListingV2.pickupMethod",
+                          "Pickup Method",
+                        )}
+                        value={pickupMethod}
                         onChange={(e) =>
-                          setPricingMode(e.target.value as "unified" | "per_variant")
+                          setPickupMethod(
+                            e.target.value as
+                              | "delivery"
+                              | "pickup"
+                              | "any"
+                              | "",
+                          )
+                        }
+                        helperText={t(
+                          "CreateListingV2.pickupMethodHelper",
+                          "How will the buyer receive the item?",
+                        )}
+                      >
+                        <MenuItem value="">
+                          {t("CreateListingV2.notSpecified", "Not specified")}
+                        </MenuItem>
+                        <MenuItem value="delivery">
+                          {t(
+                            "CreateListingV2.delivery",
+                            "Delivery (seller delivers)",
+                          )}
+                        </MenuItem>
+                        <MenuItem value="pickup">
+                          {t(
+                            "CreateListingV2.pickup",
+                            "Pickup (buyer picks up)",
+                          )}
+                        </MenuItem>
+                        <MenuItem value="any">
+                          {t(
+                            "CreateListingV2.either",
+                            "Either (delivery or pickup)",
+                          )}
+                        </MenuItem>
+                      </TextField>
+                    </Grid>
+                  </FormPaper>
+
+                  {/* Listing Options */}
+                  <FormPaper
+                    title={t(
+                      "CreateListingV2.listingOptions",
+                      "Listing Options",
+                    )}
+                  >
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        select
+                        fullWidth
+                        size="small"
+                        label={t(
+                          "CreateListingV2.listingStatus",
+                          "Listing Status",
+                        )}
+                        value={listingStatus}
+                        onChange={(e) =>
+                          setListingStatus(
+                            e.target.value as "active" | "inactive",
+                          )
+                        }
+                        helperText={
+                          listingStatus === "inactive"
+                            ? t(
+                                "CreateListingV2.inactiveHelp",
+                                "Listing will be saved as a draft and won't be visible to buyers",
+                              )
+                            : t(
+                                "CreateListingV2.activeHelp",
+                                "Listing will be immediately visible to buyers",
+                              )
                         }
                       >
-                        <FormControlLabel
-                          value="unified"
-                          control={<Radio color="secondary" />}
-                          label={t("CreateListingV2.unifiedPricing", "Unified Price")}
-                        />
-                        <FormControlLabel
-                          value="per_variant"
-                          control={<Radio color="secondary" />}
-                          label={t("CreateListingV2.perVariantPricing", "Per-Variant Pricing")}
-                        />
-                      </RadioGroup>
-                      <Typography variant="caption" color="text.secondary">
-                        {pricingMode === "unified"
-                          ? t(
-                              "CreateListingV2.unifiedPricingHelp",
-                              "All variants will have the same price"
+                        <MenuItem value="active">
+                          {t("CreateListingV2.active", "Active")}
+                        </MenuItem>
+                        <MenuItem value="inactive">
+                          {t("CreateListingV2.inactive", "Inactive (Draft)")}
+                        </MenuItem>
+                      </TextField>
+                    </Grid>
+                    {shop.is_org_owned && (
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          select
+                          fullWidth
+                          size="small"
+                          label={t("market.visibility", "Visibility")}
+                          value={visibility}
+                          onChange={(e) =>
+                            setVisibility(
+                              e.target.value as "public" | "private",
                             )
-                          : t(
-                              "CreateListingV2.perVariantPricingHelp",
-                              "Set different prices for each variant"
+                          }
+                          helperText={
+                            visibility === "private"
+                              ? t(
+                                  "market.visibilityPrivateHelp",
+                                  "Only visible to organization members",
+                                )
+                              : t(
+                                  "market.visibilityPublicHelp",
+                                  "Visible to all buyers",
+                                )
+                          }
+                        >
+                          <MenuItem value="public">
+                            {t("market.visibilityPublic", "Public")}
+                          </MenuItem>
+                          <MenuItem value="private">
+                            {t(
+                              "market.visibilityPrivate",
+                              "Private (org members only)",
                             )}
-                      </Typography>
-                    </FormControl>
-                  </Grid>
-                </FormPaper>
+                          </MenuItem>
+                        </TextField>
+                      </Grid>
+                    )}
+                    {!gameItemId && (
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          select
+                          fullWidth
+                          size="small"
+                          label={t(
+                            "CreateListingV2.quantityUnit",
+                            "Quantity Unit",
+                          )}
+                          value={quantityUnit}
+                          onChange={(e) =>
+                            setQuantityUnit(e.target.value as "unit" | "scu")
+                          }
+                          helperText={
+                            quantityUnit === "scu"
+                              ? t(
+                                  "CreateListingV2.scuHelp",
+                                  "Quantities measured in cSCU (100 cSCU = 1 SCU)",
+                                )
+                              : t(
+                                  "CreateListingV2.unitHelp",
+                                  "Discrete items (weapons, armor, components)",
+                                )
+                          }
+                        >
+                          <MenuItem value="unit">
+                            {t(
+                              "CreateListingV2.unitDiscrete",
+                              "Units (discrete items)",
+                            )}
+                          </MenuItem>
+                          <MenuItem value="scu">
+                            {t(
+                              "CreateListingV2.unitSCU",
+                              "SCU (cargo / commodities)",
+                            )}
+                          </MenuItem>
+                        </TextField>
+                      </Grid>
+                    )}
+                  </FormPaper>
 
-                {/* Order Limits */}
-                <FormPaper title={t("CreateListingV2.orderLimits", "Order Limits")}>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <NumericFormat
-                      decimalScale={0} allowNegative={false} customInput={TextField}
-                      thousandSeparator size="small" fullWidth color="secondary"
-                      label={t("CreateListingV2.minQuantity", "Min Quantity")}
-                      value={minOrderQuantity ?? ""}
-                      onValueChange={(v) => setMinOrderQuantity(v.floatValue ?? null)}
-                      helperText={t("CreateListingV2.minQuantityHelp", "Optional")}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <NumericFormat
-                      decimalScale={0} allowNegative={false} customInput={TextField}
-                      thousandSeparator size="small" fullWidth color="secondary"
-                      label={t("CreateListingV2.maxQuantity", "Max Quantity")}
-                      value={maxOrderQuantity ?? ""}
-                      onValueChange={(v) => setMaxOrderQuantity(v.floatValue ?? null)}
-                      helperText={t("CreateListingV2.maxQuantityHelp", "Optional")}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <NumericFormat
-                      decimalScale={0} allowNegative={false} customInput={TextField}
-                      thousandSeparator size="small" fullWidth color="secondary"
-                      label={t("CreateListingV2.minValue", "Min Value (aUEC)")}
-                      value={minOrderValue ?? ""}
-                      onValueChange={(v) => setMinOrderValue(v.floatValue ?? null)}
-                      InputProps={{ endAdornment: <Typography variant="caption">aUEC</Typography> }}
-                      helperText={t("CreateListingV2.minValueHelp", "Optional")}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <NumericFormat
-                      decimalScale={0} allowNegative={false} customInput={TextField}
-                      thousandSeparator size="small" fullWidth color="secondary"
-                      label={t("CreateListingV2.maxValue", "Max Value (aUEC)")}
-                      value={maxOrderValue ?? ""}
-                      onValueChange={(v) => setMaxOrderValue(v.floatValue ?? null)}
-                      InputProps={{ endAdornment: <Typography variant="caption">aUEC</Typography> }}
-                      helperText={t("CreateListingV2.maxValueHelp", "Optional")}
-                    />
-                  </Grid>
-                </FormPaper>
+                  {/* Sale Type */}
+                  <FormPaper title={t("CreateListingV2.saleType", "Sale Type")}>
+                    <Grid item xs={12}>
+                      <FormControl component="fieldset">
+                        <RadioGroup
+                          row
+                          value={saleType}
+                          onChange={(e) =>
+                            setSaleType(
+                              e.target.value as
+                                | "fixed"
+                                | "auction"
+                                | "negotiable",
+                            )
+                          }
+                        >
+                          <FormControlLabel
+                            value="fixed"
+                            control={<Radio color="secondary" />}
+                            label={t("CreateListingV2.fixed", "Fixed Price")}
+                          />
+                          <FormControlLabel
+                            value="auction"
+                            control={<Radio color="secondary" />}
+                            label={t("CreateListingV2.auction", "Auction")}
+                          />
+                          <FormControlLabel
+                            value="negotiable"
+                            control={<Radio color="secondary" />}
+                            label={t(
+                              "CreateListingV2.negotiable",
+                              "Negotiable",
+                            )}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    {saleType === "auction" && (
+                      <>
+                        <Grid item xs={12}>
+                          <HelpLink guide="auctions">
+                            {t(
+                              "CreateListingV2.auctionHelp",
+                              "How auctions work",
+                            )}
+                          </HelpLink>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            fullWidth
+                            id={LISTING_FIELD_IDS.auction_end_time}
+                            label={t(
+                              "CreateListingV2.auctionEndTime",
+                              "Auction End Time",
+                            )}
+                            type="datetime-local"
+                            value={auctionEndTime}
+                            onChange={(e) => {
+                              clearError("auction_end_time")
+                              setAuctionEndTime(e.target.value)
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            required
+                            error={!!fieldError("auction_end_time")}
+                            helperText={fieldError("auction_end_time")}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            fullWidth
+                            label={t(
+                              "CreateListingV2.minBidIncrement",
+                              "Min Bid Increment (aUEC)",
+                            )}
+                            type="number"
+                            value={minBidIncrement}
+                            onChange={(e) =>
+                              setMinBidIncrement(parseInt(e.target.value) || 0)
+                            }
+                            inputProps={{ min: 1 }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            fullWidth
+                            label={t(
+                              "CreateListingV2.reservePrice",
+                              "Reserve Price (optional)",
+                            )}
+                            type="number"
+                            value={reservePrice ?? ""}
+                            onChange={(e) =>
+                              setReservePrice(
+                                e.target.value
+                                  ? parseInt(e.target.value)
+                                  : null,
+                              )
+                            }
+                            helperText={t(
+                              "CreateListingV2.reservePriceHelp",
+                              "Auction won't sell below this price",
+                            )}
+                          />
+                        </Grid>
+                      </>
+                    )}
+                  </FormPaper>
 
-                {/* Bulk Discount Tiers */}
-                <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>
-                  <Grid item xs={12}>
-                    <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
-                  </Grid>
-                </FormPaper>
+                  {/* Pricing Mode */}
+                  <FormPaper
+                    title={t("CreateListingV2.pricingMode", "Pricing Mode")}
+                  >
+                    <Grid item xs={12}>
+                      <FormControl component="fieldset">
+                        <RadioGroup
+                          row
+                          value={pricingMode}
+                          onChange={(e) =>
+                            setPricingMode(
+                              e.target.value as "unified" | "per_variant",
+                            )
+                          }
+                        >
+                          <FormControlLabel
+                            value="unified"
+                            control={<Radio color="secondary" />}
+                            label={t(
+                              "CreateListingV2.unifiedPricing",
+                              "Unified Price",
+                            )}
+                          />
+                          <FormControlLabel
+                            value="per_variant"
+                            control={<Radio color="secondary" />}
+                            label={t(
+                              "CreateListingV2.perVariantPricing",
+                              "Per-Variant Pricing",
+                            )}
+                          />
+                        </RadioGroup>
+                        <Typography variant="caption" color="text.secondary">
+                          {pricingMode === "unified"
+                            ? t(
+                                "CreateListingV2.unifiedPricingHelp",
+                                "All variants will have the same price",
+                              )
+                            : t(
+                                "CreateListingV2.perVariantPricingHelp",
+                                "Set different prices for each variant",
+                              )}
+                        </Typography>
+                      </FormControl>
+                    </Grid>
+                  </FormPaper>
 
-                {/* Stock Lots Section */}
-                <FormPaper
-                  title={t("CreateListingV2.stockLots", "Stock Lots")}
-                  subtitle={t(
-                    "CreateListingV2.stockLotsSubtitle",
-                    "Add inventory with variant attributes (quality, source, location)"
-                  )}
-                >
-                  {stockLots.map((lot, index) => (
-                    <Grid item xs={12} key={lot.id}>
-                      <Box
-                        sx={{
-                          p: 2,
-                          border: 1,
-                          borderColor: "divider",
-                          borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
-                          position: "relative",
+                  {/* Order Limits */}
+                  <FormPaper
+                    title={t("CreateListingV2.orderLimits", "Order Limits")}
+                  >
+                    <Grid item xs={12} sm={6} md={3}>
+                      <NumericFormat
+                        decimalScale={0}
+                        allowNegative={false}
+                        customInput={TextField}
+                        thousandSeparator
+                        size="small"
+                        fullWidth
+                        color="secondary"
+                        label={t("CreateListingV2.minQuantity", "Min Quantity")}
+                        value={minOrderQuantity ?? ""}
+                        onValueChange={(v) =>
+                          setMinOrderQuantity(v.floatValue ?? null)
+                        }
+                        helperText={t(
+                          "CreateListingV2.minQuantityHelp",
+                          "Optional",
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <NumericFormat
+                        decimalScale={0}
+                        allowNegative={false}
+                        customInput={TextField}
+                        thousandSeparator
+                        size="small"
+                        fullWidth
+                        color="secondary"
+                        label={t("CreateListingV2.maxQuantity", "Max Quantity")}
+                        value={maxOrderQuantity ?? ""}
+                        onValueChange={(v) =>
+                          setMaxOrderQuantity(v.floatValue ?? null)
+                        }
+                        helperText={t(
+                          "CreateListingV2.maxQuantityHelp",
+                          "Optional",
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <NumericFormat
+                        decimalScale={0}
+                        allowNegative={false}
+                        customInput={TextField}
+                        thousandSeparator
+                        size="small"
+                        fullWidth
+                        color="secondary"
+                        label={t(
+                          "CreateListingV2.minValue",
+                          "Min Value (aUEC)",
+                        )}
+                        value={minOrderValue ?? ""}
+                        onValueChange={(v) =>
+                          setMinOrderValue(v.floatValue ?? null)
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <Typography variant="caption">aUEC</Typography>
+                          ),
                         }}
-                      >
+                        helperText={t(
+                          "CreateListingV2.minValueHelp",
+                          "Optional",
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <NumericFormat
+                        decimalScale={0}
+                        allowNegative={false}
+                        customInput={TextField}
+                        thousandSeparator
+                        size="small"
+                        fullWidth
+                        color="secondary"
+                        label={t(
+                          "CreateListingV2.maxValue",
+                          "Max Value (aUEC)",
+                        )}
+                        value={maxOrderValue ?? ""}
+                        onValueChange={(v) =>
+                          setMaxOrderValue(v.floatValue ?? null)
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <Typography variant="caption">aUEC</Typography>
+                          ),
+                        }}
+                        helperText={t(
+                          "CreateListingV2.maxValueHelp",
+                          "Optional",
+                        )}
+                      />
+                    </Grid>
+                  </FormPaper>
+
+                  {/* Bulk Discount Tiers */}
+                  <FormPaper
+                    title={t("market.bulkDiscountTiers", "Bulk Discounts")}
+                  >
+                    <Grid item xs={12}>
+                      <BulkDiscountTierEditor
+                        tiers={bulkDiscountTiers}
+                        onChange={setBulkDiscountTiers}
+                      />
+                    </Grid>
+                  </FormPaper>
+
+                  {/* Stock Lots Section */}
+                  <FormPaper
+                    title={t("CreateListingV2.stockLots", "Stock Lots")}
+                    subtitle={t(
+                      "CreateListingV2.stockLotsSubtitle",
+                      "Add inventory with variant attributes (quality, source, location)",
+                    )}
+                  >
+                    {stockLots.map((lot, index) => (
+                      <Grid item xs={12} key={lot.id}>
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 2,
+                            p: 2,
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: theme.spacing(
+                              theme.borderRadius?.topLevel ?? 0.375,
+                            ),
+                            position: "relative",
                           }}
                         >
-                          <Typography variant="subtitle2" fontWeight="bold">
-                            {t("CreateListingV2.lot", "Lot")} {index + 1}
-                          </Typography>
-                          {stockLots.length > 1 && (
-                            <IconButton
-                              size="small"
-                              onClick={() => handleRemoveStockLot(lot.id)}
-                              aria-label={t("CreateListingV2.removeLot", "Remove lot")}
-                            >
-                              <DeleteOutline />
-                            </IconButton>
-                          )}
-                        </Box>
-
-                        <Grid container spacing={2}>
-                          {/* Quantity */}
-                          <Grid item xs={12} sm={6} md={4}>
-                            <NumericFormat
-                              decimalScale={0}
-                              allowNegative={false}
-                              customInput={TextField}
-                              thousandSeparator
-                              size="small"
-                              fullWidth
-                              onValueChange={(values) => {
-                                handleUpdateStockLot(lot.id, "quantity", values.floatValue || 0);
-                              }}
-                              label={t("CreateListingV2.quantity", "Quantity")}
-                              value={lot.quantity}
-                              color="secondary"
-                              required
-                              inputProps={{
-                                inputMode: "numeric",
-                                "aria-label": t(
-                                  "CreateListingV2.quantityAriaLabel",
-                                  "Enter quantity"
-                                ),
-                              }}
-                            />
-                          </Grid>
-
-                          {/* Quality — conditional based on item type */}
-                          {(() => {
-                            const qm = getQualityMode(gameItemType)
-                            if (qm === "none") return null
-                            return qm === "value" ? (
-                              <Grid item xs={12} sm={6} md={4}>
-                                {qualityBands && qualityBands.length > 0 ? (
-                                  <QualityBandSelect
-                                    bands={qualityBands}
-                                    value={lot.quality_value}
-                                    onChange={(val) => handleUpdateStockLot(lot.id, "quality_value", val ?? undefined)}
-                                    label={t("CreateListingV2.qualityValue", "Quality Value")}
-                                  />
-                                ) : (
-                                  <NumericFormat
-                                    decimalScale={0}
-                                    allowNegative={false}
-                                    customInput={TextField}
-                                    size="small"
-                                    fullWidth
-                                    isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-                                    onValueChange={(values) => {
-                                      handleUpdateStockLot(lot.id, "quality_value", values.floatValue);
-                                    }}
-                                    label={t("CreateListingV2.qualityValue", "Quality Value")}
-                                    value={lot.quality_value ?? ""}
-                                    color="secondary"
-                                    helperText={t("CreateListingV2.qualityValueHelp", "Optional: 0-1000")}
-                                    inputProps={{
-                                      inputMode: "decimal",
-                                      "aria-label": t("CreateListingV2.qualityValueAriaLabel", "Enter quality value"),
-                                    }}
-                                  />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              mb: 2,
+                            }}
+                          >
+                            <Typography variant="subtitle2" fontWeight="bold">
+                              {t("CreateListingV2.lot", "Lot")} {index + 1}
+                            </Typography>
+                            {stockLots.length > 1 && (
+                              <IconButton
+                                size="small"
+                                onClick={() => handleRemoveStockLot(lot.id)}
+                                aria-label={t(
+                                  "CreateListingV2.removeLot",
+                                  "Remove lot",
                                 )}
-                              </Grid>
-                            ) : (
-                              <Grid item xs={12} sm={6} md={4}>
-                                <TextField
-                                  select fullWidth size="small"
-                                  label={t("CreateListingV2.qualityTier", "Quality Tier")}
-                                  value={lot.quality_tier ?? ""}
-                                  onChange={(e) => handleUpdateStockLot(lot.id, "quality_tier", e.target.value ? Number(e.target.value) : undefined)}
-                                  color="secondary"
-                                  helperText={t("CreateListingV2.qualityTierHelp", "Optional: 1-5")}
-                                >
-                                  <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
-                                  {[1, 2, 3, 4, 5].map((tier) => (
-                                    <MenuItem key={tier} value={tier}>{t("CreateListingV2.tier", "Tier")} {tier}</MenuItem>
-                                  ))}
-                                </TextField>
-                              </Grid>
-                            )
-                          })()}
+                              >
+                                <DeleteOutline />
+                              </IconButton>
+                            )}
+                          </Box>
 
-                          {/* Crafted Source */}
-                          <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                              select
-                              fullWidth
-                              size="small"
-                              label={t("CreateListingV2.craftedSource", "Source")}
-                              value={lot.crafted_source ?? ""}
-                              onChange={(e) =>
-                                handleUpdateStockLot(
-                                  lot.id,
-                                  "crafted_source",
-                                  e.target.value || undefined
-                                )
-                              }
-                              color="secondary"
-                              helperText={t(
-                                "CreateListingV2.craftedSourceHelp",
-                                "Optional: How item was obtained"
-                              )}
-                            >
-                              <MenuItem value="">
-                                {t("CreateListingV2.notSpecified", "Not specified")}
-                              </MenuItem>
-                              <MenuItem value="crafted">
-                                {t("CreateListingV2.crafted", "Crafted")}
-                              </MenuItem>
-                              <MenuItem value="store">
-                                {t("CreateListingV2.store", "Store")}
-                              </MenuItem>
-                              <MenuItem value="looted">
-                                {t("CreateListingV2.looted", "Looted")}
-                              </MenuItem>
-                              <MenuItem value="unknown">
-                                {t("CreateListingV2.unknown", "Unknown")}
-                              </MenuItem>
-                              <MenuItem value="duped">
-                                {t("CreateListingV2.duped", "Duped")}
-                              </MenuItem>
-                            </TextField>
-                          </Grid>
-
-                          {/* Location */}
-                          <Grid item xs={12} sm={6} md={4}>
-                            <LocationSelector
-                              value={lot.location_id ?? null}
-                              onChange={(locationId) =>
-                                handleUpdateStockLot(lot.id, "location_id", locationId ?? undefined)
-                              }
-                              size="small"
-                              fullWidth
-                              label={t("CreateListingV2.location", "Location")}
-                            />
-                          </Grid>
-
-                          {/* Per-Variant Price */}
-                          {pricingMode === "per_variant" && (
+                          <Grid container spacing={2}>
+                            {/* Quantity */}
                             <Grid item xs={12} sm={6} md={4}>
                               <NumericFormat
                                 decimalScale={0}
@@ -914,104 +1056,331 @@ export function CreateListingV2() {
                                 size="small"
                                 fullWidth
                                 onValueChange={(values) => {
-                                  handleUpdateStockLot(lot.id, "price", values.floatValue || 0);
+                                  handleUpdateStockLot(
+                                    lot.id,
+                                    "quantity",
+                                    values.floatValue || 0,
+                                  )
                                 }}
-                                label={t("CreateListingV2.price", "Price")}
-                                value={lot.price ?? ""}
+                                label={t(
+                                  "CreateListingV2.quantity",
+                                  "Quantity",
+                                )}
+                                value={lot.quantity}
                                 color="secondary"
                                 required
-                                InputProps={{
-                                  endAdornment: <Typography>aUEC</Typography>,
-                                  inputMode: "numeric",
-                                }}
                                 inputProps={{
+                                  inputMode: "numeric",
                                   "aria-label": t(
-                                    "CreateListingV2.priceAriaLabel",
-                                    "Enter price for this variant"
+                                    "CreateListingV2.quantityAriaLabel",
+                                    "Enter quantity",
                                   ),
                                 }}
                               />
                             </Grid>
-                          )}
 
-                          {/* Notes */}
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              size="small"
-                              fullWidth
-                              label={t("CreateListingV2.notes", "Notes")}
-                              value={lot.notes ?? ""}
-                              onChange={(e) =>
-                                handleUpdateStockLot(lot.id, "notes", e.target.value || undefined)
-                              }
-                              color="secondary"
-                              helperText={t("CreateListingV2.notesHelp", "Optional: Internal notes for this lot")}
-                            />
-                          </Grid>
+                            {/* Quality — conditional based on item type */}
+                            {(() => {
+                              const qm = getQualityMode(gameItemType)
+                              if (qm === "none") return null
+                              return qm === "value" ? (
+                                <Grid item xs={12} sm={6} md={4}>
+                                  {qualityBands && qualityBands.length > 0 ? (
+                                    <QualityBandSelect
+                                      bands={qualityBands}
+                                      value={lot.quality_value}
+                                      onChange={(val) =>
+                                        handleUpdateStockLot(
+                                          lot.id,
+                                          "quality_value",
+                                          val ?? undefined,
+                                        )
+                                      }
+                                      label={t(
+                                        "CreateListingV2.qualityValue",
+                                        "Quality Value",
+                                      )}
+                                    />
+                                  ) : (
+                                    <NumericFormat
+                                      decimalScale={0}
+                                      allowNegative={false}
+                                      customInput={TextField}
+                                      size="small"
+                                      fullWidth
+                                      isAllowed={({ floatValue }) =>
+                                        !floatValue || floatValue <= 1000
+                                      }
+                                      onValueChange={(values) => {
+                                        handleUpdateStockLot(
+                                          lot.id,
+                                          "quality_value",
+                                          values.floatValue,
+                                        )
+                                      }}
+                                      label={t(
+                                        "CreateListingV2.qualityValue",
+                                        "Quality Value",
+                                      )}
+                                      value={lot.quality_value ?? ""}
+                                      color="secondary"
+                                      helperText={t(
+                                        "CreateListingV2.qualityValueHelp",
+                                        "Optional: 0-1000",
+                                      )}
+                                      inputProps={{
+                                        inputMode: "decimal",
+                                        "aria-label": t(
+                                          "CreateListingV2.qualityValueAriaLabel",
+                                          "Enter quality value",
+                                        ),
+                                      }}
+                                    />
+                                  )}
+                                </Grid>
+                              ) : (
+                                <Grid item xs={12} sm={6} md={4}>
+                                  <TextField
+                                    select
+                                    fullWidth
+                                    size="small"
+                                    label={t(
+                                      "CreateListingV2.qualityTier",
+                                      "Quality Tier",
+                                    )}
+                                    value={lot.quality_tier ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateStockLot(
+                                        lot.id,
+                                        "quality_tier",
+                                        e.target.value
+                                          ? Number(e.target.value)
+                                          : undefined,
+                                      )
+                                    }
+                                    color="secondary"
+                                    helperText={t(
+                                      "CreateListingV2.qualityTierHelp",
+                                      "Optional: 1-5",
+                                    )}
+                                  >
+                                    <MenuItem value="">
+                                      {t(
+                                        "CreateListingV2.notSpecified",
+                                        "Not specified",
+                                      )}
+                                    </MenuItem>
+                                    {[1, 2, 3, 4, 5].map((tier) => (
+                                      <MenuItem key={tier} value={tier}>
+                                        {t("CreateListingV2.tier", "Tier")}{" "}
+                                        {tier}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </Grid>
+                              )
+                            })()}
 
-                          {/* Listed */}
-                          <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", alignItems: "center" }}>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={lot.listed !== false}
-                                  onChange={(e) =>
-                                    handleUpdateStockLot(lot.id, "listed", e.target.checked)
-                                  }
+                            {/* Crafted Source */}
+                            <Grid item xs={12} sm={6} md={4}>
+                              <TextField
+                                select
+                                fullWidth
+                                size="small"
+                                label={t(
+                                  "CreateListingV2.craftedSource",
+                                  "Source",
+                                )}
+                                value={lot.crafted_source ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateStockLot(
+                                    lot.id,
+                                    "crafted_source",
+                                    e.target.value || undefined,
+                                  )
+                                }
+                                color="secondary"
+                                helperText={t(
+                                  "CreateListingV2.craftedSourceHelp",
+                                  "Optional: How item was obtained",
+                                )}
+                              >
+                                <MenuItem value="">
+                                  {t(
+                                    "CreateListingV2.notSpecified",
+                                    "Not specified",
+                                  )}
+                                </MenuItem>
+                                <MenuItem value="crafted">
+                                  {t("CreateListingV2.crafted", "Crafted")}
+                                </MenuItem>
+                                <MenuItem value="store">
+                                  {t("CreateListingV2.store", "Store")}
+                                </MenuItem>
+                                <MenuItem value="looted">
+                                  {t("CreateListingV2.looted", "Looted")}
+                                </MenuItem>
+                                <MenuItem value="unknown">
+                                  {t("CreateListingV2.unknown", "Unknown")}
+                                </MenuItem>
+                                <MenuItem value="duped">
+                                  {t("CreateListingV2.duped", "Duped")}
+                                </MenuItem>
+                              </TextField>
+                            </Grid>
+
+                            {/* Location */}
+                            <Grid item xs={12} sm={6} md={4}>
+                              <LocationSelector
+                                value={lot.location_id ?? null}
+                                onChange={(locationId) =>
+                                  handleUpdateStockLot(
+                                    lot.id,
+                                    "location_id",
+                                    locationId ?? undefined,
+                                  )
+                                }
+                                size="small"
+                                fullWidth
+                                label={t(
+                                  "CreateListingV2.location",
+                                  "Location",
+                                )}
+                              />
+                            </Grid>
+
+                            {/* Per-Variant Price */}
+                            {pricingMode === "per_variant" && (
+                              <Grid item xs={12} sm={6} md={4}>
+                                <NumericFormat
+                                  decimalScale={0}
+                                  allowNegative={false}
+                                  customInput={TextField}
+                                  thousandSeparator
+                                  size="small"
+                                  fullWidth
+                                  onValueChange={(values) => {
+                                    handleUpdateStockLot(
+                                      lot.id,
+                                      "price",
+                                      values.floatValue || 0,
+                                    )
+                                  }}
+                                  label={t("CreateListingV2.price", "Price")}
+                                  value={lot.price ?? ""}
                                   color="secondary"
+                                  required
+                                  InputProps={{
+                                    endAdornment: <Typography>aUEC</Typography>,
+                                    inputMode: "numeric",
+                                  }}
+                                  inputProps={{
+                                    "aria-label": t(
+                                      "CreateListingV2.priceAriaLabel",
+                                      "Enter price for this variant",
+                                    ),
+                                  }}
                                 />
-                              }
-                              label={t("CreateListingV2.listed", "Listed for sale")}
-                            />
+                              </Grid>
+                            )}
+
+                            {/* Notes */}
+                            <Grid item xs={12} sm={6}>
+                              <TextField
+                                size="small"
+                                fullWidth
+                                label={t("CreateListingV2.notes", "Notes")}
+                                value={lot.notes ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateStockLot(
+                                    lot.id,
+                                    "notes",
+                                    e.target.value || undefined,
+                                  )
+                                }
+                                color="secondary"
+                                helperText={t(
+                                  "CreateListingV2.notesHelp",
+                                  "Optional: Internal notes for this lot",
+                                )}
+                              />
+                            </Grid>
+
+                            {/* Listed */}
+                            <Grid
+                              item
+                              xs={12}
+                              sm={6}
+                              md={4}
+                              sx={{ display: "flex", alignItems: "center" }}
+                            >
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={lot.listed !== false}
+                                    onChange={(e) =>
+                                      handleUpdateStockLot(
+                                        lot.id,
+                                        "listed",
+                                        e.target.checked,
+                                      )
+                                    }
+                                    color="secondary"
+                                  />
+                                }
+                                label={t(
+                                  "CreateListingV2.listed",
+                                  "Listed for sale",
+                                )}
+                              />
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      </Box>
+                        </Box>
+                      </Grid>
+                    ))}
+
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<AddCircleOutlineRounded />}
+                        onClick={handleAddStockLot}
+                      >
+                        {t("CreateListingV2.addStockLot", "Add Stock Lot")}
+                      </Button>
                     </Grid>
-                  ))}
-
-                  <Grid item xs={12}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      startIcon={<AddCircleOutlineRounded />}
-                      onClick={handleAddStockLot}
-                    >
-                      {t("CreateListingV2.addStockLot", "Add Stock Lot")}
-                    </Button>
-                  </Grid>
-                </FormPaper>
-
-              </Grid>
-            </Collapse>
-          </Grid>
-
-          {formError && (
-            <Grid item xs={12}>
-              <Alert severity="error" role="alert">
-                {formError.message}
-              </Alert>
+                  </FormPaper>
+                </Grid>
+              </Collapse>
             </Grid>
-          )}
 
-          {/* Submit Button */}
-          <Grid item xs={12} container justifyContent="flex-end">
-            <LoadingButton
-              size="large"
-              variant="contained"
-              color="secondary"
-              type="submit"
-              loading={isLoading}
-              disabled={isUploading}
-              aria-label={t("CreateListingV2.submit", "Create Listing")}
-            >
-              {isUploading
-                ? t("CreateListingV2.uploadingPhotos", "Uploading photos...")
-                : t("CreateListingV2.submit", "Create Listing")}
-            </LoadingButton>
+            {formError && (
+              <Grid item xs={12}>
+                <Alert severity="error" role="alert">
+                  {formError.message}
+                </Alert>
+              </Grid>
+            )}
+
+            {/* Submit Button */}
+            <Grid item xs={12} container justifyContent="flex-end">
+              <LoadingButton
+                size="large"
+                variant="contained"
+                color="secondary"
+                type="submit"
+                loading={isLoading}
+                disabled={isUploading}
+                aria-label={t("CreateListingV2.submit", "Create Listing")}
+              >
+                {isUploading
+                  ? t("CreateListingV2.uploadingPhotos", "Uploading photos...")
+                  : t("CreateListingV2.submit", "Create Listing")}
+              </LoadingButton>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
+        </form>
       </Grid>
     </StandardPageLayout>
-  );
+  )
 }

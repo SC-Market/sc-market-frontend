@@ -39,11 +39,15 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
 
   const { data: profile } = useGetUserProfileQuery()
   const belongsToPostOrg = useMemo(
-    () => profile?.contractors?.some(c => c.spectrum_id === contractor.spectrum_id),
+    () =>
+      profile?.contractors?.some(
+        (c) => c.spectrum_id === contractor.spectrum_id,
+      ),
     [profile?.contractors, contractor.spectrum_id],
   )
   const { data: fullContractor } = useGetContractorBySpectrumIDQuery(
-    contractor.spectrum_id, { skip: !belongsToPostOrg },
+    contractor.spectrum_id,
+    { skip: !belongsToPostOrg },
   )
   const amContractorManager = canManageOrgRecruiting(fullContractor, profile)
 
@@ -68,9 +72,13 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
               >
                 <Avatar
                   src={contractor.avatar}
-                  alt={t("accessibility.contractorAvatar", "Avatar of {{name}}", {
-                    name: contractor.name,
-                  })}
+                  alt={t(
+                    "accessibility.contractorAvatar",
+                    "Avatar of {{name}}",
+                    {
+                      name: contractor.name,
+                    },
+                  )}
                   variant={"rounded"}
                   sx={{
                     maxHeight: theme.spacing(12),

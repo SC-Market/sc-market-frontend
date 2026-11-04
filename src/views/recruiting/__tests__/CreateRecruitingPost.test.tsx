@@ -33,18 +33,29 @@ vi.mock("../../../features/profile/api/profileApi", () => ({
   }),
 }))
 vi.mock("../../../features/contractor/api/contractorApi", () => ({
-  useGetContractorBySpectrumIDQuery: (spectrumId: string, { skip }: { skip: boolean }) => ({
-    data: skip ? undefined : { spectrum_id: spectrumId, name: `Org ${spectrumId}` },
+  useGetContractorBySpectrumIDQuery: (
+    spectrumId: string,
+    { skip }: { skip: boolean },
+  ) => ({
+    data: skip
+      ? undefined
+      : { spectrum_id: spectrumId, name: `Org ${spectrumId}` },
     isLoading: false,
   }),
 }))
 vi.mock("../../../components/markdown/Markdown.lazy", () => ({
   MarkdownEditor: (props: { value: string; onChange: (v: string) => void }) => (
-    <textarea aria-label="body" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
+    <textarea
+      aria-label="body"
+      value={props.value}
+      onChange={(e) => props.onChange(e.target.value)}
+    />
   ),
 }))
 vi.mock("../RecruitingPostView", () => ({ RecruitingPostView: () => null }))
-vi.mock("../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => vi.fn() }))
+vi.mock("../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => vi.fn(),
+}))
 
 import { CreateRecruitingPost } from "../CreateRecruitingPost"
 
@@ -70,11 +81,18 @@ describe("CreateRecruitingPost", () => {
     renderForm("SECONDORG")
 
     expect(screen.getByText(/Posting for/)).toBeTruthy()
-    fireEvent.change(screen.getByLabelText(/recruiting_post.title_required|Title/), {
-      target: { value: "We're hiring" },
+    fireEvent.change(
+      screen.getByLabelText(/recruiting_post.title_required|Title/),
+      {
+        target: { value: "We're hiring" },
+      },
+    )
+    fireEvent.change(screen.getByLabelText("body"), {
+      target: { value: "Join us" },
     })
-    fireEvent.change(screen.getByLabelText("body"), { target: { value: "Join us" } })
-    fireEvent.click(screen.getByRole("button", { name: /recruiting_post.submit|Submit/ }))
+    fireEvent.click(
+      screen.getByRole("button", { name: /recruiting_post.submit|Submit/ }),
+    )
 
     await waitFor(() => expect(createPost).toHaveBeenCalled())
     expect(createPost.mock.calls[0][0]).toMatchObject({
@@ -86,7 +104,9 @@ describe("CreateRecruitingPost", () => {
 
   it("can't submit without a selected org the user belongs to", () => {
     renderForm("NOTMYORG")
-    const submit = screen.getByRole("button", { name: /recruiting_post.submit|Submit/ })
+    const submit = screen.getByRole("button", {
+      name: /recruiting_post.submit|Submit/,
+    })
     expect((submit as HTMLButtonElement).disabled).toBe(true)
     expect(screen.queryByText(/Posting for/)).toBeNull()
   })

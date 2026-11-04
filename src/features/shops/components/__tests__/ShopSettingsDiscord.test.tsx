@@ -56,9 +56,13 @@ vi.mock("../ShopBlocklist", () => ({ ShopBlocklistSection: () => null }))
 vi.mock("../../../discord-install/LinkedDiscordServers", () => ({
   LinkedDiscordServers: () => null,
 }))
-vi.mock("../ShopStorefrontSection", () => ({ ShopStorefrontSection: () => null }))
+vi.mock("../ShopStorefrontSection", () => ({
+  ShopStorefrontSection: () => null,
+}))
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: (props: { children: React.ReactNode }) => <div>{props.children}</div>,
+  StandardPageLayout: (props: { children: React.ReactNode }) => (
+    <div>{props.children}</div>
+  ),
 }))
 
 import { ShopSettings } from "../ShopSettings"
@@ -87,7 +91,12 @@ function shop(overrides: Partial<ShopResponse>): ShopResponse {
     official_server_id: null,
     discord_thread_channel_id: null,
     badge_ids: [],
-    permissions: { can_manage: true, manage_market: true, manage_stock: true, manage_orders: true },
+    permissions: {
+      can_manage: true,
+      manage_market: true,
+      manage_stock: true,
+      manage_orders: true,
+    },
     ...overrides,
   } as ShopResponse
 }
@@ -103,7 +112,8 @@ function renderSettings() {
   return {
     server: screen.getByLabelText("Discord Server ID"),
     channel: screen.getByLabelText("Thread Channel ID"),
-    save: () => fireEvent.click(screen.getByRole("button", { name: /Save Changes/ })),
+    save: () =>
+      fireEvent.click(screen.getByRole("button", { name: /Save Changes/ })),
   }
 }
 
@@ -117,18 +127,25 @@ describe("Shop Settings › Discord", () => {
     state.shop = shop({})
     renderSettings()
     const discord = screen.getByText(/own channel/).closest("div")!
-    expect(within(discord).getByText(/your org's thread\s+channel/)).toBeInTheDocument()
+    expect(
+      within(discord).getByText(/your org's thread\s+channel/),
+    ).toBeInTheDocument()
     expect(discord.textContent).toContain("/setup threads")
   })
 
   it("says 'your' thread channel for a personal shop", () => {
     state.shop = shop({ is_org_owned: false, owner_user_id: "user-1" })
     renderSettings()
-    expect(screen.getByText(/Leave both\s+empty to use your thread/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Leave both\s+empty to use your thread/),
+    ).toBeInTheDocument()
   })
 
   it("shows the shop's own channel and saves both IDs", async () => {
-    state.shop = shop({ official_server_id: "1003056231591727264", discord_thread_channel_id: "1072580369251041330" })
+    state.shop = shop({
+      official_server_id: "1003056231591727264",
+      discord_thread_channel_id: "1072580369251041330",
+    })
     const { server, channel, save } = renderSettings()
     expect(server).toHaveValue("1003056231591727264")
     expect(channel).toHaveValue("1072580369251041330")
@@ -143,7 +160,10 @@ describe("Shop Settings › Discord", () => {
   })
 
   it("clears both to go back to the owner's channel", async () => {
-    state.shop = shop({ official_server_id: "1003056231591727264", discord_thread_channel_id: "1072580369251041330" })
+    state.shop = shop({
+      official_server_id: "1003056231591727264",
+      discord_thread_channel_id: "1072580369251041330",
+    })
     const { server, channel, save } = renderSettings()
     fireEvent.change(server, { target: { value: "" } })
     fireEvent.change(channel, { target: { value: "" } })
@@ -161,12 +181,15 @@ describe("Shop Settings › Discord", () => {
     fireEvent.change(server, { target: { value: "1003056231591727264" } })
 
     expect(
-      screen.getByText("Enter both the server ID and the channel ID, or leave both empty"),
+      screen.getByText(
+        "Enter both the server ID and the channel ID, or leave both empty",
+      ),
     ).toBeInTheDocument()
     save()
     expect(updateShop).not.toHaveBeenCalled()
     expect(issueAlert).toHaveBeenCalledWith({
-      message: "Enter both the server ID and the channel ID, or leave both empty",
+      message:
+        "Enter both the server ID and the channel ID, or leave both empty",
       severity: "error",
     })
   })

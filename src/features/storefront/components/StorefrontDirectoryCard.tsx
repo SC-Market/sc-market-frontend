@@ -1,5 +1,13 @@
 import React from "react"
-import { Alert, Box, FormControlLabel, Paper, Stack, Switch, Typography } from "@mui/material"
+import {
+  Alert,
+  Box,
+  FormControlLabel,
+  Paper,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { StorefrontDirectoryStatus } from "../../../store/api/v2/market"
 import { getErrorMessage } from "../../../util/errorHandling"
@@ -27,10 +35,19 @@ export function StorefrontDirectoryCard(props: {
     switch (status.reason) {
       case "listed":
         return props.kind === "org"
-          ? t("storefront.directory.listed", "Your org is listed in the storefront directory.")
-          : t("storefront.directory.shopListed", "This shop counts towards its org's listing in the storefront directory.")
+          ? t(
+              "storefront.directory.listed",
+              "Your org is listed in the storefront directory.",
+            )
+          : t(
+              "storefront.directory.shopListed",
+              "This shop counts towards its org's listing in the storefront directory.",
+            )
       case "hidden_by_setting":
-        return t("storefront.directory.hidden", "Hidden: it isn't shown in the storefront directory.")
+        return t(
+          "storefront.directory.hidden",
+          "Hidden: it isn't shown in the storefront directory.",
+        )
       case "members_only":
         return t(
           "storefront.directory.membersOnly",
@@ -43,18 +60,34 @@ export function StorefrontDirectoryCard(props: {
               defaultValue:
                 "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing or a service.",
             })
-          : t("storefront.directory.noContent", "Not listed yet: it shows once it has a public listing or a service.")
+          : t(
+              "storefront.directory.noContent",
+              "Not listed yet: it shows once it has a public listing or a service.",
+            )
       case "not_verified":
-        return t("storefront.directory.notVerified", "Only RSI-verified orgs are listed in the storefront directory.")
+        return t(
+          "storefront.directory.notVerified",
+          "Only RSI-verified orgs are listed in the storefront directory.",
+        )
       case "personal_shop":
-        return t("storefront.directory.personalShop", "The storefront directory lists orgs, so personal shops aren't in it yet.")
+        return t(
+          "storefront.directory.personalShop",
+          "The storefront directory lists orgs, so personal shops aren't in it yet.",
+        )
       case "org_not_listed":
-        return t("storefront.directory.orgNotListed", "Its org isn't listed in the storefront directory, so neither is this shop.")
+        return t(
+          "storefront.directory.orgNotListed",
+          "Its org isn't listed in the storefront directory, so neither is this shop.",
+        )
     }
   })()
 
   return (
-    <Box component={props.bare ? "div" : Paper} sx={props.bare ? undefined : { p: 2 }} data-testid="storefront-directory">
+    <Box
+      component={props.bare ? "div" : Paper}
+      sx={props.bare ? undefined : { p: 2 }}
+      data-testid="storefront-directory"
+    >
       <Stack spacing={1}>
         {!props.bare && (
           <Typography variant="h6" component="h2" color="text.secondary">
@@ -71,14 +104,25 @@ export function StorefrontDirectoryCard(props: {
               data-testid="storefront-directory-toggle"
             />
           }
-          label={t("storefront.directory.toggle", "Show in the public storefront directory")}
+          label={t(
+            "storefront.directory.toggle",
+            "Show in the public storefront directory",
+          )}
         />
-        <Typography id="storefront-directory-reason" variant="body2" color="text.primary">
+        <Typography
+          id="storefront-directory-reason"
+          variant="body2"
+          color="text.primary"
+        >
           {reason}
         </Typography>
         {props.error && (
           <Alert severity="error">
-            {getErrorMessage(props.error) ?? t("storefront.directory.saveFailed", "The setting couldn't be saved.")}
+            {getErrorMessage(props.error) ??
+              t(
+                "storefront.directory.saveFailed",
+                "The setting couldn't be saved.",
+              )}
           </Alert>
         )}
       </Stack>

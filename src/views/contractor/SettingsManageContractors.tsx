@@ -28,14 +28,23 @@ export function SettingsManageContractors() {
   const { t } = useTranslation()
   const {
     profile,
-    archiveTarget, setArchiveTarget, archiveReason, setArchiveReason,
-    isArchiving, handleArchiveOrg,
-    transferTarget, setTransferTarget,
-    transferSearchQuery, setTransferSearchQuery,
-    transferSelectedUser, setTransferSelectedUser,
-    transferSearchOptions, transferMembers,
+    archiveTarget,
+    setArchiveTarget,
+    archiveReason,
+    setArchiveReason,
+    isArchiving,
+    handleArchiveOrg,
+    transferTarget,
+    setTransferTarget,
+    transferSearchQuery,
+    setTransferSearchQuery,
+    transferSelectedUser,
+    setTransferSelectedUser,
+    transferSearchOptions,
+    transferMembers,
     setTransferSearchOptions,
-    isTransferring, handleTransferOwnership,
+    isTransferring,
+    handleTransferOwnership,
     handleLeaveOrg,
   } = useManageContractors()
 
@@ -57,8 +66,12 @@ export function SettingsManageContractors() {
         <ContractorActions
           row={row}
           profile={profile}
-          onTransfer={(spectrum_id, name) => setTransferTarget({ spectrum_id, name })}
-          onArchive={(spectrum_id, name) => setArchiveTarget({ spectrum_id, name })}
+          onTransfer={(spectrum_id, name) =>
+            setTransferTarget({ spectrum_id, name })
+          }
+          onArchive={(spectrum_id, name) =>
+            setArchiveTarget({ spectrum_id, name })
+          }
           onLeave={handleLeaveOrg}
         />
       ),
@@ -265,13 +278,16 @@ function ContractorActions(props: {
 }) {
   const { row, profile, onTransfer, onArchive, onLeave } = props
   const { t } = useTranslation()
-  const { data: contractor } = useGetContractorBySpectrumIDQuery(row.spectrum_id)
+  const { data: contractor } = useGetContractorBySpectrumIDQuery(
+    row.spectrum_id,
+  )
 
   const ownerRole = contractor?.owner_role
   const userContractor = profile?.contractors?.find(
     (c) => c.spectrum_id === contractor?.spectrum_id,
   )
-  const isOwner = ownerRole && userContractor?.roles.find((r: string) => r === ownerRole)
+  const isOwner =
+    ownerRole && userContractor?.roles.find((r: string) => r === ownerRole)
 
   if (contractor?.archived || row.archived) {
     return <Chip label={t("settingsManageContractors.archived_label")} />
@@ -280,10 +296,19 @@ function ContractorActions(props: {
   if (isOwner) {
     return (
       <>
-        <Button variant="outlined" color="primary" onClick={() => onTransfer(row.spectrum_id, row.name)} sx={{ mr: 1 }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => onTransfer(row.spectrum_id, row.name)}
+          sx={{ mr: 1 }}
+        >
           {t("settingsManageContractors.transfer_ownership")}
         </Button>
-        <Button variant="contained" color="error" onClick={() => onArchive(row.spectrum_id, row.name)}>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => onArchive(row.spectrum_id, row.name)}
+        >
           {t("settingsManageContractors.disband_org")}
         </Button>
       </>
@@ -291,7 +316,11 @@ function ContractorActions(props: {
   }
 
   return (
-    <Button variant="outlined" color="error" onClick={() => onLeave(row.spectrum_id)}>
+    <Button
+      variant="outlined"
+      color="error"
+      onClick={() => onLeave(row.spectrum_id)}
+    >
       {t("settingsManageContractors.leave_org")}
     </Button>
   )

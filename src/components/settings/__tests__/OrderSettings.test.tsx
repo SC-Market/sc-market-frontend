@@ -11,11 +11,15 @@ import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 vi.mock("../../paper/Section", () => ({
-  FlatSection: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  FlatSection: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }))
 
 vi.mock("../../../features/orders/hooks/useOrderSettings", () => ({
@@ -23,18 +27,43 @@ vi.mock("../../../features/orders/hooks/useOrderSettings", () => ({
     isLoading: false,
     userError: undefined,
     contractorError: undefined,
-    offerMessage: "", setOfferMessage: vi.fn(), offerEnabled: true, setOfferEnabled: vi.fn(),
-    orderMessage: "", setOrderMessage: vi.fn(), orderEnabled: true, setOrderEnabled: vi.fn(),
-    requireAvailabilityEnabled: false, setRequireAvailabilityEnabled: vi.fn(),
-    minOrderSize: "", setMinOrderSize: vi.fn(), minOrderSizeEnabled: false, setMinOrderSizeEnabled: vi.fn(),
-    maxOrderSize: "", setMaxOrderSize: vi.fn(), maxOrderSizeEnabled: false, setMaxOrderSizeEnabled: vi.fn(),
-    minOrderValue: "", setMinOrderValue: vi.fn(), minOrderValueEnabled: false, setMinOrderValueEnabled: vi.fn(),
-    maxOrderValue: "", setMaxOrderValue: vi.fn(), maxOrderValueEnabled: false, setMaxOrderValueEnabled: vi.fn(),
-    saving: false, error: null, success: false,
-    handleSave: vi.fn(), handleDelete: vi.fn(),
-    offerSettingId: null, orderSettingId: null,
-    minOrderSizeSettingId: null, maxOrderSizeSettingId: null,
-    minOrderValueSettingId: null, maxOrderValueSettingId: null,
+    offerMessage: "",
+    setOfferMessage: vi.fn(),
+    offerEnabled: true,
+    setOfferEnabled: vi.fn(),
+    orderMessage: "",
+    setOrderMessage: vi.fn(),
+    orderEnabled: true,
+    setOrderEnabled: vi.fn(),
+    requireAvailabilityEnabled: false,
+    setRequireAvailabilityEnabled: vi.fn(),
+    minOrderSize: "",
+    setMinOrderSize: vi.fn(),
+    minOrderSizeEnabled: false,
+    setMinOrderSizeEnabled: vi.fn(),
+    maxOrderSize: "",
+    setMaxOrderSize: vi.fn(),
+    maxOrderSizeEnabled: false,
+    setMaxOrderSizeEnabled: vi.fn(),
+    minOrderValue: "",
+    setMinOrderValue: vi.fn(),
+    minOrderValueEnabled: false,
+    setMinOrderValueEnabled: vi.fn(),
+    maxOrderValue: "",
+    setMaxOrderValue: vi.fn(),
+    maxOrderValueEnabled: false,
+    setMaxOrderValueEnabled: vi.fn(),
+    saving: false,
+    error: null,
+    success: false,
+    handleSave: vi.fn(),
+    handleDelete: vi.fn(),
+    offerSettingId: null,
+    orderSettingId: null,
+    minOrderSizeSettingId: null,
+    maxOrderSizeSettingId: null,
+    minOrderValueSettingId: null,
+    maxOrderValueSettingId: null,
   }),
 }))
 
@@ -50,11 +79,15 @@ describe("OrderSettings", () => {
       </ThemeProvider>,
     )
 
-    expect(screen.getByText(/Stock allocation mode is set per shop/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Stock allocation mode is set per shop/),
+    ).toBeInTheDocument()
     for (const link of screen.getAllByRole("link", { name: "Your shops" })) {
       expect(link).toHaveAttribute("href", "/dashboard/shops")
     }
-    expect(screen.queryByText("Automatic (Recommended)")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("Automatic (Recommended)"),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText("None (Legacy)")).not.toBeInTheDocument()
   })
 
@@ -67,7 +100,9 @@ describe("OrderSettings", () => {
       </ThemeProvider>,
     )
 
-    expect(screen.getByText(/Stock subtraction timing is set per shop/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Stock subtraction timing is set per shop/),
+    ).toBeInTheDocument()
     expect(screen.queryByRole("radio")).not.toBeInTheDocument()
     expect(screen.getAllByRole("link", { name: "Your shops" })).toHaveLength(2)
   })

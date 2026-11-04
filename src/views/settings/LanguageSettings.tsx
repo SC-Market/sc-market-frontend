@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react"
-import {
-  Box,
-  Grid,
-  Typography,
-  Alert,
-} from "@mui/material"
+import { Box, Grid, Typography, Alert } from "@mui/material"
 import { FlatSection } from "../../components/paper/Section"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
 import {
@@ -49,7 +44,10 @@ export function LanguageSettings() {
         severity: "success",
       })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("settings.languages.saveError", "Failed to update languages")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("settings.languages.saveError", "Failed to update languages")
       issueAlert({
         message,
         severity: "error",

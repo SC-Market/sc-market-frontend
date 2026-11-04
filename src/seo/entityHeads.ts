@@ -12,7 +12,12 @@ import type {
   ShopPublicResponse,
 } from "../store/api/v2/market"
 import { formatShortSlug } from "../features/market/domain/urls"
-import { MARKET_PATHS, ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../routes/paths"
+import {
+  MARKET_PATHS,
+  ORG_PATHS,
+  SHOP_PATHS,
+  USER_PATHS,
+} from "../routes/paths"
 import { FALLBACK_IMAGE_URL } from "./constants"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 
@@ -54,7 +59,9 @@ export function listingPriceRange(
 }
 
 /** Units in stock over a listing's items and variants. */
-export function listingQuantity(data: Pick<GetListingDetailResponse, "items">): number {
+export function listingQuantity(
+  data: Pick<GetListingDetailResponse, "items">,
+): number {
   let total = 0
   for (const item of data.items ?? []) {
     for (const variant of item.variants ?? []) {
@@ -87,15 +94,21 @@ export function formatAuecShort(value: number): string {
 }
 
 /** "1.5M aUEC" or "from 1.5M aUEC" (several prices), null without a price. */
-export function listingPriceLabel(range: { min: number; max: number } | null): string | null {
+export function listingPriceLabel(
+  range: { min: number; max: number } | null,
+): string | null {
   if (!range) return null
   const amount = `${formatAuecShort(range.min)} aUEC`
   return range.max > range.min ? `from ${amount}` : amount
 }
 
 /** The seller's rating as text, null while unrated. */
-export function sellerRatingLabel(rating: number | null | undefined, count?: number | null): string | null {
-  if (typeof rating !== "number" || !Number.isFinite(rating) || rating <= 0) return null
+export function sellerRatingLabel(
+  rating: number | null | undefined,
+  count?: number | null,
+): string | null {
+  if (typeof rating !== "number" || !Number.isFinite(rating) || rating <= 0)
+    return null
   const stars = `${Number(rating.toFixed(1))}/5`
   return typeof count === "number" && count > 0
     ? `rated ${stars} from ${count} review${count === 1 ? "" : "s"}`
@@ -111,7 +124,8 @@ export function listingImage(
 ): string {
   return (
     data.listing.photos?.find((photo) => !!photo) ||
-    data.items?.find((item) => !!item.game_item?.image_url)?.game_item.image_url ||
+    data.items?.find((item) => !!item.game_item?.image_url)?.game_item
+      .image_url ||
     FALLBACK_IMAGE_URL
   )
 }
@@ -154,9 +168,13 @@ export function buildListingHead(
   const summary = `${facts.join(" · ")}.`
   const text = listing.description?.replace(/\s+/g, " ").trim()
   const descriptionFull =
-    text && text !== listing.title ? `${summary} ${text}` : `${listing.title}: ${summary}`
+    text && text !== listing.title
+      ? `${summary} ${text}`
+      : `${listing.title}: ${summary}`
   const description =
-    descriptionFull.length > 160 ? `${descriptionFull.slice(0, 159).trimEnd()}…` : descriptionFull
+    descriptionFull.length > 160
+      ? `${descriptionFull.slice(0, 159).trimEnd()}…`
+      : descriptionFull
   const title = priceLabel
     ? `${listing.title} — ${priceLabel} · Star Citizen | SC Market`
     : `${listing.title} · Star Citizen | SC Market`
@@ -189,7 +207,9 @@ export function buildListingHead(
       breadcrumbJsonLd([
         { name: "SC Market", url: `${origin}/` },
         { name: "Market", url: `${origin}${MARKET_PATHS.search}` },
-        ...(items.length === 1 && items[0].game_item?.id && items[0].game_item.name
+        ...(items.length === 1 &&
+        items[0].game_item?.id &&
+        items[0].game_item.name
           ? [
               {
                 name: items[0].game_item.name,
@@ -214,7 +234,9 @@ export function aggregateSeoDescription(name: string): string {
  * `description` is the game item description the page has (it passes "").
  */
 export function buildAggregateHead(
-  gameItem: Pick<GameItemMetadata, "id" | "name" | "image_url"> & { description?: string },
+  gameItem: Pick<GameItemMetadata, "id" | "name" | "image_url"> & {
+    description?: string
+  },
   listingCount: number,
   origin: string,
 ): PageHead {
@@ -236,7 +258,8 @@ export function buildAggregateHead(
       { name: "twitter:title", content: name },
       {
         name: "twitter:description",
-        content: gameItem.description || `Browse all ${name} listings on SC Market.`,
+        content:
+          gameItem.description || `Browse all ${name} listings on SC Market.`,
       },
       { name: "twitter:image", content: image },
     ],
@@ -260,7 +283,9 @@ export function buildAggregateHead(
 }
 
 /** Bundle page image (MarketMultipleViewV2): the first item's image. */
-export function bundleImage(data: Pick<GetListingDetailResponse, "items">): string {
+export function bundleImage(
+  data: Pick<GetListingDetailResponse, "items">,
+): string {
   return data.items[0]?.game_item.image_url || FALLBACK_IMAGE_URL
 }
 
@@ -472,10 +497,14 @@ export function userPageTitle(displayName: string, storeLabel: string): string {
  * /user/:username[/:tab] (ProfileMetaTags). Title and canonical come from
  * the page layout (userPageTitle / the request path).
  */
-export function buildUserHead(profile: UserHeadInput, origin: string): PageHead {
+export function buildUserHead(
+  profile: UserHeadInput,
+  origin: string,
+): PageHead {
   const url = `${origin}${USER_PATHS.profile(profile.username)}`
   const socialDescription =
-    profile.profile_description || `${profile.display_name}'s profile on SC Market`
+    profile.profile_description ||
+    `${profile.display_name}'s profile on SC Market`
 
   return {
     meta: [
@@ -528,7 +557,11 @@ export function buildRecruitingPostHead(
   origin: string,
 ): PageHead {
   const title = `${post.title} — Star Citizen Recruiting | SC Market`
-  const description = `Join ${post.contractor?.name || "an organization"} in Star Citizen.${post.body ? ` ${post.body.slice(0, 120)}` : ""}`.slice(0, 160)
+  const description =
+    `Join ${post.contractor?.name || "an organization"} in Star Citizen.${post.body ? ` ${post.body.slice(0, 120)}` : ""}`.slice(
+      0,
+      160,
+    )
   const image = post.contractor?.banner || post.contractor?.avatar || ""
   const canonical = `${origin}/recruiting/post/${post.post_id}`
 

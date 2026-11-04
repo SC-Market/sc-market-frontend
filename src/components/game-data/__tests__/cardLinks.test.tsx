@@ -38,7 +38,8 @@ const mission = {
   ship_encounter_count: 0,
 }
 
-const inRouter = (ui: React.ReactElement) => render(<MemoryRouter>{ui}</MemoryRouter>)
+const inRouter = (ui: React.ReactElement) =>
+  render(<MemoryRouter>{ui}</MemoryRouter>)
 
 /** The card's own link (chips inside it are buttons, not links). */
 function cardLink(name: string | RegExp): HTMLAnchorElement {
@@ -48,25 +49,40 @@ function cardLink(name: string | RegExp): HTMLAnchorElement {
 }
 
 describe("BlueprintCard link", () => {
-  it.each(["grid", "list"] as const)("%s view is an <a href> to the blueprint page", (viewMode) => {
-    inRouter(<BlueprintCard blueprint={blueprint} viewMode={viewMode} />)
-    const link = cardLink(/FS-9 LMG/)
-    expect(link.getAttribute("href")).toBe("/blueprints/BP_CRAFT_behr_lmg_ballistic_01")
-    // Keyboard reachable: an anchor with an href, not taken out of the tab order.
-    expect(link.getAttribute("tabindex")).not.toBe("-1")
-  })
+  it.each(["grid", "list"] as const)(
+    "%s view is an <a href> to the blueprint page",
+    (viewMode) => {
+      inRouter(<BlueprintCard blueprint={blueprint} viewMode={viewMode} />)
+      const link = cardLink(/FS-9 LMG/)
+      expect(link.getAttribute("href")).toBe(
+        "/blueprints/BP_CRAFT_behr_lmg_ballistic_01",
+      )
+      // Keyboard reachable: an anchor with an href, not taken out of the tab order.
+      expect(link.getAttribute("tabindex")).not.toBe("-1")
+    },
+  )
 
   it("a plain click opens in-app; a modified or middle click follows the link", () => {
     const onClick = vi.fn()
-    inRouter(<BlueprintCard blueprint={blueprint} viewMode="grid" onClick={onClick} />)
+    inRouter(
+      <BlueprintCard blueprint={blueprint} viewMode="grid" onClick={onClick} />,
+    )
     const link = cardLink(/FS-9 LMG/)
 
     const plain = fireEvent.click(link)
     expect(plain).toBe(false) // default prevented: the modal, not a page load
-    expect(onClick).toHaveBeenCalledWith("bp-1", "BP_CRAFT_behr_lmg_ballistic_01")
+    expect(onClick).toHaveBeenCalledWith(
+      "bp-1",
+      "BP_CRAFT_behr_lmg_ballistic_01",
+    )
 
     onClick.mockClear()
-    for (const init of [{ ctrlKey: true }, { metaKey: true }, { shiftKey: true }, { button: 1 }]) {
+    for (const init of [
+      { ctrlKey: true },
+      { metaKey: true },
+      { shiftKey: true },
+      { button: 1 },
+    ]) {
       fireEvent.click(link, init)
     }
     expect(onClick).not.toHaveBeenCalled()
@@ -75,15 +91,28 @@ describe("BlueprintCard link", () => {
 
 describe("MissionCard link", () => {
   it("is an <a href> to the mission page", () => {
-    inRouter(<MissionCard mission={mission} href="/missions/PU_Delivery_Local_KlimIntro" />)
+    inRouter(
+      <MissionCard
+        mission={mission}
+        href="/missions/PU_Delivery_Local_KlimIntro"
+      />,
+    )
     const link = cardLink(/A Batch from Scratch/)
-    expect(link.getAttribute("href")).toBe("/missions/PU_Delivery_Local_KlimIntro")
+    expect(link.getAttribute("href")).toBe(
+      "/missions/PU_Delivery_Local_KlimIntro",
+    )
     expect(link.getAttribute("tabindex")).not.toBe("-1")
   })
 
   it("a plain click opens in-app; Ctrl-click follows the link", () => {
     const onClick = vi.fn()
-    inRouter(<MissionCard mission={mission} href="/missions/PU_Delivery_Local_KlimIntro" onClick={onClick} />)
+    inRouter(
+      <MissionCard
+        mission={mission}
+        href="/missions/PU_Delivery_Local_KlimIntro"
+        onClick={onClick}
+      />,
+    )
     const link = cardLink(/A Batch from Scratch/)
     expect(fireEvent.click(link)).toBe(false)
     expect(onClick).toHaveBeenCalledWith("m-1")
@@ -93,7 +122,12 @@ describe("MissionCard link", () => {
   })
 
   it("a chip inside the card doesn't follow the card's link", () => {
-    inRouter(<MissionCard mission={mission} href="/missions/PU_Delivery_Local_KlimIntro" />)
+    inRouter(
+      <MissionCard
+        mission={mission}
+        href="/missions/PU_Delivery_Local_KlimIntro"
+      />,
+    )
     const chip = screen.getByRole("button", { name: "Stanton" })
     expect(fireEvent.click(chip)).toBe(false)
   })

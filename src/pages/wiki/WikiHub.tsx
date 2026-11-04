@@ -95,7 +95,11 @@ export function WikiHub() {
                   >
                     {SECTION_ICONS[section.route]}
                   </Avatar>
-                  <Typography variant="subtitle1" fontWeight={600} textAlign="center">
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    textAlign="center"
+                  >
                     {t(section.labelKey, section.label)}
                   </Typography>
                 </CardContent>

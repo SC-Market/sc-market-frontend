@@ -18,7 +18,11 @@ export function ParticleField() {
     primaryRef.current = theme.palette.primary.main
     bgRef.current = theme.palette.background.default
     isDarkRef.current = theme.palette.mode === "dark"
-  }, [theme.palette.primary.main, theme.palette.background.default, theme.palette.mode])
+  }, [
+    theme.palette.primary.main,
+    theme.palette.background.default,
+    theme.palette.mode,
+  ])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -29,15 +33,28 @@ export function ParticleField() {
     // Respect prefers-reduced-motion
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
-    const setSize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    const setSize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
     setSize()
 
     const hexToRgb = (hex: string) => {
       const h = hex.replace("#", "")
-      return { r: parseInt(h.slice(0, 2), 16) || 0, g: parseInt(h.slice(2, 4), 16) || 0, b: parseInt(h.slice(4, 6), 16) || 0 }
+      return {
+        r: parseInt(h.slice(0, 2), 16) || 0,
+        g: parseInt(h.slice(2, 4), 16) || 0,
+        b: parseInt(h.slice(4, 6), 16) || 0,
+      }
     }
 
-    const particles: Array<{ x: number; y: number; vx: number; vy: number; size: number }> = []
+    const particles: Array<{
+      x: number
+      y: number
+      vx: number
+      vy: number
+      size: number
+    }> = []
     for (let i = 0; i < 40; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -52,7 +69,10 @@ export function ParticleField() {
     let paused = false
 
     const animate = () => {
-      if (paused) { animId = requestAnimationFrame(animate); return }
+      if (paused) {
+        animId = requestAnimationFrame(animate)
+        return
+      }
       const c = hexToRgb(primaryRef.current)
       const bg = hexToRgb(bgRef.current)
       const dark = isDarkRef.current
@@ -67,11 +87,13 @@ export function ParticleField() {
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
-        p.x += p.vx; p.y += p.vy
+        p.x += p.vx
+        p.y += p.vy
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1
 
-        const drawY = ((p.y - scrollY) % canvas.height + canvas.height) % canvas.height
+        const drawY =
+          (((p.y - scrollY) % canvas.height) + canvas.height) % canvas.height
 
         ctx.fillStyle = `rgba(${c.r},${c.g},${c.b},${0.5 * dim})`
         ctx.beginPath()
@@ -80,8 +102,10 @@ export function ParticleField() {
 
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j]
-          const drawY2 = ((p2.y - scrollY) % canvas.height + canvas.height) % canvas.height
-          const dx = p.x - p2.x, dy = drawY - drawY2
+          const drawY2 =
+            (((p2.y - scrollY) % canvas.height) + canvas.height) % canvas.height
+          const dx = p.x - p2.x,
+            dy = drawY - drawY2
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 120) {
             ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${0.15 * dim * (1 - dist / 120)})`
@@ -98,11 +122,17 @@ export function ParticleField() {
     animate()
 
     // Pause when tab is hidden
-    const onVisibility = () => { paused = document.hidden }
+    const onVisibility = () => {
+      paused = document.hidden
+    }
     document.addEventListener("visibilitychange", onVisibility)
 
     window.addEventListener("resize", setSize)
-    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", setSize); document.removeEventListener("visibilitychange", onVisibility) }
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener("resize", setSize)
+      document.removeEventListener("visibilitychange", onVisibility)
+    }
   }, [])
 
   return (

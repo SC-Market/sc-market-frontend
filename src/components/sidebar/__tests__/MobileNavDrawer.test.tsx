@@ -19,7 +19,12 @@ function Harness({ keepMounted }: { keepMounted: boolean }) {
   return (
     <ThemeProvider theme={createTheme()}>
       <button onClick={() => setOpen(true)}>menu</button>
-      <MobileNavDrawer open={open} onClose={() => setOpen(false)} keepMounted={keepMounted} width={280}>
+      <MobileNavDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        keepMounted={keepMounted}
+        width={280}
+      >
         <a href="/market">Market link</a>
       </MobileNavDrawer>
     </ThemeProvider>

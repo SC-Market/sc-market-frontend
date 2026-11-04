@@ -1,11 +1,5 @@
-import {
-  OrderStub,
-} from "../../features/orders/domain/types"
-import React, {
-  MouseEventHandler,
-  useMemo,
-  useCallback,
-} from "react"
+import { OrderStub } from "../../features/orders/domain/types"
+import React, { MouseEventHandler, useMemo, useCallback } from "react"
 import {
   Avatar,
   Box,
@@ -39,7 +33,10 @@ import { Stack } from "@mui/system"
 import { a11yProps } from "../../components/tabs/Tabs"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
-import { useOrderSearch, type OrderSearchResult } from "../../features/orders/hooks/useOrderSearch"
+import {
+  useOrderSearch,
+  type OrderSearchResult,
+} from "../../features/orders/hooks/useOrderSearch"
 import {
   ExpandLess,
   ExpandMore,
@@ -135,7 +132,11 @@ export function OrderRow(props: {
     contractor: row.contractor?.spectrum_id,
   })
   const canClaim = canClaimOrder(
-    { status: row.status, assignedTo: row.assigned_to?.username, contractor: row.contractor?.spectrum_id },
+    {
+      status: row.status,
+      assignedTo: row.assigned_to?.username,
+      contractor: row.contractor?.spectrum_id,
+    },
     roles,
   )
 
@@ -365,7 +366,12 @@ export function OrderRow(props: {
       >
         {row.mine ? (
           row.shop ? (
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              sx={{ justifyContent: "flex-end" }}
+            >
               {row.shop.avatar && (
                 <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
               )}
@@ -375,7 +381,12 @@ export function OrderRow(props: {
                 underline="hover"
                 color="text.secondary"
                 variant="subtitle2"
-                sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 160 }}
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: 160,
+                }}
               >
                 {row.shop.name}
               </MaterialLink>
@@ -441,8 +452,22 @@ export function OrdersViewPaginated(props: {
 }) {
   const { title, mine, assigned, unassigned, contractor, shop_id } = props
   const { data: profile } = useGetUserProfileQuery()
-  const search = useOrderSearch({ mine, assigned, unassigned, contractor, shop_id, username: profile?.username })
-  return <OrdersTableView title={title} mine={mine} unassigned={unassigned} search={search} />
+  const search = useOrderSearch({
+    mine,
+    assigned,
+    unassigned,
+    contractor,
+    shop_id,
+    username: profile?.username,
+  })
+  return (
+    <OrdersTableView
+      title={title}
+      mine={mine}
+      unassigned={unassigned}
+      search={search}
+    />
+  )
 }
 
 /**
@@ -461,24 +486,47 @@ export function OrdersTableView(props: {
   const { t } = useTranslation()
 
   const {
-    orders, awaitingData,
-    page, setPage, pageSize, setPageSize,
-    order, setOrder, orderBy, setOrderBy,
-    statusFilter, setStatusFilter, totalCounts,
-    filtersOpen, setFiltersOpen,
-    buyerUsername, setBuyerUsername,
-    sellerUsername, setSellerUsername,
-    hasMarketListings, setHasMarketListings,
-    hasService, setHasService,
-    debouncedBuyerUsername, debouncedSellerUsername,
-    activeFiltersCount, clearFilters,
+    orders,
+    awaitingData,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    order,
+    setOrder,
+    orderBy,
+    setOrderBy,
+    statusFilter,
+    setStatusFilter,
+    totalCounts,
+    filtersOpen,
+    setFiltersOpen,
+    buyerUsername,
+    setBuyerUsername,
+    sellerUsername,
+    setSellerUsername,
+    hasMarketListings,
+    setHasMarketListings,
+    hasService,
+    setHasService,
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    activeFiltersCount,
+    clearFilters,
   } = search
   // Order lists are primary content on the orders and dashboard pages.
   usePageReady(awaitingData)
 
   const tabs: [string, string][] = [
     ["all", t("orders.tabs.all")],
-    ...(unassigned !== undefined ? [["unassigned", t("orders.tabs.unclaimed", "Unclaimed")] as [string, string]] : []),
+    ...(unassigned !== undefined
+      ? [
+          ["unassigned", t("orders.tabs.unclaimed", "Unclaimed")] as [
+            string,
+            string,
+          ],
+        ]
+      : []),
     ["active", t("orders.tabs.active")],
     ["past", t("orders.tabs.past")],
     ["fulfilled", t("orders.tabs.fulfilled")],
@@ -569,7 +617,12 @@ export function OrdersTableView(props: {
                 <Tab
                   key={id}
                   label={tag}
-                  icon={<Chip label={totalCounts[id as keyof typeof totalCounts] || 0} size={"small"} />}
+                  icon={
+                    <Chip
+                      label={totalCounts[id as keyof typeof totalCounts] || 0}
+                      size={"small"}
+                    />
+                  }
                   {...a11yProps(index)}
                   onClick={() => setStatusFilter(id as typeof statusFilter)}
                 />
@@ -714,7 +767,10 @@ export function OrdersTableView(props: {
           rows={(orders?.items || []).map((o) => ({
             ...o,
             other_name: mine
-              ? o.shop?.name || o.assigned_to?.username || o.contractor?.spectrum_id || null
+              ? o.shop?.name ||
+                o.assigned_to?.username ||
+                o.contractor?.spectrum_id ||
+                null
               : o.customer.username,
             mine,
           }))}
@@ -723,7 +779,9 @@ export function OrdersTableView(props: {
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
-          rowCount={+(totalCounts[statusFilter as keyof typeof totalCounts] || 0)}
+          rowCount={
+            +(totalCounts[statusFilter as keyof typeof totalCounts] || 0)
+          }
           onOrderChange={setOrder}
           order={order}
           onOrderByChange={setOrderBy}

@@ -38,11 +38,23 @@ describe("checkSession", () => {
   })
 
   it.each([
-    ["200 authenticated:false", json(200, { authenticated: false }), "anonymous"],
-    ["404 (backend without the endpoint)", json(404, { error: "Not found" }), "unsupported"],
+    [
+      "200 authenticated:false",
+      json(200, { authenticated: false }),
+      "anonymous",
+    ],
+    [
+      "404 (backend without the endpoint)",
+      json(404, { error: "Not found" }),
+      "unsupported",
+    ],
     ["429", json(429, {}), "unsupported"],
     ["503", json(503, {}), "unsupported"],
-    ["200 without a boolean", json(200, { authenticated: "yes" }), "unsupported"],
+    [
+      "200 without a boolean",
+      json(200, { authenticated: "yes" }),
+      "unsupported",
+    ],
     ["200 non-JSON", new Response("<html>", { status: 200 }), "unsupported"],
   ])("%s → %s", async (_label, response, expected) => {
     fetchMock.mockResolvedValue(response)

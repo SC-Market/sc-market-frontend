@@ -22,10 +22,15 @@ const useUserOfficial = vi.fn()
 const useOrgOfficial = vi.fn()
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 vi.mock("../../../features/profile/api/profileApi", () => ({
-  useProfileGetDiscordSettingsQuery: (_: unknown, opts: { skip?: boolean }) => ({
+  useProfileGetDiscordSettingsQuery: (
+    _: unknown,
+    opts: { skip?: boolean },
+  ) => ({
     data: opts?.skip ? undefined : state.user,
   }),
   useProfileUseOfficialDiscordSettingsMutation: () => [useUserOfficial],
@@ -55,7 +60,10 @@ function renderAt(path: string, org: boolean) {
       <MemoryRouter initialEntries={[path]}>
         <Routes>
           <Route path="/settings" element={<ConfigureDiscord />} />
-          <Route path="/org/:contractor_id/manage" element={<ConfigureDiscord org={org} />} />
+          <Route
+            path="/org/:contractor_id/manage"
+            element={<ConfigureDiscord org={org} />}
+          />
         </Routes>
       </MemoryRouter>
     </ThemeProvider>,
@@ -81,23 +89,44 @@ describe("ConfigureDiscord", () => {
       "https://discord.com/channels/1003056231591727264/1072580369251041330",
     )
     expect(screen.queryByText("Not configured")).not.toBeInTheDocument()
-    expect(screen.getByText("To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.",
+      ),
+    ).toBeInTheDocument()
   })
 
   it("falls back to the IDs when the bot can't see the server", () => {
-    state.user = { ...CHANNEL, guild_name: null, channel_name: null, guild_avatar: null }
+    state.user = {
+      ...CHANNEL,
+      guild_name: null,
+      channel_name: null,
+      guild_avatar: null,
+    }
     renderAt("/settings", false)
     expect(
-      screen.getByRole("link", { name: "1003056231591727264: #1072580369251041330" }),
+      screen.getByRole("link", {
+        name: "1003056231591727264: #1072580369251041330",
+      }),
     ).toBeInTheDocument()
   })
 
   it("says not configured, without a dead link, and how to set it up", () => {
-    state.user = { guild_id: null, channel_id: null, guild_name: null, guild_avatar: null, channel_name: null }
+    state.user = {
+      guild_id: null,
+      channel_id: null,
+      guild_name: null,
+      guild_avatar: null,
+      channel_name: null,
+    }
     renderAt("/settings", false)
     expect(screen.getByText("Not configured")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /#/ })).not.toBeInTheDocument()
-    expect(screen.getByText("To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.",
+      ),
+    ).toBeInTheDocument()
   })
 
   it("shows the org's channel on the org page and uses the org's official-server action", () => {
@@ -106,7 +135,9 @@ describe("ConfigureDiscord", () => {
 
     expect(state.orgArg).toBe("SCMARKET")
     expect(state.orgSkip).toBe(false)
-    expect(screen.getByRole("link", { name: /SC Market: #org-orders/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole("link", { name: /SC Market: #org-orders/ }),
+    ).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole("button", { name: "Use Official Server" }))
     expect(useOrgOfficial).toHaveBeenCalledWith("SCMARKET")

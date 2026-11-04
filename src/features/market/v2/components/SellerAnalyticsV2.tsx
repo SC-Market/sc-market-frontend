@@ -2,7 +2,10 @@ import React, { useCallback, useMemo } from "react"
 import { Box, Grid, Typography, useTheme } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Section } from "../../../../components/paper/Section"
-import { MuiBarChart, MuiLineChart } from "../../../../components/charts/MuiCharts"
+import {
+  MuiBarChart,
+  MuiLineChart,
+} from "../../../../components/charts/MuiCharts"
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { ExtendedTheme } from "../../../../hooks/styles/Theme"
 
@@ -40,22 +43,25 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
   })
 
   // Get tier name for display
-  const getTierName = useCallback((tier: number): string => {
-    switch (tier) {
-      case 1:
-        return t("market.tierBronze", "Bronze")
-      case 2:
-        return t("market.tierSilver", "Silver")
-      case 3:
-        return t("market.tierGold", "Gold")
-      case 4:
-        return t("market.tierPlatinum", "Platinum")
-      case 5:
-        return t("market.tierDiamond", "Diamond")
-      default:
-        return `Tier ${tier}`
-    }
-  }, [t])
+  const getTierName = useCallback(
+    (tier: number): string => {
+      switch (tier) {
+        case 1:
+          return t("market.tierBronze", "Bronze")
+        case 2:
+          return t("market.tierSilver", "Silver")
+        case 3:
+          return t("market.tierGold", "Gold")
+        case 4:
+          return t("market.tierPlatinum", "Platinum")
+        case 5:
+          return t("market.tierDiamond", "Diamond")
+        default:
+          return `Tier ${tier}`
+      }
+    },
+    [t],
+  )
 
   // Transform sales volume data for chart
   const salesVolumeData = useMemo(() => {
@@ -169,7 +175,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
             <Typography variant="body2" color="error">
               {t(
                 "market.errorLoadingSellerStats",
-                "Error loading seller analytics"
+                "Error loading seller analytics",
               )}
             </Typography>
           </Box>
@@ -189,10 +195,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         <Grid item xs={12}>
           <Box sx={{ p: 2, textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
-              {t(
-                "market.noSellerStats",
-                "No seller analytics data available"
-              )}
+              {t("market.noSellerStats", "No seller analytics data available")}
             </Typography>
           </Box>
         </Grid>
@@ -209,7 +212,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
           lg={6}
           title={t(
             "market.salesVolumeByQualityTier",
-            "Sales Volume by Quality Tier"
+            "Sales Volume by Quality Tier",
           )}
         >
           <Grid item xs={12}>
@@ -229,7 +232,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
           lg={6}
           title={t(
             "market.avgSalePriceByQualityTier",
-            "Average Sale Price by Quality Tier"
+            "Average Sale Price by Quality Tier",
           )}
         >
           <Grid item xs={12}>
@@ -249,7 +252,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
           lg={6}
           title={t(
             "market.timeToSaleByQualityTier",
-            "Time to Sale by Quality Tier"
+            "Time to Sale by Quality Tier",
           )}
         >
           <Grid item xs={12}>
@@ -270,7 +273,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
           lg={6}
           title={t(
             "market.inventoryDistributionByQualityTier",
-            "Current Inventory Distribution"
+            "Current Inventory Distribution",
           )}
         >
           <Grid item xs={12}>
@@ -289,7 +292,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
           xs={12}
           title={t(
             "market.pricePremiumByQualityTier",
-            "Price Premium by Quality Tier"
+            "Price Premium by Quality Tier",
           )}
         >
           <Grid item xs={12}>

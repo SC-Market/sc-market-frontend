@@ -22,10 +22,7 @@ import {
   Business as BusinessIcon,
 } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
-import {
-  useGetTokenStatsQuery,
-  ApiToken,
-} from "../api/tokensApi"
+import { useGetTokenStatsQuery, ApiToken } from "../api/tokensApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -83,7 +80,9 @@ export function TokenDetailsDialog({
       return {
         status: "soon",
         color: "warning" as const,
-        text: t("apiTokensUi.details.expiresInDays", { count: daysUntilExpiry }),
+        text: t("apiTokensUi.details.expiresInDays", {
+          count: daysUntilExpiry,
+        }),
       }
     return {
       status: "valid",
@@ -312,7 +311,8 @@ export function TokenDetailsDialog({
               mt: 0.5,
             }}
           >
-            Authorization: Bearer {t("apiTokensUi.details.yourTokenPlaceholder")}
+            Authorization: Bearer{" "}
+            {t("apiTokensUi.details.yourTokenPlaceholder")}
           </Box>
         </Alert>
       </Grid>

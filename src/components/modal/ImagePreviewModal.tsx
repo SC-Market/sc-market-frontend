@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react"
-import {
-  Box,
-  Modal,
-  IconButton,
-  Typography,
-  Paper,
-} from "@mui/material"
+import { Box, Modal, IconButton, Typography, Paper } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   KeyboardArrowLeft,
@@ -162,7 +156,9 @@ export function ImagePreviewModal(props: {
                     transform: "translateY(-50%)",
                     backgroundColor: theme.palette.background.overlay,
                     color: theme.palette.common.white,
-                    "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+                    "&:hover": {
+                      backgroundColor: theme.palette.background.overlayDark,
+                    },
                   }}
                   aria-label={t(
                     "accessibility.previousImage",
@@ -180,7 +176,9 @@ export function ImagePreviewModal(props: {
                     transform: "translateY(-50%)",
                     backgroundColor: theme.palette.background.overlay,
                     color: theme.palette.common.white,
-                    "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+                    "&:hover": {
+                      backgroundColor: theme.palette.background.overlayDark,
+                    },
                   }}
                   aria-label={t("accessibility.nextImage", "Next image")}
                 >
@@ -240,7 +238,9 @@ export function ImagePreviewModal(props: {
                   <Box
                     component="img"
                     src={image}
-                    alt={t("appUi.imagePreview.thumbnailAlt", { index: idx + 1 })}
+                    alt={t("appUi.imagePreview.thumbnailAlt", {
+                      index: idx + 1,
+                    })}
                     sx={{
                       width: "100%",
                       height: "100%",
@@ -310,7 +310,9 @@ export function ImagePreviewModal(props: {
             zIndex: 10,
             backgroundColor: theme.palette.background.overlay,
             color: theme.palette.common.white,
-            "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+            "&:hover": {
+              backgroundColor: theme.palette.background.overlayDark,
+            },
           }}
           aria-label={t("accessibility.close", "Close")}
         >

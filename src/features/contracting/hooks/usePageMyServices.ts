@@ -27,10 +27,9 @@ export function usePageMyServices(): UsePageMyServicesResult {
     profile && !contractorId ? profile.username : skipToken,
   )
 
-  const orgServicesQuery = useGetServicesContractorQuery(
-    contractorId!,
-    { skip: !contractorId },
-  )
+  const orgServicesQuery = useGetServicesContractorQuery(contractorId!, {
+    skip: !contractorId,
+  })
 
   // Use whichever query is active
   const activeQuery = contractorId ? orgServicesQuery : userServicesQuery

@@ -8,7 +8,10 @@
  * and control characters (parsers strip tab/CR/LF, which can form "//host").
  * Mirrors the backend's validateRedirectPath.
  */
-export function safeRedirectPath(value: string | null | undefined, fallback: string): string {
+export function safeRedirectPath(
+  value: string | null | undefined,
+  fallback: string,
+): string {
   if (!value) return fallback
   if (!value.startsWith("/") || value.startsWith("//")) return fallback
   if (value.includes("\\")) return fallback

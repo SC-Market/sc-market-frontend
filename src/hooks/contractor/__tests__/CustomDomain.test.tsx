@@ -36,6 +36,9 @@ describe("CustomDomain", () => {
 
   it("useCustomDomain is the main site outside a provider", () => {
     const { result } = renderHook(useCustomDomain)
-    expect(result.current).toEqual({ isCustomDomain: false, customOrg: undefined })
+    expect(result.current).toEqual({
+      isCustomDomain: false,
+      customOrg: undefined,
+    })
   })
 })

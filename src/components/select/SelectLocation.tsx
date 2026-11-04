@@ -80,35 +80,43 @@ export function SelectLocation() {
   const [locationTargetObject, setLocationTargetObject] =
     useState<StarmapObject | null>(null)
 
-  const getSuggestions = React.useCallback(async (query: string) => {
-    if (query.length < 3) {
-      return []
-    }
+  const getSuggestions = React.useCallback(
+    async (query: string) => {
+      if (query.length < 3) {
+        return []
+      }
 
-    const result = await dispatch(
-      starmapApi.endpoints.searchStarmap.initiate({ query }),
-    )
-    if (!result.data) return []
-    const data = result.data as { objects?: { resultset?: StarmapObject[] }; results?: StarmapObject[] }
+      const result = await dispatch(
+        starmapApi.endpoints.searchStarmap.initiate({ query }),
+      )
+      if (!result.data) return []
+      const data = result.data as {
+        objects?: { resultset?: StarmapObject[] }
+        results?: StarmapObject[]
+      }
 
-    const extended: StarmapObject[] = []
+      const extended: StarmapObject[] = []
 
-    await Promise.all(
-      (data.objects?.resultset || data.results || []).map(async (obj: StarmapObject) => {
-        if (obj.type === "SATELLITE") {
-          const planetNum = obj.designation.replace(/\D/g, "")
-          const planetDes = `${obj.star_system.name} ${romanize(
-            parseInt(planetNum),
-          )}`
+      await Promise.all(
+        (data.objects?.resultset || data.results || []).map(
+          async (obj: StarmapObject) => {
+            if (obj.type === "SATELLITE") {
+              const planetNum = obj.designation.replace(/\D/g, "")
+              const planetDes = `${obj.star_system.name} ${romanize(
+                parseInt(planetNum),
+              )}`
 
-          extended.push(...(await getSuggestions(planetDes)))
-        }
-      }),
-    )
-    extended.push(...(data.objects?.resultset || data.results || []))
+              extended.push(...(await getSuggestions(planetDes)))
+            }
+          },
+        ),
+      )
+      extended.push(...(data.objects?.resultset || data.results || []))
 
-    return extended
-  }, [dispatch])
+      return extended
+    },
+    [dispatch],
+  )
 
   const retrieveLocation = React.useMemo(
     () =>

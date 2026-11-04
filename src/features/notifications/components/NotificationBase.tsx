@@ -143,7 +143,9 @@ export function NotificationBase(props: {
           minWidth: 0,
         }}
       >
-        <Typography sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+        <Typography
+          sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+        >
           {props.children}
         </Typography>
         <Typography variant={"subtitle2"} color={"text.primary"}>

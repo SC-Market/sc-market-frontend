@@ -21,7 +21,12 @@ describe("parseFrontmatter", () => {
       `---\ntitle: "Sell items: a guide"\norder: 20\nhowto: true\nkeywords: [a, "b c"]\n# comment\n---\nBody\n`,
       F,
     )
-    expect(data).toEqual({ title: "Sell items: a guide", order: 20, howto: true, keywords: ["a", "b c"] })
+    expect(data).toEqual({
+      title: "Sell items: a guide",
+      order: 20,
+      howto: true,
+      keywords: ["a", "b c"],
+    })
     expect(body).toBe("Body\n")
   })
 
@@ -66,16 +71,31 @@ describe("compileBody", () => {
   })
 
   it("extracts HowTo steps from the first numbered list under 'Steps'", () => {
-    const { steps } = compileBody("1. Not this\n\n## Steps\n\n1. Open **Cart**.\n2. Click [here](/x).\n", F)
+    const { steps } = compileBody(
+      "1. Not this\n\n## Steps\n\n1. Open **Cart**.\n2. Click [here](/x).\n",
+      F,
+    )
     expect(steps).toEqual(["Open Cart.", "Click here."])
   })
 
   it("turns GitHub alerts into callouts", () => {
-    const { blocks } = compileBody("> [!TIP]\n> Use **Skip**.\n\n> Plain quote\n", F)
+    const { blocks } = compileBody(
+      "> [!TIP]\n> Use **Skip**.\n\n> Plain quote\n",
+      F,
+    )
     expect(blocks[0]).toEqual({
       t: "callout",
       kind: "tip",
-      c: [{ t: "p", c: [{ t: "text", v: "Use " }, { t: "strong", c: [{ t: "text", v: "Skip" }] }, { t: "text", v: "." }] }],
+      c: [
+        {
+          t: "p",
+          c: [
+            { t: "text", v: "Use " },
+            { t: "strong", c: [{ t: "text", v: "Skip" }] },
+            { t: "text", v: "." },
+          ],
+        },
+      ],
     })
     expect(blocks[1]).toMatchObject({ t: "quote" })
   })
@@ -88,7 +108,12 @@ describe("compileBody", () => {
     )
     expect(blocks).toEqual([
       { t: "cta", href: "/market/cart", label: "Open cart" },
-      { t: "img", src: "/assets/cart.webp", alt: "The cart", caption: "Items grouped by seller" },
+      {
+        t: "img",
+        src: "/assets/cart.webp",
+        alt: "The cart",
+        caption: "Items grouped by seller",
+      },
     ])
     expect(links).toEqual(["/market/cart"])
     expect(images).toEqual(["./img/cart.webp"])
@@ -119,7 +144,8 @@ function site(overrides: Record<string, string> = {}): SourceFile[] {
     ]),
     "guides/buying/buy-an-item.md":
       "---\ntitle: Buy an item\ndescription: Buy it.\nupdated: 2026-01-02\nhowto: true\n---\n## Steps\n\n1. Do it.\n",
-    "about.md": "---\ntitle: About\ndescription: About us.\nupdated: 2026-01-01\n---\nHello.\n",
+    "about.md":
+      "---\ntitle: About\ndescription: About us.\nupdated: 2026-01-01\n---\nHello.\n",
     "STYLE.md": "# not a page",
     ...overrides,
   }
@@ -160,25 +186,80 @@ describe("compileSite", () => {
 
   it("drops drafts unless asked to keep them", () => {
     const files = site({
-      "guides/buying/later.md": "---\ntitle: Later\ndescription: Soon.\nupdated: 2026-01-01\ndraft: true\n---\nWIP\n",
+      "guides/buying/later.md":
+        "---\ntitle: Later\ndescription: Soon.\nupdated: 2026-01-01\ndraft: true\n---\nWIP\n",
     })
     expect(compileSite(files, { today }).guides).toHaveLength(1)
-    expect(compileSite(files, { today, includeDrafts: true }).guides).toHaveLength(2)
+    expect(
+      compileSite(files, { today, includeDrafts: true }).guides,
+    ).toHaveLength(2)
   })
 
   it.each([
-    ["an unknown category", { "guides/selling/x.md": "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\n---\nX\n" }],
-    ["a future update date", { "guides/buying/buy-an-item.md": "---\ntitle: X\ndescription: X.\nupdated: 2027-01-01\n---\nX\n" }],
-    ["a missing description", { "guides/buying/buy-an-item.md": "---\ntitle: X\nupdated: 2026-01-01\n---\nX\n" }],
-    ["a long description", { "guides/buying/buy-an-item.md": `---\ntitle: X\ndescription: ${"x".repeat(161)}\nupdated: 2026-01-01\n---\nX\n` }],
-    ["an unknown key", { "guides/buying/buy-an-item.md": "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\ncolor: red\n---\nX\n" }],
-    ["a missing related guide", { "guides/buying/buy-an-item.md": "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\nrelated: [buying/nope]\n---\nX\n" }],
-    ["howto without steps", { "guides/buying/buy-an-item.md": "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\nhowto: true\n---\nX\n" }],
-    ["a bad file name", { "guides/buying/Bad_Name.md": "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\n---\nX\n" }],
-    ["an empty category", { "guides/categories.json": JSON.stringify([
-      { id: "buying", title: "Buying", description: "B.", order: 1 },
-      { id: "empty", title: "Empty", description: "E.", order: 2 },
-    ]) }],
+    [
+      "an unknown category",
+      {
+        "guides/selling/x.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\n---\nX\n",
+      },
+    ],
+    [
+      "a future update date",
+      {
+        "guides/buying/buy-an-item.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2027-01-01\n---\nX\n",
+      },
+    ],
+    [
+      "a missing description",
+      {
+        "guides/buying/buy-an-item.md":
+          "---\ntitle: X\nupdated: 2026-01-01\n---\nX\n",
+      },
+    ],
+    [
+      "a long description",
+      {
+        "guides/buying/buy-an-item.md": `---\ntitle: X\ndescription: ${"x".repeat(161)}\nupdated: 2026-01-01\n---\nX\n`,
+      },
+    ],
+    [
+      "an unknown key",
+      {
+        "guides/buying/buy-an-item.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\ncolor: red\n---\nX\n",
+      },
+    ],
+    [
+      "a missing related guide",
+      {
+        "guides/buying/buy-an-item.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\nrelated: [buying/nope]\n---\nX\n",
+      },
+    ],
+    [
+      "howto without steps",
+      {
+        "guides/buying/buy-an-item.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\nhowto: true\n---\nX\n",
+      },
+    ],
+    [
+      "a bad file name",
+      {
+        "guides/buying/Bad_Name.md":
+          "---\ntitle: X\ndescription: X.\nupdated: 2026-01-01\n---\nX\n",
+      },
+    ],
+    [
+      "an empty category",
+      {
+        "guides/categories.json": JSON.stringify([
+          { id: "buying", title: "Buying", description: "B.", order: 1 },
+          { id: "empty", title: "Empty", description: "E.", order: 2 },
+        ]),
+      },
+    ],
   ])("fails the build on %s, naming the file", (_name, overrides) => {
     expect(() => compileSite(site(overrides), { today })).toThrow(ContentError)
   })
@@ -198,65 +279,173 @@ describe("changelog", () => {
   it("compiles published entries newest first and drops drafts entirely", () => {
     const compiled = compileSite(files, { today })
     expect(compiled.changelog.map((e) => e.meta)).toEqual([
-      { slug: "2026-05-11", date: "2026-05-11", title: "Week of 2026-05-11", summary: "What changed.", tags: ["market", "orders"] },
-      { slug: "2026-05-04", date: "2026-05-04", title: "Week of 2026-05-04", summary: "What changed.", tags: ["market", "orders"] },
+      {
+        slug: "2026-05-11",
+        date: "2026-05-11",
+        title: "Week of 2026-05-11",
+        summary: "What changed.",
+        tags: ["market", "orders"],
+      },
+      {
+        slug: "2026-05-04",
+        date: "2026-05-04",
+        title: "Week of 2026-05-04",
+        summary: "What changed.",
+        tags: ["market", "orders"],
+      },
     ])
     expect(compiled.changelog[0].body.links).toEqual(["/market"])
-    const everything = JSON.stringify([contentIndex(compiled), sitemapManifest(compiled), changelogFeed(compiled, { origin: "https://x.test", siteName: "X", today })])
+    const everything = JSON.stringify([
+      contentIndex(compiled),
+      sitemapManifest(compiled),
+      changelogFeed(compiled, {
+        origin: "https://x.test",
+        siteName: "X",
+        today,
+      }),
+    ])
     expect(everything).not.toContain("2026-05-18")
   })
 
   it("keeps drafts for the dev server only", () => {
-    expect(compileSite(files, { today, includeDrafts: true }).changelog).toHaveLength(3)
+    expect(
+      compileSite(files, { today, includeDrafts: true }).changelog,
+    ).toHaveLength(3)
   })
 
   it("lists /changelog and its entries in the sitemap manifest once one is published", () => {
-    expect(sitemapManifest(compileSite(files, { today })).pages.slice(-3)).toEqual([
+    expect(
+      sitemapManifest(compileSite(files, { today })).pages.slice(-3),
+    ).toEqual([
       { path: "/changelog", updated: "2026-05-11" },
       { path: "/changelog/2026-05-11", updated: "2026-05-11" },
       { path: "/changelog/2026-05-04", updated: "2026-05-04" },
     ])
-    const draftsOnly = site({ "changelog/2026-05-18.md": entry("2026-05-18", "draft") })
-    expect(sitemapManifest(compileSite(draftsOnly, { today })).pages.map((p) => p.path)).not.toContain("/changelog")
+    const draftsOnly = site({
+      "changelog/2026-05-18.md": entry("2026-05-18", "draft"),
+    })
+    expect(
+      sitemapManifest(compileSite(draftsOnly, { today })).pages.map(
+        (p) => p.path,
+      ),
+    ).not.toContain("/changelog")
   })
 
   it("writes an Atom feed of the published entries, escaped, valid when empty", () => {
     const feed = changelogFeed(
-      compileSite(site({ "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("Week of 2026-05-04", "Fish & <chips>") }), { today }),
+      compileSite(
+        site({
+          "changelog/2026-05-04.md": entry("2026-05-04", "published").replace(
+            "Week of 2026-05-04",
+            "Fish & <chips>",
+          ),
+        }),
+        { today },
+      ),
       { origin: "https://x.test", siteName: "X", today },
     )
     expect(feed).toContain('<feed xmlns="http://www.w3.org/2005/Atom"')
     expect(feed).toContain("<title>Fish &amp; &lt;chips&gt;</title>")
-    expect(feed).toContain('<link rel="alternate" type="text/html" href="https://x.test/changelog/2026-05-04"/>')
+    expect(feed).toContain(
+      '<link rel="alternate" type="text/html" href="https://x.test/changelog/2026-05-04"/>',
+    )
     expect(feed).toContain("<updated>2026-05-04T00:00:00Z</updated>")
     expect(feed).toContain('<category term="market"/>')
 
-    const empty = changelogFeed(compileSite(site(), { today }), { origin: "https://x.test", siteName: "X", today })
+    const empty = changelogFeed(compileSite(site(), { today }), {
+      origin: "https://x.test",
+      siteName: "X",
+      today,
+    })
     expect(empty).not.toContain("<entry>")
     expect(empty).toContain(`<updated>${today}T00:00:00Z</updated>`)
   })
 
   it("reads the status from the frontmatter alone", () => {
-    expect(changelogStatus(entry("2026-05-04", "draft"), "changelog/2026-05-04.md")).toBe("draft")
-    expect(changelogStatus(entry("2026-05-04", "published"), "changelog/2026-05-04.md")).toBe("published")
-    expect(() => changelogStatus(entry("2026-05-04", "live"), "changelog/2026-05-04.md")).toThrow(ContentError)
+    expect(
+      changelogStatus(entry("2026-05-04", "draft"), "changelog/2026-05-04.md"),
+    ).toBe("draft")
+    expect(
+      changelogStatus(
+        entry("2026-05-04", "published"),
+        "changelog/2026-05-04.md",
+      ),
+    ).toBe("published")
+    expect(() =>
+      changelogStatus(entry("2026-05-04", "live"), "changelog/2026-05-04.md"),
+    ).toThrow(ContentError)
   })
 
   it("lets a draft be dated ahead, but not a published entry", () => {
     const ahead = { "changelog/2026-07-06.md": entry("2026-07-06", "draft") }
-    expect(compileSite(site(ahead), { today, includeDrafts: true }).changelog).toHaveLength(1)
-    expect(() => compileSite(site({ "changelog/2026-07-06.md": entry("2026-07-06", "published") }), { today })).toThrow(ContentError)
+    expect(
+      compileSite(site(ahead), { today, includeDrafts: true }).changelog,
+    ).toHaveLength(1)
+    expect(() =>
+      compileSite(
+        site({ "changelog/2026-07-06.md": entry("2026-07-06", "published") }),
+        { today },
+      ),
+    ).toThrow(ContentError)
   })
 
   it.each([
-    ["a missing status", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("status: published\n", "") }],
-    ["an unknown status", { "changelog/2026-05-04.md": entry("2026-05-04", "hidden") }],
-    ["a date that isn't the file name", { "changelog/2026-05-04.md": entry("2026-05-05", "published") }],
-    ["a bad file name", { "changelog/week-1.md": entry("2026-05-04", "published") }],
-    ["a missing summary", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace('summary: "What changed."\n', "") }],
-    ["a long summary", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("What changed.", "x".repeat(161)) }],
-    ["an unknown key", { "changelog/2026-05-04.md": entry("2026-05-04", "published", "author: Me\n") }],
-    ["a bad body", { "changelog/2026-05-04.md": entry("2026-05-04", "published") + "\n# Heading\n" }],
+    [
+      "a missing status",
+      {
+        "changelog/2026-05-04.md": entry("2026-05-04", "published").replace(
+          "status: published\n",
+          "",
+        ),
+      },
+    ],
+    [
+      "an unknown status",
+      { "changelog/2026-05-04.md": entry("2026-05-04", "hidden") },
+    ],
+    [
+      "a date that isn't the file name",
+      { "changelog/2026-05-04.md": entry("2026-05-05", "published") },
+    ],
+    [
+      "a bad file name",
+      { "changelog/week-1.md": entry("2026-05-04", "published") },
+    ],
+    [
+      "a missing summary",
+      {
+        "changelog/2026-05-04.md": entry("2026-05-04", "published").replace(
+          'summary: "What changed."\n',
+          "",
+        ),
+      },
+    ],
+    [
+      "a long summary",
+      {
+        "changelog/2026-05-04.md": entry("2026-05-04", "published").replace(
+          "What changed.",
+          "x".repeat(161),
+        ),
+      },
+    ],
+    [
+      "an unknown key",
+      {
+        "changelog/2026-05-04.md": entry(
+          "2026-05-04",
+          "published",
+          "author: Me\n",
+        ),
+      },
+    ],
+    [
+      "a bad body",
+      {
+        "changelog/2026-05-04.md":
+          entry("2026-05-04", "published") + "\n# Heading\n",
+      },
+    ],
   ])("fails the build on %s", (_name, overrides) => {
     expect(() => compileSite(site(overrides), { today })).toThrow(ContentError)
   })

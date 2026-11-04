@@ -18,9 +18,7 @@ export function DiscordIntegrationSettings() {
       <DiscordBotDetails />
       <ConfigureDiscord />
       <Grid item xs={12}>
-        <Alert severity="info">
-          {t("accountUi.webhooksMoved")}
-        </Alert>
+        <Alert severity="info">{t("accountUi.webhooksMoved")}</Alert>
       </Grid>
     </Grid>
   )

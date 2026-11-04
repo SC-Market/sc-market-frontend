@@ -7,7 +7,10 @@ import { useGetOrgStorefrontStatusQuery } from "../../../store/api/v2/market"
  * status query is skipped when the grant already answers it.
  */
 export function useBrandingUnlocked(
-  contractor: { spectrum_id: string; premium_tier?: string | null } | undefined | null,
+  contractor:
+    | { spectrum_id: string; premium_tier?: string | null }
+    | undefined
+    | null,
 ): boolean {
   const granted = contractor?.premium_tier === "white_label"
   const { data } = useGetOrgStorefrontStatusQuery(

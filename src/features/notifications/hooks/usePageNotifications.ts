@@ -4,14 +4,19 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../api/notificationApi"
-import { useGetMyShopsQuery, type ShopResponse } from "../../../store/api/v2/market"
+import {
+  useGetMyShopsQuery,
+  type ShopResponse,
+} from "../../../store/api/v2/market"
 import { useIsAuthenticated } from "../../../hooks/login/useSession"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import type { Notification } from "../../../hooks/login/UserProfile"
 import type { NotificationScope } from "../domain/types"
 
 /** Map frontend scope labels to backend query param values */
-function mapScopeToBackend(scope: NotificationScope | undefined): "individual" | "organization" | undefined {
+function mapScopeToBackend(
+  scope: NotificationScope | undefined,
+): "individual" | "organization" | undefined {
   if (scope === "personal") return "individual"
   if (scope === "shop") return "organization"
   return undefined
@@ -28,14 +33,16 @@ export interface UsePageNotificationsResult {
   data:
     | {
         notifications: Notification[]
-        pagination: {
-          total: number
-          currentPage: number
-          pageSize: number
-          totalPages: number
-          hasNextPage: boolean
-          hasPreviousPage: boolean
-        } | undefined
+        pagination:
+          | {
+              total: number
+              currentPage: number
+              pageSize: number
+              totalPages: number
+              hasNextPage: boolean
+              hasPreviousPage: boolean
+            }
+          | undefined
         unreadCount: number
         shops: ShopResponse[]
       }
@@ -44,8 +51,16 @@ export interface UsePageNotificationsResult {
   isFetching: boolean
   error: unknown
   refetch: () => void
-  markAllAsRead: () => Promise<{ success: boolean; message: string; affected_count: number }>
-  deleteAll: () => Promise<{ success: boolean; message: string; affected_count: number }>
+  markAllAsRead: () => Promise<{
+    success: boolean
+    message: string
+    affected_count: number
+  }>
+  deleteAll: () => Promise<{
+    success: boolean
+    message: string
+    affected_count: number
+  }>
 }
 
 export function usePageNotifications(
@@ -73,8 +88,10 @@ export function usePageNotifications(
     { skip: !isLoggedIn },
   )
 
-  const { data: shopsData, isLoading: shopsLoading } =
-    useGetMyShopsQuery(undefined, { skip: !isAuthenticated })
+  const { data: shopsData, isLoading: shopsLoading } = useGetMyShopsQuery(
+    undefined,
+    { skip: !isAuthenticated },
+  )
 
   const [bulkUpdate] = useNotificationBulkUpdateMutation()
   const [bulkDelete] = useNotificationBulkDeleteMutation()
@@ -84,10 +101,7 @@ export function usePageNotifications(
     [bulkUpdate],
   )
 
-  const deleteAll = useCallback(
-    () => bulkDelete({}).unwrap(),
-    [bulkDelete],
-  )
+  const deleteAll = useCallback(() => bulkDelete({}).unwrap(), [bulkDelete])
 
   return {
     data:

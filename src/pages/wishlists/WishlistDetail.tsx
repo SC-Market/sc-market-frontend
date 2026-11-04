@@ -1,9 +1,9 @@
 /**
  * WishlistDetail Component
- * 
+ *
  * Display wishlist items with quantities, quality tiers, acquisition status,
  * and support item priority sorting.
- * 
+ *
  * Task 14.2 - Create WishlistDetail component
  * Requirements: 8.1, 8.2, 8.3, 53.1-53.10
  */
@@ -63,7 +63,7 @@ type SortOption = "priority" | "name" | "status" | "quality"
 
 /**
  * WishlistDetail Component
- * 
+ *
  * Features:
  * - Display wishlist items with details (53.1, 53.2)
  * - Show item name, icon, quantity, quality tier (53.2)
@@ -92,7 +92,7 @@ export function WishlistDetail() {
   // Query wishlist detail (Requirements 53.1, 53.2, 53.3, 53.4)
   const { data, isLoading, error } = useGetWishlistQuery(
     { wishlistId: wishlist_id! },
-    { skip: !wishlist_id }
+    { skip: !wishlist_id },
   )
 
   // Mutations
@@ -112,7 +112,10 @@ export function WishlistDetail() {
     setSortBy(event.target.value as SortOption)
   }
 
-  const handleItemMenuOpen = (event: React.MouseEvent<HTMLElement>, item: WishlistItemWithDetails) => {
+  const handleItemMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    item: WishlistItemWithDetails,
+  ) => {
     setItemMenuAnchor({ element: event.currentTarget, item })
   }
 
@@ -172,7 +175,9 @@ export function WishlistDetail() {
       case "priority":
         return items.sort((a, b) => b.priority - a.priority)
       case "name":
-        return items.sort((a, b) => a.game_item_name.localeCompare(b.game_item_name))
+        return items.sort((a, b) =>
+          a.game_item_name.localeCompare(b.game_item_name),
+        )
       case "status":
         return items.sort((a, b) => {
           if (a.is_acquired === b.is_acquired) return 0
@@ -192,7 +197,10 @@ export function WishlistDetail() {
   // Loading state
   if (isLoading) {
     return (
-      <StandardPageLayout title={t("wishlists.detail", "Shopping List Detail")} headerTitle={t("wishlists.detail", "Shopping List Detail")}>
+      <StandardPageLayout
+        title={t("wishlists.detail", "Shopping List Detail")}
+        headerTitle={t("wishlists.detail", "Shopping List Detail")}
+      >
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
@@ -203,9 +211,15 @@ export function WishlistDetail() {
   // Error state
   if (error || !data) {
     return (
-      <StandardPageLayout title={t("wishlists.detail", "Shopping List Detail")} headerTitle={t("wishlists.notFound", "Shopping List Not Found")}>
+      <StandardPageLayout
+        title={t("wishlists.detail", "Shopping List Detail")}
+        headerTitle={t("wishlists.notFound", "Shopping List Not Found")}
+      >
         <Alert severity="error" sx={{ m: 3 }}>
-          {t("wishlists.loadError", "Failed to load shopping list. It may not exist or you don't have permission to view it.")}
+          {t(
+            "wishlists.loadError",
+            "Failed to load shopping list. It may not exist or you don't have permission to view it.",
+          )}
         </Alert>
         <Button startIcon={<ArrowBack />} onClick={handleBack} sx={{ ml: 3 }}>
           {t("wishlists.backToList", "Back to Shopping Lists")}
@@ -223,7 +237,10 @@ export function WishlistDetail() {
       maxWidth="xl"
       breadcrumbs={[
         { label: t("wishlistsUi.detail.breadcrumbHome"), href: PATHS.home },
-        { label: t("sidebar.gameData.shoppingLists"), href: PATHS.shoppingLists },
+        {
+          label: t("sidebar.gameData.shoppingLists"),
+          href: PATHS.shoppingLists,
+        },
         { label: wishlist.wishlist_name },
       ]}
       headerActions={
@@ -236,7 +253,11 @@ export function WishlistDetail() {
           >
             {t("wishlists.shoppingList", "Shopping List")}
           </Button>
-          <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={handleAddItem}
+          >
             {t("wishlists.addItem", "Add Item")}
           </Button>
         </Stack>
@@ -247,7 +268,11 @@ export function WishlistDetail() {
         <Grid item xs={12} lg={6}>
           <Card sx={{ height: "100%" }}>
             <CardContent>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
                 {t("wishlistsUi.detail.description")}
               </Typography>
               <Typography variant="body1">
@@ -259,79 +284,112 @@ export function WishlistDetail() {
       )}
 
       <Grid item xs={12} lg={wishlist.wishlist_description ? 6 : 12}>
-            <Card sx={{ height: "100%" }}>
-              <CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {t("wishlists.progress", "Progress")}
+        <Card sx={{ height: "100%" }}>
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1,
+              }}
+            >
+              <Typography variant="subtitle2" color="text.secondary">
+                {t("wishlists.progress", "Progress")}
+              </Typography>
+              <Typography variant="h5" color="primary" fontWeight="bold">
+                {statistics.progress_percentage}%
+              </Typography>
+            </Box>
+
+            <LinearProgress
+              variant="determinate"
+              value={statistics.progress_percentage}
+              sx={{ height: 8, borderRadius: 4, mb: 2 }}
+            />
+
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+                gap: 1,
+              }}
+            >
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  {t("wishlists.totalItems", "Total Items")}
+                </Typography>
+                <Typography variant="h6">{statistics.total_items}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  {t("wishlists.completed", "Completed")}
+                </Typography>
+                <Typography variant="h6" color="success.main">
+                  {statistics.completed_items}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  {t("wishlists.remaining", "Remaining")}
+                </Typography>
+                <Typography variant="h6" color="warning.main">
+                  {statistics.total_items - statistics.completed_items}
+                </Typography>
+              </Box>
+              {statistics.total_estimated_cost > 0 && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {t("wishlists.estimatedCost", "Estimated Cost")}
                   </Typography>
-                  <Typography variant="h5" color="primary" fontWeight="bold">
-                    {statistics.progress_percentage}%
+                  <Typography variant="h6">
+                    {fmt.number(statistics.total_estimated_cost)} aUEC
                   </Typography>
                 </Box>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
 
-                <LinearProgress
-                  variant="determinate"
-                  value={statistics.progress_percentage}
-                  sx={{ height: 8, borderRadius: 4, mb: 2 }}
-                />
-
-                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 1 }}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("wishlists.totalItems", "Total Items")}
-                    </Typography>
-                    <Typography variant="h6">{statistics.total_items}</Typography>
-                  </Box>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("wishlists.completed", "Completed")}
-                    </Typography>
-                    <Typography variant="h6" color="success.main">
-                      {statistics.completed_items}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("wishlists.remaining", "Remaining")}
-                    </Typography>
-                    <Typography variant="h6" color="warning.main">
-                      {statistics.total_items - statistics.completed_items}
-                    </Typography>
-                  </Box>
-                  {statistics.total_estimated_cost > 0 && (
-                    <Box>
-                      <Typography variant="caption" color="text.secondary">
-                        {t("wishlists.estimatedCost", "Estimated Cost")}
-                      </Typography>
-                      <Typography variant="h6">{fmt.number(statistics.total_estimated_cost)} aUEC</Typography>
-                    </Box>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-        {/* Items Header + Sort Controls */}
-        <Grid item xs={12}>
+      {/* Items Header + Sort Controls */}
+      <Grid item xs={12}>
         <Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
             <Typography variant="h6">
               {t("wishlists.items", "Items")} ({items.length})
             </Typography>
 
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel id="wishlist-detail-sort-by-label">{t("wishlists.sortBy", "Sort By")}</InputLabel>
-              <Select labelId="wishlist-detail-sort-by-label"
+              <InputLabel id="wishlist-detail-sort-by-label">
+                {t("wishlists.sortBy", "Sort By")}
+              </InputLabel>
+              <Select
+                labelId="wishlist-detail-sort-by-label"
                 value={sortBy}
                 label={t("wishlists.sortBy", "Sort By")}
                 onChange={handleSortChange}
                 startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
               >
-                <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
-                <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
-                <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
-                <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
+                <MenuItem value="priority">
+                  {t("wishlists.sortPriority", "Priority")}
+                </MenuItem>
+                <MenuItem value="name">
+                  {t("wishlists.sortName", "Name")}
+                </MenuItem>
+                <MenuItem value="status">
+                  {t("wishlists.sortStatus", "Status")}
+                </MenuItem>
+                <MenuItem value="quality">
+                  {t("wishlists.sortQuality", "Quality")}
+                </MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -343,225 +401,317 @@ export function WishlistDetail() {
                 <Typography variant="h6" color="text.secondary" gutterBottom>
                   {t("wishlists.noItems", "No items in this shopping list")}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  {t("wishlists.noItemsHint", "Add items to start tracking what you want to acquire or craft")}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  {t(
+                    "wishlists.noItemsHint",
+                    "Add items to start tracking what you want to acquire or craft",
+                  )}
                 </Typography>
-                <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
+                <Button
+                  variant="contained"
+                  startIcon={<Add />}
+                  onClick={handleAddItem}
+                >
                   {t("wishlists.addFirstItem", "Add Your First Item")}
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {sortedItems.map((item) => (
-            <Card
-              key={item.item_id}
-              sx={{
-                opacity: item.is_acquired ? 0.6 : 1,
-                transition: "all 0.2s",
-                "&:hover": {
-                  boxShadow: 3,
-                },
-              }}
-            >
-              <CardContent>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  {/* Item Icon */}
-                  <Avatar
-                    src={item.game_item_icon}
-                    alt={item.game_item_name}
-                    sx={{ width: 64, height: 64 }}
-                    variant="rounded"
-                  >
-                    {item.game_item_name.charAt(0)}
-                  </Avatar>
-
-                  {/* Item Details */}
-                  <Box sx={{ flex: 1 }}>
-                    {/* Item Name and Status */}
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
-                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          {item.game_item_name}
-                          {item.is_acquired && (
-                            <Chip
-                              icon={<CheckCircle />}
-                              label={t("wishlistsUi.detail.acquired")}
-                              size="small"
-                              color="success"
-                              variant="outlined"
-                            />
-                          )}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {item.game_item_type}
-                        </Typography>
-                      </Box>
-
-                      {/* Actions Menu */}
-                      <IconButton
-                        size="small"
-                        onClick={(e) => handleItemMenuOpen(e, item)}
-                        aria-label={t("wishlistsUi.detail.itemActionsFor", { name: item.game_item_name })}
-                        aria-haspopup="menu"
-                      >
-                        <MoreVert />
-                      </IconButton>
-                    </Box>
-
-                    {/* Item Properties */}
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 1 }}>
-                      {/* Quantity (Requirement 53.2) */}
-                      <Box>
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t("wishlists.quantity", "Quantity")}
-                        </Typography>
-                        <Typography variant="body2">
-                          {item.acquired_quantity} / {item.desired_quantity}
-                        </Typography>
-                      </Box>
-
-                      {/* Quality Tier (Requirement 53.6) */}
-                      {item.desired_quality_tier && (
-                        <Box>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            {t("wishlists.qualityTier", "Quality Tier")}
-                          </Typography>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                            {[1, 2, 3, 4, 5].map((tier) => (
-                              <Box key={tier}>
-                                {tier <= item.desired_quality_tier! ? (
-                                  <Star fontSize="small" color="primary" />
-                                ) : (
-                                  <StarBorder fontSize="small" color="disabled" />
-                                )}
-                              </Box>
-                            ))}
-                          </Box>
-                        </Box>
-                      )}
-
-                      {/* Priority (Requirement 53.5) */}
-                      <Box>
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t("wishlists.priority", "Priority")}
-                        </Typography>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                          {[1, 2, 3, 4, 5].map((level) => (
-                            <Box
-                              key={level}
-                              sx={{
-                                width: 8,
-                                height: 16,
-                                bgcolor: level <= item.priority ? "primary.main" : "action.disabled",
-                                borderRadius: 0.5,
-                              }}
-                            />
-                          ))}
-                        </Box>
-                      </Box>
-
-                      {/* Acquisition Mode */}
-                      {item.acquisition_mode === "craft" && item.blueprint_name ? (
-                        <Chip
-                          icon={<Build />}
-                          label={t("wishlistsUi.detail.craft", { name: item.blueprint_name })}
-                          size="small"
-                          color="info"
-                          variant="outlined"
-                          component={Link}
-                          to={GAME_DATA_PATHS.blueprint(item.blueprint_id!)}
-                          clickable
-                        />
-                      ) : item.crafting_available ? (
-                        <Chip
-                          icon={<ShoppingCart />}
-                          label={t("wishlistsUi.detail.buyFromMarket")}
-                          size="small"
-                          color="primary"
-                          variant="outlined"
-                        />
-                      ) : null}
-
-                      {/* Estimated Cost */}
-                      {item.estimated_cost && (
-                        <Box>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            {t("wishlists.estCost", "Est. Cost")}
-                          </Typography>
-                          <Typography variant="body2">
-                            {fmt.number(item.estimated_cost)} aUEC
-                          </Typography>
-                        </Box>
-                      )}
-                    </Box>
-
-                    {/* Notes (Requirement 53.7) */}
-                    {item.notes && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          fontStyle: "italic",
-                          mt: 1,
-                          p: 1,
-                          bgcolor: "action.hover",
-                          borderRadius: 1,
-                        }}
-                      >
-                        {item.notes}
-                      </Typography>
-                    )}
-
-                    {/* Quick Actions */}
-                    <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                      <Button
-                        size="small"
-                        variant={item.is_acquired ? "outlined" : "contained"}
-                        startIcon={item.is_acquired ? <RadioButtonUnchecked /> : <CheckCircle />}
-                        onClick={() => handleToggleAcquired(item)}
-                      >
-                        {item.is_acquired ? t("wishlists.markNeeded", "Mark as Needed") : t("wishlists.markAcquired", "Mark as Acquired")}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
+                </Button>
               </CardContent>
             </Card>
-          ))}
-        </Box>
+          ) : (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {sortedItems.map((item) => (
+                <Card
+                  key={item.item_id}
+                  sx={{
+                    opacity: item.is_acquired ? 0.6 : 1,
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      boxShadow: 3,
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      {/* Item Icon */}
+                      <Avatar
+                        src={item.game_item_icon}
+                        alt={item.game_item_name}
+                        sx={{ width: 64, height: 64 }}
+                        variant="rounded"
+                      >
+                        {item.game_item_name.charAt(0)}
+                      </Avatar>
+
+                      {/* Item Details */}
+                      <Box sx={{ flex: 1 }}>
+                        {/* Item Name and Status */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            mb: 1,
+                          }}
+                        >
+                          <Box sx={{ flex: 1 }}>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              {item.game_item_name}
+                              {item.is_acquired && (
+                                <Chip
+                                  icon={<CheckCircle />}
+                                  label={t("wishlistsUi.detail.acquired")}
+                                  size="small"
+                                  color="success"
+                                  variant="outlined"
+                                />
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
+                              {item.game_item_type}
+                            </Typography>
+                          </Box>
+
+                          {/* Actions Menu */}
+                          <IconButton
+                            size="small"
+                            onClick={(e) => handleItemMenuOpen(e, item)}
+                            aria-label={t("wishlistsUi.detail.itemActionsFor", {
+                              name: item.game_item_name,
+                            })}
+                            aria-haspopup="menu"
+                          >
+                            <MoreVert />
+                          </IconButton>
+                        </Box>
+
+                        {/* Item Properties */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 2,
+                            mb: 1,
+                          }}
+                        >
+                          {/* Quantity (Requirement 53.2) */}
+                          <Box>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              display="block"
+                            >
+                              {t("wishlists.quantity", "Quantity")}
+                            </Typography>
+                            <Typography variant="body2">
+                              {item.acquired_quantity} / {item.desired_quantity}
+                            </Typography>
+                          </Box>
+
+                          {/* Quality Tier (Requirement 53.6) */}
+                          {item.desired_quality_tier && (
+                            <Box>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                display="block"
+                              >
+                                {t("wishlists.qualityTier", "Quality Tier")}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                }}
+                              >
+                                {[1, 2, 3, 4, 5].map((tier) => (
+                                  <Box key={tier}>
+                                    {tier <= item.desired_quality_tier! ? (
+                                      <Star fontSize="small" color="primary" />
+                                    ) : (
+                                      <StarBorder
+                                        fontSize="small"
+                                        color="disabled"
+                                      />
+                                    )}
+                                  </Box>
+                                ))}
+                              </Box>
+                            </Box>
+                          )}
+
+                          {/* Priority (Requirement 53.5) */}
+                          <Box>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              display="block"
+                            >
+                              {t("wishlists.priority", "Priority")}
+                            </Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 0.5,
+                              }}
+                            >
+                              {[1, 2, 3, 4, 5].map((level) => (
+                                <Box
+                                  key={level}
+                                  sx={{
+                                    width: 8,
+                                    height: 16,
+                                    bgcolor:
+                                      level <= item.priority
+                                        ? "primary.main"
+                                        : "action.disabled",
+                                    borderRadius: 0.5,
+                                  }}
+                                />
+                              ))}
+                            </Box>
+                          </Box>
+
+                          {/* Acquisition Mode */}
+                          {item.acquisition_mode === "craft" &&
+                          item.blueprint_name ? (
+                            <Chip
+                              icon={<Build />}
+                              label={t("wishlistsUi.detail.craft", {
+                                name: item.blueprint_name,
+                              })}
+                              size="small"
+                              color="info"
+                              variant="outlined"
+                              component={Link}
+                              to={GAME_DATA_PATHS.blueprint(item.blueprint_id!)}
+                              clickable
+                            />
+                          ) : item.crafting_available ? (
+                            <Chip
+                              icon={<ShoppingCart />}
+                              label={t("wishlistsUi.detail.buyFromMarket")}
+                              size="small"
+                              color="primary"
+                              variant="outlined"
+                            />
+                          ) : null}
+
+                          {/* Estimated Cost */}
+                          {item.estimated_cost && (
+                            <Box>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                display="block"
+                              >
+                                {t("wishlists.estCost", "Est. Cost")}
+                              </Typography>
+                              <Typography variant="body2">
+                                {fmt.number(item.estimated_cost)} aUEC
+                              </Typography>
+                            </Box>
+                          )}
+                        </Box>
+
+                        {/* Notes (Requirement 53.7) */}
+                        {item.notes && (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              fontStyle: "italic",
+                              mt: 1,
+                              p: 1,
+                              bgcolor: "action.hover",
+                              borderRadius: 1,
+                            }}
+                          >
+                            {item.notes}
+                          </Typography>
+                        )}
+
+                        {/* Quick Actions */}
+                        <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                          <Button
+                            size="small"
+                            variant={
+                              item.is_acquired ? "outlined" : "contained"
+                            }
+                            startIcon={
+                              item.is_acquired ? (
+                                <RadioButtonUnchecked />
+                              ) : (
+                                <CheckCircle />
+                              )
+                            }
+                            onClick={() => handleToggleAcquired(item)}
+                          >
+                            {item.is_acquired
+                              ? t("wishlists.markNeeded", "Mark as Needed")
+                              : t("wishlists.markAcquired", "Mark as Acquired")}
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
           )}
         </Box>
 
-      {/* Item Actions Menu */}
-      <Menu
-        anchorEl={itemMenuAnchor?.element}
-        open={Boolean(itemMenuAnchor)}
-        onClose={handleItemMenuClose}
-      >
-        <MenuItem onClick={() => itemMenuAnchor && handleEditItem(itemMenuAnchor.item)}>
-          <ListItemIcon>
-            <Edit fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{t("wishlists.editItem", "Edit Item")}</ListItemText>
-        </MenuItem>
-        <MenuItem
-          onClick={() => itemMenuAnchor && handleRemoveItem(itemMenuAnchor.item)}
-          sx={{ color: "error.main" }}
+        {/* Item Actions Menu */}
+        <Menu
+          anchorEl={itemMenuAnchor?.element}
+          open={Boolean(itemMenuAnchor)}
+          onClose={handleItemMenuClose}
         >
-          <ListItemIcon>
-            <Delete fontSize="small" color="error" />
-          </ListItemIcon>
-          <ListItemText>{t("wishlists.removeItem", "Remove Item")}</ListItemText>
-        </MenuItem>
-      </Menu>
+          <MenuItem
+            onClick={() =>
+              itemMenuAnchor && handleEditItem(itemMenuAnchor.item)
+            }
+          >
+            <ListItemIcon>
+              <Edit fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t("wishlists.editItem", "Edit Item")}</ListItemText>
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              itemMenuAnchor && handleRemoveItem(itemMenuAnchor.item)
+            }
+            sx={{ color: "error.main" }}
+          >
+            <ListItemIcon>
+              <Delete fontSize="small" color="error" />
+            </ListItemIcon>
+            <ListItemText>
+              {t("wishlists.removeItem", "Remove Item")}
+            </ListItemText>
+          </MenuItem>
+        </Menu>
 
-      {/* Add Item Dialog (Task 14.3) */}
-      <AddItemDialog
-        open={addItemDialogOpen}
-        onClose={() => setAddItemDialogOpen(false)}
-        wishlistId={wishlist_id!}
-      />
+        {/* Add Item Dialog (Task 14.3) */}
+        <AddItemDialog
+          open={addItemDialogOpen}
+          onClose={() => setAddItemDialogOpen(false)}
+          wishlistId={wishlist_id!}
+        />
       </Grid>
     </StandardPageLayout>
   )

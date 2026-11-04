@@ -14,12 +14,12 @@ import { Box, SxProps, Theme } from "@mui/material"
 
 // Career → color
 const CAREER_COLORS: Record<string, string> = {
-  combat:      "hsl(0, 72%, 62%)",
+  combat: "hsl(0, 72%, 62%)",
   exploration: "hsl(238, 90%, 72%)",
-  support:     "hsl(145, 65%, 45%)",
-  industrial:  "hsl(38, 92%, 50%)",
+  support: "hsl(145, 65%, 45%)",
+  industrial: "hsl(38, 92%, 50%)",
   transporter: "hsl(270, 80%, 70%)",
-  transport:   "hsl(270, 80%, 70%)",
+  transport: "hsl(270, 80%, 70%)",
   competition: "hsl(190, 90%, 50%)",
 }
 
@@ -27,49 +27,53 @@ const CAREER_COLORS: Record<string, string> = {
 const ROLE_OVERRIDES: Record<string, string> = {
   // Combat specializations
   stealthfighter: "hsl(340, 60%, 50%)",
-  stealthbomber:  "hsl(340, 60%, 50%)",
-  bomber:         "hsl(15, 80%, 55%)",
-  interceptor:    "hsl(355, 85%, 58%)",
-  gunship:        "hsl(10, 75%, 50%)",
-  dropship:       "hsl(20, 70%, 50%)",
-  corvette:       "hsl(350, 55%, 45%)",
-  frigate:        "hsl(345, 50%, 42%)",
-  destroyer:      "hsl(340, 50%, 40%)",
-  carrier:        "hsl(335, 45%, 38%)",
-  snub:           "hsl(5, 65%, 60%)",
+  stealthbomber: "hsl(340, 60%, 50%)",
+  bomber: "hsl(15, 80%, 55%)",
+  interceptor: "hsl(355, 85%, 58%)",
+  gunship: "hsl(10, 75%, 50%)",
+  dropship: "hsl(20, 70%, 50%)",
+  corvette: "hsl(350, 55%, 45%)",
+  frigate: "hsl(345, 50%, 42%)",
+  destroyer: "hsl(340, 50%, 40%)",
+  carrier: "hsl(335, 45%, 38%)",
+  snub: "hsl(5, 65%, 60%)",
   // Exploration
-  pathfinder:     "hsl(220, 80%, 65%)",
-  touring:        "hsl(250, 70%, 70%)",
-  reporting:      "hsl(215, 60%, 60%)",
-  datarunning:    "hsl(210, 75%, 58%)",
-  science:        "hsl(245, 70%, 65%)",
-  scienceship:    "hsl(245, 70%, 65%)",
+  pathfinder: "hsl(220, 80%, 65%)",
+  touring: "hsl(250, 70%, 70%)",
+  reporting: "hsl(215, 60%, 60%)",
+  datarunning: "hsl(210, 75%, 58%)",
+  science: "hsl(245, 70%, 65%)",
+  scienceship: "hsl(245, 70%, 65%)",
   // Industrial
-  lightmining:    "hsl(45, 90%, 50%)",
-  mediummining:   "hsl(38, 92%, 50%)",
-  heavymining:    "hsl(30, 85%, 45%)",
-  lightsalvage:   "hsl(55, 75%, 48%)",
-  mediumsalvage:  "hsl(50, 70%, 45%)",
-  heavysalvage:   "hsl(42, 65%, 40%)",
-  refinery:       "hsl(32, 80%, 48%)",
-  construction:   "hsl(25, 70%, 45%)",
+  lightmining: "hsl(45, 90%, 50%)",
+  mediummining: "hsl(38, 92%, 50%)",
+  heavymining: "hsl(30, 85%, 45%)",
+  lightsalvage: "hsl(55, 75%, 48%)",
+  mediumsalvage: "hsl(50, 70%, 45%)",
+  heavysalvage: "hsl(42, 65%, 40%)",
+  refinery: "hsl(32, 80%, 48%)",
+  construction: "hsl(25, 70%, 45%)",
   constructionship: "hsl(25, 70%, 45%)",
   // Support
-  medical:        "hsl(160, 70%, 45%)",
-  repair:         "hsl(130, 55%, 48%)",
-  refueling:      "hsl(170, 60%, 42%)",
+  medical: "hsl(160, 70%, 45%)",
+  repair: "hsl(130, 55%, 48%)",
+  refueling: "hsl(170, 60%, 42%)",
   // Transport
-  lightfreight:   "hsl(280, 70%, 65%)",
-  mediumfreight:  "hsl(270, 80%, 70%)",
-  heavyfreight:   "hsl(260, 70%, 60%)",
+  lightfreight: "hsl(280, 70%, 65%)",
+  mediumfreight: "hsl(270, 80%, 70%)",
+  heavyfreight: "hsl(260, 70%, 60%)",
   // Competition
-  racer:          "hsl(190, 90%, 50%)",
-  racing:         "hsl(190, 90%, 50%)",
+  racer: "hsl(190, 90%, 50%)",
+  racing: "hsl(190, 90%, 50%)",
 }
 
 const DEFAULT_COLOR = "hsl(220, 15%, 55%)"
 
-export function getShipColor(career?: string, role?: string, focus?: string): string {
+export function getShipColor(
+  career?: string,
+  role?: string,
+  focus?: string,
+): string {
   // Career is the primary classifier
   if (career) {
     const key = career.toLowerCase()
@@ -85,9 +89,16 @@ export function getShipColor(career?: string, role?: string, focus?: string): st
     const f = focus.toLowerCase()
     if (f.includes("combat") || f.includes("fight")) return CAREER_COLORS.combat
     if (f.includes("explor")) return CAREER_COLORS.exploration
-    if (f.includes("mining") || f.includes("salvag") || f.includes("industrial")) return CAREER_COLORS.industrial
-    if (f.includes("support") || f.includes("medical") || f.includes("repair")) return CAREER_COLORS.support
-    if (f.includes("transport") || f.includes("freight") || f.includes("cargo")) return CAREER_COLORS.transporter
+    if (
+      f.includes("mining") ||
+      f.includes("salvag") ||
+      f.includes("industrial")
+    )
+      return CAREER_COLORS.industrial
+    if (f.includes("support") || f.includes("medical") || f.includes("repair"))
+      return CAREER_COLORS.support
+    if (f.includes("transport") || f.includes("freight") || f.includes("cargo"))
+      return CAREER_COLORS.transporter
   }
   return DEFAULT_COLOR
 }

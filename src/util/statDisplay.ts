@@ -57,25 +57,36 @@ const LOWER_IS_BETTER = new Set([
  */
 export function propertyLabel(prop: string, t?: TFunction): string {
   const lower = prop.toLowerCase()
-  const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "").replace(/^weapon_/, "")
+  const stripped = lower
+    .replace(/^gpp_armor_/, "")
+    .replace(/^gpp_/, "")
+    .replace(/^weapon_/, "")
   const known = PROPERTY_LABELS[lower] ?? PROPERTY_LABELS[stripped]
-  if (known) return t ? t(`gameTaxonomyUi.statProperties.${known[0]}`, known[1]) : known[1]
+  if (known)
+    return t
+      ? t(`gameTaxonomyUi.statProperties.${known[0]}`, known[1])
+      : known[1]
   // Fallback: capitalize and space
-  return stripped
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, s => s.toUpperCase())
+  return stripped.replace(/_/g, " ").replace(/\b\w/g, (s) => s.toUpperCase())
 }
 
 /** Is this modifier "good"? Accounts for lower-is-better stats. */
 export function isModifierPositive(prop: string, factor: number): boolean {
   const lower = prop.toLowerCase()
   const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "")
-  const isLowerBetter = LOWER_IS_BETTER.has(lower) || LOWER_IS_BETTER.has(stripped)
+  const isLowerBetter =
+    LOWER_IS_BETTER.has(lower) || LOWER_IS_BETTER.has(stripped)
   return isLowerBetter ? factor < 1 : factor > 1
 }
 
 /** Interpolate a modifier value based on quality */
-export function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
+export function interpolateModifier(
+  qv: number,
+  startQ: number,
+  endQ: number,
+  modStart: number,
+  modEnd: number,
+): number {
   if (endQ === startQ) return modStart
   const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
   return modStart + t * (modEnd - modStart)
@@ -92,7 +103,11 @@ export function interpolateModifier(qv: number, startQ: number, endQ: number, mo
 export function formatModifierValue(
   value: number,
   modifierType: "linear" | "additive",
-  def?: { display_mode: string; scale_factor?: number | null; unit_label?: string | null } | null,
+  def?: {
+    display_mode: string
+    scale_factor?: number | null
+    unit_label?: string | null
+  } | null,
 ): string {
   // Additive modifiers: always display the raw value with sign
   if (modifierType === "additive") {
@@ -113,7 +128,9 @@ export function formatModifierValue(
   switch (def.display_mode) {
     case "raw": {
       const sign = value > 0 ? "+" : ""
-      const formatted = Number.isInteger(value) ? String(value) : value.toFixed(2)
+      const formatted = Number.isInteger(value)
+        ? String(value)
+        : value.toFixed(2)
       return `${sign}${formatted}${label}`
     }
 
@@ -134,7 +151,9 @@ export function formatModifierValue(
       const factor = def.scale_factor ?? 1
       const scaled = value * factor
       const sign = scaled > 0 ? "+" : ""
-      const formatted = Number.isInteger(scaled) ? String(scaled) : scaled.toFixed(2)
+      const formatted = Number.isInteger(scaled)
+        ? String(scaled)
+        : scaled.toFixed(2)
       return `${sign}${formatted}${label}`
     }
 
@@ -148,7 +167,13 @@ export function formatModifierValue(
 /**
  * Build a lookup map from property_key -> CraftedPropertyDef for fast access.
  */
-type PropertyDef = { property_key: string; display_name: string | null; display_mode: string; scale_factor?: number | null; unit_label?: string | null }
+type PropertyDef = {
+  property_key: string
+  display_name: string | null
+  display_mode: string
+  scale_factor?: number | null
+  unit_label?: string | null
+}
 
 export function buildPropertyDefMap(
   defs?: PropertyDef[],

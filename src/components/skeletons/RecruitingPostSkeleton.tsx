@@ -35,7 +35,11 @@ export function RecruitingPostHeaderSkeleton(props: { extraLine?: boolean }) {
       <Typography variant="subtitle1">
         <Skeleton variant="text" width={180} />
       </Typography>
-      <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+      <Grid
+        container
+        alignItems={"center"}
+        spacing={theme.layoutSpacing.compact}
+      >
         <Grid item>
           <PeopleAltRoundedIcon style={{ color: theme.palette.text.primary }} />
         </Grid>

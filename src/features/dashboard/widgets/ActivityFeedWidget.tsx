@@ -24,7 +24,10 @@ export interface ActivityFeedWidgetProps {
   t: TFunction
 }
 
-export function ActivityFeedWidget({ scope, settings }: ActivityFeedWidgetProps) {
+export function ActivityFeedWidget({
+  scope,
+  settings,
+}: ActivityFeedWidgetProps) {
   const theme = useTheme<ExtendedTheme>()
   const action =
     typeof settings?.action === "string" && settings.action

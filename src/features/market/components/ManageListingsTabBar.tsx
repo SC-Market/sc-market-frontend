@@ -17,12 +17,16 @@ export interface ManageListingsTabBarProps {
 }
 
 function getTabForPath(pathname: string): number {
-  if (pathname.includes("/stock") || pathname.includes("/manage-stock")) return 1
+  if (pathname.includes("/stock") || pathname.includes("/manage-stock"))
+    return 1
   if (pathname.includes("/services")) return 2
   return 0
 }
 
-export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBarProps) {
+export function ManageListingsTabBar({
+  title,
+  rightAction,
+}: ManageListingsTabBarProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
@@ -34,10 +38,18 @@ export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBa
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     if (shopSlug) {
-      const shopRoutes = [`/shop/${shopSlug}/listings`, `/shop/${shopSlug}/stock`, `/shop/${shopSlug}/services`]
+      const shopRoutes = [
+        `/shop/${shopSlug}/listings`,
+        `/shop/${shopSlug}/stock`,
+        `/shop/${shopSlug}/services`,
+      ]
       navigate(shopRoutes[newValue])
     } else {
-      const fallbackRoutes = ["/market/manage", "/market/manage-stock", "/order/services"]
+      const fallbackRoutes = [
+        "/market/manage",
+        "/market/manage-stock",
+        "/order/services",
+      ]
       navigate(fallbackRoutes[newValue])
     }
   }

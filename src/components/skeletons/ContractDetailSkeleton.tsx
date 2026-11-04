@@ -19,7 +19,6 @@ export interface ContractDetailSkeletonProps {
 export function ContractDetailSkeleton({
   showActions = true,
 }: ContractDetailSkeletonProps) {
-
   return (
     <Card
       sx={{

@@ -65,7 +65,9 @@ export function missionHubPaths(hubs: {
   systems: { slug: string }[]
 }): string[] {
   return (["givers", "factions", "types", "systems"] as const).flatMap((kind) =>
-    hubs[kind].map((hub) => `/missions/${kind}/${encodeURIComponent(hub.slug)}`),
+    hubs[kind].map(
+      (hub) => `/missions/${kind}/${encodeURIComponent(hub.slug)}`,
+    ),
   )
 }
 

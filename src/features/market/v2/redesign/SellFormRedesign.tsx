@@ -81,15 +81,16 @@ export function SellFormRedesign() {
     [shops],
   )
 
-  const { submit: submitListing, isLoading: isCreating } = useCreateListingSubmit(
-    t("SellFormRedesign.created", "Listing created."),
-  )
+  const { submit: submitListing, isLoading: isCreating } =
+    useCreateListingSubmit(t("SellFormRedesign.created", "Listing created."))
 
   // ---- Form state ----
   const [shopId, setShopId] = useState<string>("")
   const [isCustom, setIsCustom] = useState(false)
   const [itemQuery, setItemQuery] = useState("")
-  const [selectedItem, setSelectedItem] = useState<GameItemSearchResult | null>(null)
+  const [selectedItem, setSelectedItem] = useState<GameItemSearchResult | null>(
+    null,
+  )
   const [customName, setCustomName] = useState("")
 
   const [title, setTitle] = useState("")
@@ -98,7 +99,9 @@ export function SellFormRedesign() {
   const [quantity, setQuantity] = useState("1")
   const [location, setLocation] = useState("")
   const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit")
-  const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">("fixed")
+  const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">(
+    "fixed",
+  )
 
   const [byQuality, setByQuality] = useState(false)
   const [qualityRows, setQualityRows] = useState<QualityRow[]>([
@@ -141,7 +144,10 @@ export function SellFormRedesign() {
   }, [byQuality, qualityRows, price, quantity])
 
   const canSubmit =
-    !!shopId && itemChosen && title.trim().length > 0 && (byQuality || Number(price) > 0)
+    !!shopId &&
+    itemChosen &&
+    title.trim().length > 0 &&
+    (byQuality || Number(price) > 0)
 
   const handleSubmit = async () => {
     if (!canSubmit) return
@@ -236,7 +242,9 @@ export function SellFormRedesign() {
               {sellableShops.map((s) => (
                 <MenuItem key={s.shop_id} value={s.shop_id}>
                   {s.name}
-                  {s.is_org_owned ? ` (${t("SellFormRedesign.org", "org")})` : ""}
+                  {s.is_org_owned
+                    ? ` (${t("SellFormRedesign.org", "org")})`
+                    : ""}
                 </MenuItem>
               ))}
             </TextField>
@@ -246,7 +254,11 @@ export function SellFormRedesign() {
         {/* Step 1: pick the item */}
         <Card>
           <CardContent>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography variant="overline" sx={{ color: "text.primary" }}>
                 {t("SellFormRedesign.whatSelling", "What are you selling?")}
               </Typography>
@@ -260,7 +272,10 @@ export function SellFormRedesign() {
                     }}
                   />
                 }
-                label={t("SellFormRedesign.customItem", "Custom item (not in catalog)")}
+                label={t(
+                  "SellFormRedesign.customItem",
+                  "Custom item (not in catalog)",
+                )}
               />
             </Stack>
 
@@ -289,7 +304,10 @@ export function SellFormRedesign() {
                   renderInput={(p) => (
                     <TextField
                       {...p}
-                      label={t("SellFormRedesign.searchCatalog", "Search the catalog")}
+                      label={t(
+                        "SellFormRedesign.searchCatalog",
+                        "Search the catalog",
+                      )}
                     />
                   )}
                 />
@@ -336,7 +354,10 @@ export function SellFormRedesign() {
                         <TextField
                           fullWidth
                           type="number"
-                          label={t("SellFormRedesign.pricePerUnit", "Price per unit (aUEC)")}
+                          label={t(
+                            "SellFormRedesign.pricePerUnit",
+                            "Price per unit (aUEC)",
+                          )}
                           value={price}
                           onChange={(e) => setPrice(e.target.value)}
                         />
@@ -356,7 +377,9 @@ export function SellFormRedesign() {
                           fullWidth
                           label={t("SellFormRedesign.unitType", "Unit type")}
                           value={quantityUnit}
-                          onChange={(e) => setQuantityUnit(e.target.value as "unit" | "scu")}
+                          onChange={(e) =>
+                            setQuantityUnit(e.target.value as "unit" | "scu")
+                          }
                         >
                           <MenuItem value="unit">
                             {t("SellFormRedesign.unitUnit", "Units")}
@@ -373,7 +396,10 @@ export function SellFormRedesign() {
                       here we use a simple freeform field per §6.3). */}
                   <TextField
                     fullWidth
-                    label={t("SellFormRedesign.location", "Location (optional)")}
+                    label={t(
+                      "SellFormRedesign.location",
+                      "Location (optional)",
+                    )}
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     helperText={t(
@@ -399,14 +425,25 @@ export function SellFormRedesign() {
               <CardContent>
                 <FormControlLabel
                   control={
-                    <Switch checked={byQuality} onChange={(e) => setByQuality(e.target.checked)} />
+                    <Switch
+                      checked={byQuality}
+                      onChange={(e) => setByQuality(e.target.checked)}
+                    />
                   }
-                  label={t("SellFormRedesign.priceByQuality", "Price by quality")}
+                  label={t(
+                    "SellFormRedesign.priceByQuality",
+                    "Price by quality",
+                  )}
                 />
                 <Collapse in={byQuality} unmountOnExit>
                   <Stack spacing={1.5} sx={{ mt: 1 }}>
                     {qualityRows.map((row) => (
-                      <Grid container spacing={1.5} key={row.id} alignItems="center">
+                      <Grid
+                        container
+                        spacing={1.5}
+                        key={row.id}
+                        alignItems="center"
+                      >
                         <Grid size={{ xs: 4, sm: 3 }}>
                           <TextField
                             select
@@ -417,14 +454,18 @@ export function SellFormRedesign() {
                             onChange={(e) =>
                               setQualityRows((rows) =>
                                 rows.map((r) =>
-                                  r.id === row.id ? { ...r, tier: Number(e.target.value) } : r,
+                                  r.id === row.id
+                                    ? { ...r, tier: Number(e.target.value) }
+                                    : r,
                                 ),
                               )
                             }
                           >
                             {[1, 2, 3, 4, 5].map((n) => (
                               <MenuItem key={n} value={n}>
-                                {t("SellFormRedesign.tierN", "Tier {{n}}", { n })}
+                                {t("SellFormRedesign.tierN", "Tier {{n}}", {
+                                  n,
+                                })}
                               </MenuItem>
                             ))}
                           </TextField>
@@ -439,7 +480,9 @@ export function SellFormRedesign() {
                             onChange={(e) =>
                               setQualityRows((rows) =>
                                 rows.map((r) =>
-                                  r.id === row.id ? { ...r, price: e.target.value } : r,
+                                  r.id === row.id
+                                    ? { ...r, price: e.target.value }
+                                    : r,
                                 ),
                               )
                             }
@@ -455,7 +498,9 @@ export function SellFormRedesign() {
                             onChange={(e) =>
                               setQualityRows((rows) =>
                                 rows.map((r) =>
-                                  r.id === row.id ? { ...r, quantity: e.target.value } : r,
+                                  r.id === row.id
+                                    ? { ...r, quantity: e.target.value }
+                                    : r,
                                 ),
                               )
                             }
@@ -465,9 +510,14 @@ export function SellFormRedesign() {
                           <IconButton
                             size="small"
                             disabled={qualityRows.length <= 1}
-                            aria-label={t("SellFormRedesign.removeQualityRow", "Remove quality row")}
+                            aria-label={t(
+                              "SellFormRedesign.removeQualityRow",
+                              "Remove quality row",
+                            )}
                             onClick={() =>
-                              setQualityRows((rows) => rows.filter((r) => r.id !== row.id))
+                              setQualityRows((rows) =>
+                                rows.filter((r) => r.id !== row.id),
+                              )
                             }
                           >
                             <DeleteOutlineRounded fontSize="small" />
@@ -497,20 +547,34 @@ export function SellFormRedesign() {
               <CardContent>
                 <FormControlLabel
                   control={
-                    <Switch checked={asBundle} onChange={(e) => setAsBundle(e.target.checked)} />
+                    <Switch
+                      checked={asBundle}
+                      onChange={(e) => setAsBundle(e.target.checked)}
+                    />
                   }
-                  label={t("SellFormRedesign.sellAsBundle", "Sell as a bundle (multiple items per set)")}
+                  label={t(
+                    "SellFormRedesign.sellAsBundle",
+                    "Sell as a bundle (multiple items per set)",
+                  )}
                 />
                 <Collapse in={asBundle} unmountOnExit>
                   <Stack spacing={1.5} sx={{ mt: 1 }}>
-                    <Typography variant="caption" sx={{ color: "text.primary" }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.primary" }}
+                    >
                       {t(
                         "SellFormRedesign.bundleHelp",
                         "Each set includes all these items. Quantity above is the number of sets.",
                       )}
                     </Typography>
                     {bundleItems.map((bi) => (
-                      <Stack direction="row" spacing={1} key={bi.id} alignItems="center">
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        key={bi.id}
+                        alignItems="center"
+                      >
                         <Autocomplete
                           fullWidth
                           size="small"
@@ -519,7 +583,9 @@ export function SellFormRedesign() {
                           value={bi.item}
                           onChange={(_, v) =>
                             setBundleItems((items) =>
-                              items.map((it) => (it.id === bi.id ? { ...it, item: v } : it)),
+                              items.map((it) =>
+                                it.id === bi.id ? { ...it, item: v } : it,
+                              ),
                             )
                           }
                           onInputChange={(_, v) => setItemQuery(v)}
@@ -527,16 +593,24 @@ export function SellFormRedesign() {
                           renderInput={(p) => (
                             <TextField
                               {...p}
-                              label={t("SellFormRedesign.bundleItem", "Item in set")}
+                              label={t(
+                                "SellFormRedesign.bundleItem",
+                                "Item in set",
+                              )}
                             />
                           )}
                         />
                         <IconButton
                           size="small"
                           disabled={bundleItems.length <= 1}
-                          aria-label={t("SellFormRedesign.removeBundleItem", "Remove bundle item")}
+                          aria-label={t(
+                            "SellFormRedesign.removeBundleItem",
+                            "Remove bundle item",
+                          )}
                           onClick={() =>
-                            setBundleItems((items) => items.filter((it) => it.id !== bi.id))
+                            setBundleItems((items) =>
+                              items.filter((it) => it.id !== bi.id),
+                            )
                           }
                         >
                           <DeleteOutlineRounded fontSize="small" />
@@ -546,7 +620,10 @@ export function SellFormRedesign() {
                     <Button
                       startIcon={<AddRounded />}
                       onClick={() =>
-                        setBundleItems((items) => [...items, { id: nextId(), item: null }])
+                        setBundleItems((items) => [
+                          ...items,
+                          { id: nextId(), item: null },
+                        ])
                       }
                       sx={{ alignSelf: "flex-start" }}
                     >
@@ -576,7 +653,10 @@ export function SellFormRedesign() {
             >
               <Box>
                 <Typography variant="body2" sx={{ color: "text.primary" }}>
-                  {t("SellFormRedesign.estimatedTotal", "Estimated total value")}
+                  {t(
+                    "SellFormRedesign.estimatedTotal",
+                    "Estimated total value",
+                  )}
                 </Typography>
                 <Typography variant="h6" sx={{ color: "primary.main" }}>
                   {fmt.price(estimatedTotal)}

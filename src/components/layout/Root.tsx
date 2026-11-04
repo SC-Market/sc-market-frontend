@@ -69,22 +69,22 @@ export function Root(props: { children: React.ReactNode }) {
         </>
       )}
       <CartDrawerProvider>
-      <Navbar />
-      <SidebarV2 />
-      <PageReadyProvider>
-        <MainContent
-          floating={
-            <>
-              {!isMessagingPage && !isMobile && <PreferencesButton />}
-              <DebugPanel />
-              <MobileBottomNav />
-              <ContextAwareFAB />
-            </>
-          }
-        >
-          {props.children}
-        </MainContent>
-      </PageReadyProvider>
+        <Navbar />
+        <SidebarV2 />
+        <PageReadyProvider>
+          <MainContent
+            floating={
+              <>
+                {!isMessagingPage && !isMobile && <PreferencesButton />}
+                <DebugPanel />
+                <MobileBottomNav />
+                <ContextAwareFAB />
+              </>
+            }
+          >
+            {props.children}
+          </MainContent>
+        </PageReadyProvider>
       </CartDrawerProvider>
     </Box>
   )

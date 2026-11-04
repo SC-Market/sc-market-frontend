@@ -14,7 +14,8 @@ import { OrgManageLayout } from "../OrgManageLayout"
 const navigateSpy = vi.hoisted(() => vi.fn())
 // The branding status query (needs a store); a white_label grant answers it.
 vi.mock("../../../features/storefront/hooks/useBrandingUnlocked", () => ({
-  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) =>
+    c?.premium_tier === "white_label",
 }))
 
 vi.mock("react-router-dom", async (importOriginal) => ({
@@ -23,7 +24,9 @@ vi.mock("react-router-dom", async (importOriginal) => ({
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
@@ -33,7 +36,9 @@ vi.mock("../../../components/layout/StandardPageLayout", () => ({
 }))
 
 vi.mock("../../../hooks/layout/useBreakpoint", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../../hooks/layout/useBreakpoint")>()),
+  ...(await importOriginal<
+    typeof import("../../../hooks/layout/useBreakpoint")
+  >()),
   useBreakpointUp: () => true,
 }))
 
@@ -66,14 +71,20 @@ function memberWith(...permissions: string[]) {
     },
     profile: {
       username: "officer-user",
-      contractors: [{ spectrum_id: "TESTORG", role: "Officer", roles: ["officer"] }],
+      contractors: [
+        { spectrum_id: "TESTORG", role: "Officer", roles: ["officer"] },
+      ],
     },
   }
 }
 
 const page = vi.hoisted(() => ({ data: undefined as unknown }))
 vi.mock("../../../features/contractor/hooks/usePageOrgManage", () => ({
-  usePageOrgManage: () => ({ isLoading: false, error: undefined, data: page.data }),
+  usePageOrgManage: () => ({
+    isLoading: false,
+    error: undefined,
+    data: page.data,
+  }),
 }))
 
 function navLabels(data: unknown) {
@@ -106,12 +117,15 @@ describe("OrgManageLayout nav", () => {
     expect(labels).not.toContain("Market")
     expect(labels).not.toContain("Blocked Users")
     expect(labels).not.toContain("Customers")
-    for (const tab of ["market", "blocklist", "customers"]) expect(manageTabs.has(tab)).toBe(false)
+    for (const tab of ["market", "blocklist", "customers"])
+      expect(manageTabs.has(tab)).toBe(false)
   })
 
   it("shows Discord Integration with Manage Webhooks, not Manage Invites", () => {
     expect(navLabels(memberWith("manage_invites"))).toEqual(["Invites"])
-    expect(navLabels(memberWith("manage_webhooks"))).toEqual(["Discord Integration"])
+    expect(navLabels(memberWith("manage_webhooks"))).toEqual([
+      "Discord Integration",
+    ])
   })
 
   it("hides Audit Logs from members without Manage Org Details", () => {
@@ -125,9 +139,7 @@ describe("OrgManageLayout nav", () => {
         <OrgManageLayout />
       </MemoryRouter>,
     )
-    const labels = screen
-      .getAllByRole("button")
-      .map((b) => b.textContent ?? "")
+    const labels = screen.getAllByRole("button").map((b) => b.textContent ?? "")
     // The owner of a white-label org sees the combined theme item.
     expect(labels).toContain("Theme & White Label")
     expect(labels).not.toContain("White Label")

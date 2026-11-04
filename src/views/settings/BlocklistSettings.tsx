@@ -150,7 +150,8 @@ export function BlocklistSettings() {
       })
       refetch()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : t("unblockUser.error")
+      const errorMessage =
+        error instanceof Error ? error.message : t("unblockUser.error")
 
       issueAlert({
         message: errorMessage,
@@ -179,7 +180,8 @@ export function BlocklistSettings() {
       setReason("")
       refetch()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : t("blockUser.error")
+      const errorMessage =
+        error instanceof Error ? error.message : t("blockUser.error")
 
       issueAlert({
         message: errorMessage,

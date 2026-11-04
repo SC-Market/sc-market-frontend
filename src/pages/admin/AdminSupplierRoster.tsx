@@ -57,7 +57,10 @@ import { useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { useFormatters } from "../../util/format"
 
-const TIER_COLORS: Record<string, "success" | "primary" | "warning" | "default"> = {
+const TIER_COLORS: Record<
+  string,
+  "success" | "primary" | "warning" | "default"
+> = {
   preferred: "success",
   approved: "primary",
   restricted: "warning",
@@ -124,13 +127,16 @@ function AddSupplierDialog({
             <InputLabel id="admin-supplier-roster-supplier-type-label">
               {t("suppliersUi.roster.supplierType")}
             </InputLabel>
-            <Select labelId="admin-supplier-roster-supplier-type-label"
+            <Select
+              labelId="admin-supplier-roster-supplier-type-label"
               value={kind}
               label={t("suppliersUi.roster.supplierType")}
               onChange={(e) => setKind(e.target.value as "user" | "contractor")}
             >
               <MenuItem value="user">{t("suppliersUi.kind.user")}</MenuItem>
-              <MenuItem value="contractor">{t("suppliersUi.kind.organisation")}</MenuItem>
+              <MenuItem value="contractor">
+                {t("suppliersUi.kind.organisation")}
+              </MenuItem>
             </Select>
           </FormControl>
 
@@ -141,7 +147,9 @@ function AddSupplierDialog({
                 ? t("suppliersUi.roster.userUuid")
                 : t("suppliersUi.roster.contractorUuid")
             }
-            placeholder={kind === "user" ? "user_id (UUID)" : "contractor_id (UUID)"}
+            placeholder={
+              kind === "user" ? "user_id (UUID)" : "contractor_id (UUID)"
+            }
             value={id}
             onChange={(e) => setId(e.target.value)}
             fullWidth
@@ -149,16 +157,25 @@ function AddSupplierDialog({
           />
 
           <FormControl fullWidth size="small">
-            <InputLabel id="admin-supplier-roster-tier-optional-label">{t("suppliersUi.roster.tierOptional")}</InputLabel>
-            <Select labelId="admin-supplier-roster-tier-optional-label"
+            <InputLabel id="admin-supplier-roster-tier-optional-label">
+              {t("suppliersUi.roster.tierOptional")}
+            </InputLabel>
+            <Select
+              labelId="admin-supplier-roster-tier-optional-label"
               value={tier}
               label={t("suppliersUi.roster.tierOptional")}
               onChange={(e) => setTier(e.target.value as SupplierTier)}
             >
               <MenuItem value="">{t("common.none")}</MenuItem>
-              <MenuItem value="preferred">{t("suppliersUi.tiers.preferred")}</MenuItem>
-              <MenuItem value="approved">{t("suppliersUi.tiers.approved")}</MenuItem>
-              <MenuItem value="restricted">{t("suppliersUi.tiers.restricted")}</MenuItem>
+              <MenuItem value="preferred">
+                {t("suppliersUi.tiers.preferred")}
+              </MenuItem>
+              <MenuItem value="approved">
+                {t("suppliersUi.tiers.approved")}
+              </MenuItem>
+              <MenuItem value="restricted">
+                {t("suppliersUi.tiers.restricted")}
+              </MenuItem>
             </Select>
           </FormControl>
 
@@ -174,7 +191,10 @@ function AddSupplierDialog({
 
           {error && (
             <Alert severity="error">
-              {(error && "data" in error && (error.data as { message?: string })?.message) || t("suppliersUi.roster.addFailed")}
+              {(error &&
+                "data" in error &&
+                (error.data as { message?: string })?.message) ||
+                t("suppliersUi.roster.addFailed")}
             </Alert>
           )}
         </Stack>
@@ -249,7 +269,9 @@ function EditSupplierDialog({
               )}
             </Avatar>
             <Box>
-              <Typography variant="subtitle2">{rel?.supplier.display_name}</Typography>
+              <Typography variant="subtitle2">
+                {rel?.supplier.display_name}
+              </Typography>
               <Typography variant="caption" color="text.secondary">
                 {rel?.supplier.username}
               </Typography>
@@ -257,29 +279,47 @@ function EditSupplierDialog({
           </Stack>
 
           <FormControl fullWidth size="small">
-            <InputLabel id="admin-supplier-roster-tier-label">{t("suppliersUi.roster.tier")}</InputLabel>
-            <Select labelId="admin-supplier-roster-tier-label"
+            <InputLabel id="admin-supplier-roster-tier-label">
+              {t("suppliersUi.roster.tier")}
+            </InputLabel>
+            <Select
+              labelId="admin-supplier-roster-tier-label"
               value={tier}
               label={t("suppliersUi.roster.tier")}
               onChange={(e) => setTier(e.target.value as SupplierTier)}
             >
               <MenuItem value="">{t("common.none")}</MenuItem>
-              <MenuItem value="preferred">{t("suppliersUi.tiers.preferred")}</MenuItem>
-              <MenuItem value="approved">{t("suppliersUi.tiers.approved")}</MenuItem>
-              <MenuItem value="restricted">{t("suppliersUi.tiers.restricted")}</MenuItem>
+              <MenuItem value="preferred">
+                {t("suppliersUi.tiers.preferred")}
+              </MenuItem>
+              <MenuItem value="approved">
+                {t("suppliersUi.tiers.approved")}
+              </MenuItem>
+              <MenuItem value="restricted">
+                {t("suppliersUi.tiers.restricted")}
+              </MenuItem>
             </Select>
           </FormControl>
 
           <FormControl fullWidth size="small">
-            <InputLabel id="admin-supplier-roster-status-label">{t("suppliersUi.roster.status")}</InputLabel>
-            <Select labelId="admin-supplier-roster-status-label"
+            <InputLabel id="admin-supplier-roster-status-label">
+              {t("suppliersUi.roster.status")}
+            </InputLabel>
+            <Select
+              labelId="admin-supplier-roster-status-label"
               value={status}
               label={t("suppliersUi.roster.status")}
               onChange={(e) => setStatus(e.target.value as SupplierStatus)}
             >
-              <MenuItem value="active">{t("suppliersUi.roster.statusOption.active")}</MenuItem>
-              <MenuItem value="suspended">{t("suppliersUi.roster.statusOption.suspended")}</MenuItem>
-              <MenuItem value="removed">{t("suppliersUi.roster.statusOption.removed")}</MenuItem>
+              <MenuItem value="active">
+                {t("suppliersUi.roster.statusOption.active")}
+              </MenuItem>
+              <MenuItem value="suspended">
+                {t("suppliersUi.roster.statusOption.suspended")}
+              </MenuItem>
+              <MenuItem value="removed">
+                {t("suppliersUi.roster.statusOption.removed")}
+              </MenuItem>
             </Select>
           </FormControl>
 
@@ -295,7 +335,10 @@ function EditSupplierDialog({
 
           {error && (
             <Alert severity="error">
-              {(error && "data" in error && (error.data as { message?: string })?.message) || t("suppliersUi.roster.updateFailed")}
+              {(error &&
+                "data" in error &&
+                (error.data as { message?: string })?.message) ||
+                t("suppliersUi.roster.updateFailed")}
             </Alert>
           )}
         </Stack>
@@ -525,10 +568,14 @@ export function AdminSupplierRoster() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("suppliersUi.roster.columns.supplier")}</TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.supplier")}
+                  </TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.type")}</TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.tier")}</TableCell>
-                  <TableCell>{t("suppliersUi.roster.columns.status")}</TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.status")}
+                  </TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.notes")}</TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.added")}</TableCell>
                   <TableCell align="right">
@@ -569,11 +616,19 @@ export function AdminSupplierRoster() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("suppliersUi.roster.columns.aggregator")}</TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.aggregator")}
+                  </TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.type")}</TableCell>
-                  <TableCell>{t("suppliersUi.roster.columns.tierAssigned")}</TableCell>
-                  <TableCell>{t("suppliersUi.roster.columns.status")}</TableCell>
-                  <TableCell>{t("suppliersUi.roster.columns.theirNotes")}</TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.tierAssigned")}
+                  </TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.status")}
+                  </TableCell>
+                  <TableCell>
+                    {t("suppliersUi.roster.columns.theirNotes")}
+                  </TableCell>
                   <TableCell>{t("suppliersUi.roster.columns.since")}</TableCell>
                   <TableCell />
                 </TableRow>
@@ -583,7 +638,9 @@ export function AdminSupplierRoster() {
                   <TableRow key={rel.relationship_id} hover>
                     <TableCell>
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Avatar sx={{ width: 28, height: 28, fontSize: "0.75rem" }}>
+                        <Avatar
+                          sx={{ width: 28, height: 28, fontSize: "0.75rem" }}
+                        >
                           {rel.aggregator.display_name?.[0]?.toUpperCase()}
                         </Avatar>
                         <Box>
@@ -615,19 +672,23 @@ export function AdminSupplierRoster() {
                           color={TIER_COLORS[rel.tier] || "default"}
                         />
                       ) : (
-                        <Typography variant="caption" color="text.secondary">—</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          —
+                        </Typography>
                       )}
                     </TableCell>
                     <TableCell>
                       <Chip
                         label={
-            STATUS_LABEL_KEYS[rel.status]
-              ? t(STATUS_LABEL_KEYS[rel.status])
-              : rel.status
-          }
+                          STATUS_LABEL_KEYS[rel.status]
+                            ? t(STATUS_LABEL_KEYS[rel.status])
+                            : rel.status
+                        }
                         size="small"
                         color={STATUS_COLORS[rel.status] || "default"}
-                        variant={rel.status === "active" ? "filled" : "outlined"}
+                        variant={
+                          rel.status === "active" ? "filled" : "outlined"
+                        }
                       />
                     </TableCell>
                     <TableCell>

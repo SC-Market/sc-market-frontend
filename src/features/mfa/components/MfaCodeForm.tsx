@@ -1,5 +1,13 @@
 import React, { useState } from "react"
-import { Alert, Box, Button, Link, Stack, TextField, Typography } from "@mui/material"
+import {
+  Alert,
+  Box,
+  Button,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import { useVerifyMfaMutation } from "../../../store/api/v2/market"
@@ -20,7 +28,9 @@ export function MfaCodeForm(props: {
   focusOnOpen?: boolean
 }) {
   const { t } = useTranslation()
-  const focusOnReveal = useFocusOnReveal<HTMLInputElement>(props.focusOnOpen ?? false)
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>(
+    props.focusOnOpen ?? false,
+  )
   const dispatch = useAppDispatch()
   const [useRecovery, setUseRecovery] = useState(false)
   const [value, setValue] = useState("")
@@ -51,23 +61,39 @@ export function MfaCodeForm(props: {
       <Stack spacing={2}>
         <Typography variant="body2" color="text.secondary">
           {useRecovery
-            ? t("mfa.challenge.recoveryPrompt", "Enter one of your recovery codes. Each code works once.")
-            : t("mfa.challenge.codePrompt", "Enter the 6-digit code from your authenticator app.")}
+            ? t(
+                "mfa.challenge.recoveryPrompt",
+                "Enter one of your recovery codes. Each code works once.",
+              )
+            : t(
+                "mfa.challenge.codePrompt",
+                "Enter the 6-digit code from your authenticator app.",
+              )}
         </Typography>
         <TextField
-          label={useRecovery ? t("mfa.challenge.recoveryLabel", "Recovery code") : t("mfa.challenge.codeLabel", "Authentication code")}
+          label={
+            useRecovery
+              ? t("mfa.challenge.recoveryLabel", "Recovery code")
+              : t("mfa.challenge.codeLabel", "Authentication code")
+          }
           value={value}
           onChange={(e) => {
             reset()
             const next = e.target.value
-            setValue(useRecovery ? next.toUpperCase().slice(0, 11) : next.replace(/\D/g, "").slice(0, 6))
+            setValue(
+              useRecovery
+                ? next.toUpperCase().slice(0, 11)
+                : next.replace(/\D/g, "").slice(0, 6),
+            )
           }}
           inputRef={focusOnReveal}
           autoComplete="one-time-code"
           inputProps={{
             inputMode: useRecovery ? "text" : "numeric",
             pattern: useRecovery ? undefined : "[0-9]*",
-            "aria-label": useRecovery ? t("appUi.mfa.recoveryCodeAria") : t("appUi.mfa.authCodeAria"),
+            "aria-label": useRecovery
+              ? t("appUi.mfa.recoveryCodeAria")
+              : t("appUi.mfa.authCodeAria"),
             style: { letterSpacing: "0.3em", fontFamily: "monospace" },
           }}
           fullWidth
@@ -79,7 +105,11 @@ export function MfaCodeForm(props: {
               {t("mfa.common.cancel", "Cancel")}
             </Button>
           )}
-          <Button type="submit" variant="contained" disabled={!valid || isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={!valid || isLoading}
+          >
             {props.submitLabel ?? t("mfa.challenge.verify", "Verify")}
           </Button>
         </Stack>

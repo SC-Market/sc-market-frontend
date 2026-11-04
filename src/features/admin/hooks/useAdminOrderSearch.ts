@@ -23,12 +23,26 @@ const SORT_METHODS: readonly AdminOrderSortMethod[] = [
  * involving a test buyer, seller, org or shop are left out, counts included,
  * unless `includeTest`; when included, each says so (is_test).
  */
-export function useAdminOrderSearch({ includeTest }: { includeTest: boolean }): OrderSearchResult {
+export function useAdminOrderSearch({
+  includeTest,
+}: {
+  includeTest: boolean
+}): OrderSearchResult {
   const state = useOrderSearchState()
   const { statusFilter, page, pageSize, orderBy, order } = state
 
-  const { data: orders, currentData, isLoading, isFetching } = useListAdminOrdersQuery({
-    status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
+  const {
+    data: orders,
+    currentData,
+    isLoading,
+    isFetching,
+  } = useListAdminOrdersQuery({
+    status:
+      statusFilter === "all"
+        ? undefined
+        : statusFilter === "unassigned"
+          ? "active"
+          : statusFilter,
     unassigned: statusFilter === "unassigned" ? true : undefined,
     page: page + 1,
     pageSize,
@@ -40,7 +54,10 @@ export function useAdminOrderSearch({ includeTest }: { includeTest: boolean }): 
     includeTest: includeTest || undefined,
   })
 
-  const totalCounts = useMemo(() => toTotalCounts(orders?.item_counts), [orders])
+  const totalCounts = useMemo(
+    () => toTotalCounts(orders?.item_counts),
+    [orders],
+  )
 
   return {
     ...state,

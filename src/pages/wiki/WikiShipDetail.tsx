@@ -4,18 +4,37 @@
 
 import React from "react"
 import {
-  Box, Card, CardContent, Typography, Grid, Chip,
-  Alert, Divider, Table, TableBody, TableCell,
-  TableContainer, TableRow, Paper, Stack,
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Chip,
+  Alert,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  Stack,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
+import {
+  ShipSilhouette,
+  getShipColor,
+} from "../../components/wiki/ShipSilhouette"
 import { FRONTEND_URL } from "../../util/constants"
-import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
+import {
+  formatShipRole,
+  formatShipCareer,
+  getShipRoleColor,
+} from "../../util/shipDisplay"
 import { WIKI_PATHS } from "../../routes/paths"
 import { AnswerLead } from "../../components/game-data/AnswerSummary"
 import { buildShipSummary } from "../../util/answerContent"
@@ -30,17 +49,34 @@ export function WikiShipDetail() {
 
   if (isLoading) {
     return (
-      <StandardPageLayout title={t("wiki.shipDetail.title", "Ship Details")} headerTitle={t("wiki.shipDetail.title", "Ship Details")} sidebarOpen={true} maxWidth="md">
-        <Grid item xs={12}><DetailPageSkeleton /></Grid>
+      <StandardPageLayout
+        title={t("wiki.shipDetail.title", "Ship Details")}
+        headerTitle={t("wiki.shipDetail.title", "Ship Details")}
+        sidebarOpen={true}
+        maxWidth="md"
+      >
+        <Grid item xs={12}>
+          <DetailPageSkeleton />
+        </Grid>
       </StandardPageLayout>
     )
   }
 
   if (error || !ship) {
     return (
-      <StandardPageLayout title={t("wiki.shipDetail.title", "Ship Details")} headerTitle={t("wiki.shipDetail.title", "Ship Details")} sidebarOpen={true} maxWidth="md">
+      <StandardPageLayout
+        title={t("wiki.shipDetail.title", "Ship Details")}
+        headerTitle={t("wiki.shipDetail.title", "Ship Details")}
+        sidebarOpen={true}
+        maxWidth="md"
+      >
         <Grid item xs={12}>
-          <Alert severity="error">{t("wiki.shipDetail.failedToLoad", "Failed to load ship details. Please try again.")}</Alert>
+          <Alert severity="error">
+            {t(
+              "wiki.shipDetail.failedToLoad",
+              "Failed to load ship details. Please try again.",
+            )}
+          </Alert>
         </Grid>
       </StandardPageLayout>
     )
@@ -57,17 +93,38 @@ export function WikiShipDetail() {
   const canonicalPath = WIKI_PATHS.ship(ship.id, ship.name)
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={canonicalPath} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: WIKI_PATHS.ships }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
+    <StandardPageLayout
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={canonicalPath}
+      headerTitle={ship.name}
+      breadcrumbs={[
+        {
+          label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"),
+          href: WIKI_PATHS.hub,
+        },
+        {
+          label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"),
+          href: WIKI_PATHS.ships,
+        },
+        { label: ship.name },
+      ]}
+      sidebarOpen={true}
+      maxWidth="md"
+    >
       <SeoHead head={head} />
       <Grid item xs={12}>
         <Grid container spacing={3}>
-
           <Grid item xs={12}>
             <AnswerLead summary={buildShipSummary(ship, t)} />
             <Card sx={{ overflow: "hidden" }}>
               <Box sx={{ height: 4, bgcolor: shipColor }} />
               <CardContent>
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="flex-start">
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={3}
+                  alignItems="flex-start"
+                >
                   <Box
                     sx={{
                       width: { xs: "100%", sm: 240 },
@@ -90,42 +147,101 @@ export function WikiShipDetail() {
                     }}
                   >
                     {ship.ship_code ? (
-                      <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} focus={ship.focus} height={150} opacity={0.9} />
+                      <ShipSilhouette
+                        shipCode={ship.ship_code}
+                        career={ship.career}
+                        role={ship.role}
+                        focus={ship.focus}
+                        height={150}
+                        opacity={0.9}
+                      />
                     ) : ship.image_url ? (
-                      <Box component="img" src={ship.image_url} alt={ship.name}
-                        sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <Box
+                        component="img"
+                        src={ship.image_url}
+                        alt={ship.name}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
                     ) : null}
                   </Box>
 
                   <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Stack direction="row" spacing={1} sx={{ mb: 1.5 }} flexWrap="wrap" useFlexGap>
-                      {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
-                      {ship.career && <Chip label={formatShipCareer(ship.career, t)} color={chipColor} variant="outlined" />}
-                      {ship.role && <Chip label={formatShipRole(ship.role, t)} color={chipColor} />}
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ mb: 1.5 }}
+                      flexWrap="wrap"
+                      useFlexGap
+                    >
+                      {ship.manufacturer && (
+                        <Chip label={ship.manufacturer} color="primary" />
+                      )}
+                      {ship.career && (
+                        <Chip
+                          label={formatShipCareer(ship.career, t)}
+                          color={chipColor}
+                          variant="outlined"
+                        />
+                      )}
+                      {ship.role && (
+                        <Chip
+                          label={formatShipRole(ship.role, t)}
+                          color={chipColor}
+                        />
+                      )}
                       {ship.focus && !ship.role && <Chip label={ship.focus} />}
-                      {ship.size && <Chip label={t("wiki.shipDetail.sizeChip", "Size {{size}}", { size: ship.size })} />}
-                      {ship.movement_class && <Chip label={ship.movement_class} />}
+                      {ship.size && (
+                        <Chip
+                          label={t(
+                            "wiki.shipDetail.sizeChip",
+                            "Size {{size}}",
+                            { size: ship.size },
+                          )}
+                        />
+                      )}
+                      {ship.movement_class && (
+                        <Chip label={ship.movement_class} />
+                      )}
                     </Stack>
 
-                    <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
+                    <Stack
+                      direction="row"
+                      spacing={3}
+                      sx={{ mb: 2 }}
+                      flexWrap="wrap"
+                      useFlexGap
+                    >
                       {ship.crew_size != null && (
                         <Typography variant="body2" color="text.secondary">
-                          <strong>{t("wiki.shipDetail.crew", "Crew:")}</strong> {ship.crew_size}
+                          <strong>{t("wiki.shipDetail.crew", "Crew:")}</strong>{" "}
+                          {ship.crew_size}
                         </Typography>
                       )}
-                      {(ship.length_m != null || ship.width_m != null || ship.height_m != null) && (
+                      {(ship.length_m != null ||
+                        ship.width_m != null ||
+                        ship.height_m != null) && (
                         <Typography variant="body2" color="text.secondary">
-                          <strong>{t("wiki.shipDetail.dimensions", "Dimensions:")}</strong>{" "}
+                          <strong>
+                            {t("wiki.shipDetail.dimensions", "Dimensions:")}
+                          </strong>{" "}
                           {[ship.length_m, ship.width_m, ship.height_m]
-                            .filter(v => v != null)
-                            .map(v => `${v}m`)
+                            .filter((v) => v != null)
+                            .map((v) => `${v}m`)
                             .join(" × ")}
                         </Typography>
                       )}
                     </Stack>
 
                     {ship.description && (
-                      <Typography variant="body1" color="text.secondary" sx={{ whiteSpace: "pre-line" }}>
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{ whiteSpace: "pre-line" }}
+                      >
                         {ship.description.replace(/\\n/g, "\n")}
                       </Typography>
                     )}
@@ -139,17 +255,30 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>{t("wiki.shipDetail.specifications", "Ship Specifications")}</Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {t("wiki.shipDetail.specifications", "Ship Specifications")}
+                  </Typography>
                   <Divider sx={{ mb: 2 }} />
                   <TableContainer component={Paper} variant="outlined">
                     <Table size="small">
                       <TableBody>
                         {Object.entries(ship.attributes)
-                          .filter(([key]) => !key.includes("loadout") && key !== "description" && key !== "ship_focus")
+                          .filter(
+                            ([key]) =>
+                              !key.includes("loadout") &&
+                              key !== "description" &&
+                              key !== "ship_focus",
+                          )
                           .map(([key, value]) => (
                             <TableRow key={key}>
-                              <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
-                                {key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {key
+                                  .replace(/_/g, " ")
+                                  .replace(/\b\w/g, (l) => l.toUpperCase())}
                               </TableCell>
                               <TableCell>
                                 {typeof value === "object"
@@ -170,10 +299,15 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>{t("wiki.shipDetail.defaultLoadout", "Default Loadout")}</Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {t("wiki.shipDetail.defaultLoadout", "Default Loadout")}
+                  </Typography>
                   <Divider sx={{ mb: 2 }} />
                   <Box sx={{ maxHeight: 500, overflow: "auto" }}>
-                    <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                    >
                       {ship.default_loadout}
                     </Typography>
                   </Box>
@@ -181,7 +315,6 @@ export function WikiShipDetail() {
               </Card>
             </Grid>
           )}
-
         </Grid>
       </Grid>
     </StandardPageLayout>

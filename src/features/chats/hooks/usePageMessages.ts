@@ -72,7 +72,10 @@ export function usePageMessages(
     : chatObj?.session_id
       ? offerNotificationsData
       : undefined
-  const notifications = useMemo(() => notificationsData?.notifications || [], [notificationsData?.notifications])
+  const notifications = useMemo(
+    () => notificationsData?.notifications || [],
+    [notificationsData?.notifications],
+  )
   const [updateNotification] = useNotificationUpdateMutation()
 
   // Mark chat notifications as read when viewing the chat

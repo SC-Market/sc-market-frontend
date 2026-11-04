@@ -22,8 +22,14 @@ import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { HelpLayout } from "../../features/help/components/HelpLayout"
 import { ContentBody } from "../../features/help/components/ContentBody"
-import { changelogEntries, findChangelogEntry } from "../../features/help/content"
-import { changelogBodyKey, type ChangelogMeta } from "../../features/help/domain/types"
+import {
+  changelogEntries,
+  findChangelogEntry,
+} from "../../features/help/content"
+import {
+  changelogBodyKey,
+  type ChangelogMeta,
+} from "../../features/help/domain/types"
 import { CHANGELOG_PATHS } from "../../routes/paths"
 import { FRONTEND_URL } from "../../util/constants"
 import {
@@ -53,7 +59,13 @@ function FeedDiscovery() {
 
 function EntryStamp({ entry }: { entry: ChangelogMeta }) {
   return (
-    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+    <Stack
+      direction="row"
+      spacing={1}
+      alignItems="center"
+      flexWrap="wrap"
+      useFlexGap
+    >
       <Typography variant="body2" color="text.primary">
         <time dateTime={entry.date}>{formatChangelogDate(entry.date)}</time>
       </Typography>
@@ -95,15 +107,25 @@ function ChangelogIndex() {
         <Grid item xs={12}>
           <Paper sx={{ p: { xs: 2, sm: 3 } }} data-testid="changelog-empty">
             <Typography variant="body1" color="text.secondary">
-              {t("changelog.empty", "No updates have been published yet. Check back soon.")}
+              {t(
+                "changelog.empty",
+                "No updates have been published yet. Check back soon.",
+              )}
             </Typography>
           </Paper>
         </Grid>
       ) : (
         changelogEntries.map((entry) => (
           <Grid item xs={12} key={entry.slug}>
-            <Card component="article" aria-labelledby={`changelog-${entry.slug}`}>
-              <CardActionArea component={RouterLink} to={CHANGELOG_PATHS.entry(entry.slug)} sx={{ p: { xs: 2, sm: 3 } }}>
+            <Card
+              component="article"
+              aria-labelledby={`changelog-${entry.slug}`}
+            >
+              <CardActionArea
+                component={RouterLink}
+                to={CHANGELOG_PATHS.entry(entry.slug)}
+                sx={{ p: { xs: 2, sm: 3 } }}
+              >
                 <EntryStamp entry={entry} />
                 <Typography
                   id={`changelog-${entry.slug}`}
@@ -114,7 +136,11 @@ function ChangelogIndex() {
                 >
                   {entry.title}
                 </Typography>
-                <Typography variant="body2" color="text.primary" sx={{ mt: 0.5 }}>
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{ mt: 0.5 }}
+                >
                   {entry.summary}
                 </Typography>
               </CardActionArea>
@@ -129,11 +155,20 @@ function ChangelogIndex() {
 function ChangelogEntryPage({ slug }: { slug: string }) {
   const { t } = useTranslation()
   const entry = findChangelogEntry(slug)
-  const crumb = { label: t("changelog.title", CHANGELOG_NAME), href: CHANGELOG_PATHS.index }
+  const crumb = {
+    label: t("changelog.title", CHANGELOG_NAME),
+    href: CHANGELOG_PATHS.index,
+  }
 
   if (!entry) {
     return (
-      <HelpLayout head={null} path={CHANGELOG_PATHS.entry(slug)} headerTitle={null} breadcrumbs={[crumb]} directory={false}>
+      <HelpLayout
+        head={null}
+        path={CHANGELOG_PATHS.entry(slug)}
+        headerTitle={null}
+        breadcrumbs={[crumb]}
+        directory={false}
+      >
         <PageBody404 />
       </HelpLayout>
     )
@@ -167,7 +202,12 @@ function ChangelogEntryPage({ slug }: { slug: string }) {
           </Suspense>
           <Divider sx={{ my: 3 }} />
           <Stack direction="row" spacing={2}>
-            <Link component={RouterLink} to={CHANGELOG_PATHS.index} variant="body2" color="secondary">
+            <Link
+              component={RouterLink}
+              to={CHANGELOG_PATHS.index}
+              variant="body2"
+              color="secondary"
+            >
               {t("changelog.allUpdates", "All updates")}
             </Link>
             <FeedLink />
@@ -180,5 +220,9 @@ function ChangelogEntryPage({ slug }: { slug: string }) {
 
 export function ChangelogPage() {
   const { slug } = useParams<{ slug?: string }>()
-  return slug === undefined ? <ChangelogIndex /> : <ChangelogEntryPage slug={slug} />
+  return slug === undefined ? (
+    <ChangelogIndex />
+  ) : (
+    <ChangelogEntryPage slug={slug} />
+  )
 }

@@ -30,7 +30,10 @@ import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
  * Replacing an existing authenticator needs a step-up, which the base query
  * prompts for automatically.
  */
-export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boolean) => void }) {
+export function MfaEnrollDialog(props: {
+  open: boolean
+  onClose: (completed: boolean) => void
+}) {
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const dispatch = useAppDispatch()
@@ -63,7 +66,9 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
   const submitCode = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!enrollment || !/^\d{6}$/.test(code)) return
-    const result = await confirm({ totpConfirmRequest: { factor_id: enrollment.factor_id, code } })
+    const result = await confirm({
+      totpConfirmRequest: { factor_id: enrollment.factor_id, code },
+    })
     if ("data" in result && result.data) {
       dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
       setStep(2)
@@ -85,7 +90,9 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>{t("mfa.enroll.title", "Set up two-factor authentication")}</DialogTitle>
+      <DialogTitle>
+        {t("mfa.enroll.title", "Set up two-factor authentication")}
+      </DialogTitle>
       <DialogContent>
         <Stepper activeStep={step} sx={{ mb: 3 }}>
           {steps.map((label) => (
@@ -106,13 +113,25 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
             {enrollment && (
               <>
                 <Typography variant="body2" color="text.secondary">
-                  {t("mfa.enroll.scan", "Scan this QR code with an authenticator app (1Password, Bitwarden, Google Authenticator, Authy, ...).")}
+                  {t(
+                    "mfa.enroll.scan",
+                    "Scan this QR code with an authenticator app (1Password, Bitwarden, Google Authenticator, Authy, ...).",
+                  )}
                 </Typography>
                 <Box
                   component="img"
                   src={enrollment.qr_data_url}
-                  alt={t("mfa.enroll.qrAlt", "QR code for your authenticator app")}
-                  sx={{ width: 220, height: 220, bgcolor: "white", p: 1, borderRadius: 1 }}
+                  alt={t(
+                    "mfa.enroll.qrAlt",
+                    "QR code for your authenticator app",
+                  )}
+                  sx={{
+                    width: 220,
+                    height: 220,
+                    bgcolor: "white",
+                    p: 1,
+                    borderRadius: 1,
+                  }}
                 />
                 <Typography variant="body2" color="text.secondary">
                   {t("mfa.enroll.manual", "Or enter this key manually:")}
@@ -121,21 +140,33 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
                   <Typography
                     component="code"
                     data-testid="mfa-manual-key"
-                    sx={{ fontFamily: "monospace", fontSize: "1.05rem", letterSpacing: "0.05em" }}
+                    sx={{
+                      fontFamily: "monospace",
+                      fontSize: "1.05rem",
+                      letterSpacing: "0.05em",
+                    }}
                   >
                     {enrollment.manual_key}
                   </Typography>
                   <Button
                     size="small"
                     onClick={async () => {
-                      await navigator.clipboard.writeText(enrollment.manual_key.replace(/ /g, ""))
+                      await navigator.clipboard.writeText(
+                        enrollment.manual_key.replace(/ /g, ""),
+                      )
                       setCopied(true)
                     }}
                   >
-                    {copied ? t("mfa.common.copied", "Copied") : t("mfa.common.copy", "Copy")}
+                    {copied
+                      ? t("mfa.common.copied", "Copied")
+                      : t("mfa.common.copy", "Copy")}
                   </Button>
                 </Stack>
-                <Stack direction="row" spacing={1} sx={{ alignSelf: "flex-end" }}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignSelf: "flex-end" }}
+                >
                   <Button color="inherit" onClick={() => props.onClose(false)}>
                     {t("mfa.common.cancel", "Cancel")}
                   </Button>
@@ -152,7 +183,10 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
           <Box component="form" onSubmit={submitCode} noValidate>
             <Stack spacing={2}>
               <Typography variant="body2" color="text.secondary">
-                {t("mfa.enroll.confirm", "Enter the 6-digit code your app shows now.")}
+                {t(
+                  "mfa.enroll.confirm",
+                  "Enter the 6-digit code your app shows now.",
+                )}
               </Typography>
               <TextField
                 label={t("mfa.challenge.codeLabel", "Authentication code")}
@@ -171,7 +205,9 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
                 }}
               />
               {confirmState.error && (
-                <Alert severity="error">{describeMfaError(confirmState.error, t)}</Alert>
+                <Alert severity="error">
+                  {describeMfaError(confirmState.error, t)}
+                </Alert>
               )}
               <Stack direction="row" spacing={1} justifyContent="flex-end">
                 <Button color="inherit" onClick={() => setStep(0)}>
@@ -190,7 +226,10 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
         )}
 
         {step === 2 && recoveryCodes && (
-          <RecoveryCodesPanel codes={recoveryCodes} onDone={() => props.onClose(true)} />
+          <RecoveryCodesPanel
+            codes={recoveryCodes}
+            onDone={() => props.onClose(true)}
+          />
         )}
       </DialogContent>
     </Dialog>

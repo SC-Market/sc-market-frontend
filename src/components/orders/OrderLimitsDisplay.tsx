@@ -19,7 +19,6 @@ interface OrderLimitsDisplayProps {
 
 type ValidationState = "info" | "warning" | "error" | "success"
 
-
 function getSizeValidationState(
   limits: OrderLimits,
   currentSize: number,
@@ -180,7 +179,9 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <Warning fontSize="small" />
-                    {t("ordersUi.limits.sizeNearLimit", { current: currentSize })}
+                    {t("ordersUi.limits.sizeNearLimit", {
+                      current: currentSize,
+                    })}
                   </Typography>
                 )}
                 {sizeState === "success" && (

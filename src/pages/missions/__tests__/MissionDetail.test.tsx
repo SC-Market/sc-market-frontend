@@ -19,7 +19,10 @@ import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { vi, beforeEach, describe, it, expect } from "vitest"
 import { MissionDetail } from "../MissionDetail"
-import { marketV2Api, useGetMissionDetailQuery } from "../../../store/api/v2/market"
+import {
+  marketV2Api,
+  useGetMissionDetailQuery,
+} from "../../../store/api/v2/market"
 import {
   queryError,
   queryLoading,
@@ -45,7 +48,18 @@ vi.mock("../../../components/metadata/Page", () => ({
 
 // Mock StandardPageLayout to avoid serviceApi/profileApi dependencies
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, headerTitle }: { children: React.ReactNode; headerTitle?: string }) => <div>{headerTitle && <h1>{headerTitle}</h1>}{children}</div>,
+  StandardPageLayout: ({
+    children,
+    headerTitle,
+  }: {
+    children: React.ReactNode
+    headerTitle?: string
+  }) => (
+    <div>
+      {headerTitle && <h1>{headerTitle}</h1>}
+      {children}
+    </div>
+  ),
 }))
 
 // Real English catalog (src/util/i18n), so the rendered text is what users see
@@ -203,7 +217,10 @@ const createMockStore = () => {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
@@ -216,7 +233,7 @@ const renderWithProviders = () => {
           <Route path="/missions/:slug" element={<MissionDetail />} />
         </Routes>
       </MemoryRouter>
-    </Provider>
+    </Provider>,
   )
 }
 
@@ -237,7 +254,9 @@ describe("MissionDetail", () => {
     const { container } = renderWithProviders()
 
     // Loading renders DetailPageSkeleton (MUI Skeletons), not a progressbar
-    expect(container.querySelectorAll(".MuiSkeleton-root").length).toBeGreaterThan(0)
+    expect(
+      container.querySelectorAll(".MuiSkeleton-root").length,
+    ).toBeGreaterThan(0)
     // Mission content is not shown while loading
     expect(screen.queryByText("Test Mission")).not.toBeInTheDocument()
   })
@@ -249,14 +268,18 @@ describe("MissionDetail", () => {
 
     renderWithProviders()
 
-    expect(screen.getByText(/Failed to load mission details/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Failed to load mission details/i),
+    ).toBeInTheDocument()
   })
 
   it("renders mission header with name and badges", () => {
     renderWithProviders()
 
     // Mission name is rendered by StandardPageLayout headerTitle (mocked to <h1>)
-    expect(screen.getByText("Test Mission — Hurston Dynamics, Rank 10, Stanton")).toBeInTheDocument()
+    expect(
+      screen.getByText("Test Mission — Hurston Dynamics, Rank 10, Stanton"),
+    ).toBeInTheDocument()
     // Header chips (redesigned)
     expect(screen.getByText("Stanton")).toBeInTheDocument()
     expect(screen.getByText("Combat")).toBeInTheDocument()
@@ -275,7 +298,9 @@ describe("MissionDetail", () => {
   it("renders mission description", () => {
     renderWithProviders()
 
-    expect(screen.getByText("This is a test mission description")).toBeInTheDocument()
+    expect(
+      screen.getByText("This is a test mission description"),
+    ).toBeInTheDocument()
   })
 
   it("renders mission metadata (location, giver, faction)", () => {

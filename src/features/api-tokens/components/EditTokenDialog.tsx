@@ -18,10 +18,7 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
-import {
-  useUpdateTokenMutation,
-  ApiToken,
-} from "../api/tokensApi"
+import { useUpdateTokenMutation, ApiToken } from "../api/tokensApi"
 import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
@@ -48,7 +45,10 @@ export function EditTokenDialog({
   const { t } = useTranslation()
   const [updateToken, { isLoading }] = useUpdateTokenMutation()
   const { data: profile } = useGetUserProfileQuery()
-  const contractors = useMemo(() => profile?.contractors || [], [profile?.contractors])
+  const contractors = useMemo(
+    () => profile?.contractors || [],
+    [profile?.contractors],
+  )
   const isAdmin = isSiteAdmin(profile)
   const issueAlert = useAlertHook()
 
@@ -58,9 +58,7 @@ export function EditTokenDialog({
   )
   const availableScopes: string[] = isAdmin
     ? allScopes
-    : allScopes.filter(
-        (scope) => !isAdminOnlyScope(scope),
-      )
+    : allScopes.filter((scope) => !isAdminOnlyScope(scope))
 
   const [formData, setFormData] = useState({
     name: "",
@@ -87,9 +85,7 @@ export function EditTokenDialog({
       // Filter out admin/moderation scopes for non-admin users
       const scopesToShow = isAdmin
         ? token.scopes
-        : token.scopes.filter(
-            (scope: string) => !isAdminOnlyScope(scope),
-          )
+        : token.scopes.filter((scope: string) => !isAdminOnlyScope(scope))
 
       setFormData({
         name: token.name,
@@ -218,51 +214,49 @@ export function EditTokenDialog({
             {t("apiTokensUi.form.permissionsHelp")}
           </Typography>
 
-          {Object.entries(SCOPE_CATEGORIES).map(
-            ([category, { scopes }]) => {
-              // Filter scopes based on availability only (no showing admin scopes to non-admins)
-              const filteredScopes = scopes.filter((scope) =>
-                availableScopes.includes(scope.value),
-              )
+          {Object.entries(SCOPE_CATEGORIES).map(([category, { scopes }]) => {
+            // Filter scopes based on availability only (no showing admin scopes to non-admins)
+            const filteredScopes = scopes.filter((scope) =>
+              availableScopes.includes(scope.value),
+            )
 
-              // Don't render category if no scopes are available
-              if (filteredScopes.length === 0) return null
+            // Don't render category if no scopes are available
+            if (filteredScopes.length === 0) return null
 
-              return (
-                <Box key={category} sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {t(`apiTokensUi.scopes.categories.${category}`)}
-                    {!isAdmin &&
-                      (category === "admin" || category === "moderation") && (
-                        <Chip
-                          label={t("apiTokensUi.form.adminOnly")}
-                          size="small"
-                          color="warning"
-                          sx={{ ml: 1 }}
-                        />
-                      )}
-                  </Typography>
-                  <FormGroup>
-                    {filteredScopes.map(({ value }) => (
-                      <FormControlLabel
-                        key={value}
-                        control={
-                          <Checkbox
-                            checked={formData.scopes.includes(value)}
-                            onChange={(e) =>
-                              handleScopeChange(value, e.target.checked)
-                            }
-                          />
-                        }
-                        label={t(scopeLabelKey(value))}
+            return (
+              <Box key={category} sx={{ mb: 3 }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  {t(`apiTokensUi.scopes.categories.${category}`)}
+                  {!isAdmin &&
+                    (category === "admin" || category === "moderation") && (
+                      <Chip
+                        label={t("apiTokensUi.form.adminOnly")}
+                        size="small"
+                        color="warning"
+                        sx={{ ml: 1 }}
                       />
-                    ))}
-                  </FormGroup>
-                  <Divider sx={{ mt: 1 }} />
-                </Box>
-              )
-            },
-          )}
+                    )}
+                </Typography>
+                <FormGroup>
+                  {filteredScopes.map(({ value }) => (
+                    <FormControlLabel
+                      key={value}
+                      control={
+                        <Checkbox
+                          checked={formData.scopes.includes(value)}
+                          onChange={(e) =>
+                            handleScopeChange(value, e.target.checked)
+                          }
+                        />
+                      }
+                      label={t(scopeLabelKey(value))}
+                    />
+                  ))}
+                </FormGroup>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+            )
+          })}
         </Grid>
 
         <Grid item xs={12}>

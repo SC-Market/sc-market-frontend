@@ -29,14 +29,21 @@ export interface AcquisitionSections {
   resource: boolean
 }
 
-export function acquisitionSections(doc: ItemAcquisitionDocument): AcquisitionSections {
+export function acquisitionSections(
+  doc: ItemAcquisitionDocument,
+): AcquisitionSections {
   const r = doc.resource
   return {
     buy: doc.listings.count > 0,
     missions: doc.missions.top.length > 0,
     blueprints: doc.blueprints.items.length > 0,
     shops: doc.in_game_shops.shops.length > 0,
-    resource: !!r && (r.can_be_mined || r.can_be_purchased || r.can_be_salvaged || r.can_be_looted),
+    resource:
+      !!r &&
+      (r.can_be_mined ||
+        r.can_be_purchased ||
+        r.can_be_salvaged ||
+        r.can_be_looted),
   }
 }
 
@@ -57,7 +64,9 @@ export function acquisitionMissionPath(m: ItemAcquisitionMission): string {
 
 /** The blueprint's page (the detail route takes the blueprint name or id). */
 export function acquisitionBlueprintPath(bp: ItemAcquisitionBlueprint): string {
-  return GAME_DATA_PATHS.blueprint(encodeURIComponent(bp.blueprint_name || bp.blueprint_id))
+  return GAME_DATA_PATHS.blueprint(
+    encodeURIComponent(bp.blueprint_name || bp.blueprint_id),
+  )
 }
 
 /** An ingredient's item page (the document gives its short slug). */
@@ -72,20 +81,32 @@ export function acquisitionGiver(m: ItemAcquisitionMission): string | null {
 
 /** The mission name without game markup. */
 export function acquisitionMissionName(m: ItemAcquisitionMission): string {
-  return readableMissionText(m.mission_name, acquisitionGiver(m)) || m.mission_code
+  return (
+    readableMissionText(m.mission_name, acquisitionGiver(m)) || m.mission_code
+  )
 }
 
 /** "Item reward" / "Blueprint reward". */
-export function missionRewardKind(m: ItemAcquisitionMission, t: AnswerTranslate): string {
+export function missionRewardKind(
+  m: ItemAcquisitionMission,
+  t: AnswerTranslate,
+): string {
   return m.reward_kind === "item"
     ? t("itemAcquisition.rewardItem", "Item reward")
     : t("itemAcquisition.rewardBlueprint", "Blueprint reward")
 }
 
 /** "3.57% drop chance", "Guaranteed", or null when the game data gives none. */
-export function missionChance(m: ItemAcquisitionMission, t: AnswerTranslate): string | null {
+export function missionChance(
+  m: ItemAcquisitionMission,
+  t: AnswerTranslate,
+): string | null {
   if (m.is_guaranteed) return t("itemAcquisition.guaranteed", "Guaranteed")
-  if (typeof m.drop_probability !== "number" || !Number.isFinite(m.drop_probability) || m.drop_probability <= 0) {
+  if (
+    typeof m.drop_probability !== "number" ||
+    !Number.isFinite(m.drop_probability) ||
+    m.drop_probability <= 0
+  ) {
     return null
   }
   return t("itemAcquisition.dropChance", {
@@ -95,13 +116,18 @@ export function missionChance(m: ItemAcquisitionMission, t: AnswerTranslate): st
 }
 
 /** "Wikelo Navy F7 — Item reward — Giver: Wikelo". */
-export function missionLine(m: ItemAcquisitionMission, t: AnswerTranslate): string {
+export function missionLine(
+  m: ItemAcquisitionMission,
+  t: AnswerTranslate,
+): string {
   const giver = acquisitionGiver(m)
   return [
     acquisitionMissionName(m),
     missionRewardKind(m, t),
     missionChance(m, t),
-    giver ? t("itemAcquisition.giver", { defaultValue: "Giver: {{giver}}", giver }) : null,
+    giver
+      ? t("itemAcquisition.giver", { defaultValue: "Giver: {{giver}}", giver })
+      : null,
   ]
     .filter(Boolean)
     .join(" — ")
@@ -109,13 +135,24 @@ export function missionLine(m: ItemAcquisitionMission, t: AnswerTranslate): stri
 
 /** "Siebe Helmet blueprint" (blueprint names are game codes; the output is this item). */
 export function blueprintLabel(itemName: string, t: AnswerTranslate): string {
-  return t("itemAcquisition.blueprintName", { defaultValue: "{{name}} blueprint", name: itemName })
+  return t("itemAcquisition.blueprintName", {
+    defaultValue: "{{name}} blueprint",
+    name: itemName,
+  })
 }
 
 /** "Tier 2 — Crafting time: 6m 30s — Missions that award this blueprint: 1". */
-export function blueprintFacts(bp: ItemAcquisitionBlueprint, t: AnswerTranslate): string[] {
+export function blueprintFacts(
+  bp: ItemAcquisitionBlueprint,
+  t: AnswerTranslate,
+): string[] {
   return [
-    typeof bp.tier === "number" ? t("itemAcquisition.tier", { defaultValue: "Tier {{tier}}", tier: bp.tier }) : null,
+    typeof bp.tier === "number"
+      ? t("itemAcquisition.tier", {
+          defaultValue: "Tier {{tier}}",
+          tier: bp.tier,
+        })
+      : null,
     bp.rarity || null,
     bp.crafting_time_seconds
       ? t("itemAcquisition.craftTime", {
@@ -133,7 +170,11 @@ export function blueprintFacts(bp: ItemAcquisitionBlueprint, t: AnswerTranslate)
 }
 
 /** "0.08 SCU" or "×2", plus the slot and minimum quality. */
-export function ingredientAmount(ing: ItemAcquisitionIngredient, t: AnswerTranslate, locale: string): string {
+export function ingredientAmount(
+  ing: ItemAcquisitionIngredient,
+  t: AnswerTranslate,
+  locale: string,
+): string {
   const amount =
     typeof ing.quantity_scu === "number"
       ? `${formatNumber(ing.quantity_scu, locale, { maximumFractionDigits: 3 })} SCU`
@@ -142,7 +183,10 @@ export function ingredientAmount(ing: ItemAcquisitionIngredient, t: AnswerTransl
     amount,
     ing.slot_display_name || null,
     typeof ing.min_quality === "number" && ing.min_quality > 0
-      ? t("itemAcquisition.minQuality", { defaultValue: "min. quality {{quality}}", quality: ing.min_quality })
+      ? t("itemAcquisition.minQuality", {
+          defaultValue: "min. quality {{quality}}",
+          quality: ing.min_quality,
+        })
       : null,
   ]
     .filter(Boolean)
@@ -150,7 +194,9 @@ export function ingredientAmount(ing: ItemAcquisitionIngredient, t: AnswerTransl
 }
 
 /** "Stanton: Aberdeen, Daymar" for a location map from the document. */
-export function locationLines(map: Record<string, string[]> | null | undefined): string[] {
+export function locationLines(
+  map: Record<string, string[]> | null | undefined,
+): string[] {
   return Object.entries(map ?? {})
     .map(([group, places]) => {
       const list = (Array.isArray(places) ? places : []).filter(Boolean)
@@ -160,7 +206,10 @@ export function locationLines(map: Record<string, string[]> | null | undefined):
 }
 
 /** "Can be mined", "Can be salvaged"… for a resource. */
-export function resourceMethods(doc: ItemAcquisitionDocument, t: AnswerTranslate): string[] {
+export function resourceMethods(
+  doc: ItemAcquisitionDocument,
+  t: AnswerTranslate,
+): string[] {
   const r = doc.resource
   if (!r) return []
   return [
@@ -196,12 +245,23 @@ export function itemSeoDescription(
     if (l.count > 0) {
       ways.push(
         `buy it from ${plural(l.seller_count, "player seller", "player sellers")}` +
-          (typeof l.lowest_ask === "number" ? ` from ${formatAmount(l.lowest_ask, "en")} aUEC` : ""),
+          (typeof l.lowest_ask === "number"
+            ? ` from ${formatAmount(l.lowest_ask, "en")} aUEC`
+            : ""),
       )
     }
-    if (doc.missions.total > 0) ways.push(`earn it from ${plural(doc.missions.total, "mission", "missions")}`)
-    if (doc.blueprints.total > 0) ways.push(`craft it from ${plural(doc.blueprints.total, "blueprint", "blueprints")}`)
-    if (doc.in_game_shops.total > 0) ways.push(`buy it in ${plural(doc.in_game_shops.total, "in-game shop", "in-game shops")}`)
+    if (doc.missions.total > 0)
+      ways.push(
+        `earn it from ${plural(doc.missions.total, "mission", "missions")}`,
+      )
+    if (doc.blueprints.total > 0)
+      ways.push(
+        `craft it from ${plural(doc.blueprints.total, "blueprint", "blueprints")}`,
+      )
+    if (doc.in_game_shops.total > 0)
+      ways.push(
+        `buy it in ${plural(doc.in_game_shops.total, "in-game shop", "in-game shops")}`,
+      )
   }
   const text =
     ways.length > 0

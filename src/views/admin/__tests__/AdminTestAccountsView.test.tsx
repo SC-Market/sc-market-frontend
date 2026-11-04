@@ -5,14 +5,26 @@ import { AdminTestAccountsView } from "../AdminTestAccountsView"
 
 const mocks = vi.hoisted(() => ({
   create: vi.fn(),
-  state: { data: undefined as unknown, isLoading: false, error: undefined as unknown },
+  state: {
+    data: undefined as unknown,
+    isLoading: false,
+    error: undefined as unknown,
+  },
 }))
 
 vi.mock("../../../store/api/v2/market", () => ({
-  useListTestAccountsQuery: () => ({ data: { login_enabled: false, accounts: [] }, isLoading: false }),
+  useListTestAccountsQuery: () => ({
+    data: { login_enabled: false, accounts: [] },
+    isLoading: false,
+  }),
   useCreateTestAccountMutation: () => [
     mocks.create,
-    { ...mocks.state, reset: () => { mocks.state.data = undefined } },
+    {
+      ...mocks.state,
+      reset: () => {
+        mocks.state.data = undefined
+      },
+    },
   ],
   useDeleteTestAccountMutation: () => [vi.fn(), { isLoading: false }],
 }))
@@ -35,15 +47,24 @@ const readBlob = (b: Blob) =>
     r.readAsText(b)
   })
 
-async function createAccount(rerender: (ui: React.ReactElement) => void, name: string) {
+async function createAccount(
+  rerender: (ui: React.ReactElement) => void,
+  name: string,
+) {
   mocks.create.mockImplementationOnce(async () => {
     mocks.state.data = created(name)
     return { data: created(name) }
   })
-  fireEvent.change(screen.getByTestId("test-account-username"), { target: { value: name } })
-  fireEvent.change(screen.getByTestId("test-account-display-name"), { target: { value: name } })
+  fireEvent.change(screen.getByTestId("test-account-username"), {
+    target: { value: name },
+  })
+  fireEvent.change(screen.getByTestId("test-account-display-name"), {
+    target: { value: name },
+  })
   await act(async () => {
-    fireEvent.submit(screen.getByTestId("test-account-username").closest("form")!)
+    fireEvent.submit(
+      screen.getByTestId("test-account-username").closest("form")!,
+    )
   })
   rerender(<AdminTestAccountsView />)
 }
@@ -74,7 +95,10 @@ describe("AdminTestAccountsView credentials download", () => {
     const { rerender } = render(<AdminTestAccountsView />)
     await createAccount(rerender, "test-buyer")
     expect(mocks.create).toHaveBeenCalledWith({
-      createTestAccountRequest: { username: "test-buyer", display_name: "test-buyer" },
+      createTestAccountRequest: {
+        username: "test-buyer",
+        display_name: "test-buyer",
+      },
     })
     expect(screen.getAllByText(/chmod 600/).length).toBeGreaterThan(0)
     fireEvent.click(screen.getByTestId("download-test-account-credentials"))
@@ -94,9 +118,16 @@ describe("AdminTestAccountsView credentials download", () => {
     fireEvent.click(screen.getByText("I saved it"))
     rerender(<AdminTestAccountsView />)
     await createAccount(rerender, "test-seller")
-    await waitFor(() => expect(screen.getByTestId("download-all-test-account-credentials")).toBeInTheDocument())
+    await waitFor(() =>
+      expect(
+        screen.getByTestId("download-all-test-account-credentials"),
+      ).toBeInTheDocument(),
+    )
     fireEvent.click(screen.getByTestId("download-all-test-account-credentials"))
-    expect(Object.keys(JSON.parse(await readBlob(blobs[0]))).sort()).toEqual(["~test-buyer", "~test-seller"])
+    expect(Object.keys(JSON.parse(await readBlob(blobs[0]))).sort()).toEqual([
+      "~test-buyer",
+      "~test-seller",
+    ])
     expect(revoked).toEqual(["blob:1"])
   })
 })

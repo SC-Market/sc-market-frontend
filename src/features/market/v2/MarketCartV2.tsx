@@ -34,13 +34,17 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { EmptyCart } from "../../../components/empty-states"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
-import { ShoppingCartRounded, Warning, PlaylistAddRounded } from "@mui/icons-material"
 import {
-  useGetCartQuery,
-  CartItemDetail,
-} from "../../../store/api/v2/market"
+  ShoppingCartRounded,
+  Warning,
+  PlaylistAddRounded,
+} from "@mui/icons-material"
+import { useGetCartQuery, CartItemDetail } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
-import { formatCraftedSource, hasDisplayableSource } from "../../../util/variantDisplay"
+import {
+  formatCraftedSource,
+  hasDisplayableSource,
+} from "../../../util/variantDisplay"
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { MARKET_PATHS } from "../../../routes/paths"
@@ -50,7 +54,7 @@ import { useFormatters } from "../../../util/format"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
- * 
+ *
  * Requirements: 31.4-31.12
  * - Display variant details with quality tier badge
  * - Provide variant selector for changing selection
@@ -77,12 +81,7 @@ export function CartItemEntryV2(props: {
     : 0
 
   return (
-    <Grid
-      item
-      xs={12}
-      data-testid="cart-item"
-      data-id={item.cart_item_id}
-    >
+    <Grid item xs={12} data-testid="cart-item" data-id={item.cart_item_id}>
       <Grid
         container
         spacing={theme.layoutSpacing.layout}
@@ -126,16 +125,32 @@ export function CartItemEntryV2(props: {
           </Box>
 
           {/* Variant Display — rich chips, no duplicates */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              flexWrap: "wrap",
+            }}
+          >
             {item.variant.attributes.quality_tier && (
-              <QualityBadge tier={item.variant.attributes.quality_tier} size="small" />
+              <QualityBadge
+                tier={item.variant.attributes.quality_tier}
+                size="small"
+              />
             )}
             {item.variant.attributes.quality_value != null && (
-              <Chip label={`${item.variant.attributes.quality_value}/1000`} size="small" variant="outlined" />
+              <Chip
+                label={`${item.variant.attributes.quality_value}/1000`}
+                size="small"
+                variant="outlined"
+              />
             )}
             {hasDisplayableSource(item.variant.attributes.crafted_source) && (
               <Chip
-                label={formatCraftedSource(item.variant.attributes.crafted_source!)}
+                label={formatCraftedSource(
+                  item.variant.attributes.crafted_source!,
+                )}
                 size="small"
                 variant="outlined"
               />
@@ -144,8 +159,16 @@ export function CartItemEntryV2(props: {
 
           {/* Others in cart */}
           {(item.others_in_cart ?? 0) > 0 && (
-            <Typography variant="caption" color="warning.main" sx={{ mt: 1, display: "block" }}>
-              {t("cart.othersInCart", "{{count}} other people have this in their cart", { count: item.others_in_cart })}
+            <Typography
+              variant="caption"
+              color="warning.main"
+              sx={{ mt: 1, display: "block" }}
+            >
+              {t(
+                "cart.othersInCart",
+                "{{count}} other people have this in their cart",
+                { count: item.others_in_cart },
+              )}
             </Typography>
           )}
 
@@ -155,7 +178,7 @@ export function CartItemEntryV2(props: {
               <AlertTitle>{t("cart.unavailable", "Unavailable")}</AlertTitle>
               {t(
                 "cart.unavailableMessage",
-                "This variant is no longer available"
+                "This variant is no longer available",
               )}
             </Alert>
           )}
@@ -163,9 +186,7 @@ export function CartItemEntryV2(props: {
           {/* Price Change Warning */}
           {priceChanged && (
             <Alert severity="info" icon={<Warning />} sx={{ mt: 1 }}>
-              <AlertTitle>
-                {t("cart.priceChanged", "Price Changed")}
-              </AlertTitle>
+              <AlertTitle>{t("cart.priceChanged", "Price Changed")}</AlertTitle>
               <Typography variant="body2">
                 {priceDifference > 0
                   ? t("cart.priceIncreased", {
@@ -225,7 +246,9 @@ export function CartItemEntryV2(props: {
             </Box>
             <Box sx={{ width: 120 }}>
               <Typography sx={{ textAlign: "right" }}>
-                {fmt.number(priceChanged ? item.current_price! : item.price_per_unit)}{" "}
+                {fmt.number(
+                  priceChanged ? item.current_price! : item.price_per_unit,
+                )}{" "}
                 aUEC
               </Typography>
               <Typography sx={{ textAlign: "right" }}>
@@ -269,7 +292,7 @@ export function CartItemEntryV2(props: {
 
 /**
  * MarketCartV2 - Shopping cart with variant support
- * 
+ *
  * Requirements: 31.1-31.14
  * - Use useGetCartQuery hook for server-side cart
  * - Display variant details for each cart item
@@ -291,60 +314,75 @@ export function MarketCartV2() {
   const theme = useTheme<ExtendedTheme>()
 
   // Fetch cart data
-  const {
-    data: cartData,
-    isLoading,
-    error,
-    refetch,
-  } = useGetCartQuery()
+  const { data: cartData, isLoading, error, refetch } = useGetCartQuery()
 
-  const { removeItem: handleRemove, checkout, isRemoving, isCheckingOut } =
-    useCartActions()
+  const {
+    removeItem: handleRemove,
+    checkout,
+    isRemoving,
+    isCheckingOut,
+  } = useCartActions()
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false)
   const [checkoutSellerId, setCheckoutSellerId] = useState<string | undefined>()
   const [notes, setNotes] = useState<Record<string, string>>({})
 
   // Open checkout confirmation dialog
-  const handleCheckout = useCallback((sellerId: string) => {
-    if (!cartData || cartData.items.length === 0) return
-    setCheckoutSellerId(sellerId)
-    setCheckoutDialogOpen(true)
-  }, [cartData])
+  const handleCheckout = useCallback(
+    (sellerId: string) => {
+      if (!cartData || cartData.items.length === 0) return
+      setCheckoutSellerId(sellerId)
+      setCheckoutDialogOpen(true)
+    },
+    [cartData],
+  )
 
   // Confirm checkout
-  const handleConfirmCheckout = useCallback(
-    async () => {
-      if (!cartData) return
+  const handleConfirmCheckout = useCallback(async () => {
+    if (!cartData) return
 
-      // Get note from the first seller group (cart is single-seller)
-      const sellerName = cartData.items[0]?.listing.shop_name
-      const note = sellerName ? notes[sellerName] : undefined
+    // Get note from the first seller group (cart is single-seller)
+    const sellerName = cartData.items[0]?.listing.shop_name
+    const note = sellerName ? notes[sellerName] : undefined
 
-      await checkout({ items: cartData.items, shopId: checkoutSellerId, note })
-      setCheckoutDialogOpen(false)
-    },
-    [cartData, checkout, checkoutSellerId, notes]
-  )
+    await checkout({ items: cartData.items, shopId: checkoutSellerId, note })
+    setCheckoutDialogOpen(false)
+  }, [cartData, checkout, checkoutSellerId, notes])
 
   // Check if any items are unavailable
   const hasUnavailableItems = useMemo(
     () => cartData?.items.some((item) => !item.available) ?? false,
-    [cartData]
+    [cartData],
   )
 
   // Check if any prices changed
   const hasPriceChanges = useMemo(
     () => cartData?.items.some((item) => item.price_changed) ?? false,
-    [cartData]
+    [cartData],
   )
 
   // Group items by seller
   const sellerGroups = useMemo(() => {
     if (!cartData?.items.length) return []
-    const groups = new Map<string, { sellerName: string; sellerId: string; items: CartItemDetail[]; total: number; nextAvailable?: string | null }>()
+    const groups = new Map<
+      string,
+      {
+        sellerName: string
+        sellerId: string
+        items: CartItemDetail[]
+        total: number
+        nextAvailable?: string | null
+      }
+    >()
     for (const item of cartData.items) {
       const key = item.listing.shop_id
-      if (!groups.has(key)) groups.set(key, { sellerName: item.listing.shop_name, sellerId: key, items: [], total: 0, nextAvailable: item.listing.shop_next_available })
+      if (!groups.has(key))
+        groups.set(key, {
+          sellerName: item.listing.shop_name,
+          sellerId: key,
+          items: [],
+          total: 0,
+          nextAvailable: item.listing.shop_next_available,
+        })
       const g = groups.get(key)!
       g.items.push(item)
       g.total += item.subtotal
@@ -401,120 +439,149 @@ export function MarketCartV2() {
         <Grid item xs={12}>
           <Stack spacing={2}>
             {[1, 2, 3].map((i) => (
-              <Skeleton key={i} variant="rectangular" height={120} sx={{ borderRadius: 1 }} />
+              <Skeleton
+                key={i}
+                variant="rectangular"
+                height={120}
+                sx={{ borderRadius: 1 }}
+              />
             ))}
-            <Skeleton variant="rectangular" height={60} sx={{ borderRadius: 1 }} />
+            <Skeleton
+              variant="rectangular"
+              height={60}
+              sx={{ borderRadius: 1 }}
+            />
           </Stack>
         </Grid>
       }
     >
       <Grid item xs={12}>
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        {sellerGroups.map((group) => (
-          <Section
-            key={group.sellerName}
-            xs={12}
-            element_title={
-              <UnderlineLink color="text.primary" variant="h6" sx={{ fontWeight: "600" }}>
-                {group.sellerName}
-              </UnderlineLink>
-            }
-          >
-            {group.items.map((item) => (
-              <CartItemEntryV2
-                key={item.cart_item_id}
-                item={item}
-                onRemove={handleRemove}
-              />
-            ))}
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          {sellerGroups.map((group) => (
+            <Section
+              key={group.sellerName}
+              xs={12}
+              element_title={
+                <UnderlineLink
+                  color="text.primary"
+                  variant="h6"
+                  sx={{ fontWeight: "600" }}
+                >
+                  {group.sellerName}
+                </UnderlineLink>
+              }
+            >
+              {group.items.map((item) => (
+                <CartItemEntryV2
+                  key={item.cart_item_id}
+                  item={item}
+                  onRemove={handleRemove}
+                />
+              ))}
 
-            {/* Seller availability */}
-            {group.nextAvailable !== undefined && (
-              <Grid item xs={12}>
-                <SellerNextAvailable nextAvailable={group.nextAvailable} />
-              </Grid>
-            )}
-
-            {/* Seller Total */}
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="h5" color="text.secondary">
-                  {t("cart.total")}
-                </Typography>
-                <Typography variant="h5" color="text.secondary">
-                  {fmt.number(group.total)} aUEC
-                </Typography>
-              </Box>
-            </Grid>
-
-            {/* Note field */}
-            <Grid item xs={12}>
-              <MarkdownEditor
-                sx={{ marginRight: 2, marginBottom: 1 }}
-                TextFieldProps={{ label: t("cart.note", "Note to seller") }}
-                value={notes[group.sellerName] || ""}
-                onChange={(val: string) => setNotes(prev => ({ ...prev, [group.sellerName]: val }))}
-              />
-            </Grid>
-
-            {/* Offer + Submit */}
-            <Grid item xs={12} md={4}>
-              <Typography variant="body2" color="text.secondary">
-                {t("cart.submitOfferDesc", "Submit an offer for this seller's items")}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={theme.layoutSpacing.text} justifyContent="right" alignItems="center">
-                <Grid item>
-                  <NumericFormat
-                    decimalScale={0}
-                    allowNegative={false}
-                    customInput={TextField}
-                    thousandSeparator
-                    size="small"
-                    label={t("cart.offerOptional", "Offer (optional)")}
-                    value={group.total}
-                    color="secondary"
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
-                    }}
-                    inputProps={{ inputMode: "numeric" }}
-                  />
+              {/* Seller availability */}
+              {group.nextAvailable !== undefined && (
+                <Grid item xs={12}>
+                  <SellerNextAvailable nextAvailable={group.nextAvailable} />
                 </Grid>
-                <Grid item>
-                  <LoadingButton
-                    color="secondary"
-                    variant="outlined"
-                    startIcon={<ShoppingCartRounded />}
-                    loading={isCheckingOut}
-                    disabled={hasUnavailableItems || isRemoving}
-                    onClick={() => handleCheckout(group.sellerId)}
-                    aria-label={t("cart.submitOfferTo", "Submit offer to {{seller}}", {
-                      seller: group.sellerName,
-                    })}
-                  >
-                    {t("cart.submitOffer", "Submit Offer")}
-                  </LoadingButton>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Section>
-        ))}
-
-        {/* Price Change Alert */}
-        {hasPriceChanges && (
-          <Grid item xs={12}>
-            <Alert severity="info" icon={<Warning />}>
-              <AlertTitle>
-                {t("cart.pricesChanged", "Prices Have Changed")}
-              </AlertTitle>
-              {t(
-                "cart.pricesChangedMessage",
-                "Some item prices have changed since you added them to your cart. Please review before checkout."
               )}
-            </Alert>
-          </Grid>
-        )}
+
+              {/* Seller Total */}
+              <Grid item xs={12}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="h5" color="text.secondary">
+                    {t("cart.total")}
+                  </Typography>
+                  <Typography variant="h5" color="text.secondary">
+                    {fmt.number(group.total)} aUEC
+                  </Typography>
+                </Box>
+              </Grid>
+
+              {/* Note field */}
+              <Grid item xs={12}>
+                <MarkdownEditor
+                  sx={{ marginRight: 2, marginBottom: 1 }}
+                  TextFieldProps={{ label: t("cart.note", "Note to seller") }}
+                  value={notes[group.sellerName] || ""}
+                  onChange={(val: string) =>
+                    setNotes((prev) => ({ ...prev, [group.sellerName]: val }))
+                  }
+                />
+              </Grid>
+
+              {/* Offer + Submit */}
+              <Grid item xs={12} md={4}>
+                <Typography variant="body2" color="text.secondary">
+                  {t(
+                    "cart.submitOfferDesc",
+                    "Submit an offer for this seller's items",
+                  )}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <Grid
+                  container
+                  spacing={theme.layoutSpacing.text}
+                  justifyContent="right"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <NumericFormat
+                      decimalScale={0}
+                      allowNegative={false}
+                      customInput={TextField}
+                      thousandSeparator
+                      size="small"
+                      label={t("cart.offerOptional", "Offer (optional)")}
+                      value={group.total}
+                      color="secondary"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">aUEC</InputAdornment>
+                        ),
+                      }}
+                      inputProps={{ inputMode: "numeric" }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <LoadingButton
+                      color="secondary"
+                      variant="outlined"
+                      startIcon={<ShoppingCartRounded />}
+                      loading={isCheckingOut}
+                      disabled={hasUnavailableItems || isRemoving}
+                      onClick={() => handleCheckout(group.sellerId)}
+                      aria-label={t(
+                        "cart.submitOfferTo",
+                        "Submit offer to {{seller}}",
+                        {
+                          seller: group.sellerName,
+                        },
+                      )}
+                    >
+                      {t("cart.submitOffer", "Submit Offer")}
+                    </LoadingButton>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Section>
+          ))}
+
+          {/* Price Change Alert */}
+          {hasPriceChanges && (
+            <Grid item xs={12}>
+              <Alert severity="info" icon={<Warning />}>
+                <AlertTitle>
+                  {t("cart.pricesChanged", "Prices Have Changed")}
+                </AlertTitle>
+                {t(
+                  "cart.pricesChangedMessage",
+                  "Some item prices have changed since you added them to your cart. Please review before checkout.",
+                )}
+              </Alert>
+            </Grid>
+          )}
 
           {/* Unavailable Items Alert */}
           {hasUnavailableItems && (
@@ -525,24 +592,26 @@ export function MarketCartV2() {
                 </AlertTitle>
                 {t(
                   "cart.unavailableItemsMessage",
-                  "Some items in your cart are no longer available. Please remove them before checkout."
+                  "Some items in your cart are no longer available. Please remove them before checkout.",
                 )}
               </Alert>
             </Grid>
           )}
-      </Grid>
+        </Grid>
       </Grid>
 
       <Grid item xs={12}>
-      {/* Shopping List */}
-      <Box sx={{ mt: 3 }}>
-        <Divider sx={{ mb: 2 }} />
-        <Typography variant="h6" sx={{ mb: 1.5 }}>
-          <PlaylistAddRounded sx={{ fontSize: 20, mr: 0.5, verticalAlign: "text-bottom" }} />
-          {t("marketV2.craftingShoppingList")}
-        </Typography>
-        <ShoppingListPanel />
-      </Box>
+        {/* Shopping List */}
+        <Box sx={{ mt: 3 }}>
+          <Divider sx={{ mb: 2 }} />
+          <Typography variant="h6" sx={{ mb: 1.5 }}>
+            <PlaylistAddRounded
+              sx={{ fontSize: 20, mr: 0.5, verticalAlign: "text-bottom" }}
+            />
+            {t("marketV2.craftingShoppingList")}
+          </Typography>
+          <ShoppingListPanel />
+        </Box>
       </Grid>
 
       {/* Checkout Confirmation Dialog */}
@@ -557,45 +626,69 @@ export function MarketCartV2() {
           {t("cart.confirmCheckout", "Confirm Checkout")}
         </DialogTitle>
         <DialogContent dividers>
-          {cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).map((item) => (
-            <Box key={item.cart_item_id} sx={{ mb: 1 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Box>
-                  <Typography variant="body2" fontWeight="bold">
-                    {item.listing.title}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {item.variant.display_name} × {item.quantity}
+          {cartData?.items
+            .filter((i) => i.listing.shop_id === checkoutSellerId)
+            .map((item) => (
+              <Box key={item.cart_item_id} sx={{ mb: 1 }}>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>
+                    <Typography variant="body2" fontWeight="bold">
+                      {item.listing.title}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {item.variant.display_name} × {item.quantity}
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2">
+                    {fmt.number(
+                      (item.price_changed
+                        ? item.current_price!
+                        : item.price_per_unit) * item.quantity,
+                    )}{" "}
+                    aUEC
                   </Typography>
                 </Box>
-                <Typography variant="body2">
-                  {fmt.number((item.price_changed ? item.current_price! : item.price_per_unit) * item.quantity)} aUEC
-                </Typography>
+                {item.price_changed && (
+                  <Alert
+                    severity="warning"
+                    sx={{ mt: 0.5, py: 0 }}
+                    icon={<Warning fontSize="small" />}
+                  >
+                    <Typography variant="caption">
+                      {t(
+                        "cart.priceChangedFrom",
+                        "Price changed from {{old}} to {{new}} aUEC",
+                        {
+                          old: fmt.number(item.price_per_unit),
+                          new: fmt.number(item.current_price!),
+                        },
+                      )}
+                    </Typography>
+                  </Alert>
+                )}
               </Box>
-              {item.price_changed && (
-                <Alert severity="warning" sx={{ mt: 0.5, py: 0 }} icon={<Warning fontSize="small" />}>
-                  <Typography variant="caption">
-                    {t("cart.priceChangedFrom", "Price changed from {{old}} to {{new}} aUEC", {
-                      old: fmt.number(item.price_per_unit),
-                      new: fmt.number(item.current_price!),
-                    })}
-                  </Typography>
-                </Alert>
-              )}
-            </Box>
-          ))}
+            ))}
           <Divider sx={{ my: 1 }} />
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">{t("cart.total")}</Typography>
             <Typography variant="h6">
-              {fmt.number(cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0)} aUEC
+              {fmt.number(
+                cartData?.items
+                  .filter((i) => i.listing.shop_id === checkoutSellerId)
+                  .reduce((s, i) => s + i.subtotal, 0) ?? 0,
+              )}{" "}
+              aUEC
             </Typography>
           </Box>
           {hasPriceChanges && (
             <Alert severity="info" sx={{ mt: 1 }} icon={<Warning />}>
               {t(
                 "cart.confirmPriceChanges",
-                "Some prices have changed. By confirming, you accept the updated prices."
+                "Some prices have changed. By confirming, you accept the updated prices.",
               )}
             </Alert>
           )}

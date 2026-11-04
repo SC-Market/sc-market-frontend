@@ -56,7 +56,10 @@ export function Authenticate() {
           <IconButton aria-label={t("auth.google", "Google")} color={"primary"}>
             <Google />
           </IconButton>
-          <IconButton aria-label={t("auth.discord", "Discord")} color={"primary"}>
+          <IconButton
+            aria-label={t("auth.discord", "Discord")}
+            color={"primary"}
+          >
             <Discord />
           </IconButton>
         </ButtonGroup>

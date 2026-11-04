@@ -9,11 +9,22 @@
  * - `> [!TIP]`-style callouts are MUI Alerts; screenshots are figures.
  */
 import React, { Fragment } from "react"
-import { Alert, AlertTitle, Box, Button, Divider, Link, Typography } from "@mui/material"
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Divider,
+  Link,
+  Typography,
+} from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import type { Block, CalloutKind, Inline } from "../domain/types"
 
-const CALLOUT_SEVERITY: Record<CalloutKind, "info" | "success" | "warning" | "error"> = {
+const CALLOUT_SEVERITY: Record<
+  CalloutKind,
+  "info" | "success" | "warning" | "error"
+> = {
   note: "info",
   tip: "success",
   important: "info",
@@ -63,7 +74,12 @@ function InlineNodes({ nodes }: { nodes: readonly Inline[] }) {
               <Box
                 key={i}
                 component="code"
-                sx={{ px: 0.5, borderRadius: 0.5, bgcolor: "action.hover", fontSize: "0.9em" }}
+                sx={{
+                  px: 0.5,
+                  borderRadius: 0.5,
+                  bgcolor: "action.hover",
+                  fontSize: "0.9em",
+                }}
               >
                 {node.v}
               </Box>
@@ -72,7 +88,12 @@ function InlineNodes({ nodes }: { nodes: readonly Inline[] }) {
             return <br key={i} />
           case "link":
             return isInternal(node.href) && !node.href.startsWith("#") ? (
-              <Link key={i} component={RouterLink} to={node.href} color="secondary">
+              <Link
+                key={i}
+                component={RouterLink}
+                to={node.href}
+                color="secondary"
+              >
                 <InlineNodes nodes={node.c} />
               </Link>
             ) : (
@@ -80,7 +101,9 @@ function InlineNodes({ nodes }: { nodes: readonly Inline[] }) {
                 key={i}
                 href={node.href}
                 color="secondary"
-                {...(node.href.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                {...(node.href.startsWith("#")
+                  ? {}
+                  : { target: "_blank", rel: "noopener noreferrer" })}
               >
                 <InlineNodes nodes={node.c} />
               </Link>
@@ -97,7 +120,11 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
   switch (block.t) {
     case "p":
       return (
-        <Typography variant="body1" component="p" sx={{ mb: dense ? 0.5 : 1.5, "&:last-child": { mb: 0 } }}>
+        <Typography
+          variant="body1"
+          component="p"
+          sx={{ mb: dense ? 0.5 : 1.5, "&:last-child": { mb: 0 } }}
+        >
           <InlineNodes nodes={block.c} />
         </Typography>
       )
@@ -117,7 +144,9 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
       return (
         <Box
           component={block.t}
-          start={block.t === "ol" && block.start !== 1 ? block.start : undefined}
+          start={
+            block.t === "ol" && block.start !== 1 ? block.start : undefined
+          }
           sx={{ mt: 0, mb: 1.5, pl: 3, "& > li": { mb: 0.75 } }}
         >
           {block.items.map((item, i) => (
@@ -129,7 +158,11 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
       )
     case "callout":
       return (
-        <Alert severity={CALLOUT_SEVERITY[block.kind]} sx={{ mb: 1.5 }} role="note">
+        <Alert
+          severity={CALLOUT_SEVERITY[block.kind]}
+          sx={{ mb: 1.5 }}
+          role="note"
+        >
           <AlertTitle>{CALLOUT_LABEL[block.kind]}</AlertTitle>
           <Blocks blocks={block.c} dense />
         </Alert>
@@ -138,7 +171,13 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
       return (
         <Box
           component="blockquote"
-          sx={{ m: 0, mb: 1.5, pl: 2, borderLeft: 3, borderColor: "primary.main" }}
+          sx={{
+            m: 0,
+            mb: 1.5,
+            pl: 2,
+            borderLeft: 3,
+            borderColor: "primary.main",
+          }}
         >
           <Blocks blocks={block.c} dense />
         </Box>
@@ -152,10 +191,20 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
             alt={block.alt}
             loading="lazy"
             decoding="async"
-            sx={{ display: "block", maxWidth: "100%", height: "auto", borderRadius: 2 }}
+            sx={{
+              display: "block",
+              maxWidth: "100%",
+              height: "auto",
+              borderRadius: 2,
+            }}
           />
           {block.caption && (
-            <Typography component="figcaption" variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+            <Typography
+              component="figcaption"
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 0.75 }}
+            >
               {block.caption}
             </Typography>
           )}
@@ -169,7 +218,12 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
               {block.label}
             </Button>
           ) : (
-            <Button variant="contained" href={block.href} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="contained"
+              href={block.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {block.label}
             </Button>
           )}
@@ -179,7 +233,13 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
       return (
         <Box
           component="pre"
-          sx={{ mb: 1.5, p: 1.5, borderRadius: 1, bgcolor: "action.hover", overflowX: "auto" }}
+          sx={{
+            mb: 1.5,
+            p: 1.5,
+            borderRadius: 1,
+            bgcolor: "action.hover",
+            overflowX: "auto",
+          }}
         >
           <code>{block.v}</code>
         </Box>
@@ -189,7 +249,13 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
   }
 }
 
-export function Blocks({ blocks, dense }: { blocks: readonly Block[]; dense?: boolean }) {
+export function Blocks({
+  blocks,
+  dense,
+}: {
+  blocks: readonly Block[]
+  dense?: boolean
+}) {
   return (
     <>
       {blocks.map((block, i) => (

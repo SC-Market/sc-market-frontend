@@ -23,10 +23,10 @@ interface PriceHistoryChartV2Props {
 
 /**
  * PriceHistoryChartV2 - Price history chart with quality tier filtering
- * 
+ *
  * Displays price trends over time with separate lines for each quality tier.
  * Users can filter which quality tiers are displayed using the dropdown selector.
- * 
+ *
  * Requirements: 46.6-46.10
  * - Uses useGetPriceHistoryQuery hook (46.6)
  * - Displays multiple lines for different quality tiers (46.7)
@@ -40,7 +40,7 @@ export function PriceHistoryChartV2({
   width = "100%",
 }: PriceHistoryChartV2Props) {
   const { t } = useTranslation()
-  
+
   // Quality tier filter state (null = all tiers)
   const [selectedTier, setSelectedTier] = useState<number | null>(null)
 
@@ -75,7 +75,10 @@ export function PriceHistoryChartV2({
     })
 
     // Convert to chart series format with proper labels
-    const series: Array<{ name: string; data: Array<{ x: string; y: number }> }> = []
+    const series: Array<{
+      name: string
+      data: Array<{ x: string; y: number }>
+    }> = []
 
     // Sort tiers for consistent ordering (null/all tiers first, then 1-5)
     const sortedTiers = Array.from(tierMap.keys()).sort((a, b) => {
@@ -152,9 +155,7 @@ export function PriceHistoryChartV2({
               setSelectedTier(value === "all" ? null : Number(value))
             }}
           >
-            <MenuItem value="all">
-              {t("market.allTiers", "All Tiers")}
-            </MenuItem>
+            <MenuItem value="all">{t("market.allTiers", "All Tiers")}</MenuItem>
             <MenuItem value={1}>{t("market.tier1", "Tier 1")}</MenuItem>
             <MenuItem value={2}>{t("market.tier2", "Tier 2")}</MenuItem>
             <MenuItem value={3}>{t("market.tier3", "Tier 3")}</MenuItem>

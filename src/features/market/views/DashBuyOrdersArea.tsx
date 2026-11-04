@@ -292,8 +292,7 @@ export function BuyOrderRow(props: {
                 whiteSpace: "nowrap",
               }}
             >
-              {fmt.number(row.quantity)} {t("market.unit", "ea")}{" "}
-              •{" "}
+              {fmt.number(row.quantity)} {t("market.unit", "ea")} •{" "}
               {row.negotiable || row.price == null
                 ? row.price != null && row.price >= 1
                   ? t(
@@ -310,9 +309,7 @@ export function BuyOrderRow(props: {
         </Stack>
       </TableCell>
       <TableCell align="right" sx={{ width: { xs: "25%", sm: "auto" } }}>
-        <Typography variant="body2">
-          {fmt.number(row.quantity)}
-        </Typography>
+        <Typography variant="body2">{fmt.number(row.quantity)}</Typography>
       </TableCell>
       <TableCell align="right" sx={{ width: { xs: "30%", sm: "auto" } }}>
         <Typography variant="body2">
@@ -427,51 +424,51 @@ export function BuyOrdersViewPaginated() {
         </Stack>
 
         <Box
-            sx={{
-              "& .MuiTableHead .MuiTableCell-root:first-of-type": {
-                display: { xs: "none", sm: "table-cell" },
-              },
+          sx={{
+            "& .MuiTableHead .MuiTableCell-root:first-of-type": {
+              display: { xs: "none", sm: "table-cell" },
+            },
+          }}
+        >
+          <ControlledTable
+            rows={paginatedRows}
+            initialSort="aggregate_title"
+            onPageChange={setPage}
+            page={page}
+            onPageSizeChange={(size) => {
+              setPageSize(size)
+              setPage(0)
             }}
-          >
-            <ControlledTable
-              rows={paginatedRows}
-              initialSort="aggregate_title"
-              onPageChange={setPage}
-              page={page}
-              onPageSizeChange={(size) => {
-                setPageSize(size)
-                setPage(0)
-              }}
-              pageSize={pageSize}
-              rowCount={rows.length}
-              onOrderChange={setOrder}
-              order={order}
-              onOrderByChange={(key) =>
-                setOrderBy(key as keyof BuyOrderDashboardRow)
-              }
-              orderBy={orderBy}
-              generateRow={BuyOrderRow}
-              keyAttr="buy_order_id"
-              headCells={BuyOrderHeadCells.map((cell) => ({
-                ...cell,
-                label: t(cell.label),
-              }))}
-              disableSelect={true}
-              loading={awaitingData}
-              loadingRowComponent={BuyOrderRowSkeleton}
-              emptyStateComponent={
-                !awaitingData && rows.length === 0 ? (
-                  <EmptyState
-                    title={t("dashboard.noBuyOrders", "No buy orders")}
-                    description={t(
-                      "dashboard.noBuyOrdersDescription",
-                      "Your active buy orders will appear here.",
-                    )}
-                    sx={{ py: 4 }}
-                  />
-                ) : undefined
-              }
-            />
+            pageSize={pageSize}
+            rowCount={rows.length}
+            onOrderChange={setOrder}
+            order={order}
+            onOrderByChange={(key) =>
+              setOrderBy(key as keyof BuyOrderDashboardRow)
+            }
+            orderBy={orderBy}
+            generateRow={BuyOrderRow}
+            keyAttr="buy_order_id"
+            headCells={BuyOrderHeadCells.map((cell) => ({
+              ...cell,
+              label: t(cell.label),
+            }))}
+            disableSelect={true}
+            loading={awaitingData}
+            loadingRowComponent={BuyOrderRowSkeleton}
+            emptyStateComponent={
+              !awaitingData && rows.length === 0 ? (
+                <EmptyState
+                  title={t("dashboard.noBuyOrders", "No buy orders")}
+                  description={t(
+                    "dashboard.noBuyOrdersDescription",
+                    "Your active buy orders will appear here.",
+                  )}
+                  sx={{ py: 4 }}
+                />
+              ) : undefined
+            }
+          />
         </Box>
       </Paper>
     </Grid>

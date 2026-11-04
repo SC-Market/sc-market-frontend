@@ -8,10 +8,16 @@
  * once it is closed ("Counter Offered" is a closed session whose last offer
  * was neither accepted nor rejected, e.g. withdrawn).
  */
-import type { DealParties, OrderViewerRoles } from "../../orders/domain/orderRoles"
+import type {
+  DealParties,
+  OrderViewerRoles,
+} from "../../orders/domain/orderRoles"
 
 /** The statuses of a session that is still being negotiated. */
-export const OPEN_OFFER_STATUSES = ["Waiting for Seller", "Waiting for Customer"] as const
+export const OPEN_OFFER_STATUSES = [
+  "Waiting for Seller",
+  "Waiting for Customer",
+] as const
 
 /** Whether the offer session is still active (not accepted, rejected or withdrawn). */
 export function isOfferOpen(status: string): boolean {

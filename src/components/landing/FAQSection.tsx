@@ -21,7 +21,10 @@ export function FAQSection() {
       <Helmet>
         <script type="application/ld+json">{serializeJsonLd(faqSchema)}</script>
       </Helmet>
-      <LandingSectionHeader id="landing-faq-title" title={t("landing.faqTitle")} />
+      <LandingSectionHeader
+        id="landing-faq-title"
+        title={t("landing.faqTitle")}
+      />
       <Paper>
         {/* A div, not a <ul>: each FAQ entry is an <h3> + answer (the
             accordion pattern), which aren't valid <ul> children. */}

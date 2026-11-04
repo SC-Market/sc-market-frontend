@@ -26,7 +26,10 @@ export function canRequestReviewRevision(
  * who wrote it, or, for an org's review, an org manager (Manage Orders).
  */
 export function canEditReview(
-  review: Pick<OrderReview, "revision_requested" | "user_author" | "contractor_author">,
+  review: Pick<
+    OrderReview,
+    "revision_requested" | "user_author" | "contractor_author"
+  >,
   viewerUsername: string | null | undefined,
   roles: Pick<OrderViewerRoles, "orgManager">,
 ): boolean {

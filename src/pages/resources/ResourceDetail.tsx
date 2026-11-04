@@ -37,11 +37,16 @@ export function ResourceDetail() {
   const fmt = useFormatters()
   const { resource_id } = useParams<{ resource_id: string }>()
   const navigate = useNavigate()
-  const { data, isLoading, error } = useGetResourceQuery({ resourceId: resource_id! })
+  const { data, isLoading, error } = useGetResourceQuery({
+    resourceId: resource_id!,
+  })
 
   if (isLoading) {
     return (
-      <StandardPageLayout title={t("resources.detail", "Resource Details")} sidebarOpen={true}>
+      <StandardPageLayout
+        title={t("resources.detail", "Resource Details")}
+        sidebarOpen={true}
+      >
         <Grid item xs={12}>
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
             <CircularProgress />
@@ -53,9 +58,14 @@ export function ResourceDetail() {
 
   if (error || !data) {
     return (
-      <StandardPageLayout title={t("resources.detail", "Resource Details")} sidebarOpen={true}>
+      <StandardPageLayout
+        title={t("resources.detail", "Resource Details")}
+        sidebarOpen={true}
+      >
         <Grid item xs={12}>
-          <Alert severity="error">{t("resources.notFound", "Resource not found.")}</Alert>
+          <Alert severity="error">
+            {t("resources.notFound", "Resource not found.")}
+          </Alert>
         </Grid>
       </StandardPageLayout>
     )
@@ -101,7 +111,8 @@ export function ResourceDetail() {
             <Typography variant="body2">
               <strong>{t("resources.category", "Category")}:</strong>{" "}
               {resource.resource_category}
-              {resource.resource_subcategory && ` / ${resource.resource_subcategory}`}
+              {resource.resource_subcategory &&
+                ` / ${resource.resource_subcategory}`}
             </Typography>
             {resource.base_value != null && (
               <Typography variant="body2">
@@ -180,25 +191,40 @@ export function ResourceDetail() {
               {t("resources.qualityTiers", "Quality Tiers")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              {t("resources.qualityTiersDescription", "Mined quality is bucketed into discrete tiers. Raw quality within a range maps to a fixed value.")}
+              {t(
+                "resources.qualityTiersDescription",
+                "Mined quality is bucketed into discrete tiers. Raw quality within a range maps to a fixed value.",
+              )}
             </Typography>
             <TableContainer>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t("resources.qualityRange", "Quality Range")}</TableCell>
-                    <TableCell align="right">{t("resources.mappedValue", "Effective Quality")}</TableCell>
+                    <TableCell>
+                      {t("resources.qualityRange", "Quality Range")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {t("resources.mappedValue", "Effective Quality")}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {resource.quality_bands.map((band) => (
                     <TableRow key={band.start}>
-                      <TableCell>{band.start}–{band.end}</TableCell>
+                      <TableCell>
+                        {band.start}–{band.end}
+                      </TableCell>
                       <TableCell align="right">
                         <Chip
                           label={band.mappedValue}
                           size="small"
-                          color={band.mappedValue >= 900 ? "secondary" : band.mappedValue >= 700 ? "primary" : "default"}
+                          color={
+                            band.mappedValue >= 900
+                              ? "secondary"
+                              : band.mappedValue >= 700
+                                ? "primary"
+                                : "default"
+                          }
                           variant="outlined"
                         />
                       </TableCell>
@@ -216,15 +242,22 @@ export function ResourceDetail() {
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              {t("resources.usedIn", "Used in Blueprints")} ({blueprints_requiring.length})
+              {t("resources.usedIn", "Used in Blueprints")} (
+              {blueprints_requiring.length})
             </Typography>
             <TableContainer>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t("resources.craftedItem", "Crafted Item")}</TableCell>
-                    <TableCell align="right">{t("resources.qtyRequired", "Qty Required")}</TableCell>
-                    <TableCell align="right">{t("resources.minTier", "Min Tier")}</TableCell>
+                    <TableCell>
+                      {t("resources.craftedItem", "Crafted Item")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {t("resources.qtyRequired", "Qty Required")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {t("resources.minTier", "Min Tier")}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -233,12 +266,26 @@ export function ResourceDetail() {
                       key={bp.blueprint_id}
                       hover
                       sx={{ cursor: "pointer" }}
-                      onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_name || bp.blueprint_id))}
+                      onClick={() =>
+                        navigate(
+                          GAME_DATA_PATHS.blueprint(
+                            bp.blueprint_name || bp.blueprint_id,
+                          ),
+                        )
+                      }
                     >
-                      <TableCell>{bp.output_item_name || bp.blueprint_name}</TableCell>
-                      <TableCell align="right">{bp.quantity_required}</TableCell>
+                      <TableCell>
+                        {bp.output_item_name || bp.blueprint_name}
+                      </TableCell>
                       <TableCell align="right">
-                        {bp.min_quality_tier ? t("wikiUi.resource.tierValue", { tier: bp.min_quality_tier }) : "—"}
+                        {bp.quantity_required}
+                      </TableCell>
+                      <TableCell align="right">
+                        {bp.min_quality_tier
+                          ? t("wikiUi.resource.tierValue", {
+                              tier: bp.min_quality_tier,
+                            })
+                          : "—"}
                       </TableCell>
                     </TableRow>
                   ))}

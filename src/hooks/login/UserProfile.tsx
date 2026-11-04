@@ -5,7 +5,11 @@ import {
   ContractorInvite,
   MinimalContractor,
 } from "../../features/contractor/domain/types"
-import { Order, OrderComment, OrderReview } from "../../features/orders/domain/types"
+import {
+  Order,
+  OrderComment,
+  OrderReview,
+} from "../../features/orders/domain/types"
 import { MarketBid, MarketListing } from "../../features/market"
 import { MinimalUser } from "../../datatypes/User"
 import { OfferSession } from "../../features/offers/api/offerApi"

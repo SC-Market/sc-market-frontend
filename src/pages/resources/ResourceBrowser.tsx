@@ -37,7 +37,9 @@ export function ResourceBrowser() {
 
   const [searchText, setSearchText] = useState("")
   const [category, setCategory] = useState("")
-  const [acquisition, setAcquisition] = useState<"" | "mined" | "purchased" | "salvaged" | "looted">("")
+  const [acquisition, setAcquisition] = useState<
+    "" | "mined" | "purchased" | "salvaged" | "looted"
+  >("")
   const [page, setPage] = useState(1)
 
   const debouncedSearch = useDebounce(searchText, 300)
@@ -63,10 +65,15 @@ export function ResourceBrowser() {
         size="small"
         placeholder={t("resources.search", "Search resources...")}
         value={searchText}
-        onChange={(e) => { setSearchText(e.target.value); setPage(1) }}
+        onChange={(e) => {
+          setSearchText(e.target.value)
+          setPage(1)
+        }}
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start"><Search /></InputAdornment>
+            <InputAdornment position="start">
+              <Search />
+            </InputAdornment>
           ),
         }}
       />
@@ -76,11 +83,16 @@ export function ResourceBrowser() {
         size="small"
         label={t("resources.category", "Category")}
         value={category}
-        onChange={(e) => { setCategory(e.target.value); setPage(1) }}
+        onChange={(e) => {
+          setCategory(e.target.value)
+          setPage(1)
+        }}
       >
         <MenuItem value="">{t("common.all", "All")}</MenuItem>
         {uniqueCategories.map((cat) => (
-          <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+          <MenuItem key={cat} value={cat}>
+            {cat}
+          </MenuItem>
         ))}
       </TextField>
       <TextField
@@ -89,12 +101,19 @@ export function ResourceBrowser() {
         size="small"
         label={t("resources.acquisition", "Acquisition")}
         value={acquisition}
-        onChange={(e) => { setAcquisition(e.target.value as typeof acquisition); setPage(1) }}
+        onChange={(e) => {
+          setAcquisition(e.target.value as typeof acquisition)
+          setPage(1)
+        }}
       >
         <MenuItem value="">{t("common.all", "All")}</MenuItem>
         <MenuItem value="mined">{t("resources.mined", "Mined")}</MenuItem>
-        <MenuItem value="purchased">{t("resources.purchased", "Purchased")}</MenuItem>
-        <MenuItem value="salvaged">{t("resources.salvaged", "Salvaged")}</MenuItem>
+        <MenuItem value="purchased">
+          {t("resources.purchased", "Purchased")}
+        </MenuItem>
+        <MenuItem value="salvaged">
+          {t("resources.salvaged", "Salvaged")}
+        </MenuItem>
         <MenuItem value="looted">{t("resources.looted", "Looted")}</MenuItem>
       </TextField>
     </Stack>
@@ -128,7 +147,14 @@ export function ResourceBrowser() {
             <>
               <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
                 {data.resources.map((resource) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={resource.resource_id}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    key={resource.resource_id}
+                  >
                     <ResourceCard
                       resource={resource}
                       to={GAME_DATA_PATHS.resource(
@@ -141,9 +167,19 @@ export function ResourceBrowser() {
               </Grid>
 
               {data.resources.length === 0 && (
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    py: 6,
+                  }}
+                >
                   <Typography color="text.secondary">
-                    {t("resources.noResults", "No results found. Try adjusting your filters.")}
+                    {t(
+                      "resources.noResults",
+                      "No results found. Try adjusting your filters.",
+                    )}
                   </Typography>
                 </Box>
               )}

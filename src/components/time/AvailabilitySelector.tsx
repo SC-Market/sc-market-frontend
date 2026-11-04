@@ -140,7 +140,10 @@ export function AvailabilitySelector(props: {
     () =>
       [...Array(7).keys()].map((i) =>
         // 2024-01-07 is a Sunday
-        fmt.date(Date.UTC(2024, 0, 7 + i), { weekday: "short", timeZone: "UTC" }),
+        fmt.date(Date.UTC(2024, 0, 7 + i), {
+          weekday: "short",
+          timeZone: "UTC",
+        }),
       ),
     [fmt],
   )
@@ -299,7 +302,10 @@ export function AvailabilityDisplay(
     () =>
       [...Array(7).keys()].map((i) =>
         // 2024-01-07 is a Sunday
-        fmt.date(Date.UTC(2024, 0, 7 + i), { weekday: "short", timeZone: "UTC" }),
+        fmt.date(Date.UTC(2024, 0, 7 + i), {
+          weekday: "short",
+          timeZone: "UTC",
+        }),
       ),
     [fmt],
   )
@@ -313,7 +319,9 @@ export function AvailabilityDisplay(
       subtitle={
         profile?.username === name ? (
           <Link to={"/availability"} style={{ color: "inherit" }}>
-            <IconButton aria-label={t("availability.edit", "Edit availability")}>
+            <IconButton
+              aria-label={t("availability.edit", "Edit availability")}
+            >
               <CreateRoundedIcon />
             </IconButton>
           </Link>

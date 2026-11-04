@@ -20,7 +20,10 @@ export interface ListingFormError {
 }
 
 /** DOM id of each field's input, so the form can scroll to and focus it. */
-export const LISTING_FIELD_IDS: Record<Exclude<ListingFormField, "form">, string> = {
+export const LISTING_FIELD_IDS: Record<
+  Exclude<ListingFormField, "form">,
+  string
+> = {
   game_item_id: "game-item-search",
   title: "listing-title",
   description: "listing-description",
@@ -55,9 +58,14 @@ function isStandardError(data: unknown): data is StandardErrorResponse {
  * field when the API names one. `fallback` is used when the response has no
  * message (network errors and the like).
  */
-export function listingApiError(error: unknown, fallback: string): ListingFormError {
+export function listingApiError(
+  error: unknown,
+  fallback: string,
+): ListingFormError {
   const data =
-    typeof error === "object" && error !== null && "data" in error ? error.data : undefined
+    typeof error === "object" && error !== null && "data" in error
+      ? error.data
+      : undefined
   if (!isStandardError(data)) return { field: "form", message: fallback }
   const first = data.error.validationErrors?.[0]
   if (first) {

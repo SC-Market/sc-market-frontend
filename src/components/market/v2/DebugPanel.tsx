@@ -33,7 +33,8 @@ export function DebugPanel() {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useIsMobile()
-  const { isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
+  const { isDeveloper, hasOverride, flags, overriddenFlags, setFlag } =
+    useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
 
@@ -131,34 +132,49 @@ export function DebugPanel() {
             {Object.entries(flags)
               .filter(([flagName]) => !RETIRED_FLAGS.has(flagName))
               .map(([flagName, enabled]) => {
-              const isOverridden = overriddenFlags.includes(flagName)
-              const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
-              return (
-                <Box key={flagName} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Box>
-                    <Typography variant="body2" fontWeight="bold" sx={{ textTransform: "capitalize" }}>
-                      {label}
-                    </Typography>
-                    {isOverridden && (
-                      <Typography variant="caption" color="primary">{t("marketUi.debugPanel.override")}</Typography>
-                    )}
-                  </Box>
-                  <Switch
-                    inputProps={{ "aria-label": label }}
-                    checked={enabled}
-                    onChange={async () => {
-                      setIsSwitching(true)
-                      await setFlag(flagName, !enabled)
-                      setIsSwitching(false)
-                      window.location.reload()
+                const isOverridden = overriddenFlags.includes(flagName)
+                const label = flagName
+                  .replace(/_/g, " ")
+                  .replace(/\bv2\b/i, "V2")
+                return (
+                  <Box
+                    key={flagName}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
-                    disabled={isSwitching}
-                    size="small"
-                    color="primary"
-                  />
-                </Box>
-              )
-            })}
+                  >
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        fontWeight="bold"
+                        sx={{ textTransform: "capitalize" }}
+                      >
+                        {label}
+                      </Typography>
+                      {isOverridden && (
+                        <Typography variant="caption" color="primary">
+                          {t("marketUi.debugPanel.override")}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Switch
+                      inputProps={{ "aria-label": label }}
+                      checked={enabled}
+                      onChange={async () => {
+                        setIsSwitching(true)
+                        await setFlag(flagName, !enabled)
+                        setIsSwitching(false)
+                        window.location.reload()
+                      }}
+                      disabled={isSwitching}
+                      size="small"
+                      color="primary"
+                    />
+                  </Box>
+                )
+              })}
           </Stack>
 
           {/* Switching indicator */}

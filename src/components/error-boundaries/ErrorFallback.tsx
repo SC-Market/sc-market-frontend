@@ -114,7 +114,8 @@ export function ErrorFallback({
 
   useEffect(() => {
     console.error("[ErrorFallback] Showing error UI", {
-      path: typeof window !== "undefined" ? window.location.pathname : undefined,
+      path:
+        typeof window !== "undefined" ? window.location.pathname : undefined,
       error: error?.message ?? String(error),
       stack: error?.stack,
       componentStack: errorInfo?.componentStack,

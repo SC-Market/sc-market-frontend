@@ -41,7 +41,9 @@ const NON_FUNGIBLE_SUBCATEGORIES = new Set<string>([
  * Wide Phase 0 rule: everything aggregates EXCEPT ships, bundles, and items with
  * no catalog type (custom / non-catalog), which render as standalone listings.
  */
-export function isFungibleType(gameItemType: string | null | undefined): boolean {
+export function isFungibleType(
+  gameItemType: string | null | undefined,
+): boolean {
   if (!gameItemType) return false // custom / non-catalog → standalone
   return !NON_FUNGIBLE_SUBCATEGORIES.has(gameItemType)
 }

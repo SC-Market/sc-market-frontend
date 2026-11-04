@@ -209,7 +209,10 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
           <NotificationActionCheck
             actions={actions}
             setActions={setActions}
-            label={t("AddNotificationWebhook.publicContractCreated", "New public contracts (site-wide)")}
+            label={t(
+              "AddNotificationWebhook.publicContractCreated",
+              "New public contracts (site-wide)",
+            )}
             action_name={"public_contract_create"}
           />
           {/*<NotificationActionCheck actions={actions} setActions={setActions} label={"Market Offer Received"}*/}

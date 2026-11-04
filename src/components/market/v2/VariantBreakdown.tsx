@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
-import React from "react";
-import { formatCraftedSource } from "../../../util/variantDisplay";
+import React from "react"
+import { formatCraftedSource } from "../../../util/variantDisplay"
 import {
   Table,
   TableBody,
@@ -15,54 +15,63 @@ import {
   useTheme,
   Chip,
   Stack,
-} from "@mui/material";
-import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { LocationOnRounded } from "@mui/icons-material";
-import type { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { QualityBadge } from "./QualityBadge";
+} from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
+import { LocationOnRounded } from "@mui/icons-material"
+import type { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { QualityBadge } from "./QualityBadge"
 
-import { useFormatters } from "../../../util/format";
+import { useFormatters } from "../../../util/format"
 interface Variant {
-  variant_id: string;
-  display_name: string;
-  short_name?: string;
+  variant_id: string
+  display_name: string
+  short_name?: string
   attributes: {
-    quality_tier?: number;
-    quality_value?: number;
-    crafted_source?: string;
-    blueprint_tier?: number;
-    [key: string]: string | number | undefined;
-  };
-  quantity: number;
-  price: number;
-  locations?: string[];
+    quality_tier?: number
+    quality_value?: number
+    crafted_source?: string
+    blueprint_tier?: number
+    [key: string]: string | number | undefined
+  }
+  quantity: number
+  price: number
+  locations?: string[]
 }
 
 interface VariantBreakdownProps {
-  variants: Variant[];
-  onSelectVariant?: (variantId: string) => void;
-  showActions?: boolean;
+  variants: Variant[]
+  onSelectVariant?: (variantId: string) => void
+  showActions?: boolean
 }
 
-const SOURCE_COLORS: Record<string, "default" | "success" | "warning" | "error" | "info" | "primary"> = {
+const SOURCE_COLORS: Record<
+  string,
+  "default" | "success" | "warning" | "error" | "info" | "primary"
+> = {
   crafted: "success",
   store: "info",
   looted: "warning",
   duped: "error",
   unknown: "default",
-};
+}
 
 function hasDisplayableAttributes(variant: Variant): boolean {
-  const { quality_tier, quality_value, crafted_source } = variant.attributes;
-  return !!(quality_tier || quality_value != null || crafted_source);
+  const { quality_tier, quality_value, crafted_source } = variant.attributes
+  return !!(quality_tier || quality_value != null || crafted_source)
 }
 
 function VariantInfo({ variant }: { variant: Variant }) {
-  if (!hasDisplayableAttributes(variant)) return null;
-  const { quality_tier, quality_value, crafted_source } = variant.attributes;
+  if (!hasDisplayableAttributes(variant)) return null
+  const { quality_tier, quality_value, crafted_source } = variant.attributes
   return (
-    <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="wrap" useFlexGap>
+    <Stack
+      direction="row"
+      spacing={0.5}
+      alignItems="center"
+      flexWrap="wrap"
+      useFlexGap
+    >
       {quality_tier && <QualityBadge tier={quality_tier} size="small" />}
       {quality_value != null && (
         <Chip label={`${quality_value}/1000`} size="small" variant="outlined" />
@@ -76,7 +85,7 @@ function VariantInfo({ variant }: { variant: Variant }) {
         />
       )}
     </Stack>
-  );
+  )
 }
 
 /**
@@ -89,8 +98,8 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
 }) => {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const theme = useTheme<ExtendedTheme>();
-  const isMobile = useBreakpointDown("sm");
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useBreakpointDown("sm")
 
   if (variants.length === 0) {
     return (
@@ -99,10 +108,11 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
           {t("marketV2.noVariants")}
         </Typography>
       </Box>
-    );
+    )
   }
 
-  const showVariantColumn = variants.length > 1 && variants.some(hasDisplayableAttributes);
+  const showVariantColumn =
+    variants.length > 1 && variants.some(hasDisplayableAttributes)
 
   // Mobile card layout
   if (isMobile) {
@@ -117,16 +127,34 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
               {showVariantColumn && <VariantInfo variant={variant} />}
 
               {variant.locations && variant.locations.length > 0 && (
-                <Typography variant="caption" color="text.secondary" sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                  <LocationOnRounded sx={{ fontSize: 14 }} /> {variant.locations.join(", ")}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ display: "flex", alignItems: "center", gap: 0.25 }}
+                >
+                  <LocationOnRounded sx={{ fontSize: 14 }} />{" "}
+                  {variant.locations.join(", ")}
                 </Typography>
               )}
 
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Typography variant="body2" color="text.secondary">
-                  {t("marketV2.qtyColon", { quantity: fmt.number(variant.quantity) })}
+                  {t("marketV2.qtyColon", {
+                    quantity: fmt.number(variant.quantity),
+                  })}
                 </Typography>
-                <Typography variant="h6" color="primary" fontWeight="bold" title={fmt.exactPrice(variant.price)}>
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  fontWeight="bold"
+                  title={fmt.exactPrice(variant.price)}
+                >
                   {fmt.price(variant.price)}
                 </Typography>
               </Box>
@@ -148,7 +176,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
           </Paper>
         ))}
       </Box>
-    );
+    )
   }
 
   // Desktop table layout
@@ -160,11 +188,15 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
       <Table size="small">
         <TableHead>
           <TableRow>
-            {showVariantColumn && <TableCell>{t("marketV2.variant")}</TableCell>}
+            {showVariantColumn && (
+              <TableCell>{t("marketV2.variant")}</TableCell>
+            )}
             <TableCell align="right">{t("marketV2.quantity")}</TableCell>
             <TableCell align="right">{t("marketV2.price")}</TableCell>
             <TableCell>{t("missionsUi.location")}</TableCell>
-            {showActions && <TableCell align="center">{t("marketV2.action")}</TableCell>}
+            {showActions && (
+              <TableCell align="center">{t("marketV2.action")}</TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -184,7 +216,12 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                 </Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="body2" color="primary" fontWeight="bold" title={fmt.exactPrice(variant.price)}>
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  fontWeight="bold"
+                  title={fmt.exactPrice(variant.price)}
+                >
                   {fmt.price(variant.price)}
                 </Typography>
               </TableCell>
@@ -194,7 +231,9 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                     {variant.locations.join(", ")}
                   </Typography>
                 ) : (
-                  <Typography variant="caption" color="text.secondary">—</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    —
+                  </Typography>
                 )}
               </TableCell>
               {showActions && (
@@ -218,5 +257,5 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
         </TableBody>
       </Table>
     </TableContainer>
-  );
-};
+  )
+}

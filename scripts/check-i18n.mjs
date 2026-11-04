@@ -168,7 +168,13 @@ export function audit() {
   for (const locale of locales) {
     if (locale === SOURCE) continue
     const loc = loadLocale(locale)
-    const r = { missing: [], extra: [], placeholder: [], sameAsEn: [], total: 0 }
+    const r = {
+      missing: [],
+      extra: [],
+      placeholder: [],
+      sameAsEn: [],
+      total: 0,
+    }
     for (const [ns, enKeys] of Object.entries(en)) {
       const have = loc[ns] ?? {}
       const { expected, pluralBases } = expectedKeys(enKeys, locale)

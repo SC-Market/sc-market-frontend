@@ -106,7 +106,9 @@ describe("prefetchFirstPageData", () => {
     )
     expect(screen.getByTestId("p").textContent).toBe("true:false")
     await act(() => new Promise((r) => setTimeout(r, 20)))
-    expect(paths().filter((p) => p === "GET /api/services/public")).toHaveLength(1)
+    expect(
+      paths().filter((p) => p === "GET /api/services/public"),
+    ).toHaveLength(1)
   })
 
   it.each([
@@ -180,15 +182,18 @@ describe("prefetchFirstPageData", () => {
     }
 
     it("signed in with a cached profile: assigned orders and received offers", async () => {
-      routes["GET /api/auth/session"] = () =>
-        json(200, { authenticated: true })
+      routes["GET /api/auth/session"] = () => json(200, { authenticated: true })
       await prefetchFirstPageData(
         seededStore(),
         { pathname: "/dashboard", search: "" },
         env(),
       )
-      const orders = requests.find((r) => r.startsWith("GET /api/orders/search"))
-      const offers = requests.find((r) => r.startsWith("GET /api/offers/search"))
+      const orders = requests.find((r) =>
+        r.startsWith("GET /api/orders/search"),
+      )
+      const offers = requests.find((r) =>
+        r.startsWith("GET /api/offers/search"),
+      )
       expect(orders).toContain("assigned=tester")
       expect(orders).toContain("status=active")
       expect(offers).toContain("assigned=tester")
@@ -205,8 +210,7 @@ describe("prefetchFirstPageData", () => {
     })
 
     it("no cached profile: nothing (the args need the username)", async () => {
-      routes["GET /api/auth/session"] = () =>
-        json(200, { authenticated: true })
+      routes["GET /api/auth/session"] = () => json(200, { authenticated: true })
       await prefetchFirstPageData(
         makeStore({ networkEnv: browserNetworkEnv }),
         { pathname: "/dashboard", search: "" },

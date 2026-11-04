@@ -6,14 +6,18 @@ import { describe, expect, it, vi } from "vitest"
 import { Contracts } from "../Contracts"
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 vi.mock("../../../components/metadata/Page", () => ({
   Page: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 vi.mock("../../../components/layout/ContainerGrid", () => ({
-  OpenLayout: ({ children }: { children: React.ReactNode }) => <main>{children}</main>,
+  OpenLayout: ({ children }: { children: React.ReactNode }) => (
+    <main>{children}</main>
+  ),
 }))
 vi.mock("../../../hooks/layout/useBreakpoint", () => ({
   useBreakpointDown: () => false,
@@ -41,8 +45,12 @@ describe("Contracts page", () => {
         </MemoryRouter>
       </ThemeProvider>,
     )
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Contracts")
-    expect(await screen.findByRole("button", { name: "Create Contract" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Contracts",
+    )
+    expect(
+      await screen.findByRole("button", { name: "Create Contract" }),
+    ).toBeInTheDocument()
     expect(screen.getByTestId("contract-listings")).toBeInTheDocument()
     expect(screen.queryByRole("tablist")).toBeNull()
     expect(screen.queryByRole("tabpanel")).toBeNull()

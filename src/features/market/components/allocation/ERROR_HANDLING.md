@@ -131,8 +131,8 @@ if (error.status === 409 && error.data?.conflict) {
 | ----------------------------------------------- | ---------------------------- | ----------- |
 | 13.1 - Display available quantity and shortfall | InsufficientStockDialog      | ✅ Complete |
 | 13.2 - Offer resolution options                 | InsufficientStockDialog      | ✅ Complete |
-| 13.3 - Prevent negative quantities              | (component removed, unused) | — |
-| 13.3 - Validate character limits                | (component removed, unused) | — |
+| 13.3 - Prevent negative quantities              | (component removed, unused)  | —           |
+| 13.3 - Validate character limits                | (component removed, unused)  | —           |
 | 13.4 - Handle concurrent modifications          | ConcurrentModificationDialog | ✅ Complete |
 | 9.5 - Loading states                            | ManualAllocationDialog       | ✅ Complete |
 

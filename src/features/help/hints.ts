@@ -32,7 +32,10 @@ export const HINTS = {
   /** Org › Storefront: free storefront, branding and the subdomain. */
   whiteLabel: { key: "storefront.white-label", guide: "orgWhiteLabel" },
   /** Seller's shop pages: add the SC Market app to your own Discord account. */
-  discordUserInstall: { key: "discord.user-install", guide: "discordUserInstall" },
+  discordUserInstall: {
+    key: "discord.user-install",
+    guide: "discordUserInstall",
+  },
   /** Settings › Price Alerts: what a watch does, pausing. */
   priceAlerts: { key: "price-alerts.watchlist", guide: "priceAlerts" },
   /** Quick List dialog: list an item in seconds, split stock later. */

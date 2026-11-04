@@ -39,8 +39,10 @@ export function ScmdbSyncSettings() {
   const fmt = useFormatters()
   const { data: status, isLoading } = useGetScmdbStatusQuery()
   const [connect, { isLoading: isConnecting }] = useConnectScmdbMutation()
-  const [regenerate, { isLoading: isRegenerating }] = useRegenerateScmdbMutation()
-  const [disconnect, { isLoading: isDisconnecting }] = useDisconnectScmdbMutation()
+  const [regenerate, { isLoading: isRegenerating }] =
+    useRegenerateScmdbMutation()
+  const [disconnect, { isLoading: isDisconnecting }] =
+    useDisconnectScmdbMutation()
 
   const [copied, setCopied] = useState(false)
   // The ingest URL holds the secret token, which the server stores hashed:
@@ -94,9 +96,11 @@ export function ScmdbSyncSettings() {
           </Typography>
           <Chip
             size="small"
-            label={status?.is_connected
-              ? t("settings.scmdb.connected", "Connected")
-              : t("settings.scmdb.notConnected", "Not connected")}
+            label={
+              status?.is_connected
+                ? t("settings.scmdb.connected", "Connected")
+                : t("settings.scmdb.notConnected", "Not connected")
+            }
             color={status?.is_connected ? "success" : "default"}
           />
         </Box>
@@ -126,7 +130,10 @@ export function ScmdbSyncSettings() {
                 {newIngestUrl ? (
                   <>
                     <Typography variant="subtitle2" color="text.secondary">
-                      {t("settings.scmdb.ingestUrl", "Paste this URL into SCMDB → Profile → Sync Sinks:")}
+                      {t(
+                        "settings.scmdb.ingestUrl",
+                        "Paste this URL into SCMDB → Profile → Sync Sinks:",
+                      )}
                     </Typography>
 
                     <TextField
@@ -139,7 +146,11 @@ export function ScmdbSyncSettings() {
                           endAdornment: (
                             <InputAdornment position="end">
                               <IconButton onClick={handleCopy} size="small">
-                                {copied ? <CheckIcon color="success" /> : <CopyIcon />}
+                                {copied ? (
+                                  <CheckIcon color="success" />
+                                ) : (
+                                  <CopyIcon />
+                                )}
                               </IconButton>
                             </InputAdornment>
                           ),
@@ -158,7 +169,8 @@ export function ScmdbSyncSettings() {
                   <Typography variant="body2" color="text.secondary">
                     {status.token_hint
                       ? t("settings.scmdb.tokenHint", {
-                          defaultValue: "Sync token ending in …{{hint}} is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
+                          defaultValue:
+                            "Sync token ending in …{{hint}} is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
                           hint: status.token_hint,
                         })
                       : t(
@@ -177,7 +189,10 @@ export function ScmdbSyncSettings() {
 
                 {!status.last_event_at && (
                   <Typography variant="body2" color="text.secondary">
-                    {t("settings.scmdb.noEvents", "No events received yet. Add the URL to SCMDB to start syncing.")}
+                    {t(
+                      "settings.scmdb.noEvents",
+                      "No events received yet. Add the URL to SCMDB to start syncing.",
+                    )}
                   </Typography>
                 )}
 
@@ -204,7 +219,12 @@ export function ScmdbSyncSettings() {
                 </Box>
               </Box>
             ) : (
-              <Box display="flex" flexDirection="column" alignItems="flex-start" gap={2}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="flex-start"
+                gap={2}
+              >
                 <Typography variant="body2" color="text.secondary">
                   {t(
                     "settings.scmdb.connectPrompt",
@@ -226,8 +246,13 @@ export function ScmdbSyncSettings() {
       </Grid>
 
       {/* Regenerate confirmation dialog */}
-      <Dialog open={regenerateDialogOpen} onClose={() => setRegenerateDialogOpen(false)}>
-        <DialogTitle>{t("settings.scmdb.regenerateTitle", "Regenerate Token?")}</DialogTitle>
+      <Dialog
+        open={regenerateDialogOpen}
+        onClose={() => setRegenerateDialogOpen(false)}
+      >
+        <DialogTitle>
+          {t("settings.scmdb.regenerateTitle", "Regenerate Token?")}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t(
@@ -240,15 +265,24 @@ export function ScmdbSyncSettings() {
           <Button onClick={() => setRegenerateDialogOpen(false)}>
             {t("ui.cancel", "Cancel")}
           </Button>
-          <Button onClick={handleRegenerate} color="primary" disabled={isRegenerating}>
+          <Button
+            onClick={handleRegenerate}
+            color="primary"
+            disabled={isRegenerating}
+          >
             {t("settings.scmdb.regenerate", "Regenerate Token")}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Disconnect confirmation dialog */}
-      <Dialog open={disconnectDialogOpen} onClose={() => setDisconnectDialogOpen(false)}>
-        <DialogTitle>{t("settings.scmdb.disconnectTitle", "Disconnect SCMDB?")}</DialogTitle>
+      <Dialog
+        open={disconnectDialogOpen}
+        onClose={() => setDisconnectDialogOpen(false)}
+      >
+        <DialogTitle>
+          {t("settings.scmdb.disconnectTitle", "Disconnect SCMDB?")}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t(
@@ -261,7 +295,11 @@ export function ScmdbSyncSettings() {
           <Button onClick={() => setDisconnectDialogOpen(false)}>
             {t("ui.cancel", "Cancel")}
           </Button>
-          <Button onClick={handleDisconnect} color="error" disabled={isDisconnecting}>
+          <Button
+            onClick={handleDisconnect}
+            color="error"
+            disabled={isDisconnecting}
+          >
             {t("settings.scmdb.disconnect", "Disconnect")}
           </Button>
         </DialogActions>

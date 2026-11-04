@@ -290,7 +290,8 @@ export function MarkdownRender(props: {
               return null
             }
             const allowed = allowList.some(
-              (domain) => hostname === domain || hostname.endsWith("." + domain),
+              (domain) =>
+                hostname === domain || hostname.endsWith("." + domain),
             )
 
             if (!allowed) {

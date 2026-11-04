@@ -36,7 +36,9 @@ export function HelpLayout(props: {
 
   useEffect(() => {
     if (!official) {
-      window.location.replace(officialHelpUrl(location.pathname + location.hash))
+      window.location.replace(
+        officialHelpUrl(location.pathname + location.hash),
+      )
     }
   }, [official, location.pathname, location.hash])
 
@@ -60,7 +62,13 @@ export function HelpLayout(props: {
           <Breadcrumbs separator={<NavigateNextRoundedIcon fontSize="small" />}>
             {props.breadcrumbs.map((crumb) =>
               crumb.href ? (
-                <Link key={crumb.label} component={RouterLink} to={crumb.href} color="secondary" underline="hover">
+                <Link
+                  key={crumb.label}
+                  component={RouterLink}
+                  to={crumb.href}
+                  color="secondary"
+                  underline="hover"
+                >
                   {crumb.label}
                 </Link>
               ) : (
@@ -93,7 +101,13 @@ export function HelpLayout(props: {
 }
 
 /** "Updated Oct 25, 2026 · Khuzdul" (dates are UTC calendar days). */
-export function UpdatedStamp({ updated, author }: { updated: string; author: string }) {
+export function UpdatedStamp({
+  updated,
+  author,
+}: {
+  updated: string
+  author: string
+}) {
   const fmt = useFormatters()
   // A calendar day: UTC on the server and in the browser alike.
   const date = fmt.date(`${updated}T00:00:00Z`, {

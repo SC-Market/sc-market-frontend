@@ -29,10 +29,7 @@ vi.mock("../../../store/api/v2/market", () => ({
     data: [],
     isLoading: false,
   })),
-  useAddWishlistItemMutation: vi.fn(() => [
-    vi.fn(),
-    { isLoading: false },
-  ]),
+  useAddWishlistItemMutation: vi.fn(() => [vi.fn(), { isLoading: false }]),
   useSearchBlueprintsQuery: vi.fn(() => ({
     data: { blueprints: [] },
     isLoading: false,
@@ -61,7 +58,7 @@ describe("AddItemDialog", () => {
           wishlistId={mockWishlistId}
           {...props}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
   }
 
@@ -87,8 +84,12 @@ describe("AddItemDialog", () => {
 
     it("should render action buttons", () => {
       renderComponent()
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: /add item/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /cancel/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /add item/i }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -104,7 +105,9 @@ describe("AddItemDialog", () => {
       await userEvent.click(searchInput)
 
       await waitFor(() => {
-        expect(screen.getByText("Type at least 2 characters")).toBeInTheDocument()
+        expect(
+          screen.getByText("Type at least 2 characters"),
+        ).toBeInTheDocument()
       })
     })
   })
@@ -112,13 +115,17 @@ describe("AddItemDialog", () => {
   describe("Quantity Input (Requirement 8.2)", () => {
     it("should default quantity to 1", () => {
       renderComponent()
-      const quantityInput = screen.getByLabelText(/quantity/i) as HTMLInputElement
+      const quantityInput = screen.getByLabelText(
+        /quantity/i,
+      ) as HTMLInputElement
       expect(quantityInput.value).toBe("1")
     })
 
     it("should allow changing quantity", async () => {
       renderComponent()
-      const quantityInput = screen.getByLabelText(/quantity/i) as HTMLInputElement
+      const quantityInput = screen.getByLabelText(
+        /quantity/i,
+      ) as HTMLInputElement
 
       // The controlled input starts at 1, typing "5" appends giving "15"
       // since parseInt("") is NaN and the handler guards against it
@@ -201,7 +208,9 @@ describe("AddItemDialog", () => {
 
     it("should have add item button", () => {
       renderComponent()
-      expect(screen.getByRole("button", { name: /add item/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /add item/i }),
+      ).toBeInTheDocument()
     })
   })
 

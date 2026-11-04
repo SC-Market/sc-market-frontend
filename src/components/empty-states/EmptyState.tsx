@@ -123,7 +123,8 @@ export function EmptyState({
         <Typography
           variant="body1"
           sx={{
-            marginBottom: action || secondaryAction || children || guide ? 3 : 0,
+            marginBottom:
+              action || secondaryAction || children || guide ? 3 : 0,
             color: "text.primary",
             maxWidth: 500,
           }}

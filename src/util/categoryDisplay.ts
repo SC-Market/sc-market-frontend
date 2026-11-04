@@ -44,10 +44,16 @@ const CATEGORY_LABELS: Record<string, [string, string]> = {
  * Display name for a category code. Pass `t` for the user's language; without
  * it the English label is returned. Unknown codes (game data) are prettified.
  */
-export function formatCategoryName(category: string | null | undefined, t?: TFunction): string {
+export function formatCategoryName(
+  category: string | null | undefined,
+  t?: TFunction,
+): string {
   if (!category) return t ? t("gameTaxonomyUi.unknown", "Unknown") : "Unknown"
   const known = CATEGORY_LABELS[category]
-  if (known) return t ? t(`gameTaxonomyUi.itemCategories.${known[0]}`, known[1]) : known[1]
+  if (known)
+    return t
+      ? t(`gameTaxonomyUi.itemCategories.${known[0]}`, known[1])
+      : known[1]
   // Fallback: split PascalCase/snake_case into words
   return category
     .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -58,7 +64,9 @@ export function formatCategoryName(category: string | null | undefined, t?: TFun
 
 /** English filter labels (search/sidebar options) -> gameTaxonomyUi.itemCategories keys */
 const LABEL_KEYS: Record<string, string> = {
-  ...Object.fromEntries(Object.values(CATEGORY_LABELS).map(([key, label]) => [label, key])),
+  ...Object.fromEntries(
+    Object.values(CATEGORY_LABELS).map(([key, label]) => [label, key]),
+  ),
   Armor: "armor",
   Torso: "torso",
   Arms: "arms",

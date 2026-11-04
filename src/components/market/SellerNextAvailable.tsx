@@ -9,9 +9,7 @@ import { useFormatters } from "../../util/format"
  * Shows nothing if no availability data, a green "Available now" chip if currently available,
  * or an outlined chip with the next available time.
  */
-export function SellerNextAvailable(props: {
-  nextAvailable?: string | null
-}) {
+export function SellerNextAvailable(props: { nextAvailable?: string | null }) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const { nextAvailable } = props

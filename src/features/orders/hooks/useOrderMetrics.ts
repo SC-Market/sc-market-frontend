@@ -7,8 +7,15 @@ export interface UseOrderMetricsResult {
   error: unknown
 }
 
-export function useOrderMetrics(spectrumId: string | undefined, shopId?: string): UseOrderMetricsResult {
-  const { data: metrics, isLoading, error } = useGetContractorOrderMetricsQuery(
+export function useOrderMetrics(
+  spectrumId: string | undefined,
+  shopId?: string,
+): UseOrderMetricsResult {
+  const {
+    data: metrics,
+    isLoading,
+    error,
+  } = useGetContractorOrderMetricsQuery(
     { spectrumId: spectrumId!, shopId },
     { skip: !spectrumId },
   )

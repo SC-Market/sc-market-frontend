@@ -23,7 +23,9 @@ export function CustomerPage(props: {
   return (
     <StandardPageLayout
       title={
-        props.members ? t("manageMemberList.members") : t("customerList.customers")
+        props.members
+          ? t("manageMemberList.members")
+          : t("customerList.customers")
       }
       headerTitle={t("people.title")}
       maxWidth="xl"

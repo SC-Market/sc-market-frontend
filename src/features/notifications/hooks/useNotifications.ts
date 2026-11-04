@@ -19,7 +19,9 @@ import {
 } from "../chromeNotifications"
 
 /** Map frontend scope labels to the backend query param values */
-function mapScopeToBackend(scope: NotificationScope): "individual" | "organization" | undefined {
+function mapScopeToBackend(
+  scope: NotificationScope,
+): "individual" | "organization" | undefined {
   if (scope === "personal") return "individual"
   if (scope === "shop") return "organization"
   return undefined
@@ -44,11 +46,14 @@ export function useNotifications() {
   const { data: shopsData } = useGetMyShopsQuery(undefined, {
     skip: !isAuthenticated || !startupDone,
   })
-  const pollingInterval = useNotificationPollingInterval(isLoggedIn && startupDone)
+  const pollingInterval = useNotificationPollingInterval(
+    isLoggedIn && startupDone,
+  )
 
   const { data: notificationsData } = useGetNotificationsQuery(
     {
-      page, pageSize,
+      page,
+      pageSize,
       scope: mapScopeToBackend(scopeFilter),
       contractorId: shopIdFilter || undefined,
     },
@@ -75,34 +80,67 @@ export function useNotifications() {
   const markAllReadCallback = useCallback(async () => {
     try {
       const result = await bulkUpdate({ read: true }).unwrap()
-      issueAlert({ severity: "success", message: t("notifications.marked_all_read", { count: result.affected_count }) })
+      issueAlert({
+        severity: "success",
+        message: t("notifications.marked_all_read", {
+          count: result.affected_count,
+        }),
+      })
     } catch {
-      issueAlert({ severity: "error", message: t("notifications.mark_all_read_failed") })
+      issueAlert({
+        severity: "error",
+        message: t("notifications.mark_all_read_failed"),
+      })
     }
   }, [bulkUpdate, issueAlert, t])
 
   const deleteAllCallback = useCallback(async () => {
     try {
       const result = await bulkDelete({}).unwrap()
-      issueAlert({ severity: "success", message: t("notifications.cleared_all", { count: result.affected_count }) })
+      issueAlert({
+        severity: "success",
+        message: t("notifications.cleared_all", {
+          count: result.affected_count,
+        }),
+      })
     } catch {
-      issueAlert({ severity: "error", message: t("notifications.clear_all_failed") })
+      issueAlert({
+        severity: "error",
+        message: t("notifications.clear_all_failed"),
+      })
     }
   }, [bulkDelete, issueAlert, t])
 
-  const handleChangePage = useCallback((_: unknown, newPage: number) => setPage(newPage), [])
-  const handleChangeRowsPerPage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setPageSize(parseInt(event.target.value, 10)); setPage(0)
-  }, [])
+  const handleChangePage = useCallback(
+    (_: unknown, newPage: number) => setPage(newPage),
+    [],
+  )
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPageSize(parseInt(event.target.value, 10))
+      setPage(0)
+    },
+    [],
+  )
 
   const resetPage = useCallback(() => setPage(0), [])
 
   return {
-    isLoggedIn, shopsData,
-    notifications, total, unreadCount,
-    page, pageSize, handleChangePage, handleChangeRowsPerPage, resetPage,
-    scopeFilter, setScopeFilter,
-    shopIdFilter, setShopIdFilter,
-    markAllReadCallback, deleteAllCallback,
+    isLoggedIn,
+    shopsData,
+    notifications,
+    total,
+    unreadCount,
+    page,
+    pageSize,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    resetPage,
+    scopeFilter,
+    setScopeFilter,
+    shopIdFilter,
+    setShopIdFilter,
+    markAllReadCallback,
+    deleteAllCallback,
   }
 }

@@ -1,7 +1,10 @@
 import React from "react"
 import { Avatar, Button, Grid, TextField, Typography } from "@mui/material"
 import { User, MinimalUser } from "../../../datatypes/User"
-import type { Contractor, MinimalContractor } from "../../contractor/domain/types"
+import type {
+  Contractor,
+  MinimalContractor,
+} from "../../contractor/domain/types"
 import { useTranslation } from "react-i18next"
 
 interface SendMoneyDetailsSectionProps {

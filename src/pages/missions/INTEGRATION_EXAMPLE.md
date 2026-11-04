@@ -53,13 +53,13 @@ import { MissionRatingDialog } from "../../components/game-data"
 
 export function MissionDetail() {
   const [ratingDialogOpen, setRatingDialogOpen] = useState(false)
-  
+
   // ... existing code ...
 
   return (
     <Box>
       {/* ... existing mission detail content ... */}
-      
+
       {/* Community Ratings Section */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
@@ -76,7 +76,7 @@ export function MissionDetail() {
               {user_rating ? "Update Rating" : "Rate Mission"}
             </Button>
           </Stack>
-          
+
           {/* ... existing ratings display ... */}
         </CardContent>
       </Card>

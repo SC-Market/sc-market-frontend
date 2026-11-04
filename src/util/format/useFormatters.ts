@@ -40,26 +40,44 @@ export function useFormatters() {
     return {
       locale,
       timeZone,
-      number: (value: number | string | null | undefined, options?: Intl.NumberFormatOptions) =>
-        formatNumber(value, locale, options),
-      integer: (value: number | string | null | undefined) => formatInteger(value, locale),
-      compact: (value: number | string | null | undefined, options?: { display?: "short" | "long" }) =>
-        formatCompact(value, locale, options),
-      percent: (ratio: number | string | null | undefined, options?: { maximumFractionDigits?: number }) =>
-        formatPercent(ratio, locale, options),
-      price: (amount: number | string | null | undefined) => formatPrice(amount, locale),
-      exactPrice: (amount: number | string | null | undefined) => formatExactPrice(amount, locale),
-      auec: (amount: number | string | null | undefined) => formatAuec(amount, locale),
-      priceRange: (min: number | string | null | undefined, max: number | string | null | undefined) =>
-        formatPriceRange(min, max, locale),
+      number: (
+        value: number | string | null | undefined,
+        options?: Intl.NumberFormatOptions,
+      ) => formatNumber(value, locale, options),
+      integer: (value: number | string | null | undefined) =>
+        formatInteger(value, locale),
+      compact: (
+        value: number | string | null | undefined,
+        options?: { display?: "short" | "long" },
+      ) => formatCompact(value, locale, options),
+      percent: (
+        ratio: number | string | null | undefined,
+        options?: { maximumFractionDigits?: number },
+      ) => formatPercent(ratio, locale, options),
+      price: (amount: number | string | null | undefined) =>
+        formatPrice(amount, locale),
+      exactPrice: (amount: number | string | null | undefined) =>
+        formatExactPrice(amount, locale),
+      auec: (amount: number | string | null | undefined) =>
+        formatAuec(amount, locale),
+      priceRange: (
+        min: number | string | null | undefined,
+        max: number | string | null | undefined,
+      ) => formatPriceRange(min, max, locale),
       quantity: (value: number | string | null | undefined, unit?: string) =>
         formatQuantity(value, unit, locale),
-      date: (value: DateInput | null | undefined, options?: DateFormatOptions) =>
-        formatDate(value, locale, zoned(options)),
-      time: (value: DateInput | null | undefined, options?: DateFormatOptions) =>
-        formatTime(value, locale, zoned(options)),
-      dateTime: (value: DateInput | null | undefined, options?: DateFormatOptions) =>
-        formatDateTime(value, locale, zoned(options)),
+      date: (
+        value: DateInput | null | undefined,
+        options?: DateFormatOptions,
+      ) => formatDate(value, locale, zoned(options)),
+      time: (
+        value: DateInput | null | undefined,
+        options?: DateFormatOptions,
+      ) => formatTime(value, locale, zoned(options)),
+      dateTime: (
+        value: DateInput | null | undefined,
+        options?: DateFormatOptions,
+      ) => formatDateTime(value, locale, zoned(options)),
       relative: (
         value: DateInput | null | undefined,
         now: DateInput,

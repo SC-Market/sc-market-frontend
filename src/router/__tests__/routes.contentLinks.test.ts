@@ -41,8 +41,12 @@ const pages = [
   { file: site.about.file, links: site.about.body.links },
   ...changelog.map((e) => ({ file: e.file, links: e.body.links })),
 ]
-const guidePaths = new Set(site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)))
-const categoryPaths = new Set(site.categories.map((c) => HELP_PATHS.category(c.id)))
+const guidePaths = new Set(
+  site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)),
+)
+const categoryPaths = new Set(
+  site.categories.map((c) => HELP_PATHS.category(c.id)),
+)
 
 /**
  * Legacy paths that only redirect somewhere else (often based on a cookie).
@@ -61,7 +65,9 @@ const REDIRECT_ONLY = new Set([
   "/org/:contractor_id/listings",
 ])
 
-const cases = pages.flatMap(({ file, links }) => links.map((href) => [file, href] as const))
+const cases = pages.flatMap(({ file, links }) =>
+  links.map((href) => [file, href] as const),
+)
 
 /** Heading anchors per guide path, for HelpLink targets like ...#post-a-buy-order. */
 const guideAnchors = new Map(
@@ -75,7 +81,10 @@ describe("Help & Guides content", () => {
   it("compiles, with at least one guide per category and an About page", () => {
     expect(site.guides.length).toBeGreaterThan(0)
     for (const category of site.categories) {
-      expect(site.guides.some((g) => g.meta.category === category.id), category.id).toBe(true)
+      expect(
+        site.guides.some((g) => g.meta.category === category.id),
+        category.id,
+      ).toBe(true)
     }
     expect(site.about.body.blocks.length).toBeGreaterThan(0)
   })
@@ -90,20 +99,39 @@ describe("Help & Guides content", () => {
     const leaf = matches.at(-1)?.route
     expect(leaf, "no route matched").toBeDefined()
     expect(leaf?.path, "only the /* 404 splat matched").not.toBe("/*")
-    const pattern = matches.map((m) => m.route.path ?? "").filter(Boolean).join("/").replace(/\/+/g, "/")
-    expect(REDIRECT_ONLY.has(pattern) || REDIRECT_ONLY.has(leaf?.path ?? ""), `${pattern} only redirects`).toBe(false)
-    expect(pathname.startsWith("/admin"), "links into the admin area").toBe(false)
+    const pattern = matches
+      .map((m) => m.route.path ?? "")
+      .filter(Boolean)
+      .join("/")
+      .replace(/\/+/g, "/")
+    expect(
+      REDIRECT_ONLY.has(pattern) || REDIRECT_ONLY.has(leaf?.path ?? ""),
+      `${pattern} only redirects`,
+    ).toBe(false)
+    expect(pathname.startsWith("/admin"), "links into the admin area").toBe(
+      false,
+    )
     if (pathname.startsWith(`${HELP_PATHS.hub}/`)) {
-      expect(guidePaths.has(pathname) || categoryPaths.has(pathname), "unknown guide or category").toBe(true)
+      expect(
+        guidePaths.has(pathname) || categoryPaths.has(pathname),
+        "unknown guide or category",
+      ).toBe(true)
     }
   })
 })
 
 describe("HelpLink targets (GUIDE_LINKS)", () => {
-  it.each(Object.entries(GUIDE_LINKS))("%s → %s is a real guide", (_key, href) => {
-    const [pathname, anchor] = href.split("#")
-    expect(guidePaths.has(pathname), "unknown guide").toBe(true)
-    expect(matchRoutes(routes, pathname)?.at(-1)?.route.path).not.toBe("/*")
-    if (anchor) expect(guideAnchors.get(pathname)?.has(anchor), `no #${anchor} heading`).toBe(true)
-  })
+  it.each(Object.entries(GUIDE_LINKS))(
+    "%s → %s is a real guide",
+    (_key, href) => {
+      const [pathname, anchor] = href.split("#")
+      expect(guidePaths.has(pathname), "unknown guide").toBe(true)
+      expect(matchRoutes(routes, pathname)?.at(-1)?.route.path).not.toBe("/*")
+      if (anchor)
+        expect(
+          guideAnchors.get(pathname)?.has(anchor),
+          `no #${anchor} heading`,
+        ).toBe(true)
+    },
+  )
 })

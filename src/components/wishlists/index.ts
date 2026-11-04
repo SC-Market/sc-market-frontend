@@ -1,6 +1,6 @@
 /**
  * Wishlist Components
- * 
+ *
  * Exports all wishlist-related components.
  */
 

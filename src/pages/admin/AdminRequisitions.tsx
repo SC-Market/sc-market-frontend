@@ -43,12 +43,19 @@ import {
   useGetRequisitionQuery,
   useSearchGameItemsQuery,
 } from "../../store/api/v2/market"
-import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } from "../../store/api/v2/market"
+import type {
+  RequisitionDetail,
+  RequisitionLineItem,
+  GameItemSearchResult,
+} from "../../store/api/v2/market"
 import { Trans, useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { useFormatters } from "../../util/format"
 
-const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
+const STATUS_COLORS: Record<
+  string,
+  "default" | "warning" | "info" | "success" | "error"
+> = {
   "not-started": "warning",
   "in-progress": "info",
   fulfilled: "success",
@@ -74,9 +81,12 @@ function GameItemPicker({
 }) {
   const { t } = useTranslation()
   const [query, setQuery] = useState("")
-  const { data: results = [], isFetching } = useSearchGameItemsQuery({ query }, {
-    skip: query.length < 2,
-  })
+  const { data: results = [], isFetching } = useSearchGameItemsQuery(
+    { query },
+    {
+      skip: query.length < 2,
+    },
+  )
 
   return (
     <Autocomplete<GameItemSearchResult>
@@ -85,7 +95,7 @@ function GameItemPicker({
       getOptionLabel={(o) => o.name || ""}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={isFetching}
-      value={value ? results.find((r) => r.id === value.id) ?? null : null}
+      value={value ? (results.find((r) => r.id === value.id) ?? null) : null}
       onChange={(_, newVal) => {
         if (newVal) {
           onChange({
@@ -227,7 +237,11 @@ function CreateRequisitionDialog({
           <Divider />
 
           {/* Line items */}
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Typography variant="subtitle2">
               {t("suppliersUi.requisitions.lineItems")}
             </Typography>
@@ -327,7 +341,10 @@ function CreateRequisitionDialog({
 
           {error && (
             <Alert severity="error">
-              {(error && "data" in error && (error.data as { message?: string })?.message) || t("suppliersUi.requisitions.createFailed")}
+              {(error &&
+                "data" in error &&
+                (error.data as { message?: string })?.message) ||
+                t("suppliersUi.requisitions.createFailed")}
             </Alert>
           )}
         </Stack>
@@ -366,10 +383,7 @@ function RequisitionDetailDialog({
 
   if (!req) return null
 
-  const total = req.items.reduce(
-    (s, i) => s + i.price_per_unit * i.quantity,
-    0,
-  )
+  const total = req.items.reduce((s, i) => s + i.price_per_unit * i.quantity, 0)
 
   return (
     <Dialog open={!!orderId} onClose={onClose} maxWidth="sm" fullWidth>
@@ -396,7 +410,11 @@ function RequisitionDetailDialog({
               size="small"
               color={STATUS_COLORS[req.status] || "default"}
             />
-            <Typography variant="caption" color="text.secondary" sx={{ my: "auto" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ my: "auto" }}
+            >
               {t("suppliersUi.requisitions.createdOn", {
                 date: fmt.date(req.created_at),
               })}
@@ -417,7 +435,9 @@ function RequisitionDetailDialog({
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>{t("suppliersUi.requisitions.columns.item")}</TableCell>
+                <TableCell>
+                  {t("suppliersUi.requisitions.columns.item")}
+                </TableCell>
                 <TableCell align="right">
                   {t("suppliersUi.requisitions.qty")}
                 </TableCell>
@@ -436,7 +456,9 @@ function RequisitionDetailDialog({
               {req.items.map((item: RequisitionLineItem) => (
                 <TableRow key={item.requisition_item_id}>
                   <TableCell>{item.game_item_name}</TableCell>
-                  <TableCell align="right">{fmt.number(item.quantity)}</TableCell>
+                  <TableCell align="right">
+                    {fmt.number(item.quantity)}
+                  </TableCell>
                   <TableCell align="right">
                     {t("suppliersUi.amountAuec", {
                       amount: fmt.number(item.price_per_unit),
@@ -490,7 +512,9 @@ function RequisitionDetailDialog({
                   {req.supplier.display_name?.[0]}
                 </Avatar>
                 <Box>
-                  <Typography variant="body2">{req.supplier.display_name}</Typography>
+                  <Typography variant="body2">
+                    {req.supplier.display_name}
+                  </Typography>
                   <Typography variant="caption" color="text.secondary">
                     @{req.supplier.username}
                   </Typography>
@@ -570,16 +594,24 @@ export function AdminRequisitions() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{t("suppliersUi.requisitions.columns.title")}</TableCell>
-                <TableCell>{t("suppliersUi.requisitions.columns.status")}</TableCell>
+                <TableCell>
+                  {t("suppliersUi.requisitions.columns.title")}
+                </TableCell>
+                <TableCell>
+                  {t("suppliersUi.requisitions.columns.status")}
+                </TableCell>
                 <TableCell align="right">
                   {t("suppliersUi.requisitions.columns.items")}
                 </TableCell>
                 <TableCell align="right">
                   {t("suppliersUi.requisitions.columns.total")}
                 </TableCell>
-                <TableCell>{t("suppliersUi.requisitions.columns.supplier")}</TableCell>
-                <TableCell>{t("suppliersUi.requisitions.columns.created")}</TableCell>
+                <TableCell>
+                  {t("suppliersUi.requisitions.columns.supplier")}
+                </TableCell>
+                <TableCell>
+                  {t("suppliersUi.requisitions.columns.created")}
+                </TableCell>
                 <TableCell align="right">
                   {t("suppliersUi.requisitions.columns.actions")}
                 </TableCell>
@@ -620,17 +652,15 @@ export function AdminRequisitions() {
                     <TableCell>
                       <Chip
                         label={
-                STATUS_LABEL_KEYS[req.status]
-                  ? t(STATUS_LABEL_KEYS[req.status])
-                  : req.status
-              }
+                          STATUS_LABEL_KEYS[req.status]
+                            ? t(STATUS_LABEL_KEYS[req.status])
+                            : req.status
+                        }
                         size="small"
                         color={STATUS_COLORS[req.status] || "default"}
                       />
                     </TableCell>
-                    <TableCell align="right">
-                      {req.items.length}
-                    </TableCell>
+                    <TableCell align="right">{req.items.length}</TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={500}>
                         {t("suppliersUi.amountAuec", {

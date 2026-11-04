@@ -20,12 +20,15 @@ export type {
   OfferSearchQuery,
 } from "../domain/types"
 
-export {
-  OFFER_SEARCH_SORT_METHODS,
-  OFFER_SEARCH_STATUS,
-} from "../domain/types"
+export { OFFER_SEARCH_SORT_METHODS, OFFER_SEARCH_STATUS } from "../domain/types"
 
-import type { OfferSearchQuery, OfferSession, OfferSessionStub, CounterOfferBody, Offer } from "../domain/types"
+import type {
+  OfferSearchQuery,
+  OfferSession,
+  OfferSessionStub,
+  CounterOfferBody,
+  Offer,
+} from "../domain/types"
 
 export const offersApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -67,7 +70,9 @@ export const offersApi = serviceApi.injectEndpoints({
     >({
       query: (queryParams) => {
         // Convert boolean filters to strings for query params
-        const params: Record<string, string | number | boolean | undefined> = { ...queryParams }
+        const params: Record<string, string | number | boolean | undefined> = {
+          ...queryParams,
+        }
         if (params.has_market_listings !== undefined) {
           params.has_market_listings = String(params.has_market_listings)
         }
@@ -142,7 +147,17 @@ export const offersApi = serviceApi.injectEndpoints({
             patches.push(sessionPatch)
 
             // Optimistically update search results
-            const state = getState() as { api?: { queries?: Record<string, { data?: { items?: OfferSessionStub[] }; originalArgs?: OfferSearchQuery }> } }
+            const state = getState() as {
+              api?: {
+                queries?: Record<
+                  string,
+                  {
+                    data?: { items?: OfferSessionStub[] }
+                    originalArgs?: OfferSearchQuery
+                  }
+                >
+              }
+            }
             const cachedQueries = state.api?.queries || {}
 
             Object.keys(cachedQueries).forEach((queryKey) => {

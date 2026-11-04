@@ -108,8 +108,7 @@ export const ServiceListingBase = React.memo(
                     contractor={service.contractor}
                   />
                   <Typography color={"primary"} variant={"subtitle2"}>
-                    {fmt.number(service.cost)}{" "}
-                    aUEC {key ? t(key) : ""}
+                    {fmt.number(service.cost)} aUEC {key ? t(key) : ""}
                   </Typography>
                 </Box>
               }

@@ -5,7 +5,14 @@
  * market). Signed-out visitors get a short sign-in prompt that brings them
  * back to the same page with Quick List open (?sell=1).
  */
-import React, { Suspense, createContext, useCallback, useContext, useEffect, useState } from "react"
+import React, {
+  Suspense,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import { Button, Typography, type ButtonProps } from "@mui/material"
 import { SellRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -63,7 +70,9 @@ export function QuickListProvider({
   const signIn = () => {
     const back = new URLSearchParams(location.search)
     back.set(SELL_PARAM, "1")
-    navigate(`${PATHS.login}?redirect=${encodeURIComponent(`${location.pathname}?${back.toString()}`)}`)
+    navigate(
+      `${PATHS.login}?redirect=${encodeURIComponent(`${location.pathname}?${back.toString()}`)}`,
+    )
   }
 
   return (
@@ -83,7 +92,9 @@ export function QuickListProvider({
         closeLabel={t("quickList.close", "Close")}
         actions={
           <>
-            <Button onClick={() => setSignInOpen(false)}>{t("ui.cancel", "Cancel")}</Button>
+            <Button onClick={() => setSignInOpen(false)}>
+              {t("ui.cancel", "Cancel")}
+            </Button>
             <Button variant="contained" onClick={signIn}>
               {t("quickList.signIn.action", "Sign in")}
             </Button>
@@ -93,10 +104,14 @@ export function QuickListProvider({
         <Typography variant="body2" color="text.secondary">
           {item
             ? t("quickList.signIn.bodyItem", {
-                defaultValue: "Sign in and we'll bring you straight back to listing {{name}}.",
+                defaultValue:
+                  "Sign in and we'll bring you straight back to listing {{name}}.",
                 name: item.name,
               })
-            : t("quickList.signIn.body", "Sign in and we'll bring you straight back here to list your item.")}
+            : t(
+                "quickList.signIn.body",
+                "Sign in and we'll bring you straight back here to list your item.",
+              )}
         </Typography>
       </ResponsiveDialog>
     </QuickListLauncher.Provider>
@@ -108,7 +123,12 @@ export function SellYoursButton({ children, ...props }: ButtonProps) {
   const { t } = useTranslation()
   const launch = useContext(QuickListLauncher)
   return (
-    <Button startIcon={<SellRounded />} {...props} onClick={() => launch?.()} disabled={!launch || props.disabled}>
+    <Button
+      startIcon={<SellRounded />}
+      {...props}
+      onClick={() => launch?.()}
+      disabled={!launch || props.disabled}
+    >
       {children ?? t("quickList.sellYours", "Sell yours")}
     </Button>
   )

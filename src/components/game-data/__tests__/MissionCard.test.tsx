@@ -89,7 +89,9 @@ describe("MissionCard", () => {
 
   it("calls onClick handler when clicked", () => {
     const handleClick = vi.fn()
-    renderWithRouter(<MissionCard mission={mockMission} onClick={handleClick} />)
+    renderWithRouter(
+      <MissionCard mission={mockMission} onClick={handleClick} />,
+    )
 
     const card = screen.getByText("Test Mission").closest("[class*='MuiCard']")
     if (card) {
@@ -132,7 +134,11 @@ describe("MissionCard", () => {
   })
 
   it("displays illegal badge for illegal missions", () => {
-    const illegalMission = { ...mockMission, legal_status: "ILLEGAL", is_illegal: true }
+    const illegalMission = {
+      ...mockMission,
+      legal_status: "ILLEGAL",
+      is_illegal: true,
+    }
     renderWithRouter(<MissionCard mission={illegalMission} />)
     expect(screen.getByText("Illegal")).toBeInTheDocument()
   })

@@ -17,7 +17,11 @@ import { HelpLayout } from "../../features/help/components/HelpLayout"
 import { guidesIn, helpIndex } from "../../features/help/content"
 import { HELP_PATHS } from "../../routes/paths"
 import { FRONTEND_URL } from "../../util/constants"
-import { buildGuidesHubHead, HELP_HUB_NAME, helpHubSeoText } from "../../seo/contentHeads"
+import {
+  buildGuidesHubHead,
+  HELP_HUB_NAME,
+  helpHubSeoText,
+} from "../../seo/contentHeads"
 
 export function GuidesHub() {
   const { t } = useTranslation()
@@ -25,7 +29,11 @@ export function GuidesHub() {
   const start = helpIndex.guides[0]
 
   return (
-    <HelpLayout head={head} path={HELP_PATHS.hub} headerTitle={t("help.hubTitle", HELP_HUB_NAME)}>
+    <HelpLayout
+      head={head}
+      path={HELP_PATHS.hub}
+      headerTitle={t("help.hubTitle", HELP_HUB_NAME)}
+    >
       <Grid item xs={12}>
         <Typography variant="body1" color="text.secondary">
           {helpHubSeoText.description}
@@ -33,7 +41,11 @@ export function GuidesHub() {
         {start && (
           <Typography variant="body1" sx={{ mt: 1 }}>
             {t("help.newHere", "New to SC Market?")}{" "}
-            <Link component={RouterLink} to={HELP_PATHS.guide(start.category, start.slug)} color="secondary">
+            <Link
+              component={RouterLink}
+              to={HELP_PATHS.guide(start.category, start.slug)}
+              color="secondary"
+            >
               {start.title}
             </Link>
           </Typography>
@@ -48,7 +60,10 @@ export function GuidesHub() {
         sidebar and the directory, whatever the viewport.
       */}
       <Grid item xs={12}>
-        <Box data-testid="guides-hub-categories" sx={{ columns: "300px 2", columnGap: 2 }}>
+        <Box
+          data-testid="guides-hub-categories"
+          sx={{ columns: "300px 2", columnGap: 2 }}
+        >
           {helpIndex.categories.map((category) => {
             const guides = guidesIn(category.id)
             return (
@@ -56,10 +71,24 @@ export function GuidesHub() {
                 key={category.id}
                 component="section"
                 aria-labelledby={`guides-hub-${category.id}`}
-                sx={{ breakInside: "avoid", display: "inline-block", width: "100%", mb: 2 }}
+                sx={{
+                  breakInside: "avoid",
+                  display: "inline-block",
+                  width: "100%",
+                  mb: 2,
+                }}
               >
-                <CardActionArea component={RouterLink} to={HELP_PATHS.category(category.id)} sx={{ p: 2, pb: 0 }}>
-                  <Typography id={`guides-hub-${category.id}`} variant="h6" component="h2" sx={{ fontWeight: 700 }}>
+                <CardActionArea
+                  component={RouterLink}
+                  to={HELP_PATHS.category(category.id)}
+                  sx={{ p: 2, pb: 0 }}
+                >
+                  <Typography
+                    id={`guides-hub-${category.id}`}
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 700 }}
+                  >
                     {category.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -70,7 +99,11 @@ export function GuidesHub() {
                   <List dense disablePadding>
                     {guides.map((guide) => (
                       <ListItem key={guide.id} disableGutters>
-                        <Link component={RouterLink} to={HELP_PATHS.guide(guide.category, guide.slug)} color="secondary">
+                        <Link
+                          component={RouterLink}
+                          to={HELP_PATHS.guide(guide.category, guide.slug)}
+                          color="secondary"
+                        >
                           {guide.title}
                         </Link>
                       </ListItem>
@@ -87,7 +120,12 @@ export function GuidesHub() {
           <Typography variant="body2" color="text.secondary">
             {t("help.aboutPrompt", "What is SC Market?")}
           </Typography>
-          <Link component={RouterLink} to={HELP_PATHS.about} variant="body2" color="secondary">
+          <Link
+            component={RouterLink}
+            to={HELP_PATHS.about}
+            variant="body2"
+            color="secondary"
+          >
             {t("help.aboutLink", "About SC Market")}
           </Link>
         </Stack>

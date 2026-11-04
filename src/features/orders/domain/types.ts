@@ -1,5 +1,8 @@
 import type { MinimalUser, User } from "../../../datatypes/User"
-import type { MinimalContractor, Contractor } from "../../contractor/domain/types"
+import type {
+  MinimalContractor,
+  Contractor,
+} from "../../contractor/domain/types"
 import type { AvailabilitySelection } from "../../../hooks/login/UserProfile"
 import type { OfferMarketListing } from "../../offers/api/offerApi"
 import type { OrderV2MarketListing } from "../../../store/api/orders"

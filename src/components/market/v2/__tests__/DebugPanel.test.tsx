@@ -217,7 +217,10 @@ describe("DebugPanel", () => {
     const holdSetFlag = () => {
       let resolve!: () => void
       mockSetFlag.mockImplementationOnce(
-        () => new Promise<void>((r) => { resolve = r }),
+        () =>
+          new Promise<void>((r) => {
+            resolve = r
+          }),
       )
       const reloadSpy = vi.fn()
       Object.defineProperty(window, "location", {
@@ -307,7 +310,7 @@ describe("DebugPanel", () => {
     it("should display developer notice", () => {
       renderWithTheme(<DebugPanel />)
       expect(
-        screen.getByText(/This panel is only visible to developers/i)
+        screen.getByText(/This panel is only visible to developers/i),
       ).toBeInTheDocument()
     })
   })

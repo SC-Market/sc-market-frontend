@@ -27,35 +27,43 @@ const HOUR = 60 * 60 * 1000
 const DAY = 24 * HOUR
 
 describe("every shipped locale", () => {
-  it.each(SUPPORTED_LOCALES)("%s formats without throwing and with digits", (locale) => {
-    for (const s of [
-      formatNumber(1234567.891, locale),
-      formatInteger(-42, locale),
-      formatCompact(1_677_981_402_101, locale),
-      formatPercent(0.456, locale),
-      formatPrice(1500, locale),
-      formatPrice(150_500, locale),
-      formatPrice(15_000_000_000, locale),
-      formatExactPrice(50_000_000, locale)!,
-      formatAuec(0, locale),
-      formatPriceRange(1000, 2_000_000, locale),
-      formatQuantity(250, "scu", locale),
-      formatDate(MOMENT, locale, { timeZone: "UTC" }),
-      formatTime(MOMENT, locale, { timeZone: "UTC" }),
-      formatDateTime(MOMENT, locale, { timeZone: "UTC" }),
-      formatRelative(MOMENT - 3 * DAY, MOMENT, locale),
-      formatDuration(90 * 60 * 1000, locale),
-    ]) {
-      expect(s).toMatch(/\d/)
-    }
-  })
+  it.each(SUPPORTED_LOCALES)(
+    "%s formats without throwing and with digits",
+    (locale) => {
+      for (const s of [
+        formatNumber(1234567.891, locale),
+        formatInteger(-42, locale),
+        formatCompact(1_677_981_402_101, locale),
+        formatPercent(0.456, locale),
+        formatPrice(1500, locale),
+        formatPrice(150_500, locale),
+        formatPrice(15_000_000_000, locale),
+        formatExactPrice(50_000_000, locale)!,
+        formatAuec(0, locale),
+        formatPriceRange(1000, 2_000_000, locale),
+        formatQuantity(250, "scu", locale),
+        formatDate(MOMENT, locale, { timeZone: "UTC" }),
+        formatTime(MOMENT, locale, { timeZone: "UTC" }),
+        formatDateTime(MOMENT, locale, { timeZone: "UTC" }),
+        formatRelative(MOMENT - 3 * DAY, MOMENT, locale),
+        formatDuration(90 * 60 * 1000, locale),
+      ]) {
+        expect(s).toMatch(/\d/)
+      }
+    },
+  )
 
-  it.each(SUPPORTED_LOCALES)("%s is stable: the same input always gives the same text", (locale) => {
-    expect(formatPrice(1_550_000, locale)).toBe(formatPrice(1_550_000, locale))
-    expect(formatDate("2026-11-03T14:05:09Z", locale, { timeZone: "UTC" })).toBe(
-      formatDate(new Date(MOMENT), locale, { timeZone: "UTC" }),
-    )
-  })
+  it.each(SUPPORTED_LOCALES)(
+    "%s is stable: the same input always gives the same text",
+    (locale) => {
+      expect(formatPrice(1_550_000, locale)).toBe(
+        formatPrice(1_550_000, locale),
+      )
+      expect(
+        formatDate("2026-11-03T14:05:09Z", locale, { timeZone: "UTC" }),
+      ).toBe(formatDate(new Date(MOMENT), locale, { timeZone: "UTC" }))
+    },
+  )
 })
 
 describe("formatNumber", () => {
@@ -79,7 +87,9 @@ describe("formatNumber", () => {
   })
 
   it("formats very large values exactly", () => {
-    expect(formatNumber(9_007_199_254_740_991, "en")).toBe("9,007,199,254,740,991")
+    expect(formatNumber(9_007_199_254_740_991, "en")).toBe(
+      "9,007,199,254,740,991",
+    )
     expect(formatNumber(1e21, "en")).toBe("1,000,000,000,000,000,000,000")
   })
 
@@ -100,7 +110,9 @@ describe("formatNumber", () => {
 
 describe("formatCompact", () => {
   it("abbreviates in the locale's words and never rounds up", () => {
-    expect(formatCompact(1_677_981_402_101, "en", { display: "long" })).toBe("1.6 trillion")
+    expect(formatCompact(1_677_981_402_101, "en", { display: "long" })).toBe(
+      "1.6 trillion",
+    )
     expect(formatCompact(1_699_000, "en")).toBe("1.6M")
     expect(plain(formatCompact(1_699_000, "de"))).toBe("1,6 Mio.")
     expect(formatCompact(1_699_000, "ja")).toBe("169.9万")
@@ -120,7 +132,9 @@ describe("formatPercent", () => {
   })
 
   it("keeps decimals when asked, and handles 0 and negatives", () => {
-    expect(formatPercent(0.456, "en", { maximumFractionDigits: 1 })).toBe("45.6%")
+    expect(formatPercent(0.456, "en", { maximumFractionDigits: 1 })).toBe(
+      "45.6%",
+    )
     expect(formatPercent(0, "en")).toBe("0%")
     expect(formatPercent(-0.25, "en")).toBe("-25%")
   })
@@ -208,13 +222,20 @@ describe("dates and times", () => {
     ["ja", "2026/11/3"],
     ["zh-CN", "2026/11/3"],
     ["uk", "03.11.2026"],
-  ])("%s date, with toLocaleDateString's default fields", (locale, expected) => {
-    expect(formatDate(MOMENT, locale, { timeZone: "UTC" })).toBe(expected)
-  })
+  ])(
+    "%s date, with toLocaleDateString's default fields",
+    (locale, expected) => {
+      expect(formatDate(MOMENT, locale, { timeZone: "UTC" })).toBe(expected)
+    },
+  )
 
   it("accepts ISO strings, Dates and epoch ms; invalid or missing gives ''", () => {
-    expect(formatDate("2026-11-03T14:05:09Z", "en", { timeZone: "UTC" })).toBe("11/3/2026")
-    expect(formatDate(new Date(MOMENT), "en", { timeZone: "UTC" })).toBe("11/3/2026")
+    expect(formatDate("2026-11-03T14:05:09Z", "en", { timeZone: "UTC" })).toBe(
+      "11/3/2026",
+    )
+    expect(formatDate(new Date(MOMENT), "en", { timeZone: "UTC" })).toBe(
+      "11/3/2026",
+    )
     expect(formatDate("not a date", "en")).toBe("")
     expect(formatDate(null, "en")).toBe("")
     expect(formatDate("", "en")).toBe("")
@@ -222,35 +243,62 @@ describe("dates and times", () => {
 
   it("keeps the caller's own fields", () => {
     expect(
-      formatDate(MOMENT, "en", { month: "short", day: "numeric", timeZone: "UTC" }),
+      formatDate(MOMENT, "en", {
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC",
+      }),
     ).toBe("Nov 3")
-    expect(formatDate(MOMENT, "de", { dateStyle: "long", timeZone: "UTC" })).toBe("3. November 2026")
+    expect(
+      formatDate(MOMENT, "de", { dateStyle: "long", timeZone: "UTC" }),
+    ).toBe("3. November 2026")
   })
 
   it("labels times rendered in UTC", () => {
-    expect(plain(formatTime(MOMENT, "en", { timeZone: "UTC" }))).toBe("2:05:09 PM UTC")
+    expect(plain(formatTime(MOMENT, "en", { timeZone: "UTC" }))).toBe(
+      "2:05:09 PM UTC",
+    )
     expect(formatTime(MOMENT, "de", { timeZone: "UTC" })).toBe("14:05:09 UTC")
-    expect(plain(formatDateTime(MOMENT, "en", { timeZone: "UTC" }))).toBe("11/3/2026, 2:05:09 PM UTC")
+    expect(plain(formatDateTime(MOMENT, "en", { timeZone: "UTC" }))).toBe(
+      "11/3/2026, 2:05:09 PM UTC",
+    )
     // A date alone has no time to label.
     expect(formatDate(MOMENT, "en", { timeZone: "UTC" })).not.toContain("UTC")
   })
 
   it("formats in the zone it's given (the visitor's after hydration)", () => {
-    expect(formatTime(MOMENT, "en", { timeZone: "Asia/Tokyo", hour: "numeric", minute: "2-digit", hourCycle: "h23" })).toBe("23:05")
-    expect(formatDate(Date.UTC(2026, 10, 3, 20), "en", { timeZone: "Asia/Tokyo" })).toBe("11/4/2026")
+    expect(
+      formatTime(MOMENT, "en", {
+        timeZone: "Asia/Tokyo",
+        hour: "numeric",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }),
+    ).toBe("23:05")
+    expect(
+      formatDate(Date.UTC(2026, 10, 3, 20), "en", { timeZone: "Asia/Tokyo" }),
+    ).toBe("11/4/2026")
   })
 
   it("formats CJK dates", () => {
-    expect(formatDate(MOMENT, "ja", { dateStyle: "long", timeZone: "UTC" })).toBe("2026年11月3日")
-    expect(formatDate(MOMENT, "zh-CN", { dateStyle: "long", timeZone: "UTC" })).toBe("2026年11月3日")
-    expect(formatDate(MOMENT, "zh-TW", { dateStyle: "long", timeZone: "UTC" })).toBe("2026年11月3日")
+    expect(
+      formatDate(MOMENT, "ja", { dateStyle: "long", timeZone: "UTC" }),
+    ).toBe("2026年11月3日")
+    expect(
+      formatDate(MOMENT, "zh-CN", { dateStyle: "long", timeZone: "UTC" }),
+    ).toBe("2026年11月3日")
+    expect(
+      formatDate(MOMENT, "zh-TW", { dateStyle: "long", timeZone: "UTC" }),
+    ).toBe("2026年11月3日")
   })
 })
 
 describe("formatRelative", () => {
   it("uses the largest whole unit, relative to the given now", () => {
     expect(formatRelative(MOMENT - 3 * DAY, MOMENT, "en")).toBe("3 days ago")
-    expect(formatRelative(MOMENT + 2 * HOUR + 1, MOMENT, "en")).toBe("in 2 hours")
+    expect(formatRelative(MOMENT + 2 * HOUR + 1, MOMENT, "en")).toBe(
+      "in 2 hours",
+    )
     expect(formatRelative(MOMENT - 1.2 * DAY, MOMENT, "en")).toBe("yesterday")
     expect(formatRelative(MOMENT, MOMENT, "en")).toBe("now")
     expect(formatRelative(MOMENT - 400 * DAY, MOMENT, "en")).toBe("last year")
@@ -271,7 +319,9 @@ describe("formatRelative", () => {
 describe("formatDuration and formatTimeUntil", () => {
   it("shows the two largest units by default", () => {
     expect(formatDuration(90 * 60 * 1000, "en")).toBe("1h 30m")
-    expect(formatDuration(3 * DAY + 4 * HOUR + 5 * 60 * 1000, "en")).toBe("3d 4h")
+    expect(formatDuration(3 * DAY + 4 * HOUR + 5 * 60 * 1000, "en")).toBe(
+      "3d 4h",
+    )
     expect(formatDuration(45 * 1000, "en")).toBe("45s")
     expect(plain(formatDuration(90 * 60 * 1000, "de"))).toBe("1h 30 Min.")
     expect(formatDuration(90 * 60 * 1000, "zh-CN")).toBe("1小时30分钟")

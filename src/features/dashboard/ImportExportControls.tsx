@@ -183,7 +183,10 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
                 >
                   <MenuItem value={DROP}>
                     <em>
-                      {t("dashboard.dontImportWidget", "Don't import this widget")}
+                      {t(
+                        "dashboard.dontImportWidget",
+                        "Don't import this widget",
+                      )}
                     </em>
                   </MenuItem>
                   {isOrg
@@ -199,7 +202,11 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
                       ))}
                 </Select>
                 {options.length === 0 && (
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 0.5 }}
+                  >
                     {isOrg
                       ? t(
                           "dashboard.noOrgsWidgetDropped",

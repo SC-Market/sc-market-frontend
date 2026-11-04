@@ -8,9 +8,14 @@ import { useOrderFormContext } from "./OrderFormContext"
 export function AvailabilityBanner() {
   const { t } = useTranslation()
   const {
-    availabilityRequirement, hasAvailabilitySet, formDisabled,
-    isAvailabilityModalOpen, setIsAvailabilityModalOpen,
-    orderLimits, sellerName, state,
+    availabilityRequirement,
+    hasAvailabilitySet,
+    formDisabled,
+    isAvailabilityModalOpen,
+    setIsAvailabilityModalOpen,
+    orderLimits,
+    sellerName,
+    state,
   } = useOrderFormContext()
 
   if (!availabilityRequirement && !orderLimits) return null
@@ -25,13 +30,19 @@ export function AvailabilityBanner() {
             sx={{ mb: 2 }}
           >
             <AlertTitle>
-              {hasAvailabilitySet ? t("AvailabilityRequirement.set") : t("AvailabilityRequirement.required")}
+              {hasAvailabilitySet
+                ? t("AvailabilityRequirement.set")
+                : t("AvailabilityRequirement.required")}
             </AlertTitle>
             <Box>
               {hasAvailabilitySet ? (
                 <>
                   {t("AvailabilityRequirement.setMessage", { sellerName })}
-                  <Button size="small" onClick={() => setIsAvailabilityModalOpen(true)} sx={{ mt: 1, ml: 1 }}>
+                  <Button
+                    size="small"
+                    onClick={() => setIsAvailabilityModalOpen(true)}
+                    sx={{ mt: 1, ml: 1 }}
+                  >
                     {t("availability.edit", "Edit")}
                   </Button>
                 </>
@@ -39,7 +50,11 @@ export function AvailabilityBanner() {
                 <>
                   {t("AvailabilityRequirement.requiredMessage", { sellerName })}
                   <Box mt={1}>
-                    <Button variant="contained" size="small" onClick={() => setIsAvailabilityModalOpen(true)}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => setIsAvailabilityModalOpen(true)}
+                    >
                       {t("AvailabilityRequirement.setAvailability")}
                     </Button>
                   </Box>
@@ -51,7 +66,12 @@ export function AvailabilityBanner() {
       )}
       {orderLimits && (
         <Grid item xs={12}>
-          <OrderLimitsDisplay limits={orderLimits} currentSize={0} currentValue={state.offer} showValidation={true} />
+          <OrderLimitsDisplay
+            limits={orderLimits}
+            currentSize={0}
+            currentValue={state.offer}
+            showValidation={true}
+          />
         </Grid>
       )}
     </>

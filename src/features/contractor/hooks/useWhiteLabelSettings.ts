@@ -66,13 +66,22 @@ export function useWhiteLabelSettings() {
   const [contractor] = useCurrentOrg()
   const spectrumId = contractor?.spectrum_id
 
-  const { data: configRes } = useGetWhitelabelConfigQuery(spectrumId!, { skip: !spectrumId })
-  const { data: sidebarRes } = useGetWhitelabelSidebarQuery(spectrumId!, { skip: !spectrumId })
-  const [updateConfig, { isLoading: configSaving }] = useUpdateWhitelabelConfigMutation()
-  const [updateSidebar, { isLoading: sidebarSaving }] = useUpdateWhitelabelSidebarMutation()
+  const { data: configRes } = useGetWhitelabelConfigQuery(spectrumId!, {
+    skip: !spectrumId,
+  })
+  const { data: sidebarRes } = useGetWhitelabelSidebarQuery(spectrumId!, {
+    skip: !spectrumId,
+  })
+  const [updateConfig, { isLoading: configSaving }] =
+    useUpdateWhitelabelConfigMutation()
+  const [updateSidebar, { isLoading: sidebarSaving }] =
+    useUpdateWhitelabelSidebarMutation()
 
   const config = configRes?.data
-  const sidebarItems: SidebarConfigItem[] = useMemo(() => sidebarRes?.data ?? [], [sidebarRes?.data])
+  const sidebarItems: SidebarConfigItem[] = useMemo(
+    () => sidebarRes?.data ?? [],
+    [sidebarRes?.data],
+  )
 
   // Config state
   const [focusMode, setFocusMode] = useState<"public" | "internal">("public")
@@ -99,9 +108,14 @@ export function useWhiteLabelSettings() {
     const disabled = new Set<string>()
     const custom: CustomTab[] = []
     for (const item of sidebarItems) {
-      if (item.standard_tab_key && !item.enabled) disabled.add(item.standard_tab_key)
+      if (item.standard_tab_key && !item.enabled)
+        disabled.add(item.standard_tab_key)
       if (!item.standard_tab_key && item.custom_path) {
-        custom.push({ label: item.custom_label ?? "", path: item.custom_path, icon: item.custom_icon || DEFAULT_ICON })
+        custom.push({
+          label: item.custom_label ?? "",
+          path: item.custom_path,
+          icon: item.custom_icon || DEFAULT_ICON,
+        })
       }
     }
     setDisabledTabs(disabled)
@@ -112,9 +126,16 @@ export function useWhiteLabelSettings() {
     if (!spectrumId) return
     try {
       // Membership only applies to an Internal (login required) site.
-      await updateConfig({ spectrum_id: spectrumId, focus_mode: focusMode, homepage_path: homepagePath || null, require_membership: focusMode === "internal" && requireMembership }).unwrap()
+      await updateConfig({
+        spectrum_id: spectrumId,
+        focus_mode: focusMode,
+        homepage_path: homepagePath || null,
+        require_membership: focusMode === "internal" && requireMembership,
+      }).unwrap()
       setSnack(t("sharedUi.whiteLabel.settingsSaved"))
-    } catch { setSnack(t("sharedUi.whiteLabel.settingsSaveFailed")) }
+    } catch {
+      setSnack(t("sharedUi.whiteLabel.settingsSaveFailed"))
+    }
   }, [spectrumId, focusMode, homepagePath, requireMembership, updateConfig, t])
 
   const handleSaveSidebar = useCallback(async () => {
@@ -123,28 +144,62 @@ export function useWhiteLabelSettings() {
       const items: SidebarConfigItem[] = []
       let order = 0
       for (const key of ALWAYS_ON_KEYS) {
-        items.push({ standard_tab_key: key, custom_label: null, custom_path: null, custom_icon: null, is_external: false, enabled: true, sort_order: order++ })
+        items.push({
+          standard_tab_key: key,
+          custom_label: null,
+          custom_path: null,
+          custom_icon: null,
+          is_external: false,
+          enabled: true,
+          sort_order: order++,
+        })
       }
       for (const tab of TOGGLEABLE_TABS) {
-        items.push({ standard_tab_key: tab.key, custom_label: null, custom_path: null, custom_icon: null, is_external: false, enabled: !disabledTabs.has(tab.key), sort_order: order++ })
+        items.push({
+          standard_tab_key: tab.key,
+          custom_label: null,
+          custom_path: null,
+          custom_icon: null,
+          is_external: false,
+          enabled: !disabledTabs.has(tab.key),
+          sort_order: order++,
+        })
       }
       for (const ct of customTabs) {
-        items.push({ standard_tab_key: null, custom_label: ct.label, custom_path: ct.path, custom_icon: ct.icon, is_external: isExternal(ct.path), enabled: true, sort_order: order++ })
+        items.push({
+          standard_tab_key: null,
+          custom_label: ct.label,
+          custom_path: ct.path,
+          custom_icon: ct.icon,
+          is_external: isExternal(ct.path),
+          enabled: true,
+          sort_order: order++,
+        })
       }
       await updateSidebar({ spectrum_id: spectrumId, items }).unwrap()
       setSnack(t("sharedUi.whiteLabel.sidebarSaved"))
-    } catch { setSnack(t("sharedUi.whiteLabel.sidebarSaveFailed")) }
+    } catch {
+      setSnack(t("sharedUi.whiteLabel.sidebarSaveFailed"))
+    }
   }, [spectrumId, disabledTabs, customTabs, updateSidebar, t])
 
   const toggleTab = useCallback((key: string) => {
-    setDisabledTabs((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); return next })
+    setDisabledTabs((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
   }, [])
 
   const addCustomTab = useCallback(() => {
-    const label = newLabel.trim(); const path = newPath.trim()
+    const label = newLabel.trim()
+    const path = newPath.trim()
     if (!label || !path || customTabPathError(path)) return
     setCustomTabs((prev) => [...prev, { label, path, icon: newIcon }])
-    setNewLabel(""); setNewPath(""); setNewIcon(DEFAULT_ICON)
+    setNewLabel("")
+    setNewPath("")
+    setNewIcon(DEFAULT_ICON)
   }, [newLabel, newPath, newIcon])
 
   const removeCustomTab = useCallback((index: number) => {
@@ -152,23 +207,50 @@ export function useWhiteLabelSettings() {
   }, [])
 
   const updateCustomTabIcon = useCallback((index: number, icon: string) => {
-    setCustomTabs((prev) => prev.map((tab, i) => (i === index ? { ...tab, icon } : tab)))
+    setCustomTabs((prev) =>
+      prev.map((tab, i) => (i === index ? { ...tab, icon } : tab)),
+    )
   }, [])
 
   const newPathErrorKey = customTabPathError(newPath)
 
   return {
-    spectrumId, config,
-    focusMode, setFocusMode, homepagePath, setHomepagePath, requireMembership, setRequireMembership,
-    configSaving, handleSaveConfig,
-    disabledTabs, toggleTab,
-    customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
-    newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon,
+    spectrumId,
+    config,
+    focusMode,
+    setFocusMode,
+    homepagePath,
+    setHomepagePath,
+    requireMembership,
+    setRequireMembership,
+    configSaving,
+    handleSaveConfig,
+    disabledTabs,
+    toggleTab,
+    customTabs,
+    addCustomTab,
+    removeCustomTab,
+    updateCustomTabIcon,
+    newLabel,
+    setNewLabel,
+    newPath,
+    setNewPath,
+    newIcon,
+    setNewIcon,
     newPathError: newPathErrorKey ? t(newPathErrorKey) : null,
-    sidebarSaving, handleSaveSidebar,
-    snack, setSnack,
+    sidebarSaving,
+    handleSaveSidebar,
+    snack,
+    setSnack,
     TOGGLEABLE_TABS,
   }
 }
 
-export { TOGGLEABLE_TABS, DEFAULT_ICON, isExternal, customTabPathError, type CustomTab, type SidebarConfigItem }
+export {
+  TOGGLEABLE_TABS,
+  DEFAULT_ICON,
+  isExternal,
+  customTabPathError,
+  type CustomTab,
+  type SidebarConfigItem,
+}

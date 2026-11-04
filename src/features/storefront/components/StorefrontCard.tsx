@@ -39,25 +39,53 @@ export function StorefrontCard(props: { storefront: StorefrontCardData }) {
       }}
       data-testid="storefront-card"
     >
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
-        <Avatar src={s.logo_url ?? undefined} alt="" variant="rounded" sx={{ width: 44, height: 44 }} />
+      <Stack
+        direction="row"
+        spacing={1.5}
+        alignItems="center"
+        sx={{ minWidth: 0 }}
+      >
+        <Avatar
+          src={s.logo_url ?? undefined}
+          alt=""
+          variant="rounded"
+          sx={{ width: 44, height: 44 }}
+        />
         <Box sx={{ minWidth: 0 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography color="text.secondary" fontWeight={700} noWrap>
               {s.name}
             </Typography>
-            <VerifiedRounded color="primary" sx={{ fontSize: 16 }} titleAccess={t("storefront.verified.label", "Verified org")} />
+            <VerifiedRounded
+              color="primary"
+              sx={{ fontSize: 16 }}
+              titleAccess={t("storefront.verified.label", "Verified org")}
+            />
           </Stack>
-          <Typography variant="caption" color="text.primary" noWrap component="p">
+          <Typography
+            variant="caption"
+            color="text.primary"
+            noWrap
+            component="p"
+          >
             {[
               s.active_listings > 0 || s.active_services === 0
-                ? t("storefront.embed.listings", { n: s.active_listings, defaultValue: "{{n}} listings" })
+                ? t("storefront.embed.listings", {
+                    n: s.active_listings,
+                    defaultValue: "{{n}} listings",
+                  })
                 : null,
               s.active_services > 0
-                ? t("storefront.embed.services", { n: s.active_services, defaultValue: "{{n}} services" })
+                ? t("storefront.embed.services", {
+                    n: s.active_services,
+                    defaultValue: "{{n}} services",
+                  })
                 : null,
               s.completed_orders > 0
-                ? t("storefront.embed.completed", { n: s.completed_orders, defaultValue: "{{n}} completed orders" })
+                ? t("storefront.embed.completed", {
+                    n: s.completed_orders,
+                    defaultValue: "{{n}} completed orders",
+                  })
                 : null,
               rating ? `${rating}★` : null,
             ]
@@ -69,11 +97,20 @@ export function StorefrontCard(props: { storefront: StorefrontCardData }) {
       <Typography
         variant="body2"
         color="text.primary"
-        sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+        sx={{
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
       >
         {s.tagline}
       </Typography>
-      <Stack direction="row" spacing={0.5} sx={{ mt: "auto", overflow: "hidden" }}>
+      <Stack
+        direction="row"
+        spacing={0.5}
+        sx={{ mt: "auto", overflow: "hidden" }}
+      >
         {serviceOnly && (
           <Chip
             label={t("storefront.hub.servicesTag", "Services")}
@@ -84,7 +121,13 @@ export function StorefrontCard(props: { storefront: StorefrontCardData }) {
           />
         )}
         {s.fields.slice(0, serviceOnly ? 2 : 3).map((field) => (
-          <Chip key={field} label={field} size="small" variant="outlined" sx={{ textTransform: "capitalize" }} />
+          <Chip
+            key={field}
+            label={field}
+            size="small"
+            variant="outlined"
+            sx={{ textTransform: "capitalize" }}
+          />
         ))}
       </Stack>
     </Paper>

@@ -6,7 +6,9 @@ import { DiscordLoginButton } from "../DiscordLoginButton"
 
 // English catalog t() (src/test/mocks/reactI18next).
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock constants to avoid import.meta.env in tests

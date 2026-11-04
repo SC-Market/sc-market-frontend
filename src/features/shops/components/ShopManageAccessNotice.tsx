@@ -8,7 +8,11 @@ import { useTranslation } from "react-i18next"
  * instead of failing with a 403 when saved. Listings need Manage Market;
  * stock lots need Manage Market or Manage Stock (`area="stock"`).
  */
-export function ShopManageAccessNotice({ area = "listings" }: { area?: "listings" | "stock" }) {
+export function ShopManageAccessNotice({
+  area = "listings",
+}: {
+  area?: "listings" | "stock"
+}) {
   const { t } = useTranslation()
   return (
     <Alert severity="info">

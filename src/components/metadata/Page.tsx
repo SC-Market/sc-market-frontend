@@ -88,14 +88,19 @@ export function Page(
   // page there), so link equity and indexing stay on the main site.
   const whiteLabelCanonical =
     props.canonUrl ||
-    (backupCanonUrl === "/" && customOrg ? ORG_PATHS.profile(customOrg) : backupCanonUrl)
+    (backupCanonUrl === "/" && customOrg
+      ? ORG_PATHS.profile(customOrg)
+      : backupCanonUrl)
 
   return customOrg && customOrgData ? (
     <>
       <Helmet>
         <link rel="icon" type="image/png" href={customOrgData.avatar} />
         {(props.canonUrl || !props.dontUseDefaultCanonUrl) && (
-          <link rel="canonical" href={`${FRONTEND_URL}${whiteLabelCanonical}${pageSuffix}`} />
+          <link
+            rel="canonical"
+            href={`${FRONTEND_URL}${whiteLabelCanonical}${pageSuffix}`}
+          />
         )}
         {noindexQuery && <meta name="robots" content="noindex" />}
       </Helmet>

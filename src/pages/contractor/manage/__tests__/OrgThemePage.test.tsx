@@ -21,7 +21,8 @@ vi.mock("../../../../components/theme-editor/ThemeEditor", () => ({
   ThemeEditor: () => <div>theme editor</div>,
 }))
 vi.mock("../../../../features/storefront/hooks/useBrandingUnlocked", () => ({
-  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) =>
+    c?.premium_tier === "white_label",
 }))
 vi.mock("../../../../views/contractor/WhiteLabelSettings", () => ({
   WhiteLabelSettings: () => <div>white-label settings</div>,
@@ -37,10 +38,17 @@ function memberWith(...permissions: string[]) {
       premium_tier: "white_label",
       owner_role: "owner",
       roles: [
-        { role_id: "r1", position: 5, ...Object.fromEntries(permissions.map((p) => [p, true])) },
+        {
+          role_id: "r1",
+          position: 5,
+          ...Object.fromEntries(permissions.map((p) => [p, true])),
+        },
       ],
     },
-    profile: { username: "me", contractors: [{ spectrum_id: "WLORG", role: "r", roles: ["r1"] }] },
+    profile: {
+      username: "me",
+      contractors: [{ spectrum_id: "WLORG", role: "r", roles: ["r1"] }],
+    },
   }
 }
 
@@ -57,11 +65,17 @@ function sections(data: ReturnType<typeof memberWith>) {
 
 describe("OrgThemePage", () => {
   it("shows the theme editor for Manage Theme only", () => {
-    expect(sections(memberWith("manage_theme"))).toEqual({ editor: true, settings: false })
+    expect(sections(memberWith("manage_theme"))).toEqual({
+      editor: true,
+      settings: false,
+    })
   })
 
   it("shows the site and sidebar settings for Manage Org Details only", () => {
-    expect(sections(memberWith("manage_org_details"))).toEqual({ editor: false, settings: true })
+    expect(sections(memberWith("manage_org_details"))).toEqual({
+      editor: false,
+      settings: true,
+    })
   })
 
   it("the tab shows for either permission", () => {

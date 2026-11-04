@@ -91,4 +91,8 @@ export const cyberpunkThemeOptions: ThemeOptions = {
   },
 }
 
-export const CYBERPUNK_theme = createAppTheme(themeBase, mainThemeOptions, cyberpunkThemeOptions)
+export const CYBERPUNK_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  cyberpunkThemeOptions,
+)

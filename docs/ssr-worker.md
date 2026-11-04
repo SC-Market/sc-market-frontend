@@ -8,11 +8,11 @@ SPA shell. Design: `ssr-migration-design.md` §5, Phase 4. Prerendered pages:
 
 ## What is server-rendered
 
-| Path | Loader (`src/ssr/loaders.ts`) | Cache (fresh / stale / crawlers) |
-| --- | --- | --- |
-| `/market/<id>`, `/shops/<slug>[/<tab>]`, `/contractor/<id>[/<tab>]`, `/user/<name>[/<tab>]` | the pages' `prefetchXPage` | 60 s / 600 s / 24 h |
-| `/wiki/items/<id>`, `/wiki/commodities/<id>` | item / commodity prefetch + LIVE version | per game version: 10 min / 6 h / 24 h (live prices) |
-| `/wiki/ships/<id>`, `/mining/ores/<name>`, `/mining/locations/<name>`, `/blueprints/<slug>`, `/missions/<slug>`, `/resources/<id>` | the detail query + LIVE version | per game version: 6 h / 7 days / 7 days |
+| Path                                                                                                                               | Loader (`src/ssr/loaders.ts`)            | Cache (fresh / stale / crawlers)                    |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------------- |
+| `/market/<id>`, `/shops/<slug>[/<tab>]`, `/contractor/<id>[/<tab>]`, `/user/<name>[/<tab>]`                                        | the pages' `prefetchXPage`               | 60 s / 600 s / 24 h                                 |
+| `/wiki/items/<id>`, `/wiki/commodities/<id>`                                                                                       | item / commodity prefetch + LIVE version | per game version: 10 min / 6 h / 24 h (live prices) |
+| `/wiki/ships/<id>`, `/mining/ores/<name>`, `/mining/locations/<name>`, `/blueprints/<slug>`, `/missions/<slug>`, `/resources/<id>` | the detail query + LIVE version          | per game version: 6 h / 7 days / 7 days             |
 
 Unknown entities (v2 404, v1 400/404), and pages the bridge's builders mark
 gone (a sold or expired listing, an unknown tab: 404; a cancelled listing:
@@ -97,11 +97,11 @@ visitor whose variant is switched off gets the default HTML, which the
 browser renders from scratch instead of hydrating (as before: no mismatch,
 just no hydration speed-up).
 
-| Variant | Read from | Rendered as | Browser hydrates when |
-| --- | --- | --- | --- |
-| `theme` | `theme=light` cookie; or no theme cookie / `system` plus `scm_scheme=light` (the pre-theme script in `document.html` writes the OS scheme it saw, so the *next* page can be light) | The light theme (`useRequestContext().theme`, HookProvider) | The pre-theme script resolves the same scheme (`data-ssr-theme`) |
-| `locale` | `?lng`, then the `i18next` cookie (the detector caches the choice there, SameSite=Lax), then `Accept-Language` (the first visit: the most preferred tag we ship, as i18next picks from `navigator.languages`), else English | A per-request `i18n.cloneInstance` with the locale's strings; `<html lang>` set; renders run one at a time per isolate for the helpers that read the language outside React (`util/renderLanguage.ts`) | `toSupportedLocale(i18n.language)` is the rendered one (`data-ssr-lng`). A visitor whose language is only in localStorage (older visits, before the cookie) differs and gets the page rendered from scratch; the detector writes the cookie then, so the next page hydrates |
-| `host` | The request's `Host`, when it isn't the main site: `GET /api/domain/:host`, then `GET /api/contractors/:sid/theme` (edge-cached 60 s, anonymous) | The org's theme and branding: the custom-domain context, sidebar brand and settings (prefetched with the page), "<Org> — <page>" title. The resolved domain and theme ship with the page data (`whiteLabel`), and `entry.client` seeds the browser's domain and theme caches with them before the first render (`src/ssr/whiteLabel.ts`) | `data-ssr-host` is this host and its domain answer was seeded |
+| Variant  | Read from                                                                                                                                                                                                                   | Rendered as                                                                                                                                                                                                                                                                                                                              | Browser hydrates when                                                                                                                                                                                                                                                       |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`  | `theme=light` cookie; or no theme cookie / `system` plus `scm_scheme=light` (the pre-theme script in `document.html` writes the OS scheme it saw, so the _next_ page can be light)                                          | The light theme (`useRequestContext().theme`, HookProvider)                                                                                                                                                                                                                                                                              | The pre-theme script resolves the same scheme (`data-ssr-theme`)                                                                                                                                                                                                            |
+| `locale` | `?lng`, then the `i18next` cookie (the detector caches the choice there, SameSite=Lax), then `Accept-Language` (the first visit: the most preferred tag we ship, as i18next picks from `navigator.languages`), else English | A per-request `i18n.cloneInstance` with the locale's strings; `<html lang>` set; renders run one at a time per isolate for the helpers that read the language outside React (`util/renderLanguage.ts`)                                                                                                                                   | `toSupportedLocale(i18n.language)` is the rendered one (`data-ssr-lng`). A visitor whose language is only in localStorage (older visits, before the cookie) differs and gets the page rendered from scratch; the detector writes the cookie then, so the next page hydrates |
+| `host`   | The request's `Host`, when it isn't the main site: `GET /api/domain/:host`, then `GET /api/contractors/:sid/theme` (edge-cached 60 s, anonymous)                                                                            | The org's theme and branding: the custom-domain context, sidebar brand and settings (prefetched with the page), "<Org> — <page>" title. The resolved domain and theme ship with the page data (`whiteLabel`), and `entry.client` seeds the browser's domain and theme caches with them before the first render (`src/ssr/whiteLabel.ts`) | `data-ssr-host` is this host and its domain answer was seeded                                                                                                                                                                                                               |
 
 Crawlers (`isCrawler`) always get the default theme and English, whatever
 they send. The `host` variant applies to them too (it's the host, not the
@@ -116,7 +116,7 @@ visitor).
   a page query (`src/document/pageQuery.ts`): a crawler on it gets the
   English page with the clean canonical, never a German duplicate.
   Visitors get their language on the same URL (dynamic serving, `Vary:
-  Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
+Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   wanted, they are a route-table and sitemap change; this variant would
   then render them.
 - **White-label hosts point at sc-market.space.** The canonical, `og:url`
@@ -176,7 +176,7 @@ visitor).
   (`failed: primary <status>`), so an error page is never stored as the
   page. A render whose other data failed the same way, or whose bridge head
   couldn't be built, is served but not cached (`X-SCM-SSR-Partial:
-  getPriceHistory(429), ...`; logged `ssr partial`). On a stale hit, such a
+getPriceHistory(429), ...`; logged `ssr partial`). On a stale hit, such a
   background render leaves the cached page in place.
 - The first request for a path in a data center is always a miss, and the
   `cache.put` lands a moment after the response (a request within ~1 s is
@@ -185,14 +185,14 @@ visitor).
 
 ## Switches and rollback
 
-| What | How | Takes effect |
-| --- | --- | --- |
-| Instant kill, all or some paths | Zone Transform Rule (Rules → Transform Rules → Modify Request Header) that sets `X-SCM-SSR-Off: 1`, filtered on the paths to switch off (custom domain only, not pages.dev) | Seconds, no deploy |
-| Kill switch | Pages env var `SSR_ENABLED=false` (production: SSR is off unless it is `true`) | Next deployment ("Retry deployment", no code change) |
-| Per page kind | Pages env var `SSR_KINDS=listing,shop` (omit kinds to roll them back) | Next deployment |
-| Per variant | Pages env var `SSR_VARIANTS=theme,locale,host` (any subset; `none` for none). Unset: all on previews and localhost, none in production | Next deployment |
-| Per prefix, permanent | Point `functions/<prefix>/[[path]].ts` back at `src/bridge/pagesFunction` | A commit |
-| Everything | Pages → Deployments → Rollback to the previous deployment | Instant |
+| What                            | How                                                                                                                                                                         | Takes effect                                         |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Instant kill, all or some paths | Zone Transform Rule (Rules → Transform Rules → Modify Request Header) that sets `X-SCM-SSR-Off: 1`, filtered on the paths to switch off (custom domain only, not pages.dev) | Seconds, no deploy                                   |
+| Kill switch                     | Pages env var `SSR_ENABLED=false` (production: SSR is off unless it is `true`)                                                                                              | Next deployment ("Retry deployment", no code change) |
+| Per page kind                   | Pages env var `SSR_KINDS=listing,shop` (omit kinds to roll them back)                                                                                                       | Next deployment                                      |
+| Per variant                     | Pages env var `SSR_VARIANTS=theme,locale,host` (any subset; `none` for none). Unset: all on previews and localhost, none in production                                      | Next deployment                                      |
+| Per prefix, permanent           | Point `functions/<prefix>/[[path]].ts` back at `src/bridge/pagesFunction`                                                                                                   | A commit                                             |
+| Everything                      | Pages → Deployments → Rollback to the previous deployment                                                                                                                   | Instant                                              |
 
 Failure modes all fail open: a render error, a timeout (2.5 s for loaders
 plus render), a failed primary query, an unexpected status, or a missing
@@ -224,15 +224,15 @@ serves the static shell if the Function dies (exception or CPU limit).
    (requests and CPU time), e.g. at 8M requests and 25M CPU-ms a month.
 3. Optional WAF rate limiting rule (Security → WAF → Rate limiting rules;
    Free includes one): `starts_with(http.request.uri.path, "/market/") or
-   starts_with(http.request.uri.path, "/shops/") or
-   starts_with(http.request.uri.path, "/contractor/") or
-   starts_with(http.request.uri.path, "/user/")`, 60 requests per 10 s per
+starts_with(http.request.uri.path, "/shops/") or
+starts_with(http.request.uri.path, "/contractor/") or
+starts_with(http.request.uri.path, "/user/")`, 60 requests per 10 s per
    IP, action Block or Managed Challenge for 10 s.
 4. Prepare the instant kill switch (disabled): Rules → Transform Rules →
    Modify Request Header, "Set static" `X-SCM-SSR-Off` = `1`, expression as
    above (or a single prefix). Enable it to switch SSR off.
 5. Optional CPU cap: add `wrangler.toml` with `pages_build_output_dir =
-   "dist"`, the project's current compatibility date/flags and env vars
+"dist"`, the project's current compatibility date/flags and env vars
    (copied from the dashboard first: the file replaces them), and
    `[limits] cpu_ms = 500`. Warm renders measure 30-100 ms locally, a cold
    isolate's first render ~350 ms (x1.5-2.5 on Workers).
@@ -244,14 +244,14 @@ serves the static shell if the Function dies (exception or CPU limit).
 
 ## Measured (local, Node 22 on Apple Silicon; Workers run ~1.5-2.5x slower)
 
-| Page | Warm render CPU (median / max) | HTML |
-| --- | --- | --- |
-| Listing | 64 / 97 ms | 310 KB (35 KB gzip) |
-| Shop (listings tab) | 30-62 / 46-91 ms | 230-430 KB |
-| Shop (reviews tab) | 34 / 41 ms | 234 KB |
-| Org | 44-55 / 66-100 ms | 263 KB |
-| User | 34 / 64 ms | 186 KB |
-| Unknown entity | 2 ms | (bridge 404) |
+| Page                | Warm render CPU (median / max) | HTML                |
+| ------------------- | ------------------------------ | ------------------- |
+| Listing             | 64 / 97 ms                     | 310 KB (35 KB gzip) |
+| Shop (listings tab) | 30-62 / 46-91 ms               | 230-430 KB          |
+| Shop (reviews tab)  | 34 / 41 ms                     | 234 KB              |
+| Org                 | 44-55 / 66-100 ms              | 263 KB              |
+| User                | 34 / 64 ms                     | 186 KB              |
+| Unknown entity      | 2 ms                           | (bridge 404)        |
 
 First render in a fresh isolate adds ~250-300 ms (evaluating the app).
 `wrangler check startup --pages`: 13.9 ms active (bundle 15.5 MiB, 2.9 MiB
@@ -262,12 +262,12 @@ gzip). On the preview: misses 0.5-1.8 s to first byte (API calls), hits
 
 Assumes ~90 ms CPU per render on Workers (measured x1.7) and ~2 ms per hit.
 
-| Entity page loads / month | Renders | CPU-ms | Monthly |
-| --- | --- | --- | --- |
-| 1M, 50% hits | 0.5M | 46M | $5.32 |
-| 3M (the bridge's Free ceiling), 50% hits | 1.5M | 138M | $7.16 |
-| + one aggressive crawler, every entity sitemap URL (~40k) daily | +1.2M | +108M | +$2.16 |
-| Worst case: 10 such crawlers, no cache benefit | 12M | 1.1B | ~$27 |
+| Entity page loads / month                                       | Renders | CPU-ms | Monthly |
+| --------------------------------------------------------------- | ------- | ------ | ------- |
+| 1M, 50% hits                                                    | 0.5M    | 46M    | $5.32   |
+| 3M (the bridge's Free ceiling), 50% hits                        | 1.5M    | 138M   | $7.16   |
+| + one aggressive crawler, every entity sitemap URL (~40k) daily | +1.2M   | +108M  | +$2.16  |
+| Worst case: 10 such crawlers, no cache benefit                  | 12M     | 1.1B   | ~$27    |
 
 Origin load is the bigger risk in the crawler rows (3-5 API calls per
 render, edge-cached 60 s): use the WAF rule and robots crawl-delay.

@@ -5,12 +5,23 @@
 import React from "react"
 import { Box, Alert, Grid, Typography } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetActiveVersionsQuery, useGetMissionDetailQuery } from "../../store/api/v2/market"
+import {
+  useGetActiveVersionsQuery,
+  useGetMissionDetailQuery,
+} from "../../store/api/v2/market"
 import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
-import { missionGiver, missionSummaryLine, missionTitle, readableMissionText } from "../../seo/missionText"
+import {
+  missionGiver,
+  missionSummaryLine,
+  missionTitle,
+  readableMissionText,
+} from "../../seo/missionText"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { MissionHeaderChips, MissionDetailTabs } from "../../components/game-data/MissionDetailContent"
+import {
+  MissionHeaderChips,
+  MissionDetailTabs,
+} from "../../components/game-data/MissionDetailContent"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { FRONTEND_URL } from "../../util/constants"
 import { GAME_DATA_PATHS } from "../../routes/paths"
@@ -32,7 +43,10 @@ export function MissionDetail() {
   const m = data?.mission
 
   const { data: versions } = useGetActiveVersionsQuery()
-  const head = data && m && slug ? buildMissionHead(data, slug, FRONTEND_URL, versions?.LIVE) : null
+  const head =
+    data && m && slug
+      ? buildMissionHead(data, slug, FRONTEND_URL, versions?.LIVE)
+      : null
   const seoTitle = head?.title ?? "Mission Detail | SC Market"
   const seoDescription = head ? headDescription(head) : ""
 
@@ -41,19 +55,35 @@ export function MissionDetail() {
       title={seoTitle}
       description={seoDescription}
       canonicalUrl={`/missions/${slug}`}
-      headerTitle={m ? missionTitle(m) : t("missions.detail.header", "Mission Detail")}
+      headerTitle={
+        m ? missionTitle(m) : t("missions.detail.header", "Mission Detail")
+      }
       breadcrumbs={[
         { label: "Missions", href: GAME_DATA_PATHS.missions },
         // The giver's hub (as in the page's BreadcrumbList JSON-LD).
         ...(data?.hubs?.giver
           ? [
               {
-                label: missionHubText({ kind: "givers", name: data.hubs.giver.name, mission_count: data.hubs.giver.mission_count }, t).heading,
-                href: GAME_DATA_PATHS.missionHub("givers", data.hubs.giver.slug),
+                label: missionHubText(
+                  {
+                    kind: "givers",
+                    name: data.hubs.giver.name,
+                    mission_count: data.hubs.giver.mission_count,
+                  },
+                  t,
+                ).heading,
+                href: GAME_DATA_PATHS.missionHub(
+                  "givers",
+                  data.hubs.giver.slug,
+                ),
               },
             ]
           : []),
-        { label: m ? readableMissionText(m.mission_name, missionGiver(m)) : "Detail" },
+        {
+          label: m
+            ? readableMissionText(m.mission_name, missionGiver(m))
+            : "Detail",
+        },
       ]}
       isLoading={isLoading}
       error={error || undefined}
@@ -80,7 +110,10 @@ export function MissionDetail() {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
             {missionSummaryLine(m, data.blueprint_rewards)}
           </Typography>
-          <MissionDetailTabs data={data} onBlueprintClick={(id) => navigate(GAME_DATA_PATHS.blueprint(id))} />
+          <MissionDetailTabs
+            data={data}
+            onBlueprintClick={(id) => navigate(GAME_DATA_PATHS.blueprint(id))}
+          />
           <GameDataFreshness />
         </Grid>
       )}

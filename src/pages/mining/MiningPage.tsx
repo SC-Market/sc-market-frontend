@@ -13,10 +13,14 @@ export function MiningPage() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const tab = location.pathname.includes("/mining/locations") ? "locations" : "ores"
+  const tab = location.pathname.includes("/mining/locations")
+    ? "locations"
+    : "ores"
 
   const handleTabChange = (_: React.SyntheticEvent, value: string) => {
-    navigate(value === "locations" ? "/mining/locations" : "/mining", { replace: true })
+    navigate(value === "locations" ? "/mining/locations" : "/mining", {
+      replace: true,
+    })
   }
 
   return (
@@ -28,7 +32,12 @@ export function MiningPage() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 2 }} variant="fullWidth">
+        <Tabs
+          value={tab}
+          onChange={handleTabChange}
+          sx={{ mb: 2 }}
+          variant="fullWidth"
+        >
           <Tab label={t("mining.ores", "Ores")} value="ores" />
           <Tab label={t("mining.locations", "Locations")} value="locations" />
         </Tabs>

@@ -7,18 +7,29 @@ import "./setup"
  * when that request succeeds.
  */
 import React from "react"
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react"
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import type { Mock } from "vitest"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
-import { mockMutationHook, querySuccess } from "../../../../../__tests__/rtkQueryMocks"
+import {
+  mockMutationHook,
+  querySuccess,
+} from "../../../../../__tests__/rtkQueryMocks"
 import type { GetListingDetailApiResponse } from "../../../../../store/api/v2/market"
 
 type MarketV2Module = typeof import("../../../../../store/api/v2/market")
 type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const issueAlert = vi.fn()
@@ -49,13 +60,22 @@ vi.mock("../../../../../store/api/v2/market", () => ({
 
 import { CreateLotDialogV2 } from "../CreateLotDialogV2"
 
-function detail(listingId: string, itemIds: string[]): GetListingDetailApiResponse {
+function detail(
+  listingId: string,
+  itemIds: string[],
+): GetListingDetailApiResponse {
   return {
-    listing: { listing_id: listingId } as GetListingDetailApiResponse["listing"],
+    listing: {
+      listing_id: listingId,
+    } as GetListingDetailApiResponse["listing"],
     seller: {} as GetListingDetailApiResponse["seller"],
     items: itemIds.map((item_id) => ({
       item_id,
-      game_item: { id: `gi-${item_id}`, name: `Item ${item_id}`, type: "weapon" },
+      game_item: {
+        id: `gi-${item_id}`,
+        name: `Item ${item_id}`,
+        type: "weapon",
+      },
       pricing_mode: "unified",
       variants: [],
     })) as GetListingDetailApiResponse["items"],
@@ -93,7 +113,9 @@ describe("CreateLotDialogV2", () => {
       "listing-1": detail("listing-1", ["item-1"]),
       "listing-2": detail("listing-2", ["item-2"]),
     }
-    h.createTrigger = vi.fn(() => ({ unwrap: () => Promise.resolve({ lot: {} }) }))
+    h.createTrigger = vi.fn(() => ({
+      unwrap: () => Promise.resolve({ lot: {} }),
+    }))
   })
 
   it("creates the lot on the chosen listing's item and reports success", async () => {
@@ -113,7 +135,10 @@ describe("CreateLotDialogV2", () => {
       },
     })
     await waitFor(() =>
-      expect(issueAlert).toHaveBeenCalledWith({ message: "Lot created", severity: "success" }),
+      expect(issueAlert).toHaveBeenCalledWith({
+        message: "Lot created",
+        severity: "success",
+      }),
     )
     expect(onClose).toHaveBeenCalled()
   })
@@ -126,7 +151,9 @@ describe("CreateLotDialogV2", () => {
     fireEvent.click(screen.getByRole("button", { name: "Create Lot" }))
 
     await waitFor(() => expect(h.createTrigger).toHaveBeenCalledTimes(1))
-    expect(h.createTrigger.mock.calls[0][0].createStockLotRequest.item_id).toBe("item-2")
+    expect(h.createTrigger.mock.calls[0][0].createStockLotRequest.item_id).toBe(
+      "item-2",
+    )
   })
 
   it("shows the server's reason and stays open when the request fails", async () => {
@@ -134,7 +161,13 @@ describe("CreateLotDialogV2", () => {
       unwrap: () =>
         Promise.reject({
           status: 403,
-          data: { error: { code: "FORBIDDEN", message: "You do not have permission to add stock to this listing" } },
+          data: {
+            error: {
+              code: "FORBIDDEN",
+              message:
+                "You do not have permission to add stock to this listing",
+            },
+          },
         }),
     }))
     renderDialog()
@@ -143,11 +176,14 @@ describe("CreateLotDialogV2", () => {
 
     await waitFor(() =>
       expect(issueAlert).toHaveBeenCalledWith({
-        message: "Failed to create lot: You do not have permission to add stock to this listing",
+        message:
+          "Failed to create lot: You do not have permission to add stock to this listing",
         severity: "error",
       }),
     )
-    expect(issueAlert).not.toHaveBeenCalledWith(expect.objectContaining({ severity: "success" }))
+    expect(issueAlert).not.toHaveBeenCalledWith(
+      expect.objectContaining({ severity: "success" }),
+    )
     expect(onClose).not.toHaveBeenCalled()
   })
 
@@ -155,7 +191,9 @@ describe("CreateLotDialogV2", () => {
     renderDialog()
     fireEvent.click(screen.getByRole("button", { name: "Create Lot" }))
     await waitFor(() =>
-      expect(issueAlert).toHaveBeenCalledWith(expect.objectContaining({ severity: "error" })),
+      expect(issueAlert).toHaveBeenCalledWith(
+        expect.objectContaining({ severity: "error" }),
+      ),
     )
     expect(h.createTrigger).not.toHaveBeenCalled()
   })

@@ -74,9 +74,7 @@ export function usePageOrder(orderId: string): UsePageOrderResult {
       offerSessionQuery.isFetching ||
       notificationsQuery.isFetching,
     error:
-      orderQuery.error ||
-      offerSessionQuery.error ||
-      notificationsQuery.error,
+      orderQuery.error || offerSessionQuery.error || notificationsQuery.error,
     refetch: () => {
       orderQuery.refetch()
       chatQuery.refetch()

@@ -105,14 +105,23 @@ const CreateOrderFormComponent = React.forwardRef<
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const {
-    state, setState,
+    state,
+    setState,
     isLoading,
-    services, service, setService,
-    availabilityRequirement, hasAvailabilitySet, formDisabled,
-    isAvailabilityModalOpen, setIsAvailabilityModalOpen,
-    availabilitySelections, handleSaveAvailability,
-    orderLimits, sellerName,
-    submitOrder, issueAlert,
+    services,
+    service,
+    setService,
+    availabilityRequirement,
+    hasAvailabilitySet,
+    formDisabled,
+    isAvailabilityModalOpen,
+    setIsAvailabilityModalOpen,
+    availabilitySelections,
+    handleSaveAvailability,
+    orderLimits,
+    sellerName,
+    submitOrder,
+    issueAlert,
   } = useCreateOrderForm({
     contractor_id: props.contractor_id,
     assigned_to: props.assigned_to,
@@ -521,7 +530,10 @@ const CreateOrderFormComponent = React.forwardRef<
               label={t("CreateOrderForm.paymentType")}
               value={state.payment_type}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setState({ ...state, payment_type: event.target.value as PaymentType })
+                setState({
+                  ...state,
+                  payment_type: event.target.value as PaymentType,
+                })
               }}
               fullWidth
               aria-required="true"

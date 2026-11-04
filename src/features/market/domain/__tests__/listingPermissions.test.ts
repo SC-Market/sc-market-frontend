@@ -1,14 +1,36 @@
 import { describe, it, expect } from "vitest"
 import { canManageListing } from "../listingPermissions"
 
-const perms = (p: Partial<{ can_manage: boolean; manage_market: boolean; manage_stock: boolean; manage_orders: boolean }>) => ({
-  can_manage: false, manage_market: false, manage_stock: false, manage_orders: false, ...p,
+const perms = (
+  p: Partial<{
+    can_manage: boolean
+    manage_market: boolean
+    manage_stock: boolean
+    manage_orders: boolean
+  }>,
+) => ({
+  can_manage: false,
+  manage_market: false,
+  manage_stock: false,
+  manage_orders: false,
+  ...p,
 })
 
 describe("canManageListing", () => {
   const myShops = [
-    { shop_id: "own", permissions: perms({ can_manage: true, manage_market: true, manage_stock: true, manage_orders: true }) },
-    { shop_id: "org-market", permissions: perms({ can_manage: true, manage_market: true }) },
+    {
+      shop_id: "own",
+      permissions: perms({
+        can_manage: true,
+        manage_market: true,
+        manage_stock: true,
+        manage_orders: true,
+      }),
+    },
+    {
+      shop_id: "org-market",
+      permissions: perms({ can_manage: true, manage_market: true }),
+    },
     { shop_id: "org-stock", permissions: perms({ manage_stock: true }) },
     { shop_id: "org-orders", permissions: perms({ manage_orders: true }) },
     { shop_id: "org-member", permissions: perms({}) },

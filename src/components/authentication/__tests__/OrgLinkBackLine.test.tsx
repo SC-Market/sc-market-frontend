@@ -5,7 +5,9 @@ import { OrgLinkBackLine, orgLinkBackUrl } from "../OrgLinkBackLine"
 
 // English catalog t() (src/test/mocks/reactI18next).
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const LINE =

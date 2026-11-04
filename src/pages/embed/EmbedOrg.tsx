@@ -32,7 +32,10 @@ import {
 } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
 import { MARKET_PATHS, ORG_PATHS } from "../../routes/paths"
-import { orgFeaturedListingsArgs, ratingLabel } from "../../features/storefront/domain"
+import {
+  orgFeaturedListingsArgs,
+  ratingLabel,
+} from "../../features/storefront/domain"
 import { markRouterReady } from "../../routes/definePage"
 import { useFormatters } from "../../util/format"
 
@@ -56,7 +59,10 @@ function ListingTile(props: { listing: ListingSearchResult }) {
   const fmt = useFormatters()
   const { listing } = props
   return (
-    <Out to={MARKET_PATHS.listing(listing.listing_id, listing.title)} sx={{ display: "block", minWidth: 0 }}>
+    <Out
+      to={MARKET_PATHS.listing(listing.listing_id, listing.title)}
+      sx={{ display: "block", minWidth: 0 }}
+    >
       <Box
         sx={{
           borderRadius: 1,
@@ -71,10 +77,21 @@ function ListingTile(props: { listing: ListingSearchResult }) {
           alt=""
           loading="lazy"
           referrerPolicy="no-referrer"
-          sx={{ width: "100%", aspectRatio: "4 / 3", objectFit: "cover", display: "block", bgcolor: "action.hover" }}
+          sx={{
+            width: "100%",
+            aspectRatio: "4 / 3",
+            objectFit: "cover",
+            display: "block",
+            bgcolor: "action.hover",
+          }}
         />
         <Box sx={{ p: 1 }}>
-          <Typography variant="body2" color="text.secondary" noWrap fontWeight={600}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            noWrap
+            fontWeight={600}
+          >
             {listing.title}
           </Typography>
           <Typography variant="caption" color="text.primary">
@@ -90,7 +107,10 @@ export function EmbedOrg(props: { variant?: "card" | "listings" }) {
   const variant = props.variant ?? "card"
   const { t } = useTranslation()
   const { id: spectrum_id = "" } = useParams<{ id: string }>()
-  const storefront = useGetOrgStorefrontQuery({ spectrumId: spectrum_id }, { skip: !spectrum_id })
+  const storefront = useGetOrgStorefrontQuery(
+    { spectrumId: spectrum_id },
+    { skip: !spectrum_id },
+  )
   const listings = useSearchListingsQuery(
     orgFeaturedListingsArgs(spectrum_id, variant === "listings" ? 12 : 3),
     { skip: !spectrum_id },
@@ -130,24 +150,45 @@ export function EmbedOrg(props: { variant?: "card" | "listings" }) {
         ) : (
           <Stack spacing={1.5}>
             <Stack direction="row" spacing={1.5} alignItems="center">
-              <Avatar src={org?.logo_url ?? undefined} alt="" variant="rounded" sx={{ width: 48, height: 48 }} />
+              <Avatar
+                src={org?.logo_url ?? undefined}
+                alt=""
+                variant="rounded"
+                sx={{ width: 48, height: 48 }}
+              />
               <Box sx={{ minWidth: 0, flex: 1 }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Typography variant="subtitle1" color="text.secondary" fontWeight={700} noWrap>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    fontWeight={700}
+                    noWrap
+                  >
                     <Out to={orgPath}>{org?.name ?? spectrum_id}</Out>
                   </Typography>
                   {org?.verified && (
                     <VerifiedRounded
                       color="primary"
                       fontSize="small"
-                      titleAccess={t("storefront.verified.label", "Verified org")}
+                      titleAccess={t(
+                        "storefront.verified.label",
+                        "Verified org",
+                      )}
                     />
                   )}
                 </Stack>
                 {org && (
-                  <Typography variant="caption" color="text.primary" component="p" noWrap>
+                  <Typography
+                    variant="caption"
+                    color="text.primary"
+                    component="p"
+                    noWrap
+                  >
                     {[
-                      t("storefront.embed.completed", { n: org.trust.completed_orders, defaultValue: "{{n}} completed orders" }),
+                      t("storefront.embed.completed", {
+                        n: org.trust.completed_orders,
+                        defaultValue: "{{n}} completed orders",
+                      }),
                       ratingLabel(org.trust.avg_rating)
                         ? t("storefront.embed.rating", {
                             rating: ratingLabel(org.trust.avg_rating),
@@ -155,7 +196,10 @@ export function EmbedOrg(props: { variant?: "card" | "listings" }) {
                             defaultValue: "{{rating}}★ ({{n}})",
                           })
                         : null,
-                      t("storefront.embed.listings", { n: org.trust.active_listings, defaultValue: "{{n}} listings" }),
+                      t("storefront.embed.listings", {
+                        n: org.trust.active_listings,
+                        defaultValue: "{{n}} listings",
+                      }),
                     ]
                       .filter(Boolean)
                       .join(" · ")}

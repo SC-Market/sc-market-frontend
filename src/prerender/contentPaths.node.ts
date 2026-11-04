@@ -34,7 +34,10 @@ export function changelogPathsFromDisk(contentDir: string): string[] {
   for (const file of readdirSync(dir).sort().reverse()) {
     if (!file.endsWith(".md")) continue
     const rel = `changelog/${file}`
-    if (changelogStatus(readFileSync(path.join(dir, file), "utf8"), rel) === "published") {
+    if (
+      changelogStatus(readFileSync(path.join(dir, file), "utf8"), rel) ===
+      "published"
+    ) {
       paths.push(CHANGELOG_PATHS.entry(file.slice(0, -3)))
     }
   }

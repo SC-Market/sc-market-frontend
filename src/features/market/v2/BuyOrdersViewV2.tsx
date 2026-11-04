@@ -24,7 +24,12 @@ import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLay
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
-import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar"
+import {
+  UnifiedSearchBar,
+  marketParamsToTokens,
+  marketTokensToParams,
+  type SearchToken,
+} from "../../../components/game-data/UnifiedSearchBar"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { usePageReady } from "../../../components/metadata/PageReady"
@@ -50,16 +55,28 @@ export function BuyOrdersViewV2() {
   const [perPage, setPerPage] = useState(48)
   const ref = useRef<HTMLDivElement>(null)
 
-  const searchText = searchParams.get("text") || searchParams.get("query") || undefined
-  const marketSearchTokens = useMemo(() => marketParamsToTokens(searchParams), [searchParams])
+  const searchText =
+    searchParams.get("text") || searchParams.get("query") || undefined
+  const marketSearchTokens = useMemo(
+    () => marketParamsToTokens(searchParams),
+    [searchParams],
+  )
 
-  const handleMarketTokensChange = useCallback((tokens: SearchToken[]) => {
-    const params = marketTokensToParams(tokens)
-    setSearchParams(params)
-    setPage(0)
-  }, [setSearchParams])
+  const handleMarketTokensChange = useCallback(
+    (tokens: SearchToken[]) => {
+      const params = marketTokensToParams(tokens)
+      setSearchParams(params)
+      setPage(0)
+    },
+    [setSearchParams],
+  )
 
-  const { data, isFetching, currentData, isLoading: pageIsLoading } = useSearchBuyOrdersQuery({
+  const {
+    data,
+    isFetching,
+    currentData,
+    isLoading: pageIsLoading,
+  } = useSearchBuyOrdersQuery({
     page: page + 1,
     pageSize: perPage,
     text: searchText,
@@ -96,39 +113,37 @@ export function BuyOrdersViewV2() {
     <>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid container spacing={1}>
-        {loading
-          ? new Array(Math.min(perPage, LISTING_GRID_SKELETON_COUNT))
-              .fill(undefined)
-              .map((_, i) => (
-                <Grid item {...gridBreakpoints} key={i}>
-                  <ListingSkeleton index={i} />
-                </Grid>
-              ))
-          : aggregates.length === 0
-            ? (
-              <Grid item xs={12}>
-                <EmptyListings
-                  isSearchResult={false}
-                  showCreateAction={false}
-                  action={{
-                    label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
-                    onClick: () => navigate(MARKET_PATHS.buyOrderCreate),
-                    variant: "contained" as const,
-                  }}
-                />
+        {loading ? (
+          new Array(Math.min(perPage, LISTING_GRID_SKELETON_COUNT))
+            .fill(undefined)
+            .map((_, i) => (
+              <Grid item {...gridBreakpoints} key={i}>
+                <ListingSkeleton index={i} />
               </Grid>
-            )
-            : viewMode === "list"
-              ? (
-                <Grid item xs={12}>
-                  <BuyOrdersTableV2 aggregates={aggregates} />
-                </Grid>
-              )
-              : aggregates.map((agg, index) => (
-              <Grid item {...gridBreakpoints} key={agg.item_id}>
-                <BuyOrderAggregateCard aggregate={agg} index={index} />
-              </Grid>
-            ))}
+            ))
+        ) : aggregates.length === 0 ? (
+          <Grid item xs={12}>
+            <EmptyListings
+              isSearchResult={false}
+              showCreateAction={false}
+              action={{
+                label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
+                onClick: () => navigate(MARKET_PATHS.buyOrderCreate),
+                variant: "contained" as const,
+              }}
+            />
+          </Grid>
+        ) : viewMode === "list" ? (
+          <Grid item xs={12}>
+            <BuyOrdersTableV2 aggregates={aggregates} />
+          </Grid>
+        ) : (
+          aggregates.map((agg, index) => (
+            <Grid item {...gridBreakpoints} key={agg.item_id}>
+              <BuyOrderAggregateCard aggregate={agg} index={index} />
+            </Grid>
+          ))
+        )}
       </Grid>
       <Divider light sx={{ my: 1 }} />
       <ListingPagination
@@ -185,7 +200,14 @@ export function BuyOrdersViewV2() {
                 <MarketSearchAreaV2 />
               </Paper>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box sx={{ mb: 1.5, display: "flex", gap: 1, alignItems: "center" }}>
+                <Box
+                  sx={{
+                    mb: 1.5,
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                  }}
+                >
                   <Box sx={{ flex: 1 }}>
                     <UnifiedSearchBar
                       tokens={marketSearchTokens}

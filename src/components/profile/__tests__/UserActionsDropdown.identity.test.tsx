@@ -24,8 +24,14 @@ vi.mock("../../../features/profile/hooks/useUserActions", () => ({
     orgBlocklistLoading: false,
   }),
 }))
-vi.mock("../BlockUserButton", () => ({ BlockUserButton: () => null, BlockUserForOrgButton: () => null }))
-vi.mock("../UnblockUserButton", () => ({ UnblockUserButton: () => null, UnblockUserForOrgButton: () => null }))
+vi.mock("../BlockUserButton", () => ({
+  BlockUserButton: () => null,
+  BlockUserForOrgButton: () => null,
+}))
+vi.mock("../UnblockUserButton", () => ({
+  UnblockUserButton: () => null,
+  UnblockUserForOrgButton: () => null,
+}))
 
 import { UserActionsDropdown } from "../UserActionsDropdown"
 
@@ -34,7 +40,9 @@ function open(isAdmin: boolean) {
   render(
     <ThemeProvider theme={mainTheme}>
       <MemoryRouter>
-        <UserActionsDropdown user={{ username: "Stale Handle", rsi_confirmed: true } as never} />
+        <UserActionsDropdown
+          user={{ username: "Stale Handle", rsi_confirmed: true } as never}
+        />
       </MemoryRouter>
     </ThemeProvider>,
   )

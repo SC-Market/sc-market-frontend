@@ -16,7 +16,10 @@ import type { ShopResponse } from "../../../../store/api/v2/market"
 const { updateShop, issueAlert, state, query, mutation } = vi.hoisted(() => ({
   updateShop: vi.fn(),
   issueAlert: vi.fn(),
-  state: { shop: {} as ShopResponse, settings: [] as Array<Record<string, unknown>> },
+  state: {
+    shop: {} as ShopResponse,
+    settings: [] as Array<Record<string, unknown>>,
+  },
   query: () => ({ data: undefined, isLoading: false }),
   mutation: () => [vi.fn(), { isLoading: false }],
 }))
@@ -32,7 +35,10 @@ vi.mock("../../../../store/api/v2/market", () => ({
   useGetShopWebhooksQuery: query,
   useCreateShopWebhookMutation: mutation,
   useDeleteShopWebhookMutation: mutation,
-  useGetShopOrderSettingsQuery: () => ({ data: state.settings, isLoading: false }),
+  useGetShopOrderSettingsQuery: () => ({
+    data: state.settings,
+    isLoading: false,
+  }),
   useUpsertShopOrderSettingMutation: mutation,
   useDeleteShopOrderSettingMutation: mutation,
   useTransferShopMutation: mutation,
@@ -58,9 +64,13 @@ vi.mock("../ShopBlocklist", () => ({ ShopBlocklistSection: () => null }))
 vi.mock("../../../discord-install/LinkedDiscordServers", () => ({
   LinkedDiscordServers: () => null,
 }))
-vi.mock("../ShopStorefrontSection", () => ({ ShopStorefrontSection: () => null }))
+vi.mock("../ShopStorefrontSection", () => ({
+  ShopStorefrontSection: () => null,
+}))
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: (props: { children: React.ReactNode }) => <div>{props.children}</div>,
+  StandardPageLayout: (props: { children: React.ReactNode }) => (
+    <div>{props.children}</div>
+  ),
 }))
 
 import { ShopSettings } from "../ShopSettings"
@@ -89,7 +99,12 @@ function shop(overrides: Partial<ShopResponse>): ShopResponse {
     official_server_id: null,
     discord_thread_channel_id: null,
     badge_ids: [],
-    permissions: { can_manage: true, manage_market: true, manage_stock: true, manage_orders: true },
+    permissions: {
+      can_manage: true,
+      manage_market: true,
+      manage_stock: true,
+      manage_orders: true,
+    },
     ...overrides,
   } as ShopResponse
 }
@@ -124,15 +139,23 @@ describe("Shop Settings › Stock subtraction timing", () => {
 
   it("describes each option by what happens to an order (no 'received/fulfilled' mix-up)", () => {
     renderSettings()
-    expect(screen.getByLabelText("When you accept the order (default)")).toBeChecked()
-    expect(screen.getByLabelText("As soon as the order arrives, before you accept it")).not.toBeChecked()
+    expect(
+      screen.getByLabelText("When you accept the order (default)"),
+    ).toBeChecked()
+    expect(
+      screen.getByLabelText(
+        "As soon as the order arrives, before you accept it",
+      ),
+    ).not.toBeChecked()
     expect(screen.getByLabelText("Never (unlimited supply)")).not.toBeChecked()
     expect(screen.queryByText(/received\/fulfilled/)).not.toBeInTheDocument()
   })
 
   it("has a ? HelpTip that explains all three values", () => {
     renderSettings()
-    const tip = screen.getByRole("button", { name: "Help: Stock subtraction timing" })
+    const tip = screen.getByRole("button", {
+      name: "Help: Stock subtraction timing",
+    })
     fireEvent.click(tip)
     const text = screen.getByRole("tooltip").textContent ?? ""
     expect(text).toContain("When you accept (default)")
@@ -149,6 +172,8 @@ describe("Shop Settings › Stock subtraction timing", () => {
   it("a disabled or unknown saved row shows the default, which is what orders use", () => {
     state.settings = [timingRow("on_received", false)]
     renderSettings()
-    expect(screen.getByLabelText("When you accept the order (default)")).toBeChecked()
+    expect(
+      screen.getByLabelText("When you accept the order (default)"),
+    ).toBeChecked()
   })
 })

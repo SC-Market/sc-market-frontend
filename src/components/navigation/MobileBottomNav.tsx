@@ -206,7 +206,6 @@ export function MobileBottomNav() {
     const userTabs = saved ? JSON.parse(saved) : null
     const tabIds = userTabs || defaultTabs
 
-
     return tabIds
       .map((id: string) => getTabConfig(id))
       .filter((tab: NavTabConfig | null): tab is NavTabConfig => {

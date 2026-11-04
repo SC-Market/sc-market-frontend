@@ -27,7 +27,10 @@ class FakeRewriter implements HtmlRewriterLike {
     return this
   }
   transform(response: Response): Response {
-    return new Response(`REWRITTEN ${FakeRewriter.selectors.join(",")}`, response)
+    return new Response(
+      `REWRITTEN ${FakeRewriter.selectors.join(",")}`,
+      response,
+    )
   }
 }
 
@@ -43,18 +46,30 @@ class MemoryCache {
 
 type Upstream = (url: string, init?: RequestInit) => Promise<Response>
 
-function setup(upstream: Upstream, env: Record<string, string | undefined> = {}) {
+function setup(
+  upstream: Upstream,
+  env: Record<string, string | undefined> = {},
+) {
   const fetchSpy = vi.fn(upstream)
   const cache = new MemoryCache()
   const pending: Promise<unknown>[] = []
   const next = vi.fn(async () => new Response("NEXT", { status: 200 }))
-  const assets = vi.fn(async (_input: Request | URL | string) => new Response(SHELL, { headers: { "Content-Type": "text/html; charset=utf-8" } }))
+  const assets = vi.fn(
+    async (_input: Request | URL | string) =>
+      new Response(SHELL, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      }),
+  )
   const runtime: BridgeRuntime = {
     HTMLRewriter: FakeRewriter,
     cache: cache as unknown as Cache,
     fetch: fetchSpy as unknown as typeof fetch,
   }
-  const run = async (path: string, init: RequestInit = {}, origin = "https://sc-market.space") => {
+  const run = async (
+    path: string,
+    init: RequestInit = {},
+    origin = "https://sc-market.space",
+  ) => {
     const response = await handleBridgeRequest(
       {
         request: new Request(`${origin}${path}`, init),
@@ -70,8 +85,13 @@ function setup(upstream: Upstream, env: Record<string, string | undefined> = {})
   return { run, fetchSpy, next, assets, cache }
 }
 
-const json = (body: unknown, status = 200) =>
-  async () => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } })
+const json =
+  (body: unknown, status = 200) =>
+  async () =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    })
 
 beforeEach(() => {
   FakeRewriter.selectors = []
@@ -79,7 +99,11 @@ beforeEach(() => {
 
 describe("handleBridgeRequest", () => {
   it("passes white-label org domains through untouched, on every route", async () => {
-    for (const path of ["/", "/market/71012eb4--pristine-medal", "/wiki/ships"]) {
+    for (const path of [
+      "/",
+      "/market/71012eb4--pristine-medal",
+      "/wiki/ships",
+    ]) {
       const { run, fetchSpy, next, assets } = setup(json(f.listing()))
       const res = await run(path, {}, "https://shop.example-org.com")
       expect(await res.text()).toBe("NEXT")
@@ -95,12 +119,19 @@ describe("handleBridgeRequest", () => {
 
     expect(res.status).toBe(200)
     expect(await res.text()).toContain("REWRITTEN")
-    expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root", "head"]))
+    expect(FakeRewriter.selectors).toEqual(
+      expect.arrayContaining(["title", "div#root", "head"]),
+    )
     expect(res.headers.get("Cache-Control")).toBe("no-cache")
     expect(res.headers.get("Content-Type")).toBe("text/html; charset=utf-8")
-    expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://api.sc-market.space")
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(
+      "https://api.sc-market.space",
+    )
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
-    expect(fetchSpy).toHaveBeenCalledWith(`${API}/api/v2/listings/71012eb4--pristine-medal`, expect.anything())
+    expect(fetchSpy).toHaveBeenCalledWith(
+      `${API}/api/v2/listings/71012eb4--pristine-medal`,
+      expect.anything(),
+    )
     // The SPA shell, by its pretty path (/ is the prerendered homepage).
     const shellRequest = assets.mock.calls[0][0] as Request
     expect(new URL(shellRequest.url).pathname).toBe(SHELL_PATH)
@@ -109,7 +140,11 @@ describe("handleBridgeRequest", () => {
   it("never forwards the visitor's cookies or headers to the API", async () => {
     const { run, fetchSpy } = setup(json(f.listing()))
     await run("/market/abc--x", {
-      headers: { Cookie: "scmarket.sid=secret", Authorization: "Bearer t", "X-Forwarded-For": "1.2.3.4" },
+      headers: {
+        Cookie: "scmarket.sid=secret",
+        Authorization: "Bearer t",
+        "X-Forwarded-For": "1.2.3.4",
+      },
     })
     const init = fetchSpy.mock.calls[0][1] as RequestInit
     expect(init.headers).toEqual({ Accept: "application/json" })
@@ -126,7 +161,10 @@ describe("handleBridgeRequest", () => {
   })
 
   it.each([
-    ["/contractor/ZZBOGUSZZ", { error: { code: "VALIDATION_ERROR", message: "Invalid contractor" } }],
+    [
+      "/contractor/ZZBOGUSZZ",
+      { error: { code: "VALIDATION_ERROR", message: "Invalid contractor" } },
+    ],
     ["/user/zzbogususerzz", { error: "Invalid user" }],
   ])("v1 400 (%s) → 404", async (path, body) => {
     const { run } = setup(json(body, 400))
@@ -142,16 +180,24 @@ describe("handleBridgeRequest", () => {
 
   it.each([
     ["5xx", json({ error: "boom" }, 500)],
-    ["network error", async () => { throw new TypeError("fetch failed") }],
+    [
+      "network error",
+      async () => {
+        throw new TypeError("fetch failed")
+      },
+    ],
     ["invalid JSON", async () => new Response("<html>", { status: 200 })],
     ["unexpected shape", json({ nothing: true })],
-  ] as [string, Upstream][])("%s → unmodified shell, 200", async (_name, upstream) => {
-    const { run } = setup(upstream)
-    const res = await run("/market/abc--x")
-    expect(res.status).toBe(200)
-    expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
-    expect(await res.text()).toBe(SHELL)
-  })
+  ] as [string, Upstream][])(
+    "%s → unmodified shell, 200",
+    async (_name, upstream) => {
+      const { run } = setup(upstream)
+      const res = await run("/market/abc--x")
+      expect(res.status).toBe(200)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
+      expect(await res.text()).toBe(SHELL)
+    },
+  )
 
   describe("timeout", () => {
     beforeEach(() => vi.useFakeTimers())
@@ -160,7 +206,9 @@ describe("handleBridgeRequest", () => {
     it(`aborts the API call after ${API_TIMEOUT_MS} ms and serves the shell`, async () => {
       const hang: Upstream = (_url, init) =>
         new Promise((_resolve, reject) => {
-          init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")))
+          init?.signal?.addEventListener("abort", () =>
+            reject(new DOMException("aborted", "AbortError")),
+          )
         })
       const { run } = setup(hang)
       const pending = run("/wiki/ships/x")
@@ -172,7 +220,9 @@ describe("handleBridgeRequest", () => {
   })
 
   it("fails open when the API origin isn't configured", async () => {
-    const { run, fetchSpy } = setup(json(f.listing()), { VITE_BACKEND_URL: undefined })
+    const { run, fetchSpy } = setup(json(f.listing()), {
+      VITE_BACKEND_URL: undefined,
+    })
     const res = await run("/market/abc--x")
     expect(await res.text()).toBe(SHELL)
     expect(fetchSpy).not.toHaveBeenCalled()
@@ -200,15 +250,19 @@ describe("handleBridgeRequest", () => {
     expect(fetchSpy).toHaveBeenCalledTimes(2)
   })
 
-  it.each(["/market/cart", "/market/multiple/abc--x/edit", "/shops/create", "/wiki/refinery", "/favicon.ico", "/login"])(
-    "leaves %s to Pages (next)",
-    async (path) => {
-      const { run, next, fetchSpy } = setup(json(f.listing()))
-      expect(await (await run(path)).text()).toBe("NEXT")
-      expect(next).toHaveBeenCalled()
-      expect(fetchSpy).not.toHaveBeenCalled()
-    },
-  )
+  it.each([
+    "/market/cart",
+    "/market/multiple/abc--x/edit",
+    "/shops/create",
+    "/wiki/refinery",
+    "/favicon.ico",
+    "/login",
+  ])("leaves %s to Pages (next)", async (path) => {
+    const { run, next, fetchSpy } = setup(json(f.listing()))
+    expect(await (await run(path)).text()).toBe("NEXT")
+    expect(next).toHaveBeenCalled()
+    expect(fetchSpy).not.toHaveBeenCalled()
+  })
 
   it("leaves non-GET requests to Pages", async () => {
     const { run, next } = setup(json(f.listing()))
@@ -218,7 +272,9 @@ describe("handleBridgeRequest", () => {
 
   it("answers HEAD without a body", async () => {
     const { run } = setup(json(f.listing()))
-    const res = await run("/market/71012eb4--pristine-medal", { method: "HEAD" })
+    const res = await run("/market/71012eb4--pristine-medal", {
+      method: "HEAD",
+    })
     expect(res.status).toBe(200)
     expect(res.body).toBeNull()
   })
@@ -227,62 +283,90 @@ describe("handleBridgeRequest", () => {
     const { run, fetchSpy } = setup(json(f.listing()))
     const res = await run("/market/71012eb4--pristine-medal/?utm_source=x")
     expect(res.status).toBe(301)
-    expect(res.headers.get("Location")).toBe("https://sc-market.space/market/71012eb4--pristine-medal?utm_source=x")
+    expect(res.headers.get("Location")).toBe(
+      "https://sc-market.space/market/71012eb4--pristine-medal?utm_source=x",
+    )
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
-  it.each(["/market/71012eb4-aaaa-bbbb-cccc-000000000000", "/market/71012eb4--old-title"])(
-    "301s %s (bare UUID, stale slug) to the canonical slug",
-    async (path) => {
-      const { run } = setup(json(f.listing()))
-      const res = await run(path)
-      expect(res.status).toBe(301)
-      expect(res.headers.get("Location")).toBe("https://sc-market.space/market/71012eb4--pristine-medal")
-    },
-  )
+  it.each([
+    "/market/71012eb4-aaaa-bbbb-cccc-000000000000",
+    "/market/71012eb4--old-title",
+  ])("301s %s (bare UUID, stale slug) to the canonical slug", async (path) => {
+    const { run } = setup(json(f.listing()))
+    const res = await run(path)
+    expect(res.status).toBe(301)
+    expect(res.headers.get("Location")).toBe(
+      "https://sc-market.space/market/71012eb4--pristine-medal",
+    )
+  })
 
   it.each([
     ["sold", 404],
     ["expired", 404],
     ["inactive", 404],
     ["cancelled", 410],
-  ])("a %s listing is a %i with noindex, never a soft 404", async (status, code) => {
-    const gone = f.listing()
-    gone.listing.status = status as typeof gone.listing.status
-    const { run } = setup(json(gone))
-    const res = await run("/market/71012eb4--pristine-medal")
-    expect(res.status).toBe(code)
-    expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
-    expect(FakeRewriter.selectors).not.toContain("div#root")
-  })
-
-  it.each(["/user/JackedCitizen/market", "/user/JackedCitizen/services", "/shops/hades-svk-shop/bogus", "/contractor/NARCO/xyz"])(
-    "an unknown profile tab (%s) is a 404",
-    async (path) => {
-      const body = path.startsWith("/user") ? f.user() : path.startsWith("/shops") ? f.shop() : f.contractor()
-      const { run } = setup(json(body))
-      expect((await run(path)).status).toBe(404)
+  ])(
+    "a %s listing is a %i with noindex, never a soft 404",
+    async (status, code) => {
+      const gone = f.listing()
+      gone.listing.status = status as typeof gone.listing.status
+      const { run } = setup(json(gone))
+      const res = await run("/market/71012eb4--pristine-medal")
+      expect(res.status).toBe(code)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+      expect(FakeRewriter.selectors).not.toContain("div#root")
     },
   )
 
+  it.each([
+    "/user/JackedCitizen/market",
+    "/user/JackedCitizen/services",
+    "/shops/hades-svk-shop/bogus",
+    "/contractor/NARCO/xyz",
+  ])("an unknown profile tab (%s) is a 404", async (path) => {
+    const body = path.startsWith("/user")
+      ? f.user()
+      : path.startsWith("/shops")
+        ? f.shop()
+        : f.contractor()
+    const { run } = setup(json(body))
+    expect((await run(path)).status).toBe(404)
+  })
+
   it("a search/filter query on a bridged page is noindex (canonical stays clean)", async () => {
-    const { run } = setup(json({ listings: [], total: 0, page: 1, page_size: 48 }))
+    const { run } = setup(
+      json({ listings: [], total: 0, page: 1, page_size: 48 }),
+    )
     const res = await run("/market?text=gold&sort_by=price")
     expect(res.status).toBe(200)
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
   })
 
   it("serves ?page=N of a live hub from that API page; past the end is a 404", async () => {
-    const { run, fetchSpy } = setup(json({ listings: [{ listing_id: "l1", title: "L1", shop_name: "S", price_min: 5 }], total: 200, page: 3, page_size: 48 }))
+    const { run, fetchSpy } = setup(
+      json({
+        listings: [
+          { listing_id: "l1", title: "L1", shop_name: "S", price_min: 5 },
+        ],
+        total: 200,
+        page: 3,
+        page_size: 48,
+      }),
+    )
     const res = await run("/market?page=3")
     expect(res.status).toBe(200)
-    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/listings/search?page=3&page_size=48&quantity_min=1`)
+    expect(fetchSpy.mock.calls[0][0]).toBe(
+      `${API}/api/v2/listings/search?page=3&page_size=48&quantity_min=1`,
+    )
     expect((await run("/market?page=9")).status).toBe(404)
   })
 
   it("fetches the org's shop alongside the org, ignoring its failure", async () => {
     const { run, fetchSpy } = setup(async (url) =>
-      url.includes("/shops/by-owner") ? new Response("", { status: 500 }) : json(f.contractor())(),
+      url.includes("/shops/by-owner")
+        ? new Response("", { status: 500 })
+        : json(f.contractor())(),
     )
     const res = await run("/contractor/NARCO")
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
@@ -322,18 +406,33 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
   )
 
   it("prerendered hub with ?page=N: that page's head and links over the static file", async () => {
-    const { run, fetchSpy, next } = setup(json({ ships: [{ id: "57e51d27-0000", name: "Intrepid" }], total: 216, page: 2, page_size: 24 }))
-    next.mockResolvedValueOnce(new Response(SHELL, { headers: { "Content-Type": "text/html" } }))
+    const { run, fetchSpy, next } = setup(
+      json({
+        ships: [{ id: "57e51d27-0000", name: "Intrepid" }],
+        total: 216,
+        page: 2,
+        page_size: 24,
+      }),
+    )
+    next.mockResolvedValueOnce(
+      new Response(SHELL, { headers: { "Content-Type": "text/html" } }),
+    )
     const res = await run("/wiki/ships?page=2")
     expect(res.status).toBe(200)
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
-    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/game-data/wiki/ships?page=2&page_size=24`)
-    expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root"]))
+    expect(fetchSpy.mock.calls[0][0]).toBe(
+      `${API}/api/v2/game-data/wiki/ships?page=2&page_size=24`,
+    )
+    expect(FakeRewriter.selectors).toEqual(
+      expect.arrayContaining(["title", "div#root"]),
+    )
   })
 
   it("prerendered hub with a filter query: the static file plus noindex, no API call", async () => {
     const { run, fetchSpy, next } = setup(json({}))
-    next.mockResolvedValueOnce(new Response(SHELL, { headers: { "Content-Type": "text/html" } }))
+    next.mockResolvedValueOnce(
+      new Response(SHELL, { headers: { "Content-Type": "text/html" } }),
+    )
     const res = await run("/wiki/items?type=Armor")
     expect(res.status).toBe(200)
     expect(res.headers.get("X-SCM-Bridge")).toBe("noindex")
@@ -345,11 +444,26 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
   describe("mission hub pages (prerendered per hub at build time)", () => {
     const PRERENDERED = `<!doctype html><html><head><title>Headhunters Missions</title></head><body><div id="root" data-prerendered><h1>Headhunters missions</h1></div></body></html>`
     const hub = {
-      kind: "givers", slug: "new-giver", name: "New Giver", version_id: "v", mission_count: 3,
-      legal_count: 3, illegal_count: 0, blueprint_mission_count: 0,
-      givers: [], factions: [], types: [], systems: [], missions: [], page: 1, page_size: 100,
+      kind: "givers",
+      slug: "new-giver",
+      name: "New Giver",
+      version_id: "v",
+      mission_count: 3,
+      legal_count: 3,
+      illegal_count: 0,
+      blueprint_mission_count: 0,
+      givers: [],
+      factions: [],
+      types: [],
+      systems: [],
+      missions: [],
+      page: 1,
+      page_size: 100,
     }
-    const html = (body: string) => new Response(body, { headers: { "Content-Type": "text/html; charset=utf-8" } })
+    const html = (body: string) =>
+      new Response(body, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      })
 
     it("serves the prerendered file as is, no API call", async () => {
       const { run, fetchSpy, next } = setup(json(hub))
@@ -371,7 +485,9 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
       expect(fetchSpy.mock.calls.map((c) => c[0])).toContain(
         `${API}/api/v2/game-data/missions/hubs/givers/new-giver?page=1&page_size=100`,
       )
-      expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root"]))
+      expect(FakeRewriter.selectors).toEqual(
+        expect.arrayContaining(["title", "div#root"]),
+      )
     })
 
     it("an unknown hub: 404 with noindex, not the shell with a 200", async () => {
@@ -437,45 +553,64 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
     ])
   })
 
-  it.each([404, 400, 500])("a hub list %i fails open (never a 404 page)", async (status) => {
-    const { run } = setup(json({}, status))
-    const res = await run("/recruiting")
-    expect(res.status).toBe(200)
-    expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
-    expect(await res.text()).toBe(SHELL)
-  })
-
-  it.each(["/market/aggregate/00000000--bogus", "/market/multiple/00000000--bogus", "/wiki/manufacturers/zzbogus"])(
-    "unknown %s → 404 + noindex",
-    async (path) => {
-      const { run } = setup(json({ error: "not found" }, 404))
-      const res = await run(path)
-      expect(res.status).toBe(404)
-      expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+  it.each([404, 400, 500])(
+    "a hub list %i fails open (never a 404 page)",
+    async (status) => {
+      const { run } = setup(json({}, status))
+      const res = await run("/recruiting")
+      expect(res.status).toBe(200)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
+      expect(await res.text()).toBe(SHELL)
     },
   )
+
+  it.each([
+    "/market/aggregate/00000000--bogus",
+    "/market/multiple/00000000--bogus",
+    "/wiki/manufacturers/zzbogus",
+  ])("unknown %s → 404 + noindex", async (path) => {
+    const { run } = setup(json({ error: "not found" }, 404))
+    const res = await run(path)
+    expect(res.status).toBe(404)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+  })
 
   it("renders an aggregate listing page", async () => {
     const { run, fetchSpy } = setup(json(f.aggregate()))
     const res = await run("/market/aggregate/1954c364--medal")
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
-    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/game-items/1954c364--medal/listings`)
+    expect(fetchSpy.mock.calls[0][0]).toBe(
+      `${API}/api/v2/game-items/1954c364--medal/listings`,
+    )
   })
 })
 
 describe("documentHeaders framing (the /embed/* carve-out)", () => {
   it("denies framing everywhere but the read-only /embed/* widgets", async () => {
     const { documentHeaders } = await import("../handler")
-    const page = documentHeaders(new URL("https://sc-market.space/contractor/BIRDINC"), "text/html")
+    const page = documentHeaders(
+      new URL("https://sc-market.space/contractor/BIRDINC"),
+      "text/html",
+    )
     expect(page.get("Content-Security-Policy")).toBe("frame-ancestors 'self'")
     expect(page.get("X-Frame-Options")).toBe("DENY")
-    const embed = documentHeaders(new URL("https://sc-market.space/embed/org/BIRDINC"), "text/html")
+    const embed = documentHeaders(
+      new URL("https://sc-market.space/embed/org/BIRDINC"),
+      "text/html",
+    )
     expect(embed.get("Content-Security-Policy")).toBeNull()
     expect(embed.get("X-Frame-Options")).toBeNull()
     expect(embed.get("X-Robots-Tag")).toBe("noindex")
     // public/_headers: the same carve-out for the static /embed/* shell.
-    expect(headersFile).toContain("/embed/*\n  ! Content-Security-Policy\n  ! X-Frame-Options\n")
+    expect(headersFile).toContain(
+      "/embed/*\n  ! Content-Security-Policy\n  ! X-Frame-Options\n",
+    )
     // Not a prefix match on "/embed" alone.
-    expect(documentHeaders(new URL("https://sc-market.space/embedded"), "text/html").get("X-Frame-Options")).toBe("DENY")
+    expect(
+      documentHeaders(
+        new URL("https://sc-market.space/embedded"),
+        "text/html",
+      ).get("X-Frame-Options"),
+    ).toBe("DENY")
   })
 })

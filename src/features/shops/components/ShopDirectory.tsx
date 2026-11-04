@@ -39,9 +39,21 @@ interface SortConfig {
 }
 
 const SORT_OPTIONS: SortConfig[] = [
-  { label: "shops.directory.sortTopRated", sortBy: "rating", sortOrder: "desc" },
-  { label: "shops.directory.sortMostSales", sortBy: "total_sales", sortOrder: "desc" },
-  { label: "shops.directory.sortNewest", sortBy: "created_at", sortOrder: "desc" },
+  {
+    label: "shops.directory.sortTopRated",
+    sortBy: "rating",
+    sortOrder: "desc",
+  },
+  {
+    label: "shops.directory.sortMostSales",
+    sortBy: "total_sales",
+    sortOrder: "desc",
+  },
+  {
+    label: "shops.directory.sortNewest",
+    sortBy: "created_at",
+    sortOrder: "desc",
+  },
   { label: "shops.directory.sortNameAZ", sortBy: "name", sortOrder: "asc" },
 ]
 
@@ -55,13 +67,20 @@ export function ShopDirectory() {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
   const setPage = (next: number) =>
-    setSearchParams(next > 1 ? { page: String(next) } : {}, { replace: next === 1 })
+    setSearchParams(next > 1 ? { page: String(next) } : {}, {
+      replace: next === 1,
+    })
   const pageSize = SHOP_DIRECTORY_PAGE_SIZE
 
   const debouncedSearch = useDebounce(search, 300)
   const currentSort = SORT_OPTIONS[sortIndex]
 
-  const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useBrowseShopsQuery({
+  const {
+    data,
+    isLoading,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useBrowseShopsQuery({
     search: debouncedSearch || undefined,
     tag: selectedTag || undefined,
     sortBy: currentSort.sortBy,
@@ -71,7 +90,11 @@ export function ShopDirectory() {
   })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
 
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0
@@ -92,10 +115,16 @@ export function ShopDirectory() {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         {page > 1 && (
-          <link rel="prev" href={`${FRONTEND_URL}/shops?page=${page - 1}${selectedTag ? `&tag=${selectedTag}` : ""}`} />
+          <link
+            rel="prev"
+            href={`${FRONTEND_URL}/shops?page=${page - 1}${selectedTag ? `&tag=${selectedTag}` : ""}`}
+          />
         )}
         {page < totalPages && (
-          <link rel="next" href={`${FRONTEND_URL}/shops?page=${page + 1}${selectedTag ? `&tag=${selectedTag}` : ""}`} />
+          <link
+            rel="next"
+            href={`${FRONTEND_URL}/shops?page=${page + 1}${selectedTag ? `&tag=${selectedTag}` : ""}`}
+          />
         )}
       </Helmet>
       {/* Header */}

@@ -29,12 +29,25 @@ import { ListingDetailV2 } from "../ListingDetailV2"
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
   palette: { outline: { main: "#e0e0e0" } },
 })
 
-vi.mock("../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => vi.fn() }))
-vi.mock("@mui/x-charts", () => ({ LineChart: () => null, BarChart: () => null, PieChart: () => null }))
+vi.mock("../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => vi.fn(),
+}))
+vi.mock("@mui/x-charts", () => ({
+  LineChart: () => null,
+  BarChart: () => null,
+  PieChart: () => null,
+}))
 vi.mock("@mui/x-charts/LineChart", () => ({ LineChart: () => null }))
 vi.mock("@mui/x-charts/BarChart", () => ({ BarChart: () => null }))
 vi.mock("react-router-dom", async () => ({
@@ -70,7 +83,13 @@ const listing: GetListingDetailApiResponse = {
     updated_at: "2026-11-01T23:30:00Z",
     expires_at: "2026-12-01T00:00:00Z",
   },
-  seller: { shop_id: "shop-123", name: "Test Seller", slug: "test-seller", rating: 4.5, languages: ["de"] },
+  seller: {
+    shop_id: "shop-123",
+    name: "Test Seller",
+    slug: "test-seller",
+    rating: 4.5,
+    languages: ["de"],
+  },
   items: [
     {
       item_id: "item-123",
@@ -122,7 +141,8 @@ function page() {
       [marketApi.marketV2Api.reducerPath]: marketApi.marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
-    middleware: (gdm) => gdm().concat(marketApi.marketV2Api.middleware, serviceApi.middleware),
+    middleware: (gdm) =>
+      gdm().concat(marketApi.marketV2Api.middleware, serviceApi.middleware),
   })
   return (
     <Provider store={store}>
@@ -145,7 +165,9 @@ describe("ListingDetailV2 server render in German", () => {
   const originalTZ = process.env.TZ
   beforeEach(() => {
     vi.spyOn(marketApi, "useGetListingDetailQuery").mockReturnValue(
-      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(listing),
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        listing,
+      ),
     )
   })
   afterEach(() => {
@@ -172,13 +194,18 @@ describe("ListingDetailV2 server render in German", () => {
     document.body.appendChild(container)
     // The visitor's machine: a different zone than the server's (UTC).
     process.env.TZ = "Asia/Tokyo"
-    Object.defineProperty(navigator, "language", { value: "de-DE", configurable: true })
+    Object.defineProperty(navigator, "language", {
+      value: "de-DE",
+      configurable: true,
+    })
 
     const errors: unknown[] = []
     const consoleErrors: unknown[] = []
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation((...args) => {
-      consoleErrors.push(args.map(String).join(" "))
-    })
+    const consoleSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation((...args) => {
+        consoleErrors.push(args.map(String).join(" "))
+      })
     let root: ReturnType<typeof hydrateRoot> | undefined
     await act(async () => {
       root = hydrateRoot(container, page(), {
@@ -187,7 +214,9 @@ describe("ListingDetailV2 server render in German", () => {
     })
 
     expect(errors).toEqual([])
-    expect(consoleErrors.filter((m) => /hydrat|did not match/i.test(String(m)))).toEqual([])
+    expect(
+      consoleErrors.filter((m) => /hydrat|did not match/i.test(String(m))),
+    ).toEqual([])
     // After hydration: still German, now relative to the browser's clock.
     expect(plain(container.textContent)).toContain("1,5 Mio. aUEC")
     expect(container.textContent).not.toContain("vor 3 Tagen")

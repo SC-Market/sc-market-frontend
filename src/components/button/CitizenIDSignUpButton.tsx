@@ -17,7 +17,10 @@ export function CitizenIDSignUpButton() {
 
   // Get redirect path from query params (if coming from pageAuthentication redirect)
   // Otherwise use current pathname
-  const redirectPath = safeRedirectPath(searchParams.get("redirect"), location.pathname)
+  const redirectPath = safeRedirectPath(
+    searchParams.get("redirect"),
+    location.pathname,
+  )
 
   return (
     <Button

@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import throttle from "lodash/throttle"
-import { useGetOfferSessionQuery, type GetOfferSessionV2Response } from "../../../store/api/v2/market"
+import {
+  useGetOfferSessionQuery,
+  type GetOfferSessionV2Response,
+} from "../../../store/api/v2/market"
 import { normalizeOfferStatus, type OfferStatusKey } from "../domain/types"
 import {
   useUpdateOfferStatusMutation,
@@ -10,7 +13,11 @@ import {
 } from "../api/offerApi"
 import { useGetPublicContractQuery } from "../../contracting/api/publicContractsApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
+import {
+  useGetContractorBySpectrumIDQuery,
+  useGetContractorMembersQuery,
+  contractorsApi,
+} from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -22,7 +29,10 @@ import type { MinimalUser } from "../../../datatypes/User"
 import { ORDER_PATHS } from "../../../routes/paths"
 import { skipToken } from "@reduxjs/toolkit/query/react"
 
-export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?: number) {
+export function useOfferDetails(
+  session: GetOfferSessionV2Response,
+  offerIndex?: number,
+) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
@@ -33,44 +43,73 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     session.contractor?.spectrum_id || skipToken,
   )
 
-  const { data: publicContract } = useGetPublicContractQuery(session?.contract_id || skipToken)
+  const { data: publicContract } = useGetPublicContractQuery(
+    session?.contract_id || skipToken,
+  )
 
   // Offer selection — use provided index or default to 0
   const selectedOfferIndex = offerIndex ?? 0
   const currentOffer = session.offers?.[selectedOfferIndex] ?? undefined
-  const previousOffer = selectedOfferIndex < (session.offers?.length ?? 0) - 1 ? session.offers[selectedOfferIndex + 1] : undefined
-  const offerChanges = currentOffer ? detectOfferChanges(currentOffer, previousOffer) : null
+  const previousOffer =
+    selectedOfferIndex < (session.offers?.length ?? 0) - 1
+      ? session.offers[selectedOfferIndex + 1]
+      : undefined
+  const offerChanges = currentOffer
+    ? detectOfferChanges(currentOffer, previousOffer)
+    : null
 
   // Assignment editing
   const [isEditingAssigned, setIsEditingAssigned] = useState(false)
   const [target, setTarget] = useState("")
-  const [targetObject, setTargetObject] = useState<{ username: string; display_name: string } | null>(null)
+  const [targetObject, setTargetObject] = useState<{
+    username: string
+    display_name: string
+  } | null>(null)
   const [options, setOptions] = useState<MinimalUser[]>([])
 
   const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: session.contractor?.spectrum_id || "", page: 0, page_size: 100, search: "", role_filter: "", sort: "username",
+    spectrum_id: session.contractor?.spectrum_id || "",
+    page: 0,
+    page_size: 100,
+    search: "",
+    role_filter: "",
+    sort: "username",
   })
   const members = membersData?.members || []
 
-  const fetchOptions = useCallback(async (query: string) => {
-    if (query.length < 3 || !session.contractor?.spectrum_id) return
-    const { data } = await dispatch(
-      contractorsApi.endpoints.searchContractorMembers.initiate({ spectrum_id: session.contractor.spectrum_id, query }),
-    )
-    setOptions(data || [])
-  }, [session.contractor?.spectrum_id, dispatch])
+  const fetchOptions = useCallback(
+    async (query: string) => {
+      if (query.length < 3 || !session.contractor?.spectrum_id) return
+      const { data } = await dispatch(
+        contractorsApi.endpoints.searchContractorMembers.initiate({
+          spectrum_id: session.contractor.spectrum_id,
+          query,
+        }),
+      )
+      setOptions(data || [])
+    },
+    [session.contractor?.spectrum_id, dispatch],
+  )
 
-  const retrieve = useMemo(() => throttle((query: string) => fetchOptions(query), 400), [fetchOptions])
-  useEffect(() => { retrieve(target) }, [target, retrieve])
+  const retrieve = useMemo(
+    () => throttle((query: string) => fetchOptions(query), 400),
+    [fetchOptions],
+  )
+  useEffect(() => {
+    retrieve(target)
+  }, [target, retrieve])
 
   // Mutations — use session_id (V2 field name)
   const [assignUser] = useAssignOfferMutation()
   const [unassignUser] = useUnassignOfferMutation()
-  const [updateStatus, { isLoading: isUpdatingStatus }] = useUpdateOfferStatusMutation()
+  const [updateStatus, { isLoading: isUpdatingStatus }] =
+    useUpdateOfferStatusMutation()
   const [createOfferThread] = useCreateOfferThreadMutation()
   // The page's own offer query (same args, same cache entry): re-read while
   // the bot creates the Discord thread.
-  const { refetch: refetchOffer } = useGetOfferSessionQuery({ sessionId: session.session_id })
+  const { refetch: refetchOffer } = useGetOfferSessionQuery({
+    sessionId: session.session_id,
+  })
   const createThread = useCallback(
     () => createOfferThread(session.session_id).unwrap(),
     [createOfferThread, session.session_id],
@@ -83,15 +122,21 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     contractor: session.contractor?.spectrum_id,
   })
   const actions = useMemo(
-    () => availableOfferActions(
-      {
-        status: session.status,
-        assignedTo: session.assigned_to?.username,
-        contractor: session.contractor?.spectrum_id,
-      },
+    () =>
+      availableOfferActions(
+        {
+          status: session.status,
+          assignedTo: session.assigned_to?.username,
+          contractor: session.contractor?.spectrum_id,
+        },
+        roles,
+      ),
+    [
+      session.status,
+      session.assigned_to?.username,
+      session.contractor?.spectrum_id,
       roles,
-    ),
-    [session.status, session.assigned_to?.username, session.contractor?.spectrum_id, roles],
+    ],
   )
 
   const statusKey: OfferStatusKey = useMemo(
@@ -110,7 +155,11 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     if (["rejected", "accepted"].includes(statusKey)) return false
 
     if (session.contractor) {
-      if (profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id)) {
+      if (
+        profile?.contractors?.some(
+          (c) => c.spectrum_id === session.contractor!.spectrum_id,
+        )
+      ) {
         return statusKey === "waitingSeller"
       }
     }
@@ -128,13 +177,19 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     return false
   }, [profile, session, statusKey])
 
-  const showCancel = !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
+  const showCancel =
+    !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
 
   const updateStatusCallback = useCallback(
     (status: "accepted" | "rejected" | "cancelled") => {
       updateStatus({ session_id: session.session_id, status })
         .unwrap()
-        .then((result) => { if ((result as { order_id?: string }).order_id) navigate(ORDER_PATHS.contract((result as { order_id?: string }).order_id!)) })
+        .then((result) => {
+          if ((result as { order_id?: string }).order_id)
+            navigate(
+              ORDER_PATHS.contract((result as { order_id?: string }).order_id!),
+            )
+        })
         .catch((err) => issueAlert(err))
     },
     [session.session_id, updateStatus, navigate, issueAlert],
@@ -143,48 +198,96 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   const handleAssignSave = useCallback(async () => {
     if (!targetObject) return
     try {
-      await assignUser({ session_id: session.session_id, username: targetObject.username }).unwrap()
-      issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
-      setIsEditingAssigned(false); setTarget(""); setTargetObject(null)
+      await assignUser({
+        session_id: session.session_id,
+        username: targetObject.username,
+      }).unwrap()
+      issueAlert({
+        message: t("memberAssignArea.assigned"),
+        severity: "success",
+      })
+      setIsEditingAssigned(false)
+      setTarget("")
+      setTargetObject(null)
     } catch {
-      issueAlert({ message: t("memberAssignArea.failed_assign"), severity: "error" })
+      issueAlert({
+        message: t("memberAssignArea.failed_assign"),
+        severity: "error",
+      })
     }
   }, [assignUser, session.session_id, issueAlert, targetObject, t])
 
-  const handleAssignCancel = useCallback(() => { setIsEditingAssigned(false); setTarget(""); setTargetObject(null) }, [])
+  const handleAssignCancel = useCallback(() => {
+    setIsEditingAssigned(false)
+    setTarget("")
+    setTargetObject(null)
+  }, [])
 
   const handleUnassign = useCallback(async () => {
     try {
       await unassignUser({ session_id: session.session_id }).unwrap()
-      issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
+      issueAlert({
+        message: t("memberAssignArea.unassigned"),
+        severity: "success",
+      })
       setIsEditingAssigned(false)
     } catch {
-      issueAlert({ message: t("memberAssignArea.failed_unassign"), severity: "error" })
+      issueAlert({
+        message: t("memberAssignArea.failed_unassign"),
+        severity: "error",
+      })
     }
   }, [unassignUser, session.session_id, issueAlert, t])
 
   const handleClaimOffer = useCallback(async () => {
     if (!profile?.username) return
     try {
-      await assignUser({ session_id: session.session_id, username: profile.username }).unwrap()
-      issueAlert({ message: t("orderDetailsArea.claimed", "Offer claimed"), severity: "success" })
+      await assignUser({
+        session_id: session.session_id,
+        username: profile.username,
+      }).unwrap()
+      issueAlert({
+        message: t("orderDetailsArea.claimed", "Offer claimed"),
+        severity: "success",
+      })
     } catch {
-      issueAlert({ message: t("orderDetailsArea.claimFailed", "Failed to claim offer"), severity: "error" })
+      issueAlert({
+        message: t("orderDetailsArea.claimFailed", "Failed to claim offer"),
+        severity: "error",
+      })
     }
   }, [assignUser, session.session_id, profile?.username, issueAlert, t])
 
   return {
-    profile, org: contractorData, issueAlert, publicContract,
-    currentOffer, previousOffer, offerChanges,
-    isEditingAssigned, setIsEditingAssigned,
-    target, setTarget, targetObject, setTargetObject,
-    options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
-    roles, actions,
-    statusKey, statusColor,
-    showAccept, showCancel,
-    isUpdatingStatus, updateStatusCallback,
-    createThread, refetchOffer,
+    profile,
+    org: contractorData,
+    issueAlert,
+    publicContract,
+    currentOffer,
+    previousOffer,
+    offerChanges,
+    isEditingAssigned,
+    setIsEditingAssigned,
+    target,
+    setTarget,
+    targetObject,
+    setTargetObject,
+    options,
+    members,
+    handleAssignSave,
+    handleAssignCancel,
+    handleUnassign,
+    handleClaimOffer,
+    roles,
+    actions,
+    statusKey,
+    statusColor,
+    showAccept,
+    showCancel,
+    isUpdatingStatus,
+    updateStatusCallback,
+    createThread,
+    refetchOffer,
   }
 }
 

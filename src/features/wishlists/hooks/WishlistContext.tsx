@@ -41,7 +41,11 @@ const ShoppingListCtx = createContext<ShoppingListContextValue>({
 
 export const useShoppingList = () => useContext(ShoppingListCtx)
 
-export function ShoppingListProvider({ children }: { children: React.ReactNode }) {
+export function ShoppingListProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const [open, setOpen] = useState(false)
@@ -53,12 +57,15 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
   const [addItem] = useAddWishlistItemMutation()
   const [createList] = useCreateWishlistMutation()
 
-  const addToShoppingList = useCallback((blueprintId?: string, gameItemId?: string) => {
-    setRequest({ blueprintId, gameItemId })
-    setOpen(true)
-    setCreating(false)
-    setNewName("")
-  }, [])
+  const addToShoppingList = useCallback(
+    (blueprintId?: string, gameItemId?: string) => {
+      setRequest({ blueprintId, gameItemId })
+      setOpen(true)
+      setCreating(false)
+      setNewName("")
+    },
+    [],
+  )
 
   const handleSelect = async (wishlistId: string) => {
     if (!request) return
@@ -72,7 +79,9 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
           priority: 0,
         },
       }).unwrap()
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setOpen(false)
     setRequest(null)
   }
@@ -88,7 +97,9 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
         },
       }).unwrap()
       await handleSelect(wl.wishlist_id)
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   const wishlists = data?.wishlists || []
@@ -96,18 +107,28 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
   return (
     <ShoppingListCtx.Provider value={{ addToShoppingList }}>
       {children}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>{t("wishlistsUi.quickAdd.title")}</DialogTitle>
         <DialogContent>
           {isLoading && <CircularProgress size={24} />}
           {!isLoading && !wishlists.length && !creating && (
-            <Alert severity="info" sx={{ mb: 1 }}>{t("wishlistsUi.quickAdd.noLists")}</Alert>
+            <Alert severity="info" sx={{ mb: 1 }}>
+              {t("wishlistsUi.quickAdd.noLists")}
+            </Alert>
           )}
           {!creating && (
             <>
               <List dense disablePadding>
                 {wishlists.map((wl) => (
-                  <ListItemButton key={wl.wishlist_id} onClick={() => handleSelect(wl.wishlist_id)}>
+                  <ListItemButton
+                    key={wl.wishlist_id}
+                    onClick={() => handleSelect(wl.wishlist_id)}
+                  >
                     <ListItemText primary={wl.wishlist_name} />
                   </ListItemButton>
                 ))}
@@ -125,13 +146,26 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
           {creating && (
             <Stack spacing={1} sx={{ mt: 1 }}>
               <TextField
-                size="small" fullWidth label={t("wishlistsUi.quickAdd.listName")} value={newName}
-                onChange={(e) => setNewName(e.target.value)} inputRef={focusOnReveal}
+                size="small"
+                fullWidth
+                label={t("wishlistsUi.quickAdd.listName")}
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                inputRef={focusOnReveal}
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}
               />
               <Stack direction="row" spacing={1}>
-                <Button size="small" variant="contained" onClick={handleCreate} disabled={!newName.trim()}>{t("wishlistsUi.quickAdd.createAndAdd")}</Button>
-                <Button size="small" onClick={() => setCreating(false)}>{t("common.cancel")}</Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleCreate}
+                  disabled={!newName.trim()}
+                >
+                  {t("wishlistsUi.quickAdd.createAndAdd")}
+                </Button>
+                <Button size="small" onClick={() => setCreating(false)}>
+                  {t("common.cancel")}
+                </Button>
               </Stack>
             </Stack>
           )}

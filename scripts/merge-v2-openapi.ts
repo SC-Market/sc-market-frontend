@@ -1,13 +1,14 @@
 /**
  * Merges the V2 OpenAPI spec from backend into the frontend's main OpenAPI spec.
  * This allows the RTK Query codegen to generate the V2 API client.
- * 
+ *
  * Usage: npx tsx scripts/merge-v2-openapi.ts
  */
 import { readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 
-const BACKEND_V2_SPEC = "../sc-market-backend/src/api/routes/v2/generated/swagger.json"
+const BACKEND_V2_SPEC =
+  "../sc-market-backend/src/api/routes/v2/generated/swagger.json"
 const FRONTEND_SPEC = "./spec/sc-market.openapi.json"
 
 console.log("Reading V2 OpenAPI spec from backend...")

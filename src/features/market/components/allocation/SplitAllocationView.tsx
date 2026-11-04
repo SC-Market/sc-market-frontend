@@ -77,10 +77,7 @@ function orderStatusLabel(status: string, t: TFunction) {
   return status
 }
 
-function allocationModeLabel(
-  mode: "auto" | "manual" | "none",
-  t: TFunction,
-) {
+function allocationModeLabel(mode: "auto" | "manual" | "none", t: TFunction) {
   if (mode === "auto") return t("allocationUi.mode.auto")
   if (mode === "manual") return t("allocationUi.mode.manual")
   return t("allocationUi.mode.none")

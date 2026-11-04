@@ -21,13 +21,13 @@ The canonical example is `features/email/`. When in doubt, look there.
 
 Each feature is a self-contained vertical slice. Subdirectories:
 
-| Directory | Purpose | Rules |
-|---|---|---|
-| `domain/` | Pure types, formatters, validators, constants | **No imports** from React, MUI, store, or other features |
-| `api/` | RTK Query slices — the only code that talks to the backend | May import from `domain/`. No UI imports |
-| `hooks/` | Business logic hooks. `usePage*` hooks orchestrate data for a page | May import from `api/` and `domain/`. **No JSX** |
-| `components/` | Rendering. Receives data via props | May use `useTheme`/`useMediaQuery` for styling. **Never calls mutations or queries directly** |
-| `index.ts` | Barrel file — the public API of the feature | Re-exports from all subdirectories |
+| Directory     | Purpose                                                            | Rules                                                                                         |
+| ------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `domain/`     | Pure types, formatters, validators, constants                      | **No imports** from React, MUI, store, or other features                                      |
+| `api/`        | RTK Query slices — the only code that talks to the backend         | May import from `domain/`. No UI imports                                                      |
+| `hooks/`      | Business logic hooks. `usePage*` hooks orchestrate data for a page | May import from `api/` and `domain/`. **No JSX**                                              |
+| `components/` | Rendering. Receives data via props                                 | May use `useTheme`/`useMediaQuery` for styling. **Never calls mutations or queries directly** |
+| `index.ts`    | Barrel file — the public API of the feature                        | Re-exports from all subdirectories                                                            |
 
 Dependency flow within a feature:
 
@@ -62,6 +62,7 @@ Pages **never** import from `store/` directly.
 Reusable components that are **not** specific to any feature: layout shells, buttons, typography, skeletons, modals, navigation, etc.
 
 Rules:
+
 - **No imports from `store/`** — no queries, no mutations, no selectors
 - **No feature-specific logic** — if it mentions "order", "contractor", "listing" in its business logic, it belongs in a feature
 - Receives all data via props
@@ -92,16 +93,16 @@ Shared type definitions. New types go in `features/<name>/domain/types.ts`. Type
 
 ## Rules Summary
 
-| Rule | Enforced By |
-|---|---|
-| `features/*/domain/` has no React/MUI/store imports | ESLint `no-restricted-imports` |
-| `components/` does not import from `store/` | ESLint `no-restricted-imports` |
-| No new files in `views/` | Code review |
-| No new slices in `store/` (top-level) | Code review |
-| Pages are thin shells | Code review |
-| Feature components receive data via props, not queries | Code review |
-| No `any`, `unknown`, or `Record<string, unknown>` as a substitute for real types | Code review + `@typescript-eslint/no-explicit-any` |
-| Hooks are called unconditionally, before any early return | ESLint `react-hooks/rules-of-hooks` (error) |
+| Rule                                                                                                                                                    | Enforced By                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `features/*/domain/` has no React/MUI/store imports                                                                                                     | ESLint `no-restricted-imports`                                                                                                                                                              |
+| `components/` does not import from `store/`                                                                                                             | ESLint `no-restricted-imports`                                                                                                                                                              |
+| No new files in `views/`                                                                                                                                | Code review                                                                                                                                                                                 |
+| No new slices in `store/` (top-level)                                                                                                                   | Code review                                                                                                                                                                                 |
+| Pages are thin shells                                                                                                                                   | Code review                                                                                                                                                                                 |
+| Feature components receive data via props, not queries                                                                                                  | Code review                                                                                                                                                                                 |
+| No `any`, `unknown`, or `Record<string, unknown>` as a substitute for real types                                                                        | Code review + `@typescript-eslint/no-explicit-any`                                                                                                                                          |
+| Hooks are called unconditionally, before any early return                                                                                               | ESLint `react-hooks/rules-of-hooks` (error)                                                                                                                                                 |
 | Components and views don't call mutations or `has_permission`; no `toLocale*()` without a locale or `new Date()` in tsx; tsx files stay under 400 lines | ESLint warnings, ratcheted: `npm run lint:ratchet` (CI) fails if the warning or error count rises above `scripts/lint-baseline.json`. Lower the baseline with `--update` when you fix some. |
 
 ---
@@ -123,7 +124,10 @@ const data = response as any
 const items = (result as Record<string, unknown>)["items"]
 
 // ✅ Good — update the OpenAPI spec and regenerate
-interface OrderDetail { items: OrderItemDetail[]; total_price: number }
+interface OrderDetail {
+  items: OrderItemDetail[]
+  total_price: number
+}
 const { data } = useGetOrderDetailQuery({ orderId })
 
 // ✅ Good — define the type in domain/

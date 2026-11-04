@@ -89,4 +89,8 @@ export const natureDarkThemeOptions: ThemeOptions = {
   },
 }
 
-export const NATURE_DARK_theme = createAppTheme(themeBase, mainThemeOptions, natureDarkThemeOptions)
+export const NATURE_DARK_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  natureDarkThemeOptions,
+)

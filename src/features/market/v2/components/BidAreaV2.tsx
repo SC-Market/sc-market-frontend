@@ -31,7 +31,11 @@ interface BidAreaV2Props {
   isOwner: boolean
 }
 
-export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props) {
+export function BidAreaV2({
+  listingId,
+  startingPrice,
+  isOwner,
+}: BidAreaV2Props) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const now = useNow(30_000)
@@ -60,17 +64,29 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
     <Paper sx={{ p: 2 }}>
       <Stack spacing={2}>
         {/* Auction Status */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Stack direction="row" spacing={1} alignItems="center">
             <GavelRounded color="primary" />
             <Typography variant="h6" fontWeight="bold">
               {t("BidAreaV2.auction", "Auction")}
             </Typography>
-            <HelpLink guide="auctions">{t("BidAreaV2.howItWorks", "How bidding works")}</HelpLink>
+            <HelpLink guide="auctions">
+              {t("BidAreaV2.howItWorks", "How bidding works")}
+            </HelpLink>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
-            <TimerRounded fontSize="small" color={isActive ? "warning" : "disabled"} />
-            <Typography variant="body2" color={isActive ? "warning.main" : "text.disabled"}>
+            <TimerRounded
+              fontSize="small"
+              color={isActive ? "warning" : "disabled"}
+            />
+            <Typography
+              variant="body2"
+              color={isActive ? "warning.main" : "text.disabled"}
+            >
               {isActive
                 ? t("BidAreaV2.endsIn", { time: fmt.timeUntil(endTime, now) })
                 : auction.status === "concluded"
@@ -132,8 +148,12 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
               <TableHead>
                 <TableRow>
                   <TableCell>{t("BidAreaV2.bidder", "Bidder")}</TableCell>
-                  <TableCell align="right">{t("BidAreaV2.amount", "Amount")}</TableCell>
-                  <TableCell align="right">{t("BidAreaV2.time", "Time")}</TableCell>
+                  <TableCell align="right">
+                    {t("BidAreaV2.amount", "Amount")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {t("BidAreaV2.time", "Time")}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -141,33 +161,50 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
                   // The highest bid across all pages, not this page's first row.
                   const isHighest = bid.amount === auction.current_highest_bid
                   return (
-                  <TableRow
-                    key={bid.bid_id}
-                    selected={bid.bidder.is_you}
-                    aria-current={bid.bidder.is_you ? "true" : undefined}
-                  >
-                    <TableCell>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Typography variant="body2" fontWeight={bid.bidder.is_you ? "bold" : "normal"}>
-                          {bid.bidder.display_name}
+                    <TableRow
+                      key={bid.bid_id}
+                      selected={bid.bidder.is_you}
+                      aria-current={bid.bidder.is_you ? "true" : undefined}
+                    >
+                      <TableCell>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography
+                            variant="body2"
+                            fontWeight={bid.bidder.is_you ? "bold" : "normal"}
+                          >
+                            {bid.bidder.display_name}
+                          </Typography>
+                          {bid.bidder.is_you && (
+                            <Chip
+                              label={t("BidAreaV2.isYou", "Your bid")}
+                              size="small"
+                              color="primary"
+                              variant="outlined"
+                            />
+                          )}
+                          {isHighest && (
+                            <Chip
+                              label={t("BidAreaV2.highest", "Highest")}
+                              size="small"
+                              color="success"
+                            />
+                          )}
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography
+                          variant="body2"
+                          fontWeight={isHighest ? "bold" : "normal"}
+                        >
+                          {fmt.price(bid.amount)}
                         </Typography>
-                        {bid.bidder.is_you && (
-                          <Chip label={t("BidAreaV2.isYou", "Your bid")} size="small" color="primary" variant="outlined" />
-                        )}
-                        {isHighest && <Chip label={t("BidAreaV2.highest", "Highest")} size="small" color="success" />}
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body2" fontWeight={isHighest ? "bold" : "normal"}>
-                        {fmt.price(bid.amount)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="caption" color="text.secondary">
-                        {fmt.relative(bid.created_at, now)}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="caption" color="text.secondary">
+                          {fmt.relative(bid.created_at, now)}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
                   )
                 })}
               </TableBody>

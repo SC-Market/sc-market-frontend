@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -16,7 +16,9 @@ import { BrowserRouter } from "react-router-dom"
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock data
@@ -210,7 +212,7 @@ const renderWithProviders = (
   {
     counterOfferBody = mockCounterOfferBody,
     setCounterOfferBody = vi.fn(),
-  } = {}
+  } = {},
 ) => {
   const store = createMockStore()
 
@@ -240,13 +242,11 @@ const renderWithProviders = (
     ),
   )
 
-  vi
-    .spyOn(marketV2Api.endpoints.getListingDetail, "useQuery")
-    .mockReturnValue(
-      querySuccess<typeof marketV2Api.endpoints.getListingDetail>(
-        mockListingDetail,
-      ),
-    )
+  vi.spyOn(marketV2Api.endpoints.getListingDetail, "useQuery").mockReturnValue(
+    querySuccess<typeof marketV2Api.endpoints.getListingDetail>(
+      mockListingDetail,
+    ),
+  )
 
   return render(
     <Provider store={store}>
@@ -259,7 +259,7 @@ const renderWithProviders = (
           </CounterOfferDetailsContext.Provider>
         </ThemeProvider>
       </BrowserRouter>
-    </Provider>
+    </Provider>,
   )
 }
 
@@ -271,9 +271,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
   it("renders the component with title", () => {
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
-    expect(
-      screen.getByText(/Associated Market Listings/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/Associated Market Listings/i)).toBeInTheDocument()
   })
 
   it("displays empty table when no listings in counter offer", () => {
@@ -287,14 +285,12 @@ describe("OfferMarketListingsEditAreaV2", () => {
   it("displays existing listings with variant selectors", () => {
     const bodyWithListings: CounterOfferBody = {
       ...mockCounterOfferBody,
-      market_listings: [
-        { listing_id: "listing-1", quantity: 2 },
-      ],
+      market_listings: [{ listing_id: "listing-1", quantity: 2 }],
     }
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Component renders with listings in counter offer body
@@ -309,7 +305,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     // Find the autocomplete input
     const autocomplete = screen.getByLabelText(/Select Listing/i)
     expect(autocomplete).toBeInTheDocument()
-    
+
     // Autocomplete options are rendered by MUI, not directly testable without full interaction
     // This test verifies the autocomplete is present and functional
   })
@@ -332,17 +328,20 @@ describe("OfferMarketListingsEditAreaV2", () => {
     // The component builds its items table from body.v2_variant_items.
     const bodyWithListings: CounterOfferBody = {
       ...mockCounterOfferBody,
-      market_listings: [
-        { listing_id: "listing-1", quantity: 2 },
-      ],
+      market_listings: [{ listing_id: "listing-1", quantity: 2 }],
       v2_variant_items: [
-        { listing_id: "listing-1", variant_id: "variant-1", quantity: 2, price_per_unit: 100 },
+        {
+          listing_id: "listing-1",
+          variant_id: "variant-1",
+          quantity: 2,
+          price_per_unit: 100,
+        },
       ],
     }
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Total row is rendered when there are items
@@ -355,14 +354,12 @@ describe("OfferMarketListingsEditAreaV2", () => {
   it("allows removing a listing", async () => {
     const bodyWithListings: CounterOfferBody = {
       ...mockCounterOfferBody,
-      market_listings: [
-        { listing_id: "listing-1", quantity: 2 },
-      ],
+      market_listings: [{ listing_id: "listing-1", quantity: 2 }],
     }
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Component renders with listing
@@ -376,7 +373,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     // Check for Typography with correct variant
     const title = screen.getByText(/Associated Market Listings/i)
     expect(title).toHaveClass("MuiTypography-h5")
-    
+
     // Check for Paper component structure
     const paper = screen.getByText(/Associated Market Listings/i).closest("div")
     expect(paper).toBeInTheDocument()
@@ -385,14 +382,12 @@ describe("OfferMarketListingsEditAreaV2", () => {
   it("filters out already added listings from autocomplete options", () => {
     const bodyWithListings: CounterOfferBody = {
       ...mockCounterOfferBody,
-      market_listings: [
-        { listing_id: "listing-1", quantity: 2 },
-      ],
+      market_listings: [{ listing_id: "listing-1", quantity: 2 }],
     }
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Autocomplete filters options using:
@@ -411,7 +406,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Component should render with listing
@@ -423,23 +418,26 @@ describe("OfferMarketListingsEditAreaV2", () => {
   it("updates total when variant selection changes", async () => {
     const bodyWithListings: CounterOfferBody = {
       ...mockCounterOfferBody,
-      market_listings: [
-        { listing_id: "listing-1", quantity: 2 },
-      ],
+      market_listings: [{ listing_id: "listing-1", quantity: 2 }],
       v2_variant_items: [
-        { listing_id: "listing-1", variant_id: "variant-1", quantity: 2, price_per_unit: 100 },
+        {
+          listing_id: "listing-1",
+          variant_id: "variant-1",
+          quantity: 2,
+          price_per_unit: 100,
+        },
       ],
     }
 
     renderWithProviders(
       <OfferMarketListingsEditAreaV2 session={mockSession} />,
-      { counterOfferBody: bodyWithListings }
+      { counterOfferBody: bodyWithListings },
     )
 
     // Total should be displayed
     const totalCells = screen.getAllByText(/total/i)
     expect(totalCells.length).toBeGreaterThan(0)
-    
+
     // Variant selection changes would update the total
     // This is handled by the component's useMemo that recalculates extendedListings
     // when variantSelections state changes

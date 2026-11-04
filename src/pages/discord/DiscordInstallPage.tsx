@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from "react"
-import { Alert, Button, Link as MuiLink, Stack, Typography } from "@mui/material"
+import {
+  Alert,
+  Button,
+  Link as MuiLink,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useHead } from "@unhead/react"

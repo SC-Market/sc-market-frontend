@@ -72,7 +72,11 @@ export function getErrorMessage(
     }
     if (error.data && typeof error.data === "object") {
       const data = error.data as Record<string, unknown>
-      if (data.error && typeof data.error === "object" && "message" in (data.error as object)) {
+      if (
+        data.error &&
+        typeof data.error === "object" &&
+        "message" in (data.error as object)
+      ) {
         return (data.error as { message: string }).message
       }
       if ("message" in data) {

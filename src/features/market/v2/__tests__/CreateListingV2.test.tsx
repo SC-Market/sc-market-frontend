@@ -1,40 +1,42 @@
-import "./setup";
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { configureStore } from "@reduxjs/toolkit";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { CreateListingV2 } from "../CreateListingV2";
-import { generatedApi } from "../../../../store/generatedApi";
-import { generatedApiV2 } from "../../../../store/generatedApiV2";
-import { serviceApi } from "../../../../store/service";
-import "@testing-library/jest-dom";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
-import type { MarkdownEditor } from "../../../../components/markdown/Markdown";
-import type { GameItemSearchAutocomplete } from "../../components/GameItemSearchAutocomplete";
-import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
-import type { LocationSelectorProps } from "../../components/stock/LocationSelector";
+import "./setup"
+import React from "react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { BrowserRouter } from "react-router-dom"
+import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import { CreateListingV2 } from "../CreateListingV2"
+import { generatedApi } from "../../../../store/generatedApi"
+import { generatedApiV2 } from "../../../../store/generatedApiV2"
+import { serviceApi } from "../../../../store/service"
+import "@testing-library/jest-dom"
+import { vi, describe, it, expect, beforeEach } from "vitest"
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
+import type { MarkdownEditor } from "../../../../components/markdown/Markdown"
+import type { GameItemSearchAutocomplete } from "../../components/GameItemSearchAutocomplete"
+import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
+import type { LocationSelectorProps } from "../../components/stock/LocationSelector"
 
-type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>;
+type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>
 type GameItemSearchAutocompleteProps = React.ComponentProps<
   typeof GameItemSearchAutocomplete
->;
-type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>;
+>
+type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>
 
 // Mock dependencies
-const { mockIssueAlert, gameItem, shopAccess, createListing } = vi.hoisted(() => ({
-  mockIssueAlert: vi.fn(),
-  shopAccess: { canManage: true },
-  createListing: vi.fn(),
-  // Mutable holder so each test can control the selected game item's type,
-  // which drives whether the quality-tier or quality-value field renders.
-  gameItem: { name: "Test Item", type: "Ranged Weapon", id: "test-item-id" },
-}));
+const { mockIssueAlert, gameItem, shopAccess, createListing } = vi.hoisted(
+  () => ({
+    mockIssueAlert: vi.fn(),
+    shopAccess: { canManage: true },
+    createListing: vi.fn(),
+    // Mutable holder so each test can control the selected game item's type,
+    // which drives whether the quality-tier or quality-value field renders.
+    gameItem: { name: "Test Item", type: "Ranged Weapon", id: "test-item-id" },
+  }),
+)
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => mockIssueAlert,
-}));
+}))
 
 // Mock StandardPageLayout to avoid data-router / metadata Page dependencies
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
@@ -44,10 +46,14 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownEditor: ({ onChange, value, TextFieldProps }: MarkdownEditorProps) => (
+  MarkdownEditor: ({
+    onChange,
+    value,
+    TextFieldProps,
+  }: MarkdownEditorProps) => (
     <textarea
       data-testid="markdown-editor"
       value={value}
@@ -60,7 +66,7 @@ vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
       }
     />
   ),
-}));
+}))
 
 vi.mock("../../components/GameItemSearchAutocomplete", () => ({
   GameItemSearchAutocomplete: ({
@@ -73,23 +79,23 @@ vi.mock("../../components/GameItemSearchAutocomplete", () => ({
         data-testid="game-item-search"
         placeholder={label}
         onChange={() => {
-          onChange(gameItem.name, gameItem.type, gameItem.id);
+          onChange(gameItem.name, gameItem.type, gameItem.id)
         }}
       />
       {errorText && <p data-testid="game-item-error">{errorText}</p>}
     </>
   ),
-}));
+}))
 
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual<typeof import("../../../../store/api/v2/market")>(
-    "../../../../store/api/v2/market",
-  );
+  const actual = await vi.importActual<
+    typeof import("../../../../store/api/v2/market")
+  >("../../../../store/api/v2/market")
   return {
     ...actual,
     useCreateListingMutation: () => [createListing, { isLoading: false }],
-  };
-});
+  }
+})
 
 vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
   SelectPhotosArea: ({ setPhotos }: SelectPhotosAreaProps) => (
@@ -97,7 +103,7 @@ vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
       <button onClick={() => setPhotos(["photo1.jpg"])}>Add Photo</button>
     </div>
   ),
-}));
+}))
 
 vi.mock("../../components/stock/LocationSelector", () => ({
   LocationSelector: ({ onChange, label }: LocationSelectorProps) => (
@@ -107,7 +113,7 @@ vi.mock("../../components/stock/LocationSelector", () => ({
       onChange={() => onChange("location-id-123")}
     />
   ),
-}));
+}))
 
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
   useShopRouteContext: () => ({
@@ -130,7 +136,7 @@ vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
     },
   }),
   useOptionalShopRouteContext: () => null,
-}));
+}))
 
 // Create mock store
 const createMockStore = (initialState = {}) => {
@@ -147,63 +153,84 @@ const createMockStore = (initialState = {}) => {
         serviceApi.middleware,
       ),
     preloadedState: initialState,
-  });
-};
+  })
+}
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
   palette: { outline: { main: "#e0e0e0" } },
-});
+})
 
 // Wrapper component
 const renderWithProviders = (component: React.ReactElement) => {
-  const store = createMockStore();
+  const store = createMockStore()
   return render(
     <Provider store={store}>
       <ThemeProvider theme={testTheme}>
         <BrowserRouter>{component}</BrowserRouter>
       </ThemeProvider>
-    </Provider>
-  );
-};
+    </Provider>,
+  )
+}
 
 describe("CreateListingV2", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    shopAccess.canManage = true;
-    createListing.mockReturnValue({ unwrap: () => Promise.resolve({ listing_id: "l-1" }) });
-  });
+    vi.clearAllMocks()
+    shopAccess.canManage = true
+    createListing.mockReturnValue({
+      unwrap: () => Promise.resolve({ listing_id: "l-1" }),
+    })
+  })
 
   // Regression: the description was required (and not marked), so a
   // listing without one failed; quick-add always sent none.
   it("creates a listing without a description", async () => {
-    renderWithProviders(<CreateListingV2 />);
-    fireEvent.change(screen.getByTestId("game-item-search"), { target: { value: "Test Item" } });
-    fireEvent.change(screen.getByLabelText("Enter price"), { target: { value: "15000" } });
-    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+    renderWithProviders(<CreateListingV2 />)
+    fireEvent.change(screen.getByTestId("game-item-search"), {
+      target: { value: "Test Item" },
+    })
+    fireEvent.change(screen.getByLabelText("Enter price"), {
+      target: { value: "15000" },
+    })
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Create Listing/i }).closest("form")!,
+    )
 
-    await waitFor(() => expect(createListing).toHaveBeenCalled());
-    const request = createListing.mock.calls[0][0].createListingRequest;
-    expect(request.description).toBeUndefined();
-    expect(request.title).toBe("Test Item");
-    expect(request.base_price).toBe(15000);
-  });
+    await waitFor(() => expect(createListing).toHaveBeenCalled())
+    const request = createListing.mock.calls[0][0].createListingRequest
+    expect(request.description).toBeUndefined()
+    expect(request.title).toBe("Test Item")
+    expect(request.base_price).toBe(15000)
+  })
 
   it("labels the description optional", () => {
-    renderWithProviders(<CreateListingV2 />);
-    expect(screen.getByPlaceholderText("Description (optional)")).toBeInTheDocument();
-  });
+    renderWithProviders(<CreateListingV2 />)
+    expect(
+      screen.getByPlaceholderText("Description (optional)"),
+    ).toBeInTheDocument()
+  })
 
   // Regression: errors only showed in a toast that disappears.
   it("shows a validation error next to its field and above the submit button", async () => {
-    renderWithProviders(<CreateListingV2 />);
-    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+    renderWithProviders(<CreateListingV2 />)
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Create Listing/i }).closest("form")!,
+    )
 
-    expect(await screen.findByTestId("game-item-error")).toHaveTextContent("Game item is required");
-    expect(screen.getByRole("alert")).toHaveTextContent("Game item is required");
-    expect(createListing).not.toHaveBeenCalled();
-  });
+    expect(await screen.findByTestId("game-item-error")).toHaveTextContent(
+      "Game item is required",
+    )
+    expect(screen.getByRole("alert")).toHaveTextContent("Game item is required")
+    expect(createListing).not.toHaveBeenCalled()
+  })
 
   it("shows the API's field error next to the field", async () => {
     createListing.mockReturnValue({
@@ -214,242 +241,260 @@ describe("CreateListingV2", () => {
             error: {
               code: "VALIDATION_ERROR",
               message: "Validation failed",
-              validationErrors: [{ field: "title", message: "Title must be 500 characters or less" }],
+              validationErrors: [
+                {
+                  field: "title",
+                  message: "Title must be 500 characters or less",
+                },
+              ],
             },
           },
         }),
-    });
-    renderWithProviders(<CreateListingV2 />);
-    fireEvent.change(screen.getByTestId("game-item-search"), { target: { value: "Test Item" } });
-    fireEvent.change(screen.getByLabelText("Enter price"), { target: { value: "100" } });
-    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+    })
+    renderWithProviders(<CreateListingV2 />)
+    fireEvent.change(screen.getByTestId("game-item-search"), {
+      target: { value: "Test Item" },
+    })
+    fireEvent.change(screen.getByLabelText("Enter price"), {
+      target: { value: "100" },
+    })
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Create Listing/i }).closest("form")!,
+    )
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Title must be 500 characters or less");
-    expect(screen.getByLabelText("Enter listing title")).toHaveAttribute("aria-invalid", "true");
-  });
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Title must be 500 characters or less",
+    )
+    expect(screen.getByLabelText("Enter listing title")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    )
+  })
 
   // Regression: org members without manage_market got the form, then a 403.
   it("tells members who can't manage the shop to ask for access instead of showing the form", () => {
-    shopAccess.canManage = false;
-    renderWithProviders(<CreateListingV2 />);
-    expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument();
-    expect(screen.queryByTestId("game-item-search")).not.toBeInTheDocument();
-  });
+    shopAccess.canManage = false
+    renderWithProviders(<CreateListingV2 />)
+    expect(
+      screen.getByText(/ask an org admin for the Manage Market permission/i),
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId("game-item-search")).not.toBeInTheDocument()
+  })
 
   it("renders the form with all required fields", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Check for main sections
-    expect(screen.getByText(/Create New Listing/i)).toBeInTheDocument();
-    expect(screen.getByTestId("game-item-search")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
-    expect(screen.getByTestId("markdown-editor")).toBeInTheDocument();
-    expect(screen.getByTestId("select-photos-area")).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Create New Listing/i)).toBeInTheDocument()
+    expect(screen.getByTestId("game-item-search")).toBeInTheDocument()
+    expect(screen.getByLabelText(/Title/i)).toBeInTheDocument()
+    expect(screen.getByTestId("markdown-editor")).toBeInTheDocument()
+    expect(screen.getByTestId("select-photos-area")).toBeInTheDocument()
+  })
 
   it("displays pricing mode selector with unified and per-variant options", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
-    expect(screen.getByLabelText(/Unified Price/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Per-Variant Pricing/i)).toBeInTheDocument();
-  });
+    expect(screen.getByLabelText(/Unified Price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Per-Variant Pricing/i)).toBeInTheDocument()
+  })
 
   it("shows base price field when unified pricing mode is selected", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Unified pricing is selected by default; the base price input is labeled
     // via its aria-label "Enter price".
-    const basePriceInput = screen.getByLabelText("Enter price");
-    expect(basePriceInput).toBeInTheDocument();
-  });
+    const basePriceInput = screen.getByLabelText("Enter price")
+    expect(basePriceInput).toBeInTheDocument()
+  })
 
   it("shows per-variant price fields when per-variant pricing mode is selected", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Switch to per-variant pricing
-    const perVariantRadio = screen.getByLabelText(/Per-Variant Pricing/i);
-    fireEvent.click(perVariantRadio);
+    const perVariantRadio = screen.getByLabelText(/Per-Variant Pricing/i)
+    fireEvent.click(perVariantRadio)
 
     // Base price should not be visible
-    expect(screen.queryByLabelText(/Base Price/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Base Price/i)).not.toBeInTheDocument()
 
     // Price field should be in the stock lot section
-    const priceInputs = screen.getAllByLabelText(/Price/i);
-    expect(priceInputs.length).toBeGreaterThan(0);
-  });
+    const priceInputs = screen.getAllByLabelText(/Price/i)
+    expect(priceInputs.length).toBeGreaterThan(0)
+  })
 
   it("renders stock lot section with variant attribute fields", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Select a tier-based game item so the quality-tier field renders.
     fireEvent.change(screen.getByTestId("game-item-search"), {
       target: { value: "Test Item" },
-    });
+    })
 
     // Check for stock lot fields.
-    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument()
     // "Quantity" appears both in the simplified section and each stock lot.
-    expect(screen.getAllByLabelText(/Quantity/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByLabelText(/Quantity/i).length).toBeGreaterThan(0)
     // Tier-based items show a Quality Tier select (value items show Quality Value).
-    expect(screen.getByLabelText(/Quality Tier/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Source/i)).toBeInTheDocument();
-    expect(screen.getByTestId("location-selector")).toBeInTheDocument();
-  });
+    expect(screen.getByLabelText(/Quality Tier/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Source/i)).toBeInTheDocument()
+    expect(screen.getByTestId("location-selector")).toBeInTheDocument()
+  })
 
   it("allows adding multiple stock lots", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Initially should have 1 lot
-    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Lot 2/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Lot 2/i)).not.toBeInTheDocument()
 
     // Click add stock lot button
-    const addButton = screen.getByText(/Add Stock Lot/i);
-    fireEvent.click(addButton);
+    const addButton = screen.getByText(/Add Stock Lot/i)
+    fireEvent.click(addButton)
 
     // Should now have 2 lots
-    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Lot 2/i)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument()
+    expect(screen.getByText(/Lot 2/i)).toBeInTheDocument()
+  })
 
   it("allows removing stock lots when more than one exists", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Add a second lot
-    const addButton = screen.getByText(/Add Stock Lot/i);
-    fireEvent.click(addButton);
+    const addButton = screen.getByText(/Add Stock Lot/i)
+    fireEvent.click(addButton)
 
-    expect(screen.getByText(/Lot 2/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lot 2/i)).toBeInTheDocument()
 
     // Remove buttons should be visible
-    const removeButtons = screen.getAllByLabelText(/Remove lot/i);
-    expect(removeButtons.length).toBe(2);
+    const removeButtons = screen.getAllByLabelText(/Remove lot/i)
+    expect(removeButtons.length).toBe(2)
 
     // Remove the second lot
-    fireEvent.click(removeButtons[1]);
+    fireEvent.click(removeButtons[1])
 
     // Should only have 1 lot now
-    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Lot 2/i)).not.toBeInTheDocument();
-  });
+    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Lot 2/i)).not.toBeInTheDocument()
+  })
 
   it("does not show remove button when only one stock lot exists", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Should have 1 lot but no remove button
-    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/Remove lot/i)).not.toBeInTheDocument();
-  });
+    expect(screen.getByText(/Lot 1/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Remove lot/i)).not.toBeInTheDocument()
+  })
 
   it("validates required fields before submission", async () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Try to submit without filling required fields — submit the form directly
     // (clicking the submit button does not reliably dispatch a form submit in happy-dom).
-    const submitButton = screen.getByRole("button", { name: /Create Listing/i });
-    const form = submitButton.closest("form")!;
-    fireEvent.submit(form);
+    const submitButton = screen.getByRole("button", { name: /Create Listing/i })
+    const form = submitButton.closest("form")!
+    fireEvent.submit(form)
 
     await waitFor(() => {
       expect(mockIssueAlert).toHaveBeenCalledWith(
         expect.objectContaining({
           severity: "error",
-        })
-      );
-    });
-  });
+        }),
+      )
+    })
+  })
 
   it("validates quality tier range (1-5)", async () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Fill required fields
     fireEvent.change(screen.getByLabelText(/Title/i), {
       target: { value: "Test Listing" },
-    });
+    })
     fireEvent.change(screen.getByTestId("markdown-editor"), {
       target: { value: "Test description" },
-    });
+    })
     fireEvent.change(screen.getByTestId("game-item-search"), {
       target: { value: "Test Item" },
-    });
+    })
 
     // Set invalid quality tier (this would need to be done through the select dropdown)
     // For this test, we're validating the validation logic exists
 
-    const submitButton = screen.getByRole("button", { name: /Create Listing/i });
-    fireEvent.click(submitButton);
+    const submitButton = screen.getByRole("button", { name: /Create Listing/i })
+    fireEvent.click(submitButton)
 
     // The validation should catch any invalid quality tier values
     // This is a simplified test - in reality, the select dropdown prevents invalid values
-  });
+  })
 
   it("validates quality value range (0-1000)", () => {
     // Quality VALUE input only renders for value-type (commodity) items.
-    gameItem.type = "Commodity";
-    renderWithProviders(<CreateListingV2 />);
+    gameItem.type = "Commodity"
+    renderWithProviders(<CreateListingV2 />)
 
     fireEvent.change(screen.getByTestId("game-item-search"), {
       target: { value: "Test Item" },
-    });
+    })
 
     // Quality value input should be present for commodity items
-    const qualityValueInput = screen.getByLabelText(/Quality Value/i);
-    expect(qualityValueInput).toBeInTheDocument();
+    const qualityValueInput = screen.getByLabelText(/Quality Value/i)
+    expect(qualityValueInput).toBeInTheDocument()
 
     // Restore default tier-based type for subsequent tests
-    gameItem.type = "Ranged Weapon";
-  });
+    gameItem.type = "Ranged Weapon"
+  })
 
   it("includes all crafted source options", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Click on the crafted source dropdown
-    const sourceSelect = screen.getByLabelText(/Source/i);
-    fireEvent.mouseDown(sourceSelect);
+    const sourceSelect = screen.getByLabelText(/Source/i)
+    fireEvent.mouseDown(sourceSelect)
 
     // Check for all options (they appear in the dropdown menu)
     // Note: In a real test, you'd need to wait for the menu to open
     // This is a simplified version
-    expect(sourceSelect).toBeInTheDocument();
-  });
+    expect(sourceSelect).toBeInTheDocument()
+  })
 
   it("updates form state when fields are changed", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
     // Change title
-    const titleInput = screen.getByLabelText(/Title/i);
-    fireEvent.change(titleInput, { target: { value: "New Title" } });
-    expect(titleInput).toHaveValue("New Title");
+    const titleInput = screen.getByLabelText(/Title/i)
+    fireEvent.change(titleInput, { target: { value: "New Title" } })
+    expect(titleInput).toHaveValue("New Title")
 
     // Change description
-    const descriptionInput = screen.getByTestId("markdown-editor");
-    fireEvent.change(descriptionInput, { target: { value: "New Description" } });
-    expect(descriptionInput).toHaveValue("New Description");
-  });
+    const descriptionInput = screen.getByTestId("markdown-editor")
+    fireEvent.change(descriptionInput, { target: { value: "New Description" } })
+    expect(descriptionInput).toHaveValue("New Description")
+  })
 
   it("displays character count when approaching limit", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
-    const titleInput = screen.getByLabelText(/Title/i);
-    const longTitle = "a".repeat(460);
-    fireEvent.change(titleInput, { target: { value: longTitle } });
+    const titleInput = screen.getByLabelText(/Title/i)
+    const longTitle = "a".repeat(460)
+    fireEvent.change(titleInput, { target: { value: longTitle } })
 
     // Should show character count when over 450 characters
-    expect(screen.getByText(/460\/500/)).toBeInTheDocument();
-  });
+    expect(screen.getByText(/460\/500/)).toBeInTheDocument()
+  })
 
   it("renders submit button with loading state", () => {
-    renderWithProviders(<CreateListingV2 />);
+    renderWithProviders(<CreateListingV2 />)
 
-    const submitButton = screen.getByRole("button", { name: /Create Listing/i });
-    expect(submitButton).toBeInTheDocument();
-    expect(submitButton).not.toBeDisabled();
-  });
-});
+    const submitButton = screen.getByRole("button", { name: /Create Listing/i })
+    expect(submitButton).toBeInTheDocument()
+    expect(submitButton).not.toBeDisabled()
+  })
+})
 
 /**
  * Test Coverage Summary:
- * 
+ *
  * ✅ Renders form with all required fields
  * ✅ Displays pricing mode selector (unified vs per_variant)
  * ✅ Shows base price field for unified pricing
@@ -464,7 +509,7 @@ describe("CreateListingV2", () => {
  * ✅ Updates form state on field changes
  * ✅ Displays character count warnings
  * ✅ Renders submit button with loading state
- * 
+ *
  * Requirements Validated:
  * - 11.7: Component reuse (FormPaper, MarkdownEditor, GameItemSearchAutocomplete, SelectPhotosArea, NumericFormat)
  * - 14.1-14.12: Listing creation with variants, validation, pricing modes, stock lots

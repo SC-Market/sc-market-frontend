@@ -32,7 +32,11 @@ interface AddToCartDrawerProps {
   listingId: string
 }
 
-export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerProps) {
+export function AddToCartDrawer({
+  open,
+  onClose,
+  listingId,
+}: AddToCartDrawerProps) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const isMobile = useIsMobile()
@@ -61,13 +65,19 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     }
   }, [variants, selectedVariantId])
 
-  const selectedVariant = variants.find((v) => v.variant_id === selectedVariantId)
+  const selectedVariant = variants.find(
+    (v) => v.variant_id === selectedVariantId,
+  )
 
   // How many of this variant are already in cart
   const inCartQty = useMemo(() => {
     if (!cartData?.items || !selectedVariantId) return 0
     return cartData.items
-      .filter((ci) => ci.variant?.variant_id === selectedVariantId && ci.listing?.listing_id === listingId)
+      .filter(
+        (ci) =>
+          ci.variant?.variant_id === selectedVariantId &&
+          ci.listing?.listing_id === listingId,
+      )
       .reduce((sum, ci) => sum + ci.quantity, 0)
   }, [cartData, selectedVariantId, listingId])
 
@@ -86,10 +96,30 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     if (!selectedVariant) return null
     if (quantity < 1) return t("cart.invalidQty", "Quantity must be at least 1")
     if (totalAfterAdd > available) {
-      return t("cart.exceedsStockWithCart", "Only {{available}} available, cart would have {{total}}", { available, total: totalAfterAdd })
+      return t(
+        "cart.exceedsStockWithCart",
+        "Only {{available}} available, cart would have {{total}}",
+        { available, total: totalAfterAdd },
+      )
     }
-    if (listing?.min_order_quantity && totalAfterAdd < listing.min_order_quantity) return t("cart.belowMinQty", "Minimum quantity: {{min}} (cart has {{total}})", { min: listing.min_order_quantity, total: totalAfterAdd })
-    if (listing?.max_order_quantity && totalAfterAdd > listing.max_order_quantity) return t("cart.aboveMaxQty", "Maximum quantity: {{max}} (cart would have {{total}})", { max: listing.max_order_quantity, total: totalAfterAdd })
+    if (
+      listing?.min_order_quantity &&
+      totalAfterAdd < listing.min_order_quantity
+    )
+      return t(
+        "cart.belowMinQty",
+        "Minimum quantity: {{min}} (cart has {{total}})",
+        { min: listing.min_order_quantity, total: totalAfterAdd },
+      )
+    if (
+      listing?.max_order_quantity &&
+      totalAfterAdd > listing.max_order_quantity
+    )
+      return t(
+        "cart.aboveMaxQty",
+        "Maximum quantity: {{max}} (cart would have {{total}})",
+        { max: listing.max_order_quantity, total: totalAfterAdd },
+      )
     return null
   }, [selectedVariant, quantity, listing, totalAfterAdd, available, t])
 
@@ -103,41 +133,78 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
   }
 
   const content = (
-    <Stack spacing={2} sx={{ p: isMobile ? 0 : 3, minWidth: isMobile ? undefined : 360 }}>
+    <Stack
+      spacing={2}
+      sx={{ p: isMobile ? 0 : 3, minWidth: isMobile ? undefined : 360 }}
+    >
       {isLoading ? (
-        <Box display="flex" justifyContent="center" py={4}><CircularProgress /></Box>
+        <Box display="flex" justifyContent="center" py={4}>
+          <CircularProgress />
+        </Box>
       ) : listingData ? (
         <>
           {!isMobile && (
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Typography variant="h6" fontWeight="bold">{t("cart.addToCart", "Add to Cart")}</Typography>
-              <IconButton onClick={onClose} size="small" aria-label={t("cart.closeDrawer", "Close")}><Close /></IconButton>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6" fontWeight="bold">
+                {t("cart.addToCart", "Add to Cart")}
+              </Typography>
+              <IconButton
+                onClick={onClose}
+                size="small"
+                aria-label={t("cart.closeDrawer", "Close")}
+              >
+                <Close />
+              </IconButton>
             </Box>
           )}
 
-          <Typography variant="subtitle2" color="text.secondary">{listingData.listing.title}</Typography>
+          <Typography variant="subtitle2" color="text.secondary">
+            {listingData.listing.title}
+          </Typography>
 
           {/* Variant selector */}
           {variants.length > 1 ? (
             <TextField
-              select fullWidth size="small"
+              select
+              fullWidth
+              size="small"
               label={t("cart.variant", "Variant")}
               value={selectedVariantId}
-              onChange={(e) => { setSelectedVariantId(e.target.value); setQuantity(1) }}
+              onChange={(e) => {
+                setSelectedVariantId(e.target.value)
+                setQuantity(1)
+              }}
             >
               {variants.map((v) => (
                 <MenuItem key={v.variant_id} value={v.variant_id}>
-                  {v.display_name || t("marketV2.standardVariant")} — {fmt.number(v.price)} aUEC ({t("marketV2.availShort", { quantity: fmt.quantity(v.quantity, listingData.listing.quantity_unit) })})
+                  {v.display_name || t("marketV2.standardVariant")} —{" "}
+                  {fmt.number(v.price)} aUEC (
+                  {t("marketV2.availShort", {
+                    quantity: fmt.quantity(
+                      v.quantity,
+                      listingData.listing.quantity_unit,
+                    ),
+                  })}
+                  )
                 </MenuItem>
               ))}
             </TextField>
           ) : variants.length === 1 ? (
             <Box sx={{ p: 1.5, bgcolor: "action.hover", borderRadius: 1 }}>
               <Typography variant="body2">
-                {variants[0].display_name || t("marketV2.standardVariant")} — {fmt.number(variants[0].price)} aUEC
+                {variants[0].display_name || t("marketV2.standardVariant")} —{" "}
+                {fmt.number(variants[0].price)} aUEC
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                {fmt.quantity(variants[0].quantity, listingData.listing.quantity_unit)} {t("cart.available", "available")}
+                {fmt.quantity(
+                  variants[0].quantity,
+                  listingData.listing.quantity_unit,
+                )}{" "}
+                {t("cart.available", "available")}
               </Typography>
             </Box>
           ) : null}
@@ -145,7 +212,9 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           {/* Already in cart indicator */}
           {inCartQty > 0 && (
             <Chip
-              label={t("cart.alreadyInCart", "{{count}} already in cart", { count: inCartQty })}
+              label={t("cart.alreadyInCart", "{{count}} already in cart", {
+                count: inCartQty,
+              })}
               size="small"
               color="info"
               variant="outlined"
@@ -158,7 +227,8 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
-            size="small" fullWidth
+            size="small"
+            fullWidth
             label={t("cart.quantity", "Quantity")}
             value={quantity}
             onValueChange={(v) => setQuantity(v.floatValue || 1)}
@@ -173,16 +243,26 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           )}
 
           {validationError && (
-            <Typography variant="caption" color="error">{validationError}</Typography>
+            <Typography variant="caption" color="error">
+              {validationError}
+            </Typography>
           )}
 
           <Button
-            variant="contained" fullWidth
+            variant="contained"
+            fullWidth
             startIcon={<ShoppingCartRounded />}
             onClick={handleAdd}
-            disabled={isAdding || !selectedVariantId || quantity < 1 || !!validationError}
+            disabled={
+              isAdding ||
+              !selectedVariantId ||
+              quantity < 1 ||
+              !!validationError
+            }
           >
-            {isAdding ? t("cart.adding", "Adding...") : t("cart.addToCart", "Add to Cart")}
+            {isAdding
+              ? t("cart.adding", "Adding...")
+              : t("cart.addToCart", "Add to Cart")}
           </Button>
 
           {/* Current cart for this listing */}
@@ -196,21 +276,36 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                 {cartItemsForListing.map((ci) => (
                   <Box
                     key={ci.cart_item_id}
-                    sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 1, bgcolor: "action.hover", borderRadius: 1 }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      p: 1,
+                      bgcolor: "action.hover",
+                      borderRadius: 1,
+                    }}
                   >
                     <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="body2" noWrap>{ci.variant?.display_name || t("marketV2.standardVariant")}</Typography>
+                      <Typography variant="body2" noWrap>
+                        {ci.variant?.display_name ||
+                          t("marketV2.standardVariant")}
+                      </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {ci.quantity} × {fmt.number(ci.price_per_unit)} aUEC = {fmt.number(ci.quantity * ci.price_per_unit)} aUEC
+                        {ci.quantity} × {fmt.number(ci.price_per_unit)} aUEC ={" "}
+                        {fmt.number(ci.quantity * ci.price_per_unit)} aUEC
                       </Typography>
                     </Box>
                     <IconButton
                       size="small"
                       onClick={() => handleRemoveCartItem(ci.cart_item_id)}
                       color="error"
-                      aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
-                        title: `${listingData.listing.title} (${ci.variant?.display_name || t("marketV2.standardVariant")})`,
-                      })}
+                      aria-label={t(
+                        "cart.removeItem",
+                        "Remove {{title}} from cart",
+                        {
+                          title: `${listingData.listing.title} (${ci.variant?.display_name || t("marketV2.standardVariant")})`,
+                        },
+                      )}
                     >
                       <DeleteOutline fontSize="small" />
                     </IconButton>
@@ -240,7 +335,11 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
 
   if (isMobile) {
     return (
-      <BottomSheet open={open} onClose={onClose} title={t("cart.addToCart", "Add to Cart")}>
+      <BottomSheet
+        open={open}
+        onClose={onClose}
+        title={t("cart.addToCart", "Add to Cart")}
+      >
         {content}
       </BottomSheet>
     )

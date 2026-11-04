@@ -1,11 +1,5 @@
 import React, { ReactElement, useEffect, useRef } from "react"
-import {
-  Box,
-  Container,
-  ContainerProps,
-  Grid,
-  GridProps,
-} from "@mui/material"
+import { Box, Container, ContainerProps, Grid, GridProps } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"

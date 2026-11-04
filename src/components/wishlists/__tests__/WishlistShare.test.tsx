@@ -1,7 +1,7 @@
 import "../../../util/i18n"
 /**
  * WishlistShare Component Tests
- * 
+ *
  * Tests for wishlist sharing functionality including:
  * - Share link generation and display
  * - Copy to clipboard functionality
@@ -9,7 +9,7 @@ import "../../../util/i18n"
  * - Collaborative mode toggle
  * - Error handling
  * - Loading states
- * 
+ *
  * Task 14.5 - Create WishlistShare component
  * Requirements: 28.1, 28.2, 28.3, 28.4, 28.5, 28.6
  */
@@ -46,7 +46,10 @@ const createMockStore = (initialState = {}) => {
 }
 
 // Helper to render with Redux
-const renderWithRedux = (component: React.ReactElement, store = createMockStore()) => {
+const renderWithRedux = (
+  component: React.ReactElement,
+  store = createMockStore(),
+) => {
   return {
     ...render(<Provider store={store}>{component}</Provider>),
     store,
@@ -86,7 +89,7 @@ describe("WishlistShare Component", () => {
   describe("Rendering", () => {
     it("should render dialog with wishlist name", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getByText("Share Wishlist")).toBeInTheDocument()
@@ -95,7 +98,7 @@ describe("WishlistShare Component", () => {
 
     it("should render privacy settings section", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getByText("Privacy Settings")).toBeInTheDocument()
@@ -104,7 +107,7 @@ describe("WishlistShare Component", () => {
 
     it("should render current sharing status summary (Requirement 28.4)", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getByText("Current Sharing Status")).toBeInTheDocument()
@@ -115,7 +118,11 @@ describe("WishlistShare Component", () => {
 
     it("should not render when dialog is closed", () => {
       renderWithRedux(
-        <WishlistShare open={false} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare
+          open={false}
+          onClose={vi.fn()}
+          wishlist={mockWishlist}
+        />,
       )
 
       expect(screen.queryByText("Share Wishlist")).not.toBeInTheDocument()
@@ -125,35 +132,45 @@ describe("WishlistShare Component", () => {
   describe("Privacy Settings (Requirement 28.5)", () => {
     it("should display private status for private wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getAllByText("Private").length).toBeGreaterThan(0)
-      expect(screen.getByText("Only you can view this shopping list")).toBeInTheDocument()
+      expect(
+        screen.getByText("Only you can view this shopping list"),
+      ).toBeInTheDocument()
     })
 
     it("should display public status for public wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
       expect(screen.getAllByText("Public").length).toBeGreaterThan(0)
-      expect(screen.getByText("Anyone with the link can view this shopping list")).toBeInTheDocument()
+      expect(
+        screen.getByText("Anyone with the link can view this shopping list"),
+      ).toBeInTheDocument()
     })
 
     it("should show info alert when wishlist is private", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(
-        screen.getByText("Enable public visibility to generate a shareable link")
+        screen.getByText(
+          "Enable public visibility to generate a shareable link",
+        ),
       ).toBeInTheDocument()
     })
 
     it("should toggle privacy switch", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       const privacySwitch = screen.getByRole("checkbox", { name: /Private/i })
@@ -167,14 +184,20 @@ describe("WishlistShare Component", () => {
   describe("Share Link Generation (Requirement 28.1)", () => {
     it("should display share link for public wishlist with token", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
       expect(screen.getByText("Share Link")).toBeInTheDocument()
-      expect(screen.getByText("Copy this link to share your wishlist with others")).toBeInTheDocument()
+      expect(
+        screen.getByText("Copy this link to share your wishlist with others"),
+      ).toBeInTheDocument()
 
       const linkInput = screen.getByDisplayValue(
-        "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789"
+        "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789",
       )
       expect(linkInput).toBeInTheDocument()
       expect(linkInput).toHaveAttribute("readonly")
@@ -182,7 +205,7 @@ describe("WishlistShare Component", () => {
 
     it("should not display share link for private wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.queryByText("Share Link")).not.toBeInTheDocument()
@@ -190,7 +213,11 @@ describe("WishlistShare Component", () => {
 
     it("should generate correct share URL format", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
       const expectedUrl = `https://example.com/game-data/shopping-lists/${mockPublicWishlist.wishlist_id}?share_token=${mockPublicWishlist.share_token}`
@@ -201,10 +228,16 @@ describe("WishlistShare Component", () => {
   describe("Copy to Clipboard (Requirement 28.1)", () => {
     it("should render copy button for public wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      const copyButton = screen.getByRole("button", { name: /Copy to clipboard/i })
+      const copyButton = screen.getByRole("button", {
+        name: /Copy to clipboard/i,
+      })
       expect(copyButton).toBeInTheDocument()
     })
 
@@ -216,15 +249,21 @@ describe("WishlistShare Component", () => {
       })
 
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      const copyButton = screen.getByRole("button", { name: /Copy to clipboard/i })
+      const copyButton = screen.getByRole("button", {
+        name: /Copy to clipboard/i,
+      })
       fireEvent.click(copyButton)
 
       await waitFor(() => {
         expect(writeTextMock).toHaveBeenCalledWith(
-          "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789"
+          "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789",
         )
       })
     })
@@ -237,14 +276,22 @@ describe("WishlistShare Component", () => {
       })
 
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      const copyButton = screen.getByRole("button", { name: /Copy to clipboard/i })
+      const copyButton = screen.getByRole("button", {
+        name: /Copy to clipboard/i,
+      })
       fireEvent.click(copyButton)
 
       await waitFor(() => {
-        expect(screen.getByText("Link copied to clipboard!")).toBeInTheDocument()
+        expect(
+          screen.getByText("Link copied to clipboard!"),
+        ).toBeInTheDocument()
       })
     })
 
@@ -256,33 +303,51 @@ describe("WishlistShare Component", () => {
       })
 
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      const copyButton = screen.getByRole("button", { name: /Copy to clipboard/i })
+      const copyButton = screen.getByRole("button", {
+        name: /Copy to clipboard/i,
+      })
       fireEvent.click(copyButton)
 
       await waitFor(() => {
-        expect(screen.getByRole("button", { name: /Copied!/i })).toBeInTheDocument()
+        expect(
+          screen.getByRole("button", { name: /Copied!/i }),
+        ).toBeInTheDocument()
       })
     })
 
     it("should handle clipboard copy failure", async () => {
-      const writeTextMock = vi.fn().mockRejectedValue(new Error("Clipboard error"))
+      const writeTextMock = vi
+        .fn()
+        .mockRejectedValue(new Error("Clipboard error"))
       vi.stubGlobal("navigator", {
         ...navigator,
         clipboard: { ...navigator.clipboard, writeText: writeTextMock },
       })
 
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      const copyButton = screen.getByRole("button", { name: /Copy to clipboard/i })
+      const copyButton = screen.getByRole("button", {
+        name: /Copy to clipboard/i,
+      })
       fireEvent.click(copyButton)
 
       await waitFor(() => {
-        expect(screen.getByText("Failed to copy link. Please copy manually.")).toBeInTheDocument()
+        expect(
+          screen.getByText("Failed to copy link. Please copy manually."),
+        ).toBeInTheDocument()
       })
     })
   })
@@ -290,7 +355,11 @@ describe("WishlistShare Component", () => {
   describe("Collaborative Mode (Requirement 28.6)", () => {
     it("should display collaborative settings for organization wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockOrgWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockOrgWishlist}
+        />,
       )
 
       expect(screen.getByText("Collaboration Settings")).toBeInTheDocument()
@@ -299,56 +368,89 @@ describe("WishlistShare Component", () => {
 
     it("should display info about collaborative mode for organization wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockOrgWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockOrgWishlist}
+        />,
       )
 
       expect(
-        screen.getByText(/This wishlist is associated with your organization/)
+        screen.getByText(/This wishlist is associated with your organization/),
       ).toBeInTheDocument()
     })
 
     it("should show disabled collaborative mode by default", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockOrgWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockOrgWishlist}
+        />,
       )
 
-      const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
+      const collaborativeSwitch = screen.getByRole("checkbox", {
+        name: /Collaborative Mode/i,
+      })
       expect(collaborativeSwitch).not.toBeChecked()
       expect(
-        screen.getByText("Only you can add and edit items in this shopping list")
+        screen.getByText(
+          "Only you can add and edit items in this shopping list",
+        ),
       ).toBeInTheDocument()
     })
 
     it("should show enabled collaborative mode when active", () => {
-      const collaborativeWishlist = { ...mockOrgWishlist, is_collaborative: true }
+      const collaborativeWishlist = {
+        ...mockOrgWishlist,
+        is_collaborative: true,
+      }
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={collaborativeWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={collaborativeWishlist}
+        />,
       )
 
-      const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
+      const collaborativeSwitch = screen.getByRole("checkbox", {
+        name: /Collaborative Mode/i,
+      })
       expect(collaborativeSwitch).toBeChecked()
       expect(
-        screen.getByText("Organization members can add and edit items in this shopping list")
+        screen.getByText(
+          "Organization members can add and edit items in this shopping list",
+        ),
       ).toBeInTheDocument()
     })
 
     it("should show info alert for non-organization wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(
-        screen.getByText(/This wishlist is not associated with an organization/)
+        screen.getByText(
+          /This wishlist is not associated with an organization/,
+        ),
       ).toBeInTheDocument()
-      expect(screen.queryByText("Collaboration Settings")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Collaboration Settings"),
+      ).not.toBeInTheDocument()
     })
 
     it("should toggle collaborative switch", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockOrgWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockOrgWishlist}
+        />,
       )
 
-      const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
+      const collaborativeSwitch = screen.getByRole("checkbox", {
+        name: /Collaborative Mode/i,
+      })
       expect(collaborativeSwitch).not.toBeChecked()
 
       fireEvent.click(collaborativeSwitch)
@@ -359,7 +461,7 @@ describe("WishlistShare Component", () => {
   describe("Sharing Status Summary (Requirement 28.4)", () => {
     it("should display correct status for private non-collaborative wishlist", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getByText(/Visibility:/)).toBeInTheDocument()
@@ -373,7 +475,11 @@ describe("WishlistShare Component", () => {
 
     it("should display correct status for public wishlist with share token", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
       const publicElements = screen.getAllByText("Public")
@@ -382,9 +488,16 @@ describe("WishlistShare Component", () => {
     })
 
     it("should display correct status for collaborative organization wishlist", () => {
-      const collaborativeWishlist = { ...mockOrgWishlist, is_collaborative: true }
+      const collaborativeWishlist = {
+        ...mockOrgWishlist,
+        is_collaborative: true,
+      }
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={collaborativeWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={collaborativeWishlist}
+        />,
       )
 
       expect(screen.getByText("Enabled")).toBeInTheDocument()
@@ -395,7 +508,11 @@ describe("WishlistShare Component", () => {
     it("should call onClose when close button is clicked", () => {
       const onCloseMock = vi.fn()
       renderWithRedux(
-        <WishlistShare open={true} onClose={onCloseMock} wishlist={mockWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={onCloseMock}
+          wishlist={mockWishlist}
+        />,
       )
 
       const closeButton = screen.getByRole("button", { name: /Close/i })
@@ -407,7 +524,11 @@ describe("WishlistShare Component", () => {
     it("should call onClose when dialog backdrop is clicked", () => {
       const onCloseMock = vi.fn()
       const { container } = renderWithRedux(
-        <WishlistShare open={true} onClose={onCloseMock} wishlist={mockWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={onCloseMock}
+          wishlist={mockWishlist}
+        />,
       )
 
       const backdrop = container.querySelector(".MuiBackdrop-root")
@@ -421,7 +542,7 @@ describe("WishlistShare Component", () => {
   describe("State Management", () => {
     it("should reset state when wishlist changes", () => {
       const { rerender, store } = renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       // Initial state: private
@@ -430,8 +551,12 @@ describe("WishlistShare Component", () => {
       // Change to public wishlist
       rerender(
         <Provider store={store}>
-          <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
-        </Provider>
+          <WishlistShare
+            open={true}
+            onClose={vi.fn()}
+            wishlist={mockPublicWishlist}
+          />
+        </Provider>,
       )
 
       // Should update to public
@@ -441,7 +566,11 @@ describe("WishlistShare Component", () => {
     it("should clear success message when dialog closes", () => {
       const onCloseMock = vi.fn()
       renderWithRedux(
-        <WishlistShare open={true} onClose={onCloseMock} wishlist={mockWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={onCloseMock}
+          wishlist={mockWishlist}
+        />,
       )
 
       const closeButton = screen.getByRole("button", { name: /Close/i })
@@ -455,7 +584,7 @@ describe("WishlistShare Component", () => {
   describe("Accessibility", () => {
     it("should have accessible dialog title", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       expect(screen.getByRole("dialog")).toBeInTheDocument()
@@ -464,7 +593,7 @@ describe("WishlistShare Component", () => {
 
     it("should have accessible form controls", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
       )
 
       const privacySwitch = screen.getByRole("checkbox", { name: /Private/i })
@@ -473,16 +602,26 @@ describe("WishlistShare Component", () => {
 
     it("should have accessible buttons", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
-      expect(screen.getByRole("button", { name: /Copy to clipboard/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Copy to clipboard/i }),
+      ).toBeInTheDocument()
       expect(screen.getByRole("button", { name: /Close/i })).toBeInTheDocument()
     })
 
     it("should have readonly share link input", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockPublicWishlist}
+        />,
       )
 
       const linkInput = screen.getByDisplayValue(/https:\/\/example\.com/)
@@ -492,18 +631,33 @@ describe("WishlistShare Component", () => {
 
   describe("Edge Cases", () => {
     it("should handle wishlist without share token", () => {
-      const wishlistWithoutToken = { ...mockWishlist, is_public: true, share_token: undefined }
+      const wishlistWithoutToken = {
+        ...mockWishlist,
+        is_public: true,
+        share_token: undefined,
+      }
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={wishlistWithoutToken} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={wishlistWithoutToken}
+        />,
       )
 
       expect(screen.queryByText("Share Link")).not.toBeInTheDocument()
     })
 
     it("should handle wishlist with empty description", () => {
-      const wishlistNoDesc = { ...mockWishlist, wishlist_description: undefined }
+      const wishlistNoDesc = {
+        ...mockWishlist,
+        wishlist_description: undefined,
+      }
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={wishlistNoDesc} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={wishlistNoDesc}
+        />,
       )
 
       expect(screen.getByText("My Test Wishlist")).toBeInTheDocument()
@@ -511,10 +665,16 @@ describe("WishlistShare Component", () => {
 
     it("should handle organization wishlist without collaborative mode", () => {
       renderWithRedux(
-        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockOrgWishlist} />
+        <WishlistShare
+          open={true}
+          onClose={vi.fn()}
+          wishlist={mockOrgWishlist}
+        />,
       )
 
-      const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
+      const collaborativeSwitch = screen.getByRole("checkbox", {
+        name: /Collaborative Mode/i,
+      })
       expect(collaborativeSwitch).not.toBeChecked()
     })
   })

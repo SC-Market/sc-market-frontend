@@ -58,9 +58,7 @@ export function CustomerRow(props: {
         </Grid>
       </TableCell>
       <TableCell align="right">
-        <Typography variant={"subtitle1"}>
-          {fmt.number(row.orders)}
-        </Typography>
+        <Typography variant={"subtitle1"}>{fmt.number(row.orders)}</Typography>
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
@@ -74,9 +72,7 @@ export function CustomerRow(props: {
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
-          {row.last_order_at
-            ? fmt.date(row.last_order_at)
-            : "—"}
+          {row.last_order_at ? fmt.date(row.last_order_at) : "—"}
         </Typography>
       </TableCell>
     </TableRow>

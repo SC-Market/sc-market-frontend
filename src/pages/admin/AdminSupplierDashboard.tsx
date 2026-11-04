@@ -75,9 +75,11 @@ function formatAuec(value: number, locale: string): string {
 function timeAgo(t: TFunction, isoDate: string): string {
   const diff = Date.now() - new Date(isoDate).getTime()
   const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return t("suppliersUi.dashboard.timeAgo.minutes", { count: mins })
+  if (mins < 60)
+    return t("suppliersUi.dashboard.timeAgo.minutes", { count: mins })
   const hours = Math.floor(mins / 60)
-  if (hours < 24) return t("suppliersUi.dashboard.timeAgo.hours", { count: hours })
+  if (hours < 24)
+    return t("suppliersUi.dashboard.timeAgo.hours", { count: hours })
   return t("suppliersUi.dashboard.timeAgo.days", {
     count: Math.floor(hours / 24),
   })
@@ -92,9 +94,17 @@ function initials(name: string): string {
 }
 
 function avatarColor(name: string): string {
-  const colors = ["#3b82f6", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"]
+  const colors = [
+    "#3b82f6",
+    "#8b5cf6",
+    "#06b6d4",
+    "#10b981",
+    "#f59e0b",
+    "#ef4444",
+  ]
   let h = 0
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffff
+  for (let i = 0; i < name.length; i++)
+    h = (h * 31 + name.charCodeAt(i)) & 0xffffff
   return colors[Math.abs(h) % colors.length]
 }
 
@@ -102,29 +112,65 @@ const VISIBILITY_CHIP: Record<
   string,
   { label: string; color: "primary" | "info" | "default" }
 > = {
-  private: { label: "suppliersUi.dashboard.visibility.targeted", color: "primary" },
-  roster_only: { label: "suppliersUi.dashboard.visibility.roster", color: "info" },
-  public: { label: "suppliersUi.dashboard.visibility.public", color: "default" },
+  private: {
+    label: "suppliersUi.dashboard.visibility.targeted",
+    color: "primary",
+  },
+  roster_only: {
+    label: "suppliersUi.dashboard.visibility.roster",
+    color: "info",
+  },
+  public: {
+    label: "suppliersUi.dashboard.visibility.public",
+    color: "default",
+  },
 }
 
 const ORDER_STATUS_CHIP: Record<
   string,
   { label: string; color: "warning" | "success" | "error" | "default" }
 > = {
-  "not-started": { label: "suppliersUi.dashboard.orderStatus.notStarted", color: "warning" },
-  "in-progress": { label: "suppliersUi.dashboard.orderStatus.inProgress", color: "warning" },
-  fulfilled: { label: "suppliersUi.dashboard.orderStatus.fulfilled", color: "success" },
-  cancelled: { label: "suppliersUi.dashboard.orderStatus.cancelled", color: "error" },
+  "not-started": {
+    label: "suppliersUi.dashboard.orderStatus.notStarted",
+    color: "warning",
+  },
+  "in-progress": {
+    label: "suppliersUi.dashboard.orderStatus.inProgress",
+    color: "warning",
+  },
+  fulfilled: {
+    label: "suppliersUi.dashboard.orderStatus.fulfilled",
+    color: "success",
+  },
+  cancelled: {
+    label: "suppliersUi.dashboard.orderStatus.cancelled",
+    color: "error",
+  },
 }
 
 const REQ_STATUS_CHIP: Record<
   string,
-  { label: string; color: "warning" | "primary" | "success" | "error" | "default" }
+  {
+    label: string
+    color: "warning" | "primary" | "success" | "error" | "default"
+  }
 > = {
-  "not-started": { label: "suppliersUi.dashboard.reqStatus.awaiting", color: "warning" },
-  "in-progress": { label: "suppliersUi.dashboard.reqStatus.inProgress", color: "primary" },
-  fulfilled: { label: "suppliersUi.dashboard.reqStatus.fulfilled", color: "success" },
-  cancelled: { label: "suppliersUi.dashboard.reqStatus.cancelled", color: "error" },
+  "not-started": {
+    label: "suppliersUi.dashboard.reqStatus.awaiting",
+    color: "warning",
+  },
+  "in-progress": {
+    label: "suppliersUi.dashboard.reqStatus.inProgress",
+    color: "primary",
+  },
+  fulfilled: {
+    label: "suppliersUi.dashboard.reqStatus.fulfilled",
+    color: "success",
+  },
+  cancelled: {
+    label: "suppliersUi.dashboard.reqStatus.cancelled",
+    color: "error",
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -153,7 +199,12 @@ function StatCard({ icon, label, value, sub, accent, loading }: StatCardProps) {
       }}
     >
       <Stack direction="row" alignItems="center" spacing={1} mb={0.5}>
-        <Box sx={{ color: accent ? "primary.main" : "text.secondary", display: "flex" }}>
+        <Box
+          sx={{
+            color: accent ? "primary.main" : "text.secondary",
+            display: "flex",
+          }}
+        >
           {icon}
         </Box>
         <Typography variant="caption" color="text.secondary" noWrap>
@@ -221,7 +272,9 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
           </Typography>
         </Stack>
         <Chip
-          label={t("suppliersUi.dashboard.activeCount", { count: orders.length })}
+          label={t("suppliersUi.dashboard.activeCount", {
+            count: orders.length,
+          })}
           size="small"
           color="primary"
           variant="outlined"
@@ -239,7 +292,9 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         <Tab
           label={
             countBy("private")
-              ? t("suppliersUi.dashboard.tabs.targetedCount", { count: countBy("private") })
+              ? t("suppliersUi.dashboard.tabs.targetedCount", {
+                  count: countBy("private"),
+                })
               : t("suppliersUi.dashboard.tabs.targeted")
           }
           value="targeted"
@@ -248,7 +303,9 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         <Tab
           label={
             countBy("roster_only")
-              ? t("suppliersUi.dashboard.tabs.rosterCount", { count: countBy("roster_only") })
+              ? t("suppliersUi.dashboard.tabs.rosterCount", {
+                  count: countBy("roster_only"),
+                })
               : t("suppliersUi.dashboard.tabs.roster")
           }
           value="roster"
@@ -257,7 +314,9 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         <Tab
           label={
             countBy("public")
-              ? t("suppliersUi.dashboard.tabs.publicCount", { count: countBy("public") })
+              ? t("suppliersUi.dashboard.tabs.publicCount", {
+                  count: countBy("public"),
+                })
               : t("suppliersUi.dashboard.tabs.public")
           }
           value="public"
@@ -281,10 +340,16 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
                 {t("suppliersUi.dashboard.columns.visibility")}
               </TableCell>
-              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
+              <TableCell
+                align="right"
+                sx={{ color: "text.secondary", fontSize: 11 }}
+              >
                 {t("suppliersUi.dashboard.columns.pricePerUnit")}
               </TableCell>
-              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
+              <TableCell
+                align="right"
+                sx={{ color: "text.secondary", fontSize: 11 }}
+              >
                 {t("suppliersUi.dashboard.columns.qty")}
               </TableCell>
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
@@ -302,18 +367,25 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                   key={order.buy_order_id}
                   sx={{
                     cursor: "pointer",
-                    borderLeft: isTargeted ? "3px solid #3b82f6" : "3px solid transparent",
+                    borderLeft: isTargeted
+                      ? "3px solid #3b82f6"
+                      : "3px solid transparent",
                     "&:hover": { bgcolor: "action.hover" },
                   }}
-                  onClick={() =>
-                    navigate(`/buy-orders/${order.buy_order_id}`)
-                  }
+                  onClick={() => navigate(`/buy-orders/${order.buy_order_id}`)}
                 >
                   <TableCell>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Inventory2Rounded sx={{ fontSize: 14, color: "text.secondary" }} />
+                      <Inventory2Rounded
+                        sx={{ fontSize: 14, color: "text.secondary" }}
+                      />
                       <Box>
-                        <Typography variant="body2" fontWeight={500} noWrap sx={{ maxWidth: 180 }}>
+                        <Typography
+                          variant="body2"
+                          fontWeight={500}
+                          noWrap
+                          sx={{ maxWidth: 180 }}
+                        >
                           {order.game_item_name}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
@@ -358,7 +430,13 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                   </TableCell>
                   <TableCell>
                     <Tooltip title={t("suppliersUi.dashboard.viewOrder")}>
-                      <IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/buy-orders/${order.buy_order_id}`) }}>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate(`/buy-orders/${order.buy_order_id}`)
+                        }}
+                      >
                         <OpenInNewRounded sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Tooltip>
@@ -385,7 +463,16 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
 
   return (
     <Paper variant="outlined" sx={{ overflow: "hidden" }}>
-      <Box sx={{ px: 2, pt: 2, pb: 1.5, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          px: 2,
+          pt: 2,
+          pb: 1.5,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Stack direction="row" spacing={1} alignItems="center">
           <AssignmentRounded sx={{ fontSize: 18, color: "text.secondary" }} />
           <Typography variant="subtitle1" fontWeight={600}>
@@ -413,7 +500,8 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
       ) : (
         <Stack divider={<Divider />}>
           {reqs.slice(0, 5).map((req) => {
-            const sc = REQ_STATUS_CHIP[req.status] ?? REQ_STATUS_CHIP["not-started"]
+            const sc =
+              REQ_STATUS_CHIP[req.status] ?? REQ_STATUS_CHIP["not-started"]
             return (
               <Box
                 key={req.order_id}
@@ -434,10 +522,17 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                       bgcolor: avatarColor(req.buyer?.username ?? "?"),
                     }}
                   >
-                    {initials(req.buyer?.display_name ?? req.buyer?.username ?? "?")}
+                    {initials(
+                      req.buyer?.display_name ?? req.buyer?.username ?? "?",
+                    )}
                   </Avatar>
                   <Box flex={1} minWidth={0}>
-                    <Stack direction="row" spacing={1} alignItems="center" mb={0.25}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      mb={0.25}
+                    >
                       <Typography variant="body2" fontWeight={600} noWrap>
                         {req.title}
                       </Typography>
@@ -455,7 +550,10 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                       })}
                     </Typography>
                   </Box>
-                  <IconButton size="small" aria-label={t("suppliersUi.dashboard.openRequisition")}>
+                  <IconButton
+                    size="small"
+                    aria-label={t("suppliersUi.dashboard.openRequisition")}
+                  >
                     <OpenInNewRounded sx={{ fontSize: 14 }} />
                   </IconButton>
                 </Stack>
@@ -479,15 +577,28 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
 
   return (
     <Paper variant="outlined" sx={{ overflow: "hidden" }}>
-      <Box sx={{ px: 2, pt: 2, pb: 1.5, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          px: 2,
+          pt: 2,
+          pb: 1.5,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Stack direction="row" spacing={1} alignItems="center">
-          <LocalShippingRounded sx={{ fontSize: 18, color: "text.secondary" }} />
+          <LocalShippingRounded
+            sx={{ fontSize: 18, color: "text.secondary" }}
+          />
           <Typography variant="subtitle1" fontWeight={600}>
             {t("recentOrders.title")}
           </Typography>
         </Stack>
         <Chip
-          label={t("suppliersUi.dashboard.sellerCount", { count: orders.length })}
+          label={t("suppliersUi.dashboard.sellerCount", {
+            count: orders.length,
+          })}
           size="small"
           variant="outlined"
           sx={{ fontSize: 10 }}
@@ -510,7 +621,10 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
                 {t("suppliersUi.dashboard.columns.order")}
               </TableCell>
-              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
+              <TableCell
+                align="right"
+                sx={{ color: "text.secondary", fontSize: 11 }}
+              >
                 {t("suppliersUi.dashboard.columns.total")}
               </TableCell>
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
@@ -528,7 +642,10 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
               return (
                 <TableRow
                   key={order.order_id}
-                  sx={{ cursor: "pointer", "&:hover": { bgcolor: "action.hover" } }}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { bgcolor: "action.hover" },
+                  }}
                   onClick={() => navigate(`/orders/${order.order_id}`)}
                 >
                   <TableCell>
@@ -580,7 +697,14 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" aria-label={t("suppliersUi.dashboard.openOrder")} onClick={(e) => { e.stopPropagation(); navigate(`/orders/${order.order_id}`) }}>
+                    <IconButton
+                      size="small"
+                      aria-label={t("suppliersUi.dashboard.openOrder")}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/orders/${order.order_id}`)
+                      }}
+                    >
                       <OpenInNewRounded sx={{ fontSize: 14 }} />
                     </IconButton>
                   </TableCell>
@@ -620,7 +744,9 @@ function buildActivityFeed(
     .forEach((o) => {
       items.push({
         id: `bo-${o.buy_order_id}`,
-        icon: <ShoppingCartRounded sx={{ fontSize: 16, color: "primary.main" }} />,
+        icon: (
+          <ShoppingCartRounded sx={{ fontSize: 16, color: "primary.main" }} />
+        ),
         text: (
           <>
             <Trans
@@ -640,7 +766,9 @@ function buildActivityFeed(
     .forEach((r) => {
       items.push({
         id: `req-${r.order_id}`,
-        icon: <AssignmentRounded sx={{ fontSize: 16, color: "warning.main" }} />,
+        icon: (
+          <AssignmentRounded sx={{ fontSize: 16, color: "warning.main" }} />
+        ),
         text: (
           <>
             <Trans
@@ -668,7 +796,10 @@ function buildActivityFeed(
           <>
             <Trans
               i18nKey="suppliersUi.dashboard.activity.orderCompleted"
-              values={{ title: o.title, amount: formatAuec(o.total_price, locale) }}
+              values={{
+                title: o.title,
+                amount: formatAuec(o.total_price, locale),
+              }}
               components={{ b: <b /> }}
             />
           </>
@@ -719,8 +850,11 @@ function ActivityFeed({ items }: { items: ActivityItem[] }) {
 export function AdminSupplierDashboard() {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const { data: buyOrdersData, isLoading: boLoading, refetch: boRefetch } =
-    useSearchBuyOrdersQuery({ pageSize: 50 })
+  const {
+    data: buyOrdersData,
+    isLoading: boLoading,
+    refetch: boRefetch,
+  } = useSearchBuyOrdersQuery({ pageSize: 50 })
   const { data: myBuyOrders } = useGetMyBuyOrdersQuery({})
   const { data: requisitionsData, isLoading: reqLoading } =
     useGetRequisitionsQuery({ role: "supplier", pageSize: 20 })
@@ -744,7 +878,13 @@ export function AdminSupplierDashboard() {
     .reduce((sum, o) => sum + o.total_price, 0)
   const supplierCount = suppliersData?.total ?? 0
 
-  const activityFeed = buildActivityFeed(t, activeBuyOrders, reqs, orders, fmt.locale)
+  const activityFeed = buildActivityFeed(
+    t,
+    activeBuyOrders,
+    reqs,
+    orders,
+    fmt.locale,
+  )
 
   const isLoading = boLoading || reqLoading || ordersLoading
 
@@ -800,7 +940,8 @@ export function AdminSupplierDashboard() {
           label={t("suppliersUi.dashboard.stats.activeBuyOrders")}
           value={activeBuyOrders.length}
           sub={t("suppliersUi.dashboard.stats.targetedAtMe", {
-            count: activeBuyOrders.filter((o) => o.visibility === "private").length,
+            count: activeBuyOrders.filter((o) => o.visibility === "private")
+              .length,
           })}
           accent={activeBuyOrders.some((o) => o.visibility === "private")}
           loading={boLoading}
@@ -808,7 +949,11 @@ export function AdminSupplierDashboard() {
         <StatCard
           icon={<AssignmentRounded sx={{ fontSize: 18 }} />}
           label={t("suppliersUi.dashboard.stats.openRequisitions")}
-          value={reqs.filter((r) => r.status !== "fulfilled" && r.status !== "cancelled").length}
+          value={
+            reqs.filter(
+              (r) => r.status !== "fulfilled" && r.status !== "cancelled",
+            ).length
+          }
           sub={
             pendingReqs.length
               ? t("suppliersUi.dashboard.stats.awaitingResponse", {
@@ -822,7 +967,9 @@ export function AdminSupplierDashboard() {
         <StatCard
           icon={<PaymentsRounded sx={{ fontSize: 18 }} />}
           label={t("suppliersUi.dashboard.stats.revenue")}
-          value={t("suppliersUi.amountAuec", { amount: formatAuec(recentRevenue, fmt.locale) })}
+          value={t("suppliersUi.amountAuec", {
+            amount: formatAuec(recentRevenue, fmt.locale),
+          })}
           sub={t("suppliersUi.dashboard.stats.ordersCompleted", {
             count: orders.filter((o) => o.status === "fulfilled").length,
           })}
@@ -832,7 +979,9 @@ export function AdminSupplierDashboard() {
           icon={<CheckCircleOutlineRounded sx={{ fontSize: 18 }} />}
           label={t("suppliersUi.dashboard.stats.fulfilledOrders")}
           value={orders.filter((o) => o.status === "fulfilled").length}
-          sub={t("suppliersUi.dashboard.stats.ofTotal", { count: orders.length })}
+          sub={t("suppliersUi.dashboard.stats.ofTotal", {
+            count: orders.length,
+          })}
           loading={ordersLoading}
         />
         <StatCard
@@ -843,9 +992,7 @@ export function AdminSupplierDashboard() {
         />
       </Stack>
 
-      {isLoading && (
-        <LinearProgress sx={{ mb: 2, borderRadius: 1 }} />
-      )}
+      {isLoading && <LinearProgress sx={{ mb: 2, borderRadius: 1 }} />}
 
       {/* Main grid */}
       <Grid container spacing={2}>
@@ -853,14 +1000,26 @@ export function AdminSupplierDashboard() {
         <Grid item xs={12} lg={8}>
           <Stack spacing={2}>
             {boLoading ? (
-              <Skeleton variant="rectangular" height={300} sx={{ borderRadius: 1 }} />
+              <Skeleton
+                variant="rectangular"
+                height={300}
+                sx={{ borderRadius: 1 }}
+              />
             ) : (
               <BuyOrdersPanel orders={activeBuyOrders} />
             )}
             {reqLoading ? (
-              <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 1 }} />
+              <Skeleton
+                variant="rectangular"
+                height={200}
+                sx={{ borderRadius: 1 }}
+              />
             ) : (
-              <RequisitionsPanel reqs={reqs.filter((r) => r.status !== "fulfilled" && r.status !== "cancelled")} />
+              <RequisitionsPanel
+                reqs={reqs.filter(
+                  (r) => r.status !== "fulfilled" && r.status !== "cancelled",
+                )}
+              />
             )}
           </Stack>
         </Grid>
@@ -869,7 +1028,11 @@ export function AdminSupplierDashboard() {
         <Grid item xs={12} lg={4}>
           <Stack spacing={2}>
             {ordersLoading ? (
-              <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 1 }} />
+              <Skeleton
+                variant="rectangular"
+                height={280}
+                sx={{ borderRadius: 1 }}
+              />
             ) : (
               <RecentOrdersPanel orders={orders} />
             )}
@@ -878,7 +1041,9 @@ export function AdminSupplierDashboard() {
             <Paper variant="outlined" sx={{ overflow: "hidden" }}>
               <Box sx={{ px: 2, pt: 2, pb: 1.5 }}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <FiberManualRecordRounded sx={{ fontSize: 14, color: "success.main" }} />
+                  <FiberManualRecordRounded
+                    sx={{ fontSize: 14, color: "success.main" }}
+                  />
                   <Typography variant="subtitle1" fontWeight={600}>
                     {t("suppliersUi.dashboard.activityTitle")}
                   </Typography>

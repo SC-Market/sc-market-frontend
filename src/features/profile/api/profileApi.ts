@@ -14,7 +14,10 @@ import {
 } from "../../../store/networkEnv"
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import type { RootState } from "../../../store/store"
-import type { DiscordSettings, OrderWebhook } from "../../contractor/domain/types"
+import type {
+  DiscordSettings,
+  OrderWebhook,
+} from "../../contractor/domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
 import { Language } from "../../../constants/languages"
 import { createOptimisticUpdate } from "../../../util/optimisticUpdates"

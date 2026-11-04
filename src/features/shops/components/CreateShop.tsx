@@ -19,9 +19,7 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  type ShopSlugAvailabilityResponse,
-} from "../../../store/api/v2/market"
+import { type ShopSlugAvailabilityResponse } from "../../../store/api/v2/market"
 import { ShopSlugField, SHOP_SLUG_MIN_LENGTH } from "./ShopSlugField"
 import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
@@ -104,7 +102,10 @@ export function CreateShop() {
     // The slug field shows why a too-short slug can't be used.
     if (slug.length < SHOP_SLUG_MIN_LENGTH) return
     if (ownerType === "organization" && !selectedOrg) {
-      issueAlert({ severity: "error", message: t("shopsUi.create.selectOrgError") })
+      issueAlert({
+        severity: "error",
+        message: t("shopsUi.create.selectOrgError"),
+      })
       return
     }
 
@@ -202,9 +203,7 @@ export function CreateShop() {
               <RadioGroup
                 value={ownerType}
                 onChange={(e) =>
-                  setOwnerType(
-                    e.target.value as "personal" | "organization",
-                  )
+                  setOwnerType(e.target.value as "personal" | "organization")
                 }
               >
                 <FormControlLabel
@@ -229,7 +228,9 @@ export function CreateShop() {
                   sx={{ mt: 2 }}
                   SelectProps={{ native: true }}
                 >
-                  <option value="">{t("shopsUi.form.selectOrganization")}</option>
+                  <option value="">
+                    {t("shopsUi.form.selectOrganization")}
+                  </option>
                   {orgs.map((org) => (
                     <option key={org.spectrum_id} value={org.spectrum_id}>
                       {org.name}
@@ -327,7 +328,8 @@ export function CreateShop() {
                 onClick={handleSubmit}
                 disabled={
                   !name.trim() ||
-                  (ownerType === "organization" && (!selectedOrg || isOrgLoading))
+                  (ownerType === "organization" &&
+                    (!selectedOrg || isOrgLoading))
                 }
                 size="large"
               >

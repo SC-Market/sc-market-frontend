@@ -46,7 +46,10 @@ import { ListingPagination } from "../../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import { useViewMode, ViewModeToggle } from "../../../../hooks/market/useViewMode"
+import {
+  useViewMode,
+  ViewModeToggle,
+} from "../../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "../components/BuyOrdersTableV2"
 import {
   UnifiedSearchBar,
@@ -167,23 +170,18 @@ export function BuyOrdersRedesign() {
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid container spacing={1}>
         {loading ? (
-          new Array(Math.min(perPage, 12))
-            .fill(undefined)
-            .map((_, i) => (
-              <Grid item {...gridBreakpoints} key={i}>
-                <ListingSkeleton index={i} />
-              </Grid>
-            ))
+          new Array(Math.min(perPage, 12)).fill(undefined).map((_, i) => (
+            <Grid item {...gridBreakpoints} key={i}>
+              <ListingSkeleton index={i} />
+            </Grid>
+          ))
         ) : activeOrders.length === 0 ? (
           <Grid item xs={12}>
             <EmptyListings
               isSearchResult={false}
               showCreateAction={false}
               action={{
-                label: t(
-                  "buyOrderActions.createBuyOrder",
-                  "Create Buy Order",
-                ),
+                label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
                 onClick: () => setShowForm(true),
                 variant: "contained" as const,
               }}
@@ -364,7 +362,11 @@ export function BuyOrderCard({
       data-testid="buy-order-card"
       data-id={order.buy_order_id}
     >
-      <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
+      <Fade
+        in
+        timeout={500}
+        style={{ transitionDelay: `${50 + 50 * index}ms` }}
+      >
         <Card sx={{ height: 300, position: "relative" }}>
           <CardActionArea
             component={Link}
@@ -372,100 +374,107 @@ export function BuyOrderCard({
             aria-label={accessibleName}
             sx={{ height: "100%", position: "relative", display: "block" }}
           >
-          <CardMedia
-            component="img"
-            loading="lazy"
-            image={imageUrl}
-            sx={{
-              width: "100%",
-              objectFit: "cover",
-              ...(isDark
-                ? { height: "100%", aspectRatio: "16/9" }
-                : { height: 180, aspectRatio: "16/9" }),
-              overflow: "hidden",
-            }}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src = FALLBACK_IMAGE_URL
-            }}
-            alt={t("marketV2.imageOf", { name: order.game_item_name })}
-          />
-          <Box
-            sx={{
-              ...(theme.palette.mode === "light" ? { display: "none" } : {}),
-              position: "absolute",
-              zIndex: 3,
-              top: 0,
-              left: 0,
-              height: "100%",
-              width: "100%",
-              borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              background: cardFadeGradient(theme, 50, 60),
-            }}
-          />
-          <CardContent
-            sx={{
-              ...(isDark
-                ? { position: "absolute", bottom: 0, zIndex: 4, width: "100%" }
-                : {}),
-              maxWidth: "100%",
-              padding: "8px 12px !important",
-            }}
-          >
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ mb: 0.5 }}
-            >
-              <Typography
-                variant="h6"
-                color="primary"
-                fontWeight="bold"
-                noWrap
-                sx={{ fontSize: "0.95rem" }}
-              >
-                {priceLabel}
-              </Typography>
-              <Chip
-                label={visibilityLabel}
-                size="small"
-                color="info"
-                variant="outlined"
-                sx={{ height: 20, "& .MuiChip-label": { fontSize: "0.65rem", px: 0.75 } }}
-              />
-            </Stack>
-            <Typography
-              variant="body2"
-              color="text.secondary"
+            <CardMedia
+              component="img"
+              loading="lazy"
+              image={imageUrl}
               sx={{
-                fontSize: "0.75rem",
-                lineHeight: 1.3,
-                maxHeight: 36,
+                width: "100%",
+                objectFit: "cover",
+                ...(isDark
+                  ? { height: "100%", aspectRatio: "16/9" }
+                  : { height: 180, aspectRatio: "16/9" }),
                 overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                mb: 0.5,
               }}
-              title={order.game_item_name}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null
+                currentTarget.src = FALLBACK_IMAGE_URL
+              }}
+              alt={t("marketV2.imageOf", { name: order.game_item_name })}
+            />
+            <Box
+              sx={{
+                ...(theme.palette.mode === "light" ? { display: "none" } : {}),
+                position: "absolute",
+                zIndex: 3,
+                top: 0,
+                left: 0,
+                height: "100%",
+                width: "100%",
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                background: cardFadeGradient(theme, 50, 60),
+              }}
+            />
+            <CardContent
+              sx={{
+                ...(isDark
+                  ? {
+                      position: "absolute",
+                      bottom: 0,
+                      zIndex: 4,
+                      width: "100%",
+                    }
+                  : {}),
+                maxWidth: "100%",
+                padding: "8px 12px !important",
+              }}
             >
-              {order.game_item_name}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ fontSize: "0.7rem", lineHeight: 1, display: "block" }}
-            >
-              {fmt.number(remaining)} /{" "}
-              {fmt.number(order.quantity ?? 0)}{" "}
-              {t("market.requested", "requested")}
-            </Typography>
-            {/* Fulfilment is not wired in Phase 0. Rather than show a disabled
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ mb: 0.5 }}
+              >
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  fontWeight="bold"
+                  noWrap
+                  sx={{ fontSize: "0.95rem" }}
+                >
+                  {priceLabel}
+                </Typography>
+                <Chip
+                  label={visibilityLabel}
+                  size="small"
+                  color="info"
+                  variant="outlined"
+                  sx={{
+                    height: 20,
+                    "& .MuiChip-label": { fontSize: "0.65rem", px: 0.75 },
+                  }}
+                />
+              </Stack>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: "0.75rem",
+                  lineHeight: 1.3,
+                  maxHeight: 36,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  mb: 0.5,
+                }}
+                title={order.game_item_name}
+              >
+                {order.game_item_name}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontSize: "0.7rem", lineHeight: 1, display: "block" }}
+              >
+                {fmt.number(remaining)} / {fmt.number(order.quantity ?? 0)}{" "}
+                {t("market.requested", "requested")}
+              </Typography>
+              {/* Fulfilment is not wired in Phase 0. Rather than show a disabled
                 button (dead affordance), we hide it — it'll be added back as a
                 real action when the fulfil flow is wired. */}
-          </CardContent>
+            </CardContent>
           </CardActionArea>
         </Card>
       </Fade>
@@ -532,30 +541,32 @@ function CreateBuyOrderForm({ onDone }: { onDone: () => void }) {
                     )
               }
             />
-            {!item && (itemResults?.length ?? 0) > 0 && itemQuery.length > 0 && (
-              <Box
-                sx={{
-                  mt: 1,
-                  maxHeight: 180,
-                  overflowY: "auto",
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: 1,
-                }}
-              >
-                {(itemResults ?? []).map((r) => (
-                  <MenuItem
-                    key={r.id}
-                    onClick={() => {
-                      setItem(r)
-                      setItemQuery(r.name)
-                    }}
-                  >
-                    {r.name} — {r.type}
-                  </MenuItem>
-                ))}
-              </Box>
-            )}
+            {!item &&
+              (itemResults?.length ?? 0) > 0 &&
+              itemQuery.length > 0 && (
+                <Box
+                  sx={{
+                    mt: 1,
+                    maxHeight: 180,
+                    overflowY: "auto",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 1,
+                  }}
+                >
+                  {(itemResults ?? []).map((r) => (
+                    <MenuItem
+                      key={r.id}
+                      onClick={() => {
+                        setItem(r)
+                        setItemQuery(r.name)
+                      }}
+                    >
+                      {r.name} — {r.type}
+                    </MenuItem>
+                  ))}
+                </Box>
+              )}
           </Grid2>
           <Grid2 size={{ xs: 6, md: 3 }}>
             <TextField

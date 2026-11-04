@@ -14,8 +14,14 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export function OfferServiceEditArea(props: {
-  session?: { assigned_to?: { username: string } | null; contractor?: { spectrum_id: string } | null }
-  offer?: { assigned_to?: { username: string } | null; contractor?: { spectrum_id: string } | null }
+  session?: {
+    assigned_to?: { username: string } | null
+    contractor?: { spectrum_id: string } | null
+  }
+  offer?: {
+    assigned_to?: { username: string } | null
+    contractor?: { spectrum_id: string } | null
+  }
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()

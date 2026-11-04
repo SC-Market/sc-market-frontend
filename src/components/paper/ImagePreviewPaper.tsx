@@ -155,12 +155,15 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             >
               <img
                 src={photo}
-                alt={t("accessibility.thumbnail", "Thumbnail {{index}}", { index: i + 1 })}
+                alt={t("accessibility.thumbnail", "Thumbnail {{index}}", {
+                  index: i + 1,
+                })}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 loading="lazy"
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
-                  currentTarget.src = "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                  currentTarget.src =
+                    "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
                 }}
               />
             </Box>

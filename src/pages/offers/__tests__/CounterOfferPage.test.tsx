@@ -38,7 +38,6 @@ vi.mock("../../../features/market/v2/OfferMarketListingsEditAreaV2", () => ({
   ),
 }))
 
-
 // Mock the Page component to avoid RTK Query issues
 vi.mock("../../../components/metadata/Page", () => ({
   Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -51,7 +50,9 @@ vi.mock("../../../components/button/ReportButton", () => ({
 
 // Mock i18next
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock react-router-dom navigation
@@ -123,7 +124,12 @@ describe("CounterOfferPage", () => {
   })
 
   it("renders with data", async () => {
-    const rating = { avg_rating: 0, rating_count: 0, total_rating: 0, streak: 0 }
+    const rating = {
+      avg_rating: 0,
+      rating_count: 0,
+      total_rating: 0,
+      streak: 0,
+    }
     const mockSession = {
       session_id: "test-session-id",
       status: "counteroffered",
@@ -144,9 +150,19 @@ describe("CounterOfferPage", () => {
           service: null,
         },
       ],
-      customer: { username: "test-customer", display_name: "", avatar: "", rating },
+      customer: {
+        username: "test-customer",
+        display_name: "",
+        avatar: "",
+        rating,
+      },
       contractor: null,
-      assigned_to: { username: "test-seller", display_name: "", avatar: "", rating },
+      assigned_to: {
+        username: "test-seller",
+        display_name: "",
+        avatar: "",
+        rating,
+      },
       contract_id: null,
     } satisfies GetOfferSessionV2Response
 

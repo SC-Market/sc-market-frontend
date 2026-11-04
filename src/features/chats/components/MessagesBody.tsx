@@ -48,7 +48,10 @@ export function MessagesBody(props: {
 
   // Sync cache with local state, but merge messages to preserve optimistic updates and socket messages
   useEffect(() => {
-    if (chatFromCache && (!currentChat || chatFromCache.chat_id !== currentChat.chat_id)) {
+    if (
+      chatFromCache &&
+      (!currentChat || chatFromCache.chat_id !== currentChat.chat_id)
+    ) {
       setCurrentChat(chatFromCache)
       return
     }

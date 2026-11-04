@@ -103,9 +103,15 @@
           // (src/ssr/protocol.ts themeFromCookies).
           if (v === "system") {
             var scheme = light ? "light" : "dark"
-            if (!new RegExp("(?:^|; )scm_scheme=" + scheme + "(?:;|$)").test(document.cookie)) {
+            if (
+              !new RegExp("(?:^|; )scm_scheme=" + scheme + "(?:;|$)").test(
+                document.cookie,
+              )
+            ) {
               document.cookie =
-                "scm_scheme=" + scheme + "; path=/; max-age=31536000; SameSite=Lax"
+                "scm_scheme=" +
+                scheme +
+                "; path=/; max-age=31536000; SameSite=Lax"
             }
           }
           // The cookie bar is in a prerendered page's HTML; hide it if the
@@ -130,7 +136,10 @@
             /\.sc-market-frontend\.pages\.dev$/.test(h)
           // ...or the org's white-label host the SSR Function rendered this
           // page for (data-ssr-host; entry.client checks its domain answer).
-          if (document.documentElement.getAttribute("data-ssr-host") === h.toLowerCase()) {
+          if (
+            document.documentElement.getAttribute("data-ssr-host") ===
+            h.toLowerCase()
+          ) {
             mainSite = true
           }
           var c = document.cookie.match(/(?:^|; )i18next=([^;]*)/)
@@ -145,7 +154,8 @@
           // Keep in sync with src/document/pageQuery.ts.
           var filtered = false
           new URLSearchParams(location.search).forEach(function (_v, k) {
-            if (!/^(utm_.*|fbclid|gclid|msclkid|ref|lng)$/.test(k)) filtered = true
+            if (!/^(utm_.*|fbclid|gclid|msclkid|ref|lng)$/.test(k))
+              filtered = true
           })
           // ...and in the light theme: prerendered pages are dark (the
           // default), and the app's theme isn't CSS variables yet.
@@ -163,12 +173,7 @@
               ? "zh-cn"
               : want.split("-")[0]
           if (!/^(en|de|es|fr|ja|uk|zh-cn|zh-tw)$/.test(want)) want = "en"
-          if (
-            !mainSite ||
-            light !== ssrLight ||
-            filtered ||
-            want !== ssrLng
-          ) {
+          if (!mainSite || light !== ssrLight || filtered || want !== ssrLng) {
             document.documentElement.setAttribute("data-render-fresh", "")
           }
         } catch (e) {}

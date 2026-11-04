@@ -23,7 +23,10 @@ interface DeleteAccountDialogProps {
   onClose: () => void
 }
 
-export function DeleteAccountDialog({ open, onClose }: DeleteAccountDialogProps) {
+export function DeleteAccountDialog({
+  open,
+  onClose,
+}: DeleteAccountDialogProps) {
   const { t } = useTranslation()
   const [reason, setReason] = useState("")
   const [confirmText, setConfirmText] = useState("")
@@ -34,12 +37,15 @@ export function DeleteAccountDialog({ open, onClose }: DeleteAccountDialogProps)
     useAccountRequestDeletionMutation()
   const [logout] = useLogoutMutation()
 
-  const canConfirm = confirmText === "DELETE" && precheck?.canDelete && !deleting
+  const canConfirm =
+    confirmText === "DELETE" && precheck?.canDelete && !deleting
 
   const handleDelete = async () => {
     try {
       await requestDeletion({ reason: reason || undefined }).unwrap()
-      await logout().unwrap().catch(() => {})
+      await logout()
+        .unwrap()
+        .catch(() => {})
       window.location.href = "/"
     } catch {
       // Error is shown via RTK Query state

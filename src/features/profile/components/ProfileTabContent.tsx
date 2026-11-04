@@ -63,19 +63,28 @@ function UserShopRedirect({ username }: { username: string }) {
 
   if (shop) {
     return (
-      <Alert severity="info" action={
-        <Link to={SHOP_PATHS.profile(shop.slug)} style={{ color: "inherit" }}>
-          {t("common.viewShop", "View Shop")}
-        </Link>
-      }>
-        {t("profile.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+      <Alert
+        severity="info"
+        action={
+          <Link to={SHOP_PATHS.profile(shop.slug)} style={{ color: "inherit" }}>
+            {t("common.viewShop", "View Shop")}
+          </Link>
+        }
+      >
+        {t(
+          "profile.customOrdersMovedToShop",
+          "Custom orders are now placed through shops.",
+        )}
       </Alert>
     )
   }
 
   return (
     <Alert severity="info">
-      {t("profile.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+      {t(
+        "profile.customOrdersMovedToShop",
+        "Custom orders are now placed through shops.",
+      )}
     </Alert>
   )
 }

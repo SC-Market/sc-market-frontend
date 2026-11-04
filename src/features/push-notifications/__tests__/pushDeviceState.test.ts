@@ -23,12 +23,12 @@ describe("pushDeviceState", () => {
   })
 
   it("asks iOS Safari to add the Home Screen app, even though it has no PushManager", () => {
-    expect(
-      pushDeviceState({ ...base, isIOS: true, isSupported: false }),
-    ).toBe("ios-install")
-    expect(
-      pushDeviceState({ ...base, isIOS: true, isInstalled: true }),
-    ).toBe("off")
+    expect(pushDeviceState({ ...base, isIOS: true, isSupported: false })).toBe(
+      "ios-install",
+    )
+    expect(pushDeviceState({ ...base, isIOS: true, isInstalled: true })).toBe(
+      "off",
+    )
   })
 
   it("reports browsers without the Push API as unsupported", () => {

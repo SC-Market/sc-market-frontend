@@ -34,15 +34,17 @@ export function OrgBalance() {
           color={"primary"}
           sx={{ fontWeight: "bold", transition: "0.3s" }}
         >
-          {contractor &&
-            contractor?.balance &&
-            fmt.number(contractor?.balance)}{" "}
+          {contractor && contractor?.balance && fmt.number(contractor?.balance)}{" "}
           aUEC
         </Typography>
       </Grid>
       <Grid item xs={12} container justifyContent={"space-between"}>
         <Link
-          to={contractor?.spectrum_id ? ORG_PATHS.send(contractor.spectrum_id) : "/org/send"}
+          to={
+            contractor?.spectrum_id
+              ? ORG_PATHS.send(contractor.spectrum_id)
+              : "/org/send"
+          }
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Button color={"primary"} variant={"outlined"}>

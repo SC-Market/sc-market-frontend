@@ -46,10 +46,13 @@ import { useFormatters } from "../../util/format"
 function formatDuration(seconds: number | undefined, t: TFunction): string {
   if (!seconds) return "—"
   if (seconds < 60) return t("gameTaxonomyUi.duration.seconds", { s: seconds })
-  if (seconds < 3600) return t("gameTaxonomyUi.duration.minutes", { m: Math.floor(seconds / 60) })
+  if (seconds < 3600)
+    return t("gameTaxonomyUi.duration.minutes", { m: Math.floor(seconds / 60) })
   const h = Math.floor(seconds / 3600)
   const m = Math.floor((seconds % 3600) / 60)
-  return m ? t("gameTaxonomyUi.duration.hoursMinutes", { h, m }) : t("gameTaxonomyUi.duration.hours", { h })
+  return m
+    ? t("gameTaxonomyUi.duration.hoursMinutes", { h, m })
+    : t("gameTaxonomyUi.duration.hours", { h })
 }
 
 /** Raw scope codes -> catalog keys under gameTaxonomyUi.missionScopes */
@@ -71,17 +74,30 @@ function formatScope(scope: string, t: TFunction): string {
   return scope
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
-    .replace(/^./, s => s.toUpperCase())
+    .replace(/^./, (s) => s.toUpperCase())
 }
 
-function BoolChip({ value, label }: { value: boolean | undefined; label: string }) {
+function BoolChip({
+  value,
+  label,
+}: {
+  value: boolean | undefined
+  label: string
+}) {
   if (value === undefined || value === null) return null
   return (
     <Stack direction="row" spacing={0.5} alignItems="center">
-      {value
-        ? <CheckCircleOutline sx={{ fontSize: 16, color: "success.main" }} />
-        : <CancelOutlined sx={{ fontSize: 16, color: "text.disabled" }} />}
-      <Typography variant="body2" color={value ? "text.primary" : "text.secondary"}>{label}</Typography>
+      {value ? (
+        <CheckCircleOutline sx={{ fontSize: 16, color: "success.main" }} />
+      ) : (
+        <CancelOutlined sx={{ fontSize: 16, color: "text.disabled" }} />
+      )}
+      <Typography
+        variant="body2"
+        color={value ? "text.primary" : "text.secondary"}
+      >
+        {label}
+      </Typography>
     </Stack>
   )
 }
@@ -102,23 +118,89 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
 
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" {...go({ system: m.star_system! })} />}
+      {m.star_system && (
+        <Chip
+          label={m.star_system}
+          size="small"
+          variant="outlined"
+          {...go({ system: m.star_system! })}
+        />
+      )}
       {m.category && (
         <Chip
           label={getMissionTypeLabel(m.category, t)}
           size="small"
           {...go({ category: m.category })}
-          icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
+          icon={
+            getMissionIcon(m.category) ? (
+              <img
+                src={getMissionIcon(m.category)!}
+                alt=""
+                style={{ width: 16, height: 16 }}
+              />
+            ) : undefined
+          }
         />
       )}
-      {giver && <Chip label={giver} size="small" variant="outlined" {...go({ giver })} />}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label={t("missionsUi.illegal")} size="small" color="error" {...go({ legal: "ILLEGAL" })} />}
-      {m.is_unique_mission && <Chip label={t("missionsUi.unique")} size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label={t("missionsUi.starter")} size="small" color="secondary" {...go({ chain: "true" })} />}
-      {m.is_chain_mission && !m.is_chain_starter && <Chip label={t("missionsUi.chain")} size="small" color="secondary" variant="outlined" />}
-      {m.is_shareable && <Chip label={t("missionsUi.shareable")} size="small" variant="outlined" {...go({ shareable: "true" })} />}
-      {m.associated_event && <Chip label={m.associated_event} size="small" {...go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
-      {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
+      {giver && (
+        <Chip
+          label={giver}
+          size="small"
+          variant="outlined"
+          {...go({ giver })}
+        />
+      )}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && (
+        <Chip
+          label={t("missionsUi.illegal")}
+          size="small"
+          color="error"
+          {...go({ legal: "ILLEGAL" })}
+        />
+      )}
+      {m.is_unique_mission && (
+        <Chip label={t("missionsUi.unique")} size="small" color="warning" />
+      )}
+      {m.is_chain_starter && (
+        <Chip
+          label={t("missionsUi.starter")}
+          size="small"
+          color="secondary"
+          {...go({ chain: "true" })}
+        />
+      )}
+      {m.is_chain_mission && !m.is_chain_starter && (
+        <Chip
+          label={t("missionsUi.chain")}
+          size="small"
+          color="secondary"
+          variant="outlined"
+        />
+      )}
+      {m.is_shareable && (
+        <Chip
+          label={t("missionsUi.shareable")}
+          size="small"
+          variant="outlined"
+          {...go({ shareable: "true" })}
+        />
+      )}
+      {m.associated_event && (
+        <Chip
+          label={m.associated_event}
+          size="small"
+          {...go({ show_events: "true", event: m.associated_event! })}
+          sx={{ bgcolor: "info.main", color: "#fff" }}
+        />
+      )}
+      {m.difficulty_level && (
+        <Chip
+          label={`D${m.difficulty_level}`}
+          size="small"
+          color="warning"
+          variant="outlined"
+        />
+      )}
     </Stack>
   )
 }
@@ -169,35 +251,69 @@ export function MissionHubLinks({ data }: { data: MissionDetailResponse }) {
 // Tabbed Content — renders all tabs with state management
 // ============================================================================
 
-export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
+export function MissionDetailTabs({
+  data,
+  onBlueprintClick,
+}: {
+  data: MissionDetailResponse
+  onBlueprintClick?: (id: string) => void
+}) {
   const { t } = useTranslation()
   const [tab, setTab] = useState(0)
   const m = data.mission
-  const hasChain = !!(m.is_chain_starter || m.is_chain_mission || data.prerequisite_missions?.length)
+  const hasChain = !!(
+    m.is_chain_starter ||
+    m.is_chain_mission ||
+    data.prerequisite_missions?.length
+  )
 
-  const hasDetails = !!(data.ship_encounters?.length || data.npc_encounters?.length || data.entity_spawns?.length || data.hauling_orders?.length)
+  const hasDetails = !!(
+    data.ship_encounters?.length ||
+    data.npc_encounters?.length ||
+    data.entity_spawns?.length ||
+    data.hauling_orders?.length
+  )
 
   const tabs: { label: string; id: string }[] = [
     { label: t("gameTaxonomyUi.missionTabs.overview"), id: "overview" },
   ]
-  if (hasDetails) tabs.push({ label: t("gameTaxonomyUi.missionTabs.details"), id: "details" })
-  tabs.push({ label: t("gameTaxonomyUi.missionTabs.requirements"), id: "requirements" })
-  if (m.reward_scope) tabs.push({ label: t("gameTaxonomyUi.missionTabs.rankCalculator"), id: "calculator" })
-  if (hasChain) tabs.push({ label: t("gameTaxonomyUi.missionTabs.chainInfo"), id: "chain" })
+  if (hasDetails)
+    tabs.push({ label: t("gameTaxonomyUi.missionTabs.details"), id: "details" })
+  tabs.push({
+    label: t("gameTaxonomyUi.missionTabs.requirements"),
+    id: "requirements",
+  })
+  if (m.reward_scope)
+    tabs.push({
+      label: t("gameTaxonomyUi.missionTabs.rankCalculator"),
+      id: "calculator",
+    })
+  if (hasChain)
+    tabs.push({ label: t("gameTaxonomyUi.missionTabs.chainInfo"), id: "chain" })
 
   const activeTab = tabs[tab]?.id || "overview"
 
   return (
     <>
       <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable">
-        {tabs.map((tb) => <Tab key={tb.id} label={tb.label} />)}
+        {tabs.map((tb) => (
+          <Tab key={tb.id} label={tb.label} />
+        ))}
       </Tabs>
       {/* Every panel is in the page (the inactive ones hidden), so the HTML
           has the whole mission: rewards, requirements, cooldowns, chain. */}
       <Box sx={{ pt: 2 }}>
-        <Box hidden={activeTab !== "overview"}><OverviewTab data={data} onBlueprintClick={onBlueprintClick} /></Box>
-        {hasDetails && <Box hidden={activeTab !== "details"}><MissionTypeDetails data={data} /></Box>}
-        <Box hidden={activeTab !== "requirements"}><RequirementsTab data={data} /></Box>
+        <Box hidden={activeTab !== "overview"}>
+          <OverviewTab data={data} onBlueprintClick={onBlueprintClick} />
+        </Box>
+        {hasDetails && (
+          <Box hidden={activeTab !== "details"}>
+            <MissionTypeDetails data={data} />
+          </Box>
+        )}
+        <Box hidden={activeTab !== "requirements"}>
+          <RequirementsTab data={data} />
+        </Box>
         {activeTab === "calculator" && m.reward_scope && (
           <MissionRankCalculator
             reputationReward={m.reputation_reward || 0}
@@ -208,7 +324,11 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
             isShareable={m.is_shareable}
           />
         )}
-        {hasChain && <Box hidden={activeTab !== "chain"}><ChainTab data={data} /></Box>}
+        {hasChain && (
+          <Box hidden={activeTab !== "chain"}>
+            <ChainTab data={data} />
+          </Box>
+        )}
       </Box>
     </>
   )
@@ -218,7 +338,13 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
 // Overview Tab
 // ============================================================================
 
-function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
+function OverviewTab({
+  data,
+  onBlueprintClick,
+}: {
+  data: MissionDetailResponse
+  onBlueprintClick?: (id: string) => void
+}) {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const m = data.mission
@@ -226,7 +352,13 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
   return (
     <Stack spacing={2}>
       {m.mission_description && (
-        <MissionDescription text={m.mission_description} giver={missionGiver(m)} variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }} />
+        <MissionDescription
+          text={m.mission_description}
+          giver={missionGiver(m)}
+          variant="body2"
+          color="text.secondary"
+          sx={{ whiteSpace: "pre-line" }}
+        />
       )}
 
       <Divider />
@@ -234,49 +366,74 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {/* Reward */}
       <Typography variant="subtitle2">{t("missionsUi.reward")}</Typography>
       <Stack spacing={0.5}>
-        {(m.credit_reward_min || m.credit_reward_max) && (() => {
-          const isFee = (m.credit_reward_min ?? 0) < 0
-          return (
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">{isFee ? t("missionsUi.feeLabel") : "UEC"}</Typography>
-              <Typography variant="body2" color={isFee ? "error.main" : "success.main"} fontWeight={600}>
-                {isFee
-                  ? formatCredits(Math.abs(m.credit_reward_min!), fmt.locale)
-                  : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
-                    ? formatCredits(m.credit_reward_min, fmt.locale)
-                    : `${formatCredits(m.credit_reward_min, fmt.locale)} – ${formatCredits(m.credit_reward_max, fmt.locale)}`}
-              </Typography>
-            </Stack>
-          )
-        })()}
+        {(m.credit_reward_min || m.credit_reward_max) &&
+          (() => {
+            const isFee = (m.credit_reward_min ?? 0) < 0
+            return (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="body2" color="text.secondary">
+                  {isFee ? t("missionsUi.feeLabel") : "UEC"}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color={isFee ? "error.main" : "success.main"}
+                  fontWeight={600}
+                >
+                  {isFee
+                    ? formatCredits(Math.abs(m.credit_reward_min!), fmt.locale)
+                    : m.credit_reward_min === m.credit_reward_max ||
+                        !m.credit_reward_max
+                      ? formatCredits(m.credit_reward_min, fmt.locale)
+                      : `${formatCredits(m.credit_reward_min, fmt.locale)} – ${formatCredits(m.credit_reward_max, fmt.locale)}`}
+                </Typography>
+              </Stack>
+            )
+          })()}
         {m.reputation_reward != null && m.reputation_reward > 0 && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.repPerMission")}</Typography>
-            <Typography variant="body2">{fmt.number(m.reputation_reward)} XP</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.repPerMission")}
+            </Typography>
+            <Typography variant="body2">
+              {fmt.number(m.reputation_reward)} XP
+            </Typography>
           </Stack>
         )}
         {usableGiver(m.mission_giver_org) && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.missionGiverLower")}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.missionGiverLower")}
+            </Typography>
             <Typography variant="body2">{m.mission_giver_org}</Typography>
           </Stack>
         )}
         {usableGiver(m.faction) && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.faction")}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.faction")}
+            </Typography>
             <Typography variant="body2">{m.faction}</Typography>
           </Stack>
         )}
-        {usableGiver(m.reputation_reward_faction) && m.reputation_reward_faction !== m.faction && (
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.reputationWith")}</Typography>
-            <Typography variant="body2">{m.reputation_reward_faction}</Typography>
-          </Stack>
-        )}
+        {usableGiver(m.reputation_reward_faction) &&
+          m.reputation_reward_faction !== m.faction && (
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                {t("missionsUi.reputationWith")}
+              </Typography>
+              <Typography variant="body2">
+                {m.reputation_reward_faction}
+              </Typography>
+            </Stack>
+          )}
         {m.reward_scope && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.scope")}</Typography>
-            <Typography variant="body2">{formatScope(m.reward_scope, t)}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.scope")}
+            </Typography>
+            <Typography variant="body2">
+              {formatScope(m.reward_scope, t)}
+            </Typography>
           </Stack>
         )}
       </Stack>
@@ -287,57 +444,114 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {data.blueprint_rewards?.length > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.blueprintRewards")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.blueprintRewards")}
+          </Typography>
           {data.blueprint_rewards.map((pool, poolIdx) => {
-            const poolChance = pool.pool_chance != null ? pool.pool_chance * 100 : null
-            const bpCount = pool.blueprints?.length || pool.reward_pool_size || 0
+            const poolChance =
+              pool.pool_chance != null ? pool.pool_chance * 100 : null
+            const bpCount =
+              pool.blueprints?.length || pool.reward_pool_size || 0
             return (
               <Box key={poolIdx} sx={{ mb: 1 }}>
-                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ mb: 0.5 }}
+                >
                   {pool.pool_name && (
-                    <Typography variant="caption" color="text.secondary" sx={{ fontFamily: "monospace", fontSize: "0.7rem" }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ fontFamily: "monospace", fontSize: "0.7rem" }}
+                    >
                       {pool.pool_name}
                     </Typography>
                   )}
                   <Box sx={{ flex: 1 }} />
                   {poolChance != null && (
-                    <Chip label={t("missionsUi.percentChance", { pct: poolChance })} size="small" color={poolChance >= 100 ? "success" : "default"} sx={{ height: 20, fontSize: "0.7rem" }} />
+                    <Chip
+                      label={t("missionsUi.percentChance", { pct: poolChance })}
+                      size="small"
+                      color={poolChance >= 100 ? "success" : "default"}
+                      sx={{ height: 20, fontSize: "0.7rem" }}
+                    />
                   )}
                   {pool.selection_count > 0 && bpCount > 0 && (
-                    <Chip label={t("missionsUi.nOfM", { n: pool.selection_count, m: bpCount })} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+                    <Chip
+                      label={t("missionsUi.nOfM", {
+                        n: pool.selection_count,
+                        m: bpCount,
+                      })}
+                      size="small"
+                      variant="outlined"
+                      sx={{ height: 20, fontSize: "0.7rem" }}
+                    />
                   )}
                 </Stack>
                 <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
                   <TableHead>
                     <TableRow>
                       <TableCell>{t("missionsUi.blueprint")}</TableCell>
-                      <TableCell align="right">{t("missionsUi.dropChance")}</TableCell>
+                      <TableCell align="right">
+                        {t("missionsUi.dropChance")}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {(pool.blueprints || []).map((bp) => {
-                      const pct = bp.drop_probability >= 1 ? bp.drop_probability : bp.drop_probability * 100
-                      const blueprintPath = GAME_DATA_PATHS.blueprint(encodeURIComponent(bp.blueprint_name || bp.blueprint_id))
+                      const pct =
+                        bp.drop_probability >= 1
+                          ? bp.drop_probability
+                          : bp.drop_probability * 100
+                      const blueprintPath = GAME_DATA_PATHS.blueprint(
+                        encodeURIComponent(
+                          bp.blueprint_name || bp.blueprint_id,
+                        ),
+                      )
                       return (
                         <TableRow
-                          key={bp.blueprint_id} hover
-                          sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
-                          onClick={() => onBlueprintClick?.(bp.blueprint_name || bp.blueprint_code || bp.blueprint_id)}
+                          key={bp.blueprint_id}
+                          hover
+                          sx={{
+                            cursor: onBlueprintClick ? "pointer" : undefined,
+                          }}
+                          onClick={() =>
+                            onBlueprintClick?.(
+                              bp.blueprint_name ||
+                                bp.blueprint_code ||
+                                bp.blueprint_id,
+                            )
+                          }
                         >
                           <TableCell>
-                            <Stack direction="row" spacing={0.75} alignItems="center">
+                            <Stack
+                              direction="row"
+                              spacing={0.75}
+                              alignItems="center"
+                            >
                               {/* Real links for crawlers. The icon is the blueprint (a click opens it
                                   in place); the name is the crafted item's page when the API resolved
                                   it, else the blueprint too. */}
                               <Box
                                 component={RouterLink}
                                 to={blueprintPath}
-                                aria-label={t("itemAcquisition.viewBlueprint", "View blueprint")}
-                                title={t("itemAcquisition.viewBlueprint", "View blueprint")}
+                                aria-label={t(
+                                  "itemAcquisition.viewBlueprint",
+                                  "View blueprint",
+                                )}
+                                title={t(
+                                  "itemAcquisition.viewBlueprint",
+                                  "View blueprint",
+                                )}
                                 onClick={(e: React.MouseEvent) => {
                                   if (onBlueprintClick) e.preventDefault()
                                 }}
-                                sx={{ display: "inline-flex", color: "success.main" }}
+                                sx={{
+                                  display: "inline-flex",
+                                  color: "success.main",
+                                }}
                               >
                                 <BuildRounded sx={{ fontSize: 14 }} />
                               </Box>
@@ -347,8 +561,14 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                                   fontWeight={600}
                                   component={RouterLink}
                                   to={WIKI_PATHS.item(bp.output_game_item_slug)}
-                                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                                  sx={{ color: "inherit", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                                  onClick={(e: React.MouseEvent) =>
+                                    e.stopPropagation()
+                                  }
+                                  sx={{
+                                    color: "inherit",
+                                    textDecoration: "none",
+                                    "&:hover": { textDecoration: "underline" },
+                                  }}
                                 >
                                   {bp.output_item_name || bp.blueprint_name}
                                 </Typography>
@@ -361,18 +581,38 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                                   onClick={(e: React.MouseEvent) => {
                                     if (onBlueprintClick) e.preventDefault()
                                   }}
-                                  sx={{ color: "inherit", textDecoration: "none" }}
+                                  sx={{
+                                    color: "inherit",
+                                    textDecoration: "none",
+                                  }}
                                 >
                                   {bp.output_item_name || bp.blueprint_name}
                                 </Typography>
                               )}
-                              {bp.user_owns && <CheckCircleOutline sx={{ fontSize: 14, color: "success.main" }} />}
+                              {bp.user_owns && (
+                                <CheckCircleOutline
+                                  sx={{ fontSize: 14, color: "success.main" }}
+                                />
+                              )}
                             </Stack>
                           </TableCell>
                           <TableCell align="right">
-                            <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
-                              <LinearProgress variant="determinate" value={Math.min(pct, 100)} sx={{ width: 50, height: 4, borderRadius: 2 }} />
-                              <Typography variant="caption">{pct >= 100 ? t("missionsUi.guaranteed") : `${pct.toFixed(0)}%`}</Typography>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              alignItems="center"
+                              justifyContent="flex-end"
+                            >
+                              <LinearProgress
+                                variant="determinate"
+                                value={Math.min(pct, 100)}
+                                sx={{ width: 50, height: 4, borderRadius: 2 }}
+                              />
+                              <Typography variant="caption">
+                                {pct >= 100
+                                  ? t("missionsUi.guaranteed")
+                                  : `${pct.toFixed(0)}%`}
+                              </Typography>
                             </Stack>
                           </TableCell>
                         </TableRow>
@@ -390,13 +630,17 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(data.hauling_orders?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.haulingOrders")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.haulingOrders")}
+          </Typography>
           <Stack spacing={0.25}>
             {data.hauling_orders!.map((h, i) => (
               <Stack key={i} direction="row" justifyContent="space-between">
                 <Typography variant="body2">{h.resource_name}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {h.min_scu === h.max_scu ? `${h.min_scu} SCU` : `${h.min_scu}–${h.max_scu} SCU`}
+                  {h.min_scu === h.max_scu
+                    ? `${h.min_scu} SCU`
+                    : `${h.min_scu}–${h.max_scu} SCU`}
                 </Typography>
               </Stack>
             ))}
@@ -408,7 +652,9 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(m.item_rewards?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.itemRewards")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.itemRewards")}
+          </Typography>
           <Stack spacing={0.25}>
             {m.item_rewards!.map((item, i) =>
               item.game_item_slug ? (
@@ -417,12 +663,18 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                   variant="body2"
                   component={RouterLink}
                   to={WIKI_PATHS.item(item.game_item_slug)}
-                  sx={{ color: "primary.main", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                  sx={{
+                    color: "primary.main",
+                    textDecoration: "none",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
                 >
                   {item.name}
                 </Typography>
               ) : (
-                <Typography key={i} variant="body2">{item.name}</Typography>
+                <Typography key={i} variant="body2">
+                  {item.name}
+                </Typography>
               ),
             )}
           </Stack>
@@ -434,8 +686,14 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.location")}</Typography>
-            <Typography variant="body2">{[m.star_system, m.planet_moon, m.location_detail].filter(Boolean).join(" → ")}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.location")}
+            </Typography>
+            <Typography variant="body2">
+              {[m.star_system, m.planet_moon, m.location_detail]
+                .filter(Boolean)
+                .join(" → ")}
+            </Typography>
           </Stack>
         </>
       )}
@@ -444,17 +702,33 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(m.community_difficulty_avg || m.community_satisfaction_avg) && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.communityRatings")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.communityRatings")}
+          </Typography>
           {m.community_difficulty_avg != null && (
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">{t("missionsUi.difficulty")}</Typography>
-              <Typography variant="body2">{t("missionsUi.ratingOutOf5", { avg: m.community_difficulty_avg.toFixed(1), count: m.community_difficulty_count })}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t("missionsUi.difficulty")}
+              </Typography>
+              <Typography variant="body2">
+                {t("missionsUi.ratingOutOf5", {
+                  avg: m.community_difficulty_avg.toFixed(1),
+                  count: m.community_difficulty_count,
+                })}
+              </Typography>
             </Stack>
           )}
           {m.community_satisfaction_avg != null && (
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">{t("missionsUi.satisfaction")}</Typography>
-              <Typography variant="body2">{t("missionsUi.ratingOutOf5", { avg: m.community_satisfaction_avg.toFixed(1), count: m.community_satisfaction_count })}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t("missionsUi.satisfaction")}
+              </Typography>
+              <Typography variant="body2">
+                {t("missionsUi.ratingOutOf5", {
+                  avg: m.community_satisfaction_avg.toFixed(1),
+                  count: m.community_satisfaction_count,
+                })}
+              </Typography>
             </Stack>
           )}
         </>
@@ -475,18 +749,28 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
     <Stack spacing={2}>
       {(m.min_standing || m.max_standing) && (
         <>
-          <Typography variant="subtitle2">{t("missionsUi.requiredStanding")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.requiredStanding")}
+          </Typography>
           <Stack spacing={0.5}>
             {m.min_standing && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">{t("missionsUi.min")}</Typography>
-                <Typography variant="body2">{m.min_standing_display || m.min_standing}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {t("missionsUi.min")}
+                </Typography>
+                <Typography variant="body2">
+                  {m.min_standing_display || m.min_standing}
+                </Typography>
               </Stack>
             )}
             {m.max_standing && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">{t("missionsUi.max")}</Typography>
-                <Typography variant="body2">{m.max_standing_display || m.max_standing}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {t("missionsUi.max")}
+                </Typography>
+                <Typography variant="body2">
+                  {m.max_standing_display || m.max_standing}
+                </Typography>
               </Stack>
             )}
           </Stack>
@@ -499,18 +783,34 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
         <BoolChip value={m.is_shareable} label={t("missionsUi.shareable")} />
         <BoolChip value={m.is_illegal} label={t("missionsUi.illegal")} />
         <BoolChip value={m.is_lawful} label={t("missionsUi.lawful")} />
-        <BoolChip value={m.is_unique_mission} label={t("missionsUi.onceOnly")} />
-        <BoolChip value={m.can_reaccept_after_abandoning} label={t("missionsUi.reacceptAbandon")} />
-        <BoolChip value={m.can_reaccept_after_failing} label={t("missionsUi.reacceptFail")} />
-        <BoolChip value={m.available_in_prison} label={t("missionsUi.availableInPrison")} />
+        <BoolChip
+          value={m.is_unique_mission}
+          label={t("missionsUi.onceOnly")}
+        />
+        <BoolChip
+          value={m.can_reaccept_after_abandoning}
+          label={t("missionsUi.reacceptAbandon")}
+        />
+        <BoolChip
+          value={m.can_reaccept_after_failing}
+          label={t("missionsUi.reacceptFail")}
+        />
+        <BoolChip
+          value={m.available_in_prison}
+          label={t("missionsUi.availableInPrison")}
+        />
       </Stack>
 
       {m.required_reputation != null && (
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.requiredReputation")}</Typography>
-            <Typography variant="body2">{fmt.number(m.required_reputation)} XP</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.requiredReputation")}
+            </Typography>
+            <Typography variant="body2">
+              {fmt.number(m.required_reputation)} XP
+            </Typography>
           </Stack>
         </>
       )}
@@ -521,26 +821,49 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
       <Stack spacing={0.5}>
         {m.time_to_complete != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.timeToComplete")}</Typography>
-            <Typography variant="body2">{formatDuration(m.time_to_complete, t)}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              <TimerRounded
+                sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }}
+              />
+              {t("missionsUi.timeToComplete")}
+            </Typography>
+            <Typography variant="body2">
+              {formatDuration(m.time_to_complete, t)}
+            </Typography>
           </Stack>
         )}
         {m.personal_cooldown_time != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.cooldown")}</Typography>
-            <Typography variant="body2">{formatDuration(m.personal_cooldown_time, t)}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              <TimerRounded
+                sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }}
+              />
+              {t("missionsUi.cooldown")}
+            </Typography>
+            <Typography variant="body2">
+              {formatDuration(m.personal_cooldown_time, t)}
+            </Typography>
           </Stack>
         )}
-        {m.abandoned_cooldown_time != null && m.abandoned_cooldown_time !== m.personal_cooldown_time && (
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.abandonCooldown")}</Typography>
-            <Typography variant="body2">{formatDuration(m.abandoned_cooldown_time, t)}</Typography>
-          </Stack>
-        )}
+        {m.abandoned_cooldown_time != null &&
+          m.abandoned_cooldown_time !== m.personal_cooldown_time && (
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                {t("missionsUi.abandonCooldown")}
+              </Typography>
+              <Typography variant="body2">
+                {formatDuration(m.abandoned_cooldown_time, t)}
+              </Typography>
+            </Stack>
+          )}
         {m.deadline_seconds != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.deadline")}</Typography>
-            <Typography variant="body2">{formatDuration(m.deadline_seconds, t)}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.deadline")}
+            </Typography>
+            <Typography variant="body2">
+              {formatDuration(m.deadline_seconds, t)}
+            </Typography>
           </Stack>
         )}
       </Stack>
@@ -548,10 +871,14 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
       {(m.accept_locations?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.availableAt")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.availableAt")}
+          </Typography>
           <Stack spacing={0.25}>
             {m.accept_locations!.map((loc, i) => (
-              <Typography key={i} variant="body2">{loc}</Typography>
+              <Typography key={i} variant="body2">
+                {loc}
+              </Typography>
             ))}
           </Stack>
         </>
@@ -561,7 +888,9 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">{t("missionsUi.maxCrimestat")}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t("missionsUi.maxCrimestat")}
+            </Typography>
             <Typography variant="body2">{m.max_crimestat}</Typography>
           </Stack>
         </>
@@ -580,25 +909,59 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="subtitle2">{t("missionsUi.chainStatus")}</Typography>
-        {m.is_chain_starter && <Chip label={t("missionsUi.chainStarter")} size="small" color="secondary" />}
-        {m.is_chain_mission && !m.is_chain_starter && <Chip label={t("missionsUi.partOfChain")} size="small" />}
+        <Typography variant="subtitle2">
+          {t("missionsUi.chainStatus")}
+        </Typography>
+        {m.is_chain_starter && (
+          <Chip
+            label={t("missionsUi.chainStarter")}
+            size="small"
+            color="secondary"
+          />
+        )}
+        {m.is_chain_mission && !m.is_chain_starter && (
+          <Chip label={t("missionsUi.partOfChain")} size="small" />
+        )}
         {!m.is_chain_mission && !m.is_chain_starter && (
-          <Typography variant="body2" color="text.secondary">{t("missionsUi.standalone")}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {t("missionsUi.standalone")}
+          </Typography>
         )}
       </Stack>
 
       {(data.prerequisite_missions?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("missionsUi.prerequisites", { count: data.prerequisite_missions!.length })}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.prerequisites", {
+              count: data.prerequisite_missions!.length,
+            })}
+          </Typography>
           <Stack spacing={0.5}>
             {data.prerequisite_missions!.map((pm) => (
-              <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
-                <RouterLink to={GAME_DATA_PATHS.mission(pm.mission_id)} style={{ color: "inherit" }}>
-                  <MissionName name={pm.mission_name} variant="body2" component="span" />
+              <Stack
+                key={pm.mission_id}
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
+                <RouterLink
+                  to={GAME_DATA_PATHS.mission(pm.mission_id)}
+                  style={{ color: "inherit" }}
+                >
+                  <MissionName
+                    name={pm.mission_name}
+                    variant="body2"
+                    component="span"
+                  />
                 </RouterLink>
-                {pm.category && <Chip label={getMissionTypeLabel(pm.category, t)} size="small" variant="outlined" />}
+                {pm.category && (
+                  <Chip
+                    label={getMissionTypeLabel(pm.category, t)}
+                    size="small"
+                    variant="outlined"
+                  />
+                )}
               </Stack>
             ))}
           </Stack>
@@ -607,7 +970,9 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
 
       {m.required_rank != null && (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="subtitle2">{t("missionsUi.requiredRank")}</Typography>
+          <Typography variant="subtitle2">
+            {t("missionsUi.requiredRank")}
+          </Typography>
           <Typography variant="body2">{m.required_rank}</Typography>
         </Stack>
       )}

@@ -20,7 +20,10 @@ const serverSidebarShop = () => null
 function readLastShop(user: string | undefined): string | null {
   if (!user) return null
   try {
-    return parseLastShops(localStorage.getItem(LAST_QUICK_LIST_SHOP_KEY))[user] ?? null
+    return (
+      parseLastShops(localStorage.getItem(LAST_QUICK_LIST_SHOP_KEY))[user] ??
+      null
+    )
   } catch {
     return null
   }
@@ -45,8 +48,14 @@ export function rememberQuickListShop(user: string, shopId: string): void {
 export function useSellingAsShop() {
   const location = useLocation()
   const session = useSession()
-  const user = session.status === "authenticated" ? session.profile.username : undefined
-  const { data: myShops, isLoading, isError, refetch } = useGetMyShopsQuery(undefined, {
+  const user =
+    session.status === "authenticated" ? session.profile.username : undefined
+  const {
+    data: myShops,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetMyShopsQuery(undefined, {
     skip: session.status !== "authenticated",
   })
   const sidebarShopSlug = useSyncExternalStore(

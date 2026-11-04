@@ -16,7 +16,12 @@ export function useClaimOrder() {
     (orderId: string, username: string) =>
       assignOrder({ order_id: orderId, username })
         .unwrap()
-        .then(() => issueAlert({ message: t("orders.claimed", "Order claimed"), severity: "success" }))
+        .then(() =>
+          issueAlert({
+            message: t("orders.claimed", "Order claimed"),
+            severity: "success",
+          }),
+        )
         .catch((e) => issueAlert(e as UnwrappedErrorInterface)),
     [assignOrder, issueAlert, t],
   )

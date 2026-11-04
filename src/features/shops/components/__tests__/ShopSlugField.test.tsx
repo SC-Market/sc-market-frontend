@@ -32,7 +32,9 @@ vi.mock("../../../../store/api/v2/market", () => ({
 
 // English catalog t() (src/test/mocks/reactI18next).
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 import { ShopSlugField, SHOP_SLUG_CHECK_DELAY_MS } from "../ShopSlugField"

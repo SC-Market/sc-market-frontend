@@ -58,18 +58,18 @@ export function prerenderedPaths(outDir: string): string[] {
  * `/blueprints/`: a duplicate for crawlers. This check fails that build.
  */
 export function trailingSlashCanonicals(html: string): string[] {
-  return [
-    ...html.matchAll(/<link\b[^>]*\brel="canonical"[^>]*>/g),
-  ].flatMap(([tag]) => {
-    const href = /\bhref="([^"]*)"/.exec(tag)?.[1]
-    if (!href) return []
-    try {
-      const { pathname } = new URL(href)
-      return pathname !== "/" && pathname.endsWith("/") ? [href] : []
-    } catch {
-      return []
-    }
-  })
+  return [...html.matchAll(/<link\b[^>]*\brel="canonical"[^>]*>/g)].flatMap(
+    ([tag]) => {
+      const href = /\bhref="([^"]*)"/.exec(tag)?.[1]
+      if (!href) return []
+      try {
+        const { pathname } = new URL(href)
+        return pathname !== "/" && pathname.endsWith("/") ? [href] : []
+      } catch {
+        return []
+      }
+    },
+  )
 }
 
 /**
@@ -102,7 +102,9 @@ export function finalizePrerenderedPages(outDir: string): string[] {
   const headersFile = path.join(outDir, "_headers")
   // Each page's single-fetch data (React Router's `<path>.data`; for /,
   // rootDataFile): turbo-stream, never cached across deploys.
-  const dataFiles = paths.map((p) => (p === "/" ? rootDataFile(outDir) : `${p}.data`))
+  const dataFiles = paths.map((p) =>
+    p === "/" ? rootDataFile(outDir) : `${p}.data`,
+  )
   for (const file of dataFiles) {
     if (!existsSync(path.join(outDir, file))) {
       throw new Error(
@@ -113,16 +115,24 @@ export function finalizePrerenderedPages(outDir: string): string[] {
   // One splat rule for the data files, one for the changelog entries (a new
   // page every week) and one per mission hub kind: Pages allows 100 header
   // rules.
-  const changelogEntry = (p: string) => p.startsWith(`${CHANGELOG_PATHS.index}/`)
+  const changelogEntry = (p: string) =>
+    p.startsWith(`${CHANGELOG_PATHS.index}/`)
   // The mission hubs (~100 pages): one splat rule per hub kind.
-  const missionHubPrefix = (p: string) => /^(\/missions\/(?:givers|factions|types|systems))\/[^/]+$/.exec(p)?.[1]
-  const missionHubPrefixes = [...new Set(paths.map(missionHubPrefix).filter((p): p is string => !!p))]
+  const missionHubPrefix = (p: string) =>
+    /^(\/missions\/(?:givers|factions|types|systems))\/[^/]+$/.exec(p)?.[1]
+  const missionHubPrefixes = [
+    ...new Set(paths.map(missionHubPrefix).filter((p): p is string => !!p)),
+  ]
   const rules = [
     ...paths
       .filter((p) => !changelogEntry(p) && !missionHubPrefix(p))
       .map((p) => `${p}\n  Cache-Control: no-cache\n`),
-    ...(paths.some(changelogEntry) ? [`${CHANGELOG_PATHS.index}/*\n  Cache-Control: no-cache\n`] : []),
-    ...missionHubPrefixes.map((prefix) => `${prefix}/*\n  Cache-Control: no-cache\n`),
+    ...(paths.some(changelogEntry)
+      ? [`${CHANGELOG_PATHS.index}/*\n  Cache-Control: no-cache\n`]
+      : []),
+    ...missionHubPrefixes.map(
+      (prefix) => `${prefix}/*\n  Cache-Control: no-cache\n`,
+    ),
     `/*.data\n  Cache-Control: no-cache\n  Content-Type: text/x-script\n`,
   ].join("\n")
   writeFileSync(

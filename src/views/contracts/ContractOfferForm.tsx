@@ -1,5 +1,11 @@
 import React from "react"
-import { Grid, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
+import {
+  Grid,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { PAYMENT_TYPES } from "../../util/constants"
@@ -23,11 +29,23 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
   const theme = useTheme<ExtendedTheme>()
 
   const {
-    title, setTitle, description, setDescription,
-    kind, setKind, cost, setCost, collateral, setCollateral,
-    paymentType, setPaymentType,
-    isLoading, submitContractOffer,
-    profile, myUser, orderLimits,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    kind,
+    setKind,
+    cost,
+    setCost,
+    collateral,
+    setCollateral,
+    paymentType,
+    setPaymentType,
+    isLoading,
+    submitContractOffer,
+    profile,
+    myUser,
+    orderLimits,
   } = useContractOfferForm(contract)
   const primaryContractor = profile?.contractors?.[0]
   const { data: primaryOrg } = useGetContractorBySpectrumIDQuery(

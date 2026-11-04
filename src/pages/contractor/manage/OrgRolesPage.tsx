@@ -17,7 +17,10 @@ export function OrgRolesPage() {
         <HelpLink guide="orgRoles" />
       </Grid>
       <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
-        <FirstUseHint hint="shopPermissions" title={t("hints.shopPermissions.title")}>
+        <FirstUseHint
+          hint="shopPermissions"
+          title={t("hints.shopPermissions.title")}
+        >
           {t("hints.shopPermissions.body")}
         </FirstUseHint>
       </Grid>

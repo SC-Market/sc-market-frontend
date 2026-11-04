@@ -26,19 +26,33 @@ const mission = (over: Partial<Mission> = {}): Mission =>
 
 describe("missionText", () => {
   it("replaces game placeholders with readable words", () => {
-    expect(readableMissionText("Active Bounty: [TARGET NAME] (ERT)")).toBe("Active Bounty: Target (ERT)")
-    expect(readableMissionText("Deliver to ~mission(Destination|Address)")).toBe("Deliver to Destination")
-    expect(readableMissionText("<em>Alert:</em> [LOCATION] under attack")).toBe("Alert: Location under attack")
+    expect(readableMissionText("Active Bounty: [TARGET NAME] (ERT)")).toBe(
+      "Active Bounty: Target (ERT)",
+    )
+    expect(
+      readableMissionText("Deliver to ~mission(Destination|Address)"),
+    ).toBe("Deliver to Destination")
+    expect(readableMissionText("<em>Alert:</em> [LOCATION] under attack")).toBe(
+      "Alert: Location under attack",
+    )
   })
 
   it("names the giver for ~mission(Contractor) and keeps escapes readable", () => {
-    expect(readableMissionText("From ~mission(Contractor|Foo)", "Rayari")).toBe("From Rayari")
-    expect(readableMissionText("From ~mission(Contractor)")).toBe("From Contractor")
-    expect(readableMissionText("<em1>Hot</em1> line\\nnext")).toBe("Hot line\nnext")
+    expect(readableMissionText("From ~mission(Contractor|Foo)", "Rayari")).toBe(
+      "From Rayari",
+    )
+    expect(readableMissionText("From ~mission(Contractor)")).toBe(
+      "From Contractor",
+    )
+    expect(readableMissionText("<em1>Hot</em1> line\\nnext")).toBe(
+      "Hot line\nnext",
+    )
   })
 
   it("splits text into literal parts and placeholders", () => {
-    expect(missionTextParts("Kill [TARGET NAME] for ~mission(Contractor)", "Vaughn")).toEqual([
+    expect(
+      missionTextParts("Kill [TARGET NAME] for ~mission(Contractor)", "Vaughn"),
+    ).toEqual([
       { text: "Kill ", placeholder: false },
       { text: "Target", placeholder: true },
       { text: " for ", placeholder: false },
@@ -47,20 +61,44 @@ describe("missionText", () => {
   })
 
   it("only uses real giver names", () => {
-    expect(missionGiver({ mission_giver_org: "~mission(Contractor)", faction: "Rayari" })).toBe("Rayari")
-    expect(missionGiver({ mission_giver_org: "@giver_key", faction: null } as never)).toBeNull()
-    expect(missionTitle(mission({ mission_giver_org: "~mission(Contractor)", faction: "Rayari" }))).toBe(
-      "A Chance to Impress — Rayari, Rank 0, Stanton",
-    )
+    expect(
+      missionGiver({
+        mission_giver_org: "~mission(Contractor)",
+        faction: "Rayari",
+      }),
+    ).toBe("Rayari")
+    expect(
+      missionGiver({ mission_giver_org: "@giver_key", faction: null } as never),
+    ).toBeNull()
+    expect(
+      missionTitle(
+        mission({
+          mission_giver_org: "~mission(Contractor)",
+          faction: "Rayari",
+        }),
+      ),
+    ).toBe("A Chance to Impress — Rayari, Rank 0, Stanton")
   })
 
   it("disambiguates titles with giver, rank and system", () => {
-    expect(missionTitle(mission())).toBe("A Chance to Impress — Vaughn, Rank 0, Stanton")
+    expect(missionTitle(mission())).toBe(
+      "A Chance to Impress — Vaughn, Rank 0, Stanton",
+    )
   })
 
   it("writes the one-line summary with the best blueprint drop", () => {
     const pools = [
-      { blueprints: [{ blueprint_id: "b", output_item_name: "P8-AR Rifle", blueprint_name: "BP", drop_probability: 2.5, is_guaranteed: false }] },
+      {
+        blueprints: [
+          {
+            blueprint_id: "b",
+            output_item_name: "P8-AR Rifle",
+            blueprint_name: "BP",
+            drop_probability: 2.5,
+            is_guaranteed: false,
+          },
+        ],
+      },
     ] as unknown as MissionRewardPool[]
     expect(missionSummaryLine(mission(), pools)).toBe(
       "A Chance to Impress is a legal delivery Star Citizen mission from Vaughn in Stanton, paying 12,000–25,000 aUEC, with a 2.5% chance to drop the P8-AR Rifle blueprint.",
@@ -78,6 +116,8 @@ describe("missionText", () => {
         created_at: "",
         updated_at: "",
       }),
-    ).toBe("Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build 12881860).")
+    ).toBe(
+      "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build 12881860).",
+    )
   })
 })

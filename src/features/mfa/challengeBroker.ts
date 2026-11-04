@@ -44,7 +44,8 @@ export function requestMfaChallenge(kind: MfaChallengeKind): Promise<boolean> {
 
 /** The MFA error code in an RTK Query error body, if any. */
 export function mfaErrorCode(error: unknown): string | undefined {
-  const data = (error as { data?: { error?: { code?: unknown } } } | undefined)?.data
+  const data = (error as { data?: { error?: { code?: unknown } } } | undefined)
+    ?.data
   const code = data?.error?.code
   return typeof code === "string" && code.startsWith("MFA_") ? code : undefined
 }

@@ -89,7 +89,10 @@ function OrgAboutForm(props: { contractor: Contractor }) {
       {/* General */}
       <FormPaper
         title={t("orgAbout.generalTitle", "General")}
-        subtitle={t("orgAbout.generalSubtitle", "Basic organization information")}
+        subtitle={t(
+          "orgAbout.generalSubtitle",
+          "Basic organization information",
+        )}
       >
         <Grid item xs={12}>
           <TextField
@@ -104,11 +107,7 @@ function OrgAboutForm(props: { contractor: Contractor }) {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography
-            variant="subtitle2"
-            color="text.secondary"
-            gutterBottom
-          >
+          <Typography variant="subtitle2" color="text.secondary" gutterBottom>
             {t("orgAbout.description", "Description")}
           </Typography>
           <MarkdownEditor
@@ -233,7 +232,10 @@ function OrgAboutForm(props: { contractor: Contractor }) {
             </Button>
           </Stack>
           <Typography variant="caption" color="text.secondary">
-            {t("orgDetailEdit.avatar_too_large", "Avatar must be less than 1MB")}
+            {t(
+              "orgDetailEdit.avatar_too_large",
+              "Avatar must be less than 1MB",
+            )}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -284,7 +286,10 @@ function OrgAboutForm(props: { contractor: Contractor }) {
             </Button>
           </Stack>
           <Typography variant="caption" color="text.secondary">
-            {t("orgDetailEdit.banner_too_large", "Banner must be less than 2.5MB")}
+            {t(
+              "orgDetailEdit.banner_too_large",
+              "Banner must be less than 2.5MB",
+            )}
           </Typography>
         </Grid>
       </FormPaper>

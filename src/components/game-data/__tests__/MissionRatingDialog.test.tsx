@@ -1,14 +1,14 @@
 import "../../../util/i18n"
 /**
  * Unit Tests for MissionRatingDialog Component
- * 
+ *
  * Tests verify:
  * - Difficulty rating (1-5 stars) - Requirement 49.1
  * - Satisfaction rating (1-5 stars) - Requirement 49.2
  * - Optional comment field - Requirement 49.6, 49.7
  * - Update existing ratings - Requirement 49.8
  * - Validation and error handling
- * 
+ *
  * Task 11.5 - Create MissionRatingDialog component
  */
 
@@ -64,7 +64,10 @@ describe("MissionRatingDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useRateMissionMutation).mockReturnValue([
-      mockMutationTrigger<RateMission>({ success: true, rating_id: "test-rating-id" }),
+      mockMutationTrigger<RateMission>({
+        success: true,
+        rating_id: "test-rating-id",
+      }),
       mutationIdle<RateMission>(),
     ])
   })
@@ -74,7 +77,7 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText("Rate Mission")).toBeInTheDocument()
@@ -86,11 +89,13 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText("Difficulty Rating *")).toBeInTheDocument()
-    expect(screen.getByText("How difficult was this mission?")).toBeInTheDocument()
+    expect(
+      screen.getByText("How difficult was this mission?"),
+    ).toBeInTheDocument()
   })
 
   it("renders satisfaction rating field (Requirement 49.2)", () => {
@@ -98,11 +103,13 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText("Satisfaction Rating *")).toBeInTheDocument()
-    expect(screen.getByText("How satisfied were you with this mission?")).toBeInTheDocument()
+    expect(
+      screen.getByText("How satisfied were you with this mission?"),
+    ).toBeInTheDocument()
   })
 
   it("renders optional comment field (Requirement 49.6, 49.7)", () => {
@@ -110,7 +117,7 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     const commentField = screen.getByLabelText("Comment (Optional)")
@@ -123,7 +130,7 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     const submitButton = screen.getByRole("button", { name: /submit rating/i })
@@ -135,7 +142,7 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     // Initially disabled
@@ -151,11 +158,11 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     const commentField = screen.getByLabelText("Comment (Optional)")
-    
+
     // Test that character counter updates
     fireEvent.change(commentField, { target: { value: "Test comment" } })
     expect(screen.getByText("12/1000 characters")).toBeInTheDocument()
@@ -175,18 +182,21 @@ describe("MissionRatingDialog", () => {
 
     render(
       <Provider store={store}>
-        <MissionRatingDialog {...defaultProps} existingRating={existingRating} />
-      </Provider>
+        <MissionRatingDialog
+          {...defaultProps}
+          existingRating={existingRating}
+        />
+      </Provider>,
     )
 
     // Check for title (use getAllByText since it appears in both title and button)
     const updateRatingElements = screen.getAllByText("Update Rating")
     expect(updateRatingElements.length).toBeGreaterThan(0)
-    
+
     expect(
       screen.getByText(
-        "You have already rated this mission. Submitting will update your existing rating."
-      )
+        "You have already rated this mission. Submitting will update your existing rating.",
+      ),
     ).toBeInTheDocument()
 
     const commentField = screen.getByLabelText("Comment (Optional)")
@@ -198,7 +208,7 @@ describe("MissionRatingDialog", () => {
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     const cancelButton = screen.getByRole("button", { name: /cancel/i })
@@ -212,20 +222,27 @@ describe("MissionRatingDialog", () => {
       success: true,
       rating_id: "test-rating-id",
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationIdle<RateMission>()])
+    vi.mocked(useRateMissionMutation).mockReturnValue([
+      mockRateMission,
+      mutationIdle<RateMission>(),
+    ])
 
     const store = createMockStore()
     const { container } = render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     // Directly set ratings via state (simulating user interaction)
     // In a real scenario, user would click stars
-    const difficultyInputs = container.querySelectorAll('input[name^="_r_"][value="4"]')
-    const satisfactionInputs = container.querySelectorAll('input[name^="_r_"][value="5"]')
-    
+    const difficultyInputs = container.querySelectorAll(
+      'input[name^="_r_"][value="4"]',
+    )
+    const satisfactionInputs = container.querySelectorAll(
+      'input[name^="_r_"][value="5"]',
+    )
+
     if (difficultyInputs.length > 0) {
       fireEvent.click(difficultyInputs[0])
     }
@@ -251,13 +268,16 @@ describe("MissionRatingDialog", () => {
       reset: vi.fn(),
       abort: vi.fn(),
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationIdle<RateMission>()])
+    vi.mocked(useRateMissionMutation).mockReturnValue([
+      mockRateMission,
+      mutationIdle<RateMission>(),
+    ])
 
     const store = createMockStore()
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     // Note: Full error handling test would require proper Rating component interaction
@@ -268,19 +288,24 @@ describe("MissionRatingDialog", () => {
   it("shows loading state during submission", async () => {
     const mockRateMission = mockMutationTrigger<RateMission>()
     mockRateMission.mockReturnValue({
-      unwrap: vi.fn().mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 1000))
-      ),
+      unwrap: vi
+        .fn()
+        .mockImplementation(
+          () => new Promise((resolve) => setTimeout(resolve, 1000)),
+        ),
       reset: vi.fn(),
       abort: vi.fn(),
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationLoading<RateMission>()])
+    vi.mocked(useRateMissionMutation).mockReturnValue([
+      mockRateMission,
+      mutationLoading<RateMission>(),
+    ])
 
     const store = createMockStore()
     render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole("progressbar")).toBeInTheDocument()
@@ -291,7 +316,7 @@ describe("MissionRatingDialog", () => {
     const { rerender } = render(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} />
-      </Provider>
+      </Provider>,
     )
 
     // Add comment
@@ -306,13 +331,13 @@ describe("MissionRatingDialog", () => {
     rerender(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} open={false} />
-      </Provider>
+      </Provider>,
     )
 
     rerender(
       <Provider store={store}>
         <MissionRatingDialog {...defaultProps} open={true} />
-      </Provider>
+      </Provider>,
     )
 
     // Comment should be reset

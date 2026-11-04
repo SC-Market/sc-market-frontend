@@ -22,7 +22,10 @@ import { formatPrice } from "./format/format"
  */
 export interface AnswerTranslate {
   (key: string, defaultValue: string): string
-  (key: string, options: { defaultValue: string } & Record<string, unknown>): string
+  (
+    key: string,
+    options: { defaultValue: string } & Record<string, unknown>,
+  ): string
 }
 
 export interface AnswerFaq {
@@ -39,15 +42,17 @@ export interface AnswerContent {
 const MAX_LISTED = 3
 
 function list(items: string[], lang: string): string {
-  return new Intl.ListFormat(lang, { style: "long", type: "conjunction" }).format(
-    items,
-  )
+  return new Intl.ListFormat(lang, {
+    style: "long",
+    type: "conjunction",
+  }).format(items)
 }
 
 function disjunction(items: string[], lang: string): string {
-  return new Intl.ListFormat(lang, { style: "long", type: "disjunction" }).format(
-    items,
-  )
+  return new Intl.ListFormat(lang, {
+    style: "long",
+    type: "disjunction",
+  }).format(items)
 }
 
 export function buildCommodityAnswers(
@@ -59,7 +64,8 @@ export function buildCommodityAnswers(
   const name = r.resource_name
   const sentences: string[] = [
     t("seoAnswers.commodity.intro", {
-      defaultValue: "{{name}} is a Star Citizen commodity in the {{category}} category.",
+      defaultValue:
+        "{{name}} is a Star Citizen commodity in the {{category}} category.",
       name,
       category: r.resource_category,
     }),
@@ -160,7 +166,8 @@ export function buildCommodityAnswers(
         name,
       }),
       answer: t("seoAnswers.commodity.faqUsesA", {
-        defaultValue: "{{name}} is a crafting ingredient for items such as {{items}}.",
+        defaultValue:
+          "{{name}} is a crafting ingredient for items such as {{items}}.",
         name,
         items: list(uses.slice(0, MAX_LISTED), lang),
       }),
@@ -178,7 +185,8 @@ export function buildOreAnswers(
   const name = ore.displayName
   const sentences: string[] = [
     t("seoAnswers.ore.intro", {
-      defaultValue: "{{name}} is a mineable ore in Star Citizen (rarity: {{rarity}}).",
+      defaultValue:
+        "{{name}} is a mineable ore in Star Citizen (rarity: {{rarity}}).",
       name,
       rarity: ore.rarity,
     }),
@@ -203,7 +211,8 @@ export function buildOreAnswers(
         name,
       }),
       answer: t("seoAnswers.ore.faqWhereA", {
-        defaultValue: "{{name}} can be found at {{locations}}, among other locations.",
+        defaultValue:
+          "{{name}} can be found at {{locations}}, among other locations.",
         name,
         locations,
       }),
@@ -213,7 +222,10 @@ export function buildOreAnswers(
   return { summary: sentences.join(" "), faqs }
 }
 
-export function buildShipSummary(ship: WikiShipDetail, t: AnswerTranslate): string {
+export function buildShipSummary(
+  ship: WikiShipDetail,
+  t: AnswerTranslate,
+): string {
   const sentences: string[] = [
     t("seoAnswers.ship.intro", {
       defaultValue: "The {{name}} is a ship in Star Citizen.",
@@ -245,7 +257,11 @@ export function buildShipSummary(ship: WikiShipDetail, t: AnswerTranslate): stri
   return sentences.join(" ")
 }
 
-export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate, lang: string): string {
+export function buildItemSummary(
+  item: WikiItemDetail,
+  t: AnswerTranslate,
+  lang: string,
+): string {
   const sentences: string[] = [
     t("seoAnswers.item.intro", {
       defaultValue: "{{name}} is an item in Star Citizen.",
@@ -254,7 +270,10 @@ export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate, lang:
   ]
   if (item.type) {
     sentences.push(
-      t("seoAnswers.item.type", { defaultValue: "Type: {{type}}.", type: item.type }),
+      t("seoAnswers.item.type", {
+        defaultValue: "Type: {{type}}.",
+        type: item.type,
+      }),
     )
   }
 

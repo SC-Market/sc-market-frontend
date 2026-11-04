@@ -23,7 +23,12 @@ import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths"
 function Total(props: { value: React.ReactNode; label: string }) {
   return (
     <Paper sx={{ p: 2, minWidth: 140, flex: "1 1 140px" }}>
-      <Typography variant="h5" component="p" color="text.secondary" fontWeight={700}>
+      <Typography
+        variant="h5"
+        component="p"
+        color="text.secondary"
+        fontWeight={700}
+      >
         {props.value}
       </Typography>
       <Typography variant="caption" color="text.primary">
@@ -46,9 +51,17 @@ export function OrgAnalyticsPage() {
     { skip: !spectrumId },
   )
 
-  if (!spectrumId || isLoading) return <Skeleton variant="rounded" height={320} />
+  if (!spectrumId || isLoading)
+    return <Skeleton variant="rounded" height={320} />
   if (isError || !data) {
-    return <Alert severity="warning">{t("storefront.analytics.loadFailed", "Org analytics couldn't be loaded. Try again later.")}</Alert>
+    return (
+      <Alert severity="warning">
+        {t(
+          "storefront.analytics.loadFailed",
+          "Org analytics couldn't be loaded. Try again later.",
+        )}
+      </Alert>
+    )
   }
   const { totals } = data
 
@@ -59,38 +72,84 @@ export function OrgAnalyticsPage() {
           {t("storefront.analytics.title", "Org analytics")}
         </Typography>
         <Typography variant="body2" color="text.primary">
-          {t("storefront.analytics.intro", "Every shop your org owns, added up. Views are counted since view tracking began.")}
+          {t(
+            "storefront.analytics.intro",
+            "Every shop your org owns, added up. Views are counted since view tracking began.",
+          )}
         </Typography>
       </Box>
       <Stack direction="row" flexWrap="wrap" useFlexGap spacing={1}>
-        <Total value={totals.views} label={t("storefront.analytics.views", "Listing views")} />
-        <Total value={totals.unique_viewers} label={t("storefront.analytics.uniqueViewers", "Signed-in viewers")} />
-        <Total value={totals.cart_adds} label={t("storefront.analytics.cartAdds", "Cart adds")} />
-        <Total value={totals.orders} label={t("storefront.analytics.orders", "Market orders")} />
-        <Total value={totals.sales} label={t("storefront.analytics.sales", "Sales")} />
-        <Total value={`${totals.conversion_rate}%`} label={t("storefront.analytics.conversion", "Sales per view")} />
-        <Total value={totals.completed_orders} label={t("storefront.analytics.completed", "Completed orders (all kinds)")} />
-        <Total value={totals.active_listings} label={t("storefront.analytics.listings", "Active listings")} />
+        <Total
+          value={totals.views}
+          label={t("storefront.analytics.views", "Listing views")}
+        />
+        <Total
+          value={totals.unique_viewers}
+          label={t("storefront.analytics.uniqueViewers", "Signed-in viewers")}
+        />
+        <Total
+          value={totals.cart_adds}
+          label={t("storefront.analytics.cartAdds", "Cart adds")}
+        />
+        <Total
+          value={totals.orders}
+          label={t("storefront.analytics.orders", "Market orders")}
+        />
+        <Total
+          value={totals.sales}
+          label={t("storefront.analytics.sales", "Sales")}
+        />
+        <Total
+          value={`${totals.conversion_rate}%`}
+          label={t("storefront.analytics.conversion", "Sales per view")}
+        />
+        <Total
+          value={totals.completed_orders}
+          label={t(
+            "storefront.analytics.completed",
+            "Completed orders (all kinds)",
+          )}
+        />
+        <Total
+          value={totals.active_listings}
+          label={t("storefront.analytics.listings", "Active listings")}
+        />
       </Stack>
 
       {data.shops.length > 0 && (
         <TableContainer component={Paper}>
-          <Table size="small" aria-label={t("storefront.analytics.byShop", "By shop")}>
+          <Table
+            size="small"
+            aria-label={t("storefront.analytics.byShop", "By shop")}
+          >
             <TableHead>
               <TableRow>
                 <TableCell>{t("storefront.analytics.shop", "Shop")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.views", "Listing views")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.orders", "Market orders")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.sales", "Sales")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.conversion", "Sales per view")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.listings", "Active listings")}</TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.views", "Listing views")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.orders", "Market orders")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.sales", "Sales")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.conversion", "Sales per view")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.listings", "Active listings")}
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data.shops.map((shop) => (
                 <TableRow key={shop.shop_id}>
                   <TableCell>
-                    <MuiLink component={Link} to={SHOP_PATHS.dashboard(shop.slug)}>
+                    <MuiLink
+                      component={Link}
+                      to={SHOP_PATHS.dashboard(shop.slug)}
+                    >
                       {shop.name}
                     </MuiLink>
                   </TableCell>
@@ -108,22 +167,38 @@ export function OrgAnalyticsPage() {
 
       {data.top_listings.length > 0 && (
         <TableContainer component={Paper}>
-          <Typography variant="subtitle1" color="text.secondary" sx={{ px: 2, pt: 2 }}>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            sx={{ px: 2, pt: 2 }}
+          >
             {t("storefront.analytics.topListings", "Most viewed listings")}
           </Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>{t("storefront.analytics.listing", "Listing")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.views", "Listing views")}</TableCell>
-                <TableCell align="right">{t("storefront.analytics.sales", "Sales")}</TableCell>
+                <TableCell>
+                  {t("storefront.analytics.listing", "Listing")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.views", "Listing views")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("storefront.analytics.sales", "Sales")}
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data.top_listings.map((listing) => (
                 <TableRow key={listing.listing_id}>
                   <TableCell>
-                    <MuiLink component={Link} to={MARKET_PATHS.listing(listing.listing_id, listing.title)}>
+                    <MuiLink
+                      component={Link}
+                      to={MARKET_PATHS.listing(
+                        listing.listing_id,
+                        listing.title,
+                      )}
+                    >
                       {listing.title}
                     </MuiLink>
                   </TableCell>
@@ -152,16 +227,27 @@ export function OrgAnalyticsPage() {
           </Box>
           {data.orders_by_member.length === 0 ? (
             <Typography variant="body2" color="text.primary" sx={{ p: 2 }}>
-              {t("storefront.analytics.noAssigned", "No orders have been assigned to members yet.")}
+              {t(
+                "storefront.analytics.noAssigned",
+                "No orders have been assigned to members yet.",
+              )}
             </Typography>
           ) : (
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("storefront.analytics.member", "Member")}</TableCell>
-                  <TableCell align="right">{t("storefront.analytics.assigned", "Assigned")}</TableCell>
-                  <TableCell align="right">{t("storefront.analytics.done", "Completed")}</TableCell>
-                  <TableCell align="right">{t("storefront.analytics.open", "Open")}</TableCell>
+                  <TableCell>
+                    {t("storefront.analytics.member", "Member")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {t("storefront.analytics.assigned", "Assigned")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {t("storefront.analytics.done", "Completed")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {t("storefront.analytics.open", "Open")}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

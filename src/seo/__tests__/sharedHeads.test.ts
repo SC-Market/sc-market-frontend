@@ -20,7 +20,11 @@ import {
 } from "../hubHeads"
 
 const i18n = i18next.createInstance()
-i18n.init({ lng: "en", resources: { en: { translation: en } }, initAsync: false })
+i18n.init({
+  lng: "en",
+  resources: { en: { translation: en } },
+  initAsync: false,
+})
 const t = i18n.t.bind(i18n)
 
 describe("site JSON-LD (Footer)", () => {
@@ -28,11 +32,17 @@ describe("site JSON-LD (Footer)", () => {
     expect(serializeJsonLd(siteJsonLd())).toBe(JSON.stringify(siteJsonLd()))
     expect(siteJsonLd()).toMatchObject({
       "@graph": [
-        { "@type": "Organization", "@id": "https://sc-market.space/#organization" },
+        {
+          "@type": "Organization",
+          "@id": "https://sc-market.space/#organization",
+        },
         {
           "@type": "WebSite",
           potentialAction: {
-            target: { urlTemplate: "https://sc-market.space/market?text={search_term_string}" },
+            target: {
+              urlTemplate:
+                "https://sc-market.space/market?text={search_term_string}",
+            },
           },
         },
       ],
@@ -65,20 +75,28 @@ describe("hub text matches the pages' previous inline strings", () => {
   it("lists with a filter and a total", () => {
     expect(wikiItemsSeoText(undefined, 10)).toEqual({
       title: "All Items — Star Citizen Game Database | SC Market",
-      description: "Browse 10 Star Citizen items. Stats, prices, crafting uses, and locations.",
+      description:
+        "Browse 10 Star Citizen items. Stats, prices, crafting uses, and locations.",
     })
     expect(wikiItemsSeoText("Weapon", undefined).description).toBe(
       "Browse  Weapon items. Stats, prices, crafting uses, and locations.",
     )
-    expect(wikiCommoditiesSeoText("Metal", 5).title).toBe("Metal Commodities — Star Citizen | SC Market")
+    expect(wikiCommoditiesSeoText("Metal", 5).title).toBe(
+      "Metal Commodities — Star Citizen | SC Market",
+    )
     expect(wikiShipsSeoText("", 0).description).toBe(
       "Browse 0 Star Citizen ships and vehicles. Specs, loadouts, and market availability.",
     )
-    expect(blueprintsSeoText(null, 3).title).toBe("All Blueprints — Star Citizen Crafting | SC Market")
-    expect(missionsSeoText("Delivery", 3).title).toBe("Delivery Missions — Star Citizen Mission Database | SC Market")
+    expect(blueprintsSeoText(null, 3).title).toBe(
+      "All Blueprints — Star Citizen Crafting | SC Market",
+    )
+    expect(missionsSeoText("Delivery", 3).title).toBe(
+      "Delivery Missions — Star Citizen Mission Database | SC Market",
+    )
     expect(shopDirectorySeoText(null, undefined)).toEqual({
       title: "All Shops — Star Citizen Marketplace | SC Market",
-      description: "Browse  verified Star Citizen shops. Compare ratings, listings, and specialties.",
+      description:
+        "Browse  verified Star Citizen shops. Compare ratings, listings, and specialties.",
     })
   })
 
@@ -86,7 +104,9 @@ describe("hub text matches the pages' previous inline strings", () => {
     expect(marketSearchSeoText({ total: 0 }).description).toBe(
       "Trade with other players: Star Citizen items, armor, weapons, ship components and commodities for sale in aUEC. Compare prices from rated sellers.",
     )
-    expect(marketSearchSeoText({ itemType: "Armor", total: 3 }).description).toBe(
+    expect(
+      marketSearchSeoText({ itemType: "Armor", total: 3 }).description,
+    ).toBe(
       "Browse 3 Armor for sale on SC Market. Compare prices from verified Star Citizen sellers.",
     )
     expect(marketSearchSeoText({ text: "gold", itemType: "Metal" }).title).toBe(
@@ -110,7 +130,9 @@ describe("hub text matches the pages' previous inline strings", () => {
     expect(layoutDescription("Mining Database", undefined)).toBe(
       "Mining Database - SC Market, the Star Citizen marketplace",
     )
-    expect(layoutDescription(null, "")).toBe("SC Market - SC Market, the Star Citizen marketplace")
+    expect(layoutDescription(null, "")).toBe(
+      "SC Market - SC Market, the Star Citizen marketplace",
+    )
     expect(layoutDescription("x", "Own")).toBe("Own")
   })
 })

@@ -85,14 +85,14 @@ export function TransactionTableRow(props: {
   )
 
   const orgRec = useMemo(
-    () => profile?.contractors?.some(c => c.spectrum_id === props.row.contractor_recipient_id),
+    () =>
+      profile?.contractors?.some(
+        (c) => c.spectrum_id === props.row.contractor_recipient_id,
+      ),
     [profile?.contractors, props.row.contractor_recipient_id],
   )
 
-  const receiving = useMemo(
-    () => orgRec || userRec,
-    [orgRec, userRec],
-  )
+  const receiving = useMemo(() => orgRec || userRec, [orgRec, userRec])
 
   return (
     <Fade

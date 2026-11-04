@@ -1,54 +1,57 @@
-import "./setup";
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { configureStore } from "@reduxjs/toolkit";
-import { EditListingV2 } from "../EditListingV2";
+import "./setup"
+import React from "react"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { MemoryRouter, Routes, Route } from "react-router-dom"
+import { configureStore } from "@reduxjs/toolkit"
+import { EditListingV2 } from "../EditListingV2"
 import {
   marketV2Api,
   useGetListingDetailQuery,
   useGetMyShopsQuery,
   useGetStockLotsQuery,
   useUpdateListingMutation,
-} from "../../../../store/api/v2/market";
-import type { ShopResponse, StockLotDetail } from "../../../../store/api/v2/market";
-import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
+} from "../../../../store/api/v2/market"
+import type {
+  ShopResponse,
+  StockLotDetail,
+} from "../../../../store/api/v2/market"
+import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market"
 import {
   mockMutationHook,
   queryError,
   queryLoading,
   querySuccess,
-} from "../../../../__tests__/rtkQueryMocks";
-import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
-import type { MarkdownEditor } from "../../../../components/markdown/Markdown";
-import type { LocationSelectorProps } from "../../components/stock/LocationSelector";
-import type { FormPaper } from "../../../../components/paper/FormPaper";
-import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
+} from "../../../../__tests__/rtkQueryMocks"
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
+import type { MarkdownEditor } from "../../../../components/markdown/Markdown"
+import type { LocationSelectorProps } from "../../components/stock/LocationSelector"
+import type { FormPaper } from "../../../../components/paper/FormPaper"
+import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
 
-type MarketV2Module = typeof import("../../../../store/api/v2/market");
-type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>;
-type FormPaperProps = React.ComponentProps<typeof FormPaper>;
-type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>;
+type MarketV2Module = typeof import("../../../../store/api/v2/market")
+type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>
+type FormPaperProps = React.ComponentProps<typeof FormPaper>
+type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>
 
 // Mock all dependencies
 vi.mock("../../../../store/api/v2/market", async () => {
   const actual = await vi.importActual<MarketV2Module>(
     "../../../../store/api/v2/market",
-  );
+  )
   return {
     ...actual,
     useGetListingDetailQuery: vi.fn(),
     useUpdateListingMutation: vi.fn(),
     useGetStockLotsQuery: vi.fn(),
     useGetMyShopsQuery: vi.fn(),
-  };
-});
+  }
+})
 
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
-}));
+}))
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
   MarkdownEditor: ({ value, onChange }: MarkdownEditorProps) => (
@@ -58,7 +61,7 @@ vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
       onChange={(e) => onChange(e.target.value)}
     />
   ),
-}));
+}))
 
 vi.mock("../components/stock/LocationSelector", () => ({
   LocationSelector: ({ value, onChange }: LocationSelectorProps) => (
@@ -72,7 +75,7 @@ vi.mock("../components/stock/LocationSelector", () => ({
       <option value="loc-2">Area 18</option>
     </select>
   ),
-}));
+}))
 
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({
@@ -89,7 +92,7 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/paper/FormPaper", () => ({
   FormPaper: ({ children, title }: FormPaperProps) => (
@@ -98,7 +101,7 @@ vi.mock("../../../../components/paper/FormPaper", () => ({
       {children}
     </div>
   ),
-}));
+}))
 
 vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
   SelectPhotosArea: ({ setPhotos }: SelectPhotosAreaProps) => (
@@ -106,35 +109,49 @@ vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
       <button onClick={() => setPhotos(["photo1.jpg"])}>Add Photo</button>
     </div>
   ),
-}));
+}))
 
 vi.mock("@mui/material/styles", async () => {
-  const actual = await vi.importActual("@mui/material/styles") as typeof import("@mui/material/styles")
+  const actual = (await vi.importActual(
+    "@mui/material/styles",
+  )) as typeof import("@mui/material/styles")
   return {
     ...actual,
     useTheme: () => ({
       ...actual.createTheme(),
       layoutSpacing: { layout: 2, component: 1.5, text: 1, compact: 0.5 },
-      borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-      palette: { ...actual.createTheme().palette, outline: { main: "#e0e0e0" } },
+      borderRadius: {
+        topLevel: 0.375,
+        image: 0.375,
+        button: 1,
+        input: 0.5,
+        chip: 0.5,
+        minimal: 0,
+      },
+      palette: {
+        ...actual.createTheme().palette,
+        outline: { main: "#e0e0e0" },
+      },
     }),
   }
-});
+})
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock navigate
-const mockNavigate = vi.fn();
+const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+  const actual = await vi.importActual("react-router-dom")
   return {
     ...actual,
     useNavigate: () => mockNavigate,
     useParams: () => ({ id: "listing-123" }),
-  };
-});
+  }
+})
 
 // Create mock store
 const createMockStore = () => {
@@ -144,8 +161,8 @@ const createMockStore = () => {
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware),
-  });
-};
+  })
+}
 
 // Mock listing data, typed against the generated response contract.
 const mockListingData: GetListingDetailApiResponse = {
@@ -196,34 +213,41 @@ const mockListingData: GetListingDetailApiResponse = {
       ],
     },
   ],
-};
+}
 
 describe("EditListingV2", () => {
-  let updateHook: ReturnType<typeof mockMutationHook<typeof marketV2Api.endpoints.updateListing>>;
+  let updateHook: ReturnType<
+    typeof mockMutationHook<typeof marketV2Api.endpoints.updateListing>
+  >
   beforeEach(() => {
-    vi.clearAllMocks();
-    updateHook = mockMutationHook<typeof marketV2Api.endpoints.updateListing>();
-  });
+    vi.clearAllMocks()
+    updateHook = mockMutationHook<typeof marketV2Api.endpoints.updateListing>()
+  })
 
   const renderComponent = (lots: StockLotDetail[] = []) => {
-    const store = createMockStore();
-    
+    const store = createMockStore()
+
     // Mock the hooks
     vi.mocked(useGetListingDetailQuery).mockReturnValue(
       querySuccess<typeof marketV2Api.endpoints.getListingDetail>(
         mockListingData,
       ),
-    );
+    )
 
-    vi.mocked(useUpdateListingMutation).mockReturnValue(updateHook);
+    vi.mocked(useUpdateListingMutation).mockReturnValue(updateHook)
     vi.mocked(useGetStockLotsQuery).mockReturnValue(
-      querySuccess<typeof marketV2Api.endpoints.getStockLots>({ lots, total: lots.length, page: 1, page_size: 100 }),
-    );
+      querySuccess<typeof marketV2Api.endpoints.getStockLots>({
+        lots,
+        total: lots.length,
+        page: 1,
+        page_size: 100,
+      }),
+    )
     vi.mocked(useGetMyShopsQuery).mockReturnValue(
       querySuccess<typeof marketV2Api.endpoints.getMyShops>([
         { shop_id: "shop-456", slug: "org-shop" } as ShopResponse,
       ]),
-    );
+    )
 
     return render(
       <Provider store={store}>
@@ -232,196 +256,223 @@ describe("EditListingV2", () => {
             <Route path="/market/v2/:id/edit" element={<EditListingV2 />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
-    );
-  };
+      </Provider>,
+    )
+  }
 
   it("renders the edit listing form", () => {
-    renderComponent();
-    expect(screen.getByTestId("standard-page-layout")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByTestId("standard-page-layout")).toBeInTheDocument()
+  })
 
   it("displays form sections", () => {
-    renderComponent();
-    expect(screen.getByText("About")).toBeInTheDocument();
-    expect(screen.getByText("Pricing")).toBeInTheDocument();
-    expect(screen.getByText("Variants")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("About")).toBeInTheDocument()
+    expect(screen.getByText("Pricing")).toBeInTheDocument()
+    expect(screen.getByText("Variants")).toBeInTheDocument()
+  })
 
   it("pre-populates title field", () => {
-    renderComponent();
-    const titleInput = screen.getByDisplayValue("Test Listing");
-    expect(titleInput).toBeInTheDocument();
-  });
+    renderComponent()
+    const titleInput = screen.getByDisplayValue("Test Listing")
+    expect(titleInput).toBeInTheDocument()
+  })
 
   it("pre-populates description field", () => {
-    renderComponent();
-    const descriptionInput = screen.getByTestId("markdown-editor");
-    expect(descriptionInput).toHaveValue("Test description");
-  });
+    renderComponent()
+    const descriptionInput = screen.getByTestId("markdown-editor")
+    expect(descriptionInput).toHaveValue("Test description")
+  })
 
   it("pre-populates base price for unified pricing mode", () => {
-    renderComponent();
-    const basePriceInput = screen.getByLabelText(/Base Price/i);
-    expect(basePriceInput).toHaveValue("1,000");
-  });
+    renderComponent()
+    const basePriceInput = screen.getByLabelText(/Base Price/i)
+    expect(basePriceInput).toHaveValue("1,000")
+  })
 
   it("displays variant information", () => {
-    renderComponent();
-    expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
+  })
 
   it("pre-populates variant quantity", () => {
-    renderComponent();
-    const quantityInput = screen.getByLabelText(/Quantity/i);
-    expect(quantityInput).toHaveValue("10");
-  });
+    renderComponent()
+    const quantityInput = screen.getByLabelText(/Quantity/i)
+    expect(quantityInput).toHaveValue("10")
+  })
 
   it("pre-populates variant location", () => {
-    renderComponent();
-    expect(screen.getByText("loc-1")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("loc-1")).toBeInTheDocument()
+  })
 
   it("shows game item as read-only", () => {
-    renderComponent();
-    const gameItemInput = screen.getByDisplayValue("Test Item");
-    expect(gameItemInput).toBeDisabled();
-  });
+    renderComponent()
+    const gameItemInput = screen.getByDisplayValue("Test Item")
+    expect(gameItemInput).toBeDisabled()
+  })
 
   it("shows pricing mode as read-only", () => {
-    renderComponent();
-    const unifiedRadio = screen.getByLabelText(/Unified Price/i);
-    expect(unifiedRadio).toBeDisabled();
-  });
+    renderComponent()
+    const unifiedRadio = screen.getByLabelText(/Unified Price/i)
+    expect(unifiedRadio).toBeDisabled()
+  })
 
   it("allows updating title", async () => {
-    renderComponent();
-    const titleInput = screen.getByDisplayValue("Test Listing");
-    
-    fireEvent.change(titleInput, { target: { value: "Updated Title" } });
-    
+    renderComponent()
+    const titleInput = screen.getByDisplayValue("Test Listing")
+
+    fireEvent.change(titleInput, { target: { value: "Updated Title" } })
+
     await waitFor(() => {
-      expect(titleInput).toHaveValue("Updated Title");
-    });
-  });
+      expect(titleInput).toHaveValue("Updated Title")
+    })
+  })
 
   it("allows updating description", async () => {
-    renderComponent();
-    const descriptionInput = screen.getByTestId("markdown-editor");
-    
-    fireEvent.change(descriptionInput, { target: { value: "Updated description" } });
-    
+    renderComponent()
+    const descriptionInput = screen.getByTestId("markdown-editor")
+
+    fireEvent.change(descriptionInput, {
+      target: { value: "Updated description" },
+    })
+
     await waitFor(() => {
-      expect(descriptionInput).toHaveValue("Updated description");
-    });
-  });
+      expect(descriptionInput).toHaveValue("Updated description")
+    })
+  })
 
   it("allows updating quantity", async () => {
-    renderComponent();
-    const quantityInput = screen.getByLabelText(/Quantity/i);
-    
-    fireEvent.change(quantityInput, { target: { value: "20" } });
-    
+    renderComponent()
+    const quantityInput = screen.getByLabelText(/Quantity/i)
+
+    fireEvent.change(quantityInput, { target: { value: "20" } })
+
     await waitFor(() => {
-      expect(quantityInput).toHaveValue("20");
-    });
-  });
+      expect(quantityInput).toHaveValue("20")
+    })
+  })
 
   it("displays variant location as read-only", () => {
-    renderComponent();
-    expect(screen.getByText("loc-1")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("loc-1")).toBeInTheDocument()
+  })
 
   it("shows modified chip when variant is changed", async () => {
-    renderComponent();
-    const quantityInput = screen.getByLabelText(/Quantity/i);
-    
-    fireEvent.change(quantityInput, { target: { value: "20" } });
-    
+    renderComponent()
+    const quantityInput = screen.getByLabelText(/Quantity/i)
+
+    fireEvent.change(quantityInput, { target: { value: "20" } })
+
     await waitFor(() => {
-      expect(screen.getByText("Modified")).toBeInTheDocument();
-    });
-  });
+      expect(screen.getByText("Modified")).toBeInTheDocument()
+    })
+  })
 
   it("displays cancel button", () => {
-    renderComponent();
-    expect(screen.getByText("Cancel")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("Cancel")).toBeInTheDocument()
+  })
 
   it("displays update button", () => {
-    renderComponent();
-    expect(screen.getByText("Update Listing")).toBeInTheDocument();
-  });
+    renderComponent()
+    expect(screen.getByText("Update Listing")).toBeInTheDocument()
+  })
 
   it("navigates back on cancel", async () => {
-    renderComponent();
-    const cancelButton = screen.getByText("Cancel");
-    
-    fireEvent.click(cancelButton);
-    
+    renderComponent()
+    const cancelButton = screen.getByText("Cancel")
+
+    fireEvent.click(cancelButton)
+
     await waitFor(() => {
-      expect(mockNavigate.mock.calls[0][0]).toBe("/market/listing1--test-listing");
-    });
-  });
+      expect(mockNavigate.mock.calls[0][0]).toBe(
+        "/market/listing1--test-listing",
+      )
+    })
+  })
 
   // Regression: the lot lookup wasn't scoped to the listing's shop, so for an
   // org shop it found no lots and quantity edits were silently dropped.
   it("looks the listing's lots up in its shop", () => {
-    renderComponent();
+    renderComponent()
     expect(vi.mocked(useGetStockLotsQuery)).toHaveBeenCalledWith(
       expect.objectContaining({ listingId: "listing-123", shopId: "shop-456" }),
       expect.objectContaining({ skip: false }),
-    );
-  });
+    )
+  })
 
   // Regression: with variant-1's 10 units spread over two lots (6 newest, then
   // 4), saving sent the whole total into the first lot, making it 16 units.
   // Only the change is sent now.
   describe("quantity change on a variant spread over several lots", () => {
     const lot = (lot_id: string, quantity_total: number) =>
-      ({ lot_id, quantity_total, variant: { variant_id: "variant-1" } }) as StockLotDetail;
-    const lots = [lot("lot-new", 6), lot("lot-old", 4)];
+      ({
+        lot_id,
+        quantity_total,
+        variant: { variant_id: "variant-1" },
+      }) as StockLotDetail
+    const lots = [lot("lot-new", 6), lot("lot-old", 4)]
     const save = async (quantity: string) => {
-      renderComponent(lots);
-      fireEvent.change(screen.getByLabelText(/Quantity/i), { target: { value: quantity } });
-      fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
-      await waitFor(() => expect(updateHook[0]).toHaveBeenCalled());
-      return vi.mocked(updateHook[0]).mock.calls[0][0].updateListingRequest.lot_updates;
-    };
+      renderComponent(lots)
+      fireEvent.change(screen.getByLabelText(/Quantity/i), {
+        target: { value: quantity },
+      })
+      fireEvent.submit(
+        screen
+          .getByRole("button", { name: /Update Listing/i })
+          .closest("form")!,
+      )
+      await waitFor(() => expect(updateHook[0]).toHaveBeenCalled())
+      return vi.mocked(updateHook[0]).mock.calls[0][0].updateListingRequest
+        .lot_updates
+    }
 
     it("adds an increase to the newest lot", async () => {
-      expect(await save("13")).toEqual([{ lot_id: "lot-new", quantity_total: 9 }]);
-    });
+      expect(await save("13")).toEqual([
+        { lot_id: "lot-new", quantity_total: 9 },
+      ])
+    })
 
     it("takes a decrease from the lots in order", async () => {
       expect(await save("3")).toEqual([
         { lot_id: "lot-new", quantity_total: 0 },
         { lot_id: "lot-old", quantity_total: 3 },
-      ]);
-    });
-  });
+      ])
+    })
+  })
 
   // Regression: an emptied description counted as "No changes to save".
   it("saves an emptied description", async () => {
-    renderComponent();
-    fireEvent.change(screen.getByTestId("markdown-editor"), { target: { value: "" } });
-    fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
-    await waitFor(() => expect(updateHook[0]).toHaveBeenCalled());
+    renderComponent()
+    fireEvent.change(screen.getByTestId("markdown-editor"), {
+      target: { value: "" },
+    })
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Update Listing/i }).closest("form")!,
+    )
+    await waitFor(() => expect(updateHook[0]).toHaveBeenCalled())
     expect(vi.mocked(updateHook[0]).mock.calls[0][0]).toMatchObject({
       id: "listing-123",
       updateListingRequest: { description: "" },
-    });
-  });
+    })
+  })
 
   // Regression: after saving, the sidebar switched from the shop to "Browsing".
   it("goes back to the listing in its shop's context after saving", async () => {
-    renderComponent();
-    fireEvent.change(screen.getByDisplayValue("Test Listing"), { target: { value: "Renamed" } });
-    fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
+    renderComponent()
+    fireEvent.change(screen.getByDisplayValue("Test Listing"), {
+      target: { value: "Renamed" },
+    })
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Update Listing/i }).closest("form")!,
+    )
     await waitFor(() =>
-      expect(mockNavigate).toHaveBeenCalledWith("/market/listing1--renamed", { state: { shopContext: "org-shop" } }),
-    );
-  });
+      expect(mockNavigate).toHaveBeenCalledWith("/market/listing1--renamed", {
+        state: { shopContext: "org-shop" },
+      }),
+    )
+  })
 
   it("prevents editing sold listings", () => {
     vi.mocked(useGetListingDetailQuery).mockReturnValue(
@@ -432,13 +483,13 @@ describe("EditListingV2", () => {
           status: "sold",
         },
       }),
-    );
+    )
 
     vi.mocked(useUpdateListingMutation).mockReturnValue(
       mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
-    );
+    )
 
-    const store = createMockStore();
+    const store = createMockStore()
     render(
       <Provider store={store}>
         <MemoryRouter initialEntries={["/market/v2/listing-123/edit"]}>
@@ -446,27 +497,27 @@ describe("EditListingV2", () => {
             <Route path="/market/v2/:id/edit" element={<EditListingV2 />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
-    );
+      </Provider>,
+    )
 
     // Warning should be displayed
-    expect(screen.getByText(/cannot be edited/i)).toBeInTheDocument();
-    
+    expect(screen.getByText(/cannot be edited/i)).toBeInTheDocument()
+
     // Update button should be disabled
-    const updateButton = screen.getByText("Update Listing");
-    expect(updateButton).toBeDisabled();
-  });
+    const updateButton = screen.getByText("Update Listing")
+    expect(updateButton).toBeDisabled()
+  })
 
   it("displays loading state", () => {
     vi.mocked(useGetListingDetailQuery).mockReturnValue(
       queryLoading<typeof marketV2Api.endpoints.getListingDetail>(),
-    );
+    )
 
     vi.mocked(useUpdateListingMutation).mockReturnValue(
       mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
-    );
+    )
 
-    const store = createMockStore();
+    const store = createMockStore()
     render(
       <Provider store={store}>
         <MemoryRouter initialEntries={["/market/v2/listing-123/edit"]}>
@@ -474,11 +525,11 @@ describe("EditListingV2", () => {
             <Route path="/market/v2/:id/edit" element={<EditListingV2 />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
-    );
+      </Provider>,
+    )
 
-    expect(screen.getByTestId("loading")).toBeInTheDocument();
-  });
+    expect(screen.getByTestId("loading")).toBeInTheDocument()
+  })
 
   it("displays error state when listing not found", () => {
     vi.mocked(useGetListingDetailQuery).mockReturnValue(
@@ -486,13 +537,13 @@ describe("EditListingV2", () => {
         status: 404,
         data: { message: "Not found" },
       }),
-    );
+    )
 
     vi.mocked(useUpdateListingMutation).mockReturnValue(
       mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
-    );
+    )
 
-    const store = createMockStore();
+    const store = createMockStore()
     render(
       <Provider store={store}>
         <MemoryRouter initialEntries={["/market/v2/listing-123/edit"]}>
@@ -500,16 +551,16 @@ describe("EditListingV2", () => {
             <Route path="/market/v2/:id/edit" element={<EditListingV2 />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
-    );
+      </Provider>,
+    )
 
-    expect(screen.getByTestId("error")).toBeInTheDocument();
-  });
-});
+    expect(screen.getByTestId("error")).toBeInTheDocument()
+  })
+})
 
 /**
  * Test Coverage Summary:
- * 
+ *
  * ✅ Renders the edit listing form
  * ✅ Displays form sections (About, Pricing, Variants)
  * ✅ Pre-populates title field
@@ -531,7 +582,7 @@ describe("EditListingV2", () => {
  * ✅ Prevents editing sold listings
  * ✅ Displays loading state
  * ✅ Displays error state when listing not found
- * 
+ *
  * Requirements Validated:
  * - 17.1-17.12: Listing edit functionality (pre-populate form, update fields, prevent editing sold/cancelled, ownership validation)
  */

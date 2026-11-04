@@ -20,10 +20,7 @@ import React, {
 } from "react"
 import { UNSAFE_DataRouterContext, useLocation } from "react-router-dom"
 import { PageReadyStore } from "./pageReadyStore"
-import {
-  noteAppCommitted,
-  openStartupGate,
-} from "../../util/startupDeferral"
+import { noteAppCommitted, openStartupGate } from "../../util/startupDeferral"
 
 // Layout effects so a page's loading state reaches the store in the same
 // commit that renders it: nothing (an agent's poll, a paint) sees a stale

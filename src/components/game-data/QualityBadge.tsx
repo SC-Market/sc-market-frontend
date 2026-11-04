@@ -1,10 +1,10 @@
 /**
  * QualityBadge - Re-exports from market/v2 with game-data extensions
- * 
+ *
  * Consolidates the duplicate QualityBadge into a single source of truth.
  * The market/v2 version is the canonical implementation.
  * This wrapper adds game-data-specific props (showName, value tooltip).
- * 
+ *
  * Requirements: 48.1-48.10
  */
 
@@ -35,13 +35,12 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
   value,
   variant,
 }) => {
-  const tooltipText = value !== undefined
-    ? `${TIER_NAMES[tier] || `Tier ${tier}`} (${value.toFixed(1)}%)`
-    : TIER_NAMES[tier] || `Tier ${tier}`
+  const tooltipText =
+    value !== undefined
+      ? `${TIER_NAMES[tier] || `Tier ${tier}`} (${value.toFixed(1)}%)`
+      : TIER_NAMES[tier] || `Tier ${tier}`
 
-  const badge = (
-    <MarketQualityBadge tier={tier} size={size} variant={variant} />
-  )
+  const badge = <MarketQualityBadge tier={tier} size={size} variant={variant} />
 
   if (value !== undefined || showName) {
     return <Tooltip title={tooltipText}>{badge}</Tooltip>

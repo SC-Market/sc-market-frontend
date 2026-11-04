@@ -8,9 +8,9 @@ import { OfferChanges } from "../../../util/offerChanges"
 describe("OrderSummarySectionV2", () => {
   const mockItems: OrderItemDetail[] = [
     {
-    order_item_id: "item-1",
-    listing_id: "listing-1",
-    listing_title: "Test Listing 1",
+      order_item_id: "item-1",
+      listing_id: "listing-1",
+      listing_title: "Test Listing 1",
       item_id: "item-1",
       variant: {
         variant_id: "variant-1",
@@ -27,9 +27,9 @@ describe("OrderSummarySectionV2", () => {
       subtotal: 2000,
     },
     {
-    order_item_id: "item-2",
-    listing_id: "listing-2",
-    listing_title: "Test Listing 2",
+      order_item_id: "item-2",
+      listing_id: "listing-2",
+      listing_title: "Test Listing 2",
       item_id: "item-2",
       variant: {
         variant_id: "variant-2",
@@ -48,9 +48,7 @@ describe("OrderSummarySectionV2", () => {
   ]
 
   it("renders order summary with item details", () => {
-    render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
-    )
+    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
 
     // Check title
     expect(screen.getByText("Order Summary")).toBeInTheDocument()
@@ -73,9 +71,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("displays listing titles", () => {
-    render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
-    )
+    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
 
     // Listing titles should be rendered
     expect(screen.getByText("Test Listing 1")).toBeInTheDocument()
@@ -97,7 +93,7 @@ describe("OrderSummarySectionV2", () => {
         items={mockItems}
         total_cost={2500}
         offerChanges={offerChanges}
-      />
+      />,
     )
 
     // Should show NEW! chip for added listing
@@ -120,7 +116,7 @@ describe("OrderSummarySectionV2", () => {
         items={mockItems}
         total_cost={2500}
         offerChanges={offerChanges}
-      />
+      />,
     )
 
     // Should show old quantity
@@ -132,9 +128,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("calculates total from item subtotals", () => {
-    render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
-    )
+    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
 
     // Total should be sum of subtotals (2000 + 500 = 2500)
     expect(screen.getByText(/2,500/)).toBeInTheDocument()
@@ -142,7 +136,7 @@ describe("OrderSummarySectionV2", () => {
 
   it("returns null when no items provided", () => {
     const { container } = render(
-      <OrderSummarySectionV2 items={[]} total_cost={0} />
+      <OrderSummarySectionV2 items={[]} total_cost={0} />,
     )
 
     expect(container.firstChild).toBeNull()
@@ -150,7 +144,7 @@ describe("OrderSummarySectionV2", () => {
 
   it("returns null when items is undefined", () => {
     const { container } = render(
-      <OrderSummarySectionV2 items={undefined} total_cost={0} />
+      <OrderSummarySectionV2 items={undefined} total_cost={0} />,
     )
 
     expect(container.firstChild).toBeNull()
@@ -159,9 +153,9 @@ describe("OrderSummarySectionV2", () => {
   it("handles items without quality tier", () => {
     const itemsWithoutQuality: OrderItemDetail[] = [
       {
-    order_item_id: "item-1",
-    listing_id: "listing-1",
-    listing_title: "Looted Item Listing",
+        order_item_id: "item-1",
+        listing_id: "listing-1",
+        listing_title: "Looted Item Listing",
         item_id: "item-1",
         variant: {
           variant_id: "variant-1",
@@ -178,7 +172,7 @@ describe("OrderSummarySectionV2", () => {
     ]
 
     render(
-      <OrderSummarySectionV2 items={itemsWithoutQuality} total_cost={100} />
+      <OrderSummarySectionV2 items={itemsWithoutQuality} total_cost={100} />,
     )
 
     // Should render listing title
@@ -188,9 +182,9 @@ describe("OrderSummarySectionV2", () => {
   it("formats large numbers with locale string", () => {
     const expensiveItems: OrderItemDetail[] = [
       {
-    order_item_id: "item-1",
-    listing_id: "listing-1",
-    listing_title: "Test Listing 1",
+        order_item_id: "item-1",
+        listing_id: "listing-1",
+        listing_title: "Test Listing 1",
         item_id: "item-1",
         variant: {
           variant_id: "variant-1",
@@ -207,7 +201,7 @@ describe("OrderSummarySectionV2", () => {
     ]
 
     render(
-      <OrderSummarySectionV2 items={expensiveItems} total_cost={10000000} />
+      <OrderSummarySectionV2 items={expensiveItems} total_cost={10000000} />,
     )
 
     // Should format with commas
@@ -217,7 +211,7 @@ describe("OrderSummarySectionV2", () => {
 
   it("maintains visual parity with V1 structure", () => {
     const { container } = render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
+      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />,
     )
 
     // Check for key structural elements matching V1
@@ -232,9 +226,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("displays links to listing pages", () => {
-    render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
-    )
+    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
 
     // Check for listing links — uses formatMarketUrl which produces slug-based URLs
     const links = screen.getAllByRole("link")

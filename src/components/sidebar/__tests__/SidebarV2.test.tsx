@@ -35,8 +35,11 @@ import { withShopContext } from "../shopContextState"
 let mockProfile: UserProfileState | undefined = undefined
 let mockShops: ShopResponse[] = []
 /** GET /api/auth/session answer (undefined = in flight). */
-let mockSessionCheck: "authenticated" | "anonymous" | "unsupported" | undefined =
-  "authenticated"
+let mockSessionCheck:
+  | "authenticated"
+  | "anonymous"
+  | "unsupported"
+  | undefined = "authenticated"
 /** skip option of each useGetMyShopsQuery call. */
 const shopsMineSkips: (boolean | undefined)[] = []
 let mockUnreadChatCount = 0
@@ -82,9 +85,9 @@ vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
 })
 
 vi.mock("../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual<typeof import("../../../store/api/v2/market")>(
-    "../../../store/api/v2/market",
-  )
+  const actual = await vi.importActual<
+    typeof import("../../../store/api/v2/market")
+  >("../../../store/api/v2/market")
   return {
     ...actual,
     useGetMyShopsQuery: (_arg?: void, opts?: { skip?: boolean }) => {
@@ -119,9 +122,9 @@ vi.mock("../../../features/orders/hooks/useShopPendingOrderCount", () => ({
 }))
 
 vi.mock("../../../hooks/layout/Drawer", async () => {
-  const actual = await vi.importActual<typeof import("../../../hooks/layout/Drawer")>(
-    "../../../hooks/layout/Drawer",
-  )
+  const actual = await vi.importActual<
+    typeof import("../../../hooks/layout/Drawer")
+  >("../../../hooks/layout/Drawer")
   return {
     ...actual,
     useDrawerOpen: () => [true, vi.fn()],
@@ -137,11 +140,16 @@ vi.mock("../../../views/contractor/OrgRoles", () => ({
     mockHasPermission(...args),
 }))
 // The Manage entry's rules (manageTabs) use the domain permission check.
-vi.mock("../../../features/contractor/domain/permissions", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../../features/contractor/domain/permissions")>()),
-  has_permission: (...args: Parameters<typeof HasPermission>) =>
-    mockHasPermission(...args),
-}))
+vi.mock(
+  "../../../features/contractor/domain/permissions",
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("../../../features/contractor/domain/permissions")
+    >()),
+    has_permission: (...args: Parameters<typeof HasPermission>) =>
+      mockHasPermission(...args),
+  }),
+)
 
 vi.mock("react-cookie", () => ({
   useCookies: () => [mockCookies, mockSetCookie, vi.fn()],
@@ -149,7 +157,9 @@ vi.mock("react-cookie", () => ({
 
 // English catalog t() (src/test/mocks/reactI18next).
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Import AFTER mocks are declared.
@@ -159,7 +169,14 @@ import { serviceApi } from "../../../store/service"
 import { querySuccess } from "../../../__tests__/rtkQueryMocks"
 
 const testTheme = createTheme({
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
 })
 
 const createStore = () =>
@@ -169,10 +186,15 @@ const createStore = () =>
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 
-const renderSidebar = (path: string | { pathname: string; state: unknown } = "/market") =>
+const renderSidebar = (
+  path: string | { pathname: string; state: unknown } = "/market",
+) =>
   render(
     <ThemeProvider theme={testTheme}>
       <Provider store={createStore()}>
@@ -286,12 +308,17 @@ describe("SidebarV2 — browse context (logged out)", () => {
 
   it("renders the bottom Help & Guides link for logged-out visitors", () => {
     renderSidebar("/market")
-    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveAttribute("href", "/guides")
+    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveAttribute(
+      "href",
+      "/guides",
+    )
   })
 
   it("highlights Help & Guides on guide and about pages", () => {
     renderSidebar("/guides/buying/buy-an-item")
-    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveClass("Mui-selected")
+    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveClass(
+      "Mui-selected",
+    )
   })
 
   it("links Help & Guides out to the official site on a white-label domain", () => {
@@ -304,7 +331,11 @@ describe("SidebarV2 — browse context (logged out)", () => {
 })
 
 describe("SidebarV2 — white-label sidebar settings", () => {
-  const customTab = (custom_label: string, custom_path: string, sort_order: number): SidebarConfigItem => ({
+  const customTab = (
+    custom_label: string,
+    custom_path: string,
+    sort_order: number,
+  ): SidebarConfigItem => ({
     standard_tab_key: null,
     custom_label,
     custom_path,
@@ -315,7 +346,10 @@ describe("SidebarV2 — white-label sidebar settings", () => {
   })
 
   it("hides the tabs the org turned off, including Recruiting and Organizations", () => {
-    mockWhiteLabel = { hidden: new Set(["market", "contracts", "recruiting", "contractors"]), customTabs: [] }
+    mockWhiteLabel = {
+      hidden: new Set(["market", "contracts", "recruiting", "contractors"]),
+      customTabs: [],
+    }
     renderSidebar("/market/services")
     expect(screen.queryByText("Market")).not.toBeInTheDocument()
     expect(screen.queryByText("Contracts")).not.toBeInTheDocument()
@@ -334,7 +368,10 @@ describe("SidebarV2 — white-label sidebar settings", () => {
   it("adds the org's custom tabs; external ones open in a new tab", () => {
     mockWhiteLabel = {
       hidden: new Set(),
-      customTabs: [customTab("Staff Portal", "https://staff.example.com", 12), customTab("Our Fleet", "/fleet", 13)],
+      customTabs: [
+        customTab("Staff Portal", "https://staff.example.com", 12),
+        customTab("Our Fleet", "/fleet", 13),
+      ],
     }
     renderSidebar("/market")
     const staff = screen.getByRole("link", { name: /Staff Portal/ })
@@ -364,7 +401,9 @@ describe("SidebarV2 — browse context (logged in)", () => {
     const settings = screen.getByRole("link", { name: "Settings" })
     const help = screen.getByRole("link", { name: "Help & Guides" })
     expect(help).toHaveAttribute("href", "/guides")
-    expect(settings.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(
+      settings.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
   })
 
   it("renders the Game Data section (browse mode)", () => {
@@ -397,12 +436,19 @@ describe("SidebarV2 — shop context", () => {
     expect(screen.queryByText("Stock")).not.toBeInTheDocument()
     expect(screen.queryByText("Customers")).not.toBeInTheDocument()
     // Shop Settings link is gated (the always-present account Settings uses /settings).
-    expect(container.querySelector('a[href="/shop/test-shop/settings"]')).toBeNull()
+    expect(
+      container.querySelector('a[href="/shop/test-shop/settings"]'),
+    ).toBeNull()
   })
 
   it("shows manage_market items (Create Listing / Stock) with the permission", () => {
     mockShops = [
-      shopWithPerms({ manage_market: true, manage_stock: false, manage_orders: false, can_manage: false }),
+      shopWithPerms({
+        manage_market: true,
+        manage_stock: false,
+        manage_orders: false,
+        can_manage: false,
+      }),
     ]
     renderSidebar("/shop/test-shop/orders")
     expect(screen.getByText("Create Listing")).toBeInTheDocument()
@@ -415,7 +461,10 @@ describe("SidebarV2 — shop context", () => {
   // creating or editing it from the shop.
   it("keeps the shop's context on a listing page reached from that shop", () => {
     mockShops = [shopWithPerms()]
-    renderSidebar({ pathname: "/market/abcd1234--gun", state: withShopContext("test-shop") })
+    renderSidebar({
+      pathname: "/market/abcd1234--gun",
+      state: withShopContext("test-shop"),
+    })
     expect(screen.getByText("Shop Page")).toBeInTheDocument()
     expect(screen.queryByText("Browsing")).not.toBeInTheDocument()
   })
@@ -428,12 +477,19 @@ describe("SidebarV2 — shop context", () => {
 
   it("shows can_manage items (Customers / Settings) with the permission", () => {
     mockShops = [
-      shopWithPerms({ manage_market: false, manage_stock: false, manage_orders: false, can_manage: true }),
+      shopWithPerms({
+        manage_market: false,
+        manage_stock: false,
+        manage_orders: false,
+        can_manage: true,
+      }),
     ]
     const { container } = renderSidebar("/shop/test-shop/orders")
     expect(screen.getByText("Customers")).toBeInTheDocument()
     // Shop Settings link (distinct from the always-present account /settings link).
-    expect(container.querySelector('a[href="/shop/test-shop/settings"]')).not.toBeNull()
+    expect(
+      container.querySelector('a[href="/shop/test-shop/settings"]'),
+    ).not.toBeNull()
   })
 })
 
@@ -573,7 +629,9 @@ describe("SidebarV2 — admin context", () => {
     mockProfile = { ...loggedInProfile, role: "user" }
     renderSidebar("/market")
     await user.click(screen.getByRole("button", { name: "Switch context" }))
-    expect(screen.queryByRole("menuitem", { name: "Admin" })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("menuitem", { name: "Admin" }),
+    ).not.toBeInTheDocument()
   })
 })
 
@@ -645,11 +703,18 @@ describe("SidebarV2 — active highlight", () => {
   it("does not highlight a parent route when a more-specific child is active", () => {
     // On the create page: Listings (parent) must NOT be selected; Create Listing (child) must be.
     mockShops = [
-      shopWithPerms({ manage_market: true, manage_stock: false, manage_orders: false, can_manage: false }),
+      shopWithPerms({
+        manage_market: true,
+        manage_stock: false,
+        manage_orders: false,
+        can_manage: false,
+      }),
     ]
     renderSidebar("/shop/test-shop/listings/create")
     const listings = screen.getByText("Listings").closest("a") as HTMLElement
-    const create = screen.getByText("Create Listing").closest("a") as HTMLElement
+    const create = screen
+      .getByText("Create Listing")
+      .closest("a") as HTMLElement
     expect(listings.className).not.toContain("Mui-selected")
     expect(create.className).toContain("Mui-selected")
   })
@@ -673,7 +738,11 @@ describe("SidebarV2 — pinning", () => {
     renderSidebar("/market")
     // Each nav item has a pin IconButton (tooltip "Pin"); click the first.
     // They mount once the page is idle (a static icon stands in until then).
-    const pinButtons = await screen.findAllByLabelText("Pin", {}, { timeout: 4000 })
+    const pinButtons = await screen.findAllByLabelText(
+      "Pin",
+      {},
+      { timeout: 4000 },
+    )
     await user.click(pinButtons[0])
     expect(mockSetCookie).toHaveBeenCalledWith(
       "starred_nav_v2",

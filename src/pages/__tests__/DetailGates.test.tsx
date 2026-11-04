@@ -34,26 +34,60 @@ function stub(name: string) {
   }
 }
 
-vi.mock("../blueprints/BlueprintDetail", () => ({ BlueprintDetail: stub("BlueprintDetail") }))
-vi.mock("../blueprints/BlueprintBrowser", () => ({ BlueprintBrowser: stub("BlueprintBrowser") }))
-vi.mock("../missions/MissionDetail", () => ({ MissionDetail: stub("MissionDetail") }))
-vi.mock("../missions/MissionSearch", () => ({ MissionSearch: stub("MissionSearch") }))
-vi.mock("../mining/MiningOreDetailPage", () => ({ MiningOreDetailPage: stub("MiningOreDetailPage") }))
+vi.mock("../blueprints/BlueprintDetail", () => ({
+  BlueprintDetail: stub("BlueprintDetail"),
+}))
+vi.mock("../blueprints/BlueprintBrowser", () => ({
+  BlueprintBrowser: stub("BlueprintBrowser"),
+}))
+vi.mock("../missions/MissionDetail", () => ({
+  MissionDetail: stub("MissionDetail"),
+}))
+vi.mock("../missions/MissionSearch", () => ({
+  MissionSearch: stub("MissionSearch"),
+}))
+vi.mock("../mining/MiningOreDetailPage", () => ({
+  MiningOreDetailPage: stub("MiningOreDetailPage"),
+}))
 vi.mock("../mining/MiningLocationDetailPage", () => ({
   MiningLocationDetailPage: stub("MiningLocationDetailPage"),
 }))
 vi.mock("../mining/MiningPage", () => ({ MiningPage: stub("MiningPage") }))
-vi.mock("../wiki/WikiShipDetail", () => ({ WikiShipDetail: stub("WikiShipDetail") }))
-vi.mock("../wiki/WikiShipBrowser", () => ({ WikiShipBrowser: stub("WikiShipBrowser") }))
+vi.mock("../wiki/WikiShipDetail", () => ({
+  WikiShipDetail: stub("WikiShipDetail"),
+}))
+vi.mock("../wiki/WikiShipBrowser", () => ({
+  WikiShipBrowser: stub("WikiShipBrowser"),
+}))
 
 const theme = createTheme({ breakpoints: { values: breakpointsValues } })
 
 const GATES: Array<[string, React.ComponentType, string, string]> = [
-  ["BlueprintDetailGate", BlueprintDetailGate, "BlueprintDetail", "BlueprintBrowser"],
+  [
+    "BlueprintDetailGate",
+    BlueprintDetailGate,
+    "BlueprintDetail",
+    "BlueprintBrowser",
+  ],
   ["MissionDetailGate", MissionDetailGate, "MissionDetail", "MissionSearch"],
-  ["MiningOreDetailGate", MiningOreDetailGate, "MiningOreDetailPage", "MiningPage"],
-  ["MiningLocationDetailGate", MiningLocationDetailGate, "MiningLocationDetailPage", "MiningPage"],
-  ["WikiShipDetailGate", WikiShipDetailGate, "WikiShipDetail", "WikiShipBrowser"],
+  [
+    "MiningOreDetailGate",
+    MiningOreDetailGate,
+    "MiningOreDetailPage",
+    "MiningPage",
+  ],
+  [
+    "MiningLocationDetailGate",
+    MiningLocationDetailGate,
+    "MiningLocationDetailPage",
+    "MiningPage",
+  ],
+  [
+    "WikiShipDetailGate",
+    WikiShipDetailGate,
+    "WikiShipDetail",
+    "WikiShipBrowser",
+  ],
 ]
 
 describe.each(GATES)("%s", (_name, Gate, detailPage, desktopBrowser) => {

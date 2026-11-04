@@ -58,13 +58,20 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
     return `Tier ${listing.quality_tier_min}-${listing.quality_tier_max}`
   }, [listing.quality_tier_min, listing.quality_tier_max])
 
-  const statusColor = (s: string): "success" | "info" | "warning" | "error" | "default" => {
+  const statusColor = (
+    s: string,
+  ): "success" | "info" | "warning" | "error" | "default" => {
     switch (s.toLowerCase()) {
-      case "active": return "success"
-      case "sold": return "info"
-      case "expired": return "warning"
-      case "cancelled": return "error"
-      default: return "default"
+      case "active":
+        return "success"
+      case "sold":
+        return "info"
+      case "expired":
+        return "warning"
+      case "cancelled":
+        return "error"
+      default:
+        return "default"
     }
   }
 
@@ -98,7 +105,13 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
       >
         <CardContent sx={{ padding: 0 }}>
           <Stack spacing={2}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
                 <Chip
                   label={listingStatusLabel(listing.status, t).toUpperCase()}
@@ -110,7 +123,11 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
                     label={t("market.internalListing")}
                     color="warning"
                     size="small"
-                    sx={{ textTransform: "uppercase", fontWeight: "bold", fontSize: "0.65rem" }}
+                    sx={{
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                    }}
                   />
                 )}
               </Box>

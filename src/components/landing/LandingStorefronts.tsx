@@ -4,7 +4,10 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useGetStorefrontsQuery } from "../../store/api/v2/market"
 import { LandingSection, LandingSectionHeader } from "./LandingSection"
-import { StorefrontCard, STOREFRONT_CARD_HEIGHT } from "../../features/storefront/components/StorefrontCard"
+import {
+  StorefrontCard,
+  STOREFRONT_CARD_HEIGHT,
+} from "../../features/storefront/components/StorefrontCard"
 import { PATHS } from "../../routes/paths"
 import { storefrontsHubArgs } from "../../features/storefront/domain"
 
@@ -17,13 +20,24 @@ export function LandingStorefronts() {
   const storefronts = (data?.storefronts ?? []).slice(0, LANDING_STOREFRONTS)
   if (!isLoading && storefronts.length === 0) return null
   return (
-    <LandingSection labelledBy="landing-storefronts-title" testId="landing-storefronts">
+    <LandingSection
+      labelledBy="landing-storefronts-title"
+      testId="landing-storefronts"
+    >
       <LandingSectionHeader
         id="landing-storefronts-title"
         title={t("storefront.landing.title", "Org storefronts")}
-        subtitle={t("storefront.landing.subtitle", "Verified orgs' shops, services and recruiting.")}
+        subtitle={t(
+          "storefront.landing.subtitle",
+          "Verified orgs' shops, services and recruiting.",
+        )}
         actions={
-          <Button component={Link} to={PATHS.storefronts} variant="outlined" color="secondary">
+          <Button
+            component={Link}
+            to={PATHS.storefronts}
+            variant="outlined"
+            color="secondary"
+          >
             {t("landing.seeAll")}
           </Button>
         }
@@ -39,8 +53,16 @@ export function LandingStorefronts() {
         }}
       >
         {isLoading
-          ? Array.from({ length: 3 }, (_, i) => <Skeleton key={i} variant="rounded" height={STOREFRONT_CARD_HEIGHT} />)
-          : storefronts.map((s) => <StorefrontCard key={s.spectrum_id} storefront={s} />)}
+          ? Array.from({ length: 3 }, (_, i) => (
+              <Skeleton
+                key={i}
+                variant="rounded"
+                height={STOREFRONT_CARD_HEIGHT}
+              />
+            ))
+          : storefronts.map((s) => (
+              <StorefrontCard key={s.spectrum_id} storefront={s} />
+            ))}
       </Box>
     </LandingSection>
   )

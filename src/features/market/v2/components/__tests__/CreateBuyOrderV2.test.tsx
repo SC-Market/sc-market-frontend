@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -12,7 +12,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock dependencies
@@ -50,7 +52,10 @@ const createTestStore = () =>
       [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(serviceApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(
+        serviceApi.middleware,
+        generatedApiV2.middleware,
+      ),
   })
 
 // Create extended theme with layoutSpacing
@@ -120,15 +125,20 @@ describe("CreateBuyOrderV2", () => {
 
   it("validates quality_tier_min <= quality_tier_max", async () => {
     const mockAlert = vi.fn()
-    const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
+    const { useAlertHook } =
+      await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
     renderWithProviders(<CreateBuyOrderV2 gameItem={mockGameItem} />)
 
     // Provide a valid price + quantity first so validation reaches the quality check
     // (the price check runs before the quality-tier check).
-    fireEvent.change(screen.getByLabelText(/min price/i), { target: { value: "1000" } })
-    fireEvent.change(screen.getByLabelText(/max price/i), { target: { value: "2000" } })
+    fireEvent.change(screen.getByLabelText(/min price/i), {
+      target: { value: "1000" },
+    })
+    fireEvent.change(screen.getByLabelText(/max price/i), {
+      target: { value: "2000" },
+    })
 
     // Set min > max
     const minSelect = screen.getByLabelText(/min quality tier/i)
@@ -153,7 +163,8 @@ describe("CreateBuyOrderV2", () => {
 
   it("validates price_min <= price_max when not negotiable", async () => {
     const mockAlert = vi.fn()
-    const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
+    const { useAlertHook } =
+      await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
     renderWithProviders(<CreateBuyOrderV2 gameItem={mockGameItem} />)
@@ -193,12 +204,8 @@ describe("CreateBuyOrderV2", () => {
     fireEvent.click(negotiableCheckbox)
 
     // Labels should change to "optional"
-    expect(
-      screen.getByLabelText(/min price \(optional\)/i),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByLabelText(/max price \(optional\)/i),
-    ).toBeInTheDocument()
+    expect(screen.getByLabelText(/min price \(optional\)/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/max price \(optional\)/i)).toBeInTheDocument()
   })
 
   it("displays total price range calculation", () => {
@@ -223,9 +230,9 @@ describe("CreateBuyOrderV2", () => {
     )
 
     // Check Grid container exists
-    const gridContainers = container.querySelectorAll('.MuiGrid-container')
+    const gridContainers = container.querySelectorAll(".MuiGrid-container")
     expect(gridContainers.length).toBeGreaterThan(0)
-    
+
     // Check Section component is used
     expect(screen.getByText("Create Buy Order")).toBeInTheDocument()
   })
@@ -239,7 +246,7 @@ describe("CreateBuyOrderV2", () => {
     expect(screen.getByLabelText(/min price/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/max price/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/quantity/i)).toBeInTheDocument()
-    
+
     // Check submit button has accessible name
     expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument()
   })
@@ -268,8 +275,12 @@ describe("CreateBuyOrderV2", () => {
   it("reflects the selected quality tier values", () => {
     renderWithProviders(<CreateBuyOrderV2 gameItem={mockGameItem} />)
 
-    const minSelect = screen.getByLabelText(/min quality tier/i) as HTMLSelectElement
-    const maxSelect = screen.getByLabelText(/max quality tier/i) as HTMLSelectElement
+    const minSelect = screen.getByLabelText(
+      /min quality tier/i,
+    ) as HTMLSelectElement
+    const maxSelect = screen.getByLabelText(
+      /max quality tier/i,
+    ) as HTMLSelectElement
 
     // Select tier range
     fireEvent.change(minSelect, { target: { value: "3" } })

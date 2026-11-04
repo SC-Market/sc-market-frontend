@@ -1,9 +1,20 @@
 import React, { useState } from "react"
-import { Alert, Box, Button, Checkbox, FormControlLabel, Stack, Typography } from "@mui/material"
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { useTranslation } from "react-i18next"
 
 /** Shows freshly issued recovery codes once, with copy / download. */
-export function RecoveryCodesPanel(props: { codes: string[]; onDone: () => void }) {
+export function RecoveryCodesPanel(props: {
+  codes: string[]
+  onDone: () => void
+}) {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -25,7 +36,10 @@ export function RecoveryCodesPanel(props: { codes: string[]; onDone: () => void 
   return (
     <Stack spacing={2}>
       <Alert severity="warning">
-        {t("mfa.recovery.warning", "Save these recovery codes now. They are shown only once. Each one lets you in once if you lose your authenticator.")}
+        {t(
+          "mfa.recovery.warning",
+          "Save these recovery codes now. They are shown only once. Each one lets you in once if you lose your authenticator.",
+        )}
       </Alert>
       <Box
         component="ul"
@@ -54,15 +68,26 @@ export function RecoveryCodesPanel(props: { codes: string[]; onDone: () => void 
             setCopied(true)
           }}
         >
-          {copied ? t("mfa.common.copied", "Copied") : t("mfa.common.copy", "Copy")}
+          {copied
+            ? t("mfa.common.copied", "Copied")
+            : t("mfa.common.copy", "Copy")}
         </Button>
         <Button variant="outlined" onClick={download}>
           {t("mfa.recovery.download", "Download .txt")}
         </Button>
       </Stack>
       <FormControlLabel
-        control={<Checkbox checked={saved} onChange={(e) => setSaved(e.target.checked)} />}
-        label={<Typography variant="body2">{t("mfa.recovery.saved", "I saved these codes")}</Typography>}
+        control={
+          <Checkbox
+            checked={saved}
+            onChange={(e) => setSaved(e.target.checked)}
+          />
+        }
+        label={
+          <Typography variant="body2">
+            {t("mfa.recovery.saved", "I saved these codes")}
+          </Typography>
+        }
       />
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button variant="contained" disabled={!saved} onClick={props.onDone}>

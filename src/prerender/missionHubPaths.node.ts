@@ -22,7 +22,9 @@ import { missionHubPaths } from "./paths"
 const ATTEMPTS = 3
 
 /** A backend the build can reach for real game data (not a local or CI mock). */
-export function isRealBackend(backendUrl: string | undefined): backendUrl is string {
+export function isRealBackend(
+  backendUrl: string | undefined,
+): backendUrl is string {
   if (!backendUrl) return false
   try {
     const { hostname } = new URL(backendUrl)
@@ -37,21 +39,26 @@ export async function missionHubPathsFromApi(
   env: Record<string, string | undefined> = process.env,
 ): Promise<string[]> {
   if (!isRealBackend(backendUrl)) {
-    console.warn(`prerender: no real backend (VITE_BACKEND_URL=${backendUrl ?? ""}), so no mission hub pages are prerendered`)
+    console.warn(
+      `prerender: no real backend (VITE_BACKEND_URL=${backendUrl ?? ""}), so no mission hub pages are prerendered`,
+    )
     return []
   }
   const url = `${backendUrl.replace(/\/+$/, "")}/api/v2/game-data/missions/hubs`
   let lastError: unknown
   for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
     try {
-      const response = await fetch(url, { headers: { Accept: "application/json" } })
+      const response = await fetch(url, {
+        headers: { Accept: "application/json" },
+      })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const paths = missionHubPaths(await response.json())
       console.log(`prerender: ${paths.length} mission hub pages`)
       return paths
     } catch (error) {
       lastError = error
-      if (attempt < ATTEMPTS) await new Promise((resolve) => setTimeout(resolve, attempt * 2000))
+      if (attempt < ATTEMPTS)
+        await new Promise((resolve) => setTimeout(resolve, attempt * 2000))
     }
   }
   const message = `prerender: could not fetch the mission hubs from ${url}: ${String(lastError)}`

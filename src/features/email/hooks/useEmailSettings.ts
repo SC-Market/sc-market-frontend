@@ -53,11 +53,19 @@ export function useEmailSettings() {
           ],
         }).unwrap()
         issueAlert({
-          message: t("settingsUi.preferenceUpdated", { name: preference.action_name || (preference as EmailPreference).action_name || t("settingsUi.notificationFallback") }),
+          message: t("settingsUi.preferenceUpdated", {
+            name:
+              preference.action_name ||
+              (preference as EmailPreference).action_name ||
+              t("settingsUi.notificationFallback"),
+          }),
           severity: "success",
         })
       } catch (error) {
-        const err = error as { data?: { error?: { message?: string } }; message?: string }
+        const err = error as {
+          data?: { error?: { message?: string } }
+          message?: string
+        }
         issueAlert({
           message:
             err?.data?.error?.message ||
@@ -101,12 +109,17 @@ export function useEmailSettings() {
             preferences: emailPreferences,
           }).unwrap()
           issueAlert({
-            message: t("settingsUi.preferencesUpdated", { count: emailPreferences.length }),
+            message: t("settingsUi.preferencesUpdated", {
+              count: emailPreferences.length,
+            }),
             severity: "success",
           })
         }
       } catch (error) {
-        const err = error as { data?: { error?: { message?: string } }; message?: string }
+        const err = error as {
+          data?: { error?: { message?: string } }
+          message?: string
+        }
         issueAlert({
           message:
             err?.data?.error?.message ||

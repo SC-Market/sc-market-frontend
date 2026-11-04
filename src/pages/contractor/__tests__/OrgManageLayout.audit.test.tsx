@@ -12,11 +12,14 @@ const h = vi.hoisted(() => ({ granted: new Set<string>() }))
 
 // The branding status query (needs a store); a white_label grant answers it.
 vi.mock("../../../features/storefront/hooks/useBrandingUnlocked", () => ({
-  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) =>
+    c?.premium_tier === "white_label",
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children }: { children: React.ReactNode }) => (
@@ -24,11 +27,14 @@ vi.mock("../../../components/layout/StandardPageLayout", () => ({
   ),
 }))
 vi.mock("../../../hooks/layout/useBreakpoint", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../../hooks/layout/useBreakpoint")>()),
+  ...(await importOriginal<
+    typeof import("../../../hooks/layout/useBreakpoint")
+  >()),
   useBreakpointUp: () => true,
 }))
 vi.mock("../../../features/contractor/domain/permissions", () => ({
-  has_permission: (_c: unknown, _p: unknown, perm: string) => h.granted.has(perm),
+  has_permission: (_c: unknown, _p: unknown, perm: string) =>
+    h.granted.has(perm),
 }))
 vi.mock("../../../features/contractor/hooks/usePageOrgManage", () => ({
   usePageOrgManage: () => ({

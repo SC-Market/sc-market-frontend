@@ -101,7 +101,8 @@ export function socialMeta(opts: {
       content: opts.ogDescription ?? opts.description,
     },
   ]
-  if (opts.url !== undefined) meta.push({ property: "og:url", content: opts.url })
+  if (opts.url !== undefined)
+    meta.push({ property: "og:url", content: opts.url })
   if (opts.image !== undefined) {
     meta.push({ property: "og:image", content: opts.image })
   }
@@ -153,7 +154,10 @@ export function layoutDescription(
   title: string | null | undefined,
   description: string | undefined,
 ): string {
-  return description || `${title || "SC Market"} - SC Market, the Star Citizen marketplace`
+  return (
+    description ||
+    `${title || "SC Market"} - SC Market, the Star Citizen marketplace`
+  )
 }
 
 /**
@@ -175,7 +179,9 @@ export function isBreadcrumbJsonLd(data: unknown): boolean {
 }
 
 /** BreadcrumbList structured data; `url` is absolute. */
-export function breadcrumbJsonLd(items: { name: string; url: string }[]): object {
+export function breadcrumbJsonLd(
+  items: { name: string; url: string }[],
+): object {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import React from "react";
+import React from "react"
 import {
   Box,
   TextField,
@@ -7,23 +7,23 @@ import {
   Typography,
   Grid,
   useTheme,
-} from "@mui/material";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import type { ExtendedTheme } from "../../../hooks/styles/Theme";
+} from "@mui/material"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import type { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 interface QualityFilterProps {
-  minTier: number | null;
-  maxTier: number | null;
-  onMinTierChange: (tier: number | null) => void;
-  onMaxTierChange: (tier: number | null) => void;
+  minTier: number | null
+  maxTier: number | null
+  onMinTierChange: (tier: number | null) => void
+  onMaxTierChange: (tier: number | null) => void
 }
 
 /**
  * QualityFilter - Tier range selector for filtering listings
- * 
+ *
  * Provides dropdowns for selecting minimum and maximum quality tiers (1-5).
  * Maintains visual consistency with V1 filter styling.
- * 
+ *
  * Used in MarketSidebar for search filtering.
  */
 export const QualityFilter: React.FC<QualityFilterProps> = ({
@@ -33,7 +33,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
   onMaxTierChange,
 }) => {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>();
+  const theme = useTheme<ExtendedTheme>()
 
   const tierOptions = [
     { value: null, label: "Any" },
@@ -42,7 +42,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
     { value: 3, label: "Tier 3 (Gold)" },
     { value: 4, label: "Tier 4 (Platinum)" },
     { value: 5, label: "Tier 5 (Diamond)" },
-  ];
+  ]
 
   return (
     <Box>
@@ -63,18 +63,15 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             label={t("marketV2.minTier")}
             value={minTier ?? ""}
             onChange={(e) => {
-              const value = e.target.value;
-              onMinTierChange(value === "" ? null : Number(value));
+              const value = e.target.value
+              onMinTierChange(value === "" ? null : Number(value))
             }}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
           >
             {tierOptions.map((option) => (
-              <MenuItem
-                key={option.value ?? "any"}
-                value={option.value ?? ""}
-              >
+              <MenuItem key={option.value ?? "any"} value={option.value ?? ""}>
                 {option.label}
               </MenuItem>
             ))}
@@ -89,18 +86,15 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             label={t("marketV2.maxTier")}
             value={maxTier ?? ""}
             onChange={(e) => {
-              const value = e.target.value;
-              onMaxTierChange(value === "" ? null : Number(value));
+              const value = e.target.value
+              onMaxTierChange(value === "" ? null : Number(value))
             }}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
           >
             {tierOptions.map((option) => (
-              <MenuItem
-                key={option.value ?? "any"}
-                value={option.value ?? ""}
-              >
+              <MenuItem key={option.value ?? "any"} value={option.value ?? ""}>
                 {option.label}
               </MenuItem>
             ))}
@@ -108,5 +102,5 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}

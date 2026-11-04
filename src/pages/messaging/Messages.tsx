@@ -33,7 +33,8 @@ export function Messages() {
   const pageData = usePageMessages(chat_id)
 
   // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
-  const [messageSidebarOpen, setMessageSidebar] = useHydratedInitialState(!isMobile)
+  const [messageSidebarOpen, setMessageSidebar] =
+    useHydratedInitialState(!isMobile)
   const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
 
   const [currentChat, setCurrentChat] = useCurrentChat()

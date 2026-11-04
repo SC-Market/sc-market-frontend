@@ -106,7 +106,6 @@ const WEBHOOK_ACTION_KEYS: Record<string, string> = {
   public_contract_create: "publicContractCreate",
 }
 
-
 function ShopWebhookSection({ shopId }: { shopId: string }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -169,7 +168,9 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
                 <IconButton
                   size="small"
                   onClick={() => handleDelete(w.webhook_id)}
-                  aria-label={t("shopsUi.webhooks.deleteLabel", { name: w.name })}
+                  aria-label={t("shopsUi.webhooks.deleteLabel", {
+                    name: w.name,
+                  })}
                 >
                   <DeleteRounded
                     fontSize="small"
@@ -219,23 +220,38 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
         />
       </Grid>
       <Grid item xs={12}>
-        <Grid container spacing={theme.layoutSpacing.compact} direction="column">
+        <Grid
+          container
+          spacing={theme.layoutSpacing.compact}
+          direction="column"
+        >
           {WEBHOOK_ACTIONS.map(({ action_name }) => (
             <Grid item key={action_name}>
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={actions.includes(action_name)}
-                    onChange={(e) => toggleAction(action_name, e.target.checked)}
+                    onChange={(e) =>
+                      toggleAction(action_name, e.target.checked)
+                    }
                     color="secondary"
                     size="small"
                   />
                 }
                 label={
                   <span>
-                    {t(`shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.label`)}
-                    <Typography component="span" variant="caption" color="text.secondary" sx={{ display: "block" }}>
-                      {t(`shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.description`)}
+                    {t(
+                      `shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.label`,
+                    )}
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ display: "block" }}
+                    >
+                      {t(
+                        `shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.description`,
+                      )}
                     </Typography>
                   </span>
                 }
@@ -248,7 +264,12 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
         <Button
           variant="outlined"
           color="secondary"
-          disabled={!name.trim() || !url.trim() || !url.match(URL_REGEX) || actions.length === 0}
+          disabled={
+            !name.trim() ||
+            !url.trim() ||
+            !url.match(URL_REGEX) ||
+            actions.length === 0
+          }
           onClick={handleCreate}
         >
           {t("shopsUi.webhooks.add")}
@@ -260,7 +281,9 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
 
 function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   const { t } = useTranslation()
-  const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({ shopId })
+  const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({
+    shopId,
+  })
   const saveOrderSettings = useSaveShopOrderSettings(shopId)
   const [saving, setSaving] = useState(false)
 
@@ -270,8 +293,12 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   const [orderMessage, setOrderMessage] = useState("")
   const [orderEnabled, setOrderEnabled] = useState(true)
   const [requireAvailability, setRequireAvailability] = useState(false)
-  const [stockTiming, setStockTiming] = useState<"on_accepted" | "on_received" | "dont_subtract">("on_accepted")
-  const [allocationMode, setAllocationMode] = useState<"auto" | "manual" | "none">("auto")
+  const [stockTiming, setStockTiming] = useState<
+    "on_accepted" | "on_received" | "dont_subtract"
+  >("on_accepted")
+  const [allocationMode, setAllocationMode] = useState<
+    "auto" | "manual" | "none"
+  >("auto")
   const [minOrderSize, setMinOrderSize] = useState("")
   const [minOrderSizeEnabled, setMinOrderSizeEnabled] = useState(false)
   const [maxOrderSize, setMaxOrderSize] = useState("")
@@ -286,26 +313,47 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
     if (settings.length === 0) return
     const find = (type: string) => settings.find((s) => s.setting_type === type)
     const offer = find("offer_message")
-    if (offer) { setOfferMessage(offer.message_content); setOfferEnabled(offer.enabled) }
+    if (offer) {
+      setOfferMessage(offer.message_content)
+      setOfferEnabled(offer.enabled)
+    }
     const order = find("order_message")
-    if (order) { setOrderMessage(order.message_content); setOrderEnabled(order.enabled) }
+    if (order) {
+      setOrderMessage(order.message_content)
+      setOrderEnabled(order.enabled)
+    }
     const avail = find("require_availability")
     if (avail) setRequireAvailability(avail.enabled)
     const timing = find("stock_subtraction_timing")
     // A disabled or unknown row counts as the default, as on the server.
-    if (timing?.enabled && ["on_received", "dont_subtract"].includes(timing.message_content)) {
+    if (
+      timing?.enabled &&
+      ["on_received", "dont_subtract"].includes(timing.message_content)
+    ) {
       setStockTiming(timing.message_content as typeof stockTiming)
     }
     const alloc = find("allocation_mode")
     if (alloc) setAllocationMode(alloc.message_content as typeof allocationMode)
     const mins = find("min_order_size")
-    if (mins) { setMinOrderSize(mins.message_content); setMinOrderSizeEnabled(mins.enabled) }
+    if (mins) {
+      setMinOrderSize(mins.message_content)
+      setMinOrderSizeEnabled(mins.enabled)
+    }
     const maxs = find("max_order_size")
-    if (maxs) { setMaxOrderSize(maxs.message_content); setMaxOrderSizeEnabled(maxs.enabled) }
+    if (maxs) {
+      setMaxOrderSize(maxs.message_content)
+      setMaxOrderSizeEnabled(maxs.enabled)
+    }
     const minv = find("min_order_value")
-    if (minv) { setMinOrderValue(minv.message_content); setMinOrderValueEnabled(minv.enabled) }
+    if (minv) {
+      setMinOrderValue(minv.message_content)
+      setMinOrderValueEnabled(minv.enabled)
+    }
     const maxv = find("max_order_value")
-    if (maxv) { setMaxOrderValue(maxv.message_content); setMaxOrderValueEnabled(maxv.enabled) }
+    if (maxv) {
+      setMaxOrderValue(maxv.message_content)
+      setMaxOrderValueEnabled(maxv.enabled)
+    }
   }, [settings])
 
   const handleSave = async () => {
@@ -337,9 +385,14 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 
   if (isLoading) {
     return (
-      <FormPaper title={t("shopsUi.orderSettings.title")} subtitle={t("shops.profile.loading")}>
+      <FormPaper
+        title={t("shopsUi.orderSettings.title")}
+        subtitle={t("shops.profile.loading")}
+      >
         <Grid item xs={12}>
-          <Box display="flex" justifyContent="center" p={3}><CircularProgress /></Box>
+          <Box display="flex" justifyContent="center" p={3}>
+            <CircularProgress />
+          </Box>
         </Grid>
       </FormPaper>
     )
@@ -348,15 +401,27 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   return (
     <>
       {/* Order Messages */}
-      <FormPaper title={t("shopsUi.orderSettings.messagesTitle")} subtitle={t("shopsUi.orderSettings.messagesSubtitle")}>
+      <FormPaper
+        title={t("shopsUi.orderSettings.messagesTitle")}
+        subtitle={t("shopsUi.orderSettings.messagesSubtitle")}
+      >
         <Grid item xs={12}>
           <Box mb={2}>
             <FormControlLabel
-              control={<Switch checked={offerEnabled} onChange={(e) => setOfferEnabled(e.target.checked)} disabled={saving} />}
+              control={
+                <Switch
+                  checked={offerEnabled}
+                  onChange={(e) => setOfferEnabled(e.target.checked)}
+                  disabled={saving}
+                />
+              }
               label={t("shopsUi.orderSettings.offerEnabled")}
             />
             <TextField
-              fullWidth multiline rows={3} size="small"
+              fullWidth
+              multiline
+              rows={3}
+              size="small"
               label={t("shopsUi.orderSettings.offerMessage")}
               value={offerMessage}
               onChange={(e) => setOfferMessage(e.target.value)}
@@ -368,11 +433,20 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         <Grid item xs={12}>
           <Box mb={2}>
             <FormControlLabel
-              control={<Switch checked={orderEnabled} onChange={(e) => setOrderEnabled(e.target.checked)} disabled={saving} />}
+              control={
+                <Switch
+                  checked={orderEnabled}
+                  onChange={(e) => setOrderEnabled(e.target.checked)}
+                  disabled={saving}
+                />
+              }
               label={t("shopsUi.orderSettings.orderEnabled")}
             />
             <TextField
-              fullWidth multiline rows={3} size="small"
+              fullWidth
+              multiline
+              rows={3}
+              size="small"
               label={t("shopsUi.orderSettings.orderMessage")}
               value={orderMessage}
               onChange={(e) => setOrderMessage(e.target.value)}
@@ -384,10 +458,19 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
       </FormPaper>
 
       {/* Order Requirements */}
-      <FormPaper title={t("shopsUi.orderSettings.requirementsTitle")} subtitle={t("shopsUi.orderSettings.requirementsSubtitle")}>
+      <FormPaper
+        title={t("shopsUi.orderSettings.requirementsTitle")}
+        subtitle={t("shopsUi.orderSettings.requirementsSubtitle")}
+      >
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Switch checked={requireAvailability} onChange={(e) => setRequireAvailability(e.target.checked)} disabled={saving} />}
+            control={
+              <Switch
+                checked={requireAvailability}
+                onChange={(e) => setRequireAvailability(e.target.checked)}
+                disabled={saving}
+              />
+            }
             label={t("shopsUi.orderSettings.requireAvailability")}
           />
           <Typography variant="body2" color="text.secondary">
@@ -397,95 +480,207 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
       </FormPaper>
 
       {/* Stock Management */}
-      <FormPaper title={t("shopsUi.orderSettings.stockTitle")} subtitle={t("shopsUi.orderSettings.stockSubtitle")}>
+      <FormPaper
+        title={t("shopsUi.orderSettings.stockTitle")}
+        subtitle={t("shopsUi.orderSettings.stockSubtitle")}
+      >
         <Grid item xs={12}>
           <HelpLink guide="stockModes" />
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend" sx={{ display: "flex", alignItems: "center" }}>
+            <FormLabel
+              component="legend"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               {t("shopsUi.orderSettings.stockTiming")}
-              <HelpTip label={t("shopsUi.orderSettings.stockTiming")} title={t("help.tips.stockTiming")} />
+              <HelpTip
+                label={t("shopsUi.orderSettings.stockTiming")}
+                title={t("help.tips.stockTiming")}
+              />
             </FormLabel>
-            <RadioGroup value={stockTiming} onChange={(e) => setStockTiming(e.target.value as typeof stockTiming)}>
-              <FormControlLabel value="on_accepted" control={<Radio />} label={t("shopsUi.orderSettings.onAccepted")} />
-              <FormControlLabel value="on_received" control={<Radio />} label={t("shopsUi.orderSettings.onReceived")} />
-              <FormControlLabel value="dont_subtract" control={<Radio />} label={t("shopsUi.orderSettings.dontSubtract")} />
+            <RadioGroup
+              value={stockTiming}
+              onChange={(e) =>
+                setStockTiming(e.target.value as typeof stockTiming)
+              }
+            >
+              <FormControlLabel
+                value="on_accepted"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.onAccepted")}
+              />
+              <FormControlLabel
+                value="on_received"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.onReceived")}
+              />
+              <FormControlLabel
+                value="dont_subtract"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.dontSubtract")}
+              />
             </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <Divider sx={{ my: 2 }} />
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend" sx={{ display: "flex", alignItems: "center" }}>
+            <FormLabel
+              component="legend"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               {t("shopsUi.orderSettings.allocationMode")}
-              <HelpTip label={t("shopsUi.orderSettings.allocationMode")} title={t("help.tips.allocationMode")} />
+              <HelpTip
+                label={t("shopsUi.orderSettings.allocationMode")}
+                title={t("help.tips.allocationMode")}
+              />
             </FormLabel>
-            <RadioGroup value={allocationMode} onChange={(e) => setAllocationMode(e.target.value as typeof allocationMode)}>
-              <FormControlLabel value="auto" control={<Radio />} label={t("shopsUi.orderSettings.allocationAuto")} />
-              <FormControlLabel value="manual" control={<Radio />} label={t("shopsUi.orderSettings.allocationManual")} />
-              <FormControlLabel value="none" control={<Radio />} label={t("shopsUi.orderSettings.allocationNone")} />
+            <RadioGroup
+              value={allocationMode}
+              onChange={(e) =>
+                setAllocationMode(e.target.value as typeof allocationMode)
+              }
+            >
+              <FormControlLabel
+                value="auto"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.allocationAuto")}
+              />
+              <FormControlLabel
+                value="manual"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.allocationManual")}
+              />
+              <FormControlLabel
+                value="none"
+                control={<Radio />}
+                label={t("shopsUi.orderSettings.allocationNone")}
+              />
             </RadioGroup>
           </FormControl>
         </Grid>
       </FormPaper>
 
       {/* Order Limits */}
-      <FormPaper title={t("shopsUi.orderSettings.limitsTitle")} subtitle={t("shopsUi.orderSettings.limitsSubtitle")}>
+      <FormPaper
+        title={t("shopsUi.orderSettings.limitsTitle")}
+        subtitle={t("shopsUi.orderSettings.limitsSubtitle")}
+      >
         <Grid item xs={12} md={6}>
           <FormControlLabel
-            control={<Switch checked={minOrderSizeEnabled} onChange={(e) => setMinOrderSizeEnabled(e.target.checked)} disabled={saving} />}
+            control={
+              <Switch
+                checked={minOrderSizeEnabled}
+                onChange={(e) => setMinOrderSizeEnabled(e.target.checked)}
+                disabled={saving}
+              />
+            }
             label={t("shopsUi.orderSettings.minSize")}
           />
           <TextField
-            fullWidth type="number" size="small"
-            inputProps={{ "aria-label": t("shopsUi.orderSettings.minSizeAria") }}
+            fullWidth
+            type="number"
+            size="small"
+            inputProps={{
+              "aria-label": t("shopsUi.orderSettings.minSizeAria"),
+            }}
             value={minOrderSize}
             onChange={(e) => setMinOrderSize(e.target.value)}
             disabled={saving || !minOrderSizeEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">{t("shopsUi.orderSettings.itemsUnit")}</InputAdornment> }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {t("shopsUi.orderSettings.itemsUnit")}
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControlLabel
-            control={<Switch checked={maxOrderSizeEnabled} onChange={(e) => setMaxOrderSizeEnabled(e.target.checked)} disabled={saving} />}
+            control={
+              <Switch
+                checked={maxOrderSizeEnabled}
+                onChange={(e) => setMaxOrderSizeEnabled(e.target.checked)}
+                disabled={saving}
+              />
+            }
             label={t("shopsUi.orderSettings.maxSize")}
           />
           <TextField
-            fullWidth type="number" size="small"
-            inputProps={{ "aria-label": t("shopsUi.orderSettings.maxSizeAria") }}
+            fullWidth
+            type="number"
+            size="small"
+            inputProps={{
+              "aria-label": t("shopsUi.orderSettings.maxSizeAria"),
+            }}
             value={maxOrderSize}
             onChange={(e) => setMaxOrderSize(e.target.value)}
             disabled={saving || !maxOrderSizeEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">{t("shopsUi.orderSettings.itemsUnit")}</InputAdornment> }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {t("shopsUi.orderSettings.itemsUnit")}
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControlLabel
-            control={<Switch checked={minOrderValueEnabled} onChange={(e) => setMinOrderValueEnabled(e.target.checked)} disabled={saving} />}
+            control={
+              <Switch
+                checked={minOrderValueEnabled}
+                onChange={(e) => setMinOrderValueEnabled(e.target.checked)}
+                disabled={saving}
+              />
+            }
             label={t("shopsUi.orderSettings.minValue")}
           />
           <TextField
-            fullWidth type="number" size="small"
-            inputProps={{ "aria-label": t("shopsUi.orderSettings.minValueAria") }}
+            fullWidth
+            type="number"
+            size="small"
+            inputProps={{
+              "aria-label": t("shopsUi.orderSettings.minValueAria"),
+            }}
             value={minOrderValue}
             onChange={(e) => setMinOrderValue(e.target.value)}
             disabled={saving || !minOrderValueEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">aUEC</InputAdornment> }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">aUEC</InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControlLabel
-            control={<Switch checked={maxOrderValueEnabled} onChange={(e) => setMaxOrderValueEnabled(e.target.checked)} disabled={saving} />}
+            control={
+              <Switch
+                checked={maxOrderValueEnabled}
+                onChange={(e) => setMaxOrderValueEnabled(e.target.checked)}
+                disabled={saving}
+              />
+            }
             label={t("shopsUi.orderSettings.maxValue")}
           />
           <TextField
-            fullWidth type="number" size="small"
-            inputProps={{ "aria-label": t("shopsUi.orderSettings.maxValueAria") }}
+            fullWidth
+            type="number"
+            size="small"
+            inputProps={{
+              "aria-label": t("shopsUi.orderSettings.maxValueAria"),
+            }}
             value={maxOrderValue}
             onChange={(e) => setMaxOrderValue(e.target.value)}
             disabled={saving || !maxOrderValueEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">aUEC</InputAdornment> }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">aUEC</InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -521,17 +716,21 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
   // Only the owner may give a shop away (the API refuses manage_market
   // members): for an org shop, that is the org's owner role.
   const orgSpectrumId = shop.owner_contractor_spectrum_id
-  const { data: owningOrg } = useGetContractorBySpectrumIDQuery(orgSpectrumId ?? "", {
-    skip: !orgSpectrumId,
-  })
+  const { data: owningOrg } = useGetContractorBySpectrumIDQuery(
+    orgSpectrumId ?? "",
+    {
+      skip: !orgSpectrumId,
+    },
+  )
   const membership = orgs.find((c) => c.spectrum_id === orgSpectrumId)
   const canTransfer = orgSpectrumId
-    ? !!owningOrg?.owner_role && !!membership?.roles.includes(owningOrg.owner_role)
+    ? !!owningOrg?.owner_role &&
+      !!membership?.roles.includes(owningOrg.owner_role)
     : true
 
   const handleConfirm = async () => {
     const target_id =
-      targetType === "user" ? profile?.username ?? "" : contractorSpectrumId
+      targetType === "user" ? (profile?.username ?? "") : contractorSpectrumId
     // The transfer endpoint expects a user_id for users; profile exposes
     // username, so we transfer to self using the backend's own resolution.
     const slug = await transfer({ target_type: targetType, target_id })
@@ -541,9 +740,7 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
   }
 
   const canSubmit =
-    targetType === "user"
-      ? !!profile?.username
-      : !!contractorSpectrumId
+    targetType === "user" ? !!profile?.username : !!contractorSpectrumId
 
   const targetOrgName = orgs.find(
     (o) => o.spectrum_id === contractorSpectrumId,
@@ -789,7 +986,11 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
             subtitle={t("shopsUi.settings.appearanceSubtitle")}
           >
             <Grid item xs={12} sm={6}>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
                 {t("orgAbout.logo")}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
@@ -820,7 +1021,11 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
               </Stack>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
                 {t("orgAbout.banner")}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
@@ -830,7 +1035,9 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                     height: 64,
                     borderRadius: 1,
                     bgcolor: "background.default",
-                    backgroundImage: draft.bannerUrl ? `url(${draft.bannerUrl})` : undefined,
+                    backgroundImage: draft.bannerUrl
+                      ? `url(${draft.bannerUrl})`
+                      : undefined,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     display: "flex",
@@ -903,7 +1110,9 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                 options={AVAILABLE_LANGUAGES.slice()}
                 getOptionLabel={languageLabel}
                 value={draft.supportedLanguages}
-                onChange={(_e, newValue) => edit("supportedLanguages", newValue)}
+                onChange={(_e, newValue) =>
+                  edit("supportedLanguages", newValue)
+                }
                 renderTags={(value, getTagProps) =>
                   value.map((code, index) => {
                     const { key, ...rest } = getTagProps({ index })
@@ -939,7 +1148,9 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                 control={
                   <Switch
                     checked={draft.acceptsCustomOrders}
-                    onChange={(e) => edit("acceptsCustomOrders", e.target.checked)}
+                    onChange={(e) =>
+                      edit("acceptsCustomOrders", e.target.checked)
+                    }
                   />
                 }
                 label={t("shopsUi.form.acceptCustomOrders")}
@@ -993,7 +1204,10 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <HelpTip label={t("shopsUi.settings.discordServerId")} title={t("help.tips.discordServerId")} />
+                      <HelpTip
+                        label={t("shopsUi.settings.discordServerId")}
+                        title={t("help.tips.discordServerId")}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -1014,7 +1228,10 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <HelpTip label={t("shopsUi.settings.threadChannelId")} title={t("help.tips.threadChannelId")} />
+                      <HelpTip
+                        label={t("shopsUi.settings.threadChannelId")}
+                        title={t("help.tips.threadChannelId")}
+                      />
                     </InputAdornment>
                   ),
                 }}

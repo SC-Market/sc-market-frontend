@@ -182,9 +182,12 @@ export function SidebarV2() {
   const whiteLabel = useWhiteLabelSidebar()
   // On an org's white-label subdomain the header is the org's brand.
   const { customOrg } = useCustomDomain()
-  const { data: customOrgData } = useGetContractorBySpectrumIDQuery(customOrg!, {
-    skip: !customOrg,
-  })
+  const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
+    customOrg!,
+    {
+      skip: !customOrg,
+    },
+  )
   const whiteLabelBrand = customOrg
     ? {
         name: customOrgData?.name ?? getWhiteLabelConfig()?.name ?? customOrg,
@@ -199,7 +202,10 @@ export function SidebarV2() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [search, setSearch] = useState("")
   const [cookies, setCookie] = useCookies(["starred_nav_v2"])
-  const starred: string[] = useMemo(() => cookies.starred_nav_v2 || [], [cookies.starred_nav_v2])
+  const starred: string[] = useMemo(
+    () => cookies.starred_nav_v2 || [],
+    [cookies.starred_nav_v2],
+  )
   const navigate = useNavigate()
 
   const toggleStar = (path: string) => {
@@ -211,9 +217,14 @@ export function SidebarV2() {
   }
 
   // Infer context from URL
-  const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null; orgId: string | null }>(() => {
+  const inferredContext = useMemo<{
+    ctx: NavContext
+    shopSlug: string | null
+    orgId: string | null
+  }>(() => {
     const path = location.pathname
-    if (path.startsWith("/admin")) return { ctx: "admin", shopSlug: null, orgId: null }
+    if (path.startsWith("/admin"))
+      return { ctx: "admin", shopSlug: null, orgId: null }
     const shopMatch = path.match(/^\/shop\/([^/]+)/)
     if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1], orgId: null }
     const orgMatch = path.match(/^\/org\/([^/]+)/)
@@ -225,7 +236,11 @@ export function SidebarV2() {
     return { ctx: "browse", shopSlug: null, orgId: null }
   }, [location.pathname, location.state])
 
-  const [contextOverride, setContextOverride] = useState<{ ctx: NavContext; shopSlug: string | null; orgId: string | null } | null>(null)
+  const [contextOverride, setContextOverride] = useState<{
+    ctx: NavContext
+    shopSlug: string | null
+    orgId: string | null
+  } | null>(null)
   const context = contextOverride?.ctx ?? inferredContext.ctx
   const selectedShopSlug = contextOverride?.shopSlug ?? inferredContext.shopSlug
   const selectedOrgId = contextOverride?.orgId ?? inferredContext.orgId
@@ -246,7 +261,8 @@ export function SidebarV2() {
   )
 
   // Pages outside /shop/:slug read the shop the sidebar is in (Quick List)
-  const sidebarShopSlug = context === "shop" ? (selectedShop?.slug ?? null) : null
+  const sidebarShopSlug =
+    context === "shop" ? (selectedShop?.slug ?? null) : null
   useEffect(() => {
     setSidebarShopContext(sidebarShopSlug)
     return () => setSidebarShopContext(null)
@@ -256,7 +272,9 @@ export function SidebarV2() {
     if (context === "admin") return t("nav.admin", "Admin")
     if (context === "shop" && selectedShop) return selectedShop.name
     if (context === "org" && selectedOrgId) {
-      const org = profile?.contractors?.find((c) => c.spectrum_id === selectedOrgId)
+      const org = profile?.contractors?.find(
+        (c) => c.spectrum_id === selectedOrgId,
+      )
       return org?.name || "Organization"
     }
     return t("nav.browsing", "Browsing")
@@ -269,26 +287,126 @@ export function SidebarV2() {
       const data = t("nav.groupAdminData", "Data & Config")
       const security = t("nav.groupAdminSecurity", "Security & Testing")
       return [
-        { label: t("nav.adminOrders", "Orders"), to: ADMIN_PATHS.orders, icon: <LocalShippingRounded />, group: ops },
-        { label: t("nav.adminUsers", "Users"), to: ADMIN_PATHS.users, icon: <PeopleRounded />, group: ops },
-        { label: t("nav.adminMarket", "Market"), to: ADMIN_PATHS.market, icon: <StorefrontRounded />, group: ops },
-        { label: t("nav.adminWipe", "Expire Listings"), to: ADMIN_PATHS.wipe, icon: <EventBusyRounded />, group: ops },
-        { label: t("nav.adminPremium", "Premium"), to: ADMIN_PATHS.premium, icon: <WorkspacePremiumRounded />, group: ops },
-        { label: t("nav.adminAlerts", "Alerts"), to: ADMIN_PATHS.alerts, icon: <CampaignRounded />, group: ops },
-        { label: t("nav.adminModeration", "Moderation"), to: ADMIN_PATHS.moderation, icon: <GavelRounded />, group: ops },
-        { label: t("nav.adminSupplierDashboard", "Supplier Dashboard"), to: ADMIN_PATHS.supplierDashboard, icon: <InventoryRounded />, group: ops },
-        { label: t("nav.adminSupplierRoster", "Supplier Roster"), to: ADMIN_PATHS.supplierRoster, icon: <BadgeRounded />, group: ops },
-        { label: t("nav.adminRequisitions", "Requisitions"), to: ADMIN_PATHS.requisitions, icon: <ListAltRounded />, group: ops },
-        { label: t("nav.adminFeatureFlags", "Feature Flags"), to: ADMIN_PATHS.featureFlags, icon: <SettingsRounded />, group: data },
-        { label: t("nav.adminGameData", "Game Data Import"), to: ADMIN_PATHS.gameDataImport, icon: <ScienceRounded />, group: data },
-        { label: t("nav.adminAttributes", "Attributes"), to: ADMIN_PATHS.attributeDefinitions, icon: <TuneRounded />, group: data },
-        { label: t("nav.adminGameItemAttrs", "Game Item Attributes"), to: ADMIN_PATHS.gameItemAttributes, icon: <CategoryRounded />, group: data },
-        { label: t("nav.adminImportMonitoring", "Import Monitoring"), to: ADMIN_PATHS.importMonitoring, icon: <MonitorHeartRounded />, group: data },
-        { label: t("nav.adminIdentity", "Identity"), to: ADMIN_PATHS.identity, icon: <ManageAccountsRounded />, group: security },
-        { label: t("nav.adminTestAccounts", "Test Accounts"), to: ADMIN_PATHS.testAccounts, icon: <PersonAddRounded />, group: security },
-        { label: t("nav.adminAuditLogs", "Audit Logs"), to: ADMIN_PATHS.auditLogs, icon: <HistoryRounded />, group: security },
-        { label: t("nav.adminNotificationTest", "Notification Test"), to: ADMIN_PATHS.notificationTest, icon: <MessageRounded />, group: security },
-        { label: t("nav.adminTwoFactor", "Two-factor"), to: `${PATHS.settings}?mfa=1`, icon: <PhonelinkLockRounded />, group: security },
+        {
+          label: t("nav.adminOrders", "Orders"),
+          to: ADMIN_PATHS.orders,
+          icon: <LocalShippingRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminUsers", "Users"),
+          to: ADMIN_PATHS.users,
+          icon: <PeopleRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminMarket", "Market"),
+          to: ADMIN_PATHS.market,
+          icon: <StorefrontRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminWipe", "Expire Listings"),
+          to: ADMIN_PATHS.wipe,
+          icon: <EventBusyRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminPremium", "Premium"),
+          to: ADMIN_PATHS.premium,
+          icon: <WorkspacePremiumRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminAlerts", "Alerts"),
+          to: ADMIN_PATHS.alerts,
+          icon: <CampaignRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminModeration", "Moderation"),
+          to: ADMIN_PATHS.moderation,
+          icon: <GavelRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminSupplierDashboard", "Supplier Dashboard"),
+          to: ADMIN_PATHS.supplierDashboard,
+          icon: <InventoryRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminSupplierRoster", "Supplier Roster"),
+          to: ADMIN_PATHS.supplierRoster,
+          icon: <BadgeRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminRequisitions", "Requisitions"),
+          to: ADMIN_PATHS.requisitions,
+          icon: <ListAltRounded />,
+          group: ops,
+        },
+        {
+          label: t("nav.adminFeatureFlags", "Feature Flags"),
+          to: ADMIN_PATHS.featureFlags,
+          icon: <SettingsRounded />,
+          group: data,
+        },
+        {
+          label: t("nav.adminGameData", "Game Data Import"),
+          to: ADMIN_PATHS.gameDataImport,
+          icon: <ScienceRounded />,
+          group: data,
+        },
+        {
+          label: t("nav.adminAttributes", "Attributes"),
+          to: ADMIN_PATHS.attributeDefinitions,
+          icon: <TuneRounded />,
+          group: data,
+        },
+        {
+          label: t("nav.adminGameItemAttrs", "Game Item Attributes"),
+          to: ADMIN_PATHS.gameItemAttributes,
+          icon: <CategoryRounded />,
+          group: data,
+        },
+        {
+          label: t("nav.adminImportMonitoring", "Import Monitoring"),
+          to: ADMIN_PATHS.importMonitoring,
+          icon: <MonitorHeartRounded />,
+          group: data,
+        },
+        {
+          label: t("nav.adminIdentity", "Identity"),
+          to: ADMIN_PATHS.identity,
+          icon: <ManageAccountsRounded />,
+          group: security,
+        },
+        {
+          label: t("nav.adminTestAccounts", "Test Accounts"),
+          to: ADMIN_PATHS.testAccounts,
+          icon: <PersonAddRounded />,
+          group: security,
+        },
+        {
+          label: t("nav.adminAuditLogs", "Audit Logs"),
+          to: ADMIN_PATHS.auditLogs,
+          icon: <HistoryRounded />,
+          group: security,
+        },
+        {
+          label: t("nav.adminNotificationTest", "Notification Test"),
+          to: ADMIN_PATHS.notificationTest,
+          icon: <MessageRounded />,
+          group: security,
+        },
+        {
+          label: t("nav.adminTwoFactor", "Two-factor"),
+          to: `${PATHS.settings}?mfa=1`,
+          icon: <PhonelinkLockRounded />,
+          group: security,
+        },
       ]
     }
     if (context === "shop" && selectedShop) {
@@ -296,44 +414,107 @@ export function SidebarV2() {
       const perms = selectedShop.permissions
       const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
-        { label: t("nav.shopPage", "Shop Page"), to: SHOP_PATHS.profile(slug), icon: <StorefrontRounded /> },
+        {
+          label: t("nav.shopPage", "Shop Page"),
+          to: SHOP_PATHS.profile(slug),
+          icon: <StorefrontRounded />,
+        },
         ...(flags.customizable_dashboard
-          ? [{ label: t("nav.dashboard", "Dashboard"), to: SHOP_PATHS.dashboard(slug), icon: <DashboardRounded /> }]
+          ? [
+              {
+                label: t("nav.dashboard", "Dashboard"),
+                to: SHOP_PATHS.dashboard(slug),
+                icon: <DashboardRounded />,
+              },
+            ]
           : []),
-        { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded />, badge: shopPendingOrderCount },
-        { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
-        { label: t("nav.services", "Services"), to: SHOP_PATHS.services(slug), icon: <DesignServicesRounded /> },
+        {
+          label: t("nav.orders", "Orders"),
+          to: SHOP_PATHS.orders(slug),
+          icon: <LocalShippingRounded />,
+          badge: shopPendingOrderCount,
+        },
+        {
+          label: t("nav.listings", "Listings"),
+          to: SHOP_PATHS.listings(slug),
+          icon: <ListAltRounded />,
+        },
+        {
+          label: t("nav.services", "Services"),
+          to: SHOP_PATHS.services(slug),
+          icon: <DesignServicesRounded />,
+        },
       ]
       if (perms?.manage_market) {
-        items.push({ label: t("nav.createListing", "Create Listing"), to: SHOP_PATHS.create(slug), icon: <AddRounded /> })
+        items.push({
+          label: t("nav.createListing", "Create Listing"),
+          to: SHOP_PATHS.create(slug),
+          icon: <AddRounded />,
+        })
       }
       if (perms?.manage_stock || perms?.manage_market) {
-        items.push({ label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> })
+        items.push({
+          label: t("nav.stock", "Stock"),
+          to: SHOP_PATHS.stock(slug),
+          icon: <InventoryRounded />,
+        })
       }
       if (perms?.can_manage) {
-        items.push({ label: t("nav.customers", "Customers"), to: SHOP_PATHS.customers(slug), icon: <PeopleRounded />, group: manage })
+        items.push({
+          label: t("nav.customers", "Customers"),
+          to: SHOP_PATHS.customers(slug),
+          icon: <PeopleRounded />,
+          group: manage,
+        })
       }
       if (canOpenShopSettings(selectedShop)) {
-        items.push({ label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded />, group: manage })
+        items.push({
+          label: t("nav.shopSettings", "Settings"),
+          to: SHOP_PATHS.settings(slug),
+          icon: <SettingsRounded />,
+          group: manage,
+        })
       }
       return items
     }
     if (context === "org" && selectedOrgId) {
       const canManageOrders = canManageOrgOrders(selectedContractor, profile)
       const items: NavItem[] = [
-        { label: t("nav.orgPage", "Org Page"), to: ORG_PATHS.profile(selectedOrgId), icon: <StorefrontRounded /> },
-        { label: t("nav.orgDashboard", "Dashboard"), to: flags.customizable_dashboard ? ORG_PATHS.dashboardOverview(selectedOrgId) : ORG_PATHS.dashboard(selectedOrgId), icon: <DashboardRounded /> },
-        { label: t("nav.members", "Members"), to: ORG_PATHS.members(selectedOrgId), icon: <PeopleRounded /> },
+        {
+          label: t("nav.orgPage", "Org Page"),
+          to: ORG_PATHS.profile(selectedOrgId),
+          icon: <StorefrontRounded />,
+        },
+        {
+          label: t("nav.orgDashboard", "Dashboard"),
+          to: flags.customizable_dashboard
+            ? ORG_PATHS.dashboardOverview(selectedOrgId)
+            : ORG_PATHS.dashboard(selectedOrgId),
+          icon: <DashboardRounded />,
+        },
+        {
+          label: t("nav.members", "Members"),
+          to: ORG_PATHS.members(selectedOrgId),
+          icon: <PeopleRounded />,
+        },
       ]
       if (canManageOrders) {
-        items.push({ label: t("nav.orgOrders", "Org Orders"), to: ORG_PATHS.orders(selectedOrgId), icon: <LocalShippingRounded /> })
+        items.push({
+          label: t("nav.orgOrders", "Org Orders"),
+          to: ORG_PATHS.orders(selectedOrgId),
+          icon: <LocalShippingRounded />,
+        })
       }
       // Single Manage entry — the manage page has its own tab bar for
       // About/Roles/Invites/Discord/Theme/Settings/Audit. Don't duplicate
       // those sub-destinations in the sidebar. It shows exactly when at least
       // one of those tabs would (same rules as the manage route).
       if (canOpenOrgManage(selectedContractor, profile)) {
-        items.push({ label: t("nav.orgManage", "Manage"), to: ORG_PATHS.manage(selectedOrgId), icon: <SettingsRounded /> })
+        items.push({
+          label: t("nav.orgManage", "Manage"),
+          to: ORG_PATHS.manage(selectedOrgId),
+          icon: <SettingsRounded />,
+        })
       }
       return items
     }
@@ -341,27 +522,100 @@ export function SidebarV2() {
     const marketplace = t("nav.groupMarketplace", "Marketplace")
     const personal = t("nav.groupPersonal", "Personal")
     const items: NavItem[] = [
-      { label: t("nav.market", "Market"), to: MARKET_PATHS.search, icon: <SearchRounded />, group: marketplace, whiteLabelKey: "market" },
-      { label: t("nav.services", "Services"), to: MARKET_PATHS.services, icon: <DesignServicesRounded />, group: marketplace, whiteLabelKey: "services" },
-      { label: t("nav.contracts", "Contracts"), to: PATHS.contracts, icon: <DescriptionRounded />, group: marketplace, whiteLabelKey: "contracts" },
-      { label: t("nav.buyOrders", "Buy Orders"), to: MARKET_PATHS.buyOrders, icon: <ShoppingCartRounded />, group: marketplace },
-    ].filter((item) => !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey))
+      {
+        label: t("nav.market", "Market"),
+        to: MARKET_PATHS.search,
+        icon: <SearchRounded />,
+        group: marketplace,
+        whiteLabelKey: "market",
+      },
+      {
+        label: t("nav.services", "Services"),
+        to: MARKET_PATHS.services,
+        icon: <DesignServicesRounded />,
+        group: marketplace,
+        whiteLabelKey: "services",
+      },
+      {
+        label: t("nav.contracts", "Contracts"),
+        to: PATHS.contracts,
+        icon: <DescriptionRounded />,
+        group: marketplace,
+        whiteLabelKey: "contracts",
+      },
+      {
+        label: t("nav.buyOrders", "Buy Orders"),
+        to: MARKET_PATHS.buyOrders,
+        icon: <ShoppingCartRounded />,
+        group: marketplace,
+      },
+    ].filter(
+      (item) =>
+        !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey),
+    )
     if (profile) {
       if (flags.customizable_dashboard) {
-        items.push({ label: t("nav.dashboard", "Dashboard"), to: PATHS.dashboardOverview, icon: <DashboardRounded />, group: personal })
+        items.push({
+          label: t("nav.dashboard", "Dashboard"),
+          to: PATHS.dashboardOverview,
+          icon: <DashboardRounded />,
+          group: personal,
+        })
       }
       items.push(
-        { label: t("nav.myOrders", "My Orders"), to: PATHS.myOrders, icon: <LocalShippingRounded />, badge: pendingOrderCount, group: personal },
-        { label: t("nav.assignedOrders", "Assigned to Me"), to: PATHS.dashboard, icon: <DashboardRounded />, group: personal },
-        { label: t("nav.messages", "Messages"), to: PATHS.messages, icon: <MessageRounded />, badge: unreadChatCount, group: personal },
-        { label: t("nav.inventory", "My Stock"), to: PATHS.inventory, icon: <InventoryRounded />, group: personal },
-        { label: t("nav.availability", "Availability"), to: PATHS.availability, icon: <DescriptionRounded />, group: personal },
+        {
+          label: t("nav.myOrders", "My Orders"),
+          to: PATHS.myOrders,
+          icon: <LocalShippingRounded />,
+          badge: pendingOrderCount,
+          group: personal,
+        },
+        {
+          label: t("nav.assignedOrders", "Assigned to Me"),
+          to: PATHS.dashboard,
+          icon: <DashboardRounded />,
+          group: personal,
+        },
+        {
+          label: t("nav.messages", "Messages"),
+          to: PATHS.messages,
+          icon: <MessageRounded />,
+          badge: unreadChatCount,
+          group: personal,
+        },
+        {
+          label: t("nav.inventory", "My Stock"),
+          to: PATHS.inventory,
+          icon: <InventoryRounded />,
+          group: personal,
+        },
+        {
+          label: t("nav.availability", "Availability"),
+          to: PATHS.availability,
+          icon: <DescriptionRounded />,
+          group: personal,
+        },
       )
     }
     return items
-  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount, flags.customizable_dashboard, whiteLabel.hidden])
+  }, [
+    context,
+    selectedShop,
+    selectedOrgId,
+    selectedContractor,
+    profile,
+    shops,
+    t,
+    pendingOrderCount,
+    unreadChatCount,
+    shopPendingOrderCount,
+    flags.customizable_dashboard,
+    whiteLabel.hidden,
+  ])
 
-  const [wikiOpen, setWikiOpen] = useState(() => location.pathname.startsWith("/wiki"))
+  const [wikiOpen, setWikiOpen] = useState(() =>
+    location.pathname.startsWith("/wiki"),
+  )
   const [craftingOpen, setCraftingOpen] = useState(
     () =>
       location.pathname.startsWith("/blueprints") ||
@@ -394,7 +648,10 @@ export function SidebarV2() {
     // Don't match parent paths when a more specific child item exists in the nav
     // e.g. /shop/x/listings should not highlight when on /shop/x/listings/create
     const hasMoreSpecificMatch = contextItems.some(
-      (item) => item.to !== path && item.to.startsWith(path + "/") && current.startsWith(item.to),
+      (item) =>
+        item.to !== path &&
+        item.to.startsWith(path + "/") &&
+        current.startsWith(item.to),
     )
     if (hasMoreSpecificMatch) return false
     return current.startsWith(path + "/") || current.startsWith(path + "?")
@@ -408,8 +665,16 @@ export function SidebarV2() {
     borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
     mt: 0.5,
     transition: "0.3s",
-    "& .MuiListItemIcon-root": { color: sidebarContrast, transition: "0.3s", fontSize: "0.9em" },
-    "& .MuiListItemText-primary": { color: sidebarContrast, fontWeight: "bold", transition: "0.3s" },
+    "& .MuiListItemIcon-root": {
+      color: sidebarContrast,
+      transition: "0.3s",
+      fontSize: "0.9em",
+    },
+    "& .MuiListItemText-primary": {
+      color: sidebarContrast,
+      fontWeight: "bold",
+      transition: "0.3s",
+    },
     "&.Mui-selected": {
       "& .MuiListItemIcon-root": { color: "primary.main" },
       "& .MuiListItemText-primary": { color: "primary.main" },
@@ -452,32 +717,69 @@ export function SidebarV2() {
       to={item.to}
       selected={isActive(item.to)}
       sx={itemSx}
-      onClick={() => { haptic.light(); closeIfMobile() }}
+      onClick={() => {
+        haptic.light()
+        closeIfMobile()
+      }}
     >
-      <ListItemIcon sx={{ minWidth: nested ? 32 : 36 }}>{item.icon}</ListItemIcon>
-      <ListItemText sx={{ flex: 1, minWidth: 0 }} primary={item.label} primaryTypographyProps={{ variant: "subtitle2", noWrap: true }} />
+      <ListItemIcon sx={{ minWidth: nested ? 32 : 36 }}>
+        {item.icon}
+      </ListItemIcon>
+      <ListItemText
+        sx={{ flex: 1, minWidth: 0 }}
+        primary={item.label}
+        primaryTypographyProps={{ variant: "subtitle2", noWrap: true }}
+      />
       {item.badge && item.badge > 0 ? (
         <Chip
           label={item.badge}
           size="small"
           color="primary"
-          sx={{ ml: 1, height: 20, minWidth: 20, "& .MuiChip-label": { px: 0.75, fontSize: "0.7rem" } }}
+          sx={{
+            ml: 1,
+            height: 20,
+            minWidth: 20,
+            "& .MuiChip-label": { px: 0.75, fontSize: "0.7rem" },
+          }}
         />
       ) : null}
       {pinButtonsReady ? (
-        <Tooltip title={starred.includes(item.to) ? t("nav.unstar", "Unpin") : t("nav.star", "Pin")}>
+        <Tooltip
+          title={
+            starred.includes(item.to)
+              ? t("nav.unstar", "Unpin")
+              : t("nav.star", "Pin")
+          }
+        >
           <IconButton
             className="nav-star"
             size="small"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStar(item.to) }}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              toggleStar(item.to)
+            }}
             sx={pinSx(starred.includes(item.to))}
           >
-            {starred.includes(item.to) ? <StarRounded fontSize="small" /> : <StarBorderRounded fontSize="small" />}
+            {starred.includes(item.to) ? (
+              <StarRounded fontSize="small" />
+            ) : (
+              <StarBorderRounded fontSize="small" />
+            )}
           </IconButton>
         </Tooltip>
       ) : (
-        <Box component="span" aria-hidden className="nav-star" sx={{ ...pinSx(starred.includes(item.to)), display: "inline-flex" }}>
-          {starred.includes(item.to) ? <StarRounded fontSize="small" /> : <StarBorderRounded fontSize="small" />}
+        <Box
+          component="span"
+          aria-hidden
+          className="nav-star"
+          sx={{ ...pinSx(starred.includes(item.to)), display: "inline-flex" }}
+        >
+          {starred.includes(item.to) ? (
+            <StarRounded fontSize="small" />
+          ) : (
+            <StarBorderRounded fontSize="small" />
+          )}
         </Box>
       )}
     </ListItemButton>
@@ -486,22 +788,70 @@ export function SidebarV2() {
   // Flat list of every navigable destination for starred lookup + search
   const allNavigable = useMemo<NavItem[]>(() => {
     const wiki: NavItem[] = [
-      { label: t("sidebar.wiki.items", "Items"), to: WIKI_PATHS.items, icon: <MenuBookRounded /> },
-      { label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: WIKI_PATHS.ships, icon: <RocketLaunchRounded /> },
-      { label: t("sidebar.wiki.commodities", "Commodities"), to: WIKI_PATHS.commodities, icon: <InventoryRounded /> },
-      { label: t("sidebar.wiki.locations", "Locations"), to: WIKI_PATHS.locations, icon: <DescriptionRounded /> },
-      { label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: WIKI_PATHS.manufacturers, icon: <StorefrontRounded /> },
-      { label: t("sidebar.wiki.refinery", "Refinery"), to: WIKI_PATHS.refinery, icon: <ScienceRounded /> },
+      {
+        label: t("sidebar.wiki.items", "Items"),
+        to: WIKI_PATHS.items,
+        icon: <MenuBookRounded />,
+      },
+      {
+        label: t("sidebar.wiki.vehicles", "Ships & Vehicles"),
+        to: WIKI_PATHS.ships,
+        icon: <RocketLaunchRounded />,
+      },
+      {
+        label: t("sidebar.wiki.commodities", "Commodities"),
+        to: WIKI_PATHS.commodities,
+        icon: <InventoryRounded />,
+      },
+      {
+        label: t("sidebar.wiki.locations", "Locations"),
+        to: WIKI_PATHS.locations,
+        icon: <DescriptionRounded />,
+      },
+      {
+        label: t("sidebar.wiki.manufacturers", "Manufacturers"),
+        to: WIKI_PATHS.manufacturers,
+        icon: <StorefrontRounded />,
+      },
+      {
+        label: t("sidebar.wiki.refinery", "Refinery"),
+        to: WIKI_PATHS.refinery,
+        icon: <ScienceRounded />,
+      },
     ]
     const gameData: NavItem[] = [
-      { label: t("sidebar.gameData.missions", "Missions"), to: GAME_DATA_PATHS.missions, icon: <DescriptionRounded /> },
-      { label: t("sidebar.gameData.mining", "Mining"), to: GAME_DATA_PATHS.mining, icon: <InventoryRounded /> },
-      { label: t("sidebar.gameData.blueprints", "Blueprints"), to: GAME_DATA_PATHS.blueprints, icon: <ScienceRounded /> },
-      { label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: GAME_DATA_PATHS.craftingCalculator, icon: <CalculateRounded /> },
-      { label: t("sidebar.gameData.resources", "Resources"), to: GAME_DATA_PATHS.resources, icon: <InventoryRounded /> },
+      {
+        label: t("sidebar.gameData.missions", "Missions"),
+        to: GAME_DATA_PATHS.missions,
+        icon: <DescriptionRounded />,
+      },
+      {
+        label: t("sidebar.gameData.mining", "Mining"),
+        to: GAME_DATA_PATHS.mining,
+        icon: <InventoryRounded />,
+      },
+      {
+        label: t("sidebar.gameData.blueprints", "Blueprints"),
+        to: GAME_DATA_PATHS.blueprints,
+        icon: <ScienceRounded />,
+      },
+      {
+        label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"),
+        to: GAME_DATA_PATHS.craftingCalculator,
+        icon: <CalculateRounded />,
+      },
+      {
+        label: t("sidebar.gameData.resources", "Resources"),
+        to: GAME_DATA_PATHS.resources,
+        icon: <InventoryRounded />,
+      },
     ]
     if (profile) {
-      gameData.push({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: PATHS.shoppingLists, icon: <ShoppingCartRounded /> })
+      gameData.push({
+        label: t("sidebar.gameData.shoppingLists", "Shopping Lists"),
+        to: PATHS.shoppingLists,
+        icon: <ShoppingCartRounded />,
+      })
     }
     return [...contextItems, ...gameData, ...wiki]
   }, [contextItems, profile, t])
@@ -548,10 +898,20 @@ export function SidebarV2() {
         >
           <Stack direction="row" alignItems="center" spacing={1.5}>
             <Avatar
-              src={context === "admin" ? undefined : context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
+              src={
+                context === "admin"
+                  ? undefined
+                  : context === "shop" && selectedShop
+                    ? selectedShop.logo_url || undefined
+                    : profile?.avatar
+              }
               sx={{ width: 32, height: 32 }}
             >
-              {context === "admin" ? <AdminPanelSettingsRounded fontSize="small" /> : context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
+              {context === "admin" ? (
+                <AdminPanelSettingsRounded fontSize="small" />
+              ) : context === "shop" ? (
+                <StorefrontRounded fontSize="small" />
+              ) : undefined}
             </Avatar>
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Typography variant="body2" fontWeight={600} noWrap>
@@ -591,7 +951,9 @@ export function SidebarV2() {
           selected={context === "browse"}
           onClick={() => handleContextSwitch("browse")}
         >
-          <ListItemIcon><SearchRounded /></ListItemIcon>
+          <ListItemIcon>
+            <SearchRounded />
+          </ListItemIcon>
           <ListItemText>{t("nav.browsing", "Browsing")}</ListItemText>
         </MenuItem>
         {shops.length > 0 && <Divider />}
@@ -607,7 +969,10 @@ export function SidebarV2() {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={<StorefrontRounded sx={{ fontSize: 12 }} />}
               >
-                <Avatar src={shop.logo_url || undefined} sx={{ width: 28, height: 28 }}>
+                <Avatar
+                  src={shop.logo_url || undefined}
+                  sx={{ width: 28, height: 28 }}
+                >
                   <StorefrontRounded fontSize="small" />
                 </Avatar>
               </Badge>
@@ -628,7 +993,10 @@ export function SidebarV2() {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={<PeopleRounded sx={{ fontSize: 12 }} />}
               >
-                <Avatar src={org.avatar || undefined} sx={{ width: 28, height: 28 }}>
+                <Avatar
+                  src={org.avatar || undefined}
+                  sx={{ width: 28, height: 28 }}
+                >
                   <PeopleRounded fontSize="small" />
                 </Avatar>
               </Badge>
@@ -644,11 +1012,17 @@ export function SidebarV2() {
             onClick={() => handleContextSwitch("admin")}
           >
             <ListItemIcon>
-              {isSiteAdmin(profile) ? <AdminPanelSettingsRounded /> : <LockRounded />}
+              {isSiteAdmin(profile) ? (
+                <AdminPanelSettingsRounded />
+              ) : (
+                <LockRounded />
+              )}
             </ListItemIcon>
             <ListItemText
               secondary={
-                isSiteAdmin(profile) ? undefined : t("mfa.nav.locked", "Verify to unlock")
+                isSiteAdmin(profile)
+                  ? undefined
+                  : t("mfa.nav.locked", "Verify to unlock")
               }
             >
               {t("nav.admin", "Admin")}
@@ -668,12 +1042,19 @@ export function SidebarV2() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchRounded fontSize="small" sx={{ color: "text.secondary" }} />
+                <SearchRounded
+                  fontSize="small"
+                  sx={{ color: "text.secondary" }}
+                />
               </InputAdornment>
             ),
             endAdornment: search ? (
               <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearch("")} aria-label={t("nav.clearSearch", "Clear search")}>
+                <IconButton
+                  size="small"
+                  onClick={() => setSearch("")}
+                  aria-label={t("nav.clearSearch", "Clear search")}
+                >
                   <CloseRounded fontSize="small" />
                 </IconButton>
               </InputAdornment>
@@ -686,148 +1067,325 @@ export function SidebarV2() {
 
       {/* Scrollable content area */}
       <Box sx={{ flex: 1, overflowY: "auto", pb: 1 }}>
-      {q ? (
-        /* SEARCH RESULTS — flat filtered list across all destinations */
-        <List dense sx={{ px: 1 }}>
-          {allNavigable.filter((item) => matchesSearch(item.label)).length === 0 ? (
-            <Typography variant="body2" sx={{ px: 2, py: 2, color: "text.secondary", textAlign: "center" }}>
-              {t("nav.noResults", "No matching pages")}
-            </Typography>
-          ) : (
-            allNavigable
-              .filter((item) => matchesSearch(item.label))
-              .map((item) => renderNavItem(item))
-          )}
-        </List>
-      ) : (
-        <>
-          {/* Starred / pinned section */}
-          {starredItems.length > 0 && (
-            <>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ...sectionHeaderSx }}>
-                <StarRounded sx={{ fontSize: "1em" }} />
-                <Typography variant="body2" component="span" sx={{ fontWeight: "bold", fontSize: "1em", textTransform: "uppercase" }}>
-                  {t("nav.pinned", "Pinned")}
-                </Typography>
-              </Box>
-              <List dense sx={{ px: 1 }}>
-                {starredItems.map((item) => renderNavItem(item))}
-              </List>
-              <Divider sx={{ mx: 2, my: 0.5 }} />
-            </>
-          )}
-
-          {/* Context-specific items — grouped by subsection */}
+        {q ? (
+          /* SEARCH RESULTS — flat filtered list across all destinations */
           <List dense sx={{ px: 1 }}>
-            {contextItems.map((item, i) => {
-              const showGroup = item.group && item.group !== contextItems[i - 1]?.group
-              return (
-                <React.Fragment key={item.to}>
-                  {showGroup && (
-                    <Typography variant="body2" sx={{ ...sectionHeaderSx, px: 1 }}>
-                      {item.group}
-                    </Typography>
-                  )}
-                  {renderNavItem(item)}
-                </React.Fragment>
-              )
-            })}
+            {allNavigable.filter((item) => matchesSearch(item.label)).length ===
+            0 ? (
+              <Typography
+                variant="body2"
+                sx={{
+                  px: 2,
+                  py: 2,
+                  color: "text.secondary",
+                  textAlign: "center",
+                }}
+              >
+                {t("nav.noResults", "No matching pages")}
+              </Typography>
+            ) : (
+              allNavigable
+                .filter((item) => matchesSearch(item.label))
+                .map((item) => renderNavItem(item))
+            )}
           </List>
+        ) : (
+          <>
+            {/* Starred / pinned section */}
+            {starredItems.length > 0 && (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    ...sectionHeaderSx,
+                  }}
+                >
+                  <StarRounded sx={{ fontSize: "1em" }} />
+                  <Typography
+                    variant="body2"
+                    component="span"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {t("nav.pinned", "Pinned")}
+                  </Typography>
+                </Box>
+                <List dense sx={{ px: 1 }}>
+                  {starredItems.map((item) => renderNavItem(item))}
+                </List>
+                <Divider sx={{ mx: 2, my: 0.5 }} />
+              </>
+            )}
 
-          {/* Browse section (only in browse mode) */}
-          {context === "browse" && (
-            <>
-              <Typography variant="body2" sx={sectionHeaderSx}>
-                {t("nav.groupBrowse", "Browse")}
-              </Typography>
-              <List dense sx={{ px: 1 }}>
-                {[
-                  { label: t("nav.shops", "Shops"), to: MARKET_PATHS.shops, icon: <StorefrontRounded /> },
-                  { label: t("nav.orgs", "Organizations"), to: PATHS.contractors, icon: <BusinessRounded />, whiteLabelKey: "contractors" },
-                  { label: t("nav.recruiting", "Recruiting"), to: PATHS.recruiting, icon: <PersonAddRounded />, whiteLabelKey: "recruiting" },
-                ]
-                  .filter(shownOnWhiteLabel)
-                  .map((item) => renderNavItem(item))}
-              </List>
-            </>
-          )}
+            {/* Context-specific items — grouped by subsection */}
+            <List dense sx={{ px: 1 }}>
+              {contextItems.map((item, i) => {
+                const showGroup =
+                  item.group && item.group !== contextItems[i - 1]?.group
+                return (
+                  <React.Fragment key={item.to}>
+                    {showGroup && (
+                      <Typography
+                        variant="body2"
+                        sx={{ ...sectionHeaderSx, px: 1 }}
+                      >
+                        {item.group}
+                      </Typography>
+                    )}
+                    {renderNavItem(item)}
+                  </React.Fragment>
+                )
+              })}
+            </List>
 
-          {/* A white-label org's own links (Sidebar Tabs › Custom Tabs) */}
-          {context === "browse" && whiteLabel.customTabs.length > 0 && (
-            <>
-              <Divider sx={{ mx: 2, my: 0.5 }} />
-              <Typography variant="body2" sx={sectionHeaderSx}>
-                {whiteLabelBrand?.name || t("nav.groupLinks", "Links")}
-              </Typography>
-              <List dense sx={{ px: 1 }}>
-                {whiteLabel.customTabs.map((tab) => {
-                  const path = tab.custom_path!
-                  const external = path.startsWith("https://")
-                  return (
-                    <ListItemButton
-                      key={`${tab.sort_order}-${path}`}
-                      {...(external
-                        ? { component: "a", href: path, target: "_blank", rel: "noopener noreferrer" }
-                        : { component: Link, to: path, selected: isActive(path), onClick: closeIfMobile })}
-                      sx={itemSx}
-                    >
-                      <ListItemIcon sx={{ minWidth: 36 }}>{whiteLabelTabIcon(tab.custom_icon)}</ListItemIcon>
-                      <ListItemText primary={tab.custom_label || path} primaryTypographyProps={{ variant: "subtitle2", noWrap: true }} />
-                      {external && <OpenInNewRounded fontSize="small" sx={{ opacity: 0.6 }} />}
-                    </ListItemButton>
-                  )
-                })}
-              </List>
-            </>
-          )}
+            {/* Browse section (only in browse mode) */}
+            {context === "browse" && (
+              <>
+                <Typography variant="body2" sx={sectionHeaderSx}>
+                  {t("nav.groupBrowse", "Browse")}
+                </Typography>
+                <List dense sx={{ px: 1 }}>
+                  {[
+                    {
+                      label: t("nav.shops", "Shops"),
+                      to: MARKET_PATHS.shops,
+                      icon: <StorefrontRounded />,
+                    },
+                    {
+                      label: t("nav.orgs", "Organizations"),
+                      to: PATHS.contractors,
+                      icon: <BusinessRounded />,
+                      whiteLabelKey: "contractors",
+                    },
+                    {
+                      label: t("nav.recruiting", "Recruiting"),
+                      to: PATHS.recruiting,
+                      icon: <PersonAddRounded />,
+                      whiteLabelKey: "recruiting",
+                    },
+                  ]
+                    .filter(shownOnWhiteLabel)
+                    .map((item) => renderNavItem(item))}
+                </List>
+              </>
+            )}
 
-          {/* Game Data section — browse mode only */}
-          {context === "browse" && (
-            <>
-              <Divider sx={{ mx: 2, my: 0.5 }} />
-              <Typography variant="body2" sx={sectionHeaderSx}>
-                {t("sidebar.gameData.title", "Game Data")}
-              </Typography>
-              <List dense sx={{ px: 1 }}>
-                {renderNavItem({ label: t("sidebar.gameData.missions", "Missions"), to: GAME_DATA_PATHS.missions, icon: <DescriptionRounded /> })}
-                {renderNavItem({ label: t("sidebar.gameData.mining", "Mining"), to: GAME_DATA_PATHS.mining, icon: <InventoryRounded /> })}
+            {/* A white-label org's own links (Sidebar Tabs › Custom Tabs) */}
+            {context === "browse" && whiteLabel.customTabs.length > 0 && (
+              <>
+                <Divider sx={{ mx: 2, my: 0.5 }} />
+                <Typography variant="body2" sx={sectionHeaderSx}>
+                  {whiteLabelBrand?.name || t("nav.groupLinks", "Links")}
+                </Typography>
+                <List dense sx={{ px: 1 }}>
+                  {whiteLabel.customTabs.map((tab) => {
+                    const path = tab.custom_path!
+                    const external = path.startsWith("https://")
+                    return (
+                      <ListItemButton
+                        key={`${tab.sort_order}-${path}`}
+                        {...(external
+                          ? {
+                              component: "a",
+                              href: path,
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                            }
+                          : {
+                              component: Link,
+                              to: path,
+                              selected: isActive(path),
+                              onClick: closeIfMobile,
+                            })}
+                        sx={itemSx}
+                      >
+                        <ListItemIcon sx={{ minWidth: 36 }}>
+                          {whiteLabelTabIcon(tab.custom_icon)}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={tab.custom_label || path}
+                          primaryTypographyProps={{
+                            variant: "subtitle2",
+                            noWrap: true,
+                          }}
+                        />
+                        {external && (
+                          <OpenInNewRounded
+                            fontSize="small"
+                            sx={{ opacity: 0.6 }}
+                          />
+                        )}
+                      </ListItemButton>
+                    )
+                  })}
+                </List>
+              </>
+            )}
 
-                {/* Crafting — collapsible */}
-                <ListItemButton sx={itemSx} onClick={() => setCraftingOpen((v) => !v)}>
-                  <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
-                  <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "subtitle2" }} />
-                  {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-                </ListItemButton>
-                <Collapse in={craftingOpen}>
-                  <List dense disablePadding sx={{ pl: 2 }}>
-                    {renderNavItem({ label: t("sidebar.gameData.blueprints", "Blueprints"), to: GAME_DATA_PATHS.blueprints, icon: <ScienceRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: GAME_DATA_PATHS.craftingCalculator, icon: <CalculateRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.gameData.resources", "Resources"), to: GAME_DATA_PATHS.resources, icon: <InventoryRounded /> }, true)}
-                    {profile && renderNavItem({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: PATHS.shoppingLists, icon: <ShoppingCartRounded /> }, true)}
-                  </List>
-                </Collapse>
+            {/* Game Data section — browse mode only */}
+            {context === "browse" && (
+              <>
+                <Divider sx={{ mx: 2, my: 0.5 }} />
+                <Typography variant="body2" sx={sectionHeaderSx}>
+                  {t("sidebar.gameData.title", "Game Data")}
+                </Typography>
+                <List dense sx={{ px: 1 }}>
+                  {renderNavItem({
+                    label: t("sidebar.gameData.missions", "Missions"),
+                    to: GAME_DATA_PATHS.missions,
+                    icon: <DescriptionRounded />,
+                  })}
+                  {renderNavItem({
+                    label: t("sidebar.gameData.mining", "Mining"),
+                    to: GAME_DATA_PATHS.mining,
+                    icon: <InventoryRounded />,
+                  })}
 
-                {/* Wiki — collapsible */}
-                <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
-                  <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
-                  <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
-                  {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-                </ListItemButton>
-                <Collapse in={wikiOpen}>
-                  <List dense disablePadding sx={{ pl: 2 }}>
-                    {renderNavItem({ label: t("sidebar.wiki.items", "Items"), to: WIKI_PATHS.items, icon: <MenuBookRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: WIKI_PATHS.ships, icon: <RocketLaunchRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.wiki.commodities", "Commodities"), to: WIKI_PATHS.commodities, icon: <InventoryRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.wiki.locations", "Locations"), to: WIKI_PATHS.locations, icon: <DescriptionRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: WIKI_PATHS.manufacturers, icon: <StorefrontRounded /> }, true)}
-                    {renderNavItem({ label: t("sidebar.wiki.refinery", "Refinery"), to: WIKI_PATHS.refinery, icon: <ScienceRounded /> }, true)}
-                  </List>
-                </Collapse>
-              </List>
-            </>
-          )}
-        </>
-      )}
+                  {/* Crafting — collapsible */}
+                  <ListItemButton
+                    sx={itemSx}
+                    onClick={() => setCraftingOpen((v) => !v)}
+                  >
+                    <ListItemIcon sx={{ minWidth: 36 }}>
+                      <ScienceRounded />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={t("sidebar.gameData.crafting", "Crafting")}
+                      primaryTypographyProps={{ variant: "subtitle2" }}
+                    />
+                    {craftingOpen ? (
+                      <ExpandLessRounded fontSize="small" />
+                    ) : (
+                      <ExpandMoreRounded fontSize="small" />
+                    )}
+                  </ListItemButton>
+                  <Collapse in={craftingOpen}>
+                    <List dense disablePadding sx={{ pl: 2 }}>
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.gameData.blueprints", "Blueprints"),
+                          to: GAME_DATA_PATHS.blueprints,
+                          icon: <ScienceRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t(
+                            "sidebar.gameData.craftingCalculator",
+                            "Crafting Calculator",
+                          ),
+                          to: GAME_DATA_PATHS.craftingCalculator,
+                          icon: <CalculateRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.gameData.resources", "Resources"),
+                          to: GAME_DATA_PATHS.resources,
+                          icon: <InventoryRounded />,
+                        },
+                        true,
+                      )}
+                      {profile &&
+                        renderNavItem(
+                          {
+                            label: t(
+                              "sidebar.gameData.shoppingLists",
+                              "Shopping Lists",
+                            ),
+                            to: PATHS.shoppingLists,
+                            icon: <ShoppingCartRounded />,
+                          },
+                          true,
+                        )}
+                    </List>
+                  </Collapse>
+
+                  {/* Wiki — collapsible */}
+                  <ListItemButton
+                    sx={itemSx}
+                    onClick={() => setWikiOpen((v) => !v)}
+                  >
+                    <ListItemIcon sx={{ minWidth: 36 }}>
+                      <MenuBookRounded />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={t("sidebar.wiki.title", "Wiki")}
+                      primaryTypographyProps={{ variant: "subtitle2" }}
+                    />
+                    {wikiOpen ? (
+                      <ExpandLessRounded fontSize="small" />
+                    ) : (
+                      <ExpandMoreRounded fontSize="small" />
+                    )}
+                  </ListItemButton>
+                  <Collapse in={wikiOpen}>
+                    <List dense disablePadding sx={{ pl: 2 }}>
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.wiki.items", "Items"),
+                          to: WIKI_PATHS.items,
+                          icon: <MenuBookRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.wiki.vehicles", "Ships & Vehicles"),
+                          to: WIKI_PATHS.ships,
+                          icon: <RocketLaunchRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.wiki.commodities", "Commodities"),
+                          to: WIKI_PATHS.commodities,
+                          icon: <InventoryRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.wiki.locations", "Locations"),
+                          to: WIKI_PATHS.locations,
+                          icon: <DescriptionRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t(
+                            "sidebar.wiki.manufacturers",
+                            "Manufacturers",
+                          ),
+                          to: WIKI_PATHS.manufacturers,
+                          icon: <StorefrontRounded />,
+                        },
+                        true,
+                      )}
+                      {renderNavItem(
+                        {
+                          label: t("sidebar.wiki.refinery", "Refinery"),
+                          to: WIKI_PATHS.refinery,
+                          icon: <ScienceRounded />,
+                        },
+                        true,
+                      )}
+                    </List>
+                  </Collapse>
+                </List>
+              </>
+            )}
+          </>
+        )}
       </Box>
 
       {/* Sticky bottom block. Settings requires an account, so it only shows
@@ -838,19 +1396,46 @@ export function SidebarV2() {
         <Divider sx={{ mx: 2 }} />
         <List dense sx={{ px: 1, py: 0.5 }}>
           {profile && (
-            <ListItemButton component={Link} to={PATHS.settings} selected={isActive(PATHS.settings)} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
-              <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "subtitle2" }} />
+            <ListItemButton
+              component={Link}
+              to={PATHS.settings}
+              selected={isActive(PATHS.settings)}
+              sx={itemSx}
+              onClick={() => isMobile && setDrawerOpen(false)}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}>
+                <SettingsRounded />
+              </ListItemIcon>
+              <ListItemText
+                primary={t("nav.settings", "Settings")}
+                primaryTypographyProps={{ variant: "subtitle2" }}
+              />
             </ListItemButton>
           )}
           <ListItemButton
             {...(isOfficialSite()
-              ? { component: Link, to: HELP_PATHS.hub, selected: isActive(HELP_PATHS.hub) || isActive(HELP_PATHS.about), onClick: closeIfMobile }
-              : { component: "a", href: officialHelpUrl(HELP_PATHS.hub), target: "_blank", rel: "noopener" })}
+              ? {
+                  component: Link,
+                  to: HELP_PATHS.hub,
+                  selected:
+                    isActive(HELP_PATHS.hub) || isActive(HELP_PATHS.about),
+                  onClick: closeIfMobile,
+                }
+              : {
+                  component: "a",
+                  href: officialHelpUrl(HELP_PATHS.hub),
+                  target: "_blank",
+                  rel: "noopener",
+                })}
             sx={itemSx}
           >
-            <ListItemIcon sx={{ minWidth: 36 }}><HelpOutlineRounded /></ListItemIcon>
-            <ListItemText primary={t("nav.helpGuides", "Help & Guides")} primaryTypographyProps={{ variant: "subtitle2" }} />
+            <ListItemIcon sx={{ minWidth: 36 }}>
+              <HelpOutlineRounded />
+            </ListItemIcon>
+            <ListItemText
+              primary={t("nav.helpGuides", "Help & Guides")}
+              primaryTypographyProps={{ variant: "subtitle2" }}
+            />
           </ListItemButton>
         </List>
       </Box>
@@ -904,7 +1489,14 @@ export function SidebarV2() {
           <Box
             component={Link}
             to={PATHS.home}
-            sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit", minWidth: 0 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              textDecoration: "none",
+              color: "inherit",
+              minWidth: 0,
+            }}
             data-testid="sidebar-org-brand"
           >
             <Avatar
@@ -917,7 +1509,12 @@ export function SidebarV2() {
               <Typography fontWeight={600} color="text.secondary" noWrap>
                 {whiteLabelBrand.name}
               </Typography>
-              <Typography variant="caption" color="text.primary" noWrap component="div">
+              <Typography
+                variant="caption"
+                color="text.primary"
+                noWrap
+                component="div"
+              >
                 {t("storefront.onScMarket", "Storefront on SC Market")}
               </Typography>
             </Box>
@@ -926,7 +1523,13 @@ export function SidebarV2() {
           <Box
             component={Link}
             to={PATHS.home}
-            sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              textDecoration: "none",
+              color: "inherit",
+            }}
           >
             {/* Decorative: the link's text says "SC Market". The hashed webp
                 (13 KB, also the home hero's logo) instead of the 512px PNG. */}

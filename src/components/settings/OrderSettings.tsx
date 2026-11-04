@@ -26,18 +26,46 @@ interface OrderSettingsProps {
 export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   const { t } = useTranslation()
   const {
-    isLoading, userError, contractorError,
-    offerMessage, setOfferMessage, offerEnabled, setOfferEnabled,
-    orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
-    requireAvailabilityEnabled, setRequireAvailabilityEnabled,
-    minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
-    maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
-    minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
-    maxOrderValue, setMaxOrderValue, maxOrderValueEnabled, setMaxOrderValueEnabled,
-    saving, error, success,
-    handleSave, handleDelete,
-    offerSettingId, orderSettingId,
-    minOrderSizeSettingId, maxOrderSizeSettingId, minOrderValueSettingId, maxOrderValueSettingId,
+    isLoading,
+    userError,
+    contractorError,
+    offerMessage,
+    setOfferMessage,
+    offerEnabled,
+    setOfferEnabled,
+    orderMessage,
+    setOrderMessage,
+    orderEnabled,
+    setOrderEnabled,
+    requireAvailabilityEnabled,
+    setRequireAvailabilityEnabled,
+    minOrderSize,
+    setMinOrderSize,
+    minOrderSizeEnabled,
+    setMinOrderSizeEnabled,
+    maxOrderSize,
+    setMaxOrderSize,
+    maxOrderSizeEnabled,
+    setMaxOrderSizeEnabled,
+    minOrderValue,
+    setMinOrderValue,
+    minOrderValueEnabled,
+    setMinOrderValueEnabled,
+    maxOrderValue,
+    setMaxOrderValue,
+    maxOrderValueEnabled,
+    setMaxOrderValueEnabled,
+    saving,
+    error,
+    success,
+    handleSave,
+    handleDelete,
+    offerSettingId,
+    orderSettingId,
+    minOrderSizeSettingId,
+    maxOrderSizeSettingId,
+    minOrderValueSettingId,
+    maxOrderValueSettingId,
   } = useOrderSettings(entityType, entityId)
   if (isLoading) {
     return (
@@ -328,7 +356,9 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 disabled={saving || !minOrderSizeEnabled}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">{t("settingsUi.itemsUnit")}</InputAdornment>
+                    <InputAdornment position="end">
+                      {t("settingsUi.itemsUnit")}
+                    </InputAdornment>
                   ),
                 }}
                 helperText={t(
@@ -381,7 +411,9 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 disabled={saving || !maxOrderSizeEnabled}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">{t("settingsUi.itemsUnit")}</InputAdornment>
+                    <InputAdornment position="end">
+                      {t("settingsUi.itemsUnit")}
+                    </InputAdornment>
                   ),
                 }}
                 helperText={t(

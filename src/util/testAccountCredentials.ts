@@ -18,10 +18,16 @@ export interface TestAccountCredential {
 
 export type CredentialsFile = Record<string, TestAccountCredential>
 
-export function credentialsFile(accounts: TestAccountCredential[]): CredentialsFile {
+export function credentialsFile(
+  accounts: TestAccountCredential[],
+): CredentialsFile {
   const file: CredentialsFile = {}
   for (const a of accounts) {
-    file[a.username] = { username: a.username, secret: a.secret, otpauth_uri: a.otpauth_uri }
+    file[a.username] = {
+      username: a.username,
+      secret: a.secret,
+      otpauth_uri: a.otpauth_uri,
+    }
   }
   return file
 }
@@ -31,8 +37,13 @@ export function credentialsJson(accounts: TestAccountCredential[]): string {
 }
 
 /** Save `json` through a Blob URL that is revoked right after the click. */
-export function downloadJson(json: string, filename: string = CREDENTIALS_FILENAME): void {
-  const url = URL.createObjectURL(new Blob([json], { type: "application/json" }))
+export function downloadJson(
+  json: string,
+  filename: string = CREDENTIALS_FILENAME,
+): void {
+  const url = URL.createObjectURL(
+    new Blob([json], { type: "application/json" }),
+  )
   try {
     const a = document.createElement("a")
     a.href = url

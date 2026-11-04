@@ -107,8 +107,8 @@ function FeedbackGroup({
         <Box component="ul" sx={{ mt: 1, mb: 0, pl: 2.5 }}>
           {group.texts.map((x, i) => (
             <Typography component="li" variant="body2" key={i}>
-              {fmt.date(x.created_at)} ·{" "}
-              {x.display_name} · {fieldLabel(x.field)}: {x.text}
+              {fmt.date(x.created_at)} · {x.display_name} ·{" "}
+              {fieldLabel(x.field)}: {x.text}
             </Typography>
           ))}
         </Box>

@@ -168,11 +168,13 @@ export function LotListItemV2({
               <Stack direction="row" spacing={0.5} alignItems="center">
                 {/* Allocated units are already out of quantity_total */}
                 <Typography variant="caption" color="success.main">
-                  {fmt.number(lot.quantity_total)} {t("LotListItemV2.available", "available")}
+                  {fmt.number(lot.quantity_total)}{" "}
+                  {t("LotListItemV2.available", "available")}
                 </Typography>
                 {(lot.quantity_allocated || 0) > 0 && (
                   <Typography variant="caption" color="warning.main">
-                    · {fmt.number(lot.quantity_allocated)} {t("LotListItemV2.reserved", "reserved")}
+                    · {fmt.number(lot.quantity_allocated)}{" "}
+                    {t("LotListItemV2.reserved", "reserved")}
                   </Typography>
                 )}
               </Stack>
@@ -323,9 +325,7 @@ export function LotListItemV2({
           <Typography variant="body2" color="text.secondary">
             <strong>{t("LotListItemV2.craftedBy", "Crafted By")}:</strong>{" "}
             {lot.crafted_by}
-            {lot.crafted_at && (
-              <> ({fmt.date(new Date(lot.crafted_at))})</>
-            )}
+            {lot.crafted_at && <> ({fmt.date(new Date(lot.crafted_at))})</>}
           </Typography>
         )}
 

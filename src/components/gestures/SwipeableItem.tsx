@@ -1,9 +1,6 @@
 import React, { useState, useRef, useCallback, ReactNode } from "react"
 import { Box, IconButton } from "@mui/material"
-import {
-  DeleteRounded,
-  FavoriteRounded,
-} from "@mui/icons-material"
+import { DeleteRounded, FavoriteRounded } from "@mui/icons-material"
 import { useHapticFeedback } from "../../hooks/gestures/useHapticFeedback"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -182,7 +179,8 @@ export function SwipeableItem({
   // Default actions
   const defaultLeftAction =
     showDefaultActions && onSwipeRight ? (
-      <IconButton aria-label={t("gestures.favorite", "Favorite")}
+      <IconButton
+        aria-label={t("gestures.favorite", "Favorite")}
         onClick={(e) => {
           e.stopPropagation()
           onSwipeRight()
@@ -201,7 +199,8 @@ export function SwipeableItem({
 
   const defaultRightAction =
     showDefaultActions && onSwipeLeft ? (
-      <IconButton aria-label={t("gestures.swipeLeftAction", "Delete")}
+      <IconButton
+        aria-label={t("gestures.swipeLeftAction", "Delete")}
         onClick={(e) => {
           e.stopPropagation()
           onSwipeLeft()

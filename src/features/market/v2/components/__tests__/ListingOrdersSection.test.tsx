@@ -19,7 +19,13 @@ vi.mock("../../../../../hooks/login/useSession", () => ({
 }))
 
 vi.mock("../../../../../components/paper/Section", () => ({
-  Section: ({ title, children }: { title: string; children: React.ReactNode }) => (
+  Section: ({
+    title,
+    children,
+  }: {
+    title: string
+    children: React.ReactNode
+  }) => (
     <section>
       <h2>{title}</h2>
       {children}
@@ -36,7 +42,9 @@ const ordersQuery = vi.mocked(marketApi.useGetOrdersByListingQuery)
 const myShopsQuery = vi.mocked(marketApi.useGetMyShopsQuery)
 const isAuthenticated = vi.mocked(session.useIsAuthenticated)
 
-type MyShops = NonNullable<ReturnType<typeof marketApi.useGetMyShopsQuery>["data"]>
+type MyShops = NonNullable<
+  ReturnType<typeof marketApi.useGetMyShopsQuery>["data"]
+>
 
 function shop(shopId: string, canManage: boolean): MyShops[number] {
   return {
@@ -87,7 +95,9 @@ describe("ListingOrdersSection", () => {
 
   it("never requests orders (or my shops) for an anonymous visitor", () => {
     isAuthenticated.mockReturnValue(false)
-    myShopsQuery.mockReturnValue({ data: undefined } as unknown as ReturnType<typeof marketApi.useGetMyShopsQuery>)
+    myShopsQuery.mockReturnValue({ data: undefined } as unknown as ReturnType<
+      typeof marketApi.useGetMyShopsQuery
+    >)
 
     renderSection()
 

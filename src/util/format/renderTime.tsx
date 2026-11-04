@@ -36,7 +36,9 @@ export function RenderTimeProvider({
   children: ReactNode
 }) {
   return (
-    <RenderTimeContext.Provider value={now}>{children}</RenderTimeContext.Provider>
+    <RenderTimeContext.Provider value={now}>
+      {children}
+    </RenderTimeContext.Provider>
   )
 }
 

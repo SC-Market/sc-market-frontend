@@ -79,7 +79,9 @@ export function emptyListingDraft(): ListingDraft {
 }
 
 /** Items sold by volume (commodities) are counted in SCU, the rest in units. */
-export function quantityUnitFor(itemType: string | null | undefined): "unit" | "scu" {
+export function quantityUnitFor(
+  itemType: string | null | undefined,
+): "unit" | "scu" {
   return itemType === "Commodity" ? "scu" : "unit"
 }
 
@@ -99,7 +101,9 @@ export type ListingDraftIssue =
   | { code: "auctionEndTimeRequired" }
 
 /** The first problem with a draft, or null when it can be sent. */
-export function validateListingDraft(draft: ListingDraft): ListingDraftIssue | null {
+export function validateListingDraft(
+  draft: ListingDraft,
+): ListingDraftIssue | null {
   if (!draft.gameItemId) return { code: "gameItemRequired" }
   if (!draft.title.trim()) return { code: "titleRequired" }
   if (draft.title.length > LISTING_TITLE_MAX) return { code: "titleTooLong" }
@@ -110,10 +114,16 @@ export function validateListingDraft(draft: ListingDraft): ListingDraftIssue | n
   for (let index = 0; index < draft.lots.length; index++) {
     const lot = draft.lots[index]
     if (!(lot.quantity > 0)) return { code: "quantityRequired", index }
-    if (lot.quality_tier !== undefined && (lot.quality_tier < 1 || lot.quality_tier > 5)) {
+    if (
+      lot.quality_tier !== undefined &&
+      (lot.quality_tier < 1 || lot.quality_tier > 5)
+    ) {
       return { code: "qualityTierRange", index }
     }
-    if (lot.quality_value !== undefined && (lot.quality_value < 0 || lot.quality_value > 1000)) {
+    if (
+      lot.quality_value !== undefined &&
+      (lot.quality_value < 0 || lot.quality_value > 1000)
+    ) {
       return { code: "qualityValueRange", index }
     }
     if (draft.pricingMode === "per_variant" && !(lot.price && lot.price > 0)) {
@@ -127,7 +137,9 @@ export function validateListingDraft(draft: ListingDraft): ListingDraftIssue | n
 }
 
 /** The form field an issue is about. The first lot's quantity is the Quantity field. */
-export function listingDraftIssueField(issue: ListingDraftIssue): ListingFormField {
+export function listingDraftIssueField(
+  issue: ListingDraftIssue,
+): ListingFormField {
   switch (issue.code) {
     case "gameItemRequired":
       return "game_item_id"
@@ -146,35 +158,63 @@ export function listingDraftIssueField(issue: ListingDraftIssue): ListingFormFie
 }
 
 /** The message for an issue, pointed at its field. */
-export function listingDraftIssueError(issue: ListingDraftIssue, t: TFunction): ListingFormError {
+export function listingDraftIssueError(
+  issue: ListingDraftIssue,
+  t: TFunction,
+): ListingFormError {
   const field = listingDraftIssueField(issue)
   const index = "index" in issue ? issue.index + 1 : undefined
   switch (issue.code) {
     case "gameItemRequired":
-      return { field, message: t("CreateListingV2.validation.gameItemRequired", "Game item is required") }
+      return {
+        field,
+        message: t(
+          "CreateListingV2.validation.gameItemRequired",
+          "Game item is required",
+        ),
+      }
     case "titleRequired":
-      return { field, message: t("CreateListingV2.validation.titleRequired", "Title is required") }
+      return {
+        field,
+        message: t(
+          "CreateListingV2.validation.titleRequired",
+          "Title is required",
+        ),
+      }
     case "titleTooLong":
       return {
         field,
-        message: t("CreateListingV2.validation.titleTooLong", "Title must be 500 characters or less"),
+        message: t(
+          "CreateListingV2.validation.titleTooLong",
+          "Title must be 500 characters or less",
+        ),
       }
     case "basePriceRequired":
       return {
         field,
-        message: t("CreateListingV2.validation.basePriceRequired", "Base price must be greater than 0"),
+        message: t(
+          "CreateListingV2.validation.basePriceRequired",
+          "Base price must be greater than 0",
+        ),
       }
     case "stockLotRequired":
       return {
         field,
-        message: t("CreateListingV2.validation.stockLotRequired", "At least one stock lot is required"),
+        message: t(
+          "CreateListingV2.validation.stockLotRequired",
+          "At least one stock lot is required",
+        ),
       }
     case "quantityRequired":
       return {
         field,
-        message: t("CreateListingV2.validation.quantityRequired", "Quantity must be greater than 0 for lot {{index}}", {
-          index,
-        }),
+        message: t(
+          "CreateListingV2.validation.quantityRequired",
+          "Quantity must be greater than 0 for lot {{index}}",
+          {
+            index,
+          },
+        ),
       }
     case "qualityTierRange":
       return {
@@ -206,16 +246,25 @@ export function listingDraftIssueError(issue: ListingDraftIssue, t: TFunction): 
     case "auctionEndTimeRequired":
       return {
         field,
-        message: t("CreateListingV2.validation.auctionEndTimeRequired", "Auction end time is required"),
+        message: t(
+          "CreateListingV2.validation.auctionEndTimeRequired",
+          "Auction end time is required",
+        ),
       }
   }
 }
 
-function lotInput(lot: ListingLotDraft, pricingMode: ListingDraft["pricingMode"]): StockLotInput {
+function lotInput(
+  lot: ListingLotDraft,
+  pricingMode: ListingDraft["pricingMode"],
+): StockLotInput {
   const variant_attributes: VariantAttributes = {}
-  if (lot.quality_tier !== undefined) variant_attributes.quality_tier = lot.quality_tier
-  if (lot.quality_value !== undefined) variant_attributes.quality_value = lot.quality_value
-  if (lot.crafted_source !== undefined) variant_attributes.crafted_source = lot.crafted_source
+  if (lot.quality_tier !== undefined)
+    variant_attributes.quality_tier = lot.quality_tier
+  if (lot.quality_value !== undefined)
+    variant_attributes.quality_value = lot.quality_value
+  if (lot.crafted_source !== undefined)
+    variant_attributes.crafted_source = lot.crafted_source
   return {
     quantity: lot.quantity,
     variant_attributes,
@@ -246,7 +295,9 @@ export function buildCreateListingRequest(
     max_order_quantity: draft.maxOrderQuantity ?? undefined,
     min_order_value: draft.minOrderValue ?? undefined,
     max_order_value: draft.maxOrderValue ?? undefined,
-    bulk_discount_tiers: draft.bulkDiscountTiers.length ? draft.bulkDiscountTiers : undefined,
+    bulk_discount_tiers: draft.bulkDiscountTiers.length
+      ? draft.bulkDiscountTiers
+      : undefined,
     shop_id: shop.shop_id,
     visibility: shop.is_org_owned ? draft.visibility : undefined,
     sale_type: draft.saleType,
@@ -259,7 +310,9 @@ export function buildCreateListingRequest(
             reserve_price: draft.reservePrice ?? undefined,
           }
         : undefined,
-    photo_resource_ids: draft.photoResourceIds.length > 0 ? draft.photoResourceIds : undefined,
-    external_photo_urls: draft.externalPhotoUrls.length > 0 ? draft.externalPhotoUrls : undefined,
+    photo_resource_ids:
+      draft.photoResourceIds.length > 0 ? draft.photoResourceIds : undefined,
+    external_photo_urls:
+      draft.externalPhotoUrls.length > 0 ? draft.externalPhotoUrls : undefined,
   }
 }

@@ -33,9 +33,7 @@ import {
   type MyListingItem,
   type UpdateListingRequest,
 } from "../../../../store/api/v2/market"
-import {
-  SelectPhotosArea,
-} from "../../../../components/modal/SelectPhotosArea"
+import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
@@ -251,7 +249,11 @@ export function QuickEditListingSheet({
           <Typography variant="body2" fontWeight={500} sx={{ mb: 0.5 }}>
             {t("quickEdit.photos", "Add Photos")}
           </Typography>
-          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 1 }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: "block", mb: 1 }}
+          >
             {t(
               "quickEdit.photosHelp",
               "New photos are added to this listing. Use the full editor to remove or reorder existing photos.",
@@ -270,7 +272,11 @@ export function QuickEditListingSheet({
         {/* Read-only info tiles */}
         <Stack direction="row" spacing={1}>
           <Box sx={tileSx}>
-            <Typography variant="caption" color="text.secondary" display="block">
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+            >
               {t("quickEdit.quantity", "Quantity")}
             </Typography>
             <Typography variant="body2" fontWeight={500}>
@@ -279,7 +285,11 @@ export function QuickEditListingSheet({
           </Box>
           {qualityLabel && (
             <Box sx={tileSx}>
-              <Typography variant="caption" color="text.secondary" display="block">
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+              >
                 {t("quickEdit.quality", "Quality")}
               </Typography>
               <Typography variant="body2" fontWeight={500}>
@@ -288,7 +298,11 @@ export function QuickEditListingSheet({
             </Box>
           )}
           <Box sx={tileSx}>
-            <Typography variant="caption" color="text.secondary" display="block">
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+            >
               {t("quickEdit.variants", "Variants")}
             </Typography>
             <Typography variant="body2" fontWeight={500}>

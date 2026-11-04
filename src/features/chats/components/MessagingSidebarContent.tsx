@@ -411,7 +411,10 @@ export function MessagingSidebarContent(
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton aria-label={t("MessagingSidebar.search", "Search messages")} size={isMobile ? "small" : "medium"}>
+                <IconButton
+                  aria-label={t("MessagingSidebar.search", "Search messages")}
+                  size={isMobile ? "small" : "medium"}
+                >
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

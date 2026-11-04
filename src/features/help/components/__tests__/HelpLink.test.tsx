@@ -31,6 +31,8 @@ describe("HelpLink", () => {
     site.official = false
     render(<HelpLink guide="webhooks">Webhook guide</HelpLink>)
     const link = screen.getByRole("link", { name: /Webhook guide/ })
-    expect(link.getAttribute("href")).toBe("https://sc-market.space/guides/discord/webhooks")
+    expect(link.getAttribute("href")).toBe(
+      "https://sc-market.space/guides/discord/webhooks",
+    )
   })
 })

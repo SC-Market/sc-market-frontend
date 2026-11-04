@@ -16,32 +16,94 @@
     />
     <meta property="og:url" content="https://sc-market.space/developers" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://sc-market.space/homepage-preview.webp" />
+    <meta
+      property="og:image"
+      content="https://sc-market.space/homepage-preview.webp"
+    />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="service-desc" type="application/json" href="https://api.sc-market.space/api/public/v1/openapi.json" />
+    <link
+      rel="service-desc"
+      type="application/json"
+      href="https://api.sc-market.space/api/public/v1/openapi.json"
+    />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "SC Market", "item": "https://sc-market.space/" },
-          { "@type": "ListItem", "position": 2, "name": "Developers", "item": "https://sc-market.space/developers" }
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "SC Market",
+            "item": "https://sc-market.space/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Developers",
+            "item": "https://sc-market.space/developers"
+          }
         ]
       }
     </script>
     <style>
-      body { margin: 0; background: #0b0f17; color: #c9d1d9; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      main { max-width: 760px; margin: 0 auto; padding: 48px 20px 64px; }
-      h1, h2 { color: #fff; line-height: 1.25; }
-      h1 { font-size: 2rem; margin: 0 0 12px; }
-      h2 { font-size: 1.25rem; margin: 36px 0 8px; }
-      a { color: #6cb6ff; }
-      code { background: #161b22; padding: 1px 6px; border-radius: 4px; font-size: 0.92em; }
-      pre { background: #161b22; padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
-      ul { padding-left: 1.2em; }
-      nav.top { margin-bottom: 28px; font-size: 0.95rem; }
-      footer { margin-top: 48px; font-size: 0.85rem; color: #8b949e; }
+      body {
+        margin: 0;
+        background: #0b0f17;
+        color: #c9d1d9;
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 20px 64px;
+      }
+      h1,
+      h2 {
+        color: #fff;
+        line-height: 1.25;
+      }
+      h1 {
+        font-size: 2rem;
+        margin: 0 0 12px;
+      }
+      h2 {
+        font-size: 1.25rem;
+        margin: 36px 0 8px;
+      }
+      a {
+        color: #6cb6ff;
+      }
+      code {
+        background: #161b22;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.92em;
+      }
+      pre {
+        background: #161b22;
+        padding: 14px 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+      ul {
+        padding-left: 1.2em;
+      }
+      nav.top {
+        margin-bottom: 28px;
+        font-size: 0.95rem;
+      }
+      footer {
+        margin-top: 48px;
+        font-size: 0.85rem;
+        color: #8b949e;
+      }
     </style>
   </head>
   <body>
@@ -49,53 +111,91 @@
       <nav class="top"><a href="/">SC Market</a> › Developers</nav>
       <h1>SC Market API for developers</h1>
       <p>
-        SC Market is the Star Citizen player marketplace. Its public REST API lets your bot, script or
-        spreadsheet read your shops, listings and stock, follow your orders, move them on and answer offers,
-        with an API token you create in your account settings.
+        SC Market is the Star Citizen player marketplace. Its public REST API
+        lets your bot, script or spreadsheet read your shops, listings and
+        stock, follow your orders, move them on and answer offers, with an API
+        token you create in your account settings.
       </p>
 
       <h2>Public API</h2>
       <ul>
-        <li>Base URL: <code>https://api.sc-market.space/api/public/v1</code></li>
+        <li>
+          Base URL: <code>https://api.sc-market.space/api/public/v1</code>
+        </li>
         <li>
           OpenAPI 3 spec:
-          <a href="https://api.sc-market.space/api/public/v1/openapi.json">api/public/v1/openapi.json</a>
+          <a href="https://api.sc-market.space/api/public/v1/openapi.json"
+            >api/public/v1/openapi.json</a
+          >
         </li>
-        <li>Interactive reference: <a href="https://api.sc-market.space/docs">api.sc-market.space/docs</a></li>
+        <li>
+          Interactive reference:
+          <a href="https://api.sc-market.space/docs"
+            >api.sc-market.space/docs</a
+          >
+        </li>
         <li>
           Guide, step by step:
-          <a href="/guides/discord/api-tokens">Use the SC Market API with a token</a>
+          <a href="/guides/discord/api-tokens"
+            >Use the SC Market API with a token</a
+          >
         </li>
       </ul>
       <p>Every request sends the token as a bearer token:</p>
       <pre><code>curl -H "Authorization: Bearer scmp_live_…" \
   https://api.sc-market.space/api/public/v1/me</code></pre>
       <p>
-        Endpoints cover <code>/me</code>, <code>/shops</code>, <code>/shops/{shop}/listings</code>,
-        <code>/listings/{listingId}/stock</code>, <code>/orders</code>, <code>/orders/{orderId}/status</code> and
-        <code>/offers</code> (accept, decline). Each token is scoped: shop sync, order desk or read only, and the
-        orgs it may act for.
+        Endpoints cover <code>/me</code>, <code>/shops</code>,
+        <code>/shops/{shop}/listings</code>,
+        <code>/listings/{listingId}/stock</code>, <code>/orders</code>,
+        <code>/orders/{orderId}/status</code> and <code>/offers</code> (accept,
+        decline). Each token is scoped: shop sync, order desk or read only, and
+        the orgs it may act for.
       </p>
 
       <h2>More ways to build on SC Market</h2>
       <ul>
-        <li><a href="/guides/discord/webhooks">Discord webhooks for orders and offers</a></li>
-        <li><a href="/guides/org-storefront/white-label-theme">White-label storefronts for orgs</a></li>
+        <li>
+          <a href="/guides/discord/webhooks"
+            >Discord webhooks for orders and offers</a
+          >
+        </li>
+        <li>
+          <a href="/guides/org-storefront/white-label-theme"
+            >White-label storefronts for orgs</a
+          >
+        </li>
         <li><a href="/guides">All Help &amp; Guides</a></li>
-        <li><a href="https://github.com/SC-Market">SC Market on GitHub</a> (open source)</li>
-        <li><a href="/llms.txt">llms.txt</a>: a map of the site for AI assistants</li>
+        <li>
+          <a href="https://github.com/SC-Market">SC Market on GitHub</a> (open
+          source)
+        </li>
+        <li>
+          <a href="/llms.txt">llms.txt</a>: a map of the site for AI assistants
+        </li>
       </ul>
 
       <h2>Public data on the site</h2>
       <ul>
-        <li><a href="/market">Market listings</a> and <a href="/shops">shops</a></li>
-        <li><a href="/wiki/items">Game items</a>, <a href="/wiki/ships">ships</a> and <a href="/wiki/commodities">commodities</a></li>
-        <li><a href="/missions">Missions</a> and <a href="/blueprints">crafting blueprints</a></li>
+        <li>
+          <a href="/market">Market listings</a> and <a href="/shops">shops</a>
+        </li>
+        <li>
+          <a href="/wiki/items">Game items</a>,
+          <a href="/wiki/ships">ships</a> and
+          <a href="/wiki/commodities">commodities</a>
+        </li>
+        <li>
+          <a href="/missions">Missions</a> and
+          <a href="/blueprints">crafting blueprints</a>
+        </li>
       </ul>
 
       <footer>
-        SC Market is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies.
-        <a href="/terms" rel="nofollow">Terms</a> · <a href="/privacy" rel="nofollow">Privacy</a>
+        SC Market is an unofficial Star Citizen fansite, not affiliated with the
+        Cloud Imperium group of companies.
+        <a href="/terms" rel="nofollow">Terms</a> ·
+        <a href="/privacy" rel="nofollow">Privacy</a>
       </footer>
     </main>
   </body>

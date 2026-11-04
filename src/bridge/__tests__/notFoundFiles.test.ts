@@ -41,12 +41,16 @@ describe("404s for missing static files", () => {
       .split("\n")
       .filter((line: string) => line.trim() && !line.trim().startsWith("#"))
     expect(rules.filter((r: string) => /\s404\s*$/.test(r))).toEqual([])
-    expect(rules.filter((r: string) => r.trim().startsWith("/content"))).toEqual([])
+    expect(
+      rules.filter((r: string) => r.trim().startsWith("/content")),
+    ).toEqual([])
   })
 
   it("no Function runs for /content (it would bypass the static 404)", () => {
     const covers = (rule: string, p: string) =>
       rule.endsWith("*") ? p.startsWith(rule.slice(0, -1)) : rule === p
-    expect(routesJson.include.some((r) => covers(r, "/content/bridge/index.json"))).toBe(false)
+    expect(
+      routesJson.include.some((r) => covers(r, "/content/bridge/index.json")),
+    ).toBe(false)
   })
 })

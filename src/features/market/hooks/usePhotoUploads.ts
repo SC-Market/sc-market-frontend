@@ -11,7 +11,9 @@ import { uploadErrorDetail } from "../domain/uploadError"
 /** `failedMessage`: shown when the API gives no reason. */
 export function usePhotoUploads(failedMessage: string) {
   const [uploadImage] = useUploadImageMutation()
-  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([])
+  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>(
+    [],
+  )
   const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([])
 
   const upload = useCallback(
@@ -55,7 +57,9 @@ export function usePhotoUploads(failedMessage: string) {
   )
 
   const remove = useCallback((resourceId: string) => {
-    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId))
+    setUploadedImages((prev) =>
+      prev.filter((img) => img.resource_id !== resourceId),
+    )
     setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId))
   }, [])
 

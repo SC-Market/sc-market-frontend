@@ -38,7 +38,10 @@ export function useEmailActions() {
         setSuccess(result.message || t("settings.email.addSuccess"))
         return { success: true, result }
       } catch (error) {
-        const err = error as { data?: { error?: { message?: string } }; message?: string }
+        const err = error as {
+          data?: { error?: { message?: string } }
+          message?: string
+        }
         setError(
           err?.data?.error?.message ||
             err?.message ||
@@ -66,7 +69,10 @@ export function useEmailActions() {
         setSuccess(result.message || t("settings.email.updateSuccess"))
         return { success: true, result }
       } catch (error) {
-        const err = error as { data?: { error?: { message?: string } }; message?: string }
+        const err = error as {
+          data?: { error?: { message?: string } }
+          message?: string
+        }
         setError(
           err?.data?.error?.message ||
             err?.message ||
@@ -88,7 +94,10 @@ export function useEmailActions() {
       setSuccess(result.message || t("settings.email.deleteSuccess"))
       return { success: true, result }
     } catch (error) {
-      const err = error as { data?: { error?: { message?: string } }; message?: string }
+      const err = error as {
+        data?: { error?: { message?: string } }
+        message?: string
+      }
       setError(
         err?.data?.error?.message ||
           err?.message ||
@@ -115,7 +124,10 @@ export function useEmailActions() {
       setSuccess(result.message || t("settings.email.verificationSent"))
       return { success: true, result }
     } catch (error) {
-      const err = error as { data?: { error?: { message?: string } }; message?: string }
+      const err = error as {
+        data?: { error?: { message?: string } }
+        message?: string
+      }
       setError(
         err?.data?.error?.message ||
           err?.message ||

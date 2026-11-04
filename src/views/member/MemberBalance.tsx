@@ -33,9 +33,7 @@ export function MemberBalance() {
           color={"primary"}
           sx={{ fontWeight: "bold", transition: "0.3s" }}
         >
-          {profile.data?.balance &&
-            fmt.number(profile.data?.balance)}{" "}
-          aUEC
+          {profile.data?.balance && fmt.number(profile.data?.balance)} aUEC
         </Typography>
       </Grid>
       <Grid item xs={12} container justifyContent={"space-between"}>

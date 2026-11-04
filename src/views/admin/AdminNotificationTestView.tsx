@@ -46,7 +46,15 @@ export function AdminNotificationTestView() {
   const [notificationType, setNotificationType] = useState<string>("")
   const [targetUser, setTargetUser] = useState<User | null>(null)
   const [contractorId, setContractorId] = useState<string>("")
-  const [testResult, setTestResult] = useState<{ message: string; data?: { order_id?: string; contractor_id?: string | null; chat_id?: string; listing_id?: string } } | null>(null)
+  const [testResult, setTestResult] = useState<{
+    message: string
+    data?: {
+      order_id?: string
+      contractor_id?: string | null
+      chat_id?: string
+      listing_id?: string
+    }
+  } | null>(null)
   const [testError, setTestError] = useState<string>("")
 
   const [testNotification, { isLoading: isTesting }] =
@@ -109,7 +117,9 @@ export function AdminNotificationTestView() {
     } catch (error: unknown) {
       // Handle error response structure: { error: { code, message } }
       let errorMessage: string
-      const errData = error as { data?: { error?: string | { message?: string } }; message?: string } | undefined
+      const errData = error as
+        | { data?: { error?: string | { message?: string } }; message?: string }
+        | undefined
       if (errData?.data?.error) {
         if (typeof errData.data.error === "string") {
           errorMessage = errData.data.error
@@ -156,7 +166,8 @@ export function AdminNotificationTestView() {
                   "Notification Type",
                 )}
               </InputLabel>
-              <Select labelId="admin-notification-test-type-label"
+              <Select
+                labelId="admin-notification-test-type-label"
                 value={notificationType}
                 onChange={(e) => setNotificationType(e.target.value)}
                 label={t(
@@ -212,7 +223,8 @@ export function AdminNotificationTestView() {
                   "Contractor (Optional - for org-scoped testing)",
                 )}
               </InputLabel>
-              <Select labelId="admin-notification-test-contractor-label"
+              <Select
+                labelId="admin-notification-test-contractor-label"
                 value={contractorId}
                 onChange={(e) => setContractorId(e.target.value)}
                 label={t(

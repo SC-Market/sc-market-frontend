@@ -32,10 +32,15 @@ export function useSaveShopSettings(shopId: string) {
   const [updateShop, { isLoading }] = useUpdateShopMutation()
 
   const save = useCallback(
-    async (request: UpdateShopRequest): Promise<{ ok: true } | { ok: false; error: unknown }> => {
+    async (
+      request: UpdateShopRequest,
+    ): Promise<{ ok: true } | { ok: false; error: unknown }> => {
       try {
         await updateShop({ shopId, updateShopRequest: request }).unwrap()
-        issueAlert({ message: t("shopsUi.settings.saved"), severity: "success" })
+        issueAlert({
+          message: t("shopsUi.settings.saved"),
+          severity: "success",
+        })
         return { ok: true }
       } catch (error) {
         issueAlert(asAlert(error))
@@ -78,8 +83,14 @@ export function useShopWebhooks(shopId: string) {
   const create = useCallback(
     async (request: CreateShopWebhookRequest) => {
       try {
-        await createWebhook({ shopId, createShopWebhookRequest: request }).unwrap()
-        issueAlert({ message: t("shopsUi.webhooks.created"), severity: "success" })
+        await createWebhook({
+          shopId,
+          createShopWebhookRequest: request,
+        }).unwrap()
+        issueAlert({
+          message: t("shopsUi.webhooks.created"),
+          severity: "success",
+        })
         return true
       } catch (err) {
         issueAlert(asAlert(err))
@@ -93,7 +104,10 @@ export function useShopWebhooks(shopId: string) {
     async (webhookId: string) => {
       try {
         await deleteWebhook({ shopId, webhookId }).unwrap()
-        issueAlert({ message: t("shopsUi.webhooks.deleted"), severity: "success" })
+        issueAlert({
+          message: t("shopsUi.webhooks.deleted"),
+          severity: "success",
+        })
       } catch (err) {
         issueAlert(asAlert(err))
       }
@@ -125,10 +139,16 @@ export function useSaveShopOrderSettings(shopId: string) {
               },
             }).unwrap()
           } else {
-            await deleteSetting({ shopId, settingType: op.settingType }).unwrap()
+            await deleteSetting({
+              shopId,
+              settingType: op.settingType,
+            }).unwrap()
           }
         }
-        issueAlert({ message: t("shopsUi.orderSettings.saved"), severity: "success" })
+        issueAlert({
+          message: t("shopsUi.orderSettings.saved"),
+          severity: "success",
+        })
       } catch (err) {
         issueAlert(asAlert(err))
       }
@@ -146,8 +166,14 @@ export function useTransferShop(shopId: string) {
   const transfer = useCallback(
     async (request: TransferShopRequest): Promise<string | null> => {
       try {
-        const result = await transferShop({ shopId, transferShopRequest: request }).unwrap()
-        issueAlert({ message: t("shopsUi.transfer.transferred"), severity: "success" })
+        const result = await transferShop({
+          shopId,
+          transferShopRequest: request,
+        }).unwrap()
+        issueAlert({
+          message: t("shopsUi.transfer.transferred"),
+          severity: "success",
+        })
         return result.slug
       } catch (err) {
         issueAlert(asAlert(err))

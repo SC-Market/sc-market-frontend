@@ -14,9 +14,9 @@ import { OrgShopRedirectListings, OrgShopRedirectStock } from "../ShopRedirect"
 
 let mockShops: ShopResponse[] = []
 vi.mock("../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual<typeof import("../../../store/api/v2/market")>(
-    "../../../store/api/v2/market",
-  )
+  const actual = await vi.importActual<
+    typeof import("../../../store/api/v2/market")
+  >("../../../store/api/v2/market")
   return {
     ...actual,
     useGetMyShopsQuery: () =>
@@ -25,14 +25,26 @@ vi.mock("../../../store/api/v2/market", async () => {
 })
 
 const shop = (slug: string, spectrumId: string | null): ShopResponse =>
-  ({ shop_id: slug, slug, name: slug, is_org_owned: !!spectrumId, owner_contractor_spectrum_id: spectrumId }) as ShopResponse
+  ({
+    shop_id: slug,
+    slug,
+    name: slug,
+    is_org_owned: !!spectrumId,
+    owner_contractor_spectrum_id: spectrumId,
+  }) as ShopResponse
 
 function renderAt(path: string) {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
-        <Route path="/org/:contractor_id/listings" element={<OrgShopRedirectListings />} />
-        <Route path="/org/:contractor_id/manage-stock" element={<OrgShopRedirectStock />} />
+        <Route
+          path="/org/:contractor_id/listings"
+          element={<OrgShopRedirectListings />}
+        />
+        <Route
+          path="/org/:contractor_id/manage-stock"
+          element={<OrgShopRedirectStock />}
+        />
         <Route path="/shop/:slug/listings" element={<p>shop listings</p>} />
         <Route path="/shop/:slug/stock" element={<p>shop stock</p>} />
         <Route path="/dashboard/shops" element={<p>my shops</p>} />

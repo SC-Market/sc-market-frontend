@@ -139,7 +139,9 @@ export function YouTubeFacade({
       sx={{ width, height: height || undefined }}
       onClick={handleActivate}
       role="button"
-      aria-label={t("appUi.youtube.playVideoNamed", { title: title || videoId })}
+      aria-label={t("appUi.youtube.playVideoNamed", {
+        title: title || videoId,
+      })}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -161,7 +163,10 @@ export function YouTubeFacade({
         }}
       />
       <PlayButtonOverlay>
-        <PlayButton className="play-button" aria-label={t("appUi.youtube.playVideo")}>
+        <PlayButton
+          className="play-button"
+          aria-label={t("appUi.youtube.playVideo")}
+        >
           <PlayArrow />
         </PlayButton>
       </PlayButtonOverlay>

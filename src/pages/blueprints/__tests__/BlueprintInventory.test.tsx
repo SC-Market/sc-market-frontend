@@ -30,13 +30,13 @@ describe("BlueprintInventory", () => {
     render(
       <MemoryRouter initialEntries={["/blueprints/inventory"]}>
         <BlueprintInventory />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith(
         expect.stringContaining("/blueprints?"),
-        { replace: true }
+        { replace: true },
       )
       const url = mockNavigate.mock.calls[0][0]
       expect(url).toContain("owned=true")
@@ -48,7 +48,7 @@ describe("BlueprintInventory", () => {
     render(
       <MemoryRouter initialEntries={["/blueprints/inventory?category=Weapons"]}>
         <BlueprintInventory />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     await waitFor(() => {
@@ -64,7 +64,7 @@ describe("BlueprintInventory", () => {
     const { container } = render(
       <MemoryRouter initialEntries={["/blueprints/inventory"]}>
         <BlueprintInventory />
-      </MemoryRouter>
+      </MemoryRouter>,
     )
 
     expect(container.innerHTML).toBe("")

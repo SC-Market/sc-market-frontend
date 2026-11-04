@@ -1,27 +1,45 @@
 import React, { useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import {
-  Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
-  Typography, CircularProgress,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Typography,
+  CircularProgress,
 } from "@mui/material"
 import { WarningRounded } from "@mui/icons-material"
-import { useExpireAllListingsMutation, useGetActiveListingCountQuery } from "../../store/api/v2/market"
+import {
+  useExpireAllListingsMutation,
+  useGetActiveListingCountQuery,
+} from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function ExpireAllListingsButton() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const { data: countData, refetch } = useGetActiveListingCountQuery(undefined, { skip: !open })
+  const { data: countData, refetch } = useGetActiveListingCountQuery(
+    undefined,
+    { skip: !open },
+  )
   const [expireAll, { isLoading }] = useExpireAllListingsMutation()
   const issueAlert = useAlertHook()
 
   const handleConfirm = async () => {
     try {
       const result = await expireAll().unwrap()
-      issueAlert({ message: t("adminUi.expireListings.expired", { count: result.affected }), severity: "success" })
+      issueAlert({
+        message: t("adminUi.expireListings.expired", {
+          count: result.affected,
+        }),
+        severity: "success",
+      })
       setOpen(false)
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("adminUi.expireListings.failed")
+      const message =
+        err instanceof Error ? err.message : t("adminUi.expireListings.failed")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -32,7 +50,10 @@ export function ExpireAllListingsButton() {
         variant="outlined"
         color="error"
         startIcon={<WarningRounded />}
-        onClick={() => { setOpen(true); refetch() }}
+        onClick={() => {
+          setOpen(true)
+          refetch()
+        }}
       >
         {t("adminUi.expireListings.button")}
       </Button>
@@ -60,11 +81,18 @@ export function ExpireAllListingsButton() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>{t("common.cancel")}</Button>
-          <Button onClick={handleConfirm} color="error" variant="contained" disabled={isLoading}>
+          <Button
+            onClick={handleConfirm}
+            color="error"
+            variant="contained"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <CircularProgress size={20} />
             ) : countData ? (
-              t("adminUi.expireListings.confirmButton", { count: countData.count })
+              t("adminUi.expireListings.confirmButton", {
+                count: countData.count,
+              })
             ) : (
               t("adminUi.expireListings.confirmButtonNoCount")
             )}

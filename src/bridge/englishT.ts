@@ -57,7 +57,10 @@ function lookup(key: string): string | undefined {
   return typeof node === "string" ? node : undefined
 }
 
-function interpolate(template: string, values: Record<string, unknown>): string {
+function interpolate(
+  template: string,
+  values: Record<string, unknown>,
+): string {
   return template.replace(/\{\{\s*([^}\s]+)\s*\}\}/g, (match, name: string) =>
     name in values ? String(values[name]) : match,
   )
@@ -71,7 +74,9 @@ function translate(
   const fallback = typeof options === "string" ? options : values.defaultValue
   // Plural keys like i18next (key_one / key_other) when a numeric count is given.
   const plural =
-    typeof values.count === "number" ? lookup(`${key}_${new Intl.PluralRules("en").select(values.count)}`) : undefined
+    typeof values.count === "number"
+      ? lookup(`${key}_${new Intl.PluralRules("en").select(values.count)}`)
+      : undefined
   const template = plural ?? lookup(key) ?? fallback ?? key
   return interpolate(template, values)
 }

@@ -76,7 +76,9 @@ export function useStockLotActions() {
 
 /** The API error's code, at `data.details.code` or `data.code`. */
 function apiErrorCode(error: unknown): string | undefined {
-  const data = (error as { data?: { details?: { code?: string }; code?: string } })?.data
+  const data = (
+    error as { data?: { details?: { code?: string }; code?: string } }
+  )?.data
   return (data?.details || data)?.code
 }
 
@@ -102,7 +104,11 @@ export function useCreateLot() {
         const reason = extractErrorMessage((error as { data?: unknown })?.data)
         issueAlert({
           message: reason
-            ? t("CreateLotDialogV2.createErrorReason", "Failed to create lot: {{reason}}", { reason })
+            ? t(
+                "CreateLotDialogV2.createErrorReason",
+                "Failed to create lot: {{reason}}",
+                { reason },
+              )
             : t("CreateLotDialogV2.createError", "Failed to create lot"),
           severity: "error",
         })
@@ -117,12 +123,16 @@ export function useCreateLot() {
 export function useEditLot() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
-  const [updateStockLot, { isLoading: isUpdating }] = useUpdateStockLotMutation()
+  const [updateStockLot, { isLoading: isUpdating }] =
+    useUpdateStockLotMutation()
 
   const save = useCallback(
     async (lotId: string, request: UpdateStockLotRequest): Promise<boolean> => {
       try {
-        await updateStockLot({ id: lotId, updateStockLotRequest: request }).unwrap()
+        await updateStockLot({
+          id: lotId,
+          updateStockLotRequest: request,
+        }).unwrap()
         issueAlert({
           message: t("LotListItemV2.updateSuccess", "Lot updated successfully"),
           severity: "success",
@@ -159,20 +169,29 @@ export function useTransferLot() {
   const [updateStockLot, { isLoading }] = useUpdateStockLotMutation()
 
   const transfer = useCallback(
-    async (lotId: string, locationId: UpdateStockLotRequest["location_id"]): Promise<boolean> => {
+    async (
+      lotId: string,
+      locationId: UpdateStockLotRequest["location_id"],
+    ): Promise<boolean> => {
       try {
         await updateStockLot({
           id: lotId,
           updateStockLotRequest: { location_id: locationId },
         }).unwrap()
         issueAlert({
-          message: t("TransferLotDialogV2.transferSuccess", "Lot transferred successfully"),
+          message: t(
+            "TransferLotDialogV2.transferSuccess",
+            "Lot transferred successfully",
+          ),
           severity: "success",
         })
         return true
       } catch {
         issueAlert({
-          message: t("TransferLotDialogV2.transferError", "Failed to transfer lot"),
+          message: t(
+            "TransferLotDialogV2.transferError",
+            "Failed to transfer lot",
+          ),
           severity: "error",
         })
         return false

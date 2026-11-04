@@ -51,19 +51,42 @@ import { EmptyState } from "../../components/empty-states/EmptyState"
 import { useFormatters } from "../../util/format"
 
 /* ── Confirm delete dialog ── */
-function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
+function ConfirmDeleteDialog({
+  open,
+  onClose,
+  onConfirm,
+  loading,
+}: {
+  open: boolean
+  onClose: () => void
+  onConfirm: () => void
+  loading: boolean
+}) {
   const { t } = useTranslation()
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>{t("inventory.confirmDeleteTitle", "Delete lot?")}</DialogTitle>
+      <DialogTitle>
+        {t("inventory.confirmDeleteTitle", "Delete lot?")}
+      </DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary">
-          {t("inventory.confirmDeleteBody", "This lot will be permanently deleted and cannot be recovered.")}
+          {t(
+            "inventory.confirmDeleteBody",
+            "This lot will be permanently deleted and cannot be recovered.",
+          )}
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={loading}>{t("common.cancel", "Cancel")}</Button>
-        <Button variant="contained" color="error" onClick={onConfirm} disabled={loading} startIcon={loading ? <CircularProgress size={16} /> : undefined}>
+        <Button onClick={onClose} disabled={loading}>
+          {t("common.cancel", "Cancel")}
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={onConfirm}
+          disabled={loading}
+          startIcon={loading ? <CircularProgress size={16} /> : undefined}
+        >
           {t("inventory.deleteConfirm", "Delete")}
         </Button>
       </DialogActions>
@@ -87,7 +110,10 @@ export default function InventoryPage() {
   const [newLocationId, setNewLocationId] = useState<string | null>(null)
   const [newNotes, setNewNotes] = useState("")
 
-  const { data, isLoading, refetch } = useGetInventoryQuery({ page, pageSize: 50 })
+  const { data, isLoading, refetch } = useGetInventoryQuery({
+    page,
+    pageSize: 50,
+  })
   const [createLot, { isLoading: creating }] = useCreateInventoryLotMutation()
   const [deleteLot, { isLoading: deleting }] = useDeleteInventoryLotMutation()
   const [unlinkLot] = useUnlinkFromListingMutation()
@@ -116,7 +142,10 @@ export default function InventoryPage() {
 
   const handleCreate = async () => {
     if (newQty <= 0) {
-      issueAlert({ message: t("inventory.qtyRequired", "Quantity must be greater than 0"), severity: "error" })
+      issueAlert({
+        message: t("inventory.qtyRequired", "Quantity must be greater than 0"),
+        severity: "error",
+      })
       return
     }
     try {
@@ -128,12 +157,18 @@ export default function InventoryPage() {
           notes: newNotes.trim() || undefined,
         },
       }).unwrap()
-      issueAlert({ message: t("inventory.created", "Lot created"), severity: "success" })
+      issueAlert({
+        message: t("inventory.created", "Lot created"),
+        severity: "success",
+      })
       setCreateOpen(false)
       resetCreateForm()
       refetch()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("inventory.createError", "Failed to create lot")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("inventory.createError", "Failed to create lot")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -142,11 +177,17 @@ export default function InventoryPage() {
     if (!confirmDeleteId) return
     try {
       await deleteLot({ lotId: confirmDeleteId }).unwrap()
-      issueAlert({ message: t("inventory.deleted", "Lot deleted"), severity: "success" })
+      issueAlert({
+        message: t("inventory.deleted", "Lot deleted"),
+        severity: "success",
+      })
       setConfirmDeleteId(null)
       refetch()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("inventory.deleteError", "Failed to delete lot")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("inventory.deleteError", "Failed to delete lot")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -154,10 +195,16 @@ export default function InventoryPage() {
   const handleUnlink = async (lotId: string) => {
     try {
       await unlinkLot({ lotId }).unwrap()
-      issueAlert({ message: t("inventory.unlinked", "Lot unlinked from listing"), severity: "success" })
+      issueAlert({
+        message: t("inventory.unlinked", "Lot unlinked from listing"),
+        severity: "success",
+      })
       refetch()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("inventory.unlinkError", "Failed to unlink lot")
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("inventory.unlinkError", "Failed to unlink lot")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -167,7 +214,10 @@ export default function InventoryPage() {
       headerActions={<HelpLink guide="stockLots" />}
       title={t("sidebar.inventory", "My Stock")}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
+        {
+          label: t("sidebar.market_short", "Market"),
+          href: MARKET_PATHS.search,
+        },
         { label: t("sidebar.inventory", "My Stock") },
       ]}
       sidebarOpen={true}
@@ -203,7 +253,13 @@ export default function InventoryPage() {
                 placeholder={t("inventory.search", "Search...")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                InputProps={{ startAdornment: <InventoryRounded sx={{ mr: 0.5, color: "text.secondary", fontSize: 18 }} /> }}
+                InputProps={{
+                  startAdornment: (
+                    <InventoryRounded
+                      sx={{ mr: 0.5, color: "text.secondary", fontSize: 18 }}
+                    />
+                  ),
+                }}
               />
               <Button
                 variant="contained"
@@ -229,137 +285,213 @@ export default function InventoryPage() {
                 title={t("inventory.empty", "No stock yet")}
                 description={t("inventory.emptyDescription")}
                 guide="myStock"
-                action={{ label: t("inventory.addLot", "Add Lot"), onClick: () => setCreateOpen(true) }}
+                action={{
+                  label: t("inventory.addLot", "Add Lot"),
+                  onClick: () => setCreateOpen(true),
+                }}
                 sx={{ minHeight: { xs: 240, sm: 300 } }}
               />
             )
           ) : (
             <TableContainer sx={{ overflowX: "auto" }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>{t("inventory.item", "Item")}</TableCell>
-                  <TableCell>{t("inventory.variant", "Variant")}</TableCell>
-                  <TableCell align="right">{t("inventory.quantity", "Qty")}</TableCell>
-                  <TableCell>{t("inventory.location", "Location")}</TableCell>
-                  <TableCell>{t("inventory.listing", "Listing")}</TableCell>
-                  <TableCell>{t("inventory.status", "Status")}</TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>{t("inventory.actions", "Actions")}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* While the first page loads: placeholder rows in the same
-                    table, so the column widths and page height match */}
-                {isLoading &&
-                  Array.from({ length: 16 }).map((_, i) => (
-                    <TableRow key={`skeleton-${i}`}>
-                      <TableCell>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          <Skeleton variant="rounded" width={28} height={28} />
-                          <Skeleton variant="text" width={160} />
-                        </Box>
-                      </TableCell>
-                      <TableCell><Skeleton variant="text" width={80} /></TableCell>
-                      <TableCell align="right"><Skeleton variant="text" width={40} sx={{ ml: "auto" }} /></TableCell>
-                      <TableCell><Skeleton variant="text" width={100} /></TableCell>
-                      <TableCell><Skeleton variant="text" width={140} /></TableCell>
-                      <TableCell><Skeleton variant="rounded" width={64} height={24} /></TableCell>
-                      <TableCell align="right"><Skeleton variant="text" width={72} sx={{ ml: "auto" }} /></TableCell>
-                    </TableRow>
-                  ))}
-                {filtered.map((lot) => (
-                  <TableRow key={lot.lot_id} hover>
-                    <TableCell>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        {lot.game_item_image && (
-                          <Avatar
-                            src={lot.game_item_image}
-                            variant="rounded"
-                            sx={{ width: 28, height: 28 }}
-                          />
-                        )}
-                        {lot.game_item_id ? (
-                          <Typography
-                            variant="body2"
-                            fontWeight={600}
-                            component={Link}
-                            to={MARKET_PATHS.aggregate(lot.game_item_id)}
-                            sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-                          >
-                            {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
-                          </Typography>
-                        ) : (
-                          <Typography variant="body2" fontWeight={600}>
-                            {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
-                          </Typography>
-                        )}
-                      </Box>
-                    </TableCell>
-                    <TableCell>{lot.variant_display_name || "—"}</TableCell>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t("inventory.item", "Item")}</TableCell>
+                    <TableCell>{t("inventory.variant", "Variant")}</TableCell>
                     <TableCell align="right">
-                      <Typography variant="body2" fontWeight={600}>
-                        {fmt.number(lot.quantity_total)}
-                      </Typography>
+                      {t("inventory.quantity", "Qty")}
                     </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary">
-                        {lot.location_name || t("inventory.unspecified", "Unspecified")}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      {lot.listing_id ? (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          {lot.listing_photo && (
-                            <Avatar
-                              src={lot.listing_photo}
-                              variant="rounded"
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          )}
-                          <Chip
-                            label={lot.listing_title || t("inventory.listing")}
-                            size="small"
-                            sx={{ maxWidth: 240 }}
-                            component={Link}
-                            to={MARKET_PATHS.listing(lot.listing_id)}
-                            clickable
-                            icon={!lot.listing_photo ? <LinkRounded /> : undefined}
-                          />
-                        </Box>
-                      ) : (
-                        <Typography variant="body2" color="text.disabled">
-                          {t("inventory.unlisted", "Unlisted")}
-                        </Typography>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={lot.listed ? t("inventory.listed", "Listed") : t("inventory.personal", "Personal")}
-                        size="small"
-                        color={lot.listed ? "success" : "default"}
-                        variant="outlined"
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" spacing={0.5} justifyContent="flex-end">
-                        {lot.listing_id && (
-                          <Tooltip title={t("inventory.unlink", "Unlink from listing")}>
-                            <IconButton size="small" onClick={() => handleUnlink(lot.lot_id)}>
-                              <LinkOffRounded fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        <Tooltip title={t("inventory.delete", "Delete lot")}>
-                          <IconButton size="small" color="error" onClick={() => setConfirmDeleteId(lot.lot_id)}>
-                            <DeleteRounded fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      </Stack>
+                    <TableCell>{t("inventory.location", "Location")}</TableCell>
+                    <TableCell>{t("inventory.listing", "Listing")}</TableCell>
+                    <TableCell>{t("inventory.status", "Status")}</TableCell>
+                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                      {t("inventory.actions", "Actions")}
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {/* While the first page loads: placeholder rows in the same
+                    table, so the column widths and page height match */}
+                  {isLoading &&
+                    Array.from({ length: 16 }).map((_, i) => (
+                      <TableRow key={`skeleton-${i}`}>
+                        <TableCell>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Skeleton
+                              variant="rounded"
+                              width={28}
+                              height={28}
+                            />
+                            <Skeleton variant="text" width={160} />
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="text" width={80} />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton
+                            variant="text"
+                            width={40}
+                            sx={{ ml: "auto" }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="text" width={100} />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="text" width={140} />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton variant="rounded" width={64} height={24} />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Skeleton
+                            variant="text"
+                            width={72}
+                            sx={{ ml: "auto" }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  {filtered.map((lot) => (
+                    <TableRow key={lot.lot_id} hover>
+                      <TableCell>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          {lot.game_item_image && (
+                            <Avatar
+                              src={lot.game_item_image}
+                              variant="rounded"
+                              sx={{ width: 28, height: 28 }}
+                            />
+                          )}
+                          {lot.game_item_id ? (
+                            <Typography
+                              variant="body2"
+                              fontWeight={600}
+                              component={Link}
+                              to={MARKET_PATHS.aggregate(lot.game_item_id)}
+                              sx={{
+                                color: "text.primary",
+                                textDecoration: "none",
+                                "&:hover": { textDecoration: "underline" },
+                              }}
+                            >
+                              {lot.game_item_name ||
+                                t("inventory.custom_item", "Custom Item")}
+                            </Typography>
+                          ) : (
+                            <Typography variant="body2" fontWeight={600}>
+                              {lot.game_item_name ||
+                                t("inventory.custom_item", "Custom Item")}
+                            </Typography>
+                          )}
+                        </Box>
+                      </TableCell>
+                      <TableCell>{lot.variant_display_name || "—"}</TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body2" fontWeight={600}>
+                          {fmt.number(lot.quantity_total)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" color="text.secondary">
+                          {lot.location_name ||
+                            t("inventory.unspecified", "Unspecified")}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {lot.listing_id ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            {lot.listing_photo && (
+                              <Avatar
+                                src={lot.listing_photo}
+                                variant="rounded"
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            )}
+                            <Chip
+                              label={
+                                lot.listing_title || t("inventory.listing")
+                              }
+                              size="small"
+                              sx={{ maxWidth: 240 }}
+                              component={Link}
+                              to={MARKET_PATHS.listing(lot.listing_id)}
+                              clickable
+                              icon={
+                                !lot.listing_photo ? <LinkRounded /> : undefined
+                              }
+                            />
+                          </Box>
+                        ) : (
+                          <Typography variant="body2" color="text.disabled">
+                            {t("inventory.unlisted", "Unlisted")}
+                          </Typography>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={
+                            lot.listed
+                              ? t("inventory.listed", "Listed")
+                              : t("inventory.personal", "Personal")
+                          }
+                          size="small"
+                          color={lot.listed ? "success" : "default"}
+                          variant="outlined"
+                        />
+                      </TableCell>
+                      <TableCell align="right">
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          justifyContent="flex-end"
+                        >
+                          {lot.listing_id && (
+                            <Tooltip
+                              title={t(
+                                "inventory.unlink",
+                                "Unlink from listing",
+                              )}
+                            >
+                              <IconButton
+                                size="small"
+                                onClick={() => handleUnlink(lot.lot_id)}
+                              >
+                                <LinkOffRounded fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                          <Tooltip title={t("inventory.delete", "Delete lot")}>
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => setConfirmDeleteId(lot.lot_id)}
+                            >
+                              <DeleteRounded fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </TableContainer>
           )}
 
@@ -372,7 +504,10 @@ export default function InventoryPage() {
               <Typography sx={{ mx: 2, alignSelf: "center" }}>
                 {page} / {Math.ceil(data.total / data.page_size)}
               </Typography>
-              <Button disabled={page >= Math.ceil(data.total / data.page_size)} onClick={() => setPage(page + 1)}>
+              <Button
+                disabled={page >= Math.ceil(data.total / data.page_size)}
+                onClick={() => setPage(page + 1)}
+              >
                 {t("common.next", "Next")}
               </Button>
             </Stack>
@@ -383,7 +518,12 @@ export default function InventoryPage() {
       {/* Create Lot Dialog */}
       <Dialog
         open={createOpen}
-        onClose={() => { if (!creating) { setCreateOpen(false); resetCreateForm() } }}
+        onClose={() => {
+          if (!creating) {
+            setCreateOpen(false)
+            resetCreateForm()
+          }
+        }}
         maxWidth="sm"
         fullWidth
       >
@@ -413,7 +553,11 @@ export default function InventoryPage() {
               inputProps={{ min: 1 }}
               size="small"
               error={newQty <= 0}
-              helperText={newQty <= 0 ? t("inventory.qtyRequired", "Must be greater than 0") : t("inventory.qtyHelp", "Number of units in this lot")}
+              helperText={
+                newQty <= 0
+                  ? t("inventory.qtyRequired", "Must be greater than 0")
+                  : t("inventory.qtyHelp", "Number of units in this lot")
+              }
             />
             <LocationSelector
               value={newLocationId}
@@ -436,7 +580,13 @@ export default function InventoryPage() {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setCreateOpen(false); resetCreateForm() }} disabled={creating}>
+          <Button
+            onClick={() => {
+              setCreateOpen(false)
+              resetCreateForm()
+            }}
+            disabled={creating}
+          >
             {t("common.cancel", "Cancel")}
           </Button>
           <Button

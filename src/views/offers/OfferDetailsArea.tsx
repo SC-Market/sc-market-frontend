@@ -49,7 +49,9 @@ import { SHOP_PATHS, ORDER_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
 import { useClearEntityNotifications } from "../../features/notifications/hooks/useClearEntityNotifications"
 
-export function OfferMessagesArea(props: { session: GetOfferSessionV2Response }) {
+export function OfferMessagesArea(props: {
+  session: GetOfferSessionV2Response
+}) {
   const { session } = props
   const [currentChat, setCurrentChat] = useCurrentChat()
   const { data: chatObj } = useGetChatByOfferIDQuery(session.session_id, {
@@ -85,7 +87,10 @@ export function OfferMessagesArea(props: { session: GetOfferSessionV2Response })
   )
 }
 
-export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; selectedOfferIndex?: number }) {
+export function OfferDetailsArea(props: {
+  session: GetOfferSessionV2Response
+  selectedOfferIndex?: number
+}) {
   const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
@@ -93,17 +98,34 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
   const { session } = props
 
   const {
-    profile, org, issueAlert, publicContract,
-    currentOffer, previousOffer, offerChanges,
-    isEditingAssigned, setIsEditingAssigned,
-    target, setTarget, targetObject, setTargetObject,
-    options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
+    profile,
+    org,
+    issueAlert,
+    publicContract,
+    currentOffer,
+    previousOffer,
+    offerChanges,
+    isEditingAssigned,
+    setIsEditingAssigned,
+    target,
+    setTarget,
+    targetObject,
+    setTargetObject,
+    options,
+    members,
+    handleAssignSave,
+    handleAssignCancel,
+    handleUnassign,
+    handleClaimOffer,
     actions,
-    statusKey, statusColor,
-    showAccept, showCancel,
-    isUpdatingStatus, updateStatusCallback,
-    createThread, refetchOffer,
+    statusKey,
+    statusColor,
+    showAccept,
+    showCancel,
+    isUpdatingStatus,
+    updateStatusCallback,
+    createThread,
+    refetchOffer,
   } = useOfferDetails(session, props.selectedOfferIndex)
 
   const { data: shop } = useGetShopQuery(
@@ -117,7 +139,8 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
   // reminder): open the withdraw confirmation for the customer. Nothing is
   // withdrawn until they confirm.
   const [searchParams, setSearchParams] = useSearchParams()
-  const isCustomer = !!profile && profile.username === session.customer?.username
+  const isCustomer =
+    !!profile && profile.username === session.customer?.username
   const canWithdraw = isCustomer && showCancel && isLatestOffer
   const [withdrawOpen, setWithdrawOpen] = useState(false)
   useEffect(() => {
@@ -156,7 +179,12 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
         listing_id: ml.listing_id,
         item_id: "",
         listing_title: ml.title,
-        variant: { variant_id: "", attributes: {}, display_name: "", short_name: "" },
+        variant: {
+          variant_id: "",
+          attributes: {},
+          display_name: "",
+          short_name: "",
+        },
         quantity: ml.quantity,
         price_per_unit: ml.price,
         subtotal: ml.quantity * ml.price,
@@ -232,7 +260,9 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
             )}
             {/* Seller (shop) row */}
             {session.shop_slug && (
-              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
                 <TableCell component="th" scope="row">
                   {t("OfferDetailsArea.seller")}
                 </TableCell>
@@ -263,25 +293,34 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
             )}
 
             {/* Assigned row */}
-            <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell component="th" scope="row">
                 <Stack direction="row" alignItems="center" spacing={1}>
                   {t("orderDetailsArea.assigned", "Assigned")}
                   {actions.canAssign && (
-                      <Button
-                        size="small"
-                        variant="text"
-                        startIcon={isEditingAssigned ? <Close /> : undefined}
-                        onClick={() => setIsEditingAssigned(!isEditingAssigned)}
-                        sx={{ textTransform: "none", fontSize: "0.75rem" }}
-                      >
-                        {isEditingAssigned ? t("common.cancel") : t("memberAssignArea.assign")}
-                      </Button>
-                    )}
+                    <Button
+                      size="small"
+                      variant="text"
+                      startIcon={isEditingAssigned ? <Close /> : undefined}
+                      onClick={() => setIsEditingAssigned(!isEditingAssigned)}
+                      sx={{ textTransform: "none", fontSize: "0.75rem" }}
+                    >
+                      {isEditingAssigned
+                        ? t("common.cancel")
+                        : t("memberAssignArea.assign")}
+                    </Button>
+                  )}
                 </Stack>
               </TableCell>
               <TableCell align="right">
-                <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                <Stack
+                  direction="row"
+                  justifyContent="right"
+                  alignItems="center"
+                  spacing={1}
+                >
                   {session.assigned_to ? (
                     <Stack direction="column">
                       <UserDetails user={session.assigned_to} />
@@ -311,7 +350,9 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                   maxWidth="xs"
                   fullWidth
                 >
-                  <DialogTitle>{t("memberAssignArea.assignMember", "Assign Member")}</DialogTitle>
+                  <DialogTitle>
+                    {t("memberAssignArea.assignMember", "Assign Member")}
+                  </DialogTitle>
                   <DialogContent>
                     <Autocomplete
                       filterOptions={(x) => x}
@@ -379,7 +420,14 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {fmt.dateTime(currentOffer.created_at, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
+                  {fmt.dateTime(currentOffer.created_at, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </Stack>
               </TableCell>
             </TableRow>
@@ -398,10 +446,15 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                     )}
                     color={statusColor}
                     icon={
-                      statusKey === "waitingSeller" ? <Announcement /> :
-                      statusKey === "waitingCustomer" ? <HourglassTop /> :
-                      statusKey === "rejected" ? <Cancel /> :
-                      <CheckCircle />
+                      statusKey === "waitingSeller" ? (
+                        <Announcement />
+                      ) : statusKey === "waitingCustomer" ? (
+                        <HourglassTop />
+                      ) : statusKey === "rejected" ? (
+                        <Cancel />
+                      ) : (
+                        <CheckCircle />
+                      )
                     }
                   />
                 </Stack>
@@ -497,7 +550,12 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 align="right"
                 sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
               >
-                <Stack direction="row" justifyContent={"right"} spacing={1} alignItems="center">
+                <Stack
+                  direction="row"
+                  justifyContent={"right"}
+                  spacing={1}
+                  alignItems="center"
+                >
                   <Typography
                     color={"text.secondary"}
                     variant={"subtitle2"}
@@ -518,14 +576,15 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                       }}
                     >
                       aUEC{" "}
-                      {t(
-                        PAYMENT_TYPE_MAP.get(currentOffer.payment_type) ||
-                          "",
-                      )}
+                      {t(PAYMENT_TYPE_MAP.get(currentOffer.payment_type) || "")}
                     </Typography>
                   </Typography>
                   {offerChanges?.costChanged && (
-                    <Chip label={t("contractsUi.newBadge")} size="small" color="primary" />
+                    <Chip
+                      label={t("contractsUi.newBadge")}
+                      size="small"
+                      color="primary"
+                    />
                   )}
                 </Stack>
               </TableCell>

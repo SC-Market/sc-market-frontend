@@ -6,15 +6,15 @@
 
 ## Status Summary
 
-| Phase | Status | Summary |
-|---|---|---|
-| Phase 0: Conventions | ✅ | ARCHITECTURE.md, ESLint rules, type safety guidance |
-| Phase 1: Store migration | ✅ | All 16 store slices → features/*/api/, shims deleted |
-| Phase 2: Feature shells | ✅ | 21 feature modules, all with index.ts barrel files |
-| Phase 3: Extract from views/ | ✅ | 11 view files decomposed (~2,500 lines extracted into hooks) |
-| Phase 4: Clean components/ | ✅ | OrderSettings, NotificationsButton, UserActionsDropdown, SelectGameItem extracted |
-| Phase 5: Context providers | ✅ | 12 contexts moved to owning features, shims deleted |
-| Phase 6: Fill feature gaps | ✅ | Domain types for 12 features, 21 API files, 72 hooks |
+| Phase                        | Status | Summary                                                                           |
+| ---------------------------- | ------ | --------------------------------------------------------------------------------- |
+| Phase 0: Conventions         | ✅     | ARCHITECTURE.md, ESLint rules, type safety guidance                               |
+| Phase 1: Store migration     | ✅     | All 16 store slices → features/\*/api/, shims deleted                             |
+| Phase 2: Feature shells      | ✅     | 21 feature modules, all with index.ts barrel files                                |
+| Phase 3: Extract from views/ | ✅     | 11 view files decomposed (~2,500 lines extracted into hooks)                      |
+| Phase 4: Clean components/   | ✅     | OrderSettings, NotificationsButton, UserActionsDropdown, SelectGameItem extracted |
+| Phase 5: Context providers   | ✅     | 12 contexts moved to owning features, shims deleted                               |
+| Phase 6: Fill feature gaps   | ✅     | Domain types for 12 features, 21 API files, 72 hooks                              |
 
 ---
 
@@ -51,17 +51,17 @@ export function UnsubscribePage() {
 
 ### What's Not There Yet
 
-| Layer | Files | Problem |
-|---|---|---|
-| `views/` | 118 tsx | 48 call mutations directly, 65 call queries directly, mix business logic + rendering + layout in single files |
-| `views/orders/` | 17 files | No `features/orders/` exists. `CreateService.tsx` is 1,055 lines with inline state, mutations, formatting, and rendering |
-| `views/settings/` | 14 files | No `features/settings/` exists |
-| `views/contracts/` | 12 files | No `features/contracts/` exists (`features/contracting/` only has hooks) |
-| `views/people/` | 6 files | No `features/people/` exists |
-| `components/` | 271 tsx | 76 call queries, 19 call mutations — many are "smart" components that should be split |
-| `pages/` | 110 tsx | 54 call queries, 14 call mutations — better than views/ but many still have inline business logic |
-| `hooks/` | 21 context providers | Global state scattered across `hooks/contract/`, `hooks/layout/`, `hooks/login/`, etc. |
-| `store/` | 20 old-style slices | 263 imports across the codebase. Only 6 slices migrated to `features/*/api/` |
+| Layer              | Files                | Problem                                                                                                                  |
+| ------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `views/`           | 118 tsx              | 48 call mutations directly, 65 call queries directly, mix business logic + rendering + layout in single files            |
+| `views/orders/`    | 17 files             | No `features/orders/` exists. `CreateService.tsx` is 1,055 lines with inline state, mutations, formatting, and rendering |
+| `views/settings/`  | 14 files             | No `features/settings/` exists                                                                                           |
+| `views/contracts/` | 12 files             | No `features/contracts/` exists (`features/contracting/` only has hooks)                                                 |
+| `views/people/`    | 6 files              | No `features/people/` exists                                                                                             |
+| `components/`      | 271 tsx              | 76 call queries, 19 call mutations — many are "smart" components that should be split                                    |
+| `pages/`           | 110 tsx              | 54 call queries, 14 call mutations — better than views/ but many still have inline business logic                        |
+| `hooks/`           | 21 context providers | Global state scattered across `hooks/contract/`, `hooks/layout/`, `hooks/login/`, etc.                                   |
+| `store/`           | 20 old-style slices  | 263 imports across the codebase. Only 6 slices migrated to `features/*/api/`                                             |
 
 ### Dependency Flow Today
 
@@ -104,24 +104,24 @@ The 20 old-style slices in `store/` are the root cause of coupling. Every view a
 
 Priority order by import count:
 
-| Slice | Importers | Target Feature |
-|---|---|---|
-| `store/profile` | 107 | `features/profile/api/` |
-| `store/contractor` | 47 | `features/contractor/api/` |
-| `store/offer` | 23 | `features/offers/api/` |
-| `store/orders` | 13 | `features/orders/api/` (new) |
-| `store/services` | 13 | `features/services/api/` (new) |
-| `store/recruiting` | 13 | `features/recruiting/api/` |
-| `store/notification` | 13 | `features/notifications/api/` (already exists) |
-| `store/public_contracts` | 8 | `features/contracting/api/` |
-| `store/orderSettings` | 5 | `features/orders/api/` |
-| `store/ships` | 5 | `features/fleet/api/` |
-| `store/admin` | 5 | `features/admin/api/` |
-| `store/organizations` | 5 | `features/contractor/api/` |
-| `store/moderation` | 3 | `features/admin/api/` |
-| `store/transactions` | 3 | `features/money/api/` |
-| `store/comments` | 2 | `features/comments/api/` (new) |
-| `store/commodities` | 1 | `features/wiki/api/` (new) |
+| Slice                    | Importers | Target Feature                                 |
+| ------------------------ | --------- | ---------------------------------------------- |
+| `store/profile`          | 107       | `features/profile/api/`                        |
+| `store/contractor`       | 47        | `features/contractor/api/`                     |
+| `store/offer`            | 23        | `features/offers/api/`                         |
+| `store/orders`           | 13        | `features/orders/api/` (new)                   |
+| `store/services`         | 13        | `features/services/api/` (new)                 |
+| `store/recruiting`       | 13        | `features/recruiting/api/`                     |
+| `store/notification`     | 13        | `features/notifications/api/` (already exists) |
+| `store/public_contracts` | 8         | `features/contracting/api/`                    |
+| `store/orderSettings`    | 5         | `features/orders/api/`                         |
+| `store/ships`            | 5         | `features/fleet/api/`                          |
+| `store/admin`            | 5         | `features/admin/api/`                          |
+| `store/organizations`    | 5         | `features/contractor/api/`                     |
+| `store/moderation`       | 3         | `features/admin/api/`                          |
+| `store/transactions`     | 3         | `features/money/api/`                          |
+| `store/comments`         | 2         | `features/comments/api/` (new)                 |
+| `store/commodities`      | 1         | `features/wiki/api/` (new)                     |
 
 **Effort:** 2–3 weeks
 
@@ -131,20 +131,20 @@ Priority order by import count:
 
 These view/page directories have no corresponding feature:
 
-| Domain | views/ files | pages/ files | Create |
-|---|---|---|---|
-| orders | 17 | — | `features/orders/{api,domain,hooks,components}/` |
-| settings | 14 | — | `features/settings/{hooks,components}/` |
-| contracts | 12 | — | Expand `features/contracting/` with api/domain/components |
-| people | 6 | 4 | `features/people/{hooks,components}/` |
-| wiki | — | 10 | `features/wiki/{api,domain,hooks,components}/` |
-| wishlists | — | 6 | `features/wishlists/{api,domain,hooks,components}/` |
-| blueprints | — | 6 | `features/blueprints/{hooks,components}/` |
-| missions | — | 4 | `features/missions/{hooks,components}/` |
-| crafting | — | 3 | `features/crafting/{hooks,components}/` |
-| member | 3 | — | Fold into `features/contractor/` |
-| transactions | 1 | — | Fold into `features/money/` |
-| comments | 1 | — | `features/comments/{api,components}/` |
+| Domain       | views/ files | pages/ files | Create                                                    |
+| ------------ | ------------ | ------------ | --------------------------------------------------------- |
+| orders       | 17           | —            | `features/orders/{api,domain,hooks,components}/`          |
+| settings     | 14           | —            | `features/settings/{hooks,components}/`                   |
+| contracts    | 12           | —            | Expand `features/contracting/` with api/domain/components |
+| people       | 6            | 4            | `features/people/{hooks,components}/`                     |
+| wiki         | —            | 10           | `features/wiki/{api,domain,hooks,components}/`            |
+| wishlists    | —            | 6            | `features/wishlists/{api,domain,hooks,components}/`       |
+| blueprints   | —            | 6            | `features/blueprints/{hooks,components}/`                 |
+| missions     | —            | 4            | `features/missions/{hooks,components}/`                   |
+| crafting     | —            | 3            | `features/crafting/{hooks,components}/`                   |
+| member       | 3            | —            | Fold into `features/contractor/`                          |
+| transactions | 1            | —            | Fold into `features/money/`                               |
+| comments     | 1            | —            | `features/comments/{api,components}/`                     |
 
 **Effort:** 1 week
 
@@ -203,17 +203,17 @@ Pattern: extract data-fetching into a hook, pass data down as props.
 
 Move feature-specific contexts to their owning feature:
 
-| Current Location | Move To |
-|---|---|
-| `hooks/contract/*` (5 contexts) | `features/contracting/hooks/` |
-| `hooks/contractor/*` (2 contexts) | `features/contractor/hooks/` |
-| `hooks/login/CurrentOrg.tsx` | `features/authentication/hooks/` |
-| `hooks/offer/CounterOfferDetails.tsx` | `features/offers/hooks/` |
-| `hooks/order/CurrentOrder.tsx` | `features/orders/hooks/` |
-| `hooks/recruiting/*` (2 contexts) | `features/recruiting/hooks/` |
-| `hooks/market/AddToCartContext.tsx` | `features/market/hooks/` |
-| `hooks/wishlist/WishlistContext.tsx` | `features/wishlists/hooks/` |
-| `hooks/time/AvailabilityHook.tsx` | `features/availability/hooks/` |
+| Current Location                      | Move To                          |
+| ------------------------------------- | -------------------------------- |
+| `hooks/contract/*` (5 contexts)       | `features/contracting/hooks/`    |
+| `hooks/contractor/*` (2 contexts)     | `features/contractor/hooks/`     |
+| `hooks/login/CurrentOrg.tsx`          | `features/authentication/hooks/` |
+| `hooks/offer/CounterOfferDetails.tsx` | `features/offers/hooks/`         |
+| `hooks/order/CurrentOrder.tsx`        | `features/orders/hooks/`         |
+| `hooks/recruiting/*` (2 contexts)     | `features/recruiting/hooks/`     |
+| `hooks/market/AddToCartContext.tsx`   | `features/market/hooks/`         |
+| `hooks/wishlist/WishlistContext.tsx`  | `features/wishlists/hooks/`      |
+| `hooks/time/AvailabilityHook.tsx`     | `features/availability/hooks/`   |
 
 Keep in `hooks/` (truly cross-cutting): `alert/`, `layout/`, `nav/`, `styles/`, `gestures/`, `animations/`, `accessibility/`, `performance/`, `pwa/`, `prefetch/`, `router/`.
 
@@ -223,18 +223,18 @@ Keep in `hooks/` (truly cross-cutting): `alert/`, `layout/`, `nav/`, `styles/`, 
 
 ## Phase 6: Fill Incomplete Feature Modules
 
-| Feature | Has api/ | Has domain/ | Has hooks/ | Has components/ | Gap |
-|---|---|---|---|---|---|
-| admin | ✗ | ✗ | ✓ | ✓ | Needs api/, domain/ |
-| authentication | ✗ | ✗ | ✓ | ✗ | Needs components/ |
-| availability | ✗ | ✗ | ✓ | ✗ | Needs components/ |
-| contracting | ✗ | ✗ | ✓ | ✗ | Needs api/, domain/, components/ |
-| contractor | ✗ | ✗ | ✓ | ✓ | Needs api/, domain/ |
-| fleet | ✗ | ✗ | ✓ | ✓ | Needs api/ |
-| money | ✗ | ✗ | ✓ | ✓ | Needs api/ |
-| offers | ✗ | ✗ | ✓ | ✗ | Needs api/, domain/, components/ |
-| recruiting | ✗ | ✗ | ✓ | ✓ | Needs api/ |
-| services | ✗ | ✗ | ✗ | ✓ | Needs api/, domain/, hooks/ |
+| Feature        | Has api/ | Has domain/ | Has hooks/ | Has components/ | Gap                              |
+| -------------- | -------- | ----------- | ---------- | --------------- | -------------------------------- |
+| admin          | ✗        | ✗           | ✓          | ✓               | Needs api/, domain/              |
+| authentication | ✗        | ✗           | ✓          | ✗               | Needs components/                |
+| availability   | ✗        | ✗           | ✓          | ✗               | Needs components/                |
+| contracting    | ✗        | ✗           | ✓          | ✗               | Needs api/, domain/, components/ |
+| contractor     | ✗        | ✗           | ✓          | ✓               | Needs api/, domain/              |
+| fleet          | ✗        | ✗           | ✓          | ✓               | Needs api/                       |
+| money          | ✗        | ✗           | ✓          | ✓               | Needs api/                       |
+| offers         | ✗        | ✗           | ✓          | ✗               | Needs api/, domain/, components/ |
+| recruiting     | ✗        | ✗           | ✓          | ✓               | Needs api/                       |
+| services       | ✗        | ✗           | ✗          | ✓               | Needs api/, domain/, hooks/      |
 
 **Effort:** 1–2 weeks
 
@@ -242,16 +242,16 @@ Keep in `hooks/` (truly cross-cutting): `alert/`, `layout/`, `nav/`, `styles/`, 
 
 ## Total Effort Estimate
 
-| Phase | Effort |
-|---|---|
-| Phase 0: Conventions | 1 day |
-| Phase 1: Store migration | 2–3 weeks |
-| Phase 2: Feature shells | 1 week |
-| Phase 3: Extract from views/ | 4–6 weeks |
-| Phase 4: Clean components/ | 1–2 weeks |
-| Phase 5: Move contexts | 2–3 days |
-| Phase 6: Fill gaps | 1–2 weeks |
-| **Total** | **9–14 weeks** (1 developer) |
+| Phase                        | Effort                       |
+| ---------------------------- | ---------------------------- |
+| Phase 0: Conventions         | 1 day                        |
+| Phase 1: Store migration     | 2–3 weeks                    |
+| Phase 2: Feature shells      | 1 week                       |
+| Phase 3: Extract from views/ | 4–6 weeks                    |
+| Phase 4: Clean components/   | 1–2 weeks                    |
+| Phase 5: Move contexts       | 2–3 days                     |
+| Phase 6: Fill gaps           | 1–2 weeks                    |
+| **Total**                    | **9–14 weeks** (1 developer) |
 
 ## Recommended Execution Order
 

@@ -30,7 +30,12 @@ import { useEnquiryStatusLabel } from "../../features/storefront/components/Stor
 import { enquiryStatusColor } from "../../features/storefront/enquiry"
 import { useFormatters } from "../../util/format"
 
-const STATUSES: EnquiryStatus[] = ["open", "in_progress", "completed", "declined"]
+const STATUSES: EnquiryStatus[] = [
+  "open",
+  "in_progress",
+  "completed",
+  "declined",
+]
 const PAGE_SIZE = 20
 
 function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
@@ -42,12 +47,25 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
   const [note, setNote] = useState(e.staff_note ?? "")
   const [update, state] = useUpdateStorefrontEnquiryMutation()
   const dirty = status !== e.status || note !== (e.staff_note ?? "")
-  const targetPath = e.target_type === "org" ? ORG_PATHS.profile(e.target) : SHOP_PATHS.profile(e.target)
+  const targetPath =
+    e.target_type === "org"
+      ? ORG_PATHS.profile(e.target)
+      : SHOP_PATHS.profile(e.target)
 
   return (
-    <Paper variant="outlined" sx={{ p: 2 }} data-testid="admin-storefront-enquiry">
+    <Paper
+      variant="outlined"
+      sx={{ p: 2 }}
+      data-testid="admin-storefront-enquiry"
+    >
       <Stack spacing={1}>
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          flexWrap="wrap"
+          useFlexGap
+        >
           <Typography variant="subtitle1" color="text.secondary">
             <MuiLink component={Link} to={targetPath}>
               {e.target_name || e.target}
@@ -61,20 +79,35 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
                 : t("admin.storefrontEnquiries.shop", "Shop")
             }
           />
-          {e.is_test && <Chip size="small" color="warning" label={t("admin.storefrontEnquiries.test", "Test")} />}
-          <Chip size="small" color={enquiryStatusColor(e.status)} label={statusLabel(e.status)} />
+          {e.is_test && (
+            <Chip
+              size="small"
+              color="warning"
+              label={t("admin.storefrontEnquiries.test", "Test")}
+            />
+          )}
+          <Chip
+            size="small"
+            color={enquiryStatusColor(e.status)}
+            label={statusLabel(e.status)}
+          />
           <Typography variant="body2" color="text.primary">
             {fmt.dateTime(e.created_at)}
           </Typography>
         </Stack>
         <Typography variant="body2" color="text.primary">
-          <strong>{t("admin.storefrontEnquiries.subdomain", "Subdomain")}:</strong>{" "}
+          <strong>
+            {t("admin.storefrontEnquiries.subdomain", "Subdomain")}:
+          </strong>{" "}
           {e.requested_subdomain}.sc-market.space
         </Typography>
         <Typography variant="body2" color="text.primary">
           <strong>{t("admin.storefrontEnquiries.from", "From")}:</strong>{" "}
           {e.submitted_by_username ? (
-            <MuiLink component={Link} to={USER_PATHS.profile(e.submitted_by_username)}>
+            <MuiLink
+              component={Link}
+              to={USER_PATHS.profile(e.submitted_by_username)}
+            >
               {e.submitted_by_username}
             </MuiLink>
           ) : (
@@ -89,18 +122,30 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
             : t("admin.storefrontEnquiries.viaMessage", "Message on SC Market")}
         </Typography>
         {e.message && (
-          <Typography variant="body2" color="text.primary" sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+          <Typography
+            variant="body2"
+            color="text.primary"
+            sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+          >
             {e.message}
           </Typography>
         )}
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ sm: "flex-start" }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1}
+          alignItems={{ sm: "flex-start" }}
+        >
           <FormControl size="small" sx={{ minWidth: 160 }}>
-            <InputLabel id={`enq-status-${e.enquiry_id}`}>{t("admin.storefrontEnquiries.status", "Status")}</InputLabel>
+            <InputLabel id={`enq-status-${e.enquiry_id}`}>
+              {t("admin.storefrontEnquiries.status", "Status")}
+            </InputLabel>
             <Select
               labelId={`enq-status-${e.enquiry_id}`}
               label={t("admin.storefrontEnquiries.status", "Status")}
               value={status}
-              onChange={(ev) => setStatus(STATUSES.find((s) => s === ev.target.value) ?? status)}
+              onChange={(ev) =>
+                setStatus(STATUSES.find((s) => s === ev.target.value) ?? status)
+              }
             >
               {STATUSES.map((s) => (
                 <MenuItem key={s} value={s}>
@@ -132,7 +177,9 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
             {t("admin.storefrontEnquiries.save", "Save")}
           </LoadingButton>
         </Stack>
-        {state.isError && <Alert severity="error">{getErrorMessage(state.error)}</Alert>}
+        {state.isError && (
+          <Alert severity="error">{getErrorMessage(state.error)}</Alert>
+        )}
         {e.handled_by_username && (
           <Typography variant="caption" color="text.primary">
             {t("admin.storefrontEnquiries.handledBy", {
@@ -164,13 +211,26 @@ export function AdminStorefrontEnquiries() {
   })
 
   return (
-    <Box id="storefront-enquiries" component="section" data-testid="admin-storefront-enquiries">
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+    <Box
+      id="storefront-enquiries"
+      component="section"
+      data-testid="admin-storefront-enquiries"
+    >
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        sx={{ mb: 1 }}
+        flexWrap="wrap"
+        useFlexGap
+      >
         <Typography variant="h6" component="h2" color="text.secondary">
           {t("admin.storefrontEnquiries.title", "Storefront enquiries")}
         </Typography>
         <FormControl size="small" sx={{ minWidth: 160 }}>
-          <InputLabel id="enq-filter">{t("admin.storefrontEnquiries.filter", "Show")}</InputLabel>
+          <InputLabel id="enq-filter">
+            {t("admin.storefrontEnquiries.filter", "Show")}
+          </InputLabel>
           <Select
             labelId="enq-filter"
             label={t("admin.storefrontEnquiries.filter", "Show")}
@@ -180,7 +240,9 @@ export function AdminStorefrontEnquiries() {
               setPage(1)
             }}
           >
-            <MenuItem value="all">{t("admin.storefrontEnquiries.all", "All")}</MenuItem>
+            <MenuItem value="all">
+              {t("admin.storefrontEnquiries.all", "All")}
+            </MenuItem>
             {STATUSES.map((s) => (
               <MenuItem key={s} value={s}>
                 {statusLabel(s)}
@@ -192,9 +254,16 @@ export function AdminStorefrontEnquiries() {
       {isLoading ? (
         <Skeleton variant="rounded" height={160} />
       ) : isError || !data ? (
-        <Alert severity="warning">{t("admin.storefrontEnquiries.loadFailed", "The enquiries couldn't be loaded.")}</Alert>
+        <Alert severity="warning">
+          {t(
+            "admin.storefrontEnquiries.loadFailed",
+            "The enquiries couldn't be loaded.",
+          )}
+        </Alert>
       ) : data.enquiries.length === 0 ? (
-        <Typography color="text.primary">{t("admin.storefrontEnquiries.empty", "No enquiries.")}</Typography>
+        <Typography color="text.primary">
+          {t("admin.storefrontEnquiries.empty", "No enquiries.")}
+        </Typography>
       ) : (
         <Stack spacing={1}>
           {data.enquiries.map((e) => (

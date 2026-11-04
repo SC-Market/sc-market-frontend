@@ -20,7 +20,13 @@ import type {
 } from "../store/api/v2/market"
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../routes/paths"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
-import { gameDataDateModified, missionGiver, missionSummaryLine, missionTitle, readableMissionText } from "./missionText"
+import {
+  gameDataDateModified,
+  missionGiver,
+  missionSummaryLine,
+  missionTitle,
+  readableMissionText,
+} from "./missionText"
 import { itemSeoDescription, itemSeoTitle } from "./itemAcquisition"
 
 // English, like the rest of the head text.
@@ -54,7 +60,11 @@ export function buildCommodityHead(
     .join(", ")
 
   const title = `${r.resource_name} — Star Citizen Commodity | SC Market`
-  const description = `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(0, 160)
+  const description =
+    `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(
+      0,
+      160,
+    )
   // Built from the *resolved* resource, not the raw path param: the same page
   // is reachable by full UUID or by short slug, and the sitemap only ever
   // lists the slug form.
@@ -96,7 +106,11 @@ export function buildResourceHead(
 ): PageHead {
   const resource = data.resource
   const title = `${resource.resource_name} — Star Citizen Resource | SC Market`
-  const description = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? formatNumber(resource.base_value, "en") + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
+  const description =
+    `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? formatNumber(resource.base_value, "en") + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(
+      0,
+      160,
+    )
   // /resources/:id and /wiki/commodities/:id render the same entity, so this
   // page deliberately points its canonical at the wiki route.
   const canonical = `${origin}${WIKI_PATHS.commodity(resource.resource_id, resource.resource_name)}`
@@ -186,7 +200,11 @@ export function buildItemHead(
 /** /wiki/ships/:id (WikiShipDetail, the full-page variant). */
 export function buildShipHead(ship: WikiShipDetail, origin: string): PageHead {
   const title = `${ship.name} — Star Citizen Ship | SC Market`
-  const description = `${ship.name}${ship.manufacturer ? " by " + ship.manufacturer : ""} — ${ship.focus || ship.role || "spacecraft"}. Specs, loadout, and market availability in Star Citizen.`.slice(0, 160)
+  const description =
+    `${ship.name}${ship.manufacturer ? " by " + ship.manufacturer : ""} — ${ship.focus || ship.role || "spacecraft"}. Specs, loadout, and market availability in Star Citizen.`.slice(
+      0,
+      160,
+    )
   // Built from the resolved ship, not the raw path param (UUID vs short slug).
   const canonical = `${origin}${WIKI_PATHS.ship(ship.id, ship.name)}`
   const image = ship.image_url || `${origin}/logo512.png`
@@ -216,13 +234,27 @@ export function buildShipHead(ship: WikiShipDetail, origin: string): PageHead {
         ...(ship.manufacturer && {
           manufacturer: { "@type": "Organization", name: ship.manufacturer },
         }),
-        category: [ship.career, ship.role, ship.focus].filter(Boolean).join(" / "),
+        category: [ship.career, ship.role, ship.focus]
+          .filter(Boolean)
+          .join(" / "),
         additionalProperty: [
           ...(ship.crew_size
-            ? [{ "@type": "PropertyValue", name: "Crew Size", value: ship.crew_size }]
+            ? [
+                {
+                  "@type": "PropertyValue",
+                  name: "Crew Size",
+                  value: ship.crew_size,
+                },
+              ]
             : []),
           ...(ship.length_m
-            ? [{ "@type": "PropertyValue", name: "Length", value: `${ship.length_m}m` }]
+            ? [
+                {
+                  "@type": "PropertyValue",
+                  name: "Length",
+                  value: `${ship.length_m}m`,
+                },
+              ]
             : []),
         ],
       },
@@ -231,7 +263,10 @@ export function buildShipHead(ship: WikiShipDetail, origin: string): PageHead {
 }
 
 /** Ore page title/description; the page also uses them while loading. */
-export function oreSeoText(displayName: string): { title: string; description: string } {
+export function oreSeoText(displayName: string): {
+  title: string
+  description: string
+} {
   return {
     title: `${displayName} — Star Citizen Mining Ore | SC Market`,
     description: `${displayName} — minable ore in Star Citizen. Mining stats, locations, and market price.`,
@@ -330,19 +365,26 @@ export function buildMiningLocationHead(
 export function blueprintItemName(
   data: Pick<BlueprintDetailResponse, "blueprint" | "output_item"> | undefined,
 ): string {
-  return data?.output_item?.name || data?.blueprint?.blueprint_name || "Blueprint"
+  return (
+    data?.output_item?.name || data?.blueprint?.blueprint_name || "Blueprint"
+  )
 }
 
 /** Blueprint title/description; the page also uses them while loading. */
-export function blueprintSeoText(
-  data: BlueprintDetailResponse | undefined,
-): { title: string; description: string } {
+export function blueprintSeoText(data: BlueprintDetailResponse | undefined): {
+  title: string
+  description: string
+} {
   const bp = data?.blueprint
   const itemName = blueprintItemName(data)
   const ingredients = data?.ingredients || []
   return {
     title: `${itemName} — Star Citizen Blueprint | SC Market`,
-    description: `How to craft ${itemName}. ${ingredients.length} ingredients, ${bp?.crafting_time_seconds ? Math.round(bp.crafting_time_seconds) + "s craft time" : "craft time varies"}. ${bp?.tier ? "Tier " + bp.tier : ""}${bp?.rarity ? ", " + bp.rarity + " rarity" : ""}.`.slice(0, 160),
+    description:
+      `How to craft ${itemName}. ${ingredients.length} ingredients, ${bp?.crafting_time_seconds ? Math.round(bp.crafting_time_seconds) + "s craft time" : "craft time varies"}. ${bp?.tier ? "Tier " + bp.tier : ""}${bp?.rarity ? ", " + bp.rarity + " rarity" : ""}.`.slice(
+        0,
+        160,
+      ),
   }
 }
 
@@ -384,7 +426,9 @@ export function buildBlueprintHead(
         image: outputItem?.icon_url || bp.icon_url || undefined,
         url: canonical,
         recipeIngredient: ingredients
-          .map((ing: BlueprintIngredient) => ing.game_item?.name || ing.slot_name)
+          .map(
+            (ing: BlueprintIngredient) => ing.game_item?.name || ing.slot_name,
+          )
           .filter(Boolean),
         ...(bp.crafting_time_seconds && {
           totalTime: `PT${Math.round(bp.crafting_time_seconds)}S`,
@@ -413,7 +457,8 @@ export function buildMissionHead(
   const name = readableMissionText(m.mission_name, giver) || "Unknown mission"
   const title = `${missionTitle(m)} · Star Citizen Mission | SC Market`
   const summary = missionSummaryLine(m, data.blueprint_rewards)
-  const description = summary.length > 160 ? `${summary.slice(0, 159).trimEnd()}…` : summary
+  const description =
+    summary.length > 160 ? `${summary.slice(0, 159).trimEnd()}…` : summary
   const canonical = `${origin}${GAME_DATA_PATHS.mission(routeSlug)}`
   return {
     title,
@@ -435,11 +480,18 @@ export function buildMissionHead(
         name: missionTitle(m),
         description: summary,
         url: canonical,
-        ...(gameDataDateModified(version) && { dateModified: gameDataDateModified(version) }),
+        ...(gameDataDateModified(version) && {
+          dateModified: gameDataDateModified(version),
+        }),
         about: {
           "@type": "Thing",
           name,
-          ...(m.mission_description && { description: readableMissionText(m.mission_description, giver).slice(0, 500) }),
+          ...(m.mission_description && {
+            description: readableMissionText(
+              m.mission_description,
+              giver,
+            ).slice(0, 500),
+          }),
         },
         isPartOf: { "@type": "WebSite", name: "SC Market", url: `${origin}/` },
       },
@@ -473,13 +525,20 @@ export function manufacturerDisplayName(
  * route param, as the page does.
  */
 export function buildManufacturerHead(
-  m: Pick<WikiManufacturerDetail, "manufacturer" | "display_name" | "item_count">,
+  m: Pick<
+    WikiManufacturerDetail,
+    "manufacturer" | "display_name" | "item_count"
+  >,
   routeId: string,
   origin: string,
 ): PageHead {
   const name = manufacturerDisplayName(m)
   const title = `${name} — Star Citizen Manufacturer | SC Market`
-  const description = `${name} manufactures ${m.item_count} items in Star Citizen. Browse their full product catalog on SC Market.`.slice(0, 160)
+  const description =
+    `${name} manufactures ${m.item_count} items in Star Citizen. Browse their full product catalog on SC Market.`.slice(
+      0,
+      160,
+    )
   const canonical = `${origin}${WIKI_PATHS.manufacturer(routeId)}`
 
   return {

@@ -8,7 +8,11 @@ import { Box, Grid, Typography, Skeleton, Button } from "@mui/material"
 import { ArrowForwardRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-import { useSearchListingsQuery, useGetPriceHistoryQuery, type ListingSearchResult } from "../../../../store/api/v2/market"
+import {
+  useSearchListingsQuery,
+  useGetPriceHistoryQuery,
+  type ListingSearchResult,
+} from "../../../../store/api/v2/market"
 import { ListingCardV2 } from "../ListingSearchV2"
 import { Section } from "../../../../components/paper/Section"
 import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
@@ -29,25 +33,34 @@ function ListingRow({
   isLoading: boolean
 }) {
   const { t } = useTranslation()
-  if (isLoading) return (
-    <Grid item xs={12}>
-      <Box sx={{ width: "100%", overflowX: "auto" }}>
-        <Box display="flex" gap={1}>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} variant="rounded" width={225} height={200} />
-          ))}
+  if (isLoading)
+    return (
+      <Grid item xs={12}>
+        <Box sx={{ width: "100%", overflowX: "auto" }}>
+          <Box display="flex" gap={1}>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} variant="rounded" width={225} height={200} />
+            ))}
+          </Box>
         </Box>
-      </Box>
-    </Grid>
-  )
+      </Grid>
+    )
 
   if (!listings.length) return null
 
   return (
     <>
       <Grid item xs={12}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6" fontWeight="bold">{title}</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold">
+            {title}
+          </Typography>
           <Button
             component={Link}
             to={seeAllHref}
@@ -63,7 +76,10 @@ function ListingRow({
         <Box sx={{ width: "100%", overflowX: "auto" }}>
           <Box display="flex" gap={1}>
             {listings.map((listing, i) => (
-              <Box key={listing.listing_id} sx={{ minWidth: 210, maxWidth: 240 }}>
+              <Box
+                key={listing.listing_id}
+                sx={{ minWidth: 210, maxWidth: 240 }}
+              >
                 <ListingCardV2 listing={listing} index={i} />
               </Box>
             ))}
@@ -96,7 +112,8 @@ export function SellerOtherListingsV2(props: {
   )
 
   const listings = useMemo(
-    () => (data?.listings ?? []).filter((l) => l.listing_id !== currentListingId),
+    () =>
+      (data?.listings ?? []).filter((l) => l.listing_id !== currentListingId),
     [data, currentListingId],
   )
 
@@ -131,7 +148,8 @@ export function RelatedListingsV2(props: {
   })
 
   const listings = useMemo(
-    () => (data?.listings ?? []).filter((l) => l.listing_id !== currentListingId),
+    () =>
+      (data?.listings ?? []).filter((l) => l.listing_id !== currentListingId),
     [data, currentListingId],
   )
 
@@ -165,16 +183,28 @@ export function AggregateMarketDataV2(props: {
     if (!priceData?.data?.length) return null
     const points = priceData.data
     return [
-      { name: "Average", data: points.map((p) => ({ x: p.timestamp, y: p.avg_price })) },
-      { name: "Min", data: points.map((p) => ({ x: p.timestamp, y: p.min_price })) },
-      { name: "Max", data: points.map((p) => ({ x: p.timestamp, y: p.max_price })) },
+      {
+        name: "Average",
+        data: points.map((p) => ({ x: p.timestamp, y: p.avg_price })),
+      },
+      {
+        name: "Min",
+        data: points.map((p) => ({ x: p.timestamp, y: p.min_price })),
+      },
+      {
+        name: "Max",
+        data: points.map((p) => ({ x: p.timestamp, y: p.max_price })),
+      },
     ]
   }, [priceData])
 
   if (isLoading || !series) return null
 
   return (
-    <Section xs={12} title={t("listing.marketAnalysis", "Market Analysis") as string}>
+    <Section
+      xs={12}
+      title={t("listing.marketAnalysis", "Market Analysis") as string}
+    >
       <Grid item xs={12}>
         <MuiAreaChart
           series={series}

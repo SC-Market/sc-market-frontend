@@ -67,7 +67,8 @@ export function visibleOrgManageTabs(
   brandingUnlocked = false,
 ): OrgManageTab[] {
   if (!contractor || !profile) return []
-  const isWhiteLabel = brandingUnlocked || contractor.premium_tier === "white_label"
+  const isWhiteLabel =
+    brandingUnlocked || contractor.premium_tier === "white_label"
   return ORG_MANAGE_TABS.filter(
     (tab) =>
       (!("whiteLabelOnly" in tab) || isWhiteLabel) &&

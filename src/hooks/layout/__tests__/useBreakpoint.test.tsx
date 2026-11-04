@@ -109,7 +109,10 @@ describe("breakpoint hooks", () => {
   it("hydrate the server default without a mismatch, then report the viewport", async () => {
     const html = renderToString(withTheme(<Probe />))
     mockViewport(PHONE_WIDTH)
-    const { container, errors, cleanup } = await hydrate(withTheme(<Probe />), html)
+    const { container, errors, cleanup } = await hydrate(
+      withTheme(<Probe />),
+      html,
+    )
     expect(errors).toEqual([])
     expect(JSON.parse(container.textContent!)).toMatchObject({
       mobile: true,

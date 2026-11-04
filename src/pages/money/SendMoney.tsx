@@ -13,7 +13,9 @@ export function SendMoney(props: { org?: boolean }) {
   const { contractor_id } = useParams<{ contractor_id: string }>()
   const pageData = usePageSendMoney(props.org)
 
-  const orgMoneyHref = contractor_id ? ORG_PATHS.money(contractor_id) : "/dashboard"
+  const orgMoneyHref = contractor_id
+    ? ORG_PATHS.money(contractor_id)
+    : "/dashboard"
 
   return (
     <FormPageLayout

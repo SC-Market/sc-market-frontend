@@ -78,9 +78,7 @@ export function UpdateNotification() {
           </Stack>
         }
       >
-        <Typography variant="body2">
-          {t("ui.pwaUpdateBody")}
-        </Typography>
+        <Typography variant="body2">{t("ui.pwaUpdateBody")}</Typography>
       </Alert>
     </Snackbar>
   )

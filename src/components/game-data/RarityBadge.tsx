@@ -1,9 +1,9 @@
 /**
  * RarityBadge - Display blueprint/item rarity badge
- * 
+ *
  * Shows rarity level with color coding.
  * Used for blueprints and rare items.
- * 
+ *
  * Requirements: 48.1-48.10
  */
 
@@ -20,7 +20,7 @@ interface RarityBadgeProps {
 
 /**
  * RarityBadge Component
- * 
+ *
  * Features:
  * - Color-coded by rarity (48.3, 48.9)
  * - Displays rarity name (48.1)
@@ -35,7 +35,7 @@ export const RarityBadge: React.FC<RarityBadgeProps> = ({
   // Get rarity color
   const getRarityColor = (): string => {
     const rarityLower = rarity.toLowerCase()
-    
+
     switch (rarityLower) {
       case "common":
         return theme.palette.grey[600]

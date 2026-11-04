@@ -63,7 +63,7 @@ export interface BannerPageLayoutProps {
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
   const { profile } = useSession()
   const primaryContractor = profile?.contractors?.[0]
-  
+
   const {
     title,
     canonicalUrl,
@@ -82,7 +82,8 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
 
   // Inject primary contractor into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs) return breadcrumbs
+    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs)
+      return breadcrumbs
 
     // Insert org after first breadcrumb (home)
     return [

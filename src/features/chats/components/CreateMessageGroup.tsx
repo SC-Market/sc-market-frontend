@@ -20,9 +20,7 @@ import React, { useEffect, useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { User } from "../../../datatypes/User"
-import {
-  useSearchUsersQuery,
-} from "../../profile/api/profileApi"
+import { useSearchUsersQuery } from "../../profile/api/profileApi"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import {
@@ -196,7 +194,9 @@ function MessageHeader(props: {
                     ? t("CreateMessageGroupBody.minChars") ||
                       "Type at least 3 characters"
                     : targetObject.length > 0
-                      ? t("CreateMessageGroupBody.selectedCount", { count: targetObject.length })
+                      ? t("CreateMessageGroupBody.selectedCount", {
+                          count: targetObject.length,
+                        })
                       : undefined
                 }
                 InputProps={{

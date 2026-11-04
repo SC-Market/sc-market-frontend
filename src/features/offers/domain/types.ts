@@ -28,7 +28,10 @@ export type OfferStatusKey =
   | "rejected"
 
 /** Map any status string (API, display, or already-normalized) to a UI key */
-export function normalizeOfferStatus(status: string, offers?: Array<{ status: string }>): OfferStatusKey {
+export function normalizeOfferStatus(
+  status: string,
+  offers?: Array<{ status: string }>,
+): OfferStatusKey {
   switch (status) {
     case "to-seller":
     case "Waiting for Seller":
@@ -49,7 +52,11 @@ export function normalizeOfferStatus(status: string, offers?: Array<{ status: st
       // V2 API: session is "active" — determine whose turn from the most recent offer
       if (offers && offers.length > 0) {
         const lastOffer = offers[0] // offers are ordered most recent first
-        if (lastOffer.status === "counteroffered" || lastOffer.status === "to-seller") return "waitingSeller"
+        if (
+          lastOffer.status === "counteroffered" ||
+          lastOffer.status === "to-seller"
+        )
+          return "waitingSeller"
         if (lastOffer.status === "to-customer") return "waitingCustomer"
         // If the last offer was made by the seller, it's waiting for customer
         // If made by the customer, it's waiting for seller

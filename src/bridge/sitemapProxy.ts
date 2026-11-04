@@ -29,28 +29,45 @@ export interface SitemapRuntime {
   fetch: typeof fetch
 }
 
-function xmlResponse(body: string | null, status: number, extra: Record<string, string> = {}): Response {
+function xmlResponse(
+  body: string | null,
+  status: number,
+  extra: Record<string, string> = {},
+): Response {
   return new Response(body, {
     status,
     headers: {
-      "Content-Type": status === 200 ? "application/xml; charset=utf-8" : "text/plain; charset=utf-8",
+      "Content-Type":
+        status === 200
+          ? "application/xml; charset=utf-8"
+          : "text/plain; charset=utf-8",
       "X-SCM-Bridge": "sitemap",
       ...extra,
     },
   })
 }
 
-export async function handleSitemapRequest(ctx: BridgeContext, runtime: SitemapRuntime): Promise<Response> {
+export async function handleSitemapRequest(
+  ctx: BridgeContext,
+  runtime: SitemapRuntime,
+): Promise<Response> {
   const { request, env } = ctx
   if (request.method !== "GET" && request.method !== "HEAD") return ctx.next()
   const url = new URL(request.url)
-  if (!SITEMAP_PATH.test(url.pathname) || !isMainSiteHostname(url.hostname)) return ctx.next()
+  if (!SITEMAP_PATH.test(url.pathname) || !isMainSiteHostname(url.hostname))
+    return ctx.next()
   const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
-  if (!apiBase) return xmlResponse("Sitemap unavailable", 503, { "Retry-After": "600" })
+  if (!apiBase)
+    return xmlResponse("Sitemap unavailable", 503, { "Retry-After": "600" })
 
-  const cacheKey = new Request(`${url.origin}${url.pathname}`, { method: "GET" })
+  const cacheKey = new Request(`${url.origin}${url.pathname}`, {
+    method: "GET",
+  })
   const cached = await runtime.cache?.match(cacheKey)
-  if (cached) return request.method === "HEAD" ? new Response(null, { status: cached.status, headers: cached.headers }) : cached
+  if (cached)
+    return request.method === "HEAD"
+      ? new Response(null, { status: cached.status, headers: cached.headers })
+      : cached
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), SITEMAP_TIMEOUT_MS)
@@ -65,23 +82,35 @@ export async function handleSitemapRequest(ctx: BridgeContext, runtime: SitemapR
     })
     body = await upstream.text()
   } catch {
-    return xmlResponse("Sitemap temporarily unavailable", 503, { "Retry-After": "600" })
+    return xmlResponse("Sitemap temporarily unavailable", 503, {
+      "Retry-After": "600",
+    })
   } finally {
     clearTimeout(timer)
   }
-  if (upstream.status === 404) return xmlResponse("Sitemap not found", 404, { "Cache-Control": "public, max-age=300" })
+  if (upstream.status === 404)
+    return xmlResponse("Sitemap not found", 404, {
+      "Cache-Control": "public, max-age=300",
+    })
   if (upstream.status !== 200 || !body.trimStart().startsWith("<?xml")) {
-    return xmlResponse("Sitemap temporarily unavailable", 503, { "Retry-After": "600" })
+    return xmlResponse("Sitemap temporarily unavailable", 503, {
+      "Retry-After": "600",
+    })
   }
 
   // The index lists the sections on the API host: list them on this one.
   const xml =
-    url.pathname === "/sitemap.xml" ? body.split(`${apiBase}/sitemap-`).join(`${url.origin}/sitemap-`) : body
+    url.pathname === "/sitemap.xml"
+      ? body.split(`${apiBase}/sitemap-`).join(`${url.origin}/sitemap-`)
+      : body
   const lastModified = upstream.headers.get("Last-Modified")
   const response = xmlResponse(xml, 200, {
     "Cache-Control": `public, max-age=${SITEMAP_TTL_SECONDS}`,
     ...(lastModified ? { "Last-Modified": lastModified } : {}),
   })
-  if (runtime.cache) ctx.waitUntil(runtime.cache.put(cacheKey, response.clone()))
-  return request.method === "HEAD" ? new Response(null, { status: 200, headers: response.headers }) : response
+  if (runtime.cache)
+    ctx.waitUntil(runtime.cache.put(cacheKey, response.clone()))
+  return request.method === "HEAD"
+    ? new Response(null, { status: 200, headers: response.headers })
+    : response
 }

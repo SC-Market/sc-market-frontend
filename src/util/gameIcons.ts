@@ -67,7 +67,9 @@ const FACTION_ICONS: Record<string, string> = {
 }
 
 /** Get mission type icon URL */
-export function getMissionIcon(missionType: string | null | undefined): string | null {
+export function getMissionIcon(
+  missionType: string | null | undefined,
+): string | null {
   if (!missionType) return null
   const file = MISSION_ICONS[missionType.toLowerCase()]
   return file ? `${BASE}/missions/${file}` : null
@@ -81,7 +83,9 @@ export function getFactionIcon(code: string | null | undefined): string | null {
 }
 
 /** Get resource category icon URL */
-export function getResourceCategoryIcon(category: string | null | undefined): string | null {
+export function getResourceCategoryIcon(
+  category: string | null | undefined,
+): string | null {
   if (!category) return null
   const map: Record<string, string> = {
     gas: "inv_filter_icons_gas.svg",
@@ -143,7 +147,9 @@ const COMMODITY_COLORS: Record<string, string> = {
   waste: "#A1887F",
 }
 
-export function getCommodityColor(subType: string | null | undefined): string | null {
+export function getCommodityColor(
+  subType: string | null | undefined,
+): string | null {
   if (!subType) return null
   return COMMODITY_COLORS[subType.toLowerCase()] || null
 }
@@ -184,7 +190,9 @@ const MISSION_CATEGORY_COLORS: Record<string, string> = {
   trading: "#F9A825",
 }
 
-export function getMissionCategoryColor(category: string | null | undefined): string {
+export function getMissionCategoryColor(
+  category: string | null | undefined,
+): string {
   if (!category) return "#616161"
   return MISSION_CATEGORY_COLORS[category.toLowerCase()] || "#616161"
 }
@@ -219,7 +227,12 @@ const ITEM_CATEGORY_COLORS: Record<string, string> = {
   drink: "#1B5E20",
 }
 
-export function getItemCategoryColor(category: string | null | undefined): string {
+export function getItemCategoryColor(
+  category: string | null | undefined,
+): string {
   if (!category) return "#616161"
-  return ITEM_CATEGORY_COLORS[category.toLowerCase().replace(/[\s_-]/g, "")] || "#616161"
+  return (
+    ITEM_CATEGORY_COLORS[category.toLowerCase().replace(/[\s_-]/g, "")] ||
+    "#616161"
+  )
 }

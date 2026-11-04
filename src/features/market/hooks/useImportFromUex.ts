@@ -22,7 +22,10 @@ export function useImportFromUex(shopId: string) {
   const [importFromUex, { isLoading }] = useImportFromUexMutation()
 
   const run = useCallback(
-    async (body: ImportFromUexApiArg["body"], fallback: string): Promise<UexImportOutcome> => {
+    async (
+      body: ImportFromUexApiArg["body"],
+      fallback: string,
+    ): Promise<UexImportOutcome> => {
       try {
         return { ok: true, result: await importFromUex({ body }).unwrap() }
       } catch (e) {
@@ -36,7 +39,10 @@ export function useImportFromUex(shopId: string) {
     (username: string) =>
       run(
         { uex_username: username.trim(), shop_id: shopId },
-        t("ItemStock.importFromUexFetchError", "Couldn't fetch your UEX listings"),
+        t(
+          "ItemStock.importFromUexFetchError",
+          "Couldn't fetch your UEX listings",
+        ),
       ),
     [run, shopId, t],
   )
@@ -44,7 +50,12 @@ export function useImportFromUex(shopId: string) {
   const confirm = useCallback(
     (username: string, listings: UexListing[]) =>
       run(
-        { uex_username: username.trim(), shop_id: shopId, listings, confirm: true },
+        {
+          uex_username: username.trim(),
+          shop_id: shopId,
+          listings,
+          confirm: true,
+        },
         t("ItemStock.importFromUexError", "The import failed"),
       ),
     [run, shopId, t],

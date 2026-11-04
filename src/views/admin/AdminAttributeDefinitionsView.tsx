@@ -32,38 +32,133 @@ export function AdminAttributeDefinitionsView() {
   const theme = useTheme<ExtendedTheme>()
 
   const {
-    definitionsData, isLoading, error, rows,
+    definitionsData,
+    isLoading,
+    error,
+    rows,
     selectedDefinition,
-    isCreateModalOpen, isEditModalOpen, isDeleteModalOpen,
-    handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
-    formData, setFormData,
-    allowedValuesInput, setAllowedValuesInput,
-    cascadeDelete, setCascadeDelete,
-    isCreating, isUpdating, isDeleting,
-    handleCreateDefinition, handleUpdateDefinition, handleDeleteDefinition,
+    isCreateModalOpen,
+    isEditModalOpen,
+    isDeleteModalOpen,
+    handleOpenCreateModal,
+    handleOpenEditModal,
+    handleOpenDeleteModal,
+    handleCloseModals,
+    formData,
+    setFormData,
+    allowedValuesInput,
+    setAllowedValuesInput,
+    cascadeDelete,
+    setCascadeDelete,
+    isCreating,
+    isUpdating,
+    isDeleting,
+    handleCreateDefinition,
+    handleUpdateDefinition,
+    handleDeleteDefinition,
   } = useAdminAttributeDefinitions()
 
   const columns: GridColDef[] = [
-    { field: "attribute_name", headerName: t("admin.attributes.attributeName", "Attribute Name"), width: 150, display: "flex" as const, flex: 1 },
-    { field: "display_name", headerName: t("admin.attributes.displayName", "Display Name"), width: 150, display: "flex" as const, flex: 1 },
-    { field: "attribute_type", headerName: t("admin.attributes.field.type", "Type"), width: 120, display: "flex" as const, flex: 1,
-      renderCell: (params: GridRenderCellParams) => <Chip label={params.value} color="primary" variant="outlined" size="small" /> },
-    { field: "allowed_values", headerName: t("admin.attributes.allowedValues", "Allowed Values"), width: 200, display: "flex" as const, flex: 1,
-      renderCell: (params: GridRenderCellParams) => params.value
-        ? <Typography variant="body2" noWrap>{params.value.join(", ")}</Typography>
-        : <Typography variant="body2" color="text.secondary">{t("admin.attributes.anyValue", "Any value")}</Typography> },
-    { field: "applicable_item_types", headerName: t("admin.attributes.field.applicableTypes", "Applicable Types"), width: 200, display: "flex" as const, flex: 1,
-      renderCell: (params: GridRenderCellParams) => params.value
-        ? <Typography variant="body2" noWrap>{params.value.join(", ")}</Typography>
-        : <Typography variant="body2" color="text.secondary">{t("admin.attributes.allTypes", "All types")}</Typography> },
-    { field: "display_order", headerName: t("admin.attributes.field.order", "Order"), width: 80, display: "flex" as const, flex: 1 },
-    { field: "actions", headerName: t("admin.attributes.actions", "Actions"), width: 150, display: "flex" as const, flex: 1,
+    {
+      field: "attribute_name",
+      headerName: t("admin.attributes.attributeName", "Attribute Name"),
+      width: 150,
+      display: "flex" as const,
+      flex: 1,
+    },
+    {
+      field: "display_name",
+      headerName: t("admin.attributes.displayName", "Display Name"),
+      width: 150,
+      display: "flex" as const,
+      flex: 1,
+    },
+    {
+      field: "attribute_type",
+      headerName: t("admin.attributes.field.type", "Type"),
+      width: 120,
+      display: "flex" as const,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Chip
+          label={params.value}
+          color="primary"
+          variant="outlined"
+          size="small"
+        />
+      ),
+    },
+    {
+      field: "allowed_values",
+      headerName: t("admin.attributes.allowedValues", "Allowed Values"),
+      width: 200,
+      display: "flex" as const,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) =>
+        params.value ? (
+          <Typography variant="body2" noWrap>
+            {params.value.join(", ")}
+          </Typography>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            {t("admin.attributes.anyValue", "Any value")}
+          </Typography>
+        ),
+    },
+    {
+      field: "applicable_item_types",
+      headerName: t(
+        "admin.attributes.field.applicableTypes",
+        "Applicable Types",
+      ),
+      width: 200,
+      display: "flex" as const,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) =>
+        params.value ? (
+          <Typography variant="body2" noWrap>
+            {params.value.join(", ")}
+          </Typography>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            {t("admin.attributes.allTypes", "All types")}
+          </Typography>
+        ),
+    },
+    {
+      field: "display_order",
+      headerName: t("admin.attributes.field.order", "Order"),
+      width: 80,
+      display: "flex" as const,
+      flex: 1,
+    },
+    {
+      field: "actions",
+      headerName: t("admin.attributes.actions", "Actions"),
+      width: 150,
+      display: "flex" as const,
+      flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Box>
-          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary" aria-label={t("accessibility.edit")}><AdminIcons.Edit /></IconButton>
-          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error" aria-label={t("accessibility.delete")}><AdminIcons.Delete /></IconButton>
+          <IconButton
+            size="small"
+            onClick={() => handleOpenEditModal(params.row)}
+            color="primary"
+            aria-label={t("accessibility.edit")}
+          >
+            <AdminIcons.Edit />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={() => handleOpenDeleteModal(params.row)}
+            color="error"
+            aria-label={t("accessibility.delete")}
+          >
+            <AdminIcons.Delete />
+          </IconButton>
         </Box>
-      ) },
+      ),
+    },
   ]
 
   return (
@@ -105,7 +200,9 @@ export function AdminAttributeDefinitionsView() {
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            {t("adminUi.attributes.loadError", { error: JSON.stringify(error) })}
+            {t("adminUi.attributes.loadError", {
+              error: JSON.stringify(error),
+            })}
           </Typography>
         </Grid>
       )}
@@ -155,7 +252,8 @@ export function AdminAttributeDefinitionsView() {
               <InputLabel id="admin-attribute-definitions-attribute-type-label">
                 {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
-              <Select labelId="admin-attribute-definitions-attribute-type-label"
+              <Select
+                labelId="admin-attribute-definitions-attribute-type-label"
                 value={formData.attribute_type}
                 label={t(
                   "admin.attributes.field.attributeType",
@@ -164,16 +262,23 @@ export function AdminAttributeDefinitionsView() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    attribute_type: e.target.value as AttributeDefinition["attribute_type"],
+                    attribute_type: e.target
+                      .value as AttributeDefinition["attribute_type"],
                   })
                 }
               >
-                <MenuItem value="select">{t("adminUi.attributes.types.select")}</MenuItem>
+                <MenuItem value="select">
+                  {t("adminUi.attributes.types.select")}
+                </MenuItem>
                 <MenuItem value="multiselect">
                   {t("adminUi.attributes.types.multiselect")}
                 </MenuItem>
-                <MenuItem value="range">{t("adminUi.attributes.types.range")}</MenuItem>
-                <MenuItem value="text">{t("adminUi.attributes.types.text")}</MenuItem>
+                <MenuItem value="range">
+                  {t("adminUi.attributes.types.range")}
+                </MenuItem>
+                <MenuItem value="text">
+                  {t("adminUi.attributes.types.text")}
+                </MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -309,7 +414,8 @@ export function AdminAttributeDefinitionsView() {
               <InputLabel id="admin-attribute-definitions-attribute-type-2-label">
                 {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
-              <Select labelId="admin-attribute-definitions-attribute-type-2-label"
+              <Select
+                labelId="admin-attribute-definitions-attribute-type-2-label"
                 value={formData.attribute_type}
                 label={t(
                   "admin.attributes.field.attributeType",
@@ -318,16 +424,23 @@ export function AdminAttributeDefinitionsView() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    attribute_type: e.target.value as AttributeDefinition["attribute_type"],
+                    attribute_type: e.target
+                      .value as AttributeDefinition["attribute_type"],
                   })
                 }
               >
-                <MenuItem value="select">{t("adminUi.attributes.types.select")}</MenuItem>
+                <MenuItem value="select">
+                  {t("adminUi.attributes.types.select")}
+                </MenuItem>
                 <MenuItem value="multiselect">
                   {t("adminUi.attributes.types.multiselect")}
                 </MenuItem>
-                <MenuItem value="range">{t("adminUi.attributes.types.range")}</MenuItem>
-                <MenuItem value="text">{t("adminUi.attributes.types.text")}</MenuItem>
+                <MenuItem value="range">
+                  {t("adminUi.attributes.types.range")}
+                </MenuItem>
+                <MenuItem value="text">
+                  {t("adminUi.attributes.types.text")}
+                </MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -461,8 +574,12 @@ export function AdminAttributeDefinitionsView() {
                 )}
               </Typography>
               <Select
-                inputProps={{ "aria-label": t("adminUi.attributes.cascadeDelete") }}
-                SelectDisplayProps={{ "aria-label": t("adminUi.attributes.cascadeDelete") }}
+                inputProps={{
+                  "aria-label": t("adminUi.attributes.cascadeDelete"),
+                }}
+                SelectDisplayProps={{
+                  "aria-label": t("adminUi.attributes.cascadeDelete"),
+                }}
                 value={cascadeDelete ? "yes" : "no"}
                 onChange={(e) => setCascadeDelete(e.target.value === "yes")}
                 size="small"

@@ -23,7 +23,9 @@ export async function prefetchMiningOrePage(
   if (!name) return
 
   await Promise.all([
-    settleQuery(dispatch(marketV2Api.endpoints.getOreDetail.initiate({ name }))),
+    settleQuery(
+      dispatch(marketV2Api.endpoints.getOreDetail.initiate({ name })),
+    ),
     settleQuery(dispatch(marketV2Api.endpoints.getActiveVersions.initiate())),
     settleQuery(
       dispatch(

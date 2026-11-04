@@ -22,18 +22,30 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
-import { formatCraftedSource, hasDisplayableSource } from "../../util/variantDisplay"
-import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
+import {
+  formatCraftedSource,
+  hasDisplayableSource,
+} from "../../util/variantDisplay"
+import type {
+  OfferMarketListingV2,
+  OrderMarketListingV2,
+} from "../../store/api/v2/market"
 import { MARKET_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
 
-export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
+export function OfferMarketListingsV2Items({
+  items,
+}: {
+  items: (OfferMarketListingV2 | OrderMarketListingV2)[]
+}) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   if (!items.length) return null
 
   const total = items.reduce(
-    (s, i) => s + i.v2_variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0),
+    (s, i) =>
+      s +
+      i.v2_variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0),
     0,
   )
 
@@ -45,9 +57,15 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
             <TableRow>
               <TableCell>{t("marketUi.offerItems.colItem")}</TableCell>
               <TableCell>{t("marketUi.offerItems.colVariant")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colQty")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colPricePerUnit")}</TableCell>
-              <TableCell align="right">{t("marketUi.offerItems.colSubtotal")}</TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colQty")}
+              </TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colPricePerUnit")}
+              </TableCell>
+              <TableCell align="right">
+                {t("marketUi.offerItems.colSubtotal")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,7 +74,11 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                 <TableRow
                   key={v.variant_id}
                   hover
-                  sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
+                  sx={{
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
                   component={Link}
                   to={MARKET_PATHS.listing(item.listing_id)}
                 >
@@ -75,27 +97,50 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                      }}
+                    >
                       {v.attributes.quality_tier != null && (
-                        <QualityBadge tier={v.attributes.quality_tier} size="small" />
+                        <QualityBadge
+                          tier={v.attributes.quality_tier}
+                          size="small"
+                        />
                       )}
                       {v.attributes.quality_value != null && (
-                        <Chip label={`${v.attributes.quality_value}/1000`} size="small" variant="outlined" />
-                      )}
-                      {hasDisplayableSource(v.attributes.crafted_source) && (
                         <Chip
-                          label={formatCraftedSource(String(v.attributes.crafted_source))}
+                          label={`${v.attributes.quality_value}/1000`}
                           size="small"
                           variant="outlined"
                         />
                       )}
-                      {v.attributes.quality_tier == null && v.attributes.quality_value == null && !hasDisplayableSource(v.attributes.crafted_source) && (
-                        <Typography variant="caption" color="text.secondary">{v.display_name || t("marketUi.offerItems.standardVariant")}</Typography>
+                      {hasDisplayableSource(v.attributes.crafted_source) && (
+                        <Chip
+                          label={formatCraftedSource(
+                            String(v.attributes.crafted_source),
+                          )}
+                          size="small"
+                          variant="outlined"
+                        />
                       )}
+                      {v.attributes.quality_tier == null &&
+                        v.attributes.quality_value == null &&
+                        !hasDisplayableSource(v.attributes.crafted_source) && (
+                          <Typography variant="caption" color="text.secondary">
+                            {v.display_name ||
+                              t("marketUi.offerItems.standardVariant")}
+                          </Typography>
+                        )}
                     </Box>
                   </TableCell>
                   <TableCell align="right">{v.quantity}</TableCell>
-                  <TableCell align="right">{fmt.price(v.price_per_unit)}</TableCell>
+                  <TableCell align="right">
+                    {fmt.price(v.price_per_unit)}
+                  </TableCell>
                   <TableCell align="right">
                     <Typography variant="body2" fontWeight={600}>
                       {fmt.price(v.price_per_unit * v.quantity)}
@@ -106,7 +151,9 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
             )}
             <TableRow>
               <TableCell colSpan={4} align="right">
-                <Typography variant="subtitle2">{t("marketUi.offerItems.total")}</Typography>
+                <Typography variant="subtitle2">
+                  {t("marketUi.offerItems.total")}
+                </Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6" color="primary" fontWeight={700}>

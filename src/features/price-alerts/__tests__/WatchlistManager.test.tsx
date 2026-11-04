@@ -10,7 +10,9 @@ const h = vi.hoisted(() => ({
 }))
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 vi.mock("../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
@@ -118,10 +120,12 @@ describe("WatchlistManager", () => {
   it("edits the target price and quality of an item watch", () => {
     renderManager()
     fireEvent.click(screen.getByLabelText("Edit Medical Supplies"))
-    expect(screen.getByRole("dialog", { name: "Edit price alert" })).toBeTruthy()
-    expect(screen.getByRole("combobox", { name: "Minimum quality" }).textContent).toBe(
-      "Tier 3 or better",
-    )
+    expect(
+      screen.getByRole("dialog", { name: "Edit price alert" }),
+    ).toBeTruthy()
+    expect(
+      screen.getByRole("combobox", { name: "Minimum quality" }).textContent,
+    ).toBe("Tier 3 or better")
     fireEvent.change(screen.getByRole("textbox", { name: "Target price" }), {
       target: { value: "30000" },
     })
@@ -158,7 +162,9 @@ describe("WatchlistManager", () => {
       screen.getByRole("link", { name: "Browse items" }).getAttribute("href"),
     ).toBe("/wiki/items")
     expect(
-      screen.getByRole("link", { name: "Browse the market" }).getAttribute("href"),
+      screen
+        .getByRole("link", { name: "Browse the market" })
+        .getAttribute("href"),
     ).toBe("/market")
   })
 

@@ -239,10 +239,9 @@ export function MyServices(props: { status: string }) {
     profile && !contractorId ? profile.username : skipToken,
   )
 
-  const { data: orglistings } = useGetServicesContractorQuery(
-    contractorId!,
-    { skip: !contractorId },
-  )
+  const { data: orglistings } = useGetServicesContractorQuery(contractorId!, {
+    skip: !contractorId,
+  })
 
   const filteredServices = useMemo(
     () =>

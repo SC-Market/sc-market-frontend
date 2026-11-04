@@ -8,10 +8,15 @@ import en from "../../../locales/en/english.json"
 import { AUDIT_LOG_ACTIONS, auditActionKey } from "../OrgAuditLogs"
 
 function resolve(key: string): unknown {
-  return key.split(".").reduce<unknown>(
-    (node, part) => (node && typeof node === "object" ? (node as Record<string, unknown>)[part] : undefined),
-    en,
-  )
+  return key
+    .split(".")
+    .reduce<unknown>(
+      (node, part) =>
+        node && typeof node === "object"
+          ? (node as Record<string, unknown>)[part]
+          : undefined,
+      en,
+    )
 }
 
 describe("org audit log action labels", () => {

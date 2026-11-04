@@ -3,11 +3,19 @@ import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 vi.mock("../components/NotificationBase", () => ({
-  NotificationBase: ({ to, children }: { to?: string; children: React.ReactNode }) => (
+  NotificationBase: ({
+    to,
+    children,
+  }: {
+    to?: string
+    children: React.ReactNode
+  }) => (
     <div data-testid="notif" data-to={to}>
       {children}
     </div>
@@ -26,14 +34,28 @@ const base = {
 }
 
 const notice = (kind: string, new_username: string | null = null) =>
-  ({ ...base, entity: { audit_log_id: "a1", kind, new_username, created_at: "2026-10-28T00:00:00Z" } }) as never
+  ({
+    ...base,
+    entity: {
+      audit_log_id: "a1",
+      kind,
+      new_username,
+      created_at: "2026-10-28T00:00:00Z",
+    },
+  }) as never
 
 describe("account_identity_changed notification", () => {
   it("a released username names the new one and links to Settings", () => {
-    render(<NotificationEntry notif={notice("username_released", "user_ab12cd34")} />)
+    render(
+      <NotificationEntry
+        notif={notice("username_released", "user_ab12cd34")}
+      />,
+    )
     expect(screen.getByTestId("notif").textContent).toContain("user_ab12cd34")
     expect(screen.getByTestId("notif").textContent).toContain("Sync handle")
-    expect(screen.getByTestId("notif").getAttribute("data-to")).toBe("/settings")
+    expect(screen.getByTestId("notif").getAttribute("data-to")).toBe(
+      "/settings",
+    )
   })
 
   it.each([
@@ -50,6 +72,8 @@ describe("account_identity_changed notification", () => {
 
   it("an unexpected entity still renders a generic line", () => {
     render(<NotificationEntry notif={{ ...base, entity: null } as never} />)
-    expect(screen.getByTestId("notif").textContent).toBe("An admin changed your account.")
+    expect(screen.getByTestId("notif").textContent).toBe(
+      "An admin changed your account.",
+    )
   })
 })

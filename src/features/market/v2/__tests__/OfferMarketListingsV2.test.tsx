@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
@@ -28,7 +28,9 @@ const testTheme = createTheme({
 
 // Mock translations
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const mockOrderItems: OrderItemDetail[] = [
@@ -72,13 +74,16 @@ const mockOrderItems: OrderItemDetail[] = [
   },
 ]
 
-const renderComponent = (items: OrderItemDetail[] = mockOrderItems, title?: string) => {
+const renderComponent = (
+  items: OrderItemDetail[] = mockOrderItems,
+  title?: string,
+) => {
   return render(
     <BrowserRouter>
       <ThemeProvider theme={testTheme}>
         <OfferMarketListingsV2 items={items} title={title} />
       </ThemeProvider>
-    </BrowserRouter>
+    </BrowserRouter>,
   )
 }
 
@@ -98,7 +103,7 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.2: Visual Parity with V1", () => {
     it("should use identical table structure to V1", () => {
       renderComponent()
-      
+
       // Check for table headers
       expect(screen.getByText("Product")).toBeInTheDocument()
       expect(screen.getByText("Qty")).toBeInTheDocument()
@@ -110,11 +115,11 @@ describe("OfferMarketListingsV2", () => {
 
     it("should display total section with correct styling", () => {
       renderComponent()
-      
+
       // Total label should be present (appears in header and total row)
       const totalLabels = screen.getAllByText("Total")
       expect(totalLabels.length).toBeGreaterThan(0)
-      
+
       // Total amount should be formatted correctly
       expect(screen.getByText("625,000 aUEC")).toBeInTheDocument()
     })
@@ -123,18 +128,18 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.4: Display Variant Details", () => {
     it("should display variant display name for each item", () => {
       renderComponent()
-      
+
       expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
       expect(screen.getByText("Tier 3 (65.0%) - Looted")).toBeInTheDocument()
     })
 
     it("should display all variant attributes in readable format", () => {
       renderComponent()
-      
+
       // Variant display names contain quality tier, quality value, and source
       const tier5Variant = screen.getByText("Tier 5 (95.5%) - Crafted")
       expect(tier5Variant).toBeInTheDocument()
-      
+
       const tier3Variant = screen.getByText("Tier 3 (65.0%) - Looted")
       expect(tier3Variant).toBeInTheDocument()
     })
@@ -143,7 +148,7 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.5: Quality Tier Visual Indicators", () => {
     it("should display QualityBadge for items with quality_tier", () => {
       renderComponent()
-      
+
       // QualityBadge renders "Tier X" text
       expect(screen.getByText("Tier 5")).toBeInTheDocument()
       expect(screen.getByText("Tier 3")).toBeInTheDocument()
@@ -167,9 +172,9 @@ describe("OfferMarketListingsV2", () => {
           subtotal: 10000,
         },
       ]
-      
+
       renderComponent(itemsWithoutQuality)
-      
+
       // Should still render the item
       expect(screen.getByText("Standard Item")).toBeInTheDocument()
       // Use getAllByText since price appears in multiple columns
@@ -181,11 +186,11 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.6: Variant Attributes Display", () => {
     it("should display variant attributes in readable format", () => {
       renderComponent()
-      
+
       // Display name includes quality tier, quality value, and crafted source
       const craftedVariant = screen.getByText("Tier 5 (95.5%) - Crafted")
       expect(craftedVariant).toBeInTheDocument()
-      
+
       const lootedVariant = screen.getByText("Tier 3 (65.0%) - Looted")
       expect(lootedVariant).toBeInTheDocument()
     })
@@ -194,7 +199,7 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.7: Per-Variant Pricing", () => {
     it("should display price per unit for each variant", () => {
       renderComponent()
-      
+
       // Unit prices should be displayed
       expect(screen.getByText("50,000 aUEC")).toBeInTheDocument()
       expect(screen.getByText("25,000 aUEC")).toBeInTheDocument()
@@ -202,7 +207,7 @@ describe("OfferMarketListingsV2", () => {
 
     it("should display subtotal for each variant", () => {
       renderComponent()
-      
+
       // Subtotals should be displayed
       expect(screen.getByText("500,000 aUEC")).toBeInTheDocument()
       expect(screen.getByText("125,000 aUEC")).toBeInTheDocument()
@@ -210,7 +215,7 @@ describe("OfferMarketListingsV2", () => {
 
     it("should calculate total price correctly across all variants", () => {
       renderComponent()
-      
+
       // Total should be sum of all subtotals: 500,000 + 125,000 = 625,000
       expect(screen.getByText("625,000 aUEC")).toBeInTheDocument()
     })
@@ -219,7 +224,7 @@ describe("OfferMarketListingsV2", () => {
   describe("Requirement 27.8: Quantity Display", () => {
     it("should display quantity for each order item", () => {
       renderComponent()
-      
+
       // Quantities should be formatted with toLocaleString()
       expect(screen.getByText("10")).toBeInTheDocument()
       // Use getAllByText for "5" since it appears in table and pagination
@@ -231,14 +236,14 @@ describe("OfferMarketListingsV2", () => {
   describe("Empty State", () => {
     it("should display empty state when no items", () => {
       renderComponent([])
-      
+
       expect(screen.getByText("Associated Market Listings")).toBeInTheDocument()
       expect(screen.getByText("No associated listings")).toBeInTheDocument()
     })
 
     it("should display custom title in empty state", () => {
       renderComponent([], "Custom Empty Title")
-      
+
       expect(screen.getByText("Custom Empty Title")).toBeInTheDocument()
       expect(screen.getByText("No associated listings")).toBeInTheDocument()
     })
@@ -265,9 +270,9 @@ describe("OfferMarketListingsV2", () => {
           subtotal: 1000000000,
         },
       ]
-      
+
       renderComponent(largeQuantityItems)
-      
+
       // Should format with commas
       expect(screen.getByText("1,000")).toBeInTheDocument()
       // Use getAllByText for prices that appear in multiple columns
@@ -281,17 +286,17 @@ describe("OfferMarketListingsV2", () => {
   describe("Multiple Items", () => {
     it("should render multiple order items correctly", () => {
       renderComponent()
-      
+
       // Should have 2 items
       expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
       expect(screen.getByText("Tier 3 (65.0%) - Looted")).toBeInTheDocument()
-      
+
       // Should have correct quantities
       expect(screen.getByText("10")).toBeInTheDocument()
       // Use getAllByText for "5" since it appears in table and pagination
       const fiveElements = screen.getAllByText("5")
       expect(fiveElements.length).toBeGreaterThan(0)
-      
+
       // Should have correct total
       expect(screen.getByText("625,000 aUEC")).toBeInTheDocument()
     })
@@ -300,7 +305,7 @@ describe("OfferMarketListingsV2", () => {
   describe("Visual Consistency", () => {
     it("should use theme spacing for layout", () => {
       const { container } = renderComponent()
-      
+
       // Component should render without errors
       expect(container.querySelector('[class*="MuiPaper"]')).toBeInTheDocument()
       expect(container.querySelector('[class*="MuiStack"]')).toBeInTheDocument()
@@ -308,7 +313,7 @@ describe("OfferMarketListingsV2", () => {
 
     it("should use correct typography variants", () => {
       renderComponent()
-      
+
       // Title should use h5 variant
       const title = screen.getByText("Associated Market Listings")
       expect(title).toBeInTheDocument()

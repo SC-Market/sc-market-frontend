@@ -13,7 +13,10 @@ import { MinimalUser } from "../../datatypes/User"
 import { Link } from "react-router-dom"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { useGetContractorReviewsQuery } from "../../features/contractor/api/contractorApi"
-import { Contractor, MinimalContractor } from "../../features/contractor/domain/types"
+import {
+  Contractor,
+  MinimalContractor,
+} from "../../features/contractor/domain/types"
 import { OrderReview } from "../../features/orders/domain/types"
 import { useGetUserOrderReviews } from "../../features/profile/api/profileApi"
 import { StarRounded } from "@mui/icons-material"

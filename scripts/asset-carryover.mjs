@@ -27,7 +27,13 @@
  * under /assets/*, so they get the same immutable headers (public/_headers).
  */
 import { createHash } from "node:crypto"
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -78,7 +84,9 @@ function isValidManifest(m) {
     m &&
     m.version === 1 &&
     Array.isArray(m.builds) &&
-    m.builds.every((b) => typeof b?.id === "string" && Number.isFinite(b?.builtAt)) &&
+    m.builds.every(
+      (b) => typeof b?.id === "string" && Number.isFinite(b?.builtAt),
+    ) &&
     m.files &&
     typeof m.files === "object"
   )
@@ -98,7 +106,8 @@ export function planCarryOver(live, current, now, retention = RETENTION) {
 
   const candidates = Object.entries(live.files)
     .filter(([name, f]) => {
-      if (!isCarryable(name) || name.includes("/") || name.startsWith(".")) return false
+      if (!isCarryable(name) || name.includes("/") || name.startsWith("."))
+        return false
       if (current[name]) return false // this build has it: never overwrite
       if (!rank.has(f?.lastBuild)) return false
       if (typeof f.sha256 !== "string" || !Number.isFinite(f.size)) return false
@@ -119,14 +128,22 @@ export function planCarryOver(live, current, now, retention = RETENTION) {
 }
 
 /** The manifest this build publishes. */
-export function buildManifest({ buildId, now, current, live, keptBuilds, carried }) {
+export function buildManifest({
+  buildId,
+  now,
+  current,
+  live,
+  keptBuilds,
+  carried,
+}) {
   const liveFiles = isValidManifest(live) ? live.files : {}
   const files = {}
   for (const [name, f] of Object.entries(current)) {
     files[name] = {
       sha256: f.sha256,
       size: f.size,
-      firstSeen: liveFiles[name]?.sha256 === f.sha256 ? liveFiles[name].firstSeen : now,
+      firstSeen:
+        liveFiles[name]?.sha256 === f.sha256 ? liveFiles[name].firstSeen : now,
       lastBuild: buildId,
     }
   }
@@ -156,7 +173,14 @@ async function fetchWithTimeout(fetchImpl, url, ms) {
 }
 
 /** Download and verify `carry` into assetsDir; returns the files written. */
-async function downloadAll({ carry, assetsDir, origin, fetchImpl, log, deadline }) {
+async function downloadAll({
+  carry,
+  assetsDir,
+  origin,
+  fetchImpl,
+  log,
+  deadline,
+}) {
   const written = []
   let skipped = 0
   let next = 0
@@ -168,7 +192,11 @@ async function downloadAll({ carry, assetsDir, origin, fetchImpl, log, deadline 
         continue
       }
       try {
-        const res = await fetchWithTimeout(fetchImpl, `${origin}/assets/${f.name}`, FILE_TIMEOUT_MS)
+        const res = await fetchWithTimeout(
+          fetchImpl,
+          `${origin}/assets/${f.name}`,
+          FILE_TIMEOUT_MS,
+        )
         if (!res.ok) {
           skipped++
           continue
@@ -188,7 +216,10 @@ async function downloadAll({ carry, assetsDir, origin, fetchImpl, log, deadline 
     }
   }
   await Promise.all(Array.from({ length: DOWNLOAD_CONCURRENCY }, worker))
-  if (skipped) log(`[asset-carryover] skipped ${skipped} file(s) (missing, changed or slow)`)
+  if (skipped)
+    log(
+      `[asset-carryover] skipped ${skipped} file(s) (missing, changed or slow)`,
+    )
   return written
 }
 
@@ -214,12 +245,19 @@ export async function runCarryOver({
     current = scanBuildAssets(assetsDir)
     const enabled =
       env.ASSET_CARRYOVER === "1" ||
-      (env.CF_PAGES === "1" && env.CF_PAGES_BRANCH === "main" && env.ASSET_CARRYOVER !== "0")
+      (env.CF_PAGES === "1" &&
+        env.CF_PAGES_BRANCH === "main" &&
+        env.ASSET_CARRYOVER !== "0")
     if (enabled) {
-      const res = await fetchWithTimeout(fetchImpl, `${origin}/${MANIFEST_NAME}?t=${now}`, FILE_TIMEOUT_MS)
+      const res = await fetchWithTimeout(
+        fetchImpl,
+        `${origin}/${MANIFEST_NAME}?t=${now}`,
+        FILE_TIMEOUT_MS,
+      )
       if (!res.ok) throw new Error(`live manifest: HTTP ${res.status}`)
       live = await res.json()
-      if (!isValidManifest(live)) throw new Error("live manifest: unexpected format")
+      if (!isValidManifest(live))
+        throw new Error("live manifest: unexpected format")
       const plan = planCarryOver(live, current, now)
       keptBuilds = plan.keptBuilds
       carried = await downloadAll({
@@ -235,21 +273,35 @@ export async function runCarryOver({
       )
     }
   } catch (error) {
-    log(`[asset-carryover] WARNING: continuing without carry-over: ${error?.message ?? error}`)
+    log(
+      `[asset-carryover] WARNING: continuing without carry-over: ${error?.message ?? error}`,
+    )
     // Keep a successfully parsed live manifest's history only if files were carried.
     if (carried.length === 0) keptBuilds = []
   }
-  const manifest = buildManifest({ buildId, now, current, live, keptBuilds, carried })
+  const manifest = buildManifest({
+    buildId,
+    now,
+    current,
+    live,
+    keptBuilds,
+    carried,
+  })
   try {
     writeFileSync(path.join(distDir, MANIFEST_NAME), JSON.stringify(manifest))
   } catch (error) {
-    log(`[asset-carryover] WARNING: could not write ${MANIFEST_NAME}: ${error?.message ?? error}`)
+    log(
+      `[asset-carryover] WARNING: could not write ${MANIFEST_NAME}: ${error?.message ?? error}`,
+    )
   }
   return { manifest, carried }
 }
 
 // CLI: node scripts/asset-carryover.mjs [distDir]
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   const distDir = path.resolve(process.argv[2] || "dist")
   runCarryOver({ distDir }).then(
     () => process.exit(0),

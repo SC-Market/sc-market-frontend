@@ -1,6 +1,4 @@
-import {
-  RecruitingPost,
-} from "../../features/recruiting/api/recruitingApi"
+import { RecruitingPost } from "../../features/recruiting/api/recruitingApi"
 import { Button, ButtonGroup } from "@mui/material"
 import {
   KeyboardArrowDownRounded,

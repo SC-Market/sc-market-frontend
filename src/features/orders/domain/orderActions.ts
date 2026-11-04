@@ -57,7 +57,9 @@ export function availableOrderActions(
     canSetStatus: worker,
     canComplete:
       worker &&
-      (admin || order.status === "not-started" || order.status === "in-progress"),
+      (admin ||
+        order.status === "not-started" ||
+        order.status === "in-progress"),
     canStart: worker && (admin || order.status === "not-started"),
     canResetToNotStarted: admin,
     canCancel: (worker && (admin || open)) || (roles.customer && open),

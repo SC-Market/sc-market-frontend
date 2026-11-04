@@ -110,7 +110,10 @@ async function readRoutePatterns() {
   const ts = require("typescript")
   const source = readFileSync(resolve(ROOT, "src/routes.ts"), "utf8")
   const js = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: {
+      module: ts.ModuleKind.ESNext,
+      target: ts.ScriptTarget.ES2022,
+    },
   }).outputText
   const { default: routeConfig } = await import(
     `data:text/javascript,${encodeURIComponent(js)}`

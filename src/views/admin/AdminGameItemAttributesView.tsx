@@ -227,9 +227,7 @@ export function AdminGameItemAttributesView({
       display: "flex",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2">
-          {fmt.dateTime(params.value)}
-        </Typography>
+        <Typography variant="body2">{fmt.dateTime(params.value)}</Typography>
       ),
     },
     {
@@ -330,7 +328,9 @@ export function AdminGameItemAttributesView({
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            {t("adminUi.gameItemAttributes.loadError", { error: JSON.stringify(error) })}
+            {t("adminUi.gameItemAttributes.loadError", {
+              error: JSON.stringify(error),
+            })}
           </Typography>
         </Grid>
       )}
@@ -353,7 +353,8 @@ export function AdminGameItemAttributesView({
               <InputLabel id="admin-game-item-attributes-attribute-label">
                 {t("admin.gameItemAttributes.attributeName", "Attribute")}
               </InputLabel>
-              <Select labelId="admin-game-item-attributes-attribute-label"
+              <Select
+                labelId="admin-game-item-attributes-attribute-label"
                 value={formData.attribute_name}
                 label={t("admin.gameItemAttributes.attributeName", "Attribute")}
                 onChange={(e) =>
@@ -379,7 +380,8 @@ export function AdminGameItemAttributesView({
                 <InputLabel id="admin-game-item-attributes-value-label">
                   {t("admin.gameItemAttributes.value", "Value")}
                 </InputLabel>
-                <Select labelId="admin-game-item-attributes-value-label"
+                <Select
+                  labelId="admin-game-item-attributes-value-label"
                   value={formData.attribute_value}
                   label={t("admin.gameItemAttributes.value", "Value")}
                   onChange={(e) =>
@@ -425,7 +427,9 @@ export function AdminGameItemAttributesView({
                   {selectedDefinition.attribute_type}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>{t("adminUi.gameItemAttributes.applicableTo")}</strong>{" "}
+                  <strong>
+                    {t("adminUi.gameItemAttributes.applicableTo")}
+                  </strong>{" "}
                   {selectedDefinition.applicable_item_types &&
                   selectedDefinition.applicable_item_types.length > 0
                     ? selectedDefinition.applicable_item_types.join(", ")

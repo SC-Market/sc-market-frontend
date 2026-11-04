@@ -157,33 +157,31 @@ export function NotificationsPage() {
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
           </Tabs>
-          {scopeFilter === "shop" &&
-            shopsData &&
-            shopsData.length > 0 && (
-              <FormControl fullWidth size="small" sx={{ mt: 1, mb: 1 }}>
-                <InputLabel id="shop-filter-label">
-                  {t("notifications.filter_by_shop", "Filter by shop")}
-                </InputLabel>
-                <Select
-                  labelId="shop-filter-label"
-                  value={shopIdFilter}
-                  label={t("notifications.filter_by_shop", "Filter by shop")}
-                  onChange={(e) => {
-                    setShopIdFilter(e.target.value)
-                    setPage(0)
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>{t("notifications.all_shops", "All shops")}</em>
+          {scopeFilter === "shop" && shopsData && shopsData.length > 0 && (
+            <FormControl fullWidth size="small" sx={{ mt: 1, mb: 1 }}>
+              <InputLabel id="shop-filter-label">
+                {t("notifications.filter_by_shop", "Filter by shop")}
+              </InputLabel>
+              <Select
+                labelId="shop-filter-label"
+                value={shopIdFilter}
+                label={t("notifications.filter_by_shop", "Filter by shop")}
+                onChange={(e) => {
+                  setShopIdFilter(e.target.value)
+                  setPage(0)
+                }}
+              >
+                <MenuItem value="">
+                  <em>{t("notifications.all_shops", "All shops")}</em>
+                </MenuItem>
+                {shopsData.map((shop) => (
+                  <MenuItem key={shop.shop_id} value={shop.shop_id}>
+                    {shop.name}
                   </MenuItem>
-                  {shopsData.map((shop) => (
-                    <MenuItem key={shop.shop_id} value={shop.shop_id}>
-                      {shop.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
+                ))}
+              </Select>
+            </FormControl>
+          )}
           {(scopeFilter !== "all" || shopIdFilter) && (
             <Box
               sx={{ mt: 1, mb: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}
@@ -206,9 +204,8 @@ export function NotificationsPage() {
               {shopIdFilter && (
                 <Chip
                   label={
-                    shopsData?.find(
-                      (s) => s.shop_id === shopIdFilter,
-                    )?.name || t("notifications.scope.shop", "Shop")
+                    shopsData?.find((s) => s.shop_id === shopIdFilter)?.name ||
+                    t("notifications.scope.shop", "Shop")
                   }
                   size="small"
                   onDelete={() => {
@@ -223,34 +220,38 @@ export function NotificationsPage() {
       </Grid>
 
       {/* Notifications List */}
-      <Grid item xs={12} sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
+      <Grid
+        item
+        xs={12}
+        sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}
+      >
         {pageData.isLoading ? (
-            <NotificationListSkeleton />
-          ) : notifications.length === 0 ? (
-            <EmptyNotifications sx={{ py: 4 }} />
-          ) : (
-            <List
-              sx={{
-                "&>:first-child": {
-                  borderTop: `1px solid ${theme.palette.outline.main}`,
-                },
-                "&>:last-child": {
-                  borderBottom: "none",
-                },
-                "& > *": {
-                  borderBottom: `1px solid ${theme.palette.outline.main}`,
-                },
-                padding: 0,
-                bgcolor: "background.paper",
-                borderRadius: 1,
-                overflow: "hidden",
-              }}
-            >
-              {notifications.map((notification: Notification, idx: number) => (
-                <NotificationEntry notif={notification} key={idx} />
-              ))}
-            </List>
-          )}
+          <NotificationListSkeleton />
+        ) : notifications.length === 0 ? (
+          <EmptyNotifications sx={{ py: 4 }} />
+        ) : (
+          <List
+            sx={{
+              "&>:first-child": {
+                borderTop: `1px solid ${theme.palette.outline.main}`,
+              },
+              "&>:last-child": {
+                borderBottom: "none",
+              },
+              "& > *": {
+                borderBottom: `1px solid ${theme.palette.outline.main}`,
+              },
+              padding: 0,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              overflow: "hidden",
+            }}
+          >
+            {notifications.map((notification: Notification, idx: number) => (
+              <NotificationEntry notif={notification} key={idx} />
+            ))}
+          </List>
+        )}
       </Grid>
 
       {/* Pagination */}

@@ -21,10 +21,17 @@ const SIZES: Record<Widget, { width: number; height: number }> = {
 }
 
 /** The iframe snippet of a widget (read-only, see pages/embed/EmbedOrg.tsx). */
-export function embedSnippet(spectrumId: string, widget: Widget, name: string): string {
+export function embedSnippet(
+  spectrumId: string,
+  widget: Widget,
+  name: string,
+): string {
   const path = `/embed/org/${encodeURIComponent(spectrumId)}${widget === "listings" ? "/listings" : ""}`
   const { width, height } = SIZES[widget]
-  const title = name.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!)
+  const title = name.replace(
+    /[&<>"]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!,
+  )
   return `<iframe src="${FRONTEND_URL}${path}" title="${title} on SC Market" width="${width}" height="${height}" style="border:0;border-radius:8px;max-width:100%" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>`
 }
 
@@ -62,8 +69,12 @@ export function EmbedCodeCard(props: { spectrumId: string; name: string }) {
         sx={{ mt: 1.5 }}
         aria-label={t("storefront.embedCode.widget", "Widget")}
       >
-        <ToggleButton value="card">{t("storefront.embedCode.card", "Storefront card")}</ToggleButton>
-        <ToggleButton value="listings">{t("storefront.embedCode.listings", "Listings")}</ToggleButton>
+        <ToggleButton value="card">
+          {t("storefront.embedCode.card", "Storefront card")}
+        </ToggleButton>
+        <ToggleButton value="listings">
+          {t("storefront.embedCode.listings", "Listings")}
+        </ToggleButton>
       </ToggleButtonGroup>
       <TextField
         value={snippet}
@@ -72,7 +83,10 @@ export function EmbedCodeCard(props: { spectrumId: string; name: string }) {
         minRows={3}
         sx={{ mt: 1.5 }}
         label={t("storefront.embedCode.snippet", "HTML")}
-        InputProps={{ readOnly: true, sx: { fontFamily: "monospace", fontSize: 13 } }}
+        InputProps={{
+          readOnly: true,
+          sx: { fontFamily: "monospace", fontSize: 13 },
+        }}
         onFocus={(e) => e.target.select()}
       />
       <Stack direction="row" spacing={1} sx={{ mt: 1 }} alignItems="center">
@@ -81,10 +95,14 @@ export function EmbedCodeCard(props: { spectrumId: string; name: string }) {
           size="small"
           startIcon={<ContentCopyRounded />}
           onClick={() => {
-            void navigator.clipboard?.writeText(snippet).then(() => setCopied(true))
+            void navigator.clipboard
+              ?.writeText(snippet)
+              .then(() => setCopied(true))
           }}
         >
-          {copied ? t("storefront.embedCode.copied", "Copied") : t("storefront.embedCode.copy", "Copy code")}
+          {copied
+            ? t("storefront.embedCode.copied", "Copied")
+            : t("storefront.embedCode.copy", "Copy code")}
         </Button>
       </Stack>
       <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2 }}>
@@ -97,7 +115,13 @@ export function EmbedCodeCard(props: { spectrumId: string; name: string }) {
           src={`/embed/org/${encodeURIComponent(props.spectrumId)}${widget === "listings" ? "/listings" : ""}`}
           title={t("storefront.embedCode.preview", "Preview")}
           loading="lazy"
-          sx={{ border: 0, borderRadius: 1, width: SIZES[widget].width, height: SIZES[widget].height, maxWidth: "100%" }}
+          sx={{
+            border: 0,
+            borderRadius: 1,
+            width: SIZES[widget].width,
+            height: SIZES[widget].height,
+            maxWidth: "100%",
+          }}
         />
       </Box>
     </Paper>

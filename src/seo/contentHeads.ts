@@ -21,7 +21,10 @@ import { formatDate } from "../util/format/format"
 const ORGANIZATION_JSON_LD_ID = `${DEFAULT_FRONTEND_URL}/#organization`
 
 export const HELP_HUB_NAME = "Help & Guides"
-export const HELP_CRUMB: HubCrumb = { name: HELP_HUB_NAME, path: HELP_PATHS.hub }
+export const HELP_CRUMB: HubCrumb = {
+  name: HELP_HUB_NAME,
+  path: HELP_PATHS.hub,
+}
 
 export const helpHubSeoText: SeoText = {
   title: "Help & Guides — How to Use SC Market",
@@ -42,10 +45,16 @@ export function guideTitle(guide: GuideMeta): string {
 }
 
 export function guideLink(guide: GuideMeta): SeoLink {
-  return { href: HELP_PATHS.guide(guide.category, guide.slug), text: guide.title }
+  return {
+    href: HELP_PATHS.guide(guide.category, guide.slug),
+    text: guide.title,
+  }
 }
 
-export function buildGuidesHubHead(index: ContentIndex, origin: string): PageHead {
+export function buildGuidesHubHead(
+  index: ContentIndex,
+  origin: string,
+): PageHead {
   return buildHubHead(
     {
       text: helpHubSeoText,
@@ -91,7 +100,10 @@ export function buildGuideHead(
     breadcrumbJsonLd([
       { name: "SC Market", url: `${origin}/` },
       { name: HELP_HUB_NAME, url: `${origin}${HELP_PATHS.hub}` },
-      { name: category.title, url: `${origin}${HELP_PATHS.category(category.id)}` },
+      {
+        name: category.title,
+        url: `${origin}${HELP_PATHS.category(category.id)}`,
+      },
       { name: guide.title, url: canonical },
     ]),
     {
@@ -213,22 +225,34 @@ export function changelogEntryTitle(entry: ChangelogMeta): string {
  * /changelog: BreadcrumbList and CollectionPage with an ItemList of the
  * entries. Until an entry is published the page is an empty state: noindex.
  */
-export function buildChangelogIndexHead(entries: readonly ChangelogMeta[], origin: string): PageHead {
+export function buildChangelogIndexHead(
+  entries: readonly ChangelogMeta[],
+  origin: string,
+): PageHead {
   const head = buildHubHead(
     {
       text: changelogSeoText,
       path: CHANGELOG_PATHS.index,
       name: CHANGELOG_NAME,
-      links: entries.map((e) => ({ href: CHANGELOG_PATHS.entry(e.slug), text: e.title })),
+      links: entries.map((e) => ({
+        href: CHANGELOG_PATHS.entry(e.slug),
+        text: e.title,
+      })),
     },
     origin,
   )
   if (entries.length > 0) return head
-  return { ...head, meta: [{ name: "robots", content: "noindex" }, ...head.meta] }
+  return {
+    ...head,
+    meta: [{ name: "robots", content: "noindex" }, ...head.meta],
+  }
 }
 
 /** /changelog/<date>: BreadcrumbList and BlogPosting. */
-export function buildChangelogEntryHead(entry: ChangelogMeta, origin: string): PageHead {
+export function buildChangelogEntryHead(
+  entry: ChangelogMeta,
+  origin: string,
+): PageHead {
   const title = changelogEntryTitle(entry)
   const canonical = `${origin}${CHANGELOG_PATHS.entry(entry.slug)}`
   return {

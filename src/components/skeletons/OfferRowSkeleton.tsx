@@ -128,8 +128,16 @@ export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
             }}
           />
           <Stack direction="column" justifyContent="center">
-            <BaseSkeleton variant="text" width={isMobile ? 50 : 100} height={17} />
-            <BaseSkeleton variant="text" width={isMobile ? 50 : 100} height={22} />
+            <BaseSkeleton
+              variant="text"
+              width={isMobile ? 50 : 100}
+              height={17}
+            />
+            <BaseSkeleton
+              variant="text"
+              width={isMobile ? 50 : 100}
+              height={22}
+            />
           </Stack>
         </Stack>
       </TableCell>

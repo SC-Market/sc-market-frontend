@@ -12,7 +12,6 @@ import { WikiItemBrowser } from "../WikiItemBrowser"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
 
-
 // Mock Page to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", () => ({
   Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -20,12 +19,27 @@ vi.mock("../../../components/metadata/Page", () => ({
 
 // Mock StandardPageLayout to avoid serviceApi/profileApi dependencies
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, headerTitle }: { children: React.ReactNode; title?: string; headerTitle?: string }) => <div><h1>{headerTitle || title}</h1>{children}</div>,
+  StandardPageLayout: ({
+    children,
+    title,
+    headerTitle,
+  }: {
+    children: React.ReactNode
+    title?: string
+    headerTitle?: string
+  }) => (
+    <div>
+      <h1>{headerTitle || title}</h1>
+      {children}
+    </div>
+  ),
 }))
 
 // Mock react-i18next
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock store setup
@@ -36,7 +50,10 @@ const createMockStore = () => {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
@@ -80,7 +97,7 @@ describe("WikiItemBrowser", () => {
         <BrowserRouter>
           <WikiItemBrowser />
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText("Game Items Database")).toBeInTheDocument()
@@ -92,11 +109,13 @@ describe("WikiItemBrowser", () => {
         <BrowserRouter>
           <WikiItemBrowser />
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     )
 
     // Check that search bar exists with actual placeholder
-    expect(screen.getByPlaceholderText("Search items, types, manufacturers...")).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText("Search items, types, manufacturers..."),
+    ).toBeInTheDocument()
   })
 
   it("displays loading state", () => {
@@ -105,7 +124,7 @@ describe("WikiItemBrowser", () => {
         <BrowserRouter>
           <WikiItemBrowser />
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     )
 
     // Should show skeleton loading indicators (MUI Skeleton elements)

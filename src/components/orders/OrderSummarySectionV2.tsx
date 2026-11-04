@@ -7,7 +7,7 @@ import { useFormatters } from "../../util/format"
 
 /**
  * OrderSummarySectionV2 Props
- * 
+ *
  * Requirements: 27.8-27.11
  */
 interface OrderSummarySectionV2Props {
@@ -21,19 +21,19 @@ interface OrderSummarySectionV2Props {
 
 /**
  * OrderSummarySectionV2 - Compact order summary with variant support
- * 
+ *
  * Displays order items with variant details in a compact summary format.
  * Maintains 100% visual parity with V1 OrderSummarySection while adding:
  * - Quality tier badges for each item
  * - Variant display names (e.g., "Tier 5 (95.5%) - Crafted")
  * - Per-variant pricing calculations
- * 
+ *
  * Requirements: 27.8-27.11
  * - 27.8: Provide OrderSummarySectionV2 React component
  * - 27.9: Maintain visual parity with V1 OrderSummarySection
  * - 27.10: Display quality_tier in order summary
  * - 27.11: Calculate totals with per-variant pricing
- * 
+ *
  * Visual Parity Details (from V1 audit):
  * - Box with mt: 2
  * - Divider with my: 2
@@ -44,7 +44,7 @@ interface OrderSummarySectionV2Props {
  * - Chip with label: "NEW!", size: "small", color: "primary"
  * - Total row with Typography variant: "subtitle2"
  * - Returns null if no items
- * 
+ *
  * @example
  * ```tsx
  * <OrderSummarySectionV2
@@ -81,7 +81,9 @@ export function OrderSummarySectionV2({
           // Check if this item is new (using listing_id for compatibility)
           const isNew = offerChanges?.addedListings.has(item.listing_id)
           // Check for quantity changes (using listing_id for compatibility)
-          const quantityChange = offerChanges?.quantityChanges.get(item.listing_id)
+          const quantityChange = offerChanges?.quantityChanges.get(
+            item.listing_id,
+          )
 
           return (
             <Box
@@ -96,12 +98,15 @@ export function OrderSummarySectionV2({
                 <Box>
                   {/* Link to listing */}
                   <Link
-                    href={formatMarketUrl({ listing_id: item.listing_id, title: item.listing_title })}
+                    href={formatMarketUrl({
+                      listing_id: item.listing_id,
+                      title: item.listing_title,
+                    })}
                     sx={{ textDecoration: "none" }}
                   >
                     {item.listing_title}
                   </Link>
-                  
+
                   {/* Price and quantity details */}
                   <Typography variant="body2" color="text.secondary">
                     {fmt.number(item.price_per_unit)} aUEC × {item.quantity}
@@ -119,7 +124,7 @@ export function OrderSummarySectionV2({
                     )}
                   </Typography>
                 </Box>
-                
+
                 {/* NEW! chip for added items or quantity changes */}
                 {(isNew || quantityChange) && (
                   <Chip
@@ -129,7 +134,7 @@ export function OrderSummarySectionV2({
                   />
                 )}
               </Box>
-              
+
               {/* Subtotal */}
               <Typography variant="body1" fontWeight="medium">
                 {fmt.number(subtotal)} aUEC
@@ -137,7 +142,7 @@ export function OrderSummarySectionV2({
             </Box>
           )
         })}
-        
+
         {/* Total row */}
         <Divider />
         <Box
@@ -150,7 +155,11 @@ export function OrderSummarySectionV2({
           <Typography variant="subtitle2" color="text.secondary">
             {t("orderSummary.total", "Total")}
           </Typography>
-          <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            fontWeight="bold"
+          >
             {fmt.number(itemsTotal)}{" "}
             <Box
               component="span"

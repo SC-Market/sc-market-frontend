@@ -21,13 +21,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
-import {
-  Box,
-  Chip,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Box, Chip, Paper, Stack, Typography } from "@mui/material"
 import {
   RocketLaunchRounded,
   ShieldRounded,
@@ -62,12 +56,16 @@ function normalizeCategory(category?: string): string {
   if (c.includes("hauling")) return "hauling"
   if (c.includes("mining")) return "mining"
   if (c.includes("maintenance")) return "maintenance"
-  if (c.includes("investigation") || c.includes("search")) return "investigation"
+  if (c.includes("investigation") || c.includes("search"))
+    return "investigation"
   if (c.includes("race")) return "race"
   return "generic"
 }
 
-const TYPE_RENDERERS: Record<string, React.FC<{ data: MissionDetailResponse }>> = {
+const TYPE_RENDERERS: Record<
+  string,
+  React.FC<{ data: MissionDetailResponse }>
+> = {
   mercenary: MercenaryDetails,
   bountyhunter: BountyHunterDetails,
   salvage: SalvageDetails,
@@ -90,41 +88,104 @@ export function MissionTypeDetails({ data }: { data: MissionDetailResponse }) {
 // Shared building blocks
 // ============================================================================
 
-function ShipEncountersSection({ encounters }: { encounters: ShipEncounter[] }) {
+function ShipEncountersSection({
+  encounters,
+}: {
+  encounters: ShipEncounter[]
+}) {
   const { t } = useTranslation()
   if (!encounters.length) return null
-  const hostileMin = encounters.filter(e => e.alignment === "hostile").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
-  const hostileMax = encounters.filter(e => e.alignment === "hostile").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
-  const friendlyMin = encounters.filter(e => e.alignment === "friendly").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
-  const friendlyMax = encounters.filter(e => e.alignment === "friendly").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
-  const allPool = encounters.flatMap(e => e.ship_pool || [])
+  const hostileMin = encounters
+    .filter((e) => e.alignment === "hostile")
+    .reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+  const hostileMax = encounters
+    .filter((e) => e.alignment === "hostile")
+    .reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+  const friendlyMin = encounters
+    .filter((e) => e.alignment === "friendly")
+    .reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+  const friendlyMax = encounters
+    .filter((e) => e.alignment === "friendly")
+    .reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+  const allPool = encounters.flatMap((e) => e.ship_pool || [])
   const uniquePool: string[] = [...new Set(allPool)].sort()
 
   return (
     <Paper variant="outlined" sx={{ p: 1.5 }}>
-      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
-        <Typography variant="subtitle2">{t("missionToolsUi.shipEncounters")}</Typography>
-        {hostileMax > 0 && <Chip icon={<RocketLaunchRounded sx={{ fontSize: 14 }} />} label={t("missionToolsUi.hostileRange", { range: fmtRange(hostileMin, hostileMax), count: hostileMax })} size="small" color="error" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />}
-        {friendlyMax > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={t("missionToolsUi.friendlyRange", { range: fmtRange(friendlyMin, friendlyMax), count: friendlyMax })} size="small" color="info" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />}
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        flexWrap="wrap"
+        useFlexGap
+        sx={{ mb: 1 }}
+      >
+        <Typography variant="subtitle2">
+          {t("missionToolsUi.shipEncounters")}
+        </Typography>
+        {hostileMax > 0 && (
+          <Chip
+            icon={<RocketLaunchRounded sx={{ fontSize: 14 }} />}
+            label={t("missionToolsUi.hostileRange", {
+              range: fmtRange(hostileMin, hostileMax),
+              count: hostileMax,
+            })}
+            size="small"
+            color="error"
+            variant="outlined"
+            sx={{ height: 22, fontSize: "0.7rem" }}
+          />
+        )}
+        {friendlyMax > 0 && (
+          <Chip
+            icon={<ShieldRounded sx={{ fontSize: 14 }} />}
+            label={t("missionToolsUi.friendlyRange", {
+              range: fmtRange(friendlyMin, friendlyMax),
+              count: friendlyMax,
+            })}
+            size="small"
+            color="info"
+            variant="outlined"
+            sx={{ height: 22, fontSize: "0.7rem" }}
+          />
+        )}
       </Stack>
       <Stack spacing={0.5}>
         {encounters.map((enc, i) => (
           <Box key={i}>
             <Stack direction="row" spacing={0.75} alignItems="center">
-              {enc.alignment === "hostile"
-                ? <RocketLaunchRounded sx={{ fontSize: 16, color: "error.main" }} />
-                : <ShieldRounded sx={{ fontSize: 16, color: "info.main" }} />}
-              <Typography variant="body2" fontWeight={600}>{enc.role}</Typography>
+              {enc.alignment === "hostile" ? (
+                <RocketLaunchRounded
+                  sx={{ fontSize: 16, color: "error.main" }}
+                />
+              ) : (
+                <ShieldRounded sx={{ fontSize: 16, color: "info.main" }} />
+              )}
+              <Typography variant="body2" fontWeight={600}>
+                {enc.role}
+              </Typography>
               <Typography variant="caption" color="text.secondary">
                 {t("missionToolsUi.shipRange", {
-                  range: fmtRange(enc.waves.reduce((s, w) => s + w.min_ships, 0), enc.waves.reduce((s, w) => s + w.max_ships, 0)),
+                  range: fmtRange(
+                    enc.waves.reduce((s, w) => s + w.min_ships, 0),
+                    enc.waves.reduce((s, w) => s + w.max_ships, 0),
+                  ),
                   count: enc.waves.reduce((s, w) => s + w.max_ships, 0),
                 })}
               </Typography>
             </Stack>
             {enc.waves.map((wave, wi) => (
-              <Typography key={wi} variant="caption" color="text.secondary" sx={{ pl: 3.5, display: "block" }}>
-                {wave.name}: {t("missionToolsUi.shipRange", { range: fmtRange(wave.min_ships, wave.max_ships), count: wave.max_ships })}
+              <Typography
+                key={wi}
+                variant="caption"
+                color="text.secondary"
+                sx={{ pl: 3.5, display: "block" }}
+              >
+                {wave.name}:{" "}
+                {t("missionToolsUi.shipRange", {
+                  range: fmtRange(wave.min_ships, wave.max_ships),
+                  count: wave.max_ships,
+                })}
               </Typography>
             ))}
           </Box>
@@ -132,10 +193,22 @@ function ShipEncountersSection({ encounters }: { encounters: ShipEncounter[] }) 
       </Stack>
       {uniquePool.length > 0 && (
         <Box sx={{ mt: 1, pt: 1, borderTop: 1, borderColor: "divider" }}>
-          <Typography variant="caption" fontWeight={600} sx={{ mb: 0.5, display: "block" }}>{t("missionToolsUi.shipPoolTypes", { count: uniquePool.length })}</Typography>
+          <Typography
+            variant="caption"
+            fontWeight={600}
+            sx={{ mb: 0.5, display: "block" }}
+          >
+            {t("missionToolsUi.shipPoolTypes", { count: uniquePool.length })}
+          </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
             {uniquePool.map((ship, i) => (
-              <Chip key={i} label={ship} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
+              <Chip
+                key={i}
+                label={ship}
+                size="small"
+                variant="outlined"
+                sx={{ height: 20, fontSize: "0.65rem" }}
+              />
             ))}
           </Box>
         </Box>
@@ -149,12 +222,16 @@ function NpcEncountersSection({ encounters }: { encounters: NpcEncounter[] }) {
   if (!encounters.length) return null
   return (
     <Paper variant="outlined" sx={{ p: 1.5 }}>
-      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("missionToolsUi.npcEncounters")}</Typography>
+      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+        {t("missionToolsUi.npcEncounters")}
+      </Typography>
       <Stack spacing={0.25}>
         {encounters.map((npc, i) => (
           <Stack key={i} direction="row" justifyContent="space-between">
             <Typography variant="body2">{npc.name}</Typography>
-            <Typography variant="body2" color="text.secondary">×{npc.count}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              ×{npc.count}
+            </Typography>
           </Stack>
         ))}
       </Stack>
@@ -171,15 +248,24 @@ function HaulingOrdersSection({ orders }: { orders: HaulingOrder[] }) {
     <Paper variant="outlined" sx={{ p: 1.5 }}>
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
         <LocalShippingRounded sx={{ fontSize: 16 }} />
-        <Typography variant="subtitle2">{t("missionsUi.haulingOrders")}</Typography>
-        <Chip label={`${fmtRange(totalMin, totalMax)} SCU`} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+        <Typography variant="subtitle2">
+          {t("missionsUi.haulingOrders")}
+        </Typography>
+        <Chip
+          label={`${fmtRange(totalMin, totalMax)} SCU`}
+          size="small"
+          variant="outlined"
+          sx={{ height: 20, fontSize: "0.7rem" }}
+        />
       </Stack>
       <Stack spacing={0.25}>
         {orders.map((h, i) => (
           <Stack key={i} direction="row" justifyContent="space-between">
             <Typography variant="body2">{h.resource_name}</Typography>
             <Typography variant="body2" color="text.secondary">
-              {h.min_scu === h.max_scu ? `${h.min_scu} SCU` : `${h.min_scu}–${h.max_scu} SCU`}
+              {h.min_scu === h.max_scu
+                ? `${h.min_scu} SCU`
+                : `${h.min_scu}–${h.max_scu} SCU`}
             </Typography>
           </Stack>
         ))}
@@ -193,12 +279,16 @@ function EntitySpawnsSection({ spawns }: { spawns: EntitySpawn[] }) {
   if (!spawns.length) return null
   return (
     <Paper variant="outlined" sx={{ p: 1.5 }}>
-      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("missionToolsUi.targets")}</Typography>
+      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+        {t("missionToolsUi.targets")}
+      </Typography>
       <Stack spacing={0.25}>
         {spawns.map((e, i) => (
           <Stack key={i} direction="row" justifyContent="space-between">
             <Typography variant="body2">{e.name}</Typography>
-            <Typography variant="body2" color="text.secondary">×{e.count}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              ×{e.count}
+            </Typography>
           </Stack>
         ))}
       </Stack>
@@ -211,31 +301,93 @@ function fmtRange(min: number, max: number): string {
 }
 
 /** Compact summary chips for quick-glance mission info */
-function SummaryChips({ chips }: { chips: { label: string; color?: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"; icon?: React.ReactElement }[] }) {
+function SummaryChips({
+  chips,
+}: {
+  chips: {
+    label: string
+    color?:
+      | "default"
+      | "primary"
+      | "secondary"
+      | "error"
+      | "info"
+      | "success"
+      | "warning"
+    icon?: React.ReactElement
+  }[]
+}) {
   if (!chips.length) return null
   return (
-    <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
+    <Stack
+      direction="row"
+      spacing={0.5}
+      flexWrap="wrap"
+      useFlexGap
+      sx={{ mb: 0.5 }}
+    >
       {chips.map((c, i) => (
-        <Chip key={i} label={c.label} icon={c.icon} size="small" color={c.color || "default"} variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+        <Chip
+          key={i}
+          label={c.label}
+          icon={c.icon}
+          size="small"
+          color={c.color || "default"}
+          variant="outlined"
+          sx={{ height: 22, fontSize: "0.7rem" }}
+        />
       ))}
     </Stack>
   )
 }
 
-function shipChips(data: MissionDetailResponse, t: TFunction): { label: string; color: "error" | "info"; icon: React.ReactElement }[] {
+function shipChips(
+  data: MissionDetailResponse,
+  t: TFunction,
+): { label: string; color: "error" | "info"; icon: React.ReactElement }[] {
   const enc = data.ship_encounters || []
-  const chips: { label: string; color: "error" | "info"; icon: React.ReactElement }[] = []
-  const hostile = enc.filter(e => e.alignment === "hostile")
-  const friendly = enc.filter(e => e.alignment === "friendly")
+  const chips: {
+    label: string
+    color: "error" | "info"
+    icon: React.ReactElement
+  }[] = []
+  const hostile = enc.filter((e) => e.alignment === "hostile")
+  const friendly = enc.filter((e) => e.alignment === "friendly")
   if (hostile.length) {
-    const min = hostile.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
-    const max = hostile.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
-    chips.push({ label: t("missionToolsUi.hostileRange", { range: fmtRange(min, max), count: max }), color: "error", icon: <RocketLaunchRounded sx={{ fontSize: 14 }} /> })
+    const min = hostile.reduce(
+      (s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0),
+      0,
+    )
+    const max = hostile.reduce(
+      (s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0),
+      0,
+    )
+    chips.push({
+      label: t("missionToolsUi.hostileRange", {
+        range: fmtRange(min, max),
+        count: max,
+      }),
+      color: "error",
+      icon: <RocketLaunchRounded sx={{ fontSize: 14 }} />,
+    })
   }
   if (friendly.length) {
-    const min = friendly.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
-    const max = friendly.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
-    chips.push({ label: t("missionToolsUi.friendlyRange", { range: fmtRange(min, max), count: max }), color: "info", icon: <ShieldRounded sx={{ fontSize: 14 }} /> })
+    const min = friendly.reduce(
+      (s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0),
+      0,
+    )
+    const max = friendly.reduce(
+      (s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0),
+      0,
+    )
+    chips.push({
+      label: t("missionToolsUi.friendlyRange", {
+        range: fmtRange(min, max),
+        count: max,
+      }),
+      color: "info",
+      icon: <ShieldRounded sx={{ fontSize: 14 }} />,
+    })
   }
   return chips
 }
@@ -248,14 +400,57 @@ function shipChips(data: MissionDetailResponse, t: TFunction): { label: string; 
 function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
   const npcCount = (data.npc_encounters || []).reduce((s, n) => s + n.count, 0)
-  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
-  const poolCount = (data.ship_encounters || []).flatMap(e => e.ship_pool || []).length
+  const entityCount = (data.entity_spawns || []).reduce(
+    (s, e) => s + e.count,
+    0,
+  )
+  const poolCount = (data.ship_encounters || []).flatMap(
+    (e) => e.ship_pool || [],
+  ).length
   const chips = [
     ...shipChips(data, t),
-    ...(npcCount > 0 ? [{ label: t("missionToolsUi.npcCount", { count: npcCount }), color: "warning" as const }] : []),
-    ...(entityCount > 0 ? [{ label: t("missionToolsUi.targetCount", { count: entityCount }), color: "secondary" as const }] : []),
-    ...(poolCount > 0 ? [{ label: t("missionToolsUi.shipTypeCount", { count: new Set((data.ship_encounters || []).flatMap(e => e.ship_pool || [])).size }), color: "info" as const }] : []),
-    ...(data.blueprint_rewards?.length ? [{ label: t("missionToolsUi.bpCount", { count: data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0) }), color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(npcCount > 0
+      ? [
+          {
+            label: t("missionToolsUi.npcCount", { count: npcCount }),
+            color: "warning" as const,
+          },
+        ]
+      : []),
+    ...(entityCount > 0
+      ? [
+          {
+            label: t("missionToolsUi.targetCount", { count: entityCount }),
+            color: "secondary" as const,
+          },
+        ]
+      : []),
+    ...(poolCount > 0
+      ? [
+          {
+            label: t("missionToolsUi.shipTypeCount", {
+              count: new Set(
+                (data.ship_encounters || []).flatMap((e) => e.ship_pool || []),
+              ).size,
+            }),
+            color: "info" as const,
+          },
+        ]
+      : []),
+    ...(data.blueprint_rewards?.length
+      ? [
+          {
+            label: t("missionToolsUi.bpCount", {
+              count: data.blueprint_rewards.reduce(
+                (s, p) => s + p.blueprints.length,
+                0,
+              ),
+            }),
+            color: "success" as const,
+            icon: <BuildRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -263,8 +458,14 @@ function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       <NpcEncountersSection encounters={data.npc_encounters || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
-      {!(data.ship_encounters?.length || data.npc_encounters?.length || data.entity_spawns?.length) && (
-        <Typography variant="body2" color="text.secondary">{t("missionToolsUi.noCombatData")}</Typography>
+      {!(
+        data.ship_encounters?.length ||
+        data.npc_encounters?.length ||
+        data.entity_spawns?.length
+      ) && (
+        <Typography variant="body2" color="text.secondary">
+          {t("missionToolsUi.noCombatData")}
+        </Typography>
       )}
     </Stack>
   )
@@ -273,11 +474,33 @@ function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
 /** Bounty Hunter — ship encounters with pools, NPC squads */
 function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
-  const poolSize = new Set((data.ship_encounters || []).flatMap(e => e.ship_pool || [])).size
+  const poolSize = new Set(
+    (data.ship_encounters || []).flatMap((e) => e.ship_pool || []),
+  ).size
   const chips = [
     ...shipChips(data, t),
-    ...(poolSize > 0 ? [{ label: t("missionToolsUi.shipTypeCount", { count: poolSize }), color: "info" as const }] : []),
-    ...(data.blueprint_rewards?.length ? [{ label: t("missionToolsUi.bpCount", { count: data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0) }), color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(poolSize > 0
+      ? [
+          {
+            label: t("missionToolsUi.shipTypeCount", { count: poolSize }),
+            color: "info" as const,
+          },
+        ]
+      : []),
+    ...(data.blueprint_rewards?.length
+      ? [
+          {
+            label: t("missionToolsUi.bpCount", {
+              count: data.blueprint_rewards.reduce(
+                (s, p) => s + p.blueprints.length,
+                0,
+              ),
+            }),
+            color: "success" as const,
+            icon: <BuildRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -285,7 +508,9 @@ function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       <NpcEncountersSection encounters={data.npc_encounters || []} />
       {!data.ship_encounters?.length && !data.npc_encounters?.length && (
-        <Typography variant="body2" color="text.secondary">{t("missionToolsUi.noEncounterData")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("missionToolsUi.noEncounterData")}
+        </Typography>
       )}
     </Stack>
   )
@@ -299,11 +524,39 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
   const isFee = (m.credit_reward_min ?? 0) < 0
   const hauling = data.hauling_orders || []
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
-  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
+  const entityCount = (data.entity_spawns || []).reduce(
+    (s, e) => s + e.count,
+    0,
+  )
   const chips = [
-    ...(isFee ? [{ label: t("missionsUi.fee", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` }), color: "warning" as const }] : []),
-    ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
-    ...(entityCount > 0 ? [{ label: t("missionToolsUi.wreckCount", { count: entityCount }), color: "secondary" as const, icon: <RecyclingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(isFee
+      ? [
+          {
+            label: t("missionsUi.fee", {
+              amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC`,
+            }),
+            color: "warning" as const,
+          },
+        ]
+      : []),
+    ...(totalScu > 0
+      ? [
+          {
+            label: `${totalScu} SCU`,
+            color: "info" as const,
+            icon: <LocalShippingRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
+    ...(entityCount > 0
+      ? [
+          {
+            label: t("missionToolsUi.wreckCount", { count: entityCount }),
+            color: "secondary" as const,
+            icon: <RecyclingRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
     ...shipChips(data, t),
   ]
   return (
@@ -311,8 +564,14 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
       <SummaryChips chips={chips} />
       {isFee && (
         <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
-          <Typography variant="subtitle2" color="warning.main">{t("missionToolsUi.buyInRequired")}</Typography>
-          <Typography variant="body2">{t("missionsUi.fee", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` })}</Typography>
+          <Typography variant="subtitle2" color="warning.main">
+            {t("missionToolsUi.buyInRequired")}
+          </Typography>
+          <Typography variant="body2">
+            {t("missionsUi.fee", {
+              amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC`,
+            })}
+          </Typography>
         </Paper>
       )}
       <HaulingOrdersSection orders={data.hauling_orders || []} />
@@ -329,8 +588,25 @@ function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
   const dests = data.mission.destinations || []
   const chips = [
-    ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
-    ...(dests.length > 0 ? [{ label: t("missionToolsUi.destinationCount", { count: dests.length }), color: "secondary" as const }] : []),
+    ...(totalScu > 0
+      ? [
+          {
+            label: `${totalScu} SCU`,
+            color: "info" as const,
+            icon: <LocalShippingRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
+    ...(dests.length > 0
+      ? [
+          {
+            label: t("missionToolsUi.destinationCount", {
+              count: dests.length,
+            }),
+            color: "secondary" as const,
+          },
+        ]
+      : []),
     ...shipChips(data, t),
   ]
   return (
@@ -339,9 +615,15 @@ function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
       <HaulingOrdersSection orders={hauling} />
       {dests.length > 0 && (
         <Paper variant="outlined" sx={{ p: 1.5 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("missionToolsUi.destinations")}</Typography>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+            {t("missionToolsUi.destinations")}
+          </Typography>
           <Stack spacing={0.25}>
-            {dests.map((d, i) => <Typography key={i} variant="body2">{d}</Typography>)}
+            {dests.map((d, i) => (
+              <Typography key={i} variant="body2">
+                {d}
+              </Typography>
+            ))}
           </Stack>
         </Paper>
       )}
@@ -356,8 +638,23 @@ function HaulingDetails({ data }: { data: MissionDetailResponse }) {
   const hauling = data.hauling_orders || []
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
   const chips = [
-    ...(totalScu > 0 ? [{ label: t("missionToolsUi.scuCargo", { amount: totalScu }), color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
-    ...(hauling.length > 0 ? [{ label: t("missionToolsUi.resourceCount", { count: hauling.length }), color: "secondary" as const }] : []),
+    ...(totalScu > 0
+      ? [
+          {
+            label: t("missionToolsUi.scuCargo", { amount: totalScu }),
+            color: "info" as const,
+            icon: <LocalShippingRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
+    ...(hauling.length > 0
+      ? [
+          {
+            label: t("missionToolsUi.resourceCount", { count: hauling.length }),
+            color: "secondary" as const,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -378,8 +675,29 @@ function MiningDetails({ data }: { data: MissionDetailResponse }) {
   const hauling = data.hauling_orders || []
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
   const chips = [
-    ...(totalScu > 0 ? [{ label: t("missionToolsUi.scuOre", { amount: totalScu }), color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
-    ...(data.blueprint_rewards?.length ? [{ label: t("missionToolsUi.bpCount", { count: data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0) }), color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(totalScu > 0
+      ? [
+          {
+            label: t("missionToolsUi.scuOre", { amount: totalScu }),
+            color: "info" as const,
+            icon: <LocalShippingRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
+    ...(data.blueprint_rewards?.length
+      ? [
+          {
+            label: t("missionToolsUi.bpCount", {
+              count: data.blueprint_rewards.reduce(
+                (s, p) => s + p.blueprints.length,
+                0,
+              ),
+            }),
+            color: "success" as const,
+            icon: <BuildRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -387,7 +705,9 @@ function MiningDetails({ data }: { data: MissionDetailResponse }) {
       <HaulingOrdersSection orders={data.hauling_orders || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!data.hauling_orders?.length && (
-        <Typography variant="body2" color="text.secondary">{t("missionToolsUi.noMiningData")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("missionToolsUi.noMiningData")}
+        </Typography>
       )}
     </Stack>
   )
@@ -396,16 +716,31 @@ function MiningDetails({ data }: { data: MissionDetailResponse }) {
 /** Maintenance — entity spawns (relay/pipe repair targets) */
 function MaintenanceDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
-  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
+  const entityCount = (data.entity_spawns || []).reduce(
+    (s, e) => s + e.count,
+    0,
+  )
   const chips = [
-    ...(entityCount > 0 ? [{ label: t("missionToolsUi.repairTargetCount", { count: entityCount }), color: "warning" as const, icon: <HandymanRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(entityCount > 0
+      ? [
+          {
+            label: t("missionToolsUi.repairTargetCount", {
+              count: entityCount,
+            }),
+            color: "warning" as const,
+            icon: <HandymanRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
       <SummaryChips chips={chips} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!data.entity_spawns?.length && (
-        <Typography variant="body2" color="text.secondary">{t("missionToolsUi.noRepairData")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("missionToolsUi.noRepairData")}
+        </Typography>
       )}
     </Stack>
   )
@@ -416,7 +751,17 @@ function InvestigationDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
   const chips = [
     ...shipChips(data, t),
-    ...((data.entity_spawns?.length ?? 0) > 0 ? [{ label: t("missionToolsUi.clueCount", { count: data.entity_spawns!.reduce((s, e) => s + e.count, 0) }), color: "info" as const, icon: <SearchRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...((data.entity_spawns?.length ?? 0) > 0
+      ? [
+          {
+            label: t("missionToolsUi.clueCount", {
+              count: data.entity_spawns!.reduce((s, e) => s + e.count, 0),
+            }),
+            color: "info" as const,
+            icon: <SearchRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -439,7 +784,17 @@ function RaceDetails({ data }: { data: MissionDetailResponse }) {
   const m = data.mission
   const isFee = (m.credit_reward_min ?? 0) < 0
   const chips = [
-    ...(isFee ? [{ label: t("missionToolsUi.entryAmount", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` }), color: "warning" as const, icon: <SportsScoreRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(isFee
+      ? [
+          {
+            label: t("missionToolsUi.entryAmount", {
+              amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC`,
+            }),
+            color: "warning" as const,
+            icon: <SportsScoreRounded sx={{ fontSize: 14 }} />,
+          },
+        ]
+      : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -449,8 +804,12 @@ function RaceDetails({ data }: { data: MissionDetailResponse }) {
           <Stack direction="row" spacing={1} alignItems="center">
             <SportsScoreRounded sx={{ fontSize: 20, color: "warning.main" }} />
             <Box>
-              <Typography variant="subtitle2" color="warning.main">{t("missionToolsUi.entryFee")}</Typography>
-              <Typography variant="body2">{fmt.number(Math.abs(m.credit_reward_min!))} aUEC</Typography>
+              <Typography variant="subtitle2" color="warning.main">
+                {t("missionToolsUi.entryFee")}
+              </Typography>
+              <Typography variant="body2">
+                {fmt.number(Math.abs(m.credit_reward_min!))} aUEC
+              </Typography>
             </Box>
           </Stack>
         </Paper>
@@ -465,7 +824,11 @@ function RaceDetails({ data }: { data: MissionDetailResponse }) {
 /** Generic fallback — shows whatever data exists */
 function GenericDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
-  const hasAnything = (data.ship_encounters?.length || data.npc_encounters?.length || data.hauling_orders?.length || data.entity_spawns?.length)
+  const hasAnything =
+    data.ship_encounters?.length ||
+    data.npc_encounters?.length ||
+    data.hauling_orders?.length ||
+    data.entity_spawns?.length
   return (
     <Stack spacing={1.5}>
       <ShipEncountersSection encounters={data.ship_encounters || []} />
@@ -473,7 +836,9 @@ function GenericDetails({ data }: { data: MissionDetailResponse }) {
       <HaulingOrdersSection orders={data.hauling_orders || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!hasAnything && (
-        <Typography variant="body2" color="text.secondary">{t("missionToolsUi.noTypeData")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("missionToolsUi.noTypeData")}
+        </Typography>
       )}
     </Stack>
   )

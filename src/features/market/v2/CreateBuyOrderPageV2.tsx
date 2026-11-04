@@ -9,7 +9,8 @@ import { HelpLink } from "../../help/components/HelpLink"
 
 export function CreateBuyOrderPageV2() {
   const { t } = useTranslation()
-  const [selectedGameItem, setSelectedGameItem] = useState<GameItemSearchResult | null>(null)
+  const [selectedGameItem, setSelectedGameItem] =
+    useState<GameItemSearchResult | null>(null)
 
   return (
     <StandardPageLayout
@@ -31,7 +32,13 @@ export function CreateBuyOrderPageV2() {
           </Typography>
           <GameItemSearchAutocomplete
             value={null}
-            onChange={(name, type, itemId) => setSelectedGameItem(itemId ? { id: itemId, name: name || "", type: type || "" } : null)}
+            onChange={(name, type, itemId) =>
+              setSelectedGameItem(
+                itemId
+                  ? { id: itemId, name: name || "", type: type || "" }
+                  : null,
+              )
+            }
             label={t("buyOrderActions.searchItem", "Search for a game item")}
           />
         </Paper>

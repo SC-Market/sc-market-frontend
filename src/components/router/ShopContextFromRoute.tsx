@@ -22,19 +22,13 @@ export function ShopContextFromRoute() {
   const { shopSlug } = useParams<{ shopSlug: string }>()
   const theme = useTheme()
 
-  const {
-    data: myShops,
-    isLoading: myShopsLoading,
-  } = useGetMyShopsQuery()
+  const { data: myShops, isLoading: myShopsLoading } = useGetMyShopsQuery()
 
   const {
     data: shopPublic,
     isLoading: shopLoading,
     isError: shopError,
-  } = useGetShopQuery(
-    { slug: shopSlug! },
-    { skip: !shopSlug },
-  )
+  } = useGetShopQuery({ slug: shopSlug! }, { skip: !shopSlug })
 
   if (!shopSlug) {
     return <Navigate to={PATHS.dashboardShops} replace />

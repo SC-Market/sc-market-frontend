@@ -9,7 +9,9 @@ import { useGetMyShopsQuery } from "../../../store/api/v2/market"
  * computed over the full filtered set (independent of pagination), so a
  * page_size of 1 is enough to read the counts cheaply.
  */
-export function useShopPendingOrderCount(slug: string | null | undefined): number {
+export function useShopPendingOrderCount(
+  slug: string | null | undefined,
+): number {
   const { data: shops = [] } = useGetMyShopsQuery(undefined, { skip: !slug })
   const shopId = slug ? shops.find((s) => s.slug === slug)?.shop_id : undefined
 

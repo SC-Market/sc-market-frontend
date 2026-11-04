@@ -21,9 +21,17 @@ import {
 } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
-import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
+import {
+  useSearchLocationsQuery,
+  type LocationSearchResult,
+} from "../../store/api/v2/market"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
-import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
+import {
+  UnifiedSearchBar,
+  locationTokensToParams,
+  locationParamsToTokens,
+  type SearchToken,
+} from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
@@ -36,7 +44,11 @@ function friendlyName(name: string): string {
 const PAGE_SIZE = MINING_LOCATION_PAGE_SIZE
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
-import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
+import {
+  RocketLaunchRounded,
+  DirectionsCarRounded,
+  PanToolRounded,
+} from "@mui/icons-material"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
@@ -51,7 +63,11 @@ const LOCATION_TYPE_KEYS: Record<string, string> = {
   Surface: "wikiUi.search.locationTypes.surface",
   "Asteroid Field": "wikiUi.search.locationTypes.asteroidField",
 }
-function apiLabel(keys: Record<string, string>, value: string, t: TFunction): string {
+function apiLabel(
+  keys: Record<string, string>,
+  value: string,
+  t: TFunction,
+): string {
   const key = keys[value]
   return key ? t(key) : value
 }
@@ -59,9 +75,12 @@ function apiLabel(keys: Record<string, string>, value: string, t: TFunction): st
 function GroupIcon({ groupName }: { groupName: string }) {
   const g = (groupName || "").toLowerCase()
   const sx = { fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }
-  if (g.includes("ship")) return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
-  if (g.includes("ground")) return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
-  if (g.includes("fps") || g.includes("hand")) return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+  if (g.includes("ship"))
+    return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+  if (g.includes("ground"))
+    return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+  if (g.includes("fps") || g.includes("hand"))
+    return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
   return null
 }
 
@@ -75,8 +94,14 @@ export function MiningLocationBrowser() {
   const page = parseInt(searchParams.get("page") || "1") || 1
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
-  const searchTokens = useMemo(() => locationParamsToTokens(searchParams), [searchParams])
-  const queryParams = useMemo(() => locationTokensToParams(searchTokens), [searchTokens])
+  const searchTokens = useMemo(
+    () => locationParamsToTokens(searchParams),
+    [searchParams],
+  )
+  const queryParams = useMemo(
+    () => locationTokensToParams(searchTokens),
+    [searchTokens],
+  )
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(locationTokensToParams(tokens))
@@ -107,16 +132,28 @@ export function MiningLocationBrowser() {
     navigate(GAME_DATA_PATHS.miningLocations, { replace: true })
   }
 
-  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchLocationsQuery({
+  const {
+    data,
+    isLoading,
+    error,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useSearchLocationsQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
-    locationType: (queryParams.location_type as "surface" | "asteroidfield" | undefined) || undefined,
+    locationType:
+      (queryParams.location_type as "surface" | "asteroidfield" | undefined) ||
+      undefined,
     page,
     pageSize: PAGE_SIZE,
   })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
 
   return (
@@ -129,40 +166,53 @@ export function MiningLocationBrowser() {
           placeholder={t("miningUi.locationBrowser.searchPlaceholder")}
         />
         {data && (
-          <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ whiteSpace: "nowrap" }}
+          >
             {data.total}
           </Typography>
         )}
       </Box>
 
       {isLoading && <CardGridSkeleton />}
-        {error && <Alert severity="error">{t("gameTaxonomyUi.locationsLoadFailed")}</Alert>}
-        {data && (
-          <>
-            <Grid container spacing={1.5}>
-              {data.locations.map((loc) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
-                  <LocationCard location={loc} onClick={() => handleLocationClick(loc.name)} />
-                </Grid>
-              ))}
-            </Grid>
-            {data.locations.length === 0 && (
-              <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-                <Typography color="text.secondary">{t("mining.noLocations", "No locations found.")}</Typography>
-              </Box>
-            )}
-            {data.total > PAGE_SIZE && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                <Pagination
-                  count={Math.ceil(data.total / PAGE_SIZE)}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
+      {error && (
+        <Alert severity="error">
+          {t("gameTaxonomyUi.locationsLoadFailed")}
+        </Alert>
+      )}
+      {data && (
+        <>
+          <Grid container spacing={1.5}>
+            {data.locations.map((loc) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
+                <LocationCard
+                  location={loc}
+                  onClick={() => handleLocationClick(loc.name)}
                 />
-              </Box>
-            )}
-          </>
-        )}
+              </Grid>
+            ))}
+          </Grid>
+          {data.locations.length === 0 && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+              <Typography color="text.secondary">
+                {t("mining.noLocations", "No locations found.")}
+              </Typography>
+            </Box>
+          )}
+          {data.total > PAGE_SIZE && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <Pagination
+                count={Math.ceil(data.total / PAGE_SIZE)}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
+      )}
       <MiningLocationDetailModal
         locationName={selectedLocation}
         open={!!selectedLocation}
@@ -182,14 +232,25 @@ function systemChipColor(system: string): string {
   return SYSTEM_COLORS[system] || "#9e9e9e"
 }
 
-function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
+function LocationCard({
+  location,
+  onClick,
+}: {
+  location: LocationSearchResult
+  onClick: () => void
+}) {
   const displayName = location.displayName || friendlyName(location.name)
   const systemDisplay = location.system || ""
   const { t } = useTranslation()
-  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/locations/:name", GAME_DATA_PATHS.miningLocation(location.name))
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch(
+    "/mining/locations/:name",
+    GAME_DATA_PATHS.miningLocation(location.name),
+  )
 
   // topOres is string[] from the search endpoint
-  const hasTopOres = (location.groups || []).some((g) => (g.topOres || []).length > 0)
+  const hasTopOres = (location.groups || []).some(
+    (g) => (g.topOres || []).length > 0,
+  )
 
   return (
     <Card
@@ -210,30 +271,91 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
         }}
       >
         <CardContent sx={{ p: 1.5, flex: 1, "&:last-child": { pb: 1.5 } }}>
-          <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
-          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ my: 0.5 }}>
+          <Typography variant="body2" fontWeight={600} noWrap>
+            {displayName}
+          </Typography>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ my: 0.5 }}
+          >
             {systemDisplay && (
-              <Chip label={systemDisplay} size="small"
-                sx={{ ...microChip, bgcolor: systemChipColor(systemDisplay) + "22", color: systemChipColor(systemDisplay), fontWeight: 600 }} />
+              <Chip
+                label={systemDisplay}
+                size="small"
+                sx={{
+                  ...microChip,
+                  bgcolor: systemChipColor(systemDisplay) + "22",
+                  color: systemChipColor(systemDisplay),
+                  fontWeight: 600,
+                }}
+              />
             )}
-            {location.locationType && <Chip label={apiLabel(LOCATION_TYPE_KEYS, location.locationType, t)} size="small" variant="outlined" sx={microChip} />}
-            {location.hasRefinery && <Chip label={t("miningUi.location.refinery")} size="small" color="success" sx={microChip} />}
+            {location.locationType && (
+              <Chip
+                label={apiLabel(LOCATION_TYPE_KEYS, location.locationType, t)}
+                size="small"
+                variant="outlined"
+                sx={microChip}
+              />
+            )}
+            {location.hasRefinery && (
+              <Chip
+                label={t("miningUi.location.refinery")}
+                size="small"
+                color="success"
+                sx={microChip}
+              />
+            )}
           </Stack>
 
           {(location.groups || []).map((g) => (
             <Box key={g.groupName} sx={{ mb: 0.5 }}>
-              <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{apiLabel(GROUP_NAME_KEYS, g.groupName, t)}</Typography>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                fontWeight={600}
+                sx={{ fontSize: "0.65rem" }}
+              >
+                <GroupIcon groupName={g.groupName} />
+                {apiLabel(GROUP_NAME_KEYS, g.groupName, t)}
+              </Typography>
               {(g.topOres || []).length > 0 ? (
                 <Box>
                   {g.topOres.slice(0, 3).map((name: string, i: number) => (
-                    <Typography key={i} variant="caption" display="block" sx={{ fontSize: "0.7rem", pl: 0.5 }}>{name}</Typography>
+                    <Typography
+                      key={i}
+                      variant="caption"
+                      display="block"
+                      sx={{ fontSize: "0.7rem", pl: 0.5 }}
+                    >
+                      {name}
+                    </Typography>
                   ))}
                   {g.oreCount > 3 && (
-                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>{t("miningUi.locationBrowser.moreOres", { count: g.oreCount - 3 })}</Typography>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ fontSize: "0.65rem", pl: 0.5 }}
+                    >
+                      {t("miningUi.locationBrowser.moreOres", {
+                        count: g.oreCount - 3,
+                      })}
+                    </Typography>
                   )}
                 </Box>
               ) : (
-                <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{t("miningUi.locationBrowser.oreCount", { count: g.oreCount })}</Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ pl: 0.5 }}
+                >
+                  {t("miningUi.locationBrowser.oreCount", {
+                    count: g.oreCount,
+                  })}
+                </Typography>
               )}
             </Box>
           ))}

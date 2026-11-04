@@ -12,7 +12,11 @@
  */
 
 import { parseConfig } from "./config"
-import { CONFIG_VERSION, type DashboardConfig, type DashboardWidget } from "./types"
+import {
+  CONFIG_VERSION,
+  type DashboardConfig,
+  type DashboardWidget,
+} from "./types"
 
 /** Envelope written to disk — the config plus a little metadata for humans. */
 export interface DashboardExport {
@@ -152,7 +156,10 @@ export function applyRemaps(
       case "org":
         return {
           ...w,
-          scope: { kind: "specific_org" as const, spectrumId: resolution.spectrumId },
+          scope: {
+            kind: "specific_org" as const,
+            spectrumId: resolution.spectrumId,
+          },
         }
       case "shop":
         return {

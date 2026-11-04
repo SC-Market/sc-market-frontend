@@ -16,7 +16,8 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "order:messages": () => import("../views/orders/OrderDetailsArea"),
   "order:review": () => import("../views/orders/OrderReviewArea"),
   "order:reviewView": () => import("../views/orders/OrderReviewView"),
-  "order:marketListings": () => import("../views/offers/OfferMarketListingsV2Items"),
+  "order:marketListings": () =>
+    import("../views/offers/OfferMarketListingsV2Items"),
   "order:service": () => import("../views/offers/OfferServiceArea"),
   "order:allocation": () => import("../features/market/components/allocation"),
   "order:availability": () => import("../views/orders/OrderAvailabilityArea"),
@@ -24,7 +25,8 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   // ViewOfferPage tab components (internal tabs, not route-based)
   "offer:details": () => import("../views/offers/OfferDetailsArea"),
   "offer:messages": () => import("../views/offers/OfferDetailsArea"),
-  "offer:marketListings": () => import("../views/offers/OfferMarketListingsV2Items"),
+  "offer:marketListings": () =>
+    import("../views/offers/OfferMarketListingsV2Items"),
   "offer:service": () => import("../views/offers/OfferServiceArea"),
   "offer:availability": () => import("../views/orders/OrderAvailabilityArea"),
 
@@ -51,7 +53,6 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "settings:market": () => import("../views/settings/MarketSettings"),
   "settings:contractors": () => import("../views/settings/ContractorsSettings"),
   "settings:blocklist": () => import("../views/settings/BlocklistSettings"),
-
 
   // Fleet tab components
   "fleet:ships": () => import("../views/fleet/Ships"),

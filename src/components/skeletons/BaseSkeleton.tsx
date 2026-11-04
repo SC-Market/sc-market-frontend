@@ -18,7 +18,6 @@ export function BaseSkeleton({
   sx,
   ...props
 }: BaseSkeletonProps) {
-
   return (
     <Skeleton
       variant={variant}

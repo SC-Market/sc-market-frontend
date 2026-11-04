@@ -4,7 +4,9 @@ import { MemoryRouter } from "react-router-dom"
 import { describe, it, expect, vi } from "vitest"
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 vi.mock("../components/NotificationBase", () => ({

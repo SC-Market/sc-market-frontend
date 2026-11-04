@@ -157,18 +157,10 @@ export function ListingAnalyticsWidget({
                 >
                   {row.title}
                 </TableCell>
-                <TableCell align="right">
-                  {fmt.number(row.views)}
-                </TableCell>
-                <TableCell align="right">
-                  {fmt.number(row.cart_adds)}
-                </TableCell>
-                <TableCell align="right">
-                  {fmt.number(row.orders)}
-                </TableCell>
-                <TableCell align="right">
-                  {fmt.number(row.sales)}
-                </TableCell>
+                <TableCell align="right">{fmt.number(row.views)}</TableCell>
+                <TableCell align="right">{fmt.number(row.cart_adds)}</TableCell>
+                <TableCell align="right">{fmt.number(row.orders)}</TableCell>
+                <TableCell align="right">{fmt.number(row.sales)}</TableCell>
                 <TableCell align="right">{row.conversion_rate}%</TableCell>
               </TableRow>
             ))}

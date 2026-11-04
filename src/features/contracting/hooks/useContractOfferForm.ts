@@ -1,8 +1,17 @@
 import { useCallback, useState } from "react"
 import { useCreateContractOfferMutation } from "../api/publicContractsApi"
-import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile/api/profileApi"
-import { useCheckContractorOrderLimitsQuery, useCheckUserOrderLimitsQuery } from "../../orders/api/orderSettingsApi"
-import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
+import {
+  useGetUserProfileQuery,
+  useGetUserByUsernameQuery,
+} from "../../profile/api/profileApi"
+import {
+  useCheckContractorOrderLimitsQuery,
+  useCheckUserOrderLimitsQuery,
+} from "../../orders/api/orderSettingsApi"
+import {
+  useAlertHook,
+  type UnwrappedErrorInterface,
+} from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ORDER_PATHS } from "../../../routes/paths"
@@ -20,38 +29,89 @@ export function useContractOfferForm(contract: PublicContract) {
   const [kind, setKind] = useState<OrderKind>(contract.kind)
   const [cost, setCost] = useState(contract.cost)
   const [collateral, setCollateral] = useState(contract.collateral)
-  const [paymentType, setPaymentType] = useState<PaymentType>(contract.payment_type)
+  const [paymentType, setPaymentType] = useState<PaymentType>(
+    contract.payment_type,
+  )
 
   const [createContractOffer, { isLoading }] = useCreateContractOfferMutation()
   const { data: profile } = useGetUserProfileQuery()
-  const { data: myUser } = useGetUserByUsernameQuery(profile?.username ?? skipToken)
+  const { data: myUser } = useGetUserByUsernameQuery(
+    profile?.username ?? skipToken,
+  )
 
   const primaryContractorId = profile?.contractors?.[0]?.spectrum_id
-  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(primaryContractorId || "", { skip: !primaryContractorId })
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(profile?.username || "", { skip: !profile?.username || !!primaryContractorId })
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
+    primaryContractorId || "",
+    { skip: !primaryContractorId },
+  )
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(
+    profile?.username || "",
+    { skip: !profile?.username || !!primaryContractorId },
+  )
   const orderLimits = contractorLimits || userLimits
 
   const submitContractOffer = useCallback(async () => {
     createContractOffer({
-      contract_id: contract.id, contractor: primaryContractorId || null,
-      title, description, kind, collateral, cost, payment_type: paymentType,
-    }).unwrap()
+      contract_id: contract.id,
+      contractor: primaryContractorId || null,
+      title,
+      description,
+      kind,
+      collateral,
+      cost,
+      payment_type: paymentType,
+    })
+      .unwrap()
       .then((data) => {
-        issueAlert({ message: t("createPublicContract.submitted"), severity: "success" })
+        issueAlert({
+          message: t("createPublicContract.submitted"),
+          severity: "success",
+        })
         navigate(ORDER_PATHS.offer(data.session_id))
       })
       .catch((error: UnwrappedErrorInterface) => {
         if (error?.error?.code === "ORDER_LIMIT_VIOLATION") {
-          issueAlert({ message: error.error.message || t("contractsUi.orderLimitViolation"), severity: "error" })
-        } else { issueAlert(error) }
+          issueAlert({
+            message:
+              error.error.message || t("contractsUi.orderLimitViolation"),
+            severity: "error",
+          })
+        } else {
+          issueAlert(error)
+        }
       })
-  }, [collateral, cost, createContractOffer, description, issueAlert, kind, navigate, paymentType, title, t, primaryContractorId, contract.id])
+  }, [
+    collateral,
+    cost,
+    createContractOffer,
+    description,
+    issueAlert,
+    kind,
+    navigate,
+    paymentType,
+    title,
+    t,
+    primaryContractorId,
+    contract.id,
+  ])
 
   return {
-    title, setTitle, description, setDescription,
-    kind, setKind, cost, setCost, collateral, setCollateral,
-    paymentType, setPaymentType,
-    isLoading, submitContractOffer,
-    profile, myUser, orderLimits,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    kind,
+    setKind,
+    cost,
+    setCost,
+    collateral,
+    setCollateral,
+    paymentType,
+    setPaymentType,
+    isLoading,
+    submitContractOffer,
+    profile,
+    myUser,
+    orderLimits,
   }
 }

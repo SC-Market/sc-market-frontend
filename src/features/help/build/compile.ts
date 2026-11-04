@@ -79,9 +79,12 @@ function unquote(raw: string, file: string, line: number): string {
 function parseValue(raw: string, file: string, line: number): FrontmatterValue {
   const value = raw.trim()
   if (value.startsWith("[")) {
-    if (!value.endsWith("]")) throw new ContentError(file, `line ${line}: unterminated list`)
+    if (!value.endsWith("]"))
+      throw new ContentError(file, `line ${line}: unterminated list`)
     const inner = value.slice(1, -1).trim()
-    return inner === "" ? [] : inner.split(",").map((item) => unquote(item, file, line))
+    return inner === ""
+      ? []
+      : inner.split(",").map((item) => unquote(item, file, line))
   }
   if (value === "true") return true
   if (value === "false") return false
@@ -94,7 +97,8 @@ export function parseFrontmatter(
   file: string,
 ): { data: Record<string, FrontmatterValue>; body: string } {
   const text = source.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n")
-  if (!text.startsWith("---\n")) throw new ContentError(file, "missing frontmatter (--- block)")
+  if (!text.startsWith("---\n"))
+    throw new ContentError(file, "missing frontmatter (--- block)")
   const end = text.indexOf("\n---\n", 3)
   if (end === -1) throw new ContentError(file, "unterminated frontmatter")
   const data: Record<string, FrontmatterValue> = {}
@@ -103,9 +107,14 @@ export function parseFrontmatter(
     const line = rawLine.trimEnd()
     if (line.trim() === "" || line.trimStart().startsWith("#")) return
     const match = KEY_LINE.exec(line)
-    if (!match) throw new ContentError(file, `frontmatter line ${i + 2}: expected "key: value"`)
+    if (!match)
+      throw new ContentError(
+        file,
+        `frontmatter line ${i + 2}: expected "key: value"`,
+      )
     const [, key, value] = match
-    if (key in data) throw new ContentError(file, `frontmatter key "${key}" repeated`)
+    if (key in data)
+      throw new ContentError(file, `frontmatter key "${key}" repeated`)
     data[key] = parseValue(value, file, i + 2)
   })
   return { data, body: text.slice(end + 5) }
@@ -123,11 +132,21 @@ const KNOWN_GUIDE_KEYS = new Set([
   "draft",
 ])
 const KNOWN_ABOUT_KEYS = new Set(["title", "description", "updated", "author"])
-const KNOWN_CHANGELOG_KEYS = new Set(["title", "date", "summary", "tags", "status"])
+const KNOWN_CHANGELOG_KEYS = new Set([
+  "title",
+  "date",
+  "summary",
+  "tags",
+  "status",
+])
 /** The only `status` values a changelog entry may have. */
 export const CHANGELOG_STATUSES = ["draft", "published"] as const
 
-function requireString(data: Record<string, FrontmatterValue>, key: string, file: string): string {
+function requireString(
+  data: Record<string, FrontmatterValue>,
+  key: string,
+  file: string,
+): string {
   const value = data[key]
   if (typeof value !== "string" || value.trim() === "") {
     throw new ContentError(file, `frontmatter "${key}" is required (a string)`)
@@ -142,14 +161,20 @@ function optionalString(
 ): string | undefined {
   const value = data[key]
   if (value === undefined) return undefined
-  if (typeof value !== "string") throw new ContentError(file, `frontmatter "${key}" must be a string`)
+  if (typeof value !== "string")
+    throw new ContentError(file, `frontmatter "${key}" must be a string`)
   return value.trim()
 }
 
-function stringList(data: Record<string, FrontmatterValue>, key: string, file: string): string[] {
+function stringList(
+  data: Record<string, FrontmatterValue>,
+  key: string,
+  file: string,
+): string[] {
   const value = data[key]
   if (value === undefined) return []
-  if (!Array.isArray(value)) throw new ContentError(file, `frontmatter "${key}" must be a [list]`)
+  if (!Array.isArray(value))
+    throw new ContentError(file, `frontmatter "${key}" must be a [list]`)
   return value
 }
 
@@ -159,7 +184,8 @@ function checkUnknownKeys(
   file: string,
 ) {
   for (const key of Object.keys(data)) {
-    if (!known.has(key)) throw new ContentError(file, `unknown frontmatter key "${key}"`)
+    if (!known.has(key))
+      throw new ContentError(file, `unknown frontmatter key "${key}"`)
   }
 }
 
@@ -178,7 +204,8 @@ function checkUpdated(updated: string, today: string, file: string) {
   if (!ISO_DATE.test(updated) || Number.isNaN(Date.parse(updated))) {
     throw new ContentError(file, `"updated" must be a YYYY-MM-DD date`)
   }
-  if (updated > today) throw new ContentError(file, `"updated" (${updated}) is in the future`)
+  if (updated > today)
+    throw new ContentError(file, `"updated" (${updated}) is in the future`)
 }
 
 // ── Markdown → blocks ───────────────────────────────────────────────────────
@@ -207,11 +234,17 @@ export function slugify(text: string): string {
 }
 
 /** Site-relative ("/x", not "//x") or an https URL; in-page "#anchor". */
-function checkHref(href: string, file: string): "internal" | "external" | "anchor" {
+function checkHref(
+  href: string,
+  file: string,
+): "internal" | "external" | "anchor" {
   if (/^\/(?![/\\])[^\s]*$/.test(href)) return "internal"
   if (/^https:\/\/[^\s]+$/.test(href)) return "external"
   if (/^#[a-z0-9-]+$/.test(href)) return "anchor"
-  throw new ContentError(file, `link "${href}" must be site-relative (/path), https:// or #anchor`)
+  throw new ContentError(
+    file,
+    `link "${href}" must be site-relative (/path), https:// or #anchor`,
+  )
 }
 
 class BodyCompiler {
@@ -258,13 +291,17 @@ class BodyCompiler {
           out.push({ t: "br" })
           break
         case "link": {
-          if (checkHref(node.url, this.file) === "internal") this.links.push(node.url)
-          if (node.title) this.fail(`link titles are only allowed for CTAs ("${node.url}")`)
+          if (checkHref(node.url, this.file) === "internal")
+            this.links.push(node.url)
+          if (node.title)
+            this.fail(`link titles are only allowed for CTAs ("${node.url}")`)
           out.push({ t: "link", href: node.url, c: this.inline(node.children) })
           break
         }
         case "image":
-          this.fail(`images must be in a paragraph of their own ("${node.url}")`)
+          this.fail(
+            `images must be in a paragraph of their own ("${node.url}")`,
+          )
           break
         case "html":
           this.fail("raw HTML is not allowed")
@@ -276,7 +313,11 @@ class BodyCompiler {
     return out
   }
 
-  private image(src: string, alt: string, caption: string | null | undefined): Block {
+  private image(
+    src: string,
+    alt: string,
+    caption: string | null | undefined,
+  ): Block {
     if (!/^\.\/img\/[\w.-]+\.(webp|png|jpg|jpeg)$/.test(src)) {
       this.fail(`screenshots must be local files in ./img/ ("${src}")`)
     }
@@ -291,12 +332,16 @@ class BodyCompiler {
   }
 
   private paragraph(children: PhrasingContent[]): Block {
-    const meaningful = children.filter((c) => !(c.type === "text" && c.value.trim() === ""))
+    const meaningful = children.filter(
+      (c) => !(c.type === "text" && c.value.trim() === ""),
+    )
     if (meaningful.length === 1) {
       const only = meaningful[0]
-      if (only.type === "image") return this.image(only.url, only.alt ?? "", only.title)
+      if (only.type === "image")
+        return this.image(only.url, only.alt ?? "", only.title)
       if (only.type === "link" && only.title === "cta") {
-        if (checkHref(only.url, this.file) === "internal") this.links.push(only.url)
+        if (checkHref(only.url, this.file) === "internal")
+          this.links.push(only.url)
         const label = inlineText(this.inline(only.children)).trim()
         if (!label) this.fail(`CTA "${only.url}" needs a label`)
         return { t: "cta", href: only.url, label }
@@ -306,7 +351,8 @@ class BodyCompiler {
   }
 
   private listItem(item: ListItem): Block[] {
-    if (item.checked !== null && item.checked !== undefined) this.fail("task lists are not supported")
+    if (item.checked !== null && item.checked !== undefined)
+      this.fail("task lists are not supported")
     return this.blocks(item.children)
   }
 
@@ -324,9 +370,15 @@ class BodyCompiler {
         // Drop a leading line break left over from "[!TIP]\n".
         while (leadChildren[0]?.type === "break") leadChildren.shift()
         const body: (BlockContent | DefinitionContent)[] =
-          leadChildren.length > 0 ? [{ ...first, children: leadChildren }, ...children.slice(1)] : children.slice(1)
+          leadChildren.length > 0
+            ? [{ ...first, children: leadChildren }, ...children.slice(1)]
+            : children.slice(1)
         if (body.length === 0) this.fail(`empty [!${match[1]}] callout`)
-        return { t: "callout", kind: match[1].toLowerCase() as CalloutKind, c: this.blocks(body) }
+        return {
+          t: "callout",
+          kind: match[1].toLowerCase() as CalloutKind,
+          c: this.blocks(body),
+        }
       }
     }
     return { t: "quote", c: this.blocks(children) }
@@ -340,17 +392,31 @@ class BodyCompiler {
           out.push(this.paragraph(node.children))
           break
         case "heading": {
-          if (node.depth === 1) this.fail("don't use # headings: the title comes from frontmatter")
-          if (node.depth > 4) this.fail("headings deeper than #### are not supported")
+          if (node.depth === 1)
+            this.fail("don't use # headings: the title comes from frontmatter")
+          if (node.depth > 4)
+            this.fail("headings deeper than #### are not supported")
           const c = this.inline(node.children)
-          out.push({ t: "h", depth: node.depth as 2 | 3 | 4, id: this.anchorId(inlineText(c)), c })
+          out.push({
+            t: "h",
+            depth: node.depth as 2 | 3 | 4,
+            id: this.anchorId(inlineText(c)),
+            c,
+          })
           break
         }
         case "list":
           if (node.ordered) {
-            out.push({ t: "ol", start: node.start ?? 1, items: node.children.map((i) => this.listItem(i)) })
+            out.push({
+              t: "ol",
+              start: node.start ?? 1,
+              items: node.children.map((i) => this.listItem(i)),
+            })
           } else {
-            out.push({ t: "ul", items: node.children.map((i) => this.listItem(i)) })
+            out.push({
+              t: "ul",
+              items: node.children.map((i) => this.listItem(i)),
+            })
           }
           break
         case "blockquote":
@@ -408,20 +474,31 @@ export function extractSteps(blocks: readonly Block[]): string[] {
       continue
     }
     if (inSteps && block.t === "ol") {
-      return block.items.map((item) => blocksText(item).replace(/\s+/g, " ").trim())
+      return block.items.map((item) =>
+        blocksText(item).replace(/\s+/g, " ").trim(),
+      )
     }
   }
   return []
 }
 
-export function compileBody(markdown: string, file: string, options: CompileOptions = {}): CompiledBody {
+export function compileBody(
+  markdown: string,
+  file: string,
+  options: CompileOptions = {},
+): CompiledBody {
   // remark-gfm registers its micromark/mdast extensions on the processor,
   // so parse() alone yields GFM nodes (tables, strikethrough, autolinks).
   const tree = unified().use(remarkParse).use(remarkGfm).parse(markdown) as Root
   const compiler = new BodyCompiler(file, options)
   const blocks = compiler.blocks(tree.children)
   if (blocks.length === 0) throw new ContentError(file, "page body is empty")
-  return { blocks, steps: extractSteps(blocks), links: compiler.links, images: compiler.images }
+  return {
+    blocks,
+    steps: extractSteps(blocks),
+    links: compiler.links,
+    images: compiler.images,
+  }
 }
 
 // ── Site ────────────────────────────────────────────────────────────────────
@@ -455,9 +532,13 @@ export interface CompiledSite {
 export const CATEGORIES_FILE = "guides/categories.json"
 export const ABOUT_FILE = "about.md"
 /** Author-facing docs in /content that aren't pages. */
-export const IGNORED_FILES: ReadonlySet<string> = new Set(["STYLE.md", "README.md"])
+export const IGNORED_FILES: ReadonlySet<string> = new Set([
+  "STYLE.md",
+  "README.md",
+])
 
-const GUIDE_FILE = /^guides\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/
+const GUIDE_FILE =
+  /^guides\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/
 const CHANGELOG_FILE = /^changelog\/(\d{4}-\d{2}-\d{2})\.md$/
 
 /**
@@ -465,11 +546,17 @@ const CHANGELOG_FILE = /^changelog\/(\d{4}-\d{2}-\d{2})\.md$/
  * prerender list reads this without compiling Markdown). Throws on a
  * missing or unknown status.
  */
-export function changelogStatus(source: string, file: string): (typeof CHANGELOG_STATUSES)[number] {
+export function changelogStatus(
+  source: string,
+  file: string,
+): (typeof CHANGELOG_STATUSES)[number] {
   const { data } = parseFrontmatter(source, file)
   const status = data.status
   if (status !== "draft" && status !== "published") {
-    throw new ContentError(file, `"status" must be ${CHANGELOG_STATUSES.join(" or ")}`)
+    throw new ContentError(
+      file,
+      `"status" must be ${CHANGELOG_STATUSES.join(" or ")}`,
+    )
   }
   return status
 }
@@ -478,15 +565,23 @@ function compileChangelogEntry(
   file: string,
   source: string,
   slug: string,
-  opts: { today: string; imageResolver?: (file: string) => CompileOptions["resolveImage"] },
+  opts: {
+    today: string
+    imageResolver?: (file: string) => CompileOptions["resolveImage"]
+  },
 ): CompiledChangelogEntry {
   const { data, body } = parseFrontmatter(source, file)
   checkUnknownKeys(data, KNOWN_CHANGELOG_KEYS, file)
   const date = requireString(data, "date", file)
-  if (date !== slug) throw new ContentError(file, `"date" (${date}) must match the file name (${slug})`)
+  if (date !== slug)
+    throw new ContentError(
+      file,
+      `"date" (${date}) must match the file name (${slug})`,
+    )
   // Drafts (dev server only) may be dated ahead; a published entry may not.
   if (data.status === "published") checkUpdated(date, opts.today, file)
-  else if (!ISO_DATE.test(date)) throw new ContentError(file, `"date" must be a YYYY-MM-DD date`)
+  else if (!ISO_DATE.test(date))
+    throw new ContentError(file, `"date" must be a YYYY-MM-DD date`)
   const summary = requireString(data, "summary", file)
   checkDescription(summary, file)
   return {
@@ -496,7 +591,9 @@ function compileChangelogEntry(
       date,
       title: requireString(data, "title", file),
       summary,
-      tags: stringList(data, "tags", file).map((tag) => tag.trim()).filter(Boolean),
+      tags: stringList(data, "tags", file)
+        .map((tag) => tag.trim())
+        .filter(Boolean),
     },
     body: compileBody(body, file, { resolveImage: opts.imageResolver?.(file) }),
   }
@@ -507,9 +604,13 @@ function parseCategories(source: string): CategoryMeta[] {
   try {
     parsed = JSON.parse(source)
   } catch (error) {
-    throw new ContentError(CATEGORIES_FILE, `invalid JSON: ${(error as Error).message}`)
+    throw new ContentError(
+      CATEGORIES_FILE,
+      `invalid JSON: ${(error as Error).message}`,
+    )
   }
-  if (!Array.isArray(parsed)) throw new ContentError(CATEGORIES_FILE, "expected an array")
+  if (!Array.isArray(parsed))
+    throw new ContentError(CATEGORIES_FILE, "expected an array")
   const seen = new Set<string>()
   return parsed.map((raw: unknown, i) => {
     const c = raw as Partial<CategoryMeta>
@@ -520,12 +621,21 @@ function parseCategories(source: string): CategoryMeta[] {
       typeof c.description !== "string" ||
       typeof c.order !== "number"
     ) {
-      throw new ContentError(CATEGORIES_FILE, `entry ${i}: needs id (kebab-case), title, description, order`)
+      throw new ContentError(
+        CATEGORIES_FILE,
+        `entry ${i}: needs id (kebab-case), title, description, order`,
+      )
     }
-    if (seen.has(c.id)) throw new ContentError(CATEGORIES_FILE, `duplicate id "${c.id}"`)
+    if (seen.has(c.id))
+      throw new ContentError(CATEGORIES_FILE, `duplicate id "${c.id}"`)
     seen.add(c.id)
     checkDescription(c.description, CATEGORIES_FILE)
-    return { id: c.id, title: c.title, description: c.description, order: c.order }
+    return {
+      id: c.id,
+      title: c.title,
+      description: c.description,
+      order: c.order,
+    }
   })
 }
 
@@ -543,8 +653,11 @@ export function compileSite(
 ): CompiledSite {
   const byPath = new Map(files.map((f) => [f.path, f.source]))
   const categoriesSource = byPath.get(CATEGORIES_FILE)
-  if (categoriesSource === undefined) throw new ContentError(CATEGORIES_FILE, "missing")
-  const categories = parseCategories(categoriesSource).sort((a, b) => a.order - b.order)
+  if (categoriesSource === undefined)
+    throw new ContentError(CATEGORIES_FILE, "missing")
+  const categories = parseCategories(categoriesSource).sort(
+    (a, b) => a.order - b.order,
+  )
   const categoryIds = new Set(categories.map((c) => c.id))
 
   const aboutSource = byPath.get(ABOUT_FILE)
@@ -553,23 +666,39 @@ export function compileSite(
   const guides: CompiledGuide[] = []
   const changelog: CompiledChangelogEntry[] = []
   for (const { path, source } of files) {
-    if (path === CATEGORIES_FILE || path === ABOUT_FILE || IGNORED_FILES.has(path)) continue
+    if (
+      path === CATEGORIES_FILE ||
+      path === ABOUT_FILE ||
+      IGNORED_FILES.has(path)
+    )
+      continue
     if (/\/img\//.test(path)) continue
     if (path.startsWith("changelog/")) {
       const entry = CHANGELOG_FILE.exec(path)
-      if (!entry) throw new ContentError(path, "changelog files must be changelog/<YYYY-MM-DD>.md")
+      if (!entry)
+        throw new ContentError(
+          path,
+          "changelog files must be changelog/<YYYY-MM-DD>.md",
+        )
       // A draft is dropped here, before its body is even parsed.
-      if (changelogStatus(source, path) === "draft" && !opts.includeDrafts) continue
+      if (changelogStatus(source, path) === "draft" && !opts.includeDrafts)
+        continue
       changelog.push(compileChangelogEntry(path, source, entry[1], opts))
       continue
     }
     const match = GUIDE_FILE.exec(path)
     if (!match) {
-      throw new ContentError(path, "content files must be guides/<category>/<slug>.md (kebab-case)")
+      throw new ContentError(
+        path,
+        "content files must be guides/<category>/<slug>.md (kebab-case)",
+      )
     }
     const [, category, slug] = match
     if (!categoryIds.has(category)) {
-      throw new ContentError(path, `category "${category}" is not in ${CATEGORIES_FILE}`)
+      throw new ContentError(
+        path,
+        `category "${category}" is not in ${CATEGORIES_FILE}`,
+      )
     }
     const { data, body } = parseFrontmatter(source, path)
     checkUnknownKeys(data, KNOWN_GUIDE_KEYS, path)
@@ -579,13 +708,20 @@ export function compileSite(
     const updated = requireString(data, "updated", path)
     checkUpdated(updated, opts.today, path)
     const order = data.order ?? 100
-    if (typeof order !== "number") throw new ContentError(path, `"order" must be a number`)
+    if (typeof order !== "number")
+      throw new ContentError(path, `"order" must be a number`)
     const howto = data.howto ?? false
-    if (typeof howto !== "boolean") throw new ContentError(path, `"howto" must be true or false`)
+    if (typeof howto !== "boolean")
+      throw new ContentError(path, `"howto" must be true or false`)
 
-    const compiled = compileBody(body, path, { resolveImage: opts.imageResolver?.(path) })
+    const compiled = compileBody(body, path, {
+      resolveImage: opts.imageResolver?.(path),
+    })
     if (howto && compiled.steps.length === 0) {
-      throw new ContentError(path, `howto: true needs a "## Steps" heading followed by a numbered list`)
+      throw new ContentError(
+        path,
+        `howto: true needs a "## Steps" heading followed by a numbered list`,
+      )
     }
     guides.push({
       file: path,
@@ -609,19 +745,27 @@ export function compileSite(
   const ids = new Set(guides.map((g) => g.meta.id))
   for (const guide of guides) {
     for (const related of guide.meta.related) {
-      if (!ids.has(related)) throw new ContentError(guide.file, `related guide "${related}" doesn't exist`)
+      if (!ids.has(related))
+        throw new ContentError(
+          guide.file,
+          `related guide "${related}" doesn't exist`,
+        )
     }
   }
   for (const category of categories) {
     if (!guides.some((g) => g.meta.category === category.id)) {
-      throw new ContentError(CATEGORIES_FILE, `category "${category.id}" has no guides`)
+      throw new ContentError(
+        CATEGORIES_FILE,
+        `category "${category.id}" has no guides`,
+      )
     }
   }
 
   const categoryOrder = new Map(categories.map((c, i) => [c.id, i]))
   guides.sort(
     (a, b) =>
-      categoryOrder.get(a.meta.category)! - categoryOrder.get(b.meta.category)! ||
+      categoryOrder.get(a.meta.category)! -
+        categoryOrder.get(b.meta.category)! ||
       a.meta.order - b.meta.order ||
       a.meta.title.localeCompare(b.meta.title),
   )
@@ -642,9 +786,12 @@ export function compileSite(
         title: requireString(about.data, "title", ABOUT_FILE),
         description: aboutDescription,
         updated: aboutUpdated,
-        author: optionalString(about.data, "author", ABOUT_FILE) || DEFAULT_AUTHOR,
+        author:
+          optionalString(about.data, "author", ABOUT_FILE) || DEFAULT_AUTHOR,
       },
-      body: compileBody(about.body, ABOUT_FILE, { resolveImage: opts.imageResolver?.(ABOUT_FILE) }),
+      body: compileBody(about.body, ABOUT_FILE, {
+        resolveImage: opts.imageResolver?.(ABOUT_FILE),
+      }),
     },
     changelog: changelog.sort((a, b) => b.meta.date.localeCompare(a.meta.date)),
   }
@@ -664,8 +811,16 @@ export function checkRedirects(
     ...site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)),
   ])
   for (const [from, to] of Object.entries(redirects)) {
-    if (livePaths.has(from)) throw new ContentError("redirects", `"${from}" is redirected but is still a page`)
-    if (!livePaths.has(to)) throw new ContentError("redirects", `"${from}" redirects to "${to}", which isn't a page`)
+    if (livePaths.has(from))
+      throw new ContentError(
+        "redirects",
+        `"${from}" is redirected but is still a page`,
+      )
+    if (!livePaths.has(to))
+      throw new ContentError(
+        "redirects",
+        `"${from}" redirects to "${to}", which isn't a page`,
+      )
   }
 }
 
@@ -686,24 +841,38 @@ function latest(dates: string[]): string {
 
 export function sitemapManifest(site: CompiledSite): SitemapManifest {
   const pages: SitemapManifest["pages"] = [
-    { path: HELP_PATHS.hub, updated: latest(site.guides.map((g) => g.meta.updated)) },
+    {
+      path: HELP_PATHS.hub,
+      updated: latest(site.guides.map((g) => g.meta.updated)),
+    },
   ]
   for (const category of site.categories) {
-    const inCategory = site.guides.filter((g) => g.meta.category === category.id)
+    const inCategory = site.guides.filter(
+      (g) => g.meta.category === category.id,
+    )
     pages.push({
       path: HELP_PATHS.category(category.id),
       updated: latest(inCategory.map((g) => g.meta.updated)),
     })
   }
   for (const guide of site.guides) {
-    pages.push({ path: HELP_PATHS.guide(guide.meta.category, guide.meta.slug), updated: guide.meta.updated })
+    pages.push({
+      path: HELP_PATHS.guide(guide.meta.category, guide.meta.slug),
+      updated: guide.meta.updated,
+    })
   }
   pages.push({ path: HELP_PATHS.about, updated: site.about.meta.updated })
   // The changelog index is noindex until an entry is published: not listed.
   if (site.changelog.length > 0) {
-    pages.push({ path: CHANGELOG_PATHS.index, updated: site.changelog[0].meta.date })
+    pages.push({
+      path: CHANGELOG_PATHS.index,
+      updated: site.changelog[0].meta.date,
+    })
     for (const entry of site.changelog) {
-      pages.push({ path: CHANGELOG_PATHS.entry(entry.meta.slug), updated: entry.meta.date })
+      pages.push({
+        path: CHANGELOG_PATHS.entry(entry.meta.slug),
+        updated: entry.meta.date,
+      })
     }
   }
   return { version: 1, pages }
@@ -762,7 +931,10 @@ function publicBody(body: CompiledBody): ContentBody {
   return { blocks: body.blocks, steps: body.steps }
 }
 
-export function guideAsset(site: CompiledSite, guide: CompiledGuide): GuideAsset {
+export function guideAsset(
+  site: CompiledSite,
+  guide: CompiledGuide,
+): GuideAsset {
   const category = site.categories.find((c) => c.id === guide.meta.category)!
   return {
     version: 1,
@@ -772,17 +944,25 @@ export function guideAsset(site: CompiledSite, guide: CompiledGuide): GuideAsset
     body: publicBody(guide.body),
     related: guide.meta.related.map((id) => {
       const target = site.guides.find((g) => g.meta.id === id)!
-      return { href: HELP_PATHS.guide(target.meta.category, target.meta.slug), text: target.meta.title }
+      return {
+        href: HELP_PATHS.guide(target.meta.category, target.meta.slug),
+        text: target.meta.title,
+      }
     }),
   }
 }
 
-export function categoryAsset(site: CompiledSite, category: CategoryMeta): CategoryAsset {
+export function categoryAsset(
+  site: CompiledSite,
+  category: CategoryMeta,
+): CategoryAsset {
   return {
     version: 1,
     directory: buildDirectory(contentIndex(site)),
     category,
-    guides: site.guides.filter((g) => g.meta.category === category.id).map((g) => g.meta),
+    guides: site.guides
+      .filter((g) => g.meta.category === category.id)
+      .map((g) => g.meta),
   }
 }
 

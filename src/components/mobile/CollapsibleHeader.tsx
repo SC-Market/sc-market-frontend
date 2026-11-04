@@ -4,12 +4,7 @@
  * Provides more screen space while maintaining navigation
  */
 
-import {
-  AppBar,
-  Toolbar,
-  useScrollTrigger,
-  useTheme,
-} from "@mui/material"
+import { AppBar, Toolbar, useScrollTrigger, useTheme } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useEffect, useState } from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

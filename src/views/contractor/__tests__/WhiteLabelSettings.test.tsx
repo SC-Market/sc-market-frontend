@@ -57,34 +57,58 @@ describe("WhiteLabelSettings", () => {
 
   it("only offers Require org membership for an Internal site", () => {
     renderSettings()
-    expect(screen.queryByLabelText("Require org membership to access")).toBeNull()
+    expect(
+      screen.queryByLabelText("Require org membership to access"),
+    ).toBeNull()
   })
 
   it("offers it for an Internal site and saves it", async () => {
     config.focus_mode = "internal"
     renderSettings()
-    expect(screen.getByLabelText("Require org membership to access")).toBeTruthy()
+    expect(
+      screen.getByLabelText("Require org membership to access"),
+    ).toBeTruthy()
     fireEvent.click(screen.getByRole("button", { name: "Save Settings" }))
     await waitFor(() => expect(updateConfig).toHaveBeenCalled())
-    expect(updateConfig.mock.calls[0][0]).toMatchObject({ focus_mode: "internal", require_membership: true })
+    expect(updateConfig.mock.calls[0][0]).toMatchObject({
+      focus_mode: "internal",
+      require_membership: true,
+    })
   })
 
   it("saves membership off for a Public site", async () => {
     renderSettings()
     fireEvent.click(screen.getByRole("button", { name: "Save Settings" }))
     await waitFor(() => expect(updateConfig).toHaveBeenCalled())
-    expect(updateConfig.mock.calls[0][0]).toMatchObject({ focus_mode: "public", require_membership: false })
+    expect(updateConfig.mock.calls[0][0]).toMatchObject({
+      focus_mode: "public",
+      require_membership: false,
+    })
   })
 
   it("refuses an http:// custom tab like the API does", () => {
     renderSettings()
-    fireEvent.change(screen.getByLabelText("Label"), { target: { value: "Staff" } })
-    fireEvent.change(screen.getByLabelText("Path or URL"), { target: { value: "http://example.com" } })
-    expect(screen.getByText("Links to other sites must use https://")).toBeTruthy()
-    expect((screen.getByRole("button", { name: "Add" }) as HTMLButtonElement).disabled).toBe(true)
+    fireEvent.change(screen.getByLabelText("Label"), {
+      target: { value: "Staff" },
+    })
+    fireEvent.change(screen.getByLabelText("Path or URL"), {
+      target: { value: "http://example.com" },
+    })
+    expect(
+      screen.getByText("Links to other sites must use https://"),
+    ).toBeTruthy()
+    expect(
+      (screen.getByRole("button", { name: "Add" }) as HTMLButtonElement)
+        .disabled,
+    ).toBe(true)
 
-    fireEvent.change(screen.getByLabelText("Path or URL"), { target: { value: "https://example.com" } })
-    expect((screen.getByRole("button", { name: "Add" }) as HTMLButtonElement).disabled).toBe(false)
+    fireEvent.change(screen.getByLabelText("Path or URL"), {
+      target: { value: "https://example.com" },
+    })
+    expect(
+      (screen.getByRole("button", { name: "Add" }) as HTMLButtonElement)
+        .disabled,
+    ).toBe(false)
   })
 })
 

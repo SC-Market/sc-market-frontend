@@ -14,12 +14,21 @@ import type { StandingBuyOrder } from "../../../../../store/api/v2/market"
 import { BuyOrderCard } from "../BuyOrdersRedesign"
 
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 const theme = createTheme({
   layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },
-  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
   palette: { outline: { main: "#e0e0e0" } },
 } as Parameters<typeof createTheme>[0])
 
@@ -47,7 +56,10 @@ function renderCard(o: StandingBuyOrder) {
     <ThemeProvider theme={theme}>
       <MemoryRouter initialEntries={["/buyorders"]}>
         <Routes>
-          <Route path="/buyorders" element={<BuyOrderCard order={o} index={0} />} />
+          <Route
+            path="/buyorders"
+            element={<BuyOrderCard order={o} index={0} />}
+          />
           <Route path="/buyorder/:id" element={<div>buy order detail</div>} />
         </Routes>
       </MemoryRouter>
@@ -81,7 +93,9 @@ describe("BuyOrderCard", () => {
     expect(screen.getByText("Make an offer")).toBeInTheDocument()
     expect(screen.queryByText(/— aUEC/)).not.toBeInTheDocument()
     expect(
-      screen.getByRole("link", { name: /Abrade Scraper Module, Make an offer,/ }),
+      screen.getByRole("link", {
+        name: /Abrade Scraper Module, Make an offer,/,
+      }),
     ).toBeInTheDocument()
   })
 })

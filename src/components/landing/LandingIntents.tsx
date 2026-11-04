@@ -107,7 +107,9 @@ export function LandingIntents(props: { signedIn: boolean }) {
             gap: { xs: 0.5 },
             p: { xs: 1.5, sm: "12px 14px" },
             transition: theme.transitions.create("border-color"),
-            "&:hover": { borderColor: alpha(theme.palette.text.secondary, 0.3) },
+            "&:hover": {
+              borderColor: alpha(theme.palette.text.secondary, 0.3),
+            },
             ...(intent.highlight
               ? {
                   borderColor: "primary.main",

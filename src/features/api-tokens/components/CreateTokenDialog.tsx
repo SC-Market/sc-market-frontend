@@ -18,9 +18,7 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { Trans, useTranslation } from "react-i18next"
-import {
-  useCreateTokenMutation,
-} from "../api/tokensApi"
+import { useCreateTokenMutation } from "../api/tokensApi"
 import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
@@ -50,9 +48,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   )
   const availableScopes: string[] = isAdmin
     ? allScopes
-    : allScopes.filter(
-        (scope) => !isAdminOnlyScope(scope),
-      )
+    : allScopes.filter((scope) => !isAdminOnlyScope(scope))
 
   const [formData, setFormData] = useState({
     name: "",
@@ -110,7 +106,10 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
       setShowToken(true)
     } catch (err) {
       const error = err as { data?: { error?: { message?: string } | string } }
-      const errorMsg = typeof error.data?.error === 'string' ? error.data.error : error.data?.error?.message
+      const errorMsg =
+        typeof error.data?.error === "string"
+          ? error.data.error
+          : error.data?.error?.message
       setError(errorMsg || t("apiTokensUi.create.error"))
     }
   }
@@ -164,8 +163,15 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             sx={{ mb: 2 }}
           />
 
-          <Button variant="outlined" onClick={copyToken} sx={{ mb: 2 }} color={copied ? "success" : "primary"}>
-            {copied ? t("apiTokensUi.create.copied") : t("apiTokensUi.create.copyToken")}
+          <Button
+            variant="outlined"
+            onClick={copyToken}
+            sx={{ mb: 2 }}
+            color={copied ? "success" : "primary"}
+          >
+            {copied
+              ? t("apiTokensUi.create.copied")
+              : t("apiTokensUi.create.copyToken")}
           </Button>
 
           <Alert severity="info" sx={{ mb: 2 }}>

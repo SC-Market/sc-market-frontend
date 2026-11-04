@@ -20,9 +20,17 @@ import {
   useParams,
 } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useSearchOresQuery, type OreSearchResult } from "../../store/api/v2/market"
+import {
+  useSearchOresQuery,
+  type OreSearchResult,
+} from "../../store/api/v2/market"
 import { MiningOreDetailModal } from "./MiningOreDetailModal"
-import { UnifiedSearchBar, miningTokensToParams, miningParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
+import {
+  UnifiedSearchBar,
+  miningTokensToParams,
+  miningParamsToTokens,
+  type SearchToken,
+} from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
@@ -57,8 +65,14 @@ export function MiningOreBrowser() {
   const page = parseInt(searchParams.get("page") || "1") || 1
   const [selectedOre, setSelectedOre] = useState<string | null>(null)
 
-  const searchTokens = useMemo(() => miningParamsToTokens(searchParams), [searchParams])
-  const queryParams = useMemo(() => miningTokensToParams(searchTokens), [searchTokens])
+  const searchTokens = useMemo(
+    () => miningParamsToTokens(searchParams),
+    [searchParams],
+  )
+  const queryParams = useMemo(
+    () => miningTokensToParams(searchTokens),
+    [searchTokens],
+  )
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(miningTokensToParams(tokens))
@@ -90,17 +104,36 @@ export function MiningOreBrowser() {
     navigate(GAME_DATA_PATHS.mining, { replace: true })
   }
 
-  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchOresQuery({
+  const {
+    data,
+    isLoading,
+    error,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useSearchOresQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
-    miningMethod: (queryParams.mining_method as "ship" | "ground" | "fps" | undefined) || undefined,
-    rarity: (queryParams.rarity as "common" | "uncommon" | "rare" | "epic" | "legendary" | undefined) || undefined,
+    miningMethod:
+      (queryParams.mining_method as "ship" | "ground" | "fps" | undefined) ||
+      undefined,
+    rarity:
+      (queryParams.rarity as
+        | "common"
+        | "uncommon"
+        | "rare"
+        | "epic"
+        | "legendary"
+        | undefined) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
 
   return (
@@ -113,40 +146,50 @@ export function MiningOreBrowser() {
           placeholder={t("miningUi.oreBrowser.searchPlaceholder")}
         />
         {data && (
-          <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ whiteSpace: "nowrap" }}
+          >
             {data.total}
           </Typography>
         )}
       </Box>
 
       {isLoading && <CardGridSkeleton />}
-        {error && <Alert severity="error">{t("mining.error", "Failed to load ores.")}</Alert>}
-        {data && (
-          <>
-            <Grid container spacing={1.5}>
-              {data.ores.map((ore) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
-                  <OreCard ore={ore} onClick={() => handleOreClick(ore.name)} />
-                </Grid>
-              ))}
-            </Grid>
-            {data.ores.length === 0 && (
-              <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-                <Typography color="text.secondary">{t("mining.noOres", "No ores found.")}</Typography>
-              </Box>
-            )}
-            {data.total > PAGE_SIZE && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                <Pagination
-                  count={Math.ceil(data.total / PAGE_SIZE)}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
-                />
-              </Box>
-            )}
-          </>
-        )}
+      {error && (
+        <Alert severity="error">
+          {t("mining.error", "Failed to load ores.")}
+        </Alert>
+      )}
+      {data && (
+        <>
+          <Grid container spacing={1.5}>
+            {data.ores.map((ore) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
+                <OreCard ore={ore} onClick={() => handleOreClick(ore.name)} />
+              </Grid>
+            ))}
+          </Grid>
+          {data.ores.length === 0 && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+              <Typography color="text.secondary">
+                {t("mining.noOres", "No ores found.")}
+              </Typography>
+            </Box>
+          )}
+          {data.total > PAGE_SIZE && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <Pagination
+                count={Math.ceil(data.total / PAGE_SIZE)}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
+      )}
       <MiningOreDetailModal
         oreName={selectedOre}
         open={!!selectedOre}
@@ -156,12 +199,22 @@ export function MiningOreBrowser() {
   )
 }
 
-function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
-  const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
+function OreCard({
+  ore,
+  onClick,
+}: {
+  ore: OreSearchResult
+  onClick: () => void
+}) {
+  const rarityColor =
+    RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
   const displayName = ore.displayName || friendlyName(ore.name)
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name", GAME_DATA_PATHS.miningOre(ore.name))
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch(
+    "/mining/ores/:name",
+    GAME_DATA_PATHS.miningOre(ore.name),
+  )
 
   return (
     <Card
@@ -215,38 +268,78 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
               <Chip
                 label={ore.rarity.charAt(0).toUpperCase() + ore.rarity.slice(1)}
                 size="small"
-                sx={{ ...microChip, bgcolor: rarityColor, color: "#fff", ml: 0.5 }}
+                sx={{
+                  ...microChip,
+                  bgcolor: rarityColor,
+                  color: "#fff",
+                  ml: 0.5,
+                }}
               />
             )}
           </Box>
-          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ mb: 0.5 }}
+          >
             {ore.instability != null && (
-              <Chip label={t("miningUi.location.instShort", { value: ore.instability.toFixed(0) })} size="small" variant="outlined" sx={microChip} />
+              <Chip
+                label={t("miningUi.location.instShort", {
+                  value: ore.instability.toFixed(0),
+                })}
+                size="small"
+                variant="outlined"
+                sx={microChip}
+              />
             )}
             {ore.resistance != null && (
-              <Chip label={t("miningUi.location.resShort", { value: ore.resistance.toFixed(2) })} size="small" variant="outlined" sx={microChip} />
+              <Chip
+                label={t("miningUi.location.resShort", {
+                  value: ore.resistance.toFixed(2),
+                })}
+                size="small"
+                variant="outlined"
+                sx={microChip}
+              />
             )}
             {ore.explosionMultiplier != null && (
-              <Chip label={t("miningUi.oreBrowser.expShort", { value: ore.explosionMultiplier.toFixed(0) })} size="small" variant="outlined" sx={microChip} />
+              <Chip
+                label={t("miningUi.oreBrowser.expShort", {
+                  value: ore.explosionMultiplier.toFixed(0),
+                })}
+                size="small"
+                variant="outlined"
+                sx={microChip}
+              />
             )}
           </Stack>
           <Box sx={{ mt: "auto" }}>
-          {ore.marketPrice != null && (
+            {ore.marketPrice != null && (
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="caption" color="text.secondary">
+                  {t("miningUi.oreBrowser.marketPrice")}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="success.main"
+                  fontWeight={600}
+                >
+                  {fmt.number(ore.marketPrice)} aUEC
+                </Typography>
+              </Box>
+            )}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" color="text.secondary">{t("miningUi.oreBrowser.marketPrice")}</Typography>
-              <Typography variant="caption" color="success.main" fontWeight={600}>
-                {fmt.number(ore.marketPrice)} aUEC
+              <Typography variant="caption" color="text.secondary">
+                {t("miningUi.oreBrowser.locations")}
               </Typography>
+              <Typography variant="caption">{ore.locationCount}</Typography>
             </Box>
-          )}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" color="text.secondary">{t("miningUi.oreBrowser.locations")}</Typography>
-            <Typography variant="caption">{ore.locationCount}</Typography>
+            {(ore.topLocations?.length ?? 0) > 0 && (
+              <OreLocationChips locations={ore.topLocations || []} />
+            )}
           </Box>
-          {(ore.topLocations?.length ?? 0) > 0 && (
-            <OreLocationChips locations={ore.topLocations || []} />
-          )}
-        </Box>
         </CardContent>
       </CardActionArea>
     </Card>
@@ -259,10 +352,17 @@ const SYSTEM_COLORS: Record<string, string> = {
   Nyx: "#4caf50",
 }
 
-function OreLocationChips({ locations }: { locations: Array<{ name: string; system: string; probability: number }> }) {
+function OreLocationChips({
+  locations,
+}: {
+  locations: Array<{ name: string; system: string; probability: number }>
+}) {
   const { t } = useTranslation()
   // Group by system
-  const bySystem = new Map<string, Array<{ name: string; probability: number }>>()
+  const bySystem = new Map<
+    string,
+    Array<{ name: string; probability: number }>
+  >()
   for (const loc of locations) {
     const sys = loc.system || t("miningUi.oreBrowser.unknownSystem")
     const arr = bySystem.get(sys) || []
@@ -279,16 +379,35 @@ function OreLocationChips({ locations }: { locations: Array<{ name: string; syst
             <Chip
               label={sys}
               size="small"
-              sx={{ height: 16, fontSize: "0.6rem", fontWeight: 700, bgcolor: color + "22", color, mr: 0.5, mb: 0.25 }}
+              sx={{
+                height: 16,
+                fontSize: "0.6rem",
+                fontWeight: 700,
+                bgcolor: color + "22",
+                color,
+                mr: 0.5,
+                mb: 0.25,
+              }}
             />
             {locs.slice(0, 3).map((l, i) => (
-              <Typography key={i} variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-                {l.name}{i < Math.min(locs.length, 3) - 1 ? ", " : ""}
+              <Typography
+                key={i}
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontSize: "0.65rem" }}
+              >
+                {l.name}
+                {i < Math.min(locs.length, 3) - 1 ? ", " : ""}
               </Typography>
             ))}
             {locs.length > 3 && (
-              <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-                {" "}+{locs.length - 3}
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontSize: "0.65rem" }}
+              >
+                {" "}
+                +{locs.length - 3}
               </Typography>
             )}
           </Box>

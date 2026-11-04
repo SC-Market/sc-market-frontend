@@ -1,8 +1,4 @@
-import React, {
-  MouseEventHandler,
-  ReactElement,
-  useState,
-} from "react"
+import React, { MouseEventHandler, ReactElement, useState } from "react"
 import { Section } from "../../components/paper/Section"
 import {
   Avatar,
@@ -124,9 +120,19 @@ function PeopleRow(props: {
       </TableCell>
       <TableCell align="right">
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
-          {row.banned && <Chip label={t("appUi.adminUsers.banned")} color="error" size="small" />}
+          {row.banned && (
+            <Chip
+              label={t("appUi.adminUsers.banned")}
+              color="error"
+              size="small"
+            />
+          )}
           {!row.rsi_confirmed && (
-            <Chip label={t("adminUsers.unverified")} color="warning" size="small" />
+            <Chip
+              label={t("adminUsers.unverified")}
+              color="warning"
+              size="small"
+            />
           )}
         </Box>
       </TableCell>
@@ -221,8 +227,11 @@ export function AdminUserList(props: {
           }}
         >
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel id="all-users-role-label">{t("adminUsers.role")}</InputLabel>
-            <Select labelId="all-users-role-label"
+            <InputLabel id="all-users-role-label">
+              {t("adminUsers.role")}
+            </InputLabel>
+            <Select
+              labelId="all-users-role-label"
               value={roleFilter || ""}
               label={t("adminUsers.role")}
               onChange={(e) => {
@@ -237,8 +246,11 @@ export function AdminUserList(props: {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel id="all-users-banned-status-label">{t("adminUsers.banned_status")}</InputLabel>
-            <Select labelId="all-users-banned-status-label"
+            <InputLabel id="all-users-banned-status-label">
+              {t("adminUsers.banned_status")}
+            </InputLabel>
+            <Select
+              labelId="all-users-banned-status-label"
               value={bannedFilter === undefined ? "" : bannedFilter.toString()}
               label={t("adminUsers.banned_status")}
               onChange={(e) => {
@@ -255,8 +267,11 @@ export function AdminUserList(props: {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel id="all-users-verification-label">{t("adminUsers.verification")}</InputLabel>
-            <Select labelId="all-users-verification-label"
+            <InputLabel id="all-users-verification-label">
+              {t("adminUsers.verification")}
+            </InputLabel>
+            <Select
+              labelId="all-users-verification-label"
               value={rsiFilter === undefined ? "" : rsiFilter.toString()}
               label={t("adminUsers.verification")}
               onChange={(e) => {
@@ -426,7 +441,11 @@ export function AdminMembershipAnalytics() {
     return (
       <Section xs={12} title={t("adminUsers.membership_count")}>
         <Grid item xs={12}>
-          <div>{t("appUi.adminUsers.membershipError", { error: JSON.stringify(error) })}</div>
+          <div>
+            {t("appUi.adminUsers.membershipError", {
+              error: JSON.stringify(error),
+            })}
+          </div>
         </Grid>
       </Section>
     )

@@ -25,7 +25,9 @@ export const ListingWrapper = React.forwardRef<
       data-id={dataId}
       sx={{
         position: "relative",
-        width: useFixedWidth ? { xs: "min(50vw, 200px)", sm: LISTING_CARD_WIDTH } : "100%",
+        width: useFixedWidth
+          ? { xs: "min(50vw, 200px)", sm: LISTING_CARD_WIDTH }
+          : "100%",
         flexShrink: useFixedWidth ? 0 : undefined,
       }}
     >

@@ -21,7 +21,9 @@ function escapeText(text: string): string {
 }
 
 function assemble(chunks: HtmlChunk[]): string {
-  return chunks.map((c) => (c.html ? c.content : escapeText(c.content))).join("")
+  return chunks
+    .map((c) => (c.html ? c.content : escapeText(c.content)))
+    .join("")
 }
 
 function parse(headHtml: string, bodyHtml = ""): Document {
@@ -32,28 +34,104 @@ function parse(headHtml: string, bodyHtml = ""): Document {
 }
 
 const evilDocs = {
-  listing: BRIDGE_PAGES.listing.build(f.listing(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/x", pageNumber: 1, related: {} }),
-  shop: BRIDGE_PAGES.shop.build(f.shop(f.EVIL), undefined, { params: { slug: "x" }, origin: ORIGIN, pathname: "/shops/x", pageNumber: 1, related: {} }),
-  org: BRIDGE_PAGES.org.build(f.contractor(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/contractor/x", pageNumber: 1, related: {} }),
-  user: BRIDGE_PAGES.user.build(f.user(f.EVIL), undefined, { params: { username: "x" }, origin: ORIGIN, pathname: "/user/x", pageNumber: 1, related: {} }),
-  post: BRIDGE_PAGES.recruitingPost.build(f.recruitingPost(f.EVIL), undefined, { params: { post_id: "x" }, origin: ORIGIN, pathname: "/recruiting/post/x", pageNumber: 1, related: {} }),
-  aggregate: BRIDGE_PAGES.aggregate.build(f.aggregate(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/aggregate/x", pageNumber: 1, related: {} }),
-  bundle: BRIDGE_PAGES.bundle.build(f.bundle(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/multiple/x", pageNumber: 1, related: {} }),
-  manufacturer: BRIDGE_PAGES.manufacturer.build(f.manufacturer(f.EVIL), undefined, { params: { id: f.EVIL }, origin: ORIGIN, pathname: "/wiki/manufacturers/x", pageNumber: 1, related: {} }),
-  shopsHub: BRIDGE_PAGES.shops.build({ shops: [{ slug: f.EVIL, name: f.EVIL }], total: 1 }, undefined, { params: {}, origin: ORIGIN, pathname: "/shops", pageNumber: 1, related: {} }),
-  home: BRIDGE_PAGES.home.build(undefined, undefined, { params: {}, origin: ORIGIN, pathname: "/", pageNumber: 1, related: {} }),
+  listing: BRIDGE_PAGES.listing.build(f.listing(f.EVIL), undefined, {
+    params: { id: "x" },
+    origin: ORIGIN,
+    pathname: "/market/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  shop: BRIDGE_PAGES.shop.build(f.shop(f.EVIL), undefined, {
+    params: { slug: "x" },
+    origin: ORIGIN,
+    pathname: "/shops/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  org: BRIDGE_PAGES.org.build(f.contractor(f.EVIL), undefined, {
+    params: { id: "x" },
+    origin: ORIGIN,
+    pathname: "/contractor/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  user: BRIDGE_PAGES.user.build(f.user(f.EVIL), undefined, {
+    params: { username: "x" },
+    origin: ORIGIN,
+    pathname: "/user/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  post: BRIDGE_PAGES.recruitingPost.build(f.recruitingPost(f.EVIL), undefined, {
+    params: { post_id: "x" },
+    origin: ORIGIN,
+    pathname: "/recruiting/post/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  aggregate: BRIDGE_PAGES.aggregate.build(f.aggregate(f.EVIL), undefined, {
+    params: { id: "x" },
+    origin: ORIGIN,
+    pathname: "/market/aggregate/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  bundle: BRIDGE_PAGES.bundle.build(f.bundle(f.EVIL), undefined, {
+    params: { id: "x" },
+    origin: ORIGIN,
+    pathname: "/market/multiple/x",
+    pageNumber: 1,
+    related: {},
+  }),
+  manufacturer: BRIDGE_PAGES.manufacturer.build(
+    f.manufacturer(f.EVIL),
+    undefined,
+    {
+      params: { id: f.EVIL },
+      origin: ORIGIN,
+      pathname: "/wiki/manufacturers/x",
+      pageNumber: 1,
+      related: {},
+    },
+  ),
+  shopsHub: BRIDGE_PAGES.shops.build(
+    { shops: [{ slug: f.EVIL, name: f.EVIL }], total: 1 },
+    undefined,
+    {
+      params: {},
+      origin: ORIGIN,
+      pathname: "/shops",
+      pageNumber: 1,
+      related: {},
+    },
+  ),
+  home: BRIDGE_PAGES.home.build(undefined, undefined, {
+    params: {},
+    origin: ORIGIN,
+    pathname: "/",
+    pageNumber: 1,
+    related: {},
+  }),
 }
 
 /** The escaped-text chunks a summary should produce, in order. */
-function expectedTexts(blocks: (typeof evilDocs)["listing"]["summary"]): string[] {
+function expectedTexts(
+  blocks: (typeof evilDocs)["listing"]["summary"],
+): string[] {
   return blocks.flatMap((b) =>
-    b.tag === "ul" ? b.links.filter((l) => isSafeHref(l.href)).map((l) => l.text) : "items" in b ? b.items : [b.text],
+    b.tag === "ul"
+      ? b.links.filter((l) => isSafeHref(l.href)).map((l) => l.text)
+      : "items" in b
+        ? b.items
+        : [b.text],
   )
 }
 
 describe("escapeAttribute", () => {
   it("escapes everything that could end a quoted attribute or open a tag", () => {
-    expect(escapeAttribute(`a"b'c<d>e&f`)).toBe("a&quot;b&#39;c&lt;d&gt;e&amp;f")
+    expect(escapeAttribute(`a"b'c<d>e&f`)).toBe(
+      "a&quot;b&#39;c&lt;d&gt;e&amp;f",
+    )
   })
 })
 
@@ -72,7 +150,10 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
 
     // Attribute values round-trip exactly.
     for (const m of doc.head.meta) {
-      const key = m.name !== undefined ? `meta[name="${m.name}"]` : `meta[property="${m.property}"]`
+      const key =
+        m.name !== undefined
+          ? `meta[name="${m.name}"]`
+          : `meta[property="${m.property}"]`
       expect(head.querySelector(key)?.getAttribute("content")).toBe(m.content)
     }
 
@@ -81,10 +162,16 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
     expect(scripts).toHaveLength(doc.head.jsonLd.length)
     scripts.forEach((s, i) => {
       expect(s.getAttribute("type")).toBe("application/ld+json")
-      expect(JSON.parse(s.textContent || "")).toEqual(JSON.parse(JSON.stringify(doc.head.jsonLd[i])))
+      expect(JSON.parse(s.textContent || "")).toEqual(
+        JSON.parse(JSON.stringify(doc.head.jsonLd[i])),
+      )
       // The BreadcrumbList carries its Unhead key (one per page after hydrating).
-      const breadcrumb = (doc.head.jsonLd[i] as { "@type"?: string })["@type"] === "BreadcrumbList"
-      expect(s.getAttribute("data-hid")).toBe(breadcrumb ? "breadcrumb-ld" : null)
+      const breadcrumb =
+        (doc.head.jsonLd[i] as { "@type"?: string })["@type"] ===
+        "BreadcrumbList"
+      expect(s.getAttribute("data-hid")).toBe(
+        breadcrumb ? "breadcrumb-ld" : null,
+      )
     })
   })
 
@@ -94,7 +181,9 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
     const textChunks = chunks.filter((c) => !c.html)
     expect(textChunks.map((c) => c.content)).toEqual(expectedTexts(doc.summary))
     for (const c of chunks.filter((c) => c.html)) {
-      expect(c.content).toMatch(/^(<\/?(main|h1|h2|h3|p|ul|ol|li)( data-bridge-summary)?( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/)
+      expect(c.content).toMatch(
+        /^(<\/?(main|h1|h2|h3|p|ul|ol|li)( data-bridge-summary)?( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/,
+      )
     }
 
     const dom = parse("", `<div id="root">${assemble(chunks)}</div>`)
@@ -105,25 +194,45 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
       expect(a.getAttribute("href")).toMatch(/^\/(?![/\\])/)
       expect(a.attributes).toHaveLength(1)
     }
-    expect(root.querySelector("h1")?.textContent).toBe((doc.summary[0] as { text: string }).text)
+    expect(root.querySelector("h1")?.textContent).toBe(
+      (doc.summary[0] as { text: string }).text,
+    )
   })
 })
 
 describe("headMarkup", () => {
   it("adds robots noindex for unknown entities", () => {
-    expect(headMarkup(null, null, true)).toBe(`<meta name="robots" content="noindex">`)
+    expect(headMarkup(null, null, true)).toBe(
+      `<meta name="robots" content="noindex">`,
+    )
   })
 
   it("drops summary blocks with unexpected tags", () => {
-    const chunks = summaryChunks([{ tag: "script" as "p", text: "x" }, { tag: "p", text: "ok" }])
-    expect(assemble(chunks)).toBe(`<main data-bridge-summary style="max-width:720px;margin:0 auto;padding:32px 16px"><p>ok</p></main>`)
+    const chunks = summaryChunks([
+      { tag: "script" as "p", text: "x" },
+      { tag: "p", text: "ok" },
+    ])
+    expect(assemble(chunks)).toBe(
+      `<main data-bridge-summary style="max-width:720px;margin:0 auto;padding:32px 16px"><p>ok</p></main>`,
+    )
   })
 })
 
 describe("summary link lists", () => {
   it("only allows site-relative hrefs", () => {
-    for (const ok of ["/", "/wiki/ships", "/market/abc--x?x=1", "/a%20b"]) expect(isSafeHref(ok), ok).toBe(true)
-    for (const bad of ["//evil.example", "/\\evil.example", "javascript:alert(1)", "https://evil.example", " /x", "/x y", "/x\n", "", "x"]) {
+    for (const ok of ["/", "/wiki/ships", "/market/abc--x?x=1", "/a%20b"])
+      expect(isSafeHref(ok), ok).toBe(true)
+    for (const bad of [
+      "//evil.example",
+      "/\\evil.example",
+      "javascript:alert(1)",
+      "https://evil.example",
+      " /x",
+      "/x y",
+      "/x\n",
+      "",
+      "x",
+    ]) {
       expect(isSafeHref(bad), bad).toBe(false)
     }
   })
@@ -143,16 +252,30 @@ describe("summary link lists", () => {
     const dom = parse("", `<div id="root">${html}</div>`)
     const links = dom.querySelectorAll("a")
     expect(links).toHaveLength(1)
-    expect(links[0].getAttribute("href")).toBe(`/shops/"><script>alert(1)</script>`)
+    expect(links[0].getAttribute("href")).toBe(
+      `/shops/"><script>alert(1)</script>`,
+    )
     expect(links[0].textContent).toBe(f.EVIL)
     expect(dom.querySelectorAll("script, img")).toHaveLength(0)
   })
 
   it(`renders at most ${MAX_SUMMARY_LINKS} links and skips empty lists`, () => {
-    const links = Array.from({ length: 200 }, (_, i) => ({ href: `/wiki/items/${i}`, text: `Item ${i}` }))
-    const dom = parse("", `<div id="root">${assemble(summaryChunks([{ tag: "ul", links }]))}</div>`)
+    const links = Array.from({ length: 200 }, (_, i) => ({
+      href: `/wiki/items/${i}`,
+      text: `Item ${i}`,
+    }))
+    const dom = parse(
+      "",
+      `<div id="root">${assemble(summaryChunks([{ tag: "ul", links }]))}</div>`,
+    )
     expect(dom.querySelectorAll("a")).toHaveLength(MAX_SUMMARY_LINKS)
-    expect(assemble(summaryChunks([{ tag: "ul", links: [{ href: "javascript:x", text: "x" }] }]))).not.toContain("<ul>")
+    expect(
+      assemble(
+        summaryChunks([
+          { tag: "ul", links: [{ href: "javascript:x", text: "x" }] },
+        ]),
+      ),
+    ).not.toContain("<ul>")
   })
 })
 
@@ -185,11 +308,26 @@ describe("open-data paragraph links", () => {
       pageNumber: 1,
       related: { acquisition: f.acquisition() },
     })
-    const dom = parse("", `<div id="root">${assemble(summaryChunks(doc.summary))}</div>`)
-    const hrefs = [...dom.querySelectorAll("a")].map((a) => [a.getAttribute("href"), a.getAttribute("rel")])
-    expect(hrefs).toContainEqual(["https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json", "noopener"])
-    expect(hrefs).toContainEqual(["https://creativecommons.org/licenses/by/4.0/", "license noopener"])
-    expect(hrefs).toContainEqual(["/missions/Rayari_Rank3_IrradiatedPearls", null])
+    const dom = parse(
+      "",
+      `<div id="root">${assemble(summaryChunks(doc.summary))}</div>`,
+    )
+    const hrefs = [...dom.querySelectorAll("a")].map((a) => [
+      a.getAttribute("href"),
+      a.getAttribute("rel"),
+    ])
+    expect(hrefs).toContainEqual([
+      "https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json",
+      "noopener",
+    ])
+    expect(hrefs).toContainEqual([
+      "https://creativecommons.org/licenses/by/4.0/",
+      "license noopener",
+    ])
+    expect(hrefs).toContainEqual([
+      "/missions/Rayari_Rank3_IrradiatedPearls",
+      null,
+    ])
     expect(hrefs).toContainEqual(["/wiki/items/51c80361--stileron", null])
   })
 })
@@ -199,11 +337,21 @@ describe("relatedLinksHtml (server-rendered pages)", () => {
     { tag: "h1" as const, text: "Listing" },
     { tag: "p" as const, text: "Text the page already says" },
     { tag: "h2" as const, text: "More from <seller>" },
-    { tag: "ul" as const, links: [{ href: "/market/a", text: "A & B" }, { href: "https://evil.example", text: "x" }] },
+    {
+      tag: "ul" as const,
+      links: [
+        { href: "/market/a", text: "A & B" },
+        { href: "https://evil.example", text: "x" },
+      ],
+    },
     { tag: "ul" as const, links: [{ href: "/shops/s", text: "Shop" }] },
   ]
   it("keeps only the link lists and their headings", () => {
-    expect(relatedLinkBlocks(blocks).map((b) => b.tag)).toEqual(["h2", "ul", "ul"])
+    expect(relatedLinkBlocks(blocks).map((b) => b.tag)).toEqual([
+      "h2",
+      "ul",
+      "ul",
+    ])
   })
   it("renders them escaped, marked for removal before hydration", () => {
     const html = relatedLinksHtml(blocks)

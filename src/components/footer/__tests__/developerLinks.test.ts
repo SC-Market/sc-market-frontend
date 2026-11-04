@@ -1,10 +1,16 @@
 import { describe, expect, it } from "vitest"
 import en from "../../../locales/en/english.json"
 import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "../developerLinks"
-import { DEVELOPER_SUMMARY_BLOCKS, isDeveloperHref, summaryChunks } from "../../../bridge/render"
+import {
+  DEVELOPER_SUMMARY_BLOCKS,
+  isDeveloperHref,
+  summaryChunks,
+} from "../../../bridge/render"
 
 const enText = (key: string) =>
-  key.split(".").reduce<unknown>((o, k) => (o as Record<string, unknown>)?.[k], en)
+  key
+    .split(".")
+    .reduce<unknown>((o, k) => (o as Record<string, unknown>)?.[k], en)
 
 describe("footer developer links", () => {
   it("English labels match the en locale (what the bridge shows crawlers)", () => {
@@ -29,14 +35,27 @@ describe("footer developer links", () => {
     const html = summaryChunks(DEVELOPER_SUMMARY_BLOCKS)
       .map((c) => c.content)
       .join("")
-    for (const link of DEVELOPER_LINKS) expect(html).toContain(`href="${link.href}"`)
-    expect(html).toContain(`<a href="https://github.com/SC-Market/sc-market-sdk" rel="noopener">`)
-    expect(isDeveloperHref("https://github.com/SC-Market/sc-market-sdk")).toBe(true)
-    expect(isDeveloperHref("https://www.npmjs.com/package/@sc-market/sdk")).toBe(true)
-    expect(isDeveloperHref("https://www.npmjs.com/package/@sc-orgs/sdk")).toBe(true)
-    expect(isDeveloperHref("https://github.com/SC-Market/sc-market-sdk/../evil")).toBe(false)
+    for (const link of DEVELOPER_LINKS)
+      expect(html).toContain(`href="${link.href}"`)
+    expect(html).toContain(
+      `<a href="https://github.com/SC-Market/sc-market-sdk" rel="noopener">`,
+    )
+    expect(isDeveloperHref("https://github.com/SC-Market/sc-market-sdk")).toBe(
+      true,
+    )
+    expect(
+      isDeveloperHref("https://www.npmjs.com/package/@sc-market/sdk"),
+    ).toBe(true)
+    expect(isDeveloperHref("https://www.npmjs.com/package/@sc-orgs/sdk")).toBe(
+      true,
+    )
+    expect(
+      isDeveloperHref("https://github.com/SC-Market/sc-market-sdk/../evil"),
+    ).toBe(false)
     expect(isDeveloperHref("https://evil.example/")).toBe(false)
-    const filtered = summaryChunks([{ tag: "ul", links: [{ href: "https://evil.example/", text: "x" }] }])
+    const filtered = summaryChunks([
+      { tag: "ul", links: [{ href: "https://evil.example/", text: "x" }] },
+    ])
     expect(filtered.map((c) => c.content).join("")).not.toContain("evil")
   })
 })

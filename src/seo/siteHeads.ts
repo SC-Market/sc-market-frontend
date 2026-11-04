@@ -48,7 +48,10 @@ export function siteJsonLd(): object {
         logo: `${SITE}/scmarket-logo.png`,
         description: SITE_DESCRIPTION,
         // The SC Market Discord (util/constants DISCORD_INVITE; not imported: this module stays pure).
-        sameAs: ["https://discord.com/invite/N4Gy8py8J4", "https://github.com/SC-Market"],
+        sameAs: [
+          "https://discord.com/invite/N4Gy8py8J4",
+          "https://github.com/SC-Market",
+        ],
       },
       {
         "@type": "WebSite",
@@ -70,21 +73,35 @@ export function siteJsonLd(): object {
 }
 
 /** The landing page FAQ (FAQSection), in display order. */
-export function landingFaqs(t: SeoTranslate): { question: string; answer: string }[] {
+export function landingFaqs(
+  t: SeoTranslate,
+): { question: string; answer: string }[] {
   return [
     { question: t("landing.faqFeeQ"), answer: t("landing.faqFeeA") },
     { question: t("landing.faqBuyQ"), answer: t("landing.faqBuyA") },
-    { question: t("landing.faqRealMoneyQ"), answer: t("landing.faqRealMoneyA") },
+    {
+      question: t("landing.faqRealMoneyQ"),
+      answer: t("landing.faqRealMoneyA"),
+    },
     { question: t("landing.faqOrgsQ"), answer: t("landing.faqOrgsA") },
     { question: t("landing.faqSafeQ"), answer: t("landing.faqSafeA") },
     { question: t("landing.faqOfficialQ"), answer: t("landing.faqOfficialA") },
-    { question: t("landing.faqSellItemsQ"), answer: t("landing.faqSellItemsA") },
-    { question: t("landing.faqListThingsQ"), answer: t("landing.faqListThingsA") },
+    {
+      question: t("landing.faqSellItemsQ"),
+      answer: t("landing.faqSellItemsA"),
+    },
+    {
+      question: t("landing.faqListThingsQ"),
+      answer: t("landing.faqListThingsA"),
+    },
   ]
 }
 
 /** Landing page <title> (before the titleTemplate) and meta description. */
-export function homeSeoText(t: SeoTranslate): { title: string; description: string } {
+export function homeSeoText(t: SeoTranslate): {
+  title: string
+  description: string
+} {
   return {
     title: t(
       "landing.seoTitle",

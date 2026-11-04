@@ -94,7 +94,12 @@ export function MobileListingRow({
       leftAction={
         onEdit ? (
           <Box
-            sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "secondary.main" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              color: "secondary.main",
+            }}
           >
             <EditRounded fontSize="small" />
             <Typography variant="caption">{t("marketV2.edit")}</Typography>
@@ -104,7 +109,12 @@ export function MobileListingRow({
       rightAction={
         onArchive ? (
           <Box
-            sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "error.main" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              color: "error.main",
+            }}
           >
             <ArchiveRounded fontSize="small" />
             <Typography variant="caption">{t("marketV2.archive")}</Typography>
@@ -147,7 +157,9 @@ export function MobileListingRow({
 
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {/* Title row */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.5 }}>
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.5 }}
+          >
             <Typography
               variant="body2"
               fontWeight={500}
@@ -169,13 +181,19 @@ export function MobileListingRow({
             <Typography variant="caption" fontWeight={600} color="primary.main">
               {priceLabel}
             </Typography>
-            <Typography variant="caption" color="text.disabled">·</Typography>
+            <Typography variant="caption" color="text.disabled">
+              ·
+            </Typography>
             <Typography variant="caption" color="text.secondary">
-              {t("marketV2.qtyShort", { quantity: fmt.number(listing.quantity_available) })}
+              {t("marketV2.qtyShort", {
+                quantity: fmt.number(listing.quantity_available),
+              })}
             </Typography>
             {listing.variant_count > 1 && (
               <>
-                <Typography variant="caption" color="text.disabled">·</Typography>
+                <Typography variant="caption" color="text.disabled">
+                  ·
+                </Typography>
                 <Typography variant="caption" color="text.disabled">
                   {listing.variant_count} var.
                 </Typography>

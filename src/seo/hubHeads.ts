@@ -7,7 +7,12 @@
  *
  * `total` is the list endpoint's total (the SPA renders "" while loading).
  */
-import { GAME_DATA_PATHS, MARKET_PATHS, PATHS, WIKI_PATHS } from "../routes/paths"
+import {
+  GAME_DATA_PATHS,
+  MARKET_PATHS,
+  PATHS,
+  WIKI_PATHS,
+} from "../routes/paths"
 import {
   breadcrumbJsonLd,
   layoutDescription,
@@ -75,7 +80,10 @@ export function buildMarketSearchHead(
 }
 
 /** /shops (ShopDirectory). */
-export function shopDirectorySeoText(tag: string | null | undefined, total?: number): SeoText {
+export function shopDirectorySeoText(
+  tag: string | null | undefined,
+  total?: number,
+): SeoText {
   return {
     title: `${tag || "All"} Shops — Star Citizen Marketplace | SC Market`,
     description: `Browse ${count(total)} verified Star Citizen shops. Compare ratings, listings, and specialties.`,
@@ -83,7 +91,10 @@ export function shopDirectorySeoText(tag: string | null | undefined, total?: num
 }
 
 /** /wiki/items (WikiItemBrowser). */
-export function wikiItemsSeoText(type: string | null | undefined, total?: number): SeoText {
+export function wikiItemsSeoText(
+  type: string | null | undefined,
+  total?: number,
+): SeoText {
   return {
     title: `${type || "All"} Items — Star Citizen Game Database | SC Market`,
     description: `Browse ${count(total)} ${type || "Star Citizen"} items. Stats, prices, crafting uses, and locations.`,
@@ -91,7 +102,10 @@ export function wikiItemsSeoText(type: string | null | undefined, total?: number
 }
 
 /** /wiki/commodities (WikiCommodityBrowser). */
-export function wikiCommoditiesSeoText(category: string | null | undefined, total?: number): SeoText {
+export function wikiCommoditiesSeoText(
+  category: string | null | undefined,
+  total?: number,
+): SeoText {
   return {
     title: `${category || "All"} Commodities — Star Citizen | SC Market`,
     description: `Browse ${count(total)} Star Citizen commodities. Mining locations, market prices, and quality tiers.`,
@@ -99,7 +113,10 @@ export function wikiCommoditiesSeoText(category: string | null | undefined, tota
 }
 
 /** /wiki/ships (WikiShipBrowser); `shipCount` is the filtered vehicle count. */
-export function wikiShipsSeoText(manufacturer: string | null | undefined, shipCount: number): SeoText {
+export function wikiShipsSeoText(
+  manufacturer: string | null | undefined,
+  shipCount: number,
+): SeoText {
   return {
     title: `${manufacturer || "All"} Ships — Star Citizen Ship Database | SC Market`,
     description: `Browse ${shipCount} Star Citizen ships and vehicles. Specs, loadouts, and market availability.`,
@@ -107,7 +124,10 @@ export function wikiShipsSeoText(manufacturer: string | null | undefined, shipCo
 }
 
 /** /blueprints (BlueprintBrowser). */
-export function blueprintsSeoText(category: string | null | undefined, total?: number): SeoText {
+export function blueprintsSeoText(
+  category: string | null | undefined,
+  total?: number,
+): SeoText {
   return {
     title: `${category || "All"} Blueprints — Star Citizen Crafting | SC Market`,
     description: `Browse ${count(total)} Star Citizen crafting blueprints. Ingredients, craft time, and profit analysis.`,
@@ -115,7 +135,10 @@ export function blueprintsSeoText(category: string | null | undefined, total?: n
 }
 
 /** /missions (MissionSearch). */
-export function missionsSeoText(category: string | null | undefined, total?: number): SeoText {
+export function missionsSeoText(
+  category: string | null | undefined,
+  total?: number,
+): SeoText {
   return {
     title: `${category || "All"} Missions — Star Citizen Mission Database | SC Market`,
     description: `Browse ${count(total)} Star Citizen missions. Rewards, locations, and difficulty ratings.`,
@@ -126,7 +149,8 @@ export function missionsSeoText(category: string | null | undefined, total?: num
 export function recruitingSeoText(): SeoText {
   return {
     title: "Star Citizen Recruiting — Find Organizations | SC Market",
-    description: "Browse recruiting posts from Star Citizen organizations. Find your next crew.",
+    description:
+      "Browse recruiting posts from Star Citizen organizations. Find your next crew.",
   }
 }
 
@@ -169,7 +193,10 @@ export function resourcesSeoText(t: SeoTranslate): SeoText {
 /** /wiki (WikiHub). */
 export function wikiHubSeoText(t: SeoTranslate): SeoText & { header: string } {
   return {
-    title: t("wiki.hub.title", "Game Database — Star Citizen Items, Ships & More | SC Market"),
+    title: t(
+      "wiki.hub.title",
+      "Game Database — Star Citizen Items, Ships & More | SC Market",
+    ),
     description: t(
       "wiki.hub.description",
       "Browse the complete Star Citizen game database: items, ships, commodities, locations, manufacturers, blueprints, and mining resources.",
@@ -179,18 +206,66 @@ export function wikiHubSeoText(t: SeoTranslate): SeoText & { header: string } {
 }
 
 /** The /wiki hub's section cards (WikiHub adds the icons). */
-export const WIKI_HUB_SECTIONS: readonly { label: string; labelKey: string; route: string }[] = [
-  { label: "Items", labelKey: "wiki.hub.sectionItems", route: WIKI_PATHS.items },
-  { label: "Ships & Vehicles", labelKey: "wiki.hub.sectionShips", route: WIKI_PATHS.ships },
-  { label: "Commodities", labelKey: "wiki.hub.sectionCommodities", route: WIKI_PATHS.commodities },
-  { label: "Locations", labelKey: "wiki.hub.sectionLocations", route: WIKI_PATHS.locations },
-  { label: "Manufacturers", labelKey: "wiki.hub.sectionManufacturers", route: WIKI_PATHS.manufacturers },
-  { label: "Refinery", labelKey: "wiki.hub.sectionRefinery", route: WIKI_PATHS.refinery },
-  { label: "Missions", labelKey: "wiki.hub.sectionMissions", route: GAME_DATA_PATHS.missions },
-  { label: "Blueprints", labelKey: "wiki.hub.sectionBlueprints", route: GAME_DATA_PATHS.blueprints },
-  { label: "Crafting Calculator", labelKey: "wiki.hub.sectionCraftingCalculator", route: GAME_DATA_PATHS.craftingCalculator },
-  { label: "Resources", labelKey: "wiki.hub.sectionResources", route: GAME_DATA_PATHS.resources },
-  { label: "Mining", labelKey: "wiki.hub.sectionMining", route: GAME_DATA_PATHS.mining },
+export const WIKI_HUB_SECTIONS: readonly {
+  label: string
+  labelKey: string
+  route: string
+}[] = [
+  {
+    label: "Items",
+    labelKey: "wiki.hub.sectionItems",
+    route: WIKI_PATHS.items,
+  },
+  {
+    label: "Ships & Vehicles",
+    labelKey: "wiki.hub.sectionShips",
+    route: WIKI_PATHS.ships,
+  },
+  {
+    label: "Commodities",
+    labelKey: "wiki.hub.sectionCommodities",
+    route: WIKI_PATHS.commodities,
+  },
+  {
+    label: "Locations",
+    labelKey: "wiki.hub.sectionLocations",
+    route: WIKI_PATHS.locations,
+  },
+  {
+    label: "Manufacturers",
+    labelKey: "wiki.hub.sectionManufacturers",
+    route: WIKI_PATHS.manufacturers,
+  },
+  {
+    label: "Refinery",
+    labelKey: "wiki.hub.sectionRefinery",
+    route: WIKI_PATHS.refinery,
+  },
+  {
+    label: "Missions",
+    labelKey: "wiki.hub.sectionMissions",
+    route: GAME_DATA_PATHS.missions,
+  },
+  {
+    label: "Blueprints",
+    labelKey: "wiki.hub.sectionBlueprints",
+    route: GAME_DATA_PATHS.blueprints,
+  },
+  {
+    label: "Crafting Calculator",
+    labelKey: "wiki.hub.sectionCraftingCalculator",
+    route: GAME_DATA_PATHS.craftingCalculator,
+  },
+  {
+    label: "Resources",
+    labelKey: "wiki.hub.sectionResources",
+    route: GAME_DATA_PATHS.resources,
+  },
+  {
+    label: "Mining",
+    labelKey: "wiki.hub.sectionMining",
+    route: GAME_DATA_PATHS.mining,
+  },
 ]
 
 /** Most links a hub lists (crawl discovery, kept bounded). */
@@ -202,9 +277,18 @@ export interface HubCrumb {
   path: string
 }
 
-export const WIKI_CRUMB: HubCrumb = { name: "Game Database", path: WIKI_PATHS.hub }
-export const MARKET_CRUMB: HubCrumb = { name: "Market", path: MARKET_PATHS.search }
-export const MINING_CRUMB: HubCrumb = { name: "Mining", path: GAME_DATA_PATHS.mining }
+export const WIKI_CRUMB: HubCrumb = {
+  name: "Game Database",
+  path: WIKI_PATHS.hub,
+}
+export const MARKET_CRUMB: HubCrumb = {
+  name: "Market",
+  path: MARKET_PATHS.search,
+}
+export const MINING_CRUMB: HubCrumb = {
+  name: "Mining",
+  path: GAME_DATA_PATHS.mining,
+}
 export const HOME_PATH = PATHS.home
 
 /**
@@ -229,7 +313,10 @@ export function buildHubHead(
   const links = (opts.links ?? []).slice(0, MAX_HUB_LINKS)
   const crumbs = [
     { name: "SC Market", url: `${origin}/` },
-    ...(opts.parents ?? []).map((p) => ({ name: p.name, url: `${origin}${p.path}` })),
+    ...(opts.parents ?? []).map((p) => ({
+      name: p.name,
+      url: `${origin}${p.path}`,
+    })),
     { name: opts.name, url: canonical },
   ]
 

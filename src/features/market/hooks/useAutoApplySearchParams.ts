@@ -39,7 +39,9 @@ export interface AutoApplySearchParams {
   /** Props for a plain TextField that should be debounced. */
   bindText: (key: string) => {
     value: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => void
     onKeyDown: (e: React.KeyboardEvent) => void
     onBlur: () => void
   }
@@ -62,7 +64,10 @@ export interface AutoApplySearchParams {
 export function useAutoApplySearchParams({
   delay = FILTER_DEBOUNCE_MS,
   aliases = MARKET_PARAM_ALIASES,
-}: { delay?: number; aliases?: Record<string, string[]> } = {}): AutoApplySearchParams {
+}: {
+  delay?: number
+  aliases?: Record<string, string[]>
+} = {}): AutoApplySearchParams {
   const [searchParams, setSearchParams] = useSearchParams()
 
   // Latest applied params, readable from timers without re-creating callbacks.
@@ -151,7 +156,8 @@ export function useAutoApplySearchParams({
       setDrafts(nextDrafts)
 
       const continuesBurst = mode !== "discrete" && burstPushedRef.current
-      burstPushedRef.current = mode === "debounce" && (effective.length > 0 || burstPushedRef.current)
+      burstPushedRef.current =
+        mode === "debounce" && (effective.length > 0 || burstPushedRef.current)
 
       if (effective.length === 0) return
 
@@ -229,15 +235,17 @@ export function useAutoApplySearchParams({
   )
 
   const value = useCallback(
-    (key: string) => (key in drafts ? drafts[key] : readFrom(searchParams, key)),
+    (key: string) =>
+      key in drafts ? drafts[key] : readFrom(searchParams, key),
     [drafts, readFrom, searchParams],
   )
 
   const bindText = useCallback(
     (key: string) => ({
       value: value(key),
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-        setDebounced(key, e.target.value),
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      ) => setDebounced(key, e.target.value),
       onKeyDown: (e: React.KeyboardEvent) => {
         if (e.key === "Enter") flush()
       },

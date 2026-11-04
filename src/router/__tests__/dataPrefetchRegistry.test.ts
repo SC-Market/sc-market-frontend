@@ -48,16 +48,32 @@ describe("matchDataPrefetchRoute", () => {
     ["/wiki/items/item-1", "/wiki/items/:id", { id: "item-1" }],
     ["/wiki/ships/ship-1", "/wiki/ships/:id", { id: "ship-1" }],
     ["/mining/ores/quantanium", "/mining/ores/:name", { name: "quantanium" }],
-    ["/mining/locations/aberdeen", "/mining/locations/:name", { name: "aberdeen" }],
+    [
+      "/mining/locations/aberdeen",
+      "/mining/locations/:name",
+      { name: "aberdeen" },
+    ],
     ["/blueprints/bp-1", "/blueprints/:slug", { slug: "bp-1" }],
     ["/resources/res-1", "/resources/:resource_id", { resource_id: "res-1" }],
     ["/market/abc123-some-title", "/market/:id", { id: "abc123-some-title" }],
     ["/shops/my-shop", "/shops/:slug", { slug: "my-shop" }],
-    ["/shops/my-shop/reviews", "/shops/:slug/:tab", { slug: "my-shop", tab: "reviews" }],
+    [
+      "/shops/my-shop/reviews",
+      "/shops/:slug/:tab",
+      { slug: "my-shop", tab: "reviews" },
+    ],
     ["/contractor/SCMARKET", "/contractor/:id", { id: "SCMARKET" }],
-    ["/contractor/SCMARKET/members", "/contractor/:id/:tab", { id: "SCMARKET", tab: "members" }],
+    [
+      "/contractor/SCMARKET/members",
+      "/contractor/:id/:tab",
+      { id: "SCMARKET", tab: "members" },
+    ],
     ["/user/alice", "/user/:username", { username: "alice" }],
-    ["/user/alice/reviews", "/user/:username/:tab", { username: "alice", tab: "reviews" }],
+    [
+      "/user/alice/reviews",
+      "/user/:username/:tab",
+      { username: "alice", tab: "reviews" },
+    ],
   ])("matches %s to %s", (to, path, params) => {
     const match = matchDataPrefetchRoute(to)
     expect(match?.route.path).toBe(path)
@@ -135,14 +151,18 @@ describe("prefetchDataForPath", () => {
   })
 
   it("resolves without prefetching for unmatched paths", async () => {
-    await expect(prefetchDataForPath(dispatch, "/market/cart")).resolves.toBeUndefined()
+    await expect(
+      prefetchDataForPath(dispatch, "/market/cart"),
+    ).resolves.toBeUndefined()
     expect(prefetchListingPage).not.toHaveBeenCalled()
   })
 
   it("never rejects when a prefetch throws", async () => {
     vi.mocked(prefetchListingPage).mockRejectedValueOnce(new Error("boom"))
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
-    await expect(prefetchDataForPath(dispatch, "/market/boom")).resolves.toBeUndefined()
+    await expect(
+      prefetchDataForPath(dispatch, "/market/boom"),
+    ).resolves.toBeUndefined()
     expect(warn).toHaveBeenCalled()
     warn.mockRestore()
   })

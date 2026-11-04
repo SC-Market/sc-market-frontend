@@ -1,45 +1,39 @@
 import { useTranslation } from "react-i18next"
-import React from "react";
-import {
-  TextField,
-  MenuItem,
-  Box,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import type { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { QualityBadge } from "./QualityBadge";
+import React from "react"
+import { TextField, MenuItem, Box, Typography, useTheme } from "@mui/material"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import type { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { QualityBadge } from "./QualityBadge"
 import { useFormatters } from "../../../util/format"
 
 interface Variant {
-  variant_id: string;
-  display_name: string;
-  short_name?: string;
+  variant_id: string
+  display_name: string
+  short_name?: string
   attributes: {
-    quality_tier?: number;
-    quality_value?: number;
-    crafted_source?: string;
-    [key: string]: string | number | undefined;
-  };
-  quantity: number;
-  price: number;
+    quality_tier?: number
+    quality_value?: number
+    crafted_source?: string
+    [key: string]: string | number | undefined
+  }
+  quantity: number
+  price: number
 }
 
 interface VariantSelectorProps {
-  variants: Variant[];
-  selectedVariantId: string | null;
-  onVariantChange: (variantId: string) => void;
-  label?: string;
-  disabled?: boolean;
+  variants: Variant[]
+  selectedVariantId: string | null
+  onVariantChange: (variantId: string) => void
+  label?: string
+  disabled?: boolean
 }
 
 /**
  * VariantSelector - Dropdown for selecting specific variant from listing
- * 
+ *
  * Displays variants with quality tier badge, display name, quantity, and price.
  * Maintains visual consistency with V1 dropdown styling.
- * 
+ *
  * Used in cart, order placement, and listing detail pages.
  */
 export const VariantSelector: React.FC<VariantSelectorProps> = ({
@@ -52,15 +46,15 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
   const fmt = useFormatters()
   const { t } = useTranslation()
   const label = labelProp ?? t("marketV2.selectVariant")
-  const theme = useTheme<ExtendedTheme>();
+  const theme = useTheme<ExtendedTheme>()
 
   if (variants.length === 0) {
-    return null;
+    return null
   }
 
   // If only one variant, show it as read-only
   if (variants.length === 1) {
-    const variant = variants[0];
+    const variant = variants[0]
     return (
       <Box>
         <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5 }}>
@@ -91,7 +85,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
           </Typography>
         </Box>
       </Box>
-    );
+    )
   }
 
   return (
@@ -137,5 +131,5 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
         </MenuItem>
       ))}
     </TextField>
-  );
-};
+  )
+}

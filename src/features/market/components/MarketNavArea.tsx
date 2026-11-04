@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Grid,
-  Toolbar,
-} from "@mui/material"
+import { AppBar, Box, Button, Grid, Toolbar } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, navbarShadow } from "../../../hooks/styles/Theme"
 import React, { useEffect, useRef, useState } from "react"

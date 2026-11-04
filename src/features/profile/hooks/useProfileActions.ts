@@ -36,7 +36,9 @@ export function useProfileActions() {
     return false
   }
 
-  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleAvatarUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
     const original = event.target.files?.[0]
     if (!original) return
     const file = await resizeImageFile(original, AVATAR_RESIZE)

@@ -22,7 +22,11 @@ interface BuyOrderAggregate {
   orders: StandingBuyOrder[]
 }
 
-export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate[] }) {
+export function BuyOrdersTableV2({
+  aggregates,
+}: {
+  aggregates: BuyOrderAggregate[]
+}) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   return (
@@ -50,7 +54,14 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
                 data-id={agg.item_id}
               >
                 <TableCell>
-                  <MuiLink component={RouterLink} to={MARKET_PATHS.aggregate(agg.item_id)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
+                  <MuiLink
+                    component={RouterLink}
+                    to={MARKET_PATHS.aggregate(agg.item_id)}
+                    underline="hover"
+                    color="text.primary"
+                    fontWeight="bold"
+                    variant="body2"
+                  >
                     {agg.item_name}
                   </MuiLink>
                 </TableCell>
@@ -62,7 +73,9 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2">{fmt.number(totalQty)}</Typography>
+                  <Typography variant="body2">
+                    {fmt.number(totalQty)}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2">{agg.orders.length}</Typography>

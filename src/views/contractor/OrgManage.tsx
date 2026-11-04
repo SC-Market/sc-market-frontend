@@ -23,19 +23,12 @@ import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import {
-  contractorKindIcons,
-  contractorKindIconsKeys,
-} from "./ContractorList"
+import { contractorKindIcons, contractorKindIconsKeys } from "./ContractorList"
 import type { ContractorKindIconKey } from "../../features/contractor/domain/types"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { Contractor } from "../../features/contractor/domain/types"
-import {
-  AddAPhotoRounded,
-  EditRounded,
-  SaveRounded,
-} from "@mui/icons-material"
+import { AddAPhotoRounded, EditRounded, SaveRounded } from "@mui/icons-material"
 import {
   MarkdownEditor,
   MarkdownRender,
@@ -72,13 +65,29 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
   const { t } = useTranslation()
 
   const {
-    editingName, setEditingName, editingDesc, setEditingDesc, editingTags, setEditingTags,
-    newName, setNewName, newDesc, setNewDesc, newTags, setNewTags,
-    showAvatarButton, setShowAvatarButton,
-    avatarFileInputRef, setAvatarFileInputRef,
-    bannerFileInputRef, setBannerFileInputRef,
-    isUploadingAvatar, isUploadingBanner,
-    submitUpdate, handleAvatarUpload, handleBannerUpload,
+    editingName,
+    setEditingName,
+    editingDesc,
+    setEditingDesc,
+    editingTags,
+    setEditingTags,
+    newName,
+    setNewName,
+    newDesc,
+    setNewDesc,
+    newTags,
+    setNewTags,
+    showAvatarButton,
+    setShowAvatarButton,
+    avatarFileInputRef,
+    setAvatarFileInputRef,
+    bannerFileInputRef,
+    setBannerFileInputRef,
+    isUploadingAvatar,
+    isUploadingBanner,
+    submitUpdate,
+    handleAvatarUpload,
+    handleBannerUpload,
   } = useOrgDetailEdit(contractor)
 
   return (
@@ -165,7 +174,9 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                       fullWidth
                       multiline
                       value={newName}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>,
+                      ) => {
                         setNewName(event.target.value)
                       }}
                       aria-label={t(
@@ -217,7 +228,9 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                     display={"inline"}
                   >
                     {newName}
-                    <IconButton aria-label={t("orgDetailEdit.editName", "Edit name")}>
+                    <IconButton
+                      aria-label={t("orgDetailEdit.editName", "Edit name")}
+                    >
                       <CreateIcon />
                     </IconButton>
                   </Typography>
@@ -425,7 +438,10 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={1}>
                   <IconButton
-                    aria-label={t("orgDetailEdit.editDescription", "Edit description")}
+                    aria-label={t(
+                      "orgDetailEdit.editDescription",
+                      "Edit description",
+                    )}
                     onClick={() => {
                       setNewDesc(contractor.description)
                       setEditingDesc(true)

@@ -56,7 +56,8 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
         position: "relative",
       }}
     >
-      <Fab aria-label={t("photos.removePhoto", "Remove photo")}
+      <Fab
+        aria-label={t("photos.removePhoto", "Remove photo")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",
@@ -100,7 +101,8 @@ export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
         position: "relative",
       }}
     >
-      <Fab aria-label={t("photos.removePhoto", "Remove photo")}
+      <Fab
+        aria-label={t("photos.removePhoto", "Remove photo")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",
@@ -159,7 +161,8 @@ export function UploadingPhotoEntry(props: {
         position: "relative",
       }}
     >
-      <Fab aria-label={t("photos.cancelUpload", "Cancel upload")}
+      <Fab
+        aria-label={t("photos.cancelUpload", "Cancel upload")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",
@@ -210,7 +213,10 @@ export function UploadingPhotoEntry(props: {
       )}
       {imageStatus.status === "error" && (
         <Tooltip
-          title={imageStatus.error || t("SelectPhotosArea.uploadFailed", "Upload failed")}
+          title={
+            imageStatus.error ||
+            t("SelectPhotosArea.uploadFailed", "Upload failed")
+          }
           arrow
           open={errorTipOpen}
           onOpen={() => setErrorTipOpen(true)}
@@ -221,7 +227,10 @@ export function UploadingPhotoEntry(props: {
           <Box
             role="button"
             tabIndex={0}
-            aria-label={imageStatus.error || t("SelectPhotosArea.uploadFailed", "Upload failed")}
+            aria-label={
+              imageStatus.error ||
+              t("SelectPhotosArea.uploadFailed", "Upload failed")
+            }
             onClick={(e) => {
               // Toggle on tap/click so touch users (no hover) can read why it failed.
               e.stopPropagation()
@@ -307,7 +316,9 @@ export function SelectPhotosArea(props: {
         })
 
         const fileArray = Array.from(files)
-        const withinCap = fileArray.filter((file) => file.size <= MAX_INPUT_SIZE)
+        const withinCap = fileArray.filter(
+          (file) => file.size <= MAX_INPUT_SIZE,
+        )
         const oversizedFiles = fileArray.filter(
           (file) => file.size > MAX_INPUT_SIZE,
         )

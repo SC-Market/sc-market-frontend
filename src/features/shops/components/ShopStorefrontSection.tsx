@@ -19,7 +19,10 @@ import { StorefrontEnquiryCard } from "../../storefront/components/StorefrontEnq
 export function ShopStorefrontSection({ shop }: { shop: ShopResponse }) {
   const { t } = useTranslation()
   const orgShop = shop.is_org_owned
-  const { data: directory } = useGetShopStorefrontDirectoryQuery({ shopId: shop.shop_id }, { skip: !orgShop })
+  const { data: directory } = useGetShopStorefrontDirectoryQuery(
+    { shopId: shop.shop_id },
+    { skip: !orgShop },
+  )
   const directorySetting = useShopStorefrontDirectory(shop.shop_id)
 
   return (
@@ -31,14 +34,22 @@ export function ShopStorefrontSection({ shop }: { shop: ShopResponse }) {
               "storefront.shopSection.subtitle",
               "Ask for your shop's own sc-market.space subdomain, and choose whether it's in the storefront directory",
             )
-          : t("storefront.shopSection.subtitlePersonal", "Ask for your shop's own sc-market.space subdomain")
+          : t(
+              "storefront.shopSection.subtitlePersonal",
+              "Ask for your shop's own sc-market.space subdomain",
+            )
       }
     >
       <Grid item xs={12}>
         <Typography variant="subtitle1" color="text.secondary" component="h3">
           {t("storefront.enquiry.title", "Enquire about a branded storefront")}
         </Typography>
-        <StorefrontEnquiryCard targetType="shop" targetId={shop.shop_id} handle={shop.slug} bare />
+        <StorefrontEnquiryCard
+          targetType="shop"
+          targetId={shop.shop_id}
+          handle={shop.slug}
+          bare
+        />
       </Grid>
       {orgShop && directory && (
         <Grid item xs={12}>

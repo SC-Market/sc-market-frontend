@@ -23,7 +23,12 @@ import {
   DashboardCustomizeRounded,
   AssignmentTurnedInRounded,
 } from "@mui/icons-material"
-import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+} from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
 import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
 
@@ -134,7 +139,9 @@ export function MobileNavSettings() {
   const { t } = useTranslation()
   // On white-label, offer only the tabs the org didn't hide
   const whiteLabel = useWhiteLabelSidebar()
-  const availableTabs = ALL_NAV_TABS.filter((tab) => !whiteLabel.hidden.has(tab.id))
+  const availableTabs = ALL_NAV_TABS.filter(
+    (tab) => !whiteLabel.hidden.has(tab.id),
+  )
 
   const [selectedTabs, setSelectedTabs] = useState<string[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
@@ -248,8 +255,9 @@ export function MobileNavSettings() {
           {t("settings.mobileNav.available")}
         </Typography>
         <Stack spacing={1}>
-          {availableTabs.filter((tab) => !selectedTabs.includes(tab.id)).map(
-            (tab) => (
+          {availableTabs
+            .filter((tab) => !selectedTabs.includes(tab.id))
+            .map((tab) => (
               <FormControlLabel
                 key={tab.id}
                 control={
@@ -266,8 +274,7 @@ export function MobileNavSettings() {
                   </Box>
                 }
               />
-            ),
-          )}
+            ))}
         </Stack>
       </Paper>
 

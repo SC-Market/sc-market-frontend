@@ -117,7 +117,13 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         </Typography>
         <Box
           aria-hidden
-          sx={{ mt: 1, flexShrink: 0, width: 40, height: 3, bgcolor: ad.accent }}
+          sx={{
+            mt: 1,
+            flexShrink: 0,
+            width: 40,
+            height: 3,
+            bgcolor: ad.accent,
+          }}
         />
         <Typography
           component="p"

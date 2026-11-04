@@ -15,7 +15,9 @@ let lastRefreshAt = 0
 function onVisibilityChange(): void {
   if (document.visibilityState !== "visible") return
   if (Date.now() - lastRefreshAt > REFRESH_INTERVAL_MS) {
-    refreshAuth().then((ok) => { if (ok) lastRefreshAt = Date.now() })
+    refreshAuth().then((ok) => {
+      if (ok) lastRefreshAt = Date.now()
+    })
   }
 }
 
@@ -23,7 +25,9 @@ export function startProactiveRefresh(): void {
   if (intervalId) return
   lastRefreshAt = Date.now()
   intervalId = setInterval(() => {
-    refreshAuth().then((ok) => { if (ok) lastRefreshAt = Date.now() })
+    refreshAuth().then((ok) => {
+      if (ok) lastRefreshAt = Date.now()
+    })
   }, REFRESH_INTERVAL_MS)
   document.addEventListener("visibilitychange", onVisibilityChange)
 }

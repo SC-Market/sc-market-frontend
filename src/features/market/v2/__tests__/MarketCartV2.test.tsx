@@ -1,4 +1,4 @@
-import "./setup";
+import "./setup"
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import { MarketCartV2 } from "../MarketCartV2"
@@ -6,7 +6,10 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { BrowserRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
-import { marketV2Api as api, GetCartResponse } from "../../../../store/api/v2/market"
+import {
+  marketV2Api as api,
+  GetCartResponse,
+} from "../../../../store/api/v2/market"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { CurrentOrgContext } from "../../../../hooks/login/CurrentOrg"
 import { DrawerOpenContext } from "../../../../hooks/layout/Drawer"
@@ -30,7 +33,9 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 
 // Mock translation
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 // Mock StandardPageLayout to avoid serviceApi dependency
@@ -79,7 +84,7 @@ const createTestStore = (initialState = {}) => {
 // Helper to render with providers
 const renderWithProviders = (
   ui: React.ReactElement,
-  { store = createTestStore(), ...renderOptions } = {}
+  { store = createTestStore(), ...renderOptions } = {},
 ) => {
   const theme = createTheme({
     layoutSpacing: {
@@ -93,12 +98,15 @@ const renderWithProviders = (
     },
   })
 
-  const mockOrgState: [Contractor | null, React.Dispatch<React.SetStateAction<Contractor | null>>] = [
-    null,
-    vi.fn(),
-  ]
+  const mockOrgState: [
+    Contractor | null,
+    React.Dispatch<React.SetStateAction<Contractor | null>>,
+  ] = [null, vi.fn()]
 
-  const mockDrawerState: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = [false, vi.fn()]
+  const mockDrawerState: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+  ] = [false, vi.fn()]
 
   function Wrapper({ children }: { children: React.ReactNode }) {
     return (
@@ -129,7 +137,8 @@ const mockCartData: GetCartResponse = {
         shop_id: "seller-1",
         title: "Test Item 1",
         shop_name: "TestSeller",
-        shop_rating: 4.5, shop_slug: "testuser",
+        shop_rating: 4.5,
+        shop_slug: "testuser",
         status: "active",
       },
       variant: {
@@ -156,7 +165,8 @@ const mockCartData: GetCartResponse = {
         shop_id: "seller-2",
         title: "Test Item 2",
         shop_name: "TestSeller2",
-        shop_rating: 4.0, shop_slug: "testuser2",
+        shop_rating: 4.0,
+        shop_slug: "testuser2",
         status: "active",
       },
       variant: {
@@ -197,7 +207,7 @@ describe("MarketCartV2", () => {
       const store = createTestStore()
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, mockEmptyCart)
+        api.util.upsertQueryData("getCart", undefined, mockEmptyCart),
       )
 
       const { container } = renderWithProviders(<MarketCartV2 />, { store })
@@ -208,7 +218,7 @@ describe("MarketCartV2", () => {
       const store = createTestStore()
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, mockCartData)
+        api.util.upsertQueryData("getCart", undefined, mockCartData),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -222,7 +232,7 @@ describe("MarketCartV2", () => {
       const store = createTestStore()
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, mockCartData)
+        api.util.upsertQueryData("getCart", undefined, mockCartData),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -256,7 +266,7 @@ describe("MarketCartV2", () => {
       }
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, singleSellerCart)
+        api.util.upsertQueryData("getCart", undefined, singleSellerCart),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -284,7 +294,7 @@ describe("MarketCartV2", () => {
       }
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, cartWithPriceChange)
+        api.util.upsertQueryData("getCart", undefined, cartWithPriceChange),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -311,7 +321,7 @@ describe("MarketCartV2", () => {
       }
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, cartWithUnavailable)
+        api.util.upsertQueryData("getCart", undefined, cartWithUnavailable),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -336,7 +346,7 @@ describe("MarketCartV2", () => {
       }
 
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, cartWithUnavailable)
+        api.util.upsertQueryData("getCart", undefined, cartWithUnavailable),
       )
 
       renderWithProviders(<MarketCartV2 />, { store })

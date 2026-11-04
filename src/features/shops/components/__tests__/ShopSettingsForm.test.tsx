@@ -56,9 +56,13 @@ vi.mock("../ShopBlocklist", () => ({ ShopBlocklistSection: () => null }))
 vi.mock("../../../discord-install/LinkedDiscordServers", () => ({
   LinkedDiscordServers: () => null,
 }))
-vi.mock("../ShopStorefrontSection", () => ({ ShopStorefrontSection: () => null }))
+vi.mock("../ShopStorefrontSection", () => ({
+  ShopStorefrontSection: () => null,
+}))
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: (props: { children: React.ReactNode }) => <div>{props.children}</div>,
+  StandardPageLayout: (props: { children: React.ReactNode }) => (
+    <div>{props.children}</div>
+  ),
 }))
 
 import { ShopSettings } from "../ShopSettings"
@@ -87,7 +91,12 @@ function shop(overrides: Partial<ShopResponse>): ShopResponse {
     official_server_id: null,
     discord_thread_channel_id: null,
     badge_ids: [],
-    permissions: { can_manage: true, manage_market: true, manage_stock: true, manage_orders: true },
+    permissions: {
+      can_manage: true,
+      manage_market: true,
+      manage_stock: true,
+      manage_orders: true,
+    },
     ...overrides,
   } as ShopResponse
 }
@@ -105,7 +114,8 @@ function renderSettings() {
   return {
     rerender: () => rerender(page()),
     name: () => screen.getByLabelText(/Shop Name/),
-    save: () => fireEvent.click(screen.getByRole("button", { name: /Save Changes/ })),
+    save: () =>
+      fireEvent.click(screen.getByRole("button", { name: /Save Changes/ })),
   }
 }
 
@@ -121,7 +131,10 @@ describe("Shop Settings › form", () => {
     fireEvent.change(name(), { target: { value: "SC Market Co" } })
 
     // A refetch hands back a new object for the same shop.
-    state.shop = shop({ updated_at: "2026-01-02", description: "Changed elsewhere" })
+    state.shop = shop({
+      updated_at: "2026-01-02",
+      description: "Changed elsewhere",
+    })
     rerender()
     expect(name()).toHaveValue("SC Market Co")
   })
@@ -156,7 +169,9 @@ describe("Shop Settings › form", () => {
     save()
     await vi.waitFor(() => expect(updateShop).toHaveBeenCalledTimes(1))
     await vi.waitFor(() =>
-      expect(issueAlert).toHaveBeenCalledWith(expect.objectContaining({ severity: "success" })),
+      expect(issueAlert).toHaveBeenCalledWith(
+        expect.objectContaining({ severity: "success" }),
+      ),
     )
     await act(() => Promise.resolve())
     save()
@@ -166,7 +181,12 @@ describe("Shop Settings › form", () => {
 
   it("redirects members without can_manage (Manage Stock or Orders only)", () => {
     state.shop = shop({
-      permissions: { can_manage: false, manage_market: false, manage_stock: true, manage_orders: true },
+      permissions: {
+        can_manage: false,
+        manage_market: false,
+        manage_stock: true,
+        manage_orders: true,
+      },
     })
     render(page())
     expect(screen.queryByLabelText(/Shop Name/)).not.toBeInTheDocument()

@@ -11,7 +11,10 @@ import { GUIDE_LINKS } from "../../help/guideLinks"
  * itself (StorefrontEnquiryCard) lives there, for the org's officers and
  * the shop's managers.
  */
-export function EnquireBrandedStorefront(props: { variant?: ButtonProps["variant"]; size?: ButtonProps["size"] }) {
+export function EnquireBrandedStorefront(props: {
+  variant?: ButtonProps["variant"]
+  size?: ButtonProps["size"]
+}) {
   const { t } = useTranslation()
   return (
     <Button

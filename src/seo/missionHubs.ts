@@ -27,15 +27,25 @@ import type { SeoLink } from "./siteHeads"
 import { formatInteger } from "../util/format/format"
 /** i18next's t (and the bridge's englishT): defaults and interpolation values. */
 export interface HubTranslate {
-  (key: string, options: { defaultValue: string } & Record<string, unknown>): string
+  (
+    key: string,
+    options: { defaultValue: string } & Record<string, unknown>,
+  ): string
 }
 
-export const MISSION_HUB_KINDS: readonly MissionHubKind[] = ["givers", "factions", "types", "systems"]
+export const MISSION_HUB_KINDS: readonly MissionHubKind[] = [
+  "givers",
+  "factions",
+  "types",
+  "systems",
+]
 
 /** Missions per hub page (the API's maximum page size). */
 export const MISSION_HUB_PAGE_SIZE = 100
 
-export function isMissionHubKind(value: string | undefined): value is MissionHubKind {
+export function isMissionHubKind(
+  value: string | undefined,
+): value is MissionHubKind {
   return !!value && (MISSION_HUB_KINDS as readonly string[]).includes(value)
 }
 
@@ -47,11 +57,17 @@ const KIND_LABELS: Record<MissionHubKind, string> = {
 }
 
 /** "Mission givers", "Factions", "Mission types", "Star systems". */
-export function missionHubKindLabel(kind: MissionHubKind, t: HubTranslate): string {
+export function missionHubKindLabel(
+  kind: MissionHubKind,
+  t: HubTranslate,
+): string {
   return t(`missionHubs.kinds.${kind}`, { defaultValue: KIND_LABELS[kind] })
 }
 
-const INDEX_TEXT: Record<MissionHubKind, { title: string; heading: string; description: string }> = {
+const INDEX_TEXT: Record<
+  MissionHubKind,
+  { title: string; heading: string; description: string }
+> = {
   givers: {
     title: "Star Citizen Mission Givers ({{count}}) | SC Market",
     heading: "Star Citizen mission givers",
@@ -59,7 +75,8 @@ const INDEX_TEXT: Record<MissionHubKind, { title: string; heading: string; descr
       "Every Star Citizen mission giver in the current game files and how many missions each one offers: {{top}} and more.",
   },
   factions: {
-    title: "Star Citizen Factions and Reputation Missions ({{count}}) | SC Market",
+    title:
+      "Star Citizen Factions and Reputation Missions ({{count}}) | SC Market",
     heading: "Star Citizen factions",
     description:
       "Every Star Citizen faction you earn reputation with through missions, and how many missions raise it: {{top}} and more.",
@@ -77,14 +94,18 @@ const INDEX_TEXT: Record<MissionHubKind, { title: string; heading: string; descr
   },
 }
 
-const HUB_TEXT: Record<MissionHubKind, { title: string; heading: string; lead: string }> = {
+const HUB_TEXT: Record<
+  MissionHubKind,
+  { title: string; heading: string; lead: string }
+> = {
   givers: {
     title: "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
     heading: "{{name}} missions",
     lead: "{{name}} offers {{missions}} in Star Citizen.",
   },
   factions: {
-    title: "{{name}} Reputation Missions in Star Citizen ({{count}}) | SC Market",
+    title:
+      "{{name}} Reputation Missions in Star Citizen ({{count}}) | SC Market",
     heading: "{{name}} reputation missions",
     lead: "{{missions}} in Star Citizen raise your reputation with {{name}}.",
   },
@@ -106,7 +127,11 @@ function num(value: number, lang: string): string {
 }
 
 /** "1,318 missions" (plural-aware: missionHubs.missionCount_one/_other). */
-export function missionCountText(count: number, t: HubTranslate, lang: string): string {
+export function missionCountText(
+  count: number,
+  t: HubTranslate,
+  lang: string,
+): string {
   // `count` picks the plural form; `n` is the formatted number ("1,318").
   return t("missionHubs.missionCount", {
     defaultValue: count === 1 ? "{{n}} mission" : "{{n}} missions",
@@ -118,7 +143,10 @@ export function missionCountText(count: number, t: HubTranslate, lang: string): 
 /** "A, B and C" in the page's language. */
 function listText(items: string[], lang: string): string {
   if (items.length <= 1) return items[0] ?? ""
-  return new Intl.ListFormat(lang, { style: "long", type: "conjunction" }).format(items)
+  return new Intl.ListFormat(lang, {
+    style: "long",
+    type: "conjunction",
+  }).format(items)
 }
 
 /** Index page: title, h1 and description. */
@@ -132,11 +160,20 @@ export function missionHubIndexText(
   // Systems: all of them ("Stanton, Pyro, and Nyx."); the others: the top
   // three, followed by "and more".
   const names = (hubs ?? []).map((h) => h.name)
-  const top = kind === "systems" ? listText(names, lang) : names.slice(0, 3).join(", ")
+  const top =
+    kind === "systems" ? listText(names, lang) : names.slice(0, 3).join(", ")
   return {
-    title: t(`missionHubs.index.${kind}.title`, { defaultValue: text.title, count: hubs?.length ?? "" }),
-    heading: t(`missionHubs.index.${kind}.heading`, { defaultValue: text.heading }),
-    description: t(`missionHubs.index.${kind}.description`, { defaultValue: text.description, top }),
+    title: t(`missionHubs.index.${kind}.title`, {
+      defaultValue: text.title,
+      count: hubs?.length ?? "",
+    }),
+    heading: t(`missionHubs.index.${kind}.heading`, {
+      defaultValue: text.heading,
+    }),
+    description: t(`missionHubs.index.${kind}.description`, {
+      defaultValue: text.description,
+      top,
+    }),
   }
 }
 
@@ -147,14 +184,28 @@ export function missionHubText(
 ): { title: string; heading: string } {
   const text = HUB_TEXT[hub.kind]
   return {
-    title: t(`missionHubs.hub.${hub.kind}.title`, { defaultValue: text.title, name: hub.name, count: hub.mission_count }),
-    heading: t(`missionHubs.hub.${hub.kind}.heading`, { defaultValue: text.heading, name: hub.name }),
+    title: t(`missionHubs.hub.${hub.kind}.title`, {
+      defaultValue: text.title,
+      name: hub.name,
+      count: hub.mission_count,
+    }),
+    heading: t(`missionHubs.hub.${hub.kind}.heading`, {
+      defaultValue: text.heading,
+      name: hub.name,
+    }),
   }
 }
 
 /** "Mercenary (308), Bounty Hunter (46) and Investigation (40)". */
-function topHubs(hubs: readonly MissionHubSummary[], lang: string, max = 3): string {
-  return listText(hubs.slice(0, max).map((h) => `${h.name} (${num(h.mission_count, lang)})`), lang)
+function topHubs(
+  hubs: readonly MissionHubSummary[],
+  lang: string,
+  max = 3,
+): string {
+  return listText(
+    hubs.slice(0, max).map((h) => `${h.name} (${num(h.mission_count, lang)})`),
+    lang,
+  )
 }
 
 /** The related kinds a hub's intro names, in order. */
@@ -172,7 +223,11 @@ const INTRO_RELATED: Record<MissionHubKind, MissionHubKind[]> = {
  * Pyro, Nyx and Stanton. They pay 3,000 to 175,000 aUEC. Legal: 135,
  * illegal: 321. Mission types: Mercenary (308), …".
  */
-export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, lang: string): string[] {
+export function missionHubIntro(
+  hub: MissionHubDetailResponse,
+  t: HubTranslate,
+  lang: string,
+): string[] {
   const text = HUB_TEXT[hub.kind]
   const lines = [
     t(`missionHubs.hub.${hub.kind}.lead`, {
@@ -185,7 +240,10 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
     lines.push(
       t("missionHubs.where", {
         defaultValue: "They are offered in {{systems}}.",
-        systems: listText(hub.systems.map((s) => s.name), lang),
+        systems: listText(
+          hub.systems.map((s) => s.name),
+          lang,
+        ),
       }),
     )
   }
@@ -194,8 +252,15 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
   if (typeof max === "number" && max > 0) {
     lines.push(
       typeof min === "number" && min > 0 && min < max
-        ? t("missionHubs.rewardRange", { defaultValue: "They pay {{min}} to {{max}} aUEC.", min: num(min, lang), max: num(max, lang) })
-        : t("missionHubs.rewardUpTo", { defaultValue: "They pay up to {{max}} aUEC.", max: num(max, lang) }),
+        ? t("missionHubs.rewardRange", {
+            defaultValue: "They pay {{min}} to {{max}} aUEC.",
+            min: num(min, lang),
+            max: num(max, lang),
+          })
+        : t("missionHubs.rewardUpTo", {
+            defaultValue: "They pay up to {{max}} aUEC.",
+            max: num(max, lang),
+          }),
     )
   }
   const known = hub.legal_count + hub.illegal_count
@@ -204,7 +269,9 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
       hub.illegal_count === 0 && hub.legal_count === hub.mission_count
         ? t("missionHubs.allLegal", { defaultValue: "All of them are legal." })
         : hub.legal_count === 0 && hub.illegal_count === hub.mission_count
-          ? t("missionHubs.allIllegal", { defaultValue: "All of them are illegal." })
+          ? t("missionHubs.allIllegal", {
+              defaultValue: "All of them are illegal.",
+            })
           : t("missionHubs.legalMix", {
               defaultValue: "Legal: {{legal}}, illegal: {{illegal}}.",
               legal: num(hub.legal_count, lang),
@@ -215,7 +282,8 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
   if (hub.blueprint_mission_count > 0) {
     lines.push(
       t("missionHubs.blueprints", {
-        defaultValue: "Missions that can reward a crafting blueprint: {{count}}.",
+        defaultValue:
+          "Missions that can reward a crafting blueprint: {{count}}.",
         count: num(hub.blueprint_mission_count, lang),
       }),
     )
@@ -245,34 +313,63 @@ function shortDescription(lines: string[]): string {
   return out.length > 160 ? `${out.slice(0, 159).trimEnd()}…` : out
 }
 
-export function missionHubDescription(hub: MissionHubDetailResponse, t: HubTranslate, lang: string): string {
+export function missionHubDescription(
+  hub: MissionHubDetailResponse,
+  t: HubTranslate,
+  lang: string,
+): string {
   return shortDescription(missionHubIntro(hub, t, lang))
 }
 
 /** A mission in a hub list: "A Chance to Impress — Vaughn, Rank 0, Stanton". */
 export function missionHubMissionLink(m: MissionSearchResult): SeoLink {
-  return { href: GAME_DATA_PATHS.mission(encodeURIComponent(m.mission_code)), text: missionTitle(m) }
+  return {
+    href: GAME_DATA_PATHS.mission(encodeURIComponent(m.mission_code)),
+    text: missionTitle(m),
+  }
 }
 
 /** Link to a hub. */
-export function missionHubLink(kind: MissionHubKind, hub: MissionHubSummary): SeoLink {
+export function missionHubLink(
+  kind: MissionHubKind,
+  hub: MissionHubSummary,
+): SeoLink {
   return { href: GAME_DATA_PATHS.missionHub(kind, hub.slug), text: hub.name }
 }
 
 /** Breadcrumb steps above a hub page: Missions › Mission givers. */
-export function missionHubCrumbs(kind: MissionHubKind | null, t: HubTranslate): HubCrumb[] {
-  const missions = { name: t("missionHubs.missions", { defaultValue: "Missions" }), path: GAME_DATA_PATHS.missions }
-  return kind ? [missions, { name: missionHubKindLabel(kind, t), path: GAME_DATA_PATHS.missionHubs(kind) }] : [missions]
+export function missionHubCrumbs(
+  kind: MissionHubKind | null,
+  t: HubTranslate,
+): HubCrumb[] {
+  const missions = {
+    name: t("missionHubs.missions", { defaultValue: "Missions" }),
+    path: GAME_DATA_PATHS.missions,
+  }
+  return kind
+    ? [
+        missions,
+        {
+          name: missionHubKindLabel(kind, t),
+          path: GAME_DATA_PATHS.missionHubs(kind),
+        },
+      ]
+    : [missions]
 }
 
 /** Adds dateModified (the game data import) to the CollectionPage node. */
-function withDateModified(head: PageHead, version: GameVersion | null | undefined): PageHead {
+function withDateModified(
+  head: PageHead,
+  version: GameVersion | null | undefined,
+): PageHead {
   const modified = gameDataDateModified(version)
   if (!modified) return head
   return {
     ...head,
     jsonLd: head.jsonLd.map((node) =>
-      (node as { "@type"?: string })["@type"] === "CollectionPage" ? { ...node, dateModified: modified } : node,
+      (node as { "@type"?: string })["@type"] === "CollectionPage"
+        ? { ...node, dateModified: modified }
+        : node,
     ),
   }
 }
@@ -294,7 +391,9 @@ export function buildMissionHubIndexHead(
       path: GAME_DATA_PATHS.missionHubs(kind),
       name: missionHubKindLabel(kind, t),
       parents: missionHubCrumbs(null, t),
-      links: hubs.slice(0, MAX_HUB_LINKS).map((hub) => missionHubLink(kind, hub)),
+      links: hubs
+        .slice(0, MAX_HUB_LINKS)
+        .map((hub) => missionHubLink(kind, hub)),
     },
     origin,
   )
@@ -312,7 +411,10 @@ export function buildMissionHubHead(
   const text = missionHubText(hub, t)
   const head = buildHubHead(
     {
-      text: { title: text.title, description: missionHubDescription(hub, t, lang) },
+      text: {
+        title: text.title,
+        description: missionHubDescription(hub, t, lang),
+      },
       path: GAME_DATA_PATHS.missionHub(hub.kind, hub.slug),
       name: text.heading,
       parents: missionHubCrumbs(hub.kind, t),
@@ -324,6 +426,8 @@ export function buildMissionHubHead(
 }
 
 /** Pages of a hub's mission list. */
-export function missionHubPageCount(hub: Pick<MissionHubDetailResponse, "mission_count">): number {
+export function missionHubPageCount(
+  hub: Pick<MissionHubDetailResponse, "mission_count">,
+): number {
   return Math.max(1, Math.ceil(hub.mission_count / MISSION_HUB_PAGE_SIZE))
 }

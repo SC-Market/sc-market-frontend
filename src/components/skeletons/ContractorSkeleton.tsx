@@ -42,7 +42,11 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
             ...(theme.palette.mode === "dark" && showDarkOverlay
               ? {
                   background:
-                    "linear-gradient(135deg, " + theme.palette.primary.main + " 0%, " + theme.palette.secondary.main + " 100%)",
+                    "linear-gradient(135deg, " +
+                    theme.palette.primary.main +
+                    " 0%, " +
+                    theme.palette.secondary.main +
+                    " 100%)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }

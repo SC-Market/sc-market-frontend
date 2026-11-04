@@ -81,9 +81,7 @@ export const SCOPE_CATEGORIES = {
   },
   admin: {
     label: "Admin",
-    scopes: [
-      { value: "admin", label: "Full Admin Access" },
-    ],
+    scopes: [{ value: "admin", label: "Full Admin Access" }],
   },
   special: {
     label: "Special",

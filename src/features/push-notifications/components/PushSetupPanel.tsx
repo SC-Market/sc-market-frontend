@@ -131,9 +131,7 @@ export function PushSetupPanel() {
     setPlatform({ isIOS: isIOSDevice(), help: notificationHelpPlatform() })
   }, [])
 
-  const [endpoint, setEndpoint] = useState<string | null | undefined>(
-    undefined,
-  )
+  const [endpoint, setEndpoint] = useState<string | null | undefined>(undefined)
   const [installMessage, setInstallMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -226,10 +224,7 @@ export function PushSetupPanel() {
       icon: <NotificationsOffRounded />,
     },
     unsupported: {
-      label: t(
-        "settings.pushNotifications.state.unsupported",
-        "Not supported",
-      ),
+      label: t("settings.pushNotifications.state.unsupported", "Not supported"),
       color: "default",
       icon: <NotificationsOffRounded />,
     },
@@ -319,7 +314,10 @@ export function PushSetupPanel() {
           <Chip
             size="small"
             variant="outlined"
-            label={t("settings.pushNotifications.appInstalled", "App installed")}
+            label={t(
+              "settings.pushNotifications.appInstalled",
+              "App installed",
+            )}
           />
         )}
       </Box>
@@ -441,7 +439,9 @@ export function PushSetupPanel() {
           <Button
             variant="outlined"
             color="error"
-            onClick={() => handleUnsubscribe(currentSubscription.subscription_id)}
+            onClick={() =>
+              handleUnsubscribe(currentSubscription.subscription_id)
+            }
           >
             {t("settings.pushNotifications.disableOnDevice")}
           </Button>

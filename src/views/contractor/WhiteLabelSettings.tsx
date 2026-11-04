@@ -27,8 +27,15 @@ import {
   VisibilityOff,
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
-import { WHITE_LABEL_TAB_ICONS as ICON_MAP, DEFAULT_TAB_ICON as DEFAULT_ICON } from "../../features/contractor/components/whiteLabelIcons"
-import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal } from "../../features/contractor/hooks/useWhiteLabelSettings"
+import {
+  WHITE_LABEL_TAB_ICONS as ICON_MAP,
+  DEFAULT_TAB_ICON as DEFAULT_ICON,
+} from "../../features/contractor/components/whiteLabelIcons"
+import {
+  useWhiteLabelSettings,
+  TOGGLEABLE_TABS,
+  isExternal,
+} from "../../features/contractor/hooks/useWhiteLabelSettings"
 import { useTranslation } from "react-i18next"
 import { HelpTip } from "../../features/help/components/HelpTip"
 
@@ -40,7 +47,6 @@ const TAB_LABEL_KEYS: Record<string, string> = {
   recruiting: "sidebar.recruiting",
   contractors: "sidebar.organizations.title",
 }
-
 
 function IconPicker({
   value,
@@ -100,14 +106,33 @@ function IconPicker({
 // ── Tab definitions ────────────────────────────────────────────────────
 export function WhiteLabelSettings() {
   const {
-    spectrumId, config,
-    focusMode, setFocusMode, homepagePath, setHomepagePath, requireMembership, setRequireMembership,
-    configSaving, handleSaveConfig,
-    disabledTabs, toggleTab,
-    customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
-    newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon, newPathError,
-    sidebarSaving, handleSaveSidebar,
-    snack, setSnack,
+    spectrumId,
+    config,
+    focusMode,
+    setFocusMode,
+    homepagePath,
+    setHomepagePath,
+    requireMembership,
+    setRequireMembership,
+    configSaving,
+    handleSaveConfig,
+    disabledTabs,
+    toggleTab,
+    customTabs,
+    addCustomTab,
+    removeCustomTab,
+    updateCustomTabIcon,
+    newLabel,
+    setNewLabel,
+    newPath,
+    setNewPath,
+    newIcon,
+    setNewIcon,
+    newPathError,
+    sidebarSaving,
+    handleSaveSidebar,
+    snack,
+    setSnack,
   } = useWhiteLabelSettings()
   const { t } = useTranslation()
 
@@ -201,7 +226,9 @@ export function WhiteLabelSettings() {
               >
                 <ListItemText
                   primary={
-                    TAB_LABEL_KEYS[tab.key] ? t(TAB_LABEL_KEYS[tab.key]) : tab.label
+                    TAB_LABEL_KEYS[tab.key]
+                      ? t(TAB_LABEL_KEYS[tab.key])
+                      : tab.label
                   }
                   sx={{ opacity: disabledTabs.has(tab.key) ? 0.5 : 1 }}
                 />
@@ -224,9 +251,13 @@ export function WhiteLabelSettings() {
                 <ListItem
                   key={i}
                   secondaryAction={
-                    <IconButton aria-label={t("orgAdminUi.whiteLabel.removeTab", {
+                    <IconButton
+                      aria-label={t("orgAdminUi.whiteLabel.removeTab", {
                         name: ct.label || i + 1,
-                      })} edge="end" onClick={() => removeCustomTab(i)}>
+                      })}
+                      edge="end"
+                      onClick={() => removeCustomTab(i)}
+                    >
                       <Delete />
                     </IconButton>
                   }

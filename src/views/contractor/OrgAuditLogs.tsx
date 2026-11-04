@@ -159,7 +159,10 @@ export function OrgAuditLogs() {
   const [actorUsernameFilter, setActorUsernameFilter] = useState<string>("")
   const [actorInput, setActorInput] = useState<string>("")
   const [actorQuery, setActorQuery] = useState<string>("")
-  const searchActors = useMemo(() => throttle((q: string) => setActorQuery(q), 400), [])
+  const searchActors = useMemo(
+    () => throttle((q: string) => setActorQuery(q), 400),
+    [],
+  )
   const { data: actorOptions = [] } = useSearchContractorMembersQuery(
     { spectrum_id: contractor?.spectrum_id || "", query: actorQuery },
     { skip: !contractor?.spectrum_id || actorQuery.length < 2 },

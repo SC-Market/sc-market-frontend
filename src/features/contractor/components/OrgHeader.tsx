@@ -123,7 +123,9 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
           >
             {contractor.name}
           </Typography>
-          {isRsiVerifiedSpectrumId(contractor.spectrum_id) && <VerifiedOrgBadge />}
+          {isRsiVerifiedSpectrumId(contractor.spectrum_id) && (
+            <VerifiedOrgBadge />
+          )}
           {!contractor.spectrum_id.startsWith("~") && (
             <MaterialLink
               component="a"

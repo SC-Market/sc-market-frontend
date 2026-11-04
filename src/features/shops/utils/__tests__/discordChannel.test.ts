@@ -22,7 +22,9 @@ describe("shopDiscordChannelError", () => {
 
   it("refuses anything that isn't a Discord ID", () => {
     expect(shopDiscordChannelError(SERVER, "#orders")).toBe("notNumeric")
-    expect(shopDiscordChannelError("https://discord.com/channels/1/2", CHANNEL)).toBe("notNumeric")
+    expect(
+      shopDiscordChannelError("https://discord.com/channels/1/2", CHANNEL),
+    ).toBe("notNumeric")
     expect(shopDiscordChannelError("123", CHANNEL)).toBe("notNumeric")
   })
 })

@@ -23,7 +23,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
-import { Link as RouterLink, useParams, useSearchParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  useParams,
+  useSearchParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   useGetActiveVersionsQuery,
@@ -57,12 +61,20 @@ import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 function pagedHead(head: PageHead, path: string, page: number): PageHead {
   if (page <= 1) return head
   const canonical = `${FRONTEND_URL}${pagedPath(path, page)}`
-  const title = head.title?.replace(/ \| SC Market$/, ` — Page ${page} | SC Market`)
+  const title = head.title?.replace(
+    / \| SC Market$/,
+    ` — Page ${page} | SC Market`,
+  )
   return { ...head, title, canonical }
 }
 
 function isNotFound(error: unknown): boolean {
-  return !!error && typeof error === "object" && "status" in error && (error as { status: unknown }).status === 404
+  return (
+    !!error &&
+    typeof error === "object" &&
+    "status" in error &&
+    (error as { status: unknown }).status === 404
+  )
 }
 
 export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
@@ -72,14 +84,24 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
   const lang = i18n.resolvedLanguage || "en"
   const page = queryIndexing(searchParams).pageNumber ?? 1
 
-  const query = useGetMissionHubQuery({ kind, slug, page, pageSize: MISSION_HUB_PAGE_SIZE }, { skip: !slug })
+  const query = useGetMissionHubQuery(
+    { kind, slug, page, pageSize: MISSION_HUB_PAGE_SIZE },
+    { skip: !slug },
+  )
   const { data, isLoading, error } = query
   const { data: versions } = useGetActiveVersionsQuery()
   usePageReady(isPrimaryLoading(query))
 
   const path = GAME_DATA_PATHS.missionHub(kind, slug)
   const head = useMemo(
-    () => (data ? pagedHead(buildMissionHubHead(data, FRONTEND_URL, t, lang, versions?.LIVE), path, page) : null),
+    () =>
+      data
+        ? pagedHead(
+            buildMissionHubHead(data, FRONTEND_URL, t, lang, versions?.LIVE),
+            path,
+            page,
+          )
+        : null,
     [data, t, lang, versions?.LIVE, path, page],
   )
   const text = data ? missionHubText(data, t) : null
@@ -91,9 +113,15 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
       title={head?.title ?? kindLabel}
       description={head ? headDescription(head) : ""}
       canonicalUrl={path}
-      headerTitle={text?.heading ?? (isLoading ? <Skeleton variant="text" width={240} /> : kindLabel)}
+      headerTitle={
+        text?.heading ??
+        (isLoading ? <Skeleton variant="text" width={240} /> : kindLabel)
+      }
       breadcrumbs={[
-        { label: t("missionHubs.missions", "Missions"), href: GAME_DATA_PATHS.missions },
+        {
+          label: t("missionHubs.missions", "Missions"),
+          href: GAME_DATA_PATHS.missions,
+        },
         { label: kindLabel, href: GAME_DATA_PATHS.missionHubs(kind) },
         { label: data?.name ?? slug },
       ]}
@@ -106,8 +134,14 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
         {error && (
           <Alert severity={notFound ? "info" : "error"} sx={{ mb: 2 }}>
             {notFound
-              ? t("missionHubs.notFound", "This mission hub doesn't exist. Hubs change with game updates: browse them all below.")
-              : t("missionHubs.loadError", "Failed to load this mission hub. Please try again.")}
+              ? t(
+                  "missionHubs.notFound",
+                  "This mission hub doesn't exist. Hubs change with game updates: browse them all below.",
+                )
+              : t(
+                  "missionHubs.loadError",
+                  "Failed to load this mission hub. Please try again.",
+                )}
           </Alert>
         )}
         {data && <HubBody hub={data} page={page} lang={lang} />}
@@ -118,17 +152,37 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
   )
 }
 
-function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: number; lang: string }) {
+function HubBody({
+  hub,
+  page,
+  lang,
+}: {
+  hub: MissionHubDetailResponse
+  page: number
+  lang: string
+}) {
   const { t } = useTranslation()
   const pages = missionHubPageCount(hub)
   const path = GAME_DATA_PATHS.missionHub(hub.kind, hub.slug)
-  const related = MISSION_HUB_KINDS.filter((k) => k !== hub.kind && hub[k].length > 0)
+  const related = MISSION_HUB_KINDS.filter(
+    (k) => k !== hub.kind && hub[k].length > 0,
+  )
 
   return (
     <>
-      <Box component="section" aria-label={t("missionHubs.missionList", "Missions")} sx={{ mb: 2 }}>
+      <Box
+        component="section"
+        aria-label={t("missionHubs.missionList", "Missions")}
+        sx={{ mb: 2 }}
+      >
         {missionHubIntro(hub, t, lang).map((line) => (
-          <Typography key={line} variant="body1" color="text.secondary" component="p" sx={{ mb: 0.75 }}>
+          <Typography
+            key={line}
+            variant="body1"
+            color="text.secondary"
+            component="p"
+            sx={{ mb: 0.75 }}
+          >
             {line}
           </Typography>
         ))}
@@ -141,12 +195,18 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
         <Table size="small" sx={{ "& td, & th": { py: 0.75, px: 1 } }}>
           <TableHead>
             <TableRow>
-              <TableCell>{t("missionHubs.columns.mission", "Mission")}</TableCell>
+              <TableCell>
+                {t("missionHubs.columns.mission", "Mission")}
+              </TableCell>
               <TableCell>{t("missionHubs.columns.system", "System")}</TableCell>
               <TableCell>{t("missionHubs.columns.type", "Type")}</TableCell>
               <TableCell>{t("missionHubs.columns.giver", "Giver")}</TableCell>
-              <TableCell>{t("missionHubs.columns.legality", "Legality")}</TableCell>
-              <TableCell align="right">{t("missionHubs.columns.reward", "Reward")}</TableCell>
+              <TableCell>
+                {t("missionHubs.columns.legality", "Legality")}
+              </TableCell>
+              <TableCell align="right">
+                {t("missionHubs.columns.reward", "Reward")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -158,18 +218,30 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
                   <TableCell sx={{ minWidth: 200 }}>
                     <Link
                       component={RouterLink}
-                      to={GAME_DATA_PATHS.mission(encodeURIComponent(m.mission_code))}
+                      to={GAME_DATA_PATHS.mission(
+                        encodeURIComponent(m.mission_code),
+                      )}
                       underline="hover"
                       color="inherit"
                     >
-                      <MissionName name={m.mission_name} giver={giver} variant="body2" fontWeight={600} component="span" />
+                      <MissionName
+                        name={m.mission_name}
+                        giver={giver}
+                        variant="body2"
+                        fontWeight={600}
+                        component="span"
+                      />
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2">{m.star_system || "—"}</Typography>
+                    <Typography variant="body2">
+                      {m.star_system || "—"}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2">{m.career_type || "—"}</Typography>
+                    <Typography variant="body2">
+                      {m.career_type || "—"}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
@@ -178,15 +250,30 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
                   </TableCell>
                   <TableCell>
                     {illegal ? (
-                      <Chip label={t("missionHubs.illegal", "Illegal")} size="small" color="error" variant="outlined" />
+                      <Chip
+                        label={t("missionHubs.illegal", "Illegal")}
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                      />
                     ) : m.is_illegal === false || m.legal_status === "LEGAL" ? (
-                      <Chip label={t("missionHubs.legal", "Legal")} size="small" color="success" variant="outlined" />
+                      <Chip
+                        label={t("missionHubs.legal", "Legal")}
+                        size="small"
+                        color="success"
+                        variant="outlined"
+                      />
                     ) : (
                       "—"
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    <Typography variant="body2" color="success.main" fontWeight={600} noWrap>
+                    <Typography
+                      variant="body2"
+                      color="success.main"
+                      fontWeight={600}
+                      noWrap
+                    >
                       {missionRewardRange(m, lang) ?? "—"}
                     </Typography>
                   </TableCell>
@@ -198,17 +285,42 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
       </Paper>
 
       {pages > 1 && (
-        <Stack component="nav" direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }} aria-label={t("missionHubs.pageOf", { defaultValue: "Page {{page}} of {{pages}}", page, pages })}>
+        <Stack
+          component="nav"
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          sx={{ mt: 1.5 }}
+          aria-label={t("missionHubs.pageOf", {
+            defaultValue: "Page {{page}} of {{pages}}",
+            page,
+            pages,
+          })}
+        >
           {page > 1 && (
-            <Button component={RouterLink} to={pagedPath(path, page - 1)} size="small" rel="prev">
+            <Button
+              component={RouterLink}
+              to={pagedPath(path, page - 1)}
+              size="small"
+              rel="prev"
+            >
               {t("missionHubs.previous", "Previous page")}
             </Button>
           )}
           <Typography variant="body2" color="text.secondary">
-            {t("missionHubs.pageOf", { defaultValue: "Page {{page}} of {{pages}}", page, pages })}
+            {t("missionHubs.pageOf", {
+              defaultValue: "Page {{page}} of {{pages}}",
+              page,
+              pages,
+            })}
           </Typography>
           {page < pages && (
-            <Button component={RouterLink} to={pagedPath(path, page + 1)} size="small" rel="next">
+            <Button
+              component={RouterLink}
+              to={pagedPath(path, page + 1)}
+              size="small"
+              rel="next"
+            >
               {t("missionHubs.next", "Next page")}
             </Button>
           )}
@@ -216,13 +328,27 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
       )}
 
       {related.length > 0 && (
-        <Box component="section" aria-labelledby="mission-hub-related" sx={{ mt: 3 }}>
-          <Typography id="mission-hub-related" variant="h6" component="h2" sx={{ mb: 1 }}>
+        <Box
+          component="section"
+          aria-labelledby="mission-hub-related"
+          sx={{ mt: 3 }}
+        >
+          <Typography
+            id="mission-hub-related"
+            variant="h6"
+            component="h2"
+            sx={{ mb: 1 }}
+          >
             {t("missionHubs.related", "Related mission hubs")}
           </Typography>
           {related.map((k) => (
             <Box key={k} sx={{ mb: 1.5 }}>
-              <Typography variant="subtitle2" color="text.secondary" component="h3" sx={{ mb: 0.5 }}>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                component="h3"
+                sx={{ mb: 0.5 }}
+              >
                 {missionHubKindLabel(k, t)}
               </Typography>
               <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>

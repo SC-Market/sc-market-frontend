@@ -14,17 +14,30 @@ interface BidV2Entity {
   bid_id: string
   listing_id: string
   amount: number
-  user_bidder?: { username: string; display_name: string; avatar: string | null }
+  user_bidder?: {
+    username: string
+    display_name: string
+    avatar: string | null
+  }
 }
 
 export function NotificationBidV2(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
-  const bid = useMemo(() => notif.entity as unknown as BidV2Entity, [notif.entity])
-  const { data: listing } = useGetListingDetailQuery({ id: bid.listing_id }, { skip: !bid.listing_id })
+  const bid = useMemo(
+    () => notif.entity as unknown as BidV2Entity,
+    [notif.entity],
+  )
+  const { data: listing } = useGetListingDetailQuery(
+    { id: bid.listing_id },
+    { skip: !bid.listing_id },
+  )
   const { t } = useTranslation()
 
-  const bidderName = bid.user_bidder?.display_name || notif.actors?.[0]?.display_name || "Someone"
+  const bidderName =
+    bid.user_bidder?.display_name ||
+    notif.actors?.[0]?.display_name ||
+    "Someone"
   const bidderLink = bid.user_bidder?.username
     ? `/user/${bid.user_bidder.username}`
     : notif.actors?.[0]?.username
@@ -34,7 +47,14 @@ export function NotificationBidV2(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.listing.title }) : `/market/${bid.listing_id}`}
+      to={
+        listing
+          ? formatMarketUrl({
+              listing_id: bid.listing_id,
+              title: listing.listing.title,
+            })
+          : `/market/${bid.listing_id}`
+      }
       notif={notif}
     >
       {t("notifications.new_bid_placed_by")}{" "}
@@ -46,7 +66,14 @@ export function NotificationBidV2(props: { notif: Notification }) {
       </Link>{" "}
       {t("notifications.for")}{" "}
       <Link
-        to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.listing.title }) : `/market/${bid.listing_id}`}
+        to={
+          listing
+            ? formatMarketUrl({
+                listing_id: bid.listing_id,
+                title: listing.listing.title,
+              })
+            : `/market/${bid.listing_id}`
+        }
         style={{ textDecoration: "none", color: theme.palette.secondary.main }}
       >
         <UnderlineLink>{listing?.listing.title || "..."}</UnderlineLink>

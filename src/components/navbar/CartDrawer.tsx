@@ -56,20 +56,44 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const handleRemove = async (cartItemId: string) => {
     try {
       await removeItem({ id: cartItemId }).unwrap()
-    } catch { /* silent */ }
+    } catch {
+      /* silent */
+    }
   }
 
   const content = (
-    <Stack sx={{ height: "100%", p: isMobile ? 0 : 2, minWidth: isMobile ? undefined : 380 }}>
+    <Stack
+      sx={{
+        height: "100%",
+        p: isMobile ? 0 : 2,
+        minWidth: isMobile ? undefined : 380,
+      }}
+    >
       {!isMobile && (
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
           <Typography variant="h6" fontWeight="bold">
             {t("cart.title", "Cart")}
             {itemCount > 0 && (
-              <Chip label={itemCount} size="small" color="primary" sx={{ ml: 1 }} />
+              <Chip
+                label={itemCount}
+                size="small"
+                color="primary"
+                sx={{ ml: 1 }}
+              />
             )}
           </Typography>
-          <IconButton onClick={onClose} size="small" aria-label={t("cart.closeDrawer", "Close")}><Close /></IconButton>
+          <IconButton
+            onClick={onClose}
+            size="small"
+            aria-label={t("cart.closeDrawer", "Close")}
+          >
+            <Close />
+          </IconButton>
         </Box>
       )}
 
@@ -82,7 +106,10 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           sx={{ minHeight: 200, py: 3, px: 2 }}
           action={{
             label: t("cart.browseMarket", "Browse Market"),
-            onClick: () => { onClose(); navigate(MARKET_PATHS.search); },
+            onClick: () => {
+              onClose()
+              navigate(MARKET_PATHS.search)
+            },
             variant: "contained",
           }}
         />
@@ -99,7 +126,11 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   borderRadius: 1,
                 }}
               >
-                <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
+                >
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography variant="body2" fontWeight="bold" noWrap>
                       {item.listing?.title || t("cart.listingFallback")}
@@ -109,7 +140,8 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     </Typography>
                     <Box display="flex" gap={1} alignItems="center" mt={0.5}>
                       <Typography variant="body2">
-                        {item.quantity} × {fmt.number(item.price_per_unit || 0)} aUEC
+                        {item.quantity} × {fmt.number(item.price_per_unit || 0)}{" "}
+                        aUEC
                       </Typography>
                     </Box>
                     {item.price_changed && (
@@ -123,16 +155,29 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       </Typography>
                     )}
                   </Box>
-                  <Box display="flex" flexDirection="column" alignItems="flex-end">
-                    <Typography variant="body2" fontWeight="bold" color="primary">
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-end"
+                  >
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      color="primary"
+                    >
                       {fmt.number(item.subtotal || 0)} aUEC
                     </Typography>
                     <IconButton
                       size="small"
                       onClick={() => handleRemove(item.cart_item_id)}
-                      aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
-                        title: item.listing?.title || t("cart.listingFallback"),
-                      })}
+                      aria-label={t(
+                        "cart.removeItem",
+                        "Remove {{title}} from cart",
+                        {
+                          title:
+                            item.listing?.title || t("cart.listingFallback"),
+                        },
+                      )}
                     >
                       <DeleteOutlineRounded fontSize="small" />
                     </IconButton>
@@ -144,7 +189,12 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
 
           <Divider sx={{ mb: 2 }} />
 
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={1}
+          >
             <Typography variant="subtitle1" fontWeight="bold">
               {t("cart.total", "Total")}
             </Typography>
@@ -168,7 +218,11 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
 
   if (isMobile) {
     return (
-      <BottomSheet open={open} onClose={onClose} title={t("cart.title", "Cart")}>
+      <BottomSheet
+        open={open}
+        onClose={onClose}
+        title={t("cart.title", "Cart")}
+      >
         {content}
       </BottomSheet>
     )

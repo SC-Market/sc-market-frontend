@@ -12,6 +12,9 @@ describe("isOrderOpen", () => {
   })
 
   it("closed statuses are cancelled and fulfilled", () => {
-    expect([...ORDER_CLOSED_STATUSES].sort()).toEqual(["cancelled", "fulfilled"])
+    expect([...ORDER_CLOSED_STATUSES].sort()).toEqual([
+      "cancelled",
+      "fulfilled",
+    ])
   })
 })

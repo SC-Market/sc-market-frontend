@@ -4,13 +4,7 @@
  * Perfect for mobile interactions
  */
 
-import {
-  Box,
-  Card,
-  CardProps,
-  Stack,
-  useTheme,
-} from "@mui/material"
+import { Box, Card, CardProps, Stack, useTheme } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useRef, useState } from "react"
 import { useSwipeable } from "react-swipeable"

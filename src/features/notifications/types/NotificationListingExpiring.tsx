@@ -14,11 +14,23 @@ export interface ListingExpiryNotice {
   shop_slug: string
   shop_name: string
   renew_path: string
-  listings: { listing_id: string; title: string; expires_at: string; status: string }[]
+  listings: {
+    listing_id: string
+    title: string
+    expires_at: string
+    status: string
+  }[]
 }
 
-export function isListingExpiryNotice(entity: Notification["entity"] | undefined): entity is ListingExpiryNotice {
-  return !!entity && typeof entity === "object" && "batch_id" in entity && "renew_path" in entity
+export function isListingExpiryNotice(
+  entity: Notification["entity"] | undefined,
+): entity is ListingExpiryNotice {
+  return (
+    !!entity &&
+    typeof entity === "object" &&
+    "batch_id" in entity &&
+    "renew_path" in entity
+  )
 }
 
 /** "Still selling?": listings about to expire, with a one-click renew. */
@@ -31,17 +43,23 @@ export function NotificationListingExpiring(props: { notif: Notification }) {
   const text =
     count === 1
       ? t("notifications.listing_expiring.one", {
-          defaultValue: "Still selling \"{{title}}\"? It expires in 3 days. Open to renew it in one click.",
+          defaultValue:
+            'Still selling "{{title}}"? It expires in 3 days. Open to renew it in one click.',
           title: notice.listings[0].title,
         })
       : t("notifications.listing_expiring.many", {
-          defaultValue: "Still selling? {{n}} listings in {{shop}} expire in 3 days. Open to renew them in one click.",
+          defaultValue:
+            "Still selling? {{n}} listings in {{shop}} expire in 3 days. Open to renew them in one click.",
           n: count,
           shop: notice.shop_name,
         })
 
   return (
-    <NotificationBase icon={<EventRepeatRoundedIcon />} to={notice.renew_path} notif={notif}>
+    <NotificationBase
+      icon={<EventRepeatRoundedIcon />}
+      to={notice.renew_path}
+      notif={notif}
+    >
       {text}
     </NotificationBase>
   )

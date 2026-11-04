@@ -73,17 +73,24 @@ export function StorefrontEnquiryCard(props: {
   const { data: profile } = useGetUserProfileQuery()
   const [create, createState] = useCreateStorefrontEnquiryMutation()
 
-  const [subdomain, setSubdomain] = useState(() => suggestedSubdomain(props.handle))
+  const [subdomain, setSubdomain] = useState(() =>
+    suggestedSubdomain(props.handle),
+  )
   const [message, setMessage] = useState("")
   const discordHandle = profile?.discord_username || null
-  const [contact, setContact] = useState<EnquiryContactMethod>(discordHandle ? "discord" : "site_message")
+  const [contact, setContact] = useState<EnquiryContactMethod>(
+    discordHandle ? "discord" : "site_message",
+  )
   const [touched, setTouched] = useState(false)
 
   if (isLoading) return <Skeleton variant="rounded" height={220} />
   if (isError) {
     return (
       <Alert severity="warning">
-        {t("storefront.enquiry.loadFailed", "Your storefront enquiry couldn't be loaded. Try again later.")}
+        {t(
+          "storefront.enquiry.loadFailed",
+          "Your storefront enquiry couldn't be loaded. Try again later.",
+        )}
       </Alert>
     )
   }
@@ -94,9 +101,15 @@ export function StorefrontEnquiryCard(props: {
     problem === "length"
       ? t("storefront.enquiry.subdomainLength", "2 to 63 characters")
       : problem === "chars"
-        ? t("storefront.enquiry.subdomainChars", "Lower-case letters, digits and single hyphens; no hyphen at the start or end")
+        ? t(
+            "storefront.enquiry.subdomainChars",
+            "Lower-case letters, digits and single hyphens; no hyphen at the start or end",
+          )
         : problem === "reserved"
-          ? t("storefront.enquiry.subdomainReserved", "That subdomain is reserved")
+          ? t(
+              "storefront.enquiry.subdomainReserved",
+              "That subdomain is reserved",
+            )
           : null
 
   const submit = async () => {
@@ -120,7 +133,11 @@ export function StorefrontEnquiryCard(props: {
   }
 
   return (
-    <Box component={props.bare ? "div" : Paper} sx={props.bare ? undefined : { p: 2 }} data-testid="storefront-enquiry">
+    <Box
+      component={props.bare ? "div" : Paper}
+      sx={props.bare ? undefined : { p: 2 }}
+      data-testid="storefront-enquiry"
+    >
       {!props.bare && (
         <Typography variant="h6" component="h2" color="text.secondary">
           {t("storefront.enquiry.title", "Enquire about a branded storefront")}
@@ -128,31 +145,62 @@ export function StorefrontEnquiryCard(props: {
       )}
 
       {latest && isOpenEnquiry(latest.status) ? (
-        <Stack spacing={1} sx={{ mt: 1 }} data-testid="storefront-enquiry-status">
-          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+        <Stack
+          spacing={1}
+          sx={{ mt: 1 }}
+          data-testid="storefront-enquiry-status"
+        >
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            flexWrap="wrap"
+            useFlexGap
+          >
             <Typography variant="body2" color="text.primary">
               {t("storefront.enquiry.requested", {
                 subdomain: `${latest.requested_subdomain}.sc-market.space`,
                 defaultValue: "You asked for {{subdomain}}.",
               })}
             </Typography>
-            <Chip size="small" color={enquiryStatusColor(latest.status)} label={statusLabel(latest.status)} />
+            <Chip
+              size="small"
+              color={enquiryStatusColor(latest.status)}
+              label={statusLabel(latest.status)}
+            />
           </Stack>
           <Typography variant="body2" color="text.primary">
             {latest.contact_method === "discord"
-              ? t("storefront.enquiry.replyDiscord", "SC Market staff will contact you on Discord.")
-              : t("storefront.enquiry.replyMessage", "SC Market staff will message you on SC Market.")}
+              ? t(
+                  "storefront.enquiry.replyDiscord",
+                  "SC Market staff will contact you on Discord.",
+                )
+              : t(
+                  "storefront.enquiry.replyMessage",
+                  "SC Market staff will message you on SC Market.",
+                )}
           </Typography>
           <Typography variant="caption" color="text.primary">
             {t("storefront.enquiry.sentBy", {
               date: fmt.date(new Date(latest.created_at)),
-              user: latest.submitted_by_username ?? t("storefront.enquiry.deletedUser", "Deleted user"),
+              user:
+                latest.submitted_by_username ??
+                t("storefront.enquiry.deletedUser", "Deleted user"),
               defaultValue: "Sent {{date}} by {{user}}.",
             })}
           </Typography>
         </Stack>
       ) : (
-        <Stack spacing={2} sx={{ mt: 1 }} component="form" noValidate onSubmit={(e) => { e.preventDefault(); void submit() }}>
+        <Stack
+          spacing={2}
+          sx={{ mt: 1 }}
+          component="form"
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault()
+            void submit()
+          }}
+        >
           <Typography variant="body2" color="text.primary">
             {t(
               "storefront.enquiry.intro",
@@ -160,7 +208,11 @@ export function StorefrontEnquiryCard(props: {
             )}
           </Typography>
           {latest && (
-            <Typography variant="body2" color="text.primary" data-testid="storefront-enquiry-previous">
+            <Typography
+              variant="body2"
+              color="text.primary"
+              data-testid="storefront-enquiry-previous"
+            >
               {t("storefront.enquiry.previous", {
                 subdomain: `${latest.requested_subdomain}.sc-market.space`,
                 status: statusLabel(latest.status),
@@ -174,24 +226,45 @@ export function StorefrontEnquiryCard(props: {
             onChange={(e) => setSubdomain(e.target.value)}
             onBlur={() => setTouched(true)}
             size="small"
-            inputProps={{ maxLength: 63, "data-testid": "enquiry-subdomain", autoCapitalize: "none", spellCheck: false }}
-            InputProps={{ endAdornment: <InputAdornment position="end">.sc-market.space</InputAdornment> }}
+            inputProps={{
+              maxLength: 63,
+              "data-testid": "enquiry-subdomain",
+              autoCapitalize: "none",
+              spellCheck: false,
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">.sc-market.space</InputAdornment>
+              ),
+            }}
             error={touched && !!problem}
-            helperText={(touched && problemText) || t("storefront.enquiry.subdomainHelp", "Usually your org's Spectrum ID or your shop's name.")}
+            helperText={
+              (touched && problemText) ||
+              t(
+                "storefront.enquiry.subdomainHelp",
+                "Usually your org's Spectrum ID or your shop's name.",
+              )
+            }
             required
           />
           <TextField
             label={t("storefront.enquiry.message", "Message (optional)")}
             value={message}
-            onChange={(e) => setMessage(e.target.value.slice(0, ENQUIRY_MESSAGE_MAX))}
+            onChange={(e) =>
+              setMessage(e.target.value.slice(0, ENQUIRY_MESSAGE_MAX))
+            }
             multiline
             minRows={3}
             size="small"
-            inputProps={{ maxLength: ENQUIRY_MESSAGE_MAX, "data-testid": "enquiry-message" }}
+            inputProps={{
+              maxLength: ENQUIRY_MESSAGE_MAX,
+              "data-testid": "enquiry-message",
+            }}
             helperText={t("storefront.enquiry.messageHelp", {
               length: message.length,
               max: ENQUIRY_MESSAGE_MAX,
-              defaultValue: "What you have in mind. Only SC Market staff see it. {{length}}/{{max}}",
+              defaultValue:
+                "What you have in mind. Only SC Market staff see it. {{length}}/{{max}}",
             })}
           />
           <FormControl>
@@ -201,7 +274,11 @@ export function StorefrontEnquiryCard(props: {
             <RadioGroup
               aria-labelledby="enquiry-contact"
               value={contact}
-              onChange={(e) => setContact(e.target.value === "discord" ? "discord" : "site_message")}
+              onChange={(e) =>
+                setContact(
+                  e.target.value === "discord" ? "discord" : "site_message",
+                )
+              }
             >
               <FormControlLabel
                 value="discord"
@@ -213,22 +290,32 @@ export function StorefrontEnquiryCard(props: {
                         handle: discordHandle,
                         defaultValue: "Discord ({{handle}}, from your profile)",
                       })
-                    : t("storefront.enquiry.contactDiscordNone", "Discord (link Discord in your settings first)")
+                    : t(
+                        "storefront.enquiry.contactDiscordNone",
+                        "Discord (link Discord in your settings first)",
+                      )
                 }
               />
               <FormControlLabel
                 value="site_message"
                 control={<Radio size="small" />}
-                label={t("storefront.enquiry.contactMessage", "A message on SC Market")}
+                label={t(
+                  "storefront.enquiry.contactMessage",
+                  "A message on SC Market",
+                )}
               />
             </RadioGroup>
             <FormHelperText>
-              {t("storefront.enquiry.contactHelp", "We don't store contact details: we use the Discord account linked to your profile.")}
+              {t(
+                "storefront.enquiry.contactHelp",
+                "We don't store contact details: we use the Discord account linked to your profile.",
+              )}
             </FormHelperText>
           </FormControl>
           {createState.isError && (
             <Alert severity="error">
-              {getErrorMessage(createState.error) ?? t("storefront.enquiry.failed", "The enquiry couldn't be sent.")}
+              {getErrorMessage(createState.error) ??
+                t("storefront.enquiry.failed", "The enquiry couldn't be sent.")}
             </Alert>
           )}
           <Box>

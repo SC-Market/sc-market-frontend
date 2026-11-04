@@ -7,7 +7,10 @@ import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useCookies } from "react-cookie"
 import { canViewOrgArea } from "../../features/contractor/domain/orgPermissions"
-import type { Contractor, ContractorRole } from "../../features/contractor/domain/types"
+import type {
+  Contractor,
+  ContractorRole,
+} from "../../features/contractor/domain/types"
 import type { UserProfileState } from "../../hooks/login/UserProfile"
 import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
@@ -17,7 +20,9 @@ import { NoCurrentOrg } from "./NoCurrentOrg"
 import { NoOrgPermission, type OrgAdminArea } from "./NoOrgPermission"
 
 const MfaAdminGate = lazyWithRetry(() =>
-  import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
+  import("../../features/mfa/components/MfaAdminGate").then((m) => ({
+    default: m.MfaAdminGate,
+  })),
 )
 
 /**
@@ -146,7 +151,8 @@ export function OrgAdminRoute(props: {
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
 
   const canView = useMemo(
-    () => canViewOrgArea(contractor, profile, { allow, permission, anyPermission }),
+    () =>
+      canViewOrgArea(contractor, profile, { allow, permission, anyPermission }),
     [allow, anyPermission, contractor, permission, profile],
   )
 

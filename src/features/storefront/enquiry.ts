@@ -9,20 +9,75 @@ export const ENQUIRY_MESSAGE_MAX = 1000
 
 /** Same list as the backend's RESERVED_SUBDOMAINS. */
 const RESERVED = new Set([
-  "www", "api", "cdn", "app", "admin", "staff", "support", "help", "docs", "status",
-  "mail", "email", "smtp", "auth", "login", "account", "accounts", "id", "sso",
-  "static", "assets", "media", "img", "images", "files", "uploads",
-  "dev", "staging", "beta", "test", "preview", "demo", "sandbox",
-  "ws", "socket", "embed", "blog", "news", "wiki", "market", "shop", "shops",
-  "store", "storefront", "storefronts", "org", "orgs", "yourorg", "scmarket",
-  "sc-market", "discord", "bot", "billing", "pay", "payments", "security",
+  "www",
+  "api",
+  "cdn",
+  "app",
+  "admin",
+  "staff",
+  "support",
+  "help",
+  "docs",
+  "status",
+  "mail",
+  "email",
+  "smtp",
+  "auth",
+  "login",
+  "account",
+  "accounts",
+  "id",
+  "sso",
+  "static",
+  "assets",
+  "media",
+  "img",
+  "images",
+  "files",
+  "uploads",
+  "dev",
+  "staging",
+  "beta",
+  "test",
+  "preview",
+  "demo",
+  "sandbox",
+  "ws",
+  "socket",
+  "embed",
+  "blog",
+  "news",
+  "wiki",
+  "market",
+  "shop",
+  "shops",
+  "store",
+  "storefront",
+  "storefronts",
+  "org",
+  "orgs",
+  "yourorg",
+  "scmarket",
+  "sc-market",
+  "discord",
+  "bot",
+  "billing",
+  "pay",
+  "payments",
+  "security",
 ])
 
 /** What's wrong with a subdomain (one DNS label of sc-market.space), or null. */
-export function subdomainProblem(input: string): "length" | "chars" | "reserved" | null {
-  const s = input.trim().toLowerCase().replace(/\.sc-market\.space\.?$/, "")
+export function subdomainProblem(
+  input: string,
+): "length" | "chars" | "reserved" | null {
+  const s = input
+    .trim()
+    .toLowerCase()
+    .replace(/\.sc-market\.space\.?$/, "")
   if (s.length < 2 || s.length > 63) return "length"
-  if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(s) || s.includes("--")) return "chars"
+  if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(s) || s.includes("--"))
+    return "chars"
   if (RESERVED.has(s)) return "reserved"
   return null
 }
@@ -37,7 +92,9 @@ export function isOpenEnquiry(status: EnquiryStatus): boolean {
   return status === "open" || status === "in_progress"
 }
 
-export function enquiryStatusColor(status: EnquiryStatus): "info" | "warning" | "success" | "default" {
+export function enquiryStatusColor(
+  status: EnquiryStatus,
+): "info" | "warning" | "success" | "default" {
   switch (status) {
     case "open":
       return "info"

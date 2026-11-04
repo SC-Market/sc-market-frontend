@@ -8,9 +8,13 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface OfferServiceAreaProps {
   /** V2 session */
-  session?: { offers: Array<{ service?: { service_id: string; title: string } | null }> }
+  session?: {
+    offers: Array<{ service?: { service_id: string; title: string } | null }>
+  }
   /** V1 compat — alias for session */
-  offer?: { offers: Array<{ service?: { service_id: string; title: string } | null }> }
+  offer?: {
+    offers: Array<{ service?: { service_id: string; title: string } | null }>
+  }
 }
 
 export function OfferServiceArea(props: OfferServiceAreaProps) {
@@ -23,7 +27,11 @@ export function OfferServiceArea(props: OfferServiceAreaProps) {
     <Grid item xs={12} lg={4} md={12}>
       <Paper sx={{ padding: 2 }}>
         <Stack spacing={theme.layoutSpacing.compact}>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }} color="text.secondary">
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold" }}
+            color="text.secondary"
+          >
             {t("OfferServiceArea.associatedServices")}
           </Typography>
           {service ? (

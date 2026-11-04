@@ -260,7 +260,8 @@ export function BottomSheet({
             </Typography>
           )}
           {showCloseButton && (
-            <IconButton aria-label={t("ui.close", "Close")}
+            <IconButton
+              aria-label={t("ui.close", "Close")}
               onClick={() => {
                 haptic.light()
                 onClose()

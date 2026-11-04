@@ -21,7 +21,11 @@ import { useGetOrgStorefrontStatusQuery } from "../../../store/api/v2/market"
 import { ORG_PATHS, PATHS } from "../../../routes/paths"
 import { isRsiVerifiedSpectrumId } from "../domain"
 
-function Criterion(props: { met: boolean; primary: string; secondary?: React.ReactNode }) {
+function Criterion(props: {
+  met: boolean
+  primary: string
+  secondary?: React.ReactNode
+}) {
   return (
     <ListItem disableGutters sx={{ alignItems: "flex-start" }}>
       <ListItemIcon sx={{ minWidth: 36, mt: 0.25 }}>
@@ -54,7 +58,10 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
   if (isError || !data) {
     return (
       <Alert severity="warning">
-        {t("storefront.status.loadFailed", "The storefront status couldn't be loaded. Try again later.")}
+        {t(
+          "storefront.status.loadFailed",
+          "The storefront status couldn't be loaded. Try again later.",
+        )}
       </Alert>
     )
   }
@@ -68,7 +75,13 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
 
   return (
     <Paper sx={{ p: 2 }} data-testid="branding-status">
-      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        flexWrap="wrap"
+        useFlexGap
+      >
         <Typography variant="h6" component="h2" color="text.secondary">
           {t("storefront.status.title", "Branded storefront")}
         </Typography>
@@ -84,10 +97,19 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
       </Stack>
       <Typography variant="body2" color="text.primary" sx={{ mt: 1 }}>
         {branding.source === "grant"
-          ? t("storefront.status.byGrant", "SC Market staff unlocked branding for your org.")
+          ? t(
+              "storefront.status.byGrant",
+              "SC Market staff unlocked branding for your org.",
+            )
           : branding.unlocked
-            ? t("storefront.status.byCriteria", "Your org meets all three criteria, so branding is unlocked. It stays unlocked while it does.")
-            : t("storefront.status.howToUnlock", "Storefronts are free. Branding unlocks by itself once your org meets these three criteria:")}
+            ? t(
+                "storefront.status.byCriteria",
+                "Your org meets all three criteria, so branding is unlocked. It stays unlocked while it does.",
+              )
+            : t(
+                "storefront.status.howToUnlock",
+                "Storefronts are free. Branding unlocks by itself once your org meets these three criteria:",
+              )}
       </Typography>
 
       <List dense sx={{ mt: 1 }}>
@@ -96,10 +118,16 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
           primary={t("storefront.criteria.verified", "RSI-verified org")}
           secondary={
             criteria.rsi_verified ? (
-              t("storefront.criteria.verifiedMet", "Registered through its RSI org page.")
+              t(
+                "storefront.criteria.verifiedMet",
+                "Registered through its RSI org page.",
+              )
             ) : (
               <>
-                {t("storefront.criteria.verifiedMissing", "Register your org through its RSI org page to verify it.")}{" "}
+                {t(
+                  "storefront.criteria.verifiedMissing",
+                  "Register your org through its RSI org page to verify it.",
+                )}{" "}
                 <MuiLink component={Link} to={PATHS.orgRegister}>
                   {t("storefront.criteria.verifyAction", "Verify an org")}
                 </MuiLink>
@@ -116,7 +144,10 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
           })}
           secondary={
             criteria.members.met ? undefined : (
-              <MuiLink component={Link} to={ORG_PATHS.manageInvites(props.spectrumId)}>
+              <MuiLink
+                component={Link}
+                to={ORG_PATHS.manageInvites(props.spectrumId)}
+              >
                 {t("storefront.criteria.membersAction", "Invite members")}
               </MuiLink>
             )
@@ -131,7 +162,8 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
           secondary={t("storefront.criteria.activityCounts", {
             listings: criteria.activity.recent_listings,
             orders: criteria.activity.recent_orders,
-            defaultValue: "Listings created or updated: {{listings}}. Orders: {{orders}}.",
+            defaultValue:
+              "Listings created or updated: {{listings}}. Orders: {{orders}}.",
           })}
         />
       </List>
@@ -151,7 +183,11 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
         {branding.custom_domain ? (
           <Typography variant="body2" color="text.primary">
             {t("storefront.status.domainLive", "Your subdomain:")}{" "}
-            <MuiLink href={`https://${branding.custom_domain}`} target="_blank" rel="noopener">
+            <MuiLink
+              href={`https://${branding.custom_domain}`}
+              target="_blank"
+              rel="noopener"
+            >
               {branding.custom_domain}
             </MuiLink>
           </Typography>

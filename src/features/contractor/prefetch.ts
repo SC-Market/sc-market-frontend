@@ -38,7 +38,9 @@ export async function prefetchOrgPage(
   const spectrumId = contractor.spectrum_id
 
   const recruiting = settleQuery(
-    dispatch(recruitingApi.endpoints.recruitingGetPostByOrg.initiate(spectrumId)),
+    dispatch(
+      recruitingApi.endpoints.recruitingGetPostByOrg.initiate(spectrumId),
+    ),
   ).then(({ data: post }) => {
     if (!post?.post_id) return
     return settleQuery(
@@ -78,7 +80,9 @@ export async function prefetchOrgPage(
       ),
     ),
     settleQuery(
-      dispatch(contractorsApi.endpoints.getContractorReviews.initiate(spectrumId)),
+      dispatch(
+        contractorsApi.endpoints.getContractorReviews.initiate(spectrumId),
+      ),
     ),
   ])
 }

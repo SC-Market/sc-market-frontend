@@ -4,7 +4,6 @@
  * - Core listing types are re-exported from datatypes/MarketListing.
  */
 
-
 // Re-export core listing types from datatypes (used by API and views).
 // We omit MarketBid from datatypes to avoid conflict with API MarketBid (see MarketBidApi below).
 export type {
@@ -58,7 +57,10 @@ export interface BaseMarketListingSearchResult {
     metadata: unknown
   } | null
   languages?: Array<{ code: string; name: string }>
-  bulk_discount_tiers?: Array<{ min_quantity: number; discount_percent: number }> | null
+  bulk_discount_tiers?: Array<{
+    min_quantity: number
+    discount_percent: number
+  }> | null
 }
 
 export type ExtendedUniqueSearchResult = BaseMarketListingSearchResult & {

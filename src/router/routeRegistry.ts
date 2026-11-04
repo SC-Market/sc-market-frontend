@@ -131,10 +131,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
     import("../pages/admin/AdminGameItemAttributes"),
   "/admin/import-monitoring": () =>
     import("../pages/admin/AdminImportMonitoring"),
-  "/admin/supplier-roster": () =>
-    import("../pages/admin/AdminSupplierRoster"),
-  "/admin/requisitions": () =>
-    import("../pages/admin/AdminRequisitions"),
+  "/admin/supplier-roster": () => import("../pages/admin/AdminSupplierRoster"),
+  "/admin/requisitions": () => import("../pages/admin/AdminRequisitions"),
 
   // Widget routes
   "/widget/orders": () => import("../pages/widget/OrdersWidget"),
@@ -155,7 +153,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/missions/systems/:slug": () => import("../pages/missions/MissionHubPage"),
   "/blueprints": () => import("../pages/blueprints/BlueprintBrowser"),
   "/blueprints/:slug": () => import("../pages/blueprints/BlueprintDetailGate"),
-  "/blueprints/inventory": () => import("../pages/blueprints/BlueprintInventory"),
+  "/blueprints/inventory": () =>
+    import("../pages/blueprints/BlueprintInventory"),
   "/crafting/calculator": () => import("../pages/crafting/CraftingCalculator"),
   "/resources": () => import("../pages/resources/ResourceBrowser"),
   "/resources/:resource_id": () => import("../pages/resources/ResourceDetail"),
@@ -165,7 +164,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/mining": () => import("../pages/mining/MiningPage"),
   "/mining/locations": () => import("../pages/mining/MiningPage"),
   "/mining/ores/:name": () => import("../pages/mining/MiningOreDetailGate"),
-  "/mining/locations/:name": () => import("../pages/mining/MiningLocationDetailGate"),
+  "/mining/locations/:name": () =>
+    import("../pages/mining/MiningLocationDetailGate"),
 
   // Wiki routes
   "/wiki/items": () => import("../pages/wiki/WikiItemBrowser"),

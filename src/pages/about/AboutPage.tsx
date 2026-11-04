@@ -1,6 +1,9 @@
 import React, { Suspense } from "react"
 import { Box, Grid, Paper, Skeleton } from "@mui/material"
-import { HelpLayout, UpdatedStamp } from "../../features/help/components/HelpLayout"
+import {
+  HelpLayout,
+  UpdatedStamp,
+} from "../../features/help/components/HelpLayout"
 import { ContentBody } from "../../features/help/components/ContentBody"
 import { helpIndex } from "../../features/help/content"
 import { HELP_PATHS } from "../../routes/paths"

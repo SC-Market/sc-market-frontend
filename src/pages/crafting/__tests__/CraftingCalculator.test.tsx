@@ -110,7 +110,10 @@ function createTestStore() {
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
+      getDefaultMiddleware().concat(
+        marketV2Api.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
@@ -178,7 +181,9 @@ describe("CraftingCalculator", () => {
     it("should show empty state message when no materials added", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      expect(screen.getByText("Search and add materials above")).toBeInTheDocument()
+      expect(
+        screen.getByText("Search and add materials above"),
+      ).toBeInTheDocument()
     })
 
     it("should allow typing in the material search autocomplete", async () => {
@@ -196,14 +201,18 @@ describe("CraftingCalculator", () => {
     it("should disable calculate button when no blueprint selected and no materials", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      const calculateButton = screen.getByRole("button", { name: /Calculate Output Quality/i })
+      const calculateButton = screen.getByRole("button", {
+        name: /Calculate Output Quality/i,
+      })
       expect(calculateButton).toBeDisabled()
     })
 
     it("should show calculate button with correct text", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      expect(screen.getByRole("button", { name: /Calculate Output Quality/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Calculate Output Quality/i }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -211,17 +220,25 @@ describe("CraftingCalculator", () => {
     it("should show Craft Calculator and What Can I Craft buttons", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      expect(screen.getByRole("button", { name: /Craft Calculator/i })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: /What Can I Craft/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Craft Calculator/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /What Can I Craft/i }),
+      ).toBeInTheDocument()
     })
 
     it("should switch to discover mode and show Find Craftable Items button", async () => {
       const user = userEvent.setup()
       renderWithProviders(<CraftingCalculator />)
 
-      await user.click(screen.getByRole("button", { name: /What Can I Craft/i }))
+      await user.click(
+        screen.getByRole("button", { name: /What Can I Craft/i }),
+      )
 
-      expect(screen.getByRole("button", { name: /Find Craftable Items/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /Find Craftable Items/i }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -237,7 +254,9 @@ describe("CraftingCalculator", () => {
     it("should show import from inventory button (disabled when no inventory)", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      const importButton = screen.getByRole("button", { name: /Import from Inventory/i })
+      const importButton = screen.getByRole("button", {
+        name: /Import from Inventory/i,
+      })
       expect(importButton).toBeDisabled()
     })
   })

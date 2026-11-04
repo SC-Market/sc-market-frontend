@@ -4,7 +4,15 @@
  */
 
 import React from "react"
-import { Box, Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  Chip,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -18,7 +26,11 @@ interface ResourceCardProps {
   onClick?: (resourceId: string) => void
 }
 
-export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClick }) => {
+export const ResourceCard: React.FC<ResourceCardProps> = ({
+  resource,
+  to,
+  onClick,
+}) => {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
@@ -30,9 +42,15 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
   ].filter(Boolean) as string[]
 
   return (
-    <Card sx={{ height: "100%" }} data-testid="resource-card" data-id={resource.resource_id}>
+    <Card
+      sx={{ height: "100%" }}
+      data-testid="resource-card"
+      data-id={resource.resource_id}
+    >
       <CardActionArea
-        {...(to ? { component: RouterLink, to } : { onClick: () => onClick?.(resource.resource_id) })}
+        {...(to
+          ? { component: RouterLink, to }
+          : { onClick: () => onClick?.(resource.resource_id) })}
         sx={{ height: "100%", textDecoration: "none", color: "inherit" }}
       >
         <CardContent>
@@ -41,19 +59,45 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             {resource.resource_category}
-            {resource.resource_subcategory && ` • ${resource.resource_subcategory}`}
+            {resource.resource_subcategory &&
+              ` • ${resource.resource_subcategory}`}
           </Typography>
-          <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5} sx={{ mb: 1 }}>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            flexWrap="wrap"
+            gap={0.5}
+            sx={{ mb: 1 }}
+          >
             {acquisitionMethods.map((method) => (
-              <Chip key={method} label={method} size="small" variant="outlined" />
+              <Chip
+                key={method}
+                label={method}
+                size="small"
+                variant="outlined"
+              />
             ))}
           </Stack>
           {resource.quality_bands && resource.quality_bands.length > 0 && (
             <Box sx={{ mb: 1 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
-                {t("wikiUi.resourceCard.qualityTiers", { count: resource.quality_bands.length })}
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mb: 0.5, display: "block" }}
+              >
+                {t("wikiUi.resourceCard.qualityTiers", {
+                  count: resource.quality_bands.length,
+                })}
               </Typography>
-              <Box sx={{ display: "flex", gap: "2px", height: 6, borderRadius: 1, overflow: "hidden" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "2px",
+                  height: 6,
+                  borderRadius: 1,
+                  overflow: "hidden",
+                }}
+              >
                 {resource.quality_bands.map((band) => (
                   <Box
                     key={band.start}
@@ -67,7 +111,11 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
               </Box>
             </Box>
           )}
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             {resource.base_value != null && (
               <Typography variant="caption" color="text.secondary">
                 {fmt.number(resource.base_value)} aUEC
@@ -75,7 +123,9 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
             )}
             {resource.blueprint_count > 0 && (
               <Chip
-                label={t("wikiUi.resourceCard.blueprints", { count: resource.blueprint_count })}
+                label={t("wikiUi.resourceCard.blueprints", {
+                  count: resource.blueprint_count,
+                })}
                 size="small"
                 color="info"
               />

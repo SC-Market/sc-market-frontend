@@ -47,7 +47,12 @@ export function ReputationWidget({ t }: { t: TFunction }) {
       <Box>
         <Typography variant="h5" component="div">
           {rating.avg_rating.toFixed(1)}
-          <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
+          <Typography
+            component="span"
+            variant="body2"
+            color="text.secondary"
+            sx={{ ml: 0.5 }}
+          >
             / 5
           </Typography>
         </Typography>

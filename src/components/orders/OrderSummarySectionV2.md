@@ -7,6 +7,7 @@
 ## Requirements
 
 Implements requirements 27.8-27.11:
+
 - **27.8**: Provide OrderSummarySectionV2 React component
 - **27.9**: Maintain visual parity with V1 OrderSummarySection
 - **27.10**: Display quality_tier in order summary
@@ -15,6 +16,7 @@ Implements requirements 27.8-27.11:
 ## Features
 
 ### Core Features
+
 - Displays order items with variant details
 - Shows quality tier badges for each item
 - Displays variant display names (e.g., "Tier 5 (95.5%) - Crafted")
@@ -24,12 +26,15 @@ Implements requirements 27.8-27.11:
 - Displays subtotals and grand total
 
 ### Change Tracking
+
 - Highlights newly added items with "NEW!" chip
 - Shows quantity changes with old values
 - Compatible with `OfferChanges` utility for counter-offer tracking
 
 ### Visual Parity
+
 Maintains identical styling to V1:
+
 - Box with `mt: 2`
 - Divider with `my: 2`
 - Stack with `spacing: 1`, `mt: 1`
@@ -66,7 +71,7 @@ import { detectOfferChanges } from "../../util/offerChanges"
 function CounterOfferView() {
   const currentOffer = useGetOfferQuery(offerId)
   const previousOffer = useGetPreviousOfferQuery(offerId)
-  
+
   const offerChanges = detectOfferChanges(currentOffer, previousOffer)
 
   return (
@@ -95,11 +100,11 @@ The component automatically returns `null` when no items are provided:
 
 ### OrderSummarySectionV2Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `items` | `OrderItemDetail[]` | No | Array of order items with variant details |
-| `total_cost` | `number` | Yes | Total order cost in aUEC (atomic units) |
-| `offerChanges` | `OfferChanges \| null` | No | Optional change tracking for counter-offers |
+| Prop           | Type                   | Required | Description                                 |
+| -------------- | ---------------------- | -------- | ------------------------------------------- |
+| `items`        | `OrderItemDetail[]`    | No       | Array of order items with variant details   |
+| `total_cost`   | `number`               | Yes      | Total order cost in aUEC (atomic units)     |
+| `offerChanges` | `OfferChanges \| null` | No       | Optional change tracking for counter-offers |
 
 ### OrderItemDetail Structure
 
@@ -116,12 +121,12 @@ interface OrderItemDetail {
       crafted_source?: string
       // ... other variant attributes
     }
-    display_name: string  // e.g., "Tier 5 (95.5%) - Crafted"
-    short_name: string    // e.g., "T5 Crafted"
+    display_name: string // e.g., "Tier 5 (95.5%) - Crafted"
+    short_name: string // e.g., "T5 Crafted"
   }
   quantity: number
-  price_per_unit: number  // Price snapshot at purchase time
-  subtotal: number        // quantity * price_per_unit
+  price_per_unit: number // Price snapshot at purchase time
+  subtotal: number // quantity * price_per_unit
 }
 ```
 
@@ -132,12 +137,16 @@ interface OfferChanges {
   costChanged: boolean
   descriptionChanged: boolean
   serviceChanged: boolean
-  addedListings: Set<string>        // listing_ids that are new
-  removedListings: Set<string>      // listing_ids that were removed
-  quantityChanges: Map<string, {    // listing_id -> quantity change
-    old: number
-    new: number
-  }>
+  addedListings: Set<string> // listing_ids that are new
+  removedListings: Set<string> // listing_ids that were removed
+  quantityChanges: Map<
+    string,
+    {
+      // listing_id -> quantity change
+      old: number
+      new: number
+    }
+  >
 }
 ```
 
@@ -167,6 +176,7 @@ Box (mt: 2)
 ### Item Row Details
 
 Each item displays:
+
 1. **Listing Link**: Links to `/market/{listing_id}`
 2. **Quality Badge**: Color-coded tier badge (Tier 1-5)
 3. **Variant Name**: Display name from variant (e.g., "Tier 5 (95.5%) - Crafted")
@@ -202,18 +212,16 @@ Replace V1 `OrderSummarySection` with `OrderSummarySectionV2` in:
 ```tsx
 // V1 Usage
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
-
-<OrderSummarySection
-  market_listings={offer.market_listings}  // V1 format
+;<OrderSummarySection
+  market_listings={offer.market_listings} // V1 format
   total_cost={offer.cost}
   offerChanges={changes}
 />
 
 // V2 Usage
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
-
-<OrderSummarySectionV2
-  items={orderDetail.items}  // V2 format with variants
+;<OrderSummarySectionV2
+  items={orderDetail.items} // V2 format with variants
   total_cost={orderDetail.total_price}
   offerChanges={changes}
 />
@@ -257,6 +265,7 @@ The component includes comprehensive tests covering:
 - ✅ Displaying links to listing pages
 
 Run tests:
+
 ```bash
 npm test -- OrderSummarySectionV2.test.tsx --run
 ```

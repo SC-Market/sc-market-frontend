@@ -21,7 +21,11 @@ import {
 import { ORG_PATHS, PATHS, SHOP_PATHS } from "../../../routes/paths"
 
 /** Where each open step is done. */
-function stepLink(step: OnboardingStep["key"], spectrumId: string, shopSlug: string | null | undefined): string {
+function stepLink(
+  step: OnboardingStep["key"],
+  spectrumId: string,
+  shopSlug: string | null | undefined,
+): string {
   switch (step) {
     case "verify":
       return PATHS.orgRegister
@@ -46,12 +50,20 @@ function stepLink(step: OnboardingStep["key"], spectrumId: string, shopSlug: str
  */
 export function OnboardingChecklist(props: { spectrumId: string }) {
   const { t } = useTranslation()
-  const { data } = useGetOrgStorefrontStatusQuery({ spectrumId: props.spectrumId })
+  const { data } = useGetOrgStorefrontStatusQuery({
+    spectrumId: props.spectrumId,
+  })
   const list = data?.onboarding
   if (!list) return null
-  const labels: Record<OnboardingStep["key"], { title: string; action: string }> = {
+  const labels: Record<
+    OnboardingStep["key"],
+    { title: string; action: string }
+  > = {
     verify: {
-      title: t("storefront.onboarding.verify", "Verify your org through its RSI page"),
+      title: t(
+        "storefront.onboarding.verify",
+        "Verify your org through its RSI page",
+      ),
       action: t("storefront.onboarding.verifyAction", "Verify"),
     },
     shop: {
@@ -63,7 +75,10 @@ export function OnboardingChecklist(props: { spectrumId: string }) {
       action: t("storefront.onboarding.listingAction", "Add a listing"),
     },
     discord: {
-      title: t("storefront.onboarding.discord", "Connect Discord, so orders land in your server"),
+      title: t(
+        "storefront.onboarding.discord",
+        "Connect Discord, so orders land in your server",
+      ),
       action: t("storefront.onboarding.discordAction", "Set up Discord"),
     },
     members: {
@@ -84,8 +99,14 @@ export function OnboardingChecklist(props: { spectrumId: string }) {
       </Typography>
       <Typography variant="body2" color="text.primary">
         {done
-          ? t("storefront.onboarding.done", "All set. Share your storefront link, or put the widget below on your site.")
-          : t("storefront.onboarding.intro", "Each step takes a few minutes: aim for your first listing within 15.")}
+          ? t(
+              "storefront.onboarding.done",
+              "All set. Share your storefront link, or put the widget below on your site.",
+            )
+          : t(
+              "storefront.onboarding.intro",
+              "Each step takes a few minutes: aim for your first listing within 15.",
+            )}
       </Typography>
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>
         <LinearProgress
@@ -124,7 +145,9 @@ export function OnboardingChecklist(props: { spectrumId: string }) {
             </ListItemIcon>
             <ListItemText
               primary={labels[step.key].title}
-              primaryTypographyProps={{ color: step.done ? "text.primary" : "text.secondary" }}
+              primaryTypographyProps={{
+                color: step.done ? "text.primary" : "text.secondary",
+              }}
             />
           </ListItem>
         ))}

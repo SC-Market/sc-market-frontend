@@ -190,8 +190,12 @@ export function DashboardGrid({
           isDraggable={canArrange}
           isResizable={canArrange}
           draggableHandle=".dashboard-widget-drag-handle"
-          onBreakpointChange={(_breakpoint, nextCols) => handleColsChange(nextCols)}
-          onWidthChange={(_width, _margin, nextCols) => handleColsChange(nextCols)}
+          onBreakpointChange={(_breakpoint, nextCols) =>
+            handleColsChange(nextCols)
+          }
+          onWidthChange={(_width, _margin, nextCols) =>
+            handleColsChange(nextCols)
+          }
           onLayoutChange={handleLayoutChange}
           margin={[DASHBOARD_GRID_MARGIN, DASHBOARD_GRID_MARGIN]}
         >

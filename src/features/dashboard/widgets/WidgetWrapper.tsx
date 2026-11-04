@@ -53,7 +53,12 @@ export interface WidgetWrapperProps {
   fitCell?: boolean
 }
 
-export function WidgetWrapper({ widget, editing, onRemove, fitCell = true }: WidgetWrapperProps) {
+export function WidgetWrapper({
+  widget,
+  editing,
+  onRemove,
+  fitCell = true,
+}: WidgetWrapperProps) {
   const { t } = useTranslation()
   const definition = getWidgetDefinition(widget.type)
   const scope = useResolveScope(widget.scope)

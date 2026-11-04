@@ -1,9 +1,9 @@
 /**
  * LocationBadge - Display location badge
- * 
+ *
  * Shows star system, planet, or location with icon.
  * Used for mission locations and resource locations.
- * 
+ *
  * Requirements: 48.1-48.10
  */
 
@@ -26,7 +26,7 @@ interface LocationBadgeProps {
 
 /**
  * LocationBadge Component
- * 
+ *
  * Features:
  * - Displays location with appropriate icon (48.1, 48.4)
  * - Tooltip with full path if provided (48.10)
@@ -41,7 +41,7 @@ export const LocationBadge: React.FC<LocationBadgeProps> = ({
   // Get icon based on type
   const getIcon = () => {
     const iconSize = size === "small" ? 14 : 16
-    
+
     switch (type) {
       case "system":
         return <PublicIcon sx={{ fontSize: iconSize }} />

@@ -42,7 +42,9 @@ export function shardOf(pattern: string): number {
 }
 
 export function defineRouteSuite(shard: number) {
-  const leaves = uniqueLeaves().filter((leaf) => shardOf(leaf.pattern) === shard)
+  const leaves = uniqueLeaves().filter(
+    (leaf) => shardOf(leaf.pattern) === shard,
+  )
 
   describe(`routes (shard ${shard + 1}/${ROUTE_SHARDS})`, () => {
     it.each(leaves.map((leaf) => [leaf.pattern, leaf] as const))(

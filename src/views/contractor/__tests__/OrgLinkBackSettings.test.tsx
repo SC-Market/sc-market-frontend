@@ -14,7 +14,9 @@ vi.mock("../../../components/authentication/OrgLinkBackLine", () => ({
   ),
 }))
 vi.mock("react-i18next", async (importOriginal) =>
-  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
 )
 
 import { OrgLinkBackSettings } from "../OrgLinkBackSettings"

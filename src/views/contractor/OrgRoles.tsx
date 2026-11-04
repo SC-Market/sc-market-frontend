@@ -63,7 +63,10 @@ function RolePermissionCheck(props: {
   const { permission_name, setRole, role } = props
   const { t } = useTranslation()
   const label = t(`manageRoles.permissions.${permission_name}`)
-  const description = t(`manageRoles.permissionDescriptions.${permission_name}`, "")
+  const description = t(
+    `manageRoles.permissionDescriptions.${permission_name}`,
+    "",
+  )
   return (
     <Grid item xs={12} sm={6}>
       <Box sx={{ display: "flex", alignItems: "center" }}>

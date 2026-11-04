@@ -8,7 +8,11 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme, getNavbarContrastText, navbarShadow } from "../../hooks/styles/Theme"
+import {
+  ExtendedTheme,
+  getNavbarContrastText,
+  navbarShadow,
+} from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useLocation } from "react-router-dom"

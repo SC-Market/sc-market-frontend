@@ -1,6 +1,6 @@
 /**
  * Game Data Shared Components
- * 
+ *
  * Exports all shared UI components for the game data system.
  * Requirements: 48.1-48.10
  */

@@ -6,7 +6,12 @@ import type {
 } from "../domain/types"
 
 // Re-export domain types for backward compatibility
-export type { OrderSetting, CreateOrderSettingRequest, UpdateOrderSettingRequest, OrderLimits } from "../domain/types"
+export type {
+  OrderSetting,
+  CreateOrderSettingRequest,
+  UpdateOrderSettingRequest,
+  OrderLimits,
+} from "../domain/types"
 import { serviceApi } from "../../../store/service"
 
 export const orderSettingsApi = serviceApi.injectEndpoints({
@@ -117,7 +122,10 @@ export const orderSettingsApi = serviceApi.injectEndpoints({
         data: { required: boolean; hasAvailability: boolean }
       }) => response.data,
       providesTags: (_result, _error, spectrumId) => [
-        { type: "AvailabilityRequirement" as const, id: `contractor:${spectrumId}` },
+        {
+          type: "AvailabilityRequirement" as const,
+          id: `contractor:${spectrumId}`,
+        },
       ],
     }),
     checkUserAvailabilityRequirement: builder.query<

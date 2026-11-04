@@ -6,7 +6,9 @@ describe("hasPageQuery", () => {
     expect(hasPageQuery("")).toBe(false)
     expect(hasPageQuery("?")).toBe(false)
     expect(hasPageQuery("?utm_source=discord&utm_medium=chat")).toBe(false)
-    expect(hasPageQuery("?fbclid=x&gclid=y&msclkid=z&ref=home&lng=en")).toBe(false)
+    expect(hasPageQuery("?fbclid=x&gclid=y&msclkid=z&ref=home&lng=en")).toBe(
+      false,
+    )
   })
 
   it("is true with a filter", () => {

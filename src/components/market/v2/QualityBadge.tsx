@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next"
-import React from "react";
-import { Chip } from "@mui/material";
-import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
-import { qualityChipSx, qualityTierColor } from "../../../util/qualityColor";
+import React from "react"
+import { Chip } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
+import { qualityChipSx, qualityTierColor } from "../../../util/qualityColor"
 
 interface QualityBadgeProps {
-  tier: number | null | undefined;
-  size?: "small" | "medium";
-  variant?: "filled" | "outlined";
+  tier: number | null | undefined
+  size?: "small" | "medium"
+  variant?: "filled" | "outlined"
 }
 
 /**
@@ -22,14 +22,14 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
   variant = "filled",
 }) => {
   const { t } = useTranslation()
-  const isMobile = useBreakpointDown("sm");
+  const isMobile = useBreakpointDown("sm")
 
   if (!tier || tier < 1 || tier > 5) {
-    return null;
+    return null
   }
 
-  const color = qualityTierColor(tier);
-  const displaySize = isMobile && size === "medium" ? "small" : size;
+  const color = qualityTierColor(tier)
+  const displaySize = isMobile && size === "medium" ? "small" : size
 
   return (
     <Chip
@@ -48,5 +48,5 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
           : qualityChipSx(color)),
       }}
     />
-  );
-};
+  )
+}

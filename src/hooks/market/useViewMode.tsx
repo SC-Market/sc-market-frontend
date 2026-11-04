@@ -12,7 +12,13 @@ export function useViewMode(): [ViewMode, (mode: ViewMode) => void] {
   return useLocalStorageState<ViewMode>(STORAGE_KEY, "grid", VIEW_MODES)
 }
 
-export function ViewModeToggle({ mode, onChange }: { mode: ViewMode; onChange: (m: ViewMode) => void }) {
+export function ViewModeToggle({
+  mode,
+  onChange,
+}: {
+  mode: ViewMode
+  onChange: (m: ViewMode) => void
+}) {
   const { t } = useTranslation()
   return (
     <ToggleButtonGroup
@@ -22,8 +28,12 @@ export function ViewModeToggle({ mode, onChange }: { mode: ViewMode; onChange: (
       size="small"
       color="secondary"
     >
-      <ToggleButton value="grid" aria-label={t("marketV2.gridView")}><GridViewRounded fontSize="small" /></ToggleButton>
-      <ToggleButton value="list" aria-label={t("marketV2.listView")}><ViewListRounded fontSize="small" /></ToggleButton>
+      <ToggleButton value="grid" aria-label={t("marketV2.gridView")}>
+        <GridViewRounded fontSize="small" />
+      </ToggleButton>
+      <ToggleButton value="list" aria-label={t("marketV2.listView")}>
+        <ViewListRounded fontSize="small" />
+      </ToggleButton>
     </ToggleButtonGroup>
   )
 }

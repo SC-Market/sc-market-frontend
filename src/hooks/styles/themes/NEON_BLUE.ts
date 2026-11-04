@@ -59,7 +59,8 @@ export const neonBlueThemeOptions: ThemeOptions = {
       styleOverrides: {
         outlined: {
           border: "1px solid rgba(0, 212, 255, 0.4)",
-          boxShadow: "0 0 12px rgba(0, 212, 255, 0.2), inset 0 0 12px rgba(0, 212, 255, 0.03)",
+          boxShadow:
+            "0 0 12px rgba(0, 212, 255, 0.2), inset 0 0 12px rgba(0, 212, 255, 0.03)",
         },
       },
     },
@@ -109,4 +110,8 @@ export const neonBlueThemeOptions: ThemeOptions = {
   },
 }
 
-export const NEON_BLUE_theme = createAppTheme(themeBase, mainThemeOptions, neonBlueThemeOptions)
+export const NEON_BLUE_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  neonBlueThemeOptions,
+)

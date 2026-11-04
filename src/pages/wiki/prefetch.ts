@@ -49,7 +49,9 @@ export async function prefetchWikiItemPage(
 
   await Promise.all([
     settleQuery(dispatch(marketV2Api.endpoints.getItemDetail.initiate({ id }))),
-    settleQuery(dispatch(marketV2Api.endpoints.getAcquisition.initiate({ id }))),
+    settleQuery(
+      dispatch(marketV2Api.endpoints.getAcquisition.initiate({ id })),
+    ),
     settleQuery(
       dispatch(
         marketV2Api.endpoints.getPriceHistory.initiate({
@@ -60,7 +62,9 @@ export async function prefetchWikiItemPage(
     ),
     settleQuery(
       dispatch(
-        marketV2Api.endpoints.getQualityDistribution.initiate({ gameItemId: id }),
+        marketV2Api.endpoints.getQualityDistribution.initiate({
+          gameItemId: id,
+        }),
       ),
     ),
   ])
@@ -81,6 +85,8 @@ export async function prefetchWikiShipPage(
 
   await Promise.all([
     settleQuery(dispatch(marketV2Api.endpoints.getShipDetail.initiate({ id }))),
-    settleQuery(dispatch(marketV2Api.endpoints.getShips.initiate({ pageSize: 500 }))),
+    settleQuery(
+      dispatch(marketV2Api.endpoints.getShips.initiate({ pageSize: 500 })),
+    ),
   ])
 }

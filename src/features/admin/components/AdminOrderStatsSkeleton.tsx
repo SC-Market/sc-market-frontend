@@ -18,7 +18,11 @@ function ListSkeleton({ title, lg = 3 }: { title: string; lg?: number }) {
     <Section title={title} xs={12} lg={lg}>
       {Array.from({ length: 6 }).map((_, i) => (
         <Grid item xs={12} key={i}>
-          <Skeleton variant="text" width={`${70 + Math.random() * 25}%`} height={28} />
+          <Skeleton
+            variant="text"
+            width={`${70 + Math.random() * 25}%`}
+            height={28}
+          />
         </Grid>
       ))}
     </Section>

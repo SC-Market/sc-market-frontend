@@ -9,8 +9,14 @@ export interface UsePageAdminOrderStatsResult {
 }
 
 /** Admin › Orders stats; orders involving test accounts, orgs or shops count only with `includeTest`. */
-export function usePageAdminOrderStats({ includeTest }: { includeTest: boolean }): UsePageAdminOrderStatsResult {
-  const analytics = useGetAdminOrderAnalyticsQuery({ includeTest: includeTest || undefined })
+export function usePageAdminOrderStats({
+  includeTest,
+}: {
+  includeTest: boolean
+}): UsePageAdminOrderStatsResult {
+  const analytics = useGetAdminOrderAnalyticsQuery({
+    includeTest: includeTest || undefined,
+  })
 
   return {
     data: analytics.data,

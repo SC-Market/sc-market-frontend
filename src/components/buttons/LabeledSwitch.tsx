@@ -10,7 +10,12 @@ export function LabeledSwitch(props: {
   const { label, checked, onChange } = props
   return (
     <FormControlLabel
-      control={<Switch checked={checked} onChange={(e) => onChange(e.target.checked)} />}
+      control={
+        <Switch
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+      }
       label={label}
     />
   )

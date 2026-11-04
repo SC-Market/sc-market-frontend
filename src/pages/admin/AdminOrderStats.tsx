@@ -72,10 +72,15 @@ export function AdminOrderStats() {
   // Orders involving test accounts, orgs or shops are left out of the stats
   // and the list unless shown (?include_test=true).
   const [showTestOrders, setShowTestOrders] = useShowTestOrders()
-  const { data: orderAnalytics, isLoading: ordersLoading, error: ordersError } = usePageAdminOrderStats({
+  const {
+    data: orderAnalytics,
+    isLoading: ordersLoading,
+    error: ordersError,
+  } = usePageAdminOrderStats({
     includeTest: showTestOrders,
   })
-  const { data: offerAnalytics, isLoading: offersLoading } = useGetOfferAnalyticsQuery()
+  const { data: offerAnalytics, isLoading: offersLoading } =
+    useGetOfferAnalyticsQuery()
 
   const isLoading = ordersLoading && offersLoading
 

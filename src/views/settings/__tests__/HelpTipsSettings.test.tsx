@@ -45,15 +45,18 @@ beforeEach(() => {
   alerts = []
   localStorage.clear()
   originalFetch = globalThis.fetch
-  globalThis.fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const req = input instanceof Request ? input : new Request(String(input), init)
-    requests.push(`${req.method} ${new URL(req.url).pathname}`)
-    const body = req.method === "DELETE" ? { cleared: 3 } : { hint_keys: [] }
-    return new Response(JSON.stringify(body), {
-      status: req.method === "DELETE" ? deleteStatus : 200,
-      headers: { "Content-Type": "application/json" },
-    })
-  }) as typeof fetch
+  globalThis.fetch = vi.fn(
+    async (input: RequestInfo | URL, init?: RequestInit) => {
+      const req =
+        input instanceof Request ? input : new Request(String(input), init)
+      requests.push(`${req.method} ${new URL(req.url).pathname}`)
+      const body = req.method === "DELETE" ? { cleared: 3 } : { hint_keys: [] }
+      return new Response(JSON.stringify(body), {
+        status: req.method === "DELETE" ? deleteStatus : 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    },
+  ) as typeof fetch
 })
 
 afterEach(() => {

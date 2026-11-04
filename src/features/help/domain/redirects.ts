@@ -16,14 +16,17 @@ export const GUIDE_REDIRECTS: Readonly<Record<string, string>> = {
   "/guides/safety/trade-safely": "/guides/getting-started/trade-safely",
   "/guides/orders": "/guides/buying",
   "/guides/orders/how-orders-work": "/guides/buying/how-orders-work",
-  "/guides/orders/handle-orders-as-a-seller": "/guides/selling/handle-orders-as-a-seller",
+  "/guides/orders/handle-orders-as-a-seller":
+    "/guides/selling/handle-orders-as-a-seller",
   "/guides/orgs/org-shop": "/guides/org-storefront/org-shop",
   "/guides/orgs/recruiting": "/guides/org-storefront/recruiting",
   "/guides/orgs/white-label": "/guides/org-storefront/white-label",
   "/guides/orgs/white-label-theme": "/guides/org-storefront/white-label-theme",
 }
 
-const BY_LOWERCASE = new Map(Object.entries(GUIDE_REDIRECTS).map(([from, to]) => [from.toLowerCase(), to]))
+const BY_LOWERCASE = new Map(
+  Object.entries(GUIDE_REDIRECTS).map(([from, to]) => [from.toLowerCase(), to]),
+)
 
 /**
  * The new path for a moved Help & Guides pathname (percent-encoded, as in

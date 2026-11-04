@@ -24,7 +24,9 @@ export function lotUpdatesForQuantityChange(
   if (delta > 0) {
     const newest = lots[0]
     if (!newest) return null
-    return [{ lot_id: newest.lot_id, quantity_total: newest.quantity_total + delta }]
+    return [
+      { lot_id: newest.lot_id, quantity_total: newest.quantity_total + delta },
+    ]
   }
   let remaining = -delta
   const updates: LotQuantity[] = []
@@ -32,7 +34,10 @@ export function lotUpdatesForQuantityChange(
     if (remaining === 0) break
     const take = Math.min(lot.quantity_total, remaining)
     if (take === 0) continue
-    updates.push({ lot_id: lot.lot_id, quantity_total: lot.quantity_total - take })
+    updates.push({
+      lot_id: lot.lot_id,
+      quantity_total: lot.quantity_total - take,
+    })
     remaining -= take
   }
   return remaining === 0 ? updates : null

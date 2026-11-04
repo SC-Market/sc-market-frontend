@@ -6,11 +6,7 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../components/table/PaginatedTable"
-import React, {
-  MouseEventHandler,
-  useMemo,
-  useCallback,
-} from "react"
+import React, { MouseEventHandler, useMemo, useCallback } from "react"
 import {
   Avatar,
   Box,
@@ -152,7 +148,11 @@ export function OfferRow(props: {
     contractor: row.contractor?.spectrum_id,
   })
   const canClaim = canClaimOffer(
-    { status: row.status, assignedTo: row.assigned_to?.username, contractor: row.contractor?.spectrum_id },
+    {
+      status: row.status,
+      assignedTo: row.assigned_to?.username,
+      contractor: row.contractor?.spectrum_id,
+    },
     roles,
   )
 
@@ -351,7 +351,14 @@ export function OfferRow(props: {
                   component={Link}
                   to={SHOP_PATHS.profile(row.shop.slug)}
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                  sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" }, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}
+                  sx={{
+                    textDecoration: "none",
+                    "&:hover": { textDecoration: "underline" },
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "block",
+                  }}
                 >
                   {row.shop.name}
                 </Typography>
@@ -370,7 +377,12 @@ export function OfferRow(props: {
         }}
       >
         {isBuyerView && row.shop ? (
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{ justifyContent: "flex-end" }}
+          >
             {row.shop.avatar && (
               <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
             )}
@@ -381,7 +393,12 @@ export function OfferRow(props: {
               color="text.secondary"
               variant="body2"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 140 }}
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: 140,
+              }}
             >
               {row.shop.name}
             </MaterialLink>
@@ -430,7 +447,9 @@ export function OfferRow(props: {
   )
 }
 
-export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
+export function ReceivedOffersArea({
+  unassigned,
+}: { unassigned?: boolean } = {}) {
   const shopCtx = useOptionalShopRouteContext()
   const shopId = shopCtx?.shop.shop_id || undefined
 
@@ -460,23 +479,44 @@ export function OffersViewPaginated(props: {
   const { mine, assigned, unassigned, contractor, shop_id } = props
 
   const {
-    data, awaitingData,
-    page, setPage, pageSize, setPageSize,
-    order, setOrder, orderBy, setOrderBy,
-    statusFilter, setStatusFilter,
-    totalCount, totals,
-    selectedOfferIds, handleSelectChange,
-    mergeModalOpen, setMergeModalOpen,
-    isMerging, handleMergeOffers,
-    selectedOffers, totalCost,
-    filtersOpen, setFiltersOpen,
-    buyerUsername, setBuyerUsername,
-    sellerUsername, setSellerUsername,
-    hasMarketListings, setHasMarketListings,
-    hasService, setHasService,
-    debouncedBuyerUsername, debouncedSellerUsername,
-    activeFiltersCount, clearFilters,
-    profile, issueAlert,
+    data,
+    awaitingData,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    order,
+    setOrder,
+    orderBy,
+    setOrderBy,
+    statusFilter,
+    setStatusFilter,
+    totalCount,
+    totals,
+    selectedOfferIds,
+    handleSelectChange,
+    mergeModalOpen,
+    setMergeModalOpen,
+    isMerging,
+    handleMergeOffers,
+    selectedOffers,
+    totalCost,
+    filtersOpen,
+    setFiltersOpen,
+    buyerUsername,
+    setBuyerUsername,
+    sellerUsername,
+    setSellerUsername,
+    hasMarketListings,
+    setHasMarketListings,
+    hasService,
+    setHasService,
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    activeFiltersCount,
+    clearFilters,
+    profile,
+    issueAlert,
   } = useOfferSearch({ mine, assigned, unassigned, contractor, shop_id })
   // Offer lists are primary content on the orders and dashboard pages.
   usePageReady(awaitingData)
@@ -484,13 +524,30 @@ export function OffersViewPaginated(props: {
   const tabs = useMemo(() => {
     const t_ = [
       [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
-      ...(!mine ? [["unclaimed", t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" })]] : []),
-      ["to-seller", mine
-        ? t("OffersViewPaginated.waitingForSeller", { defaultValue: "Waiting for seller" })
-        : t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })],
-      ["to-customer", mine
-        ? t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })
-        : t("OffersViewPaginated.waitingForBuyer", { defaultValue: "Waiting for buyer" })],
+      ...(!mine
+        ? [
+            [
+              "unclaimed",
+              t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" }),
+            ],
+          ]
+        : []),
+      [
+        "to-seller",
+        mine
+          ? t("OffersViewPaginated.waitingForSeller", {
+              defaultValue: "Waiting for seller",
+            })
+          : t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" }),
+      ],
+      [
+        "to-customer",
+        mine
+          ? t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })
+          : t("OffersViewPaginated.waitingForBuyer", {
+              defaultValue: "Waiting for buyer",
+            }),
+      ],
       ["accepted", t("OffersViewPaginated.accepted")],
       ["rejected", t("OffersViewPaginated.rejected")],
     ] as [string | null, string][]
@@ -588,7 +645,11 @@ export function OffersViewPaginated(props: {
                     />
                   }
                   {...a11yProps(index)}
-                  onClick={() => setStatusFilter(id as OfferSearchStatus | "unclaimed" | null)}
+                  onClick={() =>
+                    setStatusFilter(
+                      id as OfferSearchStatus | "unclaimed" | null,
+                    )
+                  }
                 />
               ))}
             </Tabs>
@@ -755,16 +816,22 @@ export function OffersViewPaginated(props: {
           }))}
           initialSort={"timestamp"}
           generateRow={(props) => (
-            <OfferRow {...props} enableSelection={!mine} viewAs={mine ? "buyer" : "shop"} />
+            <OfferRow
+              {...props}
+              enableSelection={!mine}
+              viewAs={mine ? "buyer" : "shop"}
+            />
           )}
           keyAttr={"id"}
-          headCells={(mine ? MyOffersHeadCells : OffersHeadCells).map((cell) => ({
-            ...cell,
-            label: t(
-              `OffersViewPaginated.${cell.label.toLowerCase()}`,
-              cell.label,
-            ),
-          }))}
+          headCells={(mine ? MyOffersHeadCells : OffersHeadCells).map(
+            (cell) => ({
+              ...cell,
+              label: t(
+                `OffersViewPaginated.${cell.label.toLowerCase()}`,
+                cell.label,
+              ),
+            }),
+          )}
           disableSelect={mine}
           selected={!mine ? selectedOfferIds : undefined}
           onSelectChange={!mine ? handleSelectChange : undefined}
@@ -782,7 +849,13 @@ export function OffersViewPaginated(props: {
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
-          rowCount={statusFilter === "unclaimed" ? totalCount : statusFilter ? totals.get(statusFilter) || 0 : totalCount}
+          rowCount={
+            statusFilter === "unclaimed"
+              ? totalCount
+              : statusFilter
+                ? totals.get(statusFilter) || 0
+                : totalCount
+          }
           onOrderChange={setOrder}
           order={order}
           onOrderByChange={setOrderBy}

@@ -8,9 +8,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { useAppDispatch } from "../../store/hooks"
 import { PersonRemoveRounded, PersonRounded } from "@mui/icons-material"
-import {
-  OfferSession,
-} from "../../features/offers/api/offerApi"
+import { OfferSession } from "../../features/offers/api/offerApi"
 import { useTranslation } from "react-i18next"
 import { useOfferAssignment } from "../../features/offers/hooks/useOfferActions"
 

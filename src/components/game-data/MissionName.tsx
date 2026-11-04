@@ -44,7 +44,8 @@ export function MissionName({
   "children"
 >) {
   const { t } = useTranslation()
-  if (!name) return <Typography {...props}>{t("missionsUi.unknownMission")}</Typography>
+  if (!name)
+    return <Typography {...props}>{t("missionsUi.unknownMission")}</Typography>
   return (
     <Typography {...props}>
       <Parts text={name} giver={giver} />

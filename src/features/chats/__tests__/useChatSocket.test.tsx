@@ -91,7 +91,10 @@ describe("chat socket", () => {
     expect(listeners).toHaveLength(1)
 
     unmount()
-    expect(fakeSocket.off).toHaveBeenCalledWith("serverMessage", listeners[0][1])
+    expect(fakeSocket.off).toHaveBeenCalledWith(
+      "serverMessage",
+      listeners[0][1],
+    )
   })
 
   it("joins the open chat's room and leaves it on change", async () => {
@@ -100,13 +103,21 @@ describe("chat socket", () => {
       ({ id }) => useChatSocket(id, vi.fn()),
       { initialProps: { id: "chat-1" } },
     )
-    expect(fakeSocket.emit).toHaveBeenCalledWith("clientJoinRoom", { chat_id: "chat-1" })
+    expect(fakeSocket.emit).toHaveBeenCalledWith("clientJoinRoom", {
+      chat_id: "chat-1",
+    })
 
     rerender({ id: "chat-2" })
-    expect(fakeSocket.emit).toHaveBeenCalledWith("clientLeaveRoom", { chat_id: "chat-1" })
-    expect(fakeSocket.emit).toHaveBeenCalledWith("clientJoinRoom", { chat_id: "chat-2" })
+    expect(fakeSocket.emit).toHaveBeenCalledWith("clientLeaveRoom", {
+      chat_id: "chat-1",
+    })
+    expect(fakeSocket.emit).toHaveBeenCalledWith("clientJoinRoom", {
+      chat_id: "chat-2",
+    })
 
     unmount()
-    expect(fakeSocket.emit).toHaveBeenLastCalledWith("clientLeaveRoom", { chat_id: "chat-2" })
+    expect(fakeSocket.emit).toHaveBeenLastCalledWith("clientLeaveRoom", {
+      chat_id: "chat-2",
+    })
   })
 })

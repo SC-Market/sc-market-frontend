@@ -4,7 +4,11 @@
  * prefetch today; each entry is the future react-router loader for its route.
  */
 import { matchRoutes } from "react-router-dom"
-import type { DataPrefetchFn, PrefetchDispatch, RouteParams } from "./dataPrefetch"
+import type {
+  DataPrefetchFn,
+  PrefetchDispatch,
+  RouteParams,
+} from "./dataPrefetch"
 import {
   prefetchWikiCommodityPage,
   prefetchWikiItemPage,
@@ -68,7 +72,9 @@ function toPathname(to: string): string {
 export function matchDataPrefetchRoute(to: string): DataPrefetchMatch | null {
   const matches = matchRoutes(MATCH_ROUTES, toPathname(to))
   const match = matches?.[matches.length - 1]
-  const route = match?.route.path ? ROUTES_BY_PATH.get(match.route.path) : undefined
+  const route = match?.route.path
+    ? ROUTES_BY_PATH.get(match.route.path)
+    : undefined
   if (!match || !route) return null
   return { route, params: match.params }
 }

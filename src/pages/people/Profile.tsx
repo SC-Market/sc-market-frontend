@@ -21,7 +21,10 @@ export function Profile() {
     <BannerPageLayout
       title={
         pageData.data?.user?.display_name
-          ? userPageTitle(pageData.data.user.display_name, t("viewProfile.store_tab"))
+          ? userPageTitle(
+              pageData.data.user.display_name,
+              t("viewProfile.store_tab"),
+            )
           : t("viewProfile.store_tab")
       }
       breadcrumbs={[

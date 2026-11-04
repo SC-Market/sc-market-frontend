@@ -56,7 +56,11 @@ export interface FulfillBuyOrderDialogProps {
 const optionKey = (o: { listing_id: string; variant_id: string }) =>
   `${o.listing_id}:${o.variant_id}`
 
-export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrderDialogProps) {
+export function FulfillBuyOrderDialog({
+  buyOrder,
+  open,
+  onClose,
+}: FulfillBuyOrderDialogProps) {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
@@ -85,15 +89,18 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
 
   const { fulfill, isLoading: submitting } = useFulfillBuyOrder()
 
-
   const submit = async () => {
     if (!selected) return
     const error = validateFulfil({ buyOrder, option: selected, quantity })
     if (error === "quantity_range") {
       issueAlert({
-        message: t("buyorder.fulfillQuantityRange", "Quantity must be between 1 and {{max}}", {
-          max: maxQuantity,
-        }),
+        message: t(
+          "buyorder.fulfillQuantityRange",
+          "Quantity must be between 1 and {{max}}",
+          {
+            max: maxQuantity,
+          },
+        ),
         severity: "error",
       })
       return
@@ -111,7 +118,9 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("buyorder.fulfillTitle", "Fulfill Buy Order")}</DialogTitle>
+      <DialogTitle>
+        {t("buyorder.fulfillTitle", "Fulfill Buy Order")}
+      </DialogTitle>
       <DialogContent>
         {isLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
@@ -119,7 +128,10 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
           </Box>
         ) : isError ? (
           <Alert severity="error">
-            {t("buyorder.fulfillOptionsError", "Couldn't load your listings. Try again.")}
+            {t(
+              "buyorder.fulfillOptionsError",
+              "Couldn't load your listings. Try again.",
+            )}
           </Alert>
         ) : options.length === 0 ? (
           <Stack spacing={2}>
@@ -131,7 +143,11 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
               )}
             </Alert>
             <Box>
-              <Button component={RouterLink} to={MARKET_PATHS.create} variant="outlined">
+              <Button
+                component={RouterLink}
+                to={MARKET_PATHS.create}
+                variant="outlined"
+              >
                 {t("buyorder.createListingToFulfill", "Create a listing")}
               </Button>
             </Box>
@@ -152,7 +168,10 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
                 "Pick the listing to fill it from. The order uses that listing's price and comes out of its listed stock.",
               )}
             </Typography>
-            <RadioGroup value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
+            <RadioGroup
+              value={selectedKey}
+              onChange={(e) => setSelectedKey(e.target.value)}
+            >
               {options.map((o) => (
                 <FormControlLabel
                   key={optionKey(o)}
@@ -165,14 +184,22 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
                         {o.listing_title} · {o.variant_display_name}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {t("buyorder.fulfillOptionDetail", "{{price}} aUEC each · {{available}} listed · {{shop}}", {
-                          price: fmt.number(o.price_per_unit),
-                          available: fmt.number(o.available),
-                          shop: o.shop_name,
-                        })}
+                        {t(
+                          "buyorder.fulfillOptionDetail",
+                          "{{price}} aUEC each · {{available}} listed · {{shop}}",
+                          {
+                            price: fmt.number(o.price_per_unit),
+                            available: fmt.number(o.available),
+                            shop: o.shop_name,
+                          },
+                        )}
                       </Typography>
                       {o.problem != null && (
-                        <Typography variant="caption" color="error" display="block">
+                        <Typography
+                          variant="caption"
+                          color="error"
+                          display="block"
+                        >
                           {o.problem}
                         </Typography>
                       )}
@@ -190,10 +217,14 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
               label={t("buyorder.fulfillQuantity", "Quantity to fulfill")}
               value={quantity}
               onValueChange={(values) => setQuantity(values.floatValue ?? 0)}
-              helperText={t("buyorder.fulfillQuantityHelper", "Up to {{max}} ({{remaining}} still wanted)", {
-                max: fmt.number(maxQuantity),
-                remaining: fmt.number(remaining),
-              })}
+              helperText={t(
+                "buyorder.fulfillQuantityHelper",
+                "Up to {{max}} ({{remaining}} still wanted)",
+                {
+                  max: fmt.number(maxQuantity),
+                  remaining: fmt.number(remaining),
+                },
+              )}
             />
             {selected && (
               <Typography variant="subtitle2">
@@ -207,7 +238,11 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
-        <Button variant="contained" onClick={submit} disabled={!selected || submitting}>
+        <Button
+          variant="contained"
+          onClick={submit}
+          disabled={!selected || submitting}
+        >
           {t("MarketAggregateView.fulfill", "Fulfill")}
         </Button>
       </DialogActions>

@@ -2,9 +2,17 @@ import { serviceApi } from "../../../store/service"
 import { unwrapResponse } from "../../../store/api-utils"
 
 // Re-export domain types for backward compatibility
-export type { PublicContract, ContractOfferBody, PublicContractBody } from "../domain/types"
+export type {
+  PublicContract,
+  ContractOfferBody,
+  PublicContractBody,
+} from "../domain/types"
 
-import type { PublicContract, ContractOfferBody, PublicContractBody } from "../domain/types"
+import type {
+  PublicContract,
+  ContractOfferBody,
+  PublicContractBody,
+} from "../domain/types"
 
 export const publicContractsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({

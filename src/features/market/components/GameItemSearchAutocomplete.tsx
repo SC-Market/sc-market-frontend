@@ -17,7 +17,11 @@ import { debounce } from "lodash-es"
 
 interface GameItemSearchAutocompleteProps {
   value: string | null
-  onChange: (itemName: string | null, itemType: string | null, itemId: string | null) => void
+  onChange: (
+    itemName: string | null,
+    itemType: string | null,
+    itemId: string | null,
+  ) => void
   label?: string
   size?: "small" | "medium"
   sx?: SxProps<Theme>
@@ -43,7 +47,11 @@ export function GameItemSearchAutocomplete({
   >([])
   const [inputValue, setInputValue] = useState("")
   const [isSearching, setIsSearching] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<{ name: string; type: string; id: string } | null>(null)
+  const [selectedItem, setSelectedItem] = useState<{
+    name: string
+    type: string
+    id: string
+  } | null>(null)
 
   const debouncedSearch = useMemo(
     () =>
@@ -64,7 +72,9 @@ export function GameItemSearchAutocomplete({
 
   useEffect(() => {
     debouncedSearch(inputValue)
-    return () => { debouncedSearch.cancel() }
+    return () => {
+      debouncedSearch.cancel()
+    }
   }, [inputValue, debouncedSearch])
 
   return (
@@ -77,13 +87,17 @@ export function GameItemSearchAutocomplete({
       value={selectedItem}
       inputValue={inputValue}
       onInputChange={(event, newValue, reason) => {
-        if (reason !== 'reset') {
+        if (reason !== "reset") {
           setInputValue(newValue)
         }
       }}
       onChange={(event, newValue) => {
         setSelectedItem(newValue)
-        onChange(newValue?.name || null, newValue?.type || null, newValue?.id || null)
+        onChange(
+          newValue?.name || null,
+          newValue?.type || null,
+          newValue?.id || null,
+        )
         if (newValue) {
           setInputValue(newValue.name)
         }
@@ -108,19 +122,28 @@ export function GameItemSearchAutocomplete({
           error={!!errorText}
           helperText={errorText}
           label={label || t("market.search_query")}
-          placeholder={t("market.searchItemPlaceholder", "Start typing an item name...")}
+          placeholder={t(
+            "market.searchItemPlaceholder",
+            "Start typing an item name...",
+          )}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton size="small" edge="start" aria-label={t("market.search", "Search")}>
+                <IconButton
+                  size="small"
+                  edge="start"
+                  aria-label={t("market.search", "Search")}
+                >
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>
             ),
             endAdornment: (
               <>
-                {isSearching ? <CircularProgress color="inherit" size={18} /> : null}
+                {isSearching ? (
+                  <CircularProgress color="inherit" size={18} />
+                ) : null}
                 {params.InputProps.endAdornment}
               </>
             ),
@@ -131,8 +154,11 @@ export function GameItemSearchAutocomplete({
         inputValue.trim().length < 1
           ? t("market.typeToSearch", "Type to search...")
           : isSearching
-          ? t("market.searching", "Searching...")
-          : t("market.noItemResults", "No items found — try a shorter or different term")
+            ? t("market.searching", "Searching...")
+            : t(
+                "market.noItemResults",
+                "No items found — try a shorter or different term",
+              )
       }
       loadingText={t("market.searching", "Searching...")}
     />

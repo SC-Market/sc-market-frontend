@@ -25,27 +25,37 @@ export function useOfferSearch(params: UseOfferSearchParams) {
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
 
-  const [statusFilter, setStatusFilter] = useState<null | "unclaimed" | OfferSearchStatus>(
-    unassigned ? "unclaimed" : mine ? "to-customer" : "to-seller",
-  )
+  const [statusFilter, setStatusFilter] = useState<
+    null | "unclaimed" | OfferSearchStatus
+  >(unassigned ? "unclaimed" : mine ? "to-customer" : "to-seller")
   const [pageSize, setPageSize] = useState(5)
   const [page, setPage] = useState(0)
   const [orderBy, setOrderBy] = useState("timestamp")
   const [order, setOrder] = useState<"asc" | "desc">("desc")
   const [selectedOfferIds, setSelectedOfferIds] = useState<string[]>([])
   const [mergeModalOpen, setMergeModalOpen] = useState(false)
-  const [mergeOffers, { isLoading: isMerging }] = useMergeOfferSessionsMutation()
+  const [mergeOffers, { isLoading: isMerging }] =
+    useMergeOfferSessionsMutation()
 
   // Filters
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [buyerUsername, setBuyerUsername] = useState("")
   const [sellerUsername, setSellerUsername] = useState("")
-  const [hasMarketListings, setHasMarketListings] = useState<boolean | undefined>(undefined)
+  const [hasMarketListings, setHasMarketListings] = useState<
+    boolean | undefined
+  >(undefined)
   const [hasService, setHasService] = useState<boolean | undefined>(undefined)
   const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
   const debouncedSellerUsername = useDebounce(sellerUsername, 500)
 
-  useEffect(() => { setPage(0) }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  useEffect(() => {
+    setPage(0)
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   // ControlledTable's onSelectChange passes T[keyof T][] (a union of all value types).
   // Since our keyAttr is "id" (string), the runtime values are always strings,
@@ -54,22 +64,26 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     setSelectedOfferIds(selected.map(String))
   }
 
-  const { data, currentData, isLoading, isFetching } = useSearchOfferSessionsQuery({
-    status: statusFilter === "unclaimed" ? undefined : (statusFilter || undefined),
-    index: page,
-    page_size: pageSize,
-    customer: mine ? profile?.username : undefined,
-    assigned: assigned ? profile?.username : undefined,
-    unassigned: statusFilter === "unclaimed" ? "true" : undefined,
-    contractor,
-    shop_id,
-    sort_method: orderBy as OrderSearchSortMethod,
-    reverse_sort: order === "desc",
-    buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
-    seller_username: mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
-    has_market_listings: hasMarketListings,
-    has_service: hasService,
-  })
+  const { data, currentData, isLoading, isFetching } =
+    useSearchOfferSessionsQuery({
+      status:
+        statusFilter === "unclaimed" ? undefined : statusFilter || undefined,
+      index: page,
+      page_size: pageSize,
+      customer: mine ? profile?.username : undefined,
+      assigned: assigned ? profile?.username : undefined,
+      unassigned: statusFilter === "unclaimed" ? "true" : undefined,
+      contractor,
+      shop_id,
+      sort_method: orderBy as OrderSearchSortMethod,
+      reverse_sort: order === "desc",
+      buyer_username:
+        !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
+      seller_username:
+        mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
+      has_market_listings: hasMarketListings,
+      has_service: hasService,
+    })
 
   const totalCount = useMemo(() => {
     const counts = data?.item_counts || {}
@@ -77,12 +91,20 @@ export function useOfferSearch(params: UseOfferSearchParams) {
       .filter(([key]) => key !== "unclaimed")
       .reduce((sum, [, val]) => sum + (val as number), 0)
   }, [data])
-  const totals = useMemo(() => new Map(Object.entries(data?.item_counts || [])), [data])
+  const totals = useMemo(
+    () => new Map(Object.entries(data?.item_counts || [])),
+    [data],
+  )
 
   // Auto-switch from "unclaimed" to "to-seller" on first load if there are 0 unclaimed items
   const hasAutoSwitched = useRef(false)
   useEffect(() => {
-    if (unassigned && !hasAutoSwitched.current && !isLoading && statusFilter === "unclaimed") {
+    if (
+      unassigned &&
+      !hasAutoSwitched.current &&
+      !isLoading &&
+      statusFilter === "unclaimed"
+    ) {
       const unclaimedCount = data?.item_counts?.unclaimed || 0
       if (unclaimedCount === 0) {
         hasAutoSwitched.current = true
@@ -96,7 +118,10 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     mergeOffers({ offer_session_ids: selectedOfferIds })
       .unwrap()
       .then((result) => {
-        issueAlert({ message: result.message || t("OffersViewPaginated.merge_success"), severity: "success" })
+        issueAlert({
+          message: result.message || t("OffersViewPaginated.merge_success"),
+          severity: "success",
+        })
         setSelectedOfferIds([])
         setMergeModalOpen(false)
         if (result.merged_offer_session?.id) {
@@ -107,11 +132,18 @@ export function useOfferSearch(params: UseOfferSearchParams) {
   }, [selectedOfferIds, mergeOffers, issueAlert, t])
 
   const selectedOffers = useMemo(
-    () => (data?.items || []).filter((offer) => selectedOfferIds.includes(offer.id)),
+    () =>
+      (data?.items || []).filter((offer) =>
+        selectedOfferIds.includes(offer.id),
+      ),
     [data?.items, selectedOfferIds],
   )
   const totalCost = useMemo(
-    () => selectedOffers.reduce((sum, offer) => sum + Number(offer.most_recent_offer.cost), 0),
+    () =>
+      selectedOffers.reduce(
+        (sum, offer) => sum + Number(offer.most_recent_offer.cost),
+        0,
+      ),
     [selectedOffers],
   )
 
@@ -122,35 +154,64 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     if (hasMarketListings !== undefined) count++
     if (hasService !== undefined) count++
     return count
-  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   const clearFilters = () => {
-    setBuyerUsername(""); setSellerUsername("")
-    setHasMarketListings(undefined); setHasService(undefined)
+    setBuyerUsername("")
+    setSellerUsername("")
+    setHasMarketListings(undefined)
+    setHasService(undefined)
   }
 
   return {
-    data, isLoading, isFetching,
+    data,
+    isLoading,
+    isFetching,
     /** No result for the current filters / page yet; false during background refetches. */
     awaitingData: isAwaitingData({ isFetching, currentData }),
-    page, setPage, pageSize, setPageSize,
-    order, setOrder, orderBy, setOrderBy,
-    statusFilter, setStatusFilter,
-    totalCount, totals,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    order,
+    setOrder,
+    orderBy,
+    setOrderBy,
+    statusFilter,
+    setStatusFilter,
+    totalCount,
+    totals,
     // Selection & merge
-    selectedOfferIds, handleSelectChange,
-    mergeModalOpen, setMergeModalOpen,
-    isMerging, handleMergeOffers,
-    selectedOffers, totalCost,
+    selectedOfferIds,
+    handleSelectChange,
+    mergeModalOpen,
+    setMergeModalOpen,
+    isMerging,
+    handleMergeOffers,
+    selectedOffers,
+    totalCost,
     // Filters
-    filtersOpen, setFiltersOpen,
-    buyerUsername, setBuyerUsername,
-    sellerUsername, setSellerUsername,
-    hasMarketListings, setHasMarketListings,
-    hasService, setHasService,
-    debouncedBuyerUsername, debouncedSellerUsername,
-    activeFiltersCount, clearFilters,
+    filtersOpen,
+    setFiltersOpen,
+    buyerUsername,
+    setBuyerUsername,
+    sellerUsername,
+    setSellerUsername,
+    hasMarketListings,
+    setHasMarketListings,
+    hasService,
+    setHasService,
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    activeFiltersCount,
+    clearFilters,
     // Misc
-    profile, issueAlert,
+    profile,
+    issueAlert,
   }
 }

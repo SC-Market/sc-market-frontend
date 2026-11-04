@@ -3,32 +3,49 @@
  * Import this at the top of every V2 test file (before other imports):
  *   import "./setup";
  */
-import React from "react";
-import { vi } from "vitest";
+import React from "react"
+import { vi } from "vitest"
 
 vi.mock("@mui/icons-material", () => {
   const handler: ProxyHandler<Record<string, unknown>> = {
     get: (_target, prop) => {
-      if (prop === "__esModule") return true;
-      if (typeof prop !== "string") return undefined;
-      const Icon = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
-        (props, ref) => React.createElement("svg", { ...props, ref, "data-testid": `icon-${prop}` }),
-      );
-      Icon.displayName = prop;
-      return Icon;
+      if (prop === "__esModule") return true
+      if (typeof prop !== "string") return undefined
+      const Icon = React.forwardRef<
+        SVGSVGElement,
+        React.SVGProps<SVGSVGElement>
+      >((props, ref) =>
+        React.createElement("svg", {
+          ...props,
+          ref,
+          "data-testid": `icon-${prop}`,
+        }),
+      )
+      Icon.displayName = prop
+      return Icon
     },
     has: (_target, prop) => {
       // Tell vitest that any string property exists on this mock
-      if (typeof prop === "string") return true;
-      return false;
+      if (typeof prop === "string") return true
+      return false
     },
     ownKeys: () => ["__esModule"],
     getOwnPropertyDescriptor: (_target, prop) => {
       if (prop === "__esModule") {
-        return { configurable: true, enumerable: true, value: true, writable: true };
+        return {
+          configurable: true,
+          enumerable: true,
+          value: true,
+          writable: true,
+        }
       }
-      return { configurable: true, enumerable: true, writable: true, value: undefined };
+      return {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: undefined,
+      }
     },
-  };
-  return new Proxy({ __esModule: true } as Record<string, unknown>, handler);
-});
+  }
+  return new Proxy({ __esModule: true } as Record<string, unknown>, handler)
+})

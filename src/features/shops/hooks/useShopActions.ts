@@ -33,7 +33,10 @@ export function useCreateShop() {
     ): Promise<{ ok: true; slug: string } | { ok: false; error: unknown }> => {
       try {
         const result = await createShop({ createShopRequest: request }).unwrap()
-        issueAlert({ message: t("shopsUi.create.created"), severity: "success" })
+        issueAlert({
+          message: t("shopsUi.create.created"),
+          severity: "success",
+        })
         return { ok: true, slug: result.slug }
       } catch (error) {
         issueAlert(error as UnwrappedErrorInterface)
@@ -63,14 +66,18 @@ export function useQuickCreateShop() {
         }).unwrap()
         if (announce) {
           issueAlert({
-            message: t("ShopSelector.created", "Shop created: {{name}}", { name: shop.name }),
+            message: t("ShopSelector.created", "Shop created: {{name}}", {
+              name: shop.name,
+            }),
             severity: "success",
           })
         }
         return shop
       } catch (error) {
         issueAlert({
-          message: apiMessage(error) || t("ShopSelector.createError", "Failed to create shop"),
+          message:
+            apiMessage(error) ||
+            t("ShopSelector.createError", "Failed to create shop"),
           severity: "error",
         })
         return null
@@ -92,11 +99,20 @@ export function useShopBlocklist(shopId: string) {
   const block = useCallback(
     async (username: string, reason: string): Promise<boolean> => {
       try {
-        await blockUser({ shopId, blockUserRequest: { username, reason } }).unwrap()
-        issueAlert({ severity: "success", message: t("shops.blocklist.blocked", { username }) })
+        await blockUser({
+          shopId,
+          blockUserRequest: { username, reason },
+        }).unwrap()
+        issueAlert({
+          severity: "success",
+          message: t("shops.blocklist.blocked", { username }),
+        })
         return true
       } catch (err) {
-        issueAlert({ severity: "error", message: String(apiMessage(err) || t("shops.blocklist.blockFailed")) })
+        issueAlert({
+          severity: "error",
+          message: String(apiMessage(err) || t("shops.blocklist.blockFailed")),
+        })
         return false
       }
     },
@@ -107,9 +123,17 @@ export function useShopBlocklist(shopId: string) {
     async (userId: string, username: string) => {
       try {
         await unblockUser({ shopId, blockedUserId: userId }).unwrap()
-        issueAlert({ severity: "success", message: t("shops.blocklist.unblocked", { username }) })
+        issueAlert({
+          severity: "success",
+          message: t("shops.blocklist.unblocked", { username }),
+        })
       } catch (err) {
-        issueAlert({ severity: "error", message: String(apiMessage(err) || t("shops.blocklist.unblockFailed")) })
+        issueAlert({
+          severity: "error",
+          message: String(
+            apiMessage(err) || t("shops.blocklist.unblockFailed"),
+          ),
+        })
       }
     },
     [shopId, unblockUser, issueAlert, t],
@@ -120,10 +144,14 @@ export function useShopBlocklist(shopId: string) {
 
 /** Show an org's shop in the storefront directory, or hide it. */
 export function useShopStorefrontDirectory(shopId: string) {
-  const [setDirectory, { isLoading, error }] = useSetShopStorefrontDirectoryMutation()
+  const [setDirectory, { isLoading, error }] =
+    useSetShopStorefrontDirectoryMutation()
   const setShown = useCallback(
     (show: boolean) =>
-      void setDirectory({ shopId, storefrontDirectoryRequest: { show_in_directory: show } }),
+      void setDirectory({
+        shopId,
+        storefrontDirectoryRequest: { show_in_directory: show },
+      }),
     [setDirectory, shopId],
   )
   return { setShown, isSaving: isLoading, error }

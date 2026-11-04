@@ -33,10 +33,11 @@ import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import {
-  useGetListingDetailQuery,
+import { useGetListingDetailQuery } from "../../../../store/api/v2/market"
+import type {
+  VariantDetail,
+  ListingItemDetail,
 } from "../../../../store/api/v2/market"
-import type { VariantDetail, ListingItemDetail } from "../../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../../routes/paths"
 import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
@@ -62,13 +63,20 @@ export function ListingDetailRedesign() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
 
-  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetListingDetailQuery(
-    { id: id! },
-    { skip: !id },
-  )
+  const {
+    data,
+    isLoading,
+    error,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useGetListingDetailQuery({ id: id! }, { skip: !id })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
 
   const { add: addToCart, isAdding } = useAddToCart()
@@ -77,7 +85,8 @@ export function ListingDetailRedesign() {
   const listing = data?.listing
   const seller = data?.seller
   const items: ListingItemDetail[] = useMemo(() => data?.items ?? [], [data])
-  const isBundle = (listing?.listing_type ?? "single") === "bundle" || items.length > 1
+  const isBundle =
+    (listing?.listing_type ?? "single") === "bundle" || items.length > 1
   const isAuction = listing?.sale_type === "auction"
   const isNegotiable = listing?.sale_type === "negotiable"
 
@@ -90,9 +99,12 @@ export function ListingDetailRedesign() {
 
   // The buyer selects which variant (quality option) they're buying. Default to
   // the cheapest available so the subtotal is meaningful immediately.
-  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null)
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+    null,
+  )
   const selectedVariant: VariantDetail | undefined = useMemo(() => {
-    if (selectedVariantId) return allVariants.find((v) => v.variant_id === selectedVariantId)
+    if (selectedVariantId)
+      return allVariants.find((v) => v.variant_id === selectedVariantId)
     return [...allVariants].sort((a, b) => a.price - b.price)[0]
   }, [allVariants, selectedVariantId])
 
@@ -104,21 +116,26 @@ export function ListingDetailRedesign() {
   // — the backend doesn't yet model bundle set-stock, so we derive it client-side.
   const setsAvailable = useMemo(() => {
     if (!isBundle) return selectedVariant?.quantity ?? 0
-    const perItem = items.map((i) => i.variants.reduce((s, v) => s + v.quantity, 0))
+    const perItem = items.map((i) =>
+      i.variants.reduce((s, v) => s + v.quantity, 0),
+    )
     return perItem.length ? Math.min(...perItem) : 0
   }, [isBundle, items, selectedVariant])
 
-  const maxQty = isBundle ? setsAvailable : selectedVariant?.quantity ?? 0
+  const maxQty = isBundle ? setsAvailable : (selectedVariant?.quantity ?? 0)
   const minOrder = listing?.min_order_quantity ?? 1
   const maxOrder = listing?.max_order_quantity ?? undefined
 
   const [qty, setQty] = useState(1)
-  const clampedMax = Math.max(1, Math.min(maxQty || 1, maxOrder ?? Number.POSITIVE_INFINITY))
+  const clampedMax = Math.max(
+    1,
+    Math.min(maxQty || 1, maxOrder ?? Number.POSITIVE_INFINITY),
+  )
   const effectiveQty = Math.min(Math.max(qty, minOrder), clampedMax)
 
   const unitPrice = isBundle
     ? items.reduce((s, i) => s + (i.base_price ?? i.variants[0]?.price ?? 0), 0)
-    : selectedVariant?.price ?? 0
+    : (selectedVariant?.price ?? 0)
   const subtotal = unitPrice * effectiveQty
 
   const priceRange = useMemo(() => {
@@ -204,7 +221,12 @@ export function ListingDetailRedesign() {
             />
           </Card>
           {photos.length > 1 && (
-            <Stack direction="row" spacing={1} sx={{ mt: 1.5, flexWrap: "wrap" }} useFlexGap>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ mt: 1.5, flexWrap: "wrap" }}
+              useFlexGap
+            >
               {photos.map((p, i) => (
                 <Box
                   key={`${p}-${i}`}
@@ -235,7 +257,13 @@ export function ListingDetailRedesign() {
         <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={2}>
             <Box>
-              <Stack direction="row" spacing={1} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ mb: 1 }}
+                flexWrap="wrap"
+                useFlexGap
+              >
                 {items[0]?.game_item?.type && (
                   <Chip
                     label={items[0].game_item.type}
@@ -287,9 +315,16 @@ export function ListingDetailRedesign() {
                   to={SHOP_PATHS.profile(seller.slug)}
                   sx={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <Avatar src={seller.logo_url || undefined} alt={seller.name} />
+                  <Avatar
+                    src={seller.logo_url || undefined}
+                    alt={seller.name}
+                  />
                   <Box sx={{ minWidth: 0, flex: 1 }}>
-                    <Typography variant="subtitle1" noWrap sx={{ color: "text.secondary" }}>
+                    <Typography
+                      variant="subtitle1"
+                      noWrap
+                      sx={{ color: "text.secondary" }}
+                    >
                       {seller.name}
                     </Typography>
                     <Stack direction="row" spacing={0.5} alignItems="center">
@@ -299,7 +334,10 @@ export function ListingDetailRedesign() {
                         readOnly
                         size="small"
                       />
-                      <Typography variant="caption" sx={{ color: "text.primary" }}>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "text.primary" }}
+                      >
                         {(seller.rating ?? 0).toFixed(1)}
                       </Typography>
                     </Stack>
@@ -310,7 +348,10 @@ export function ListingDetailRedesign() {
 
             {/* Price */}
             <Box>
-              <Typography variant="h3" sx={{ color: "primary.main", fontWeight: 700 }}>
+              <Typography
+                variant="h3"
+                sx={{ color: "primary.main", fontWeight: 700 }}
+              >
                 {isBundle
                   ? fmt.price(unitPrice)
                   : priceRange
@@ -318,10 +359,16 @@ export function ListingDetailRedesign() {
                     : fmt.price(unitPrice)}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.primary" }}>
-                {t("MarketDetailRedesign.availability", "{{count}} {{unit}} available", {
-                  count: maxQty,
-                  unit: isBundle ? t("MarketDetailRedesign.sets", "sets") : quantityUnitLabel,
-                })}
+                {t(
+                  "MarketDetailRedesign.availability",
+                  "{{count}} {{unit}} available",
+                  {
+                    count: maxQty,
+                    unit: isBundle
+                      ? t("MarketDetailRedesign.sets", "sets")
+                      : quantityUnitLabel,
+                  },
+                )}
               </Typography>
             </Box>
 
@@ -330,7 +377,10 @@ export function ListingDetailRedesign() {
               <Card variant="outlined">
                 <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
                   <Typography variant="overline" sx={{ color: "text.primary" }}>
-                    {t("MarketDetailRedesign.includedInSet", "Included in each set")}
+                    {t(
+                      "MarketDetailRedesign.includedInSet",
+                      "Included in each set",
+                    )}
                   </Typography>
                   <Stack divider={<Divider />} sx={{ mt: 0.5 }}>
                     {items.map((it) => (
@@ -340,10 +390,16 @@ export function ListingDetailRedesign() {
                         justifyContent="space-between"
                         sx={{ py: 0.75 }}
                       >
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary" }}
+                        >
                           {it.game_item?.name}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: "text.primary" }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.primary" }}
+                        >
                           {fmt.price(it.base_price ?? it.variants[0]?.price)}
                         </Typography>
                       </Stack>
@@ -358,7 +414,10 @@ export function ListingDetailRedesign() {
               <TextField
                 select
                 fullWidth
-                label={t("MarketDetailRedesign.chooseOption", "Choose an option")}
+                label={t(
+                  "MarketDetailRedesign.chooseOption",
+                  "Choose an option",
+                )}
                 value={selectedVariant?.variant_id ?? ""}
                 onChange={(e) => {
                   setSelectedVariantId(e.target.value)
@@ -384,13 +443,21 @@ export function ListingDetailRedesign() {
                 <CardContent>
                   <Stack spacing={2}>
                     <Box>
-                      <Typography variant="body2" sx={{ color: "text.primary", mb: 0.5 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.primary", mb: 0.5 }}
+                      >
                         {t("MarketDetailRedesign.quantityLabel", "Quantity")}
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <IconButton
-                          onClick={() => setQty((q) => Math.max(minOrder, q - 1))}
-                          aria-label={t("MarketDetailRedesign.decreaseQuantity", "Decrease quantity")}
+                          onClick={() =>
+                            setQty((q) => Math.max(minOrder, q - 1))
+                          }
+                          aria-label={t(
+                            "MarketDetailRedesign.decreaseQuantity",
+                            "Decrease quantity",
+                          )}
                           disabled={!canTransact || effectiveQty <= minOrder}
                           sx={{ border: "1px solid", borderColor: "divider" }}
                         >
@@ -405,34 +472,63 @@ export function ListingDetailRedesign() {
                           type="number"
                           size="small"
                           sx={{ width: 100 }}
-                          inputProps={{ min: minOrder, max: clampedMax, style: { textAlign: "center" } }}
+                          inputProps={{
+                            min: minOrder,
+                            max: clampedMax,
+                            style: { textAlign: "center" },
+                          }}
                         />
                         <IconButton
-                          onClick={() => setQty((q) => Math.min(clampedMax, q + 1))}
-                          aria-label={t("MarketDetailRedesign.increaseQuantity", "Increase quantity")}
+                          onClick={() =>
+                            setQty((q) => Math.min(clampedMax, q + 1))
+                          }
+                          aria-label={t(
+                            "MarketDetailRedesign.increaseQuantity",
+                            "Increase quantity",
+                          )}
                           disabled={!canTransact || effectiveQty >= clampedMax}
                           sx={{ border: "1px solid", borderColor: "divider" }}
                         >
                           <AddRounded />
                         </IconButton>
-                        <Typography variant="body2" sx={{ color: "text.primary", ml: 1 }}>
-                          {t("MarketDetailRedesign.ofAvailable", "of {{count}}", { count: maxQty })}
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.primary", ml: 1 }}
+                        >
+                          {t(
+                            "MarketDetailRedesign.ofAvailable",
+                            "of {{count}}",
+                            { count: maxQty },
+                          )}
                         </Typography>
                       </Stack>
                     </Box>
 
                     <Divider />
 
-                    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
-                      <Typography variant="subtitle1" sx={{ color: "text.primary" }}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="baseline"
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: "text.primary" }}
+                      >
                         {t("MarketDetailRedesign.subtotal", "Subtotal")}
                       </Typography>
-                      <Typography variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>
+                      <Typography
+                        variant="h5"
+                        sx={{ color: "primary.main", fontWeight: 700 }}
+                      >
                         {fmt.price(subtotal)}
                       </Typography>
                     </Stack>
 
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={1.5}
+                    >
                       <Button
                         variant="contained"
                         color="primary"
@@ -475,7 +571,10 @@ export function ListingDetailRedesign() {
                           disabled
                           startIcon={<ChatBubbleOutlineRounded />}
                         >
-                          {t("MarketDetailRedesign.contactSeller", "Contact seller")}
+                          {t(
+                            "MarketDetailRedesign.contactSeller",
+                            "Contact seller",
+                          )}
                         </Button>
                       </span>
                     </Tooltip>
@@ -498,7 +597,10 @@ export function ListingDetailRedesign() {
                 <Typography variant="overline" sx={{ color: "text.primary" }}>
                   {t("MarketDetailRedesign.description", "Description")}
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary", whiteSpace: "pre-wrap" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", whiteSpace: "pre-wrap" }}
+                >
                   {listing.description}
                 </Typography>
               </Box>
