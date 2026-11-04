@@ -68,10 +68,11 @@ import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
 import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog";
 import { MarketAggregateViewV2Admin } from "./MarketAggregateViewV2Admin";
-import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useCancelBuyOrderMutation, type StandingBuyOrder } from "../../../store/api/v2/market";
+import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, type StandingBuyOrder } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 import { remainingQuantity } from "../domain/buyOrders";
 import { useFormatters } from "../../../util/format"
+import { useCancelBuyOrder } from "../hooks/useBuyOrderActions";
 
 /**
  * MarketAggregateViewV2 Component
@@ -650,14 +651,15 @@ export function BuyOrderRowV2(props: {
   const fmt = useFormatters()
   const { t } = useTranslation();
   const { row: buy_order, index } = props;
-  const issueAlert = useAlertHook();
   const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
   const remaining = remainingQuantity(buy_order);
   const navigate = useNavigate();
   const { data: profile } = useGetUserProfileQuery();
   const isOwnBuyOrder = !!profile && buy_order.buyer_name === profile.username;
 
-  const [cancelBuyOrderMut, { isLoading: cancelIsLoading }] = useCancelBuyOrderMutation();
+  const { cancel: cancelBuyOrder, isLoading: cancelIsLoading } = useCancelBuyOrder(
+    t("marketV2.cancelFailed"),
+  );
 
   const callback = useCallback(() => {
     if (!profile) {
@@ -669,20 +671,9 @@ export function BuyOrderRowV2(props: {
   }, [profile, navigate]);
 
   const cancelCallback = useCallback(async () => {
-    cancelBuyOrderMut({ id: buy_order.buy_order_id })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("MarketAggregateView.cancelled"),
-          severity: "success",
-        });
-      })
-      .catch((err) => issueAlert({
-        message: err?.data?.message || t("marketV2.cancelFailed"),
-        severity: "error",
-      }));
+    void cancelBuyOrder(buy_order.buy_order_id);
     return false;
-  }, [buy_order, t, issueAlert]);
+  }, [buy_order, cancelBuyOrder]);
 
   // Format price display
   const priceDisplay = useMemo(() => {

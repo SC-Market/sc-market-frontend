@@ -48,7 +48,6 @@ import { useTranslation } from "react-i18next";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useCookies } from "react-cookie";
 import {
-  useCancelBuyOrderMutation,
   type StandingBuyOrder,
 } from "../../../store/api/v2/market";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
@@ -70,6 +69,7 @@ import { QuickListProvider, SellYoursButton } from "../quick-list/SellYours";
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
 import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders";
 import { useFormatters } from "../../../util/format"
+import { useCancelBuyOrder } from "../hooks/useBuyOrderActions";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -897,9 +897,10 @@ function SellOrdersPanel({
 function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
   const fmt = useFormatters()
   const { data: profile } = useGetUserProfileQuery();
-  const [cancelBuyOrderMut] = useCancelBuyOrderMutation();
-  const issueAlert = useAlertHook();
   const { t } = useTranslation();
+  const { cancel: cancelBuyOrder } = useCancelBuyOrder(
+    t("marketUi.aggregateAdmin.cancelFailed")
+  );
   const [fulfillTarget, setFulfillTarget] =
     useState<StandingBuyOrder | null>(null);
 
@@ -913,24 +914,8 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
   const bestBid = active[0]?.price_per_unit;
 
   const doCancel = useCallback(
-    (orderId: string) => {
-      cancelBuyOrderMut({ id: orderId })
-        .unwrap()
-        .then(() =>
-          issueAlert({
-            message: t("MarketAggregateView.cancelled"),
-            severity: "success",
-          })
-        )
-        .catch((err) =>
-          issueAlert({
-            message:
-              err?.data?.message || t("marketUi.aggregateAdmin.cancelFailed"),
-            severity: "error",
-          })
-        );
-    },
-    [cancelBuyOrderMut, issueAlert, t]
+    (orderId: string) => void cancelBuyOrder(orderId),
+    [cancelBuyOrder]
   );
 
   return (

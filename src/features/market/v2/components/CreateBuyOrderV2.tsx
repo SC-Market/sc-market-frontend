@@ -19,7 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
-import { useCreateStandingBuyOrderMutation, useGetMySuppliersQuery, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
+import { useGetMySuppliersQuery, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
 import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
 import { useNavigate } from "react-router-dom";
 import { MARKET_PATHS } from "../../../../routes/paths";
@@ -28,6 +28,7 @@ import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
 import { useFormatters } from "../../../../util/format"
 import { usePhotoUploads } from "../../hooks/usePhotoUploads";
+import { useCreateBuyOrder } from "../../hooks/useBuyOrderActions";
 
 /**
  * CreateBuyOrderV2 Component
@@ -44,7 +45,10 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
-  const [createStandingBuyOrder, { isLoading: isSubmitting }] = useCreateStandingBuyOrderMutation();
+  const { create: createBuyOrder, isLoading: isSubmitting } = useCreateBuyOrder(
+    t("buyorder.created", "Buy order created successfully"),
+    t("marketUi2.createBuyOrder.failed"),
+  );
   const navigate = useNavigate();
 
   // Form state
@@ -144,56 +148,45 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
   const handleSubmit = useCallback(async () => {
     if (!isValid()) return;
 
-    try {
-      const result = await createStandingBuyOrder({
-        createTargetedBuyOrderRequest: {
-          game_item_id: gameItemId,
-          quantity,
-          price_per_unit: priceMax || priceMin || 0,
-          quality_tier_min: qualityMode === "tier" ? (qualityTierMin ?? undefined) : undefined,
-          quality_tier_max: qualityMode === "tier" ? (qualityTierMax ?? undefined) : undefined,
-          quality_value_min: qualityMode === "value" ? (qualityValueMin ?? undefined) : undefined,
-          quality_value_max: qualityMode === "value" ? (qualityValueMax ?? undefined) : undefined,
-          negotiable,
-          photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
-          visibility,
-        },
-      }).unwrap();
+    const created = await createBuyOrder({
+      game_item_id: gameItemId,
+      quantity,
+      price_per_unit: priceMax || priceMin || 0,
+      quality_tier_min: qualityMode === "tier" ? (qualityTierMin ?? undefined) : undefined,
+      quality_tier_max: qualityMode === "tier" ? (qualityTierMax ?? undefined) : undefined,
+      quality_value_min: qualityMode === "value" ? (qualityValueMin ?? undefined) : undefined,
+      quality_value_max: qualityMode === "value" ? (qualityValueMax ?? undefined) : undefined,
+      negotiable,
+      photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
+      visibility,
+    });
+    if (!created) return;
 
-      issueAlert({
-        message: t("buyorder.created", "Buy order created successfully"),
-        severity: "success",
-      });
+    navigate(MARKET_PATHS.buyOrders);
 
-      navigate(MARKET_PATHS.buyOrders);
-
-      // Reset form
-      setNegotiable(false);
-      setPriceMin(0);
-      setPriceMax(0);
-      setQuantity(1);
-      setQualityTierMin(null);
-      setQualityTierMax(null);
-    } catch (error) {
-      const err = error as { data?: { message?: string; error?: string }; message?: string }
-      const message = err?.data?.message || err?.data?.error || err?.message || t("marketUi2.createBuyOrder.failed")
-      issueAlert({
-        message,
-        severity: "error",
-      });
-    }
+    // Reset form
+    setNegotiable(false);
+    setPriceMin(0);
+    setPriceMax(0);
+    setQuantity(1);
+    setQualityTierMin(null);
+    setQualityTierMax(null);
   }, [
     isValid,
+    createBuyOrder,
     gameItemId,
     quantity,
     priceMin,
     priceMax,
+    qualityMode,
     qualityTierMin,
     qualityTierMax,
+    qualityValueMin,
+    qualityValueMax,
     negotiable,
-    createStandingBuyOrder,
-    issueAlert,
-    t,
+    photoResourceIds,
+    visibility,
+    navigate,
   ]);
 
   return (

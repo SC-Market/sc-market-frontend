@@ -31,14 +31,12 @@ import { MARKET_PATHS } from "../../../../routes/paths"
 import {
   useSearchBuyOrdersQuery,
   useSearchGameItemsQuery,
-  useCreateStandingBuyOrderMutation,
 } from "../../../../store/api/v2/market"
 import type {
   StandingBuyOrder,
   GameItemSearchResult,
   BuyOrderVisibility,
 } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useDrawerOpen } from "../../../../hooks/layout/Drawer"
 import { HideOnScroll, MarketNavArea } from "../../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "../ListingSearchV2"
@@ -61,6 +59,7 @@ import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 import { remainingQuantity } from "../../domain/buyOrders"
 import { useFormatters } from "../../../../util/format"
+import { useCreateBuyOrder } from "../../hooks/useBuyOrderActions"
 
 /**
  * BuyOrdersRedesign — Phase 0 of the Market redesign (behind the
@@ -68,7 +67,7 @@ import { useFormatters } from "../../../../util/format"
  * BuyOrdersViewV2's shell exactly (sidebar + market nav + unified search +
  * view-mode toggle + paginated card grid) so it is visually identical to the
  * rest of the market, and adds the genuinely-new redesign feature: an inline
- * "Create buy order" form wired to `useCreateStandingBuyOrderMutation`.
+ * "Create buy order" form (posts through useCreateBuyOrder).
  *
  * Reads are wired to the real `useSearchBuyOrdersQuery` with URL-param search
  * state (text/page/pageSize/sort), matching BuyOrdersViewV2's arg mapping. Active
@@ -476,7 +475,6 @@ export function BuyOrderCard({
 
 function CreateBuyOrderForm({ onDone }: { onDone: () => void }) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
 
   const [itemQuery, setItemQuery] = useState("")
   const [item, setItem] = useState<GameItemSearchResult | null>(null)
@@ -490,31 +488,23 @@ function CreateBuyOrderForm({ onDone }: { onDone: () => void }) {
     query: itemQuery || undefined,
     limit: 25,
   })
-  const [createBuyOrder, { isLoading }] = useCreateStandingBuyOrderMutation()
+  const { create: createBuyOrder, isLoading } = useCreateBuyOrder(
+    t("BuyOrdersRedesign.posted", "Buy order posted."),
+  )
 
   const canSubmit = !!item && Number(maxPrice) > 0 && Number(quantity) > 0
 
   const handleSubmit = async () => {
     if (!item) return
-    try {
-      await createBuyOrder({
-        createTargetedBuyOrderRequest: {
-          game_item_id: item.id,
-          quantity: Number(quantity),
-          price_per_unit: Number(maxPrice),
-          quality_tier_min: minTier,
-          negotiable,
-          visibility,
-        },
-      }).unwrap()
-      issueAlert({
-        message: t("BuyOrdersRedesign.posted", "Buy order posted."),
-        severity: "success",
-      })
-      onDone()
-    } catch (e) {
-      issueAlert(e as never)
-    }
+    const created = await createBuyOrder({
+      game_item_id: item.id,
+      quantity: Number(quantity),
+      price_per_unit: Number(maxPrice),
+      quality_tier_min: minTier,
+      negotiable,
+      visibility,
+    })
+    if (created) onDone()
   }
 
   return (

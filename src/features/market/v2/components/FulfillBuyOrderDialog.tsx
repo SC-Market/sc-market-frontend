@@ -30,12 +30,10 @@ import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
 import {
-  useFulfillBuyOrderMutation,
   useGetFulfillmentOptionsQuery,
   type StandingBuyOrder,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import { extractErrorMessage } from "../../../../store/api-utils"
 import { MARKET_PATHS, ORDER_PATHS } from "../../../../routes/paths"
 import { remainingQuantity } from "../../domain/buyOrders"
 import {
@@ -44,6 +42,7 @@ import {
   validateFulfil,
 } from "../../domain/fulfilBuyOrder"
 import { useFormatters } from "../../../../util/format"
+import { useFulfillBuyOrder } from "../../hooks/useBuyOrderActions"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -84,7 +83,7 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
   }, [usable, selectedKey])
   useEffect(() => setQuantity(maxQuantity), [maxQuantity])
 
-  const [fulfill, { isLoading: submitting }] = useFulfillBuyOrderMutation()
+  const { fulfill, isLoading: submitting } = useFulfillBuyOrder()
 
 
   const submit = async () => {
@@ -100,27 +99,14 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
       return
     }
     if (error) return
-    try {
-      const result = await fulfill({
-        id: buyOrder.buy_order_id,
-        fulfillBuyOrderRequest: {
-          listing_id: selected.listing_id,
-          variant_id: selected.variant_id,
-          quantity,
-        },
-      }).unwrap()
-      issueAlert({ message: t("buyorder.fulfilled", "Order created"), severity: "success" })
-      onClose()
-      navigate(ORDER_PATHS.detail(result.order_id))
-    } catch (err) {
-      const reason = extractErrorMessage((err as { data?: unknown })?.data)
-      issueAlert({
-        message: reason
-          ? t("buyorder.fulfillFailedReason", "Could not fulfill the buy order: {{reason}}", { reason })
-          : t("buyorder.fulfillFailed", "Could not fulfill the buy order"),
-        severity: "error",
-      })
-    }
+    const orderId = await fulfill(buyOrder.buy_order_id, {
+      listing_id: selected.listing_id,
+      variant_id: selected.variant_id,
+      quantity,
+    })
+    if (!orderId) return
+    onClose()
+    navigate(ORDER_PATHS.detail(orderId))
   }
 
   return (
