@@ -32,10 +32,6 @@ import {
 } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
-import {
-  useGetNotificationsQuery,
-  useNotificationDeleteMutation,
-} from "../../features/notifications/api/notificationApi"
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
@@ -51,6 +47,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
 import { SHOP_PATHS, ORDER_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
+import { useClearEntityNotifications } from "../../features/notifications/hooks/useClearEntityNotifications"
 
 export function OfferMessagesArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
@@ -59,23 +56,7 @@ export function OfferMessagesArea(props: { session: GetOfferSessionV2Response })
     skip: !session,
   })
 
-  const { data: notificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "offer_message",
-    entityId: session.session_id,
-  })
-
-  const notifications = notificationsData?.notifications || []
-  const [deleteNotification] = useNotificationDeleteMutation()
-
-  useEffect(() => {
-    // Since we're already filtering by action and entityId, we can delete all matching notifications
-    if (notifications && notifications.length > 0) {
-      const notificationIds = notifications.map((n) => n.notification_id)
-      deleteNotification(notificationIds)
-    }
-  }, [notifications, deleteNotification])
+  useClearEntityNotifications("offer_message", session.session_id)
 
   useEffect(() => {
     setCurrentChat(chatObj)

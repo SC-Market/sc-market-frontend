@@ -46,14 +46,11 @@ import { useTheme } from "@mui/material/styles"
 import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import {
-  useGetNotificationsQuery,
-  useNotificationDeleteMutation,
-} from "../../features/notifications/api/notificationApi"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 import { SHOP_PATHS } from "../../routes/paths"
 import { isSiteAdmin } from "../../util/siteRole"
 import { useFormatters } from "../../util/format"
+import { useClearEntityNotifications } from "../../features/notifications/hooks/useClearEntityNotifications"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -65,22 +62,7 @@ export function OrderMessagesArea(props: { order: Order }) {
     skip: !order,
   })
 
-  const { data: notificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "order_message",
-    entityId: order.order_id,
-  })
-  const notifications = notificationsData?.notifications || []
-  const [deleteNotification] = useNotificationDeleteMutation()
-
-  useEffect(() => {
-    // Since we're already filtering by action and entityId, we can delete all matching notifications
-    if (notifications && notifications.length > 0) {
-      const notificationIds = notifications.map((n) => n.notification_id)
-      deleteNotification(notificationIds)
-    }
-  }, [notifications, deleteNotification])
+  useClearEntityNotifications("order_message", order.order_id)
 
   useEffect(() => {
     setCurrentChat(chatObj)
