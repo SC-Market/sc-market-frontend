@@ -769,7 +769,8 @@
     },
     "buy_order_match": "Treffer für Kaufauftrag:",
     "buy_order_match_listed": "passt zu einem deiner Kaufaufträge",
-    "buy_order_filled_by": "Dein Kaufauftrag wurde erfüllt von"
+    "buy_order_filled_by": "Dein Kaufauftrag wurde erfüllt von",
+    "listing_paused_by_wipe": "Deine Inserate wurden für den Wipe pausiert. Stell sie mit einem Tippen wieder ein."
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -1022,6 +1023,10 @@
         "threads": {
           "label": "Discord-Threads",
           "hint": "Deine Bestell- und Angebots-Threads auf dem Discord-Server eines Verkäufers."
+        },
+        "listings": {
+          "label": "Inserate",
+          "hint": "Ein Spiel-Wipe hat deine Inserate pausiert."
         }
       },
       "rows": {
@@ -1106,6 +1111,10 @@
           "label": "Einladung zum Discord-Server",
           "hint": "Wenn der Bot dich nicht zu einem Bestell- oder Angebots-Thread hinzufügen kann",
           "tip": "Der Bot eröffnet für jede Bestellung und jedes Angebot einen privaten Thread auf dem Discord-Server des Verkäufers. Kann er dich nicht hinzufügen (meist, weil du noch nicht auf dem Server bist), schickt er dir per DM eine Einladung zum Server."
+        },
+        "wipe-relist": {
+          "label": "Durch Wipe pausiert",
+          "hint": "Eine Nachricht nach einem Wipe, mit Wiedereinstellen per Tippen"
         }
       },
       "subtitle": "Leg fest, wo dich jede Art von Benachrichtigung erreicht.",
@@ -7736,17 +7745,17 @@
       "failed": "Inserate konnten nicht auf abgelaufen gesetzt werden",
       "button": "Alle Inserate ablaufen lassen",
       "dialogTitle": "Alle aktiven Inserate ablaufen lassen?",
-      "confirmBody_one": "Dadurch wird <strong>{{count}} aktives Inserat</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Inserate, die er noch verkauft, auf der Seite „Inserate“ seines Shops.",
-      "confirmBody_other": "Dadurch werden <strong>{{count}} aktive Inserate</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Inserate, die er noch verkauft, auf der Seite „Inserate“ seines Shops.",
-      "confirmBodyLoading": "Dadurch werden <strong>... aktive Inserate</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Inserate, die er noch verkauft, auf der Seite „Inserate“ seines Shops.",
-      "note": "Dies erfolgt üblicherweise nach einem Spiel-Wipe. Es wird nichts gelöscht: Verkäufer können ihre Inserate jederzeit reaktivieren.",
+      "confirmBodyLoading": "Dadurch werden <strong>... aktive Inserate</strong> pausiert (vom Markt genommen, nie gelöscht) und diesem Wipe zugeordnet. Jeder Verkäufer bekommt danach eine Nachricht, und mit <strong>Alle wieder einstellen</strong> unter „Meine Inserate“ stellt er seine mit einem Tippen wieder ein.",
+      "note": "Führ es aus, wenn das Spiel einen Wipe hat; eine Vorankündigung gibt es nicht. Jeder Verkäufer bekommt eine Nachricht, gemäß seinen Benachrichtigungseinstellungen.",
       "confirmButton_one": "{{count}} Inserat ablaufen lassen",
       "confirmButton_other": "{{count}} Inserate ablaufen lassen",
-      "confirmButtonNoCount": "Inserate ablaufen lassen"
+      "confirmButtonNoCount": "Inserate ablaufen lassen",
+      "confirmBody_one": "Dadurch wird <strong>{{count}} aktives Inserat</strong> pausiert (vom Markt genommen, nie gelöscht) und diesem Wipe zugeordnet. Jeder Verkäufer bekommt danach eine Nachricht, und mit <strong>Alle wieder einstellen</strong> unter „Meine Inserate“ stellt er seine mit einem Tippen wieder ein.",
+      "confirmBody_other": "Dadurch werden <strong>{{count}} aktive Inserate</strong> pausiert (vom Markt genommen, nie gelöscht) und diesem Wipe zugeordnet. Jeder Verkäufer bekommt danach eine Nachricht, und mit <strong>Alle wieder einstellen</strong> unter „Meine Inserate“ stellt er seine mit einem Tippen wieder ein."
     },
     "wipeListings": {
       "title": "Inserate zurücksetzen",
-      "description": "Lass nach einem Spiel-Wipe alle aktiven Inserate ablaufen. Verkäufer sehen sie als pausiert und holen die Inserate, die sie noch verkaufen, auf der Seite „Inserate“ ihres Shops zurück (mit der Schaltfläche zum Erneuern oder per Auswahl und „Aktivieren“). Es wird nichts gelöscht."
+      "description": "Nach einem Spiel-Wipe ausführen: pausiert alle aktiven Inserate (es wird nichts gelöscht) und ordnet sie dem Wipe zu. Jeder Verkäufer bekommt eine Nachricht, und mit „Alle wieder einstellen“ unter „Meine Inserate“ stellt er seine pausierten Inserate mit einem Tippen wieder ein."
     },
     "importMonitoring": {
       "started": "Import {{source}} gestartet",
@@ -7901,6 +7910,15 @@
       "testSent": "Test-DM an dein Discord gesendet, mit deinen eigenen Inseratszahlen.",
       "testSentSample": "Test-DM an dein Discord gesendet, mit Beispielzahlen (du hast keine aktiven Inserate).",
       "testFailed": "Die Test-DM konnte nicht gesendet werden."
+    },
+    "lastWipe": {
+      "title": "Letzter Wipe",
+      "none": "Es gab noch keinen Wipe.",
+      "ranAt": "Ausgeführt am {{date}}",
+      "paused": "Pausierte Inserate",
+      "relisted": "Bisher wieder eingestellt",
+      "messages": "Benachrichtigte Verkäufer",
+      "messagesValue": "{{sent}} von {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -9117,5 +9135,15 @@
     "listingCount_other": "{{formatted}} Inserate",
     "listedSoFar_one": "Bisher {{formatted}} inseriert.",
     "listedSoFar_other": "Bisher {{formatted}} inseriert."
+  },
+  "wipeRelist": {
+    "hint": "Stell sie mit einem Tippen wieder ein. Sie erscheinen wieder auf dem Markt, als wären sie neu eingestellt.",
+    "button": "Alle wieder einstellen",
+    "nothing": "Es gibt nichts mehr wieder einzustellen.",
+    "failed": "Deine Inserate konnten nicht wieder eingestellt werden. Versuch es noch einmal.",
+    "title_one": "{{count}} Inserat wurde durch den Wipe am {{date}} pausiert",
+    "title_other": "{{count}} Inserate wurden durch den Wipe am {{date}} pausiert",
+    "done_one": "{{count}} Inserat wieder eingestellt",
+    "done_other": "{{count}} Inserate wieder eingestellt"
   }
 }

@@ -39,6 +39,7 @@ import type {
 } from "../../../../store/api/v2/market"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useFormatters } from "../../../../util/format"
+import { WipeRelistBanner } from "../components/WipeRelistBanner"
 
 /**
  * ManageMarketRedesign — Phase 0 of the Market redesign (behind the
@@ -143,6 +144,8 @@ export function ManageMarketRedesign() {
           </Button>
         </Stack>
       </Stack>
+
+      <WipeRelistBanner />
 
       {isAllScope && (
         <Alert severity="info" variant="outlined" sx={{ mb: 2 }}>

@@ -766,7 +766,8 @@
     },
     "buy_order_match": "收購單相符：",
     "buy_order_match_listed": "與你的一筆收購單相符",
-    "buy_order_filled_by": "你的收購單已成交，賣家："
+    "buy_order_filled_by": "你的收購單已成交，賣家：",
+    "listing_paused_by_wipe": "你的商品已因遊戲重置暫停。輕點一下即可重新刊登。"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "為此貼文按讚"
@@ -961,6 +962,10 @@
         "threads": {
           "label": "Discord 討論串",
           "hint": "你在賣家 Discord 伺服器上的訂單和報價討論串。"
+        },
+        "listings": {
+          "label": "商品",
+          "hint": "遊戲重置暫停了你的商品。"
         }
       },
       "rows": {
@@ -1045,6 +1050,10 @@
           "label": "Discord 伺服器邀請",
           "hint": "當機器人無法將你加入訂單或報價討論串時",
           "tip": "機器人會在賣家的 Discord 伺服器上為每筆訂單或報價開一個私密討論串。如果無法把你加進去（通常是因為你還不在那個伺服器裡），它會私訊你一個伺服器邀請。"
+        },
+        "wipe-relist": {
+          "label": "因重置暫停",
+          "hint": "重置後一則訊息，可一鍵重新刊登"
         }
       },
       "subtitle": "選擇每種通知的接收方式。",
@@ -7626,15 +7635,15 @@
       "failed": "無法使商品過期",
       "button": "使所有商品過期",
       "dialogTitle": "要使所有啟用中的商品過期嗎？",
-      "confirmBody_other": "這會將 <strong>{{count}} 個有效商品</strong>設為已過期（暫停）。每位賣家可在商店的「商品」頁面重新啟用仍在販售的商品。",
-      "confirmBodyLoading": "這會將 <strong>... 個有效商品</strong>設為已過期（暫停）。每位賣家可在商店的「商品」頁面重新啟用仍在販售的商品。",
-      "note": "通常在遊戲重置後執行。不會刪除任何內容：賣家可以隨時重新啟用其商品。",
+      "confirmBodyLoading": "這會暫停 <strong>... 個有效商品</strong>（從市場隱藏，不會刪除），並標記為本次重置。之後每位賣家會收到一則訊息，在「我的商品」中點選<strong>全部重新刊登</strong>即可一鍵恢復。",
+      "note": "在遊戲重置時執行，不會事先通知。每位賣家會依其通知設定收到一則訊息。",
       "confirmButton_other": "使 {{count}} 項商品過期",
-      "confirmButtonNoCount": "使商品過期"
+      "confirmButtonNoCount": "使商品過期",
+      "confirmBody_other": "這會暫停 <strong>{{count}} 個有效商品</strong>（從市場隱藏，不會刪除），並標記為本次重置。之後每位賣家會收到一則訊息，在「我的商品」中點選<strong>全部重新刊登</strong>即可一鍵恢復。"
     },
     "wipeListings": {
       "title": "重置商品",
-      "description": "在遊戲重置後將所有有效商品設為已過期。賣家會看到它們處於暫停狀態，並可在商店的「商品」頁面恢復仍在販售的商品（點選續期按鈕，或選取後點選「啟用」）。不會刪除任何內容。"
+      "description": "在遊戲重置後執行：暫停所有有效商品（不會刪除任何內容）並標記為本次重置。每位賣家會收到一則訊息，在「我的商品」中點選「全部重新刊登」即可一鍵恢復已暫停的商品。"
     },
     "importMonitoring": {
       "started": "已開始 {{source}} 匯入",
@@ -7785,6 +7794,15 @@
       "testSent": "已向你的 Discord 傳送測試私訊，使用你自己的商品數量。",
       "testSentSample": "已向你的 Discord 傳送測試私訊，使用範例數字（你沒有上架中的商品）。",
       "testFailed": "無法傳送測試私訊。"
+    },
+    "lastWipe": {
+      "title": "上次重置",
+      "none": "尚未執行過重置。",
+      "ranAt": "執行於 {{date}}",
+      "paused": "已暫停的商品",
+      "relisted": "目前已重新刊登",
+      "messages": "已通知的賣家",
+      "messagesValue": "{{sent}} / {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -8974,5 +8992,13 @@
     },
     "listingCount_other": "{{formatted}} 個商品",
     "listedSoFar_other": "目前已刊登 {{formatted}} 個。"
+  },
+  "wipeRelist": {
+    "hint": "輕點一下即可重新刊登，它們會作為新商品回到市場。",
+    "button": "全部重新刊登",
+    "nothing": "沒有需要重新刊登的商品了。",
+    "failed": "無法重新刊登你的商品，請再試一次。",
+    "title_other": "{{date}} 的遊戲重置暫停了 {{count}} 個商品",
+    "done_other": "已重新刊登 {{count}} 個商品"
   }
 }

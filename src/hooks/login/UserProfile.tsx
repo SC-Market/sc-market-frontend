@@ -14,6 +14,7 @@ import type { AccountIdentityNotice } from "../../features/notifications/types/N
 import type { StorefrontEnquiryNotice } from "../../features/notifications/types/NotificationStorefrontEnquiry"
 import type { ListingExpiryNotice } from "../../features/notifications/types/NotificationListingExpiring"
 import type { OfferReminderNotice } from "../../features/notifications/types/NotificationOfferReminder"
+import type { WipeNotice } from "../../features/notifications/types/NotificationListingPausedByWipe"
 
 export interface Notification {
   read: boolean
@@ -34,6 +35,7 @@ export interface Notification {
     | StorefrontEnquiryNotice
     | ListingExpiryNotice
     | OfferReminderNotice
+    | WipeNotice
   timestamp: string
   actors: MinimalUser[]
   scope?: "individual" | "organization"

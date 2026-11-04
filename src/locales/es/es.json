@@ -772,7 +772,8 @@
     },
     "buy_order_match": "Coincidencia con orden de compra:",
     "buy_order_match_listed": "coincide con una de tus órdenes de compra",
-    "buy_order_filled_by": "Tu orden de compra fue completada por"
+    "buy_order_filled_by": "Tu orden de compra fue completada por",
+    "listing_paused_by_wipe": "Tus anuncios se han pausado por el wipe. Vuelve a publicarlos con un toque."
   },
   "onboarding": {
     "welcome": "Bienvenido a SC Market",
@@ -1025,6 +1026,10 @@
         "threads": {
           "label": "Hilos de Discord",
           "hint": "Tus hilos de pedidos y ofertas en el servidor de Discord de un vendedor."
+        },
+        "listings": {
+          "label": "Anuncios",
+          "hint": "Un wipe del juego ha pausado tus anuncios."
         }
       },
       "rows": {
@@ -1109,6 +1114,10 @@
           "label": "Invitación al servidor de Discord",
           "hint": "Cuando el bot no puede añadirte a un hilo de pedido u oferta",
           "tip": "El bot abre un hilo privado para cada pedido u oferta en el servidor de Discord del vendedor. Si no puede añadirte (normalmente porque aún no estás en ese servidor), te envía por MD una invitación al servidor."
+        },
+        "wipe-relist": {
+          "label": "Pausados por un wipe",
+          "hint": "Un mensaje tras un wipe, para volver a publicar con un toque"
         }
       },
       "subtitle": "Elige dónde te llega cada tipo de notificación.",
@@ -7846,19 +7855,19 @@
       "failed": "No se pudieron expirar los anuncios",
       "button": "Expirar todos los anuncios",
       "dialogTitle": "¿Expirar todos los anuncios activos?",
-      "confirmBody_one": "Esto marcará <strong>{{count}} anuncio activo</strong> como caducado (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
-      "confirmBody_many": "Esto marcará <strong>{{count}} anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
-      "confirmBody_other": "Esto marcará <strong>{{count}} anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
-      "confirmBodyLoading": "Esto marcará <strong>... anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
-      "note": "Esto se suele hacer tras un wipe del juego. No se elimina nada: los vendedores pueden reactivar sus anuncios en cualquier momento.",
+      "confirmBodyLoading": "Esto pausa <strong>... anuncios activos</strong> (ocultos del mercado, nunca se eliminan) y los asocia a este wipe. Después, cada vendedor recibe un mensaje, y el botón <strong>Volver a publicar todo</strong> de Mis anuncios recupera los suyos con un toque.",
+      "note": "Ejecútalo cuando el juego haga un wipe; no hay aviso previo. Cada vendedor recibe un solo mensaje, según su configuración de notificaciones.",
       "confirmButton_one": "Expirar {{count}} anuncio",
       "confirmButton_many": "Expirar {{count}} anuncios",
       "confirmButton_other": "Expirar {{count}} anuncios",
-      "confirmButtonNoCount": "Expirar anuncios"
+      "confirmButtonNoCount": "Expirar anuncios",
+      "confirmBody_one": "Esto pausa <strong>{{count}} anuncio activo</strong> (oculto del mercado, nunca se elimina) y lo asocia a este wipe. Después, cada vendedor recibe un mensaje, y el botón <strong>Volver a publicar todo</strong> de Mis anuncios recupera los suyos con un toque.",
+      "confirmBody_many": "Esto pausa <strong>{{count}} anuncios activos</strong> (ocultos del mercado, nunca se eliminan) y los asocia a este wipe. Después, cada vendedor recibe un mensaje, y el botón <strong>Volver a publicar todo</strong> de Mis anuncios recupera los suyos con un toque.",
+      "confirmBody_other": "Esto pausa <strong>{{count}} anuncios activos</strong> (ocultos del mercado, nunca se eliminan) y los asocia a este wipe. Después, cada vendedor recibe un mensaje, y el botón <strong>Volver a publicar todo</strong> de Mis anuncios recupera los suyos con un toque."
     },
     "wipeListings": {
       "title": "Wipe de anuncios",
-      "description": "Haz que caduquen todos los anuncios activos tras un wipe del juego. Los vendedores los verán en pausa y podrán recuperar los que sigan vendiendo desde la página Anuncios de su tienda (con el botón de renovar, o seleccionándolos y pulsando Activar). No se elimina nada."
+      "description": "Ejecútalo tras un wipe del juego: pausa todos los anuncios activos (no se elimina nada) y los asocia al wipe. Cada vendedor recibe un mensaje, y el botón Volver a publicar todo de Mis anuncios recupera sus anuncios pausados con un toque."
     },
     "importMonitoring": {
       "started": "Importación {{source}} iniciada",
@@ -8017,6 +8026,15 @@
       "testSent": "MD de prueba enviado a tu Discord, con tus propios números de anuncios.",
       "testSentSample": "MD de prueba enviado a tu Discord, con números de ejemplo (no tienes anuncios activos).",
       "testFailed": "No se pudo enviar el MD de prueba."
+    },
+    "lastWipe": {
+      "title": "Último wipe",
+      "none": "Todavía no se ha hecho ningún wipe.",
+      "ranAt": "Ejecutado el {{date}}",
+      "paused": "Anuncios pausados",
+      "relisted": "Vueltos a publicar hasta ahora",
+      "messages": "Vendedores avisados",
+      "messagesValue": "{{sent}} de {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -9260,5 +9278,17 @@
     "listedSoFar_one": "{{formatted}} anunciado hasta ahora.",
     "listedSoFar_many": "{{formatted}} anunciados hasta ahora.",
     "listedSoFar_other": "{{formatted}} anunciados hasta ahora."
+  },
+  "wipeRelist": {
+    "hint": "Vuelve a publicarlos con un toque. Vuelven al mercado como anuncios recientes.",
+    "button": "Volver a publicar todo",
+    "nothing": "No queda nada por volver a publicar.",
+    "failed": "No se han podido volver a publicar tus anuncios. Inténtalo de nuevo.",
+    "title_one": "El wipe del {{date}} pausó {{count}} anuncio",
+    "title_many": "El wipe del {{date}} pausó {{count}} anuncios",
+    "title_other": "El wipe del {{date}} pausó {{count}} anuncios",
+    "done_one": "{{count}} anuncio vuelve a estar publicado",
+    "done_many": "{{count}} anuncios vuelven a estar publicados",
+    "done_other": "{{count}} anuncios vuelven a estar publicados"
   }
 }

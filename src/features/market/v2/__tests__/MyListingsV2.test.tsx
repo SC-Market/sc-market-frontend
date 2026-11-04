@@ -59,6 +59,9 @@ vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
   useOptionalShopRouteContext: () => ({ shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" } }),
 }));
 
+// The wipe banner has its own test (components/__tests__/WipeRelistBanner).
+vi.mock("../components/WipeRelistBanner", () => ({ WipeRelistBanner: () => null }));
+
 vi.mock("../../../../hooks/layout/Drawer", () => ({
   useDrawerOpen: () => [false, vi.fn()],
 }));

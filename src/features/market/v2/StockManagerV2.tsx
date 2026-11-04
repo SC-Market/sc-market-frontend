@@ -102,6 +102,7 @@ import { HelpTip } from "../../help/components/HelpTip"
 import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 import { useFormatters } from "../../../util/format"
+import { WipeRelistBanner } from "./components/WipeRelistBanner"
 
 /* ── Types ── */
 
@@ -970,6 +971,11 @@ export function StockManagerV2() {
     >
       <ListingSelectionContext.Provider value={[selectionModel, setSelectionModel]}>
         <RenewFromLink />
+        {canManage && (
+          <Grid item xs={12}>
+            <WipeRelistBanner shopId={shop.shop_id} />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             {/* Mobile bottom sheet sidebar */}

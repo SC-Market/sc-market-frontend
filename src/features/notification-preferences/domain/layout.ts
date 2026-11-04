@@ -180,9 +180,17 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section("bids", "Bids", "New bids on your auctions.", [
         row("bid", "New bid", ["market.bid"]),
       ]),
-      // No "Listings" section: listings don't expire (LISTING_EXPIRY_ENABLED is
-      // off on the backend and not exposed here), so there is no expiry
-      // reminder to set. Add it back when expiry is turned on.
+      // Listings: the message after a game wipe (listing.paused_by_wipe). The
+      // expiry reminder (listing.expiring) joins this section when
+      // LISTING_EXPIRY_ENABLED is turned on on the backend.
+      section("listings", "Listings", "A game wipe paused your listings.", [
+        row(
+          "wipe-relist",
+          "Paused by a wipe",
+          ["listing.paused_by_wipe"],
+          "One message after a wipe, with a one-tap relist",
+        ),
+      ]),
       section(
         "watchlist",
         "Price alerts",

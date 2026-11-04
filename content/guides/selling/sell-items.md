@@ -3,7 +3,7 @@ title: "Sell items: open a shop, list items and manage stock"
 description: Every listing belongs to a shop. Create your shop, list an item with a price in aUEC and a quantity, then keep your stock lots up to date.
 order: 10
 updated: 2026-11-03
-keywords: [sell, listing, create listing, quick list, sell yours, shop, stock, inventory, auction, price, paused, renew, reactivate]
+keywords: [sell, listing, create listing, quick list, sell yours, shop, stock, inventory, auction, price, paused, renew, reactivate, wipe, relist]
 related: [selling/stock-lots-and-allocation, selling/auctions, buying/how-orders-work]
 howto: true
 ---
@@ -51,6 +51,16 @@ Choose **Auction** as the sale type and set an end time, a minimum bid increment
 - **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
 - Buyers see roughly when you were last active (for example **Active today**) and how fast you usually reply on your listings and shop. To hide the last-active part, turn on **Hide my online status** in [Settings](/settings) › **Profile**. Hiding it never lowers your listings in search, but sellers inactive for over a month are listed lower by default.
 - **Import from UEX** on the **Listings** page copies your active UEXCorp sell listings into the shop. See [import your listings from UEX](/guides/selling/import-from-uex).
+
+## After a game wipe
+
+After a wipe, your listings pause. Relist them in one tap:
+
+1. You get one message: **Your listings were paused for the wipe. Relist them in one tap.** It arrives in the notification bell, and by push and Discord DM unless you turned those off.
+2. Open [My Listings](/market/me), or your shop's **Listings** page. A banner says how many of your listings the wipe paused, and on which day.
+3. Click **Relist all**. Those listings go back on the market as fresh listings. Listings you had already paused or archived yourself stay as they are.
+
+For an org shop, anyone with the org's **Manage Market** permission can relist its listings. To change how the message reaches you, open [Settings](/settings) › **Notifications** › **Market & watchlist** › **Listings**.
 
 ## Advanced: list and update many items at once
 

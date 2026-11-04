@@ -772,7 +772,8 @@
     },
     "buy_order_match": "求购单匹配：",
     "buy_order_match_listed": "与你的一个求购单匹配",
-    "buy_order_filled_by": "你的求购单已成交，卖家："
+    "buy_order_filled_by": "你的求购单已成交，卖家：",
+    "listing_paused_by_wipe": "你的商品已因游戏重置暂停。轻点一下即可重新上架。"
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
@@ -1025,6 +1026,10 @@
         "threads": {
           "label": "Discord 讨论帖",
           "hint": "你在卖家 Discord 服务器上的订单和报价讨论帖。"
+        },
+        "listings": {
+          "label": "商品",
+          "hint": "游戏重置暂停了你的商品。"
         }
       },
       "rows": {
@@ -1109,6 +1114,10 @@
           "label": "Discord 服务器邀请",
           "hint": "当机器人无法将你加入订单或报价讨论帖时",
           "tip": "机器人会在卖家的 Discord 服务器上为每个订单或报价开一个私密讨论帖。如果无法把你加进去（通常是因为你还不在那个服务器里），它会私信你一个服务器邀请。"
+        },
+        "wipe-relist": {
+          "label": "因重置暂停",
+          "hint": "重置后一条消息，可一键重新上架"
         }
       },
       "subtitle": "选择每类通知的接收方式。",
@@ -7632,15 +7641,15 @@
       "failed": "无法使商品过期",
       "button": "使所有商品过期",
       "dialogTitle": "使所有启用的商品过期？",
-      "confirmBody_other": "这会将 <strong>{{count}} 个有效商品</strong>设为已过期（暂停）。每位卖家可在店铺的“商品”页面重新启用仍在出售的商品。",
-      "confirmBodyLoading": "这会将 <strong>... 个有效商品</strong>设为已过期（暂停）。每位卖家可在店铺的“商品”页面重新启用仍在出售的商品。",
-      "note": "通常在游戏重置后执行。不会删除任何内容：卖家可以随时重新启用其商品。",
+      "confirmBodyLoading": "这会暂停 <strong>... 个有效商品</strong>（从市场隐藏，不会删除），并标记为本次重置。之后每位卖家会收到一条消息，在“我的商品”中点击<strong>全部重新上架</strong>即可一键恢复。",
+      "note": "在游戏重置时执行，不会提前通知。每位卖家会按其通知设置收到一条消息。",
       "confirmButton_other": "使 {{count}} 个商品过期",
-      "confirmButtonNoCount": "使商品过期"
+      "confirmButtonNoCount": "使商品过期",
+      "confirmBody_other": "这会暂停 <strong>{{count}} 个有效商品</strong>（从市场隐藏，不会删除），并标记为本次重置。之后每位卖家会收到一条消息，在“我的商品”中点击<strong>全部重新上架</strong>即可一键恢复。"
     },
     "wipeListings": {
       "title": "重置商品",
-      "description": "在游戏重置后将所有有效商品设为已过期。卖家会看到它们处于暂停状态，并可在店铺的“商品”页面恢复仍在出售的商品（点击续期按钮，或选中后点击“启用”）。不会删除任何内容。"
+      "description": "在游戏重置后执行：暂停所有有效商品（不会删除任何内容）并标记为本次重置。每位卖家会收到一条消息，在“我的商品”中点击“全部重新上架”即可一键恢复已暂停的商品。"
     },
     "importMonitoring": {
       "started": "已开始 {{source}} 导入",
@@ -7791,6 +7800,15 @@
       "testSent": "已向你的 Discord 发送测试私信，使用你自己的商品数量。",
       "testSentSample": "已向你的 Discord 发送测试私信，使用示例数字（你没有在售商品）。",
       "testFailed": "无法发送测试私信。"
+    },
+    "lastWipe": {
+      "title": "上次重置",
+      "none": "尚未执行过重置。",
+      "ranAt": "执行于 {{date}}",
+      "paused": "已暂停的商品",
+      "relisted": "目前已重新上架",
+      "messages": "已通知的卖家",
+      "messagesValue": "{{sent}} / {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -8980,5 +8998,13 @@
     },
     "listingCount_other": "{{formatted}} 个商品",
     "listedSoFar_other": "目前已上架 {{formatted}} 个。"
+  },
+  "wipeRelist": {
+    "hint": "轻点一下即可重新上架，它们会作为新商品回到市场。",
+    "button": "全部重新上架",
+    "nothing": "没有需要重新上架的商品了。",
+    "failed": "无法重新上架你的商品，请重试。",
+    "title_other": "{{date}} 的游戏重置暂停了 {{count}} 个商品",
+    "done_other": "已重新上架 {{count}} 个商品"
   }
 }

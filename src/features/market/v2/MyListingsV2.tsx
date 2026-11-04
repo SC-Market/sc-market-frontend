@@ -44,6 +44,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
+import { WipeRelistBanner } from "./components/WipeRelistBanner"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { lazyWithRetry } from "../../../util/lazyWithRetry"
@@ -342,6 +343,7 @@ export function MyListingsV2() {
         maxWidth="sm"
       >
         <Grid item xs={12}>
+          <WipeRelistBanner />
           <MobileListingsView />
         </Grid>
       </StandardPageLayout>
@@ -377,6 +379,7 @@ export function MyListingsV2() {
       maxWidth="lg"
     >
       <Grid item xs={12}>
+        <WipeRelistBanner />
         <Grid container spacing={theme.layoutSpacing.layout}>
           <LazySection
             component={ActiveListingsV2}

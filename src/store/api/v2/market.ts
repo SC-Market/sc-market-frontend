@@ -802,6 +802,25 @@ const injectedRtkApi = api
           invalidatesTags: ["Two-factor auth"],
         },
       ),
+      getWipeRelist: build.query<GetWipeRelistApiResponse, GetWipeRelistApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/wipe-relist`,
+            params: {
+              shop_id: queryArg.shopId,
+            },
+          }),
+          providesTags: ["Listings V2"],
+        },
+      ),
+      relistWipe: build.mutation<RelistWipeApiResponse, RelistWipeApiArg>({
+        query: (queryArg) => ({
+          url: `/wipe-relist`,
+          method: "POST",
+          body: queryArg.wipeRelistRequest,
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       getStillSellingAction: build.query<
         GetStillSellingActionApiResponse,
         GetStillSellingActionApiArg
@@ -2533,6 +2552,10 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/expire-all-listings`, method: "POST" }),
         invalidatesTags: ["Admin"],
       }),
+      getLastWipe: build.query<GetLastWipeApiResponse, GetLastWipeApiArg>({
+        query: () => ({ url: `/admin/last-wipe` }),
+        providesTags: ["Admin"],
+      }),
       getActiveListingCount: build.query<
         GetActiveListingCountApiResponse,
         GetActiveListingCountApiArg
@@ -3051,6 +3074,16 @@ export type ResetUserMfaApiResponse = /** status 200 Ok */ MfaResetResponse
 export type ResetUserMfaApiArg = {
   username: string
   mfaResetRequest: MfaResetRequest
+}
+export type GetWipeRelistApiResponse =
+  /** status 200 Ok */ WipeRelistSummary | null
+export type GetWipeRelistApiArg = {
+  /** Only this shop (it must be one the caller manages) */
+  shopId?: string
+}
+export type RelistWipeApiResponse = /** status 200 Ok */ WipeRelistResult
+export type RelistWipeApiArg = {
+  wipeRelistRequest: WipeRelistRequest
 }
 export type GetStillSellingActionApiResponse =
   /** status 200 Ok */ StillSellingActionPreview
@@ -4321,9 +4354,14 @@ export type GetPagesDeployHookStatusApiResponse =
   /** status 200 Ok */ PagesDeployHookStatus
 export type GetPagesDeployHookStatusApiArg = void
 export type ExpireAllListingsApiResponse = /** status 200 Ok */ {
+  messages_queued: number
+  ran_at: string
+  wipe_id: string
   affected: number
 }
 export type ExpireAllListingsApiArg = void
+export type GetLastWipeApiResponse = /** status 200 Ok */ LastWipeStats | null
+export type GetLastWipeApiArg = void
 export type GetActiveListingCountApiResponse = /** status 200 Ok */ {
   count: number
 }
@@ -5693,6 +5731,7 @@ export type NotificationEventKey =
   | "offer.message"
   | "market.bid"
   | "listing.expiring"
+  | "listing.paused_by_wipe"
   | "org.invite"
   | "org.member_joined"
   | "admin.alert"
@@ -5848,6 +5887,22 @@ export type MfaResetResponse = {
 }
 export type MfaResetRequest = {
   reason: string
+}
+export type WipeRelistSummary = {
+  wipe_id: string
+  ran_at: string
+  /** Listings the user can relist with one click. */
+  count: number
+}
+export type WipeRelistResult = {
+  /** Listings put back on the market by this call (0 when run again). */
+  relisted: number
+}
+export type WipeRelistRequest = {
+  /** The wipe from GET /wipe-relist. */
+  wipe_id: string
+  /** Only this shop's listings (its Listings page); all the caller manages otherwise. */
+  shop_id?: string
 }
 export type StillSellingAction = "keep" | "pause"
 export type StillSellingActionListing = {
@@ -9580,6 +9635,15 @@ export type PagesDeployHookStatus = {
   /** When a coalesced POST is due (ISO), if one is pending. */
   next_trigger_at: string | null
 }
+export type LastWipeStats = {
+  wipe_id: string
+  ran_at: string
+  paused: number
+  relisted: number
+  /** Users the message was queued for, and how many it has reached so far. */
+  messages_queued: number
+  messages_sent: number
+}
 export type AdminAlertAudiencePreview = {
   /** Users the alert would reach (the posting admin excluded). */
   recipients: number
@@ -9698,6 +9762,8 @@ export const {
   useRegenerateMfaRecoveryCodesMutation,
   useRemoveMfaFactorMutation,
   useResetUserMfaMutation,
+  useGetWipeRelistQuery,
+  useRelistWipeMutation,
   useGetStillSellingActionQuery,
   useConfirmStillSellingActionMutation,
   useSendStillSellingFeedbackMutation,
@@ -9861,6 +9927,7 @@ export const {
   useGetImportJobStatusQuery,
   useGetPagesDeployHookStatusQuery,
   useExpireAllListingsMutation,
+  useGetLastWipeQuery,
   useGetActiveListingCountQuery,
   usePreviewAdminAlertAudienceQuery,
   useGetAccountPrivacyQuery,

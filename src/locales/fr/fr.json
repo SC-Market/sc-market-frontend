@@ -772,7 +772,8 @@
     },
     "buy_order_match": "Ordre d'achat correspondant :",
     "buy_order_match_listed": "correspond à l'un de vos ordres d'achat",
-    "buy_order_filled_by": "Votre ordre d'achat a été honoré par"
+    "buy_order_filled_by": "Votre ordre d'achat a été honoré par",
+    "listing_paused_by_wipe": "Vos annonces ont été mises en pause pour le wipe. Remettez-les en vente en un clic."
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -1025,6 +1026,10 @@
         "threads": {
           "label": "Fils Discord",
           "hint": "Vos fils de commandes et d'offres sur le serveur Discord d'un vendeur."
+        },
+        "listings": {
+          "label": "Annonces",
+          "hint": "Un wipe du jeu a mis vos annonces en pause."
         }
       },
       "rows": {
@@ -1109,6 +1114,10 @@
           "label": "Invitation au serveur Discord",
           "hint": "Quand le bot ne peut pas vous ajouter à un fil de commande ou d'offre",
           "tip": "Le bot ouvre un fil privé pour chaque commande ou offre sur le serveur Discord du vendeur. S'il ne peut pas vous ajouter (souvent parce que vous n'êtes pas encore sur ce serveur), il vous envoie en MP une invitation au serveur."
+        },
+        "wipe-relist": {
+          "label": "Mises en pause par un wipe",
+          "hint": "Un message après un wipe, pour tout remettre en vente en un clic"
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -7846,19 +7855,19 @@
       "failed": "Impossible de faire expirer les annonces",
       "button": "Faire expirer toutes les annonces",
       "dialogTitle": "Faire expirer toutes les annonces actives ?",
-      "confirmBody_one": "Cela passera <strong>{{count}} annonce active</strong> à l’état expiré (en pause). Chaque vendeur réactive celles qu’il vend encore depuis la page Annonces de sa boutique.",
-      "confirmBody_many": "Cela passera <strong>{{count}} annonces actives</strong> à l’état expiré (en pause). Chaque vendeur réactive celles qu’il vend encore depuis la page Annonces de sa boutique.",
-      "confirmBody_other": "Cela passera <strong>{{count}} annonces actives</strong> à l’état expiré (en pause). Chaque vendeur réactive celles qu’il vend encore depuis la page Annonces de sa boutique.",
-      "confirmBodyLoading": "Cela passera <strong>... annonces actives</strong> à l’état expiré (en pause). Chaque vendeur réactive celles qu’il vend encore depuis la page Annonces de sa boutique.",
-      "note": "Cette opération est généralement effectuée après un wipe du jeu. Rien n’est supprimé : les vendeurs peuvent réactiver leurs annonces à tout moment.",
+      "confirmBodyLoading": "Cela met en pause <strong>... annonces actives</strong> (retirées du marché, jamais supprimées) et les rattache à ce wipe. Chaque vendeur reçoit ensuite un message, et le bouton <strong>Tout remettre en vente</strong> de Mes annonces remet les siennes en vente en un clic.",
+      "note": "Lancez-le quand le jeu fait un wipe ; il n’y a pas de préavis. Chaque vendeur reçoit un seul message, selon ses paramètres de notification.",
       "confirmButton_one": "Faire expirer {{count}} annonce",
       "confirmButton_many": "Faire expirer {{count}} annonces",
       "confirmButton_other": "Faire expirer {{count}} annonces",
-      "confirmButtonNoCount": "Faire expirer les annonces"
+      "confirmButtonNoCount": "Faire expirer les annonces",
+      "confirmBody_one": "Cela met en pause <strong>{{count}} annonce active</strong> (retirée du marché, jamais supprimée) et la rattache à ce wipe. Chaque vendeur reçoit ensuite un message, et le bouton <strong>Tout remettre en vente</strong> de Mes annonces remet les siennes en vente en un clic.",
+      "confirmBody_many": "Cela met en pause <strong>{{count}} annonces actives</strong> (retirées du marché, jamais supprimées) et les rattache à ce wipe. Chaque vendeur reçoit ensuite un message, et le bouton <strong>Tout remettre en vente</strong> de Mes annonces remet les siennes en vente en un clic.",
+      "confirmBody_other": "Cela met en pause <strong>{{count}} annonces actives</strong> (retirées du marché, jamais supprimées) et les rattache à ce wipe. Chaque vendeur reçoit ensuite un message, et le bouton <strong>Tout remettre en vente</strong> de Mes annonces remet les siennes en vente en un clic."
     },
     "wipeListings": {
       "title": "Wipe des annonces",
-      "description": "Faites expirer toutes les annonces actives après un wipe du jeu. Les vendeurs les voient en pause et réactivent celles qu’ils vendent encore depuis la page Annonces de leur boutique (bouton de renouvellement, ou sélection puis Activer). Rien n’est supprimé."
+      "description": "À lancer après un wipe du jeu : met en pause toutes les annonces actives (rien n’est supprimé) et les rattache au wipe. Chaque vendeur reçoit un message, et le bouton Tout remettre en vente de Mes annonces remet ses annonces en pause en vente en un clic."
     },
     "importMonitoring": {
       "started": "Importation {{source}} lancée",
@@ -8017,6 +8026,15 @@
       "testSent": "MP de test envoyé sur votre Discord, avec vos propres chiffres d'annonces.",
       "testSentSample": "MP de test envoyé sur votre Discord, avec des chiffres d'exemple (vous n'avez aucune annonce en ligne).",
       "testFailed": "Le MP de test n'a pas pu être envoyé."
+    },
+    "lastWipe": {
+      "title": "Dernier wipe",
+      "none": "Aucun wipe n’a encore été lancé.",
+      "ranAt": "Lancé le {{date}}",
+      "paused": "Annonces mises en pause",
+      "relisted": "Remises en vente à ce jour",
+      "messages": "Vendeurs prévenus",
+      "messagesValue": "{{sent}} sur {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -9260,5 +9278,17 @@
     "listedSoFar_one": "{{formatted}} mise en vente jusqu'ici.",
     "listedSoFar_many": "{{formatted}} mises en vente jusqu'ici.",
     "listedSoFar_other": "{{formatted}} mises en vente jusqu'ici."
+  },
+  "wipeRelist": {
+    "hint": "Remettez-les en vente en un clic. Elles reviennent sur le marché comme des annonces récentes.",
+    "button": "Tout remettre en vente",
+    "nothing": "Plus rien à remettre en vente.",
+    "failed": "Impossible de remettre vos annonces en vente. Réessayez.",
+    "title_one": "{{count}} annonce a été mise en pause par le wipe du {{date}}",
+    "title_many": "{{count}} annonces ont été mises en pause par le wipe du {{date}}",
+    "title_other": "{{count}} annonces ont été mises en pause par le wipe du {{date}}",
+    "done_one": "{{count}} annonce remise en vente",
+    "done_many": "{{count}} annonces remises en vente",
+    "done_other": "{{count}} annonces remises en vente"
   }
 }

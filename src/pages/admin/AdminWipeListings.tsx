@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Grid, Typography } from "@mui/material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExpireAllListingsButton } from "../../views/admin/ExpireAllListingsButton"
+import { LastWipeStats } from "../../views/admin/LastWipeStats"
 
 export function AdminWipeListings() {
   const { t } = useTranslation()
@@ -16,6 +17,7 @@ export function AdminWipeListings() {
         <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
           {t("adminUi.wipeListings.description")}
         </Typography>
+        <LastWipeStats />
         <ExpireAllListingsButton />
       </Grid>
     </StandardPageLayout>

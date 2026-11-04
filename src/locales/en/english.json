@@ -3360,7 +3360,8 @@
     },
     "buy_order_match": "Buy-order match:",
     "buy_order_match_listed": "matches one of your buy orders",
-    "buy_order_filled_by": "Your buy order was filled by"
+    "buy_order_filled_by": "Your buy order was filled by",
+    "listing_paused_by_wipe": "Your listings were paused for the wipe. Relist them in one tap."
   },
   "OfferDetailsArea": {
     "accept": "Accept",
@@ -4950,6 +4951,10 @@
         "threads": {
           "label": "Discord threads",
           "hint": "Your order and offer threads on a seller's Discord server."
+        },
+        "listings": {
+          "label": "Listings",
+          "hint": "A game wipe paused your listings."
         }
       },
       "rows": {
@@ -5034,6 +5039,10 @@
           "label": "Invite to the Discord server",
           "hint": "When the bot can't add you to an order or offer thread",
           "tip": "The bot opens a private thread for each order or offer on the seller's Discord server. If it can't add you (usually because you're not in that server yet), it DMs you an invite to the server."
+        },
+        "wipe-relist": {
+          "label": "Paused by a wipe",
+          "hint": "One message after a wipe, with a one-tap relist"
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -7736,17 +7745,17 @@
       "failed": "Failed to expire listings",
       "button": "Expire All Listings",
       "dialogTitle": "Expire All Active Listings?",
-      "confirmBody_one": "This will set <strong>{{count}} active listing</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
-      "confirmBody_other": "This will set <strong>{{count}} active listings</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
-      "confirmBodyLoading": "This will set <strong>... active listings</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
-      "note": "This is typically done after a game wipe. Nothing is deleted: sellers can reactivate their listings at any time.",
+      "confirmBodyLoading": "This pauses <strong>... active listings</strong> (hidden from the market, never deleted) and tags them with this wipe. Each seller then gets one message, and a <strong>Relist all</strong> button on My Listings puts theirs back in one tap.",
+      "note": "Run it when the game wipes; there is no advance notice. Sellers are messaged once each, through their notification settings.",
       "confirmButton_one": "Expire {{count}} Listing",
       "confirmButton_other": "Expire {{count}} Listings",
-      "confirmButtonNoCount": "Expire Listings"
+      "confirmButtonNoCount": "Expire Listings",
+      "confirmBody_one": "This pauses <strong>{{count}} active listing</strong> (hidden from the market, never deleted) and tags it with this wipe. Each seller then gets one message, and a <strong>Relist all</strong> button on My Listings puts theirs back in one tap.",
+      "confirmBody_other": "This pauses <strong>{{count}} active listings</strong> (hidden from the market, never deleted) and tags them with this wipe. Each seller then gets one message, and a <strong>Relist all</strong> button on My Listings puts theirs back in one tap."
     },
     "wipeListings": {
       "title": "Wipe Listings",
-      "description": "Expire all active listings after a game wipe. Sellers see them as paused, and bring back the ones they still sell from their shop's Listings page (the renew button, or select them and Activate). Nothing is deleted."
+      "description": "Run after a game wipe: pauses every active listing (nothing is deleted) and tags it with the wipe. Each seller gets one message, and a Relist all button on My Listings puts their paused listings back in one tap."
     },
     "importMonitoring": {
       "started": "Started {{source}} import",
@@ -7901,6 +7910,15 @@
       "testSent": "Test DM sent to your Discord, with your own listing numbers.",
       "testSentSample": "Test DM sent to your Discord, with sample numbers (you have no live listings).",
       "testFailed": "The test DM couldn't be sent."
+    },
+    "lastWipe": {
+      "title": "Last wipe",
+      "none": "No wipe has run yet.",
+      "ranAt": "Ran on {{date}}",
+      "paused": "Listings paused",
+      "relisted": "Relisted so far",
+      "messages": "Sellers messaged",
+      "messagesValue": "{{sent}} of {{queued}}"
     }
   },
   "apiTokensUi": {
@@ -9117,5 +9135,15 @@
     "listingCount_other": "{{formatted}} listings",
     "listedSoFar_one": "{{formatted}} listed so far.",
     "listedSoFar_other": "{{formatted}} listed so far."
+  },
+  "wipeRelist": {
+    "hint": "Relist them in one tap. They go back on the market as fresh listings.",
+    "button": "Relist all",
+    "nothing": "Nothing left to relist.",
+    "failed": "Couldn't relist your listings. Try again.",
+    "title_one": "{{count}} listing was paused by the wipe on {{date}}",
+    "title_other": "{{count}} listings were paused by the wipe on {{date}}",
+    "done_one": "Relisted {{count}} listing",
+    "done_other": "Relisted {{count}} listings"
   }
 }
