@@ -270,9 +270,7 @@ export function SellerRatingCount(props: {
   shopRating?: ShopRatingProps
   display_limit?: number // Default: unlimited for profiles
 }) {
-  const { t } = useTranslation()
   const fmt = useFormatters()
-  const theme = useTheme<ExtendedTheme>()
   const { user, contractor, shopRating, display_limit } = props
   const rating = useMemo(
     () =>

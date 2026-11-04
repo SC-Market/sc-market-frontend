@@ -13,7 +13,9 @@ function nextId(): string {
     if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
       return crypto.randomUUID()
     }
-  } catch {}
+  } catch {
+    // randomUUID unavailable (insecure context): use the fallback below.
+  }
   return `w-${Date.now()}-${Math.floor(Math.random() * 1e6)}`
 }
 

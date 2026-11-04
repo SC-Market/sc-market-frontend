@@ -102,7 +102,7 @@ export function FocusManagerProvider({ children }: FocusManagerProviderProps) {
           try {
             element.focus()
             break
-          } catch (error) {
+          } catch {
             // Continue to next element in history
             continue
           }

@@ -7,7 +7,6 @@ import type { OfferSearchStatus } from "../domain/types"
 import type { OrderSearchSortMethod } from "../../orders/domain/types"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { isAwaitingData } from "../../../util/queryLoading"
@@ -25,7 +24,6 @@ export function useOfferSearch(params: UseOfferSearchParams) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
-  const navigate = useNavigate()
 
   const [statusFilter, setStatusFilter] = useState<null | "unclaimed" | OfferSearchStatus>(
     unassigned ? "unclaimed" : mine ? "to-customer" : "to-seller",

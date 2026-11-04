@@ -107,7 +107,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
         setCopied(false)
         setSuccess(null)
       }, 3000)
-    } catch (err) {
+    } catch {
       setError(t("wishlistsUi.share.copyFailed"))
     }
   }

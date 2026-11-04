@@ -153,7 +153,6 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
   } = props
   const [selectionModel] = useListingSelection()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const bulkStatus = useBulkListingStatus()
 
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)

@@ -77,7 +77,7 @@ export function ApiTokensSettings() {
         await deleteToken(tokenToDelete.id).unwrap()
         setDeleteDialogOpen(false)
         setTokenToDelete(null)
-      } catch (error) {
+      } catch {
         // Error handled by RTK Query
       }
     }

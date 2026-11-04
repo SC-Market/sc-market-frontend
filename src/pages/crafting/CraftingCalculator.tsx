@@ -19,8 +19,6 @@ import {
 } from "@mui/material"
 import { Delete } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
   useSearchBlueprintsQuery,
@@ -126,7 +124,6 @@ function MaterialQualityInput({
 export function CraftingCalculator() {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const prefillBlueprintId = searchParams.get("blueprint_id")

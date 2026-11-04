@@ -47,7 +47,6 @@ export function PageBody404() {
 }
 
 export function Error404() {
-  const { t } = useTranslation()
   return (
     <StandardPageLayout
       title={"404"}

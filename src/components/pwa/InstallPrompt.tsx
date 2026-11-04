@@ -27,7 +27,9 @@ export function InstallPrompt() {
     if (isInstalled) return
     try {
       if (localStorage.getItem(DISMISS_KEY)) return
-    } catch {}
+    } catch {
+      // Storage unavailable (private mode): show the prompt / skip remembering.
+    }
     if (canInstall) setShowPrompt(true)
   }, [canInstall, isInstalled])
 
@@ -38,7 +40,7 @@ export function InstallPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false)
-    try { localStorage.setItem(DISMISS_KEY, "1") } catch {}
+    try { localStorage.setItem(DISMISS_KEY, "1") } catch { /* Storage unavailable (private mode): show the prompt / skip remembering. */ }
   }
 
   if (isInstalled || !showPrompt || !canInstall) return null

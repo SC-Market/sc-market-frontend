@@ -18,7 +18,6 @@ import {
   Typography,
 } from "@mui/material"
 import { YouTubeFacade } from "../embeds/YouTubeFacade"
-import { useTheme } from "@mui/material/styles"
 import { SxProps } from "@mui/system"
 
 const allowList = [
@@ -329,7 +328,6 @@ export function MarkdownEditor(props: {
     props
 
   const { t } = useTranslation()
-  const theme = useTheme()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const buttons = [

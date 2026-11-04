@@ -106,7 +106,7 @@ export function PreferencesControls() {
 
   const handleFontChange = useCallback((value: string) => {
     setSelectedFont(value)
-    try { localStorage.setItem("sc-admin-font", value) } catch {}
+    try { localStorage.setItem("sc-admin-font", value) } catch { /* Storage unavailable: the font still applies for this visit. */ }
     applyFont(value)
   }, [])
 

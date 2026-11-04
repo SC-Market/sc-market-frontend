@@ -188,7 +188,7 @@ export function waitForTiming(
           }
         })
         observer.observe({ entryTypes: ["paint"] })
-      } catch (e) {
+      } catch {
         // Fallback to load event
         waitForTiming("load", callback)
       }

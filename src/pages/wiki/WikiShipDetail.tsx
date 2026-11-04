@@ -8,12 +8,10 @@ import {
   Alert, Divider, Table, TableBody, TableCell,
   TableContainer, TableRow, Paper, Stack,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
 import { FRONTEND_URL } from "../../util/constants"
@@ -27,9 +25,7 @@ import { SeoHead } from "../../seo/SeoHead"
 
 export function WikiShipDetail() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { data: ship, isLoading, error } = useGetShipDetailQuery({ id: id! })
 
   if (isLoading) {

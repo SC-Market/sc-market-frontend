@@ -11,8 +11,6 @@
 import React, { useState, useMemo } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   Box,
   Typography,
@@ -80,7 +78,6 @@ type SortOption = "priority" | "name" | "status" | "quality"
 export function WishlistDetail() {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const { wishlist_id } = useParams<{ wishlist_id: string }>()
   const navigate = useNavigate()
 

@@ -24,7 +24,7 @@ export function ShareButton({ url, title, text }: ShareButtonProps) {
     if (navigator.share) {
       try {
         await navigator.share(shareData)
-      } catch (err) {
+      } catch {
         // User cancelled or error occurred
       }
     } else {

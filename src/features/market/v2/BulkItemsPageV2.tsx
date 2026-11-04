@@ -140,7 +140,6 @@ function BulkMobileSidebar() {
 
 function AggregateCard({ item }: { item: GameItemAggregate }) {
   const fmt = useFormatters()
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   return (

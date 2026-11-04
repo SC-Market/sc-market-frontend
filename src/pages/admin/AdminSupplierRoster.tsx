@@ -110,7 +110,9 @@ function AddSupplierDialog({
       setTier("")
       setNotes("")
       onClose()
-    } catch {}
+    } catch {
+      // The dialog shows the request's error (the mutation's `error`).
+    }
   }
 
   return (
@@ -228,7 +230,9 @@ function EditSupplierDialog({
         },
       }).unwrap()
       onClose()
-    } catch {}
+    } catch {
+      // The dialog shows the request's error (the mutation's `error`).
+    }
   }
 
   return (

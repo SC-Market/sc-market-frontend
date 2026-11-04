@@ -433,7 +433,7 @@ export function initPWA(): void {
     // Still try to initialize online detection even if SW fails
     try {
       initOnlineDetection()
-    } catch (e) {
+    } catch {
       // Ignore online detection errors too
     }
   }

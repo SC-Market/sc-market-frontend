@@ -3,9 +3,18 @@
  */
 import React from "react"
 import {
-  Typography, Chip, Stack, Box, Button, LinearProgress,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  useTheme,
+  Typography,
+  Chip,
+  Stack,
+  Box,
+  Button,
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { OreDetailResponse, OreQualityDistribution } from "../../store/api/v2/market"
@@ -33,7 +42,6 @@ interface Props {
 export function OreDetailContent({ ore, onClose }: Props) {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const theme = useTheme()
   const hasQuality = (ore.qualityDistributions?.length ?? 0) > 0
 
   return (

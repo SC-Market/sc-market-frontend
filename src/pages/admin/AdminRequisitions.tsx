@@ -187,7 +187,9 @@ function CreateRequisitionDialog({
       setItems([{ key: 0, game_item: null, quantity: 1, price_per_unit: 0 }])
       setNextKey(1)
       onClose()
-    } catch {}
+    } catch {
+      // The dialog shows the request's error (the mutation's `error`).
+    }
   }
 
   return (

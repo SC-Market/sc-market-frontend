@@ -3,14 +3,11 @@ import { Grid } from "@mui/material"
 import { MemberAssignments } from "../../views/member/MemberAssignments"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrdersAssigned } from "../../features/contracting/hooks/usePageOrdersAssigned"
 
 export function OrdersAssigned() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const pageData = usePageOrdersAssigned()
 
   return (

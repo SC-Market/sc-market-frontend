@@ -27,7 +27,9 @@ function freshId(index: number): string {
     if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
       return crypto.randomUUID()
     }
-  } catch {}
+  } catch {
+    // randomUUID unavailable (insecure context): use the fallback below.
+  }
   // Deterministic-enough fallback; index keeps ids unique within one import.
   return `w-import-${index}-${Math.floor(performance.now())}`
 }

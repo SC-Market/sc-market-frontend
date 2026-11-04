@@ -177,7 +177,7 @@ export const ordersApi = serviceApi.injectEndpoints({
                     )
                     patches.push(searchPatch)
                   }
-                } catch (e) {
+                } catch {
                   // Ignore errors updating individual cached queries
                 }
               }

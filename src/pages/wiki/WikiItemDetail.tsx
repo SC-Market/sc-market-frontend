@@ -28,12 +28,10 @@ import {
   Tab,
   TextField,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate, Link as RouterLink } from "react-router-dom"
 import { useGetItemDetailQuery, useGetAcquisitionQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
@@ -60,7 +58,6 @@ const TAB_DISASSEMBLY = 2
 export function WikiItemDetail() {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: item, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetItemDetailQuery({ id: id! })

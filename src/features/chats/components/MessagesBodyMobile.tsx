@@ -67,7 +67,6 @@ function MessageEntryMobile(props: { message: Message }) {
   const { message } = props
   const fmt = useFormatters()
   const now = useNow()
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const { data: author } = useGetUserByUsernameQuery(message.author!, {
@@ -408,7 +407,6 @@ function MessagesAreaMobile(props: {
   inputAreaHeight: number
   isKeyboardOpen?: boolean
 }) {
-  const theme = useTheme<ExtendedTheme>()
   const { messageBoxRef, inputAreaHeight, isKeyboardOpen } = props
   const [chat] = useCurrentChat()
 

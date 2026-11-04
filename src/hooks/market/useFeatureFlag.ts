@@ -55,7 +55,9 @@ function readStoredFlags(): FeatureFlags {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) return { ...DEFAULT_FLAGS, ...JSON.parse(stored) }
-  } catch {}
+  } catch {
+    // Storage unavailable or corrupt: use the defaults.
+  }
   return DEFAULT_FLAGS
 }
 
@@ -73,7 +75,9 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     if (!hydrated) setFlags(readStoredFlags())
     try {
       localStorage.removeItem(LEGACY_MARKET_VERSION_KEY)
-    } catch {}
+    } catch {
+      // Storage unavailable or corrupt: use the defaults.
+    }
     // Only the first render's value matters: it says whether we hydrated.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

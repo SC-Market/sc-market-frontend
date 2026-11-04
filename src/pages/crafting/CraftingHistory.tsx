@@ -15,8 +15,6 @@ import {
 } from "@mui/material"
 import { Check } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
@@ -32,7 +30,6 @@ const TIER_COLORS: Record<number, "default" | "primary" | "secondary" | "error" 
 export function CraftingHistory() {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(20)
 

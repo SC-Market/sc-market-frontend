@@ -50,7 +50,6 @@ import { useClearEntityNotifications } from "../../features/notifications/hooks/
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
-  const { t } = useTranslation()
   const isMobile = useIsMobile()
 
   const [currentChat, setCurrentChat] = useCurrentChat()

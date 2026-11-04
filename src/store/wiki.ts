@@ -241,7 +241,7 @@ export function transformSearchResults(results: typeof image_search_sample) {
         } else {
           return page.thumbnail.url
         }
-      } catch (e) {
+      } catch {
         return page.thumbnail.url
       }
     })

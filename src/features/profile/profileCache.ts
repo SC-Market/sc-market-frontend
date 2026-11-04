@@ -5,7 +5,9 @@ const PROFILE_CACHE_KEY = "cached_user_profile"
 export function saveProfileCache(profile: UserProfileState): void {
   try {
     localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(profile))
-  } catch {}
+  } catch {
+    // Storage unavailable: the cache is only a head start.
+  }
 }
 
 export function loadProfileCache(): UserProfileState | null {
@@ -20,5 +22,7 @@ export function loadProfileCache(): UserProfileState | null {
 export function clearProfileCache(): void {
   try {
     localStorage.removeItem(PROFILE_CACHE_KEY)
-  } catch {}
+  } catch {
+    // Storage unavailable: the cache is only a head start.
+  }
 }

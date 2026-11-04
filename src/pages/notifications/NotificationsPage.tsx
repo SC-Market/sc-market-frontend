@@ -71,7 +71,7 @@ export function NotificationsPage() {
           count: result.affected_count,
         }),
       })
-    } catch (error) {
+    } catch {
       issueAlert({
         severity: "error",
         message: t("notifications.mark_all_read_failed"),
@@ -88,7 +88,7 @@ export function NotificationsPage() {
           count: result.affected_count,
         }),
       })
-    } catch (error) {
+    } catch {
       issueAlert({
         severity: "error",
         message: t("notifications.clear_all_failed"),

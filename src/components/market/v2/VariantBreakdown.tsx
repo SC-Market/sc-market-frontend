@@ -59,8 +59,6 @@ function hasDisplayableAttributes(variant: Variant): boolean {
 }
 
 function VariantInfo({ variant }: { variant: Variant }) {
-  const { t } = useTranslation()
-  const fmt = useFormatters()
   if (!hasDisplayableAttributes(variant)) return null;
   const { quality_tier, quality_value, crafted_source } = variant.attributes;
   return (

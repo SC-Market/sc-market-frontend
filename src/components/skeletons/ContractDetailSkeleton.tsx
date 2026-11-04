@@ -7,8 +7,6 @@ import {
   Stack,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useTheme } from "@mui/material/styles"
 
 export interface ContractDetailSkeletonProps {
   showActions?: boolean
@@ -21,7 +19,6 @@ export interface ContractDetailSkeletonProps {
 export function ContractDetailSkeleton({
   showActions = true,
 }: ContractDetailSkeletonProps) {
-  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Card

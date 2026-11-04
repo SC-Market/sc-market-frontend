@@ -7,7 +7,6 @@ import {
   Select,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { MuiLineChart } from "../../../../components/charts/MuiCharts"
@@ -41,7 +40,6 @@ export function PriceHistoryChartV2({
   width = "100%",
 }: PriceHistoryChartV2Props) {
   const { t } = useTranslation()
-  const theme = useTheme()
   
   // Quality tier filter state (null = all tiers)
   const [selectedTier, setSelectedTier] = useState<number | null>(null)

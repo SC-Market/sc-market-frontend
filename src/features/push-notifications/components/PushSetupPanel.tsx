@@ -175,7 +175,7 @@ export function PushSetupPanel() {
         await unsubscribeFromPush(subscriptionId, async (id) => {
           await unsubscribePush(id).unwrap()
         })
-      } catch (error) {
+      } catch {
         push.setError(
           t(
             "settings.pushNotifications.unsubscribeFailed",

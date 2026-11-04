@@ -660,7 +660,6 @@ export function ItemTypeFilter({ filters }: { filters: AutoApplySearchParams }) 
  */
 export function MarketSidebarV2() {
   const [open, setOpen] = useMarketSidebar();
-  const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
 
   return (

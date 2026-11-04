@@ -16,7 +16,7 @@ export function SentinelCode({ code }: SentinelCodeProps) {
         onClick={async () => {
           try {
             await navigator.clipboard.writeText(code)
-          } catch (err) {
+          } catch {
             // Clipboard API might not be available, but text is still selectable
           }
         }}

@@ -25,7 +25,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -458,7 +458,6 @@ export function OrdersTableView(props: {
 }) {
   const { title, mine, unassigned, search } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   const {

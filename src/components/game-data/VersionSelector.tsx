@@ -97,7 +97,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     // Call API to persist selection (if authenticated)
     try {
       await selectVersion({ selectVersionRequest: { version_id: versionId } }).unwrap()
-    } catch (error) {
+    } catch {
       // Ignore auth errors for guest users
       console.debug("Version selection not persisted (guest user)")
     }

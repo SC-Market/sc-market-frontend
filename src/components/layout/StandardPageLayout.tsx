@@ -79,7 +79,6 @@ export interface StandardPageLayoutProps {
 export function StandardPageLayout(
   props: StandardPageLayoutProps,
 ): ReactElement {
-  const theme = useTheme<ExtendedTheme>()
   const { profile } = useSession()
   const location = useLocation()
   const primaryContractor = profile?.contractors?.[0]

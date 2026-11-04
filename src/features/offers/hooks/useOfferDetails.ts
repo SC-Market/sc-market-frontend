@@ -146,7 +146,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
       await assignUser({ session_id: session.session_id, username: targetObject.username }).unwrap()
       issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
       setIsEditingAssigned(false); setTarget(""); setTargetObject(null)
-    } catch (err) {
+    } catch {
       issueAlert({ message: t("memberAssignArea.failed_assign"), severity: "error" })
     }
   }, [assignUser, session.session_id, issueAlert, targetObject, t])
@@ -158,7 +158,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
       await unassignUser({ session_id: session.session_id }).unwrap()
       issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
       setIsEditingAssigned(false)
-    } catch (err) {
+    } catch {
       issueAlert({ message: t("memberAssignArea.failed_unassign"), severity: "error" })
     }
   }, [unassignUser, session.session_id, issueAlert, t])

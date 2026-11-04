@@ -47,8 +47,6 @@ import {
 import { useNavigate } from "react-router-dom"
 import { Trans, useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../hooks/accessibility/useFocusOnReveal"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useFormatters } from "../../util/format"
@@ -71,7 +69,6 @@ export function WishlistManager() {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
-  const theme = useTheme<ExtendedTheme>()
   const { data: userProfile } = useGetUserProfileQuery()
   const primaryContractor = userProfile?.contractors?.[0]
   const navigate = useNavigate()

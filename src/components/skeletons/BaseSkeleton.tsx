@@ -1,6 +1,4 @@
 import { Skeleton, SkeletonProps } from "@mui/material"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useTheme } from "@mui/material/styles"
 
 export interface BaseSkeletonProps extends Omit<SkeletonProps, "variant"> {
   variant?: "text" | "rectangular" | "rounded" | "circular"
@@ -20,7 +18,6 @@ export function BaseSkeleton({
   sx,
   ...props
 }: BaseSkeletonProps) {
-  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Skeleton

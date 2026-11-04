@@ -31,7 +31,6 @@ import {
 } from "../../store/api/v2/market"
 import {
   Link as RouterLink,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -88,7 +87,6 @@ function AcqChips({ can_be_mined, can_be_purchased, can_be_salvaged, can_be_loot
 
 export function WikiCommodityBrowser() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const text = searchParams.get("q") || ""

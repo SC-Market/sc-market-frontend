@@ -29,14 +29,18 @@ function readCache(owner: DashboardOwnerRef): DashboardConfig {
   try {
     const stored = localStorage.getItem(cacheKey(owner))
     if (stored) return parseConfig(stored)
-  } catch {}
+  } catch {
+    // Storage unavailable or corrupt: fall back to the server copy.
+  }
   return emptyConfig()
 }
 
 function writeCache(owner: DashboardOwnerRef, config: DashboardConfig): void {
   try {
     localStorage.setItem(cacheKey(owner), JSON.stringify(config))
-  } catch {}
+  } catch {
+    // Storage unavailable or corrupt: fall back to the server copy.
+  }
 }
 
 export interface UseDashboardConfigResult {

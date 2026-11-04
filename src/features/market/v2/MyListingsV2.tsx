@@ -55,7 +55,6 @@ function MyListingSectionV2({
 }: {
   status: "active" | "inactive" | "cancelled"
 }) {
-  const theme = useTheme<ExtendedTheme>()
   const shopCtx = useOptionalShopRouteContext()
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
   const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }

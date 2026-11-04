@@ -1,5 +1,4 @@
 import React from "react"
-import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { Box, Container, Grid } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
@@ -19,7 +18,6 @@ import { useProfileTab } from "../hooks/useProfileTab"
 import { Stack } from "@mui/system"
 
 export function ViewProfile(props: { profile: User }) {
-  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const navigate = useNavigate()

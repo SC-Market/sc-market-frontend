@@ -77,7 +77,7 @@ export function PushNotificationSubscription({
           setCurrentDeviceSubscribed(false)
           setCurrentSubscriptionId(null)
         }
-      } catch (error) {
+      } catch {
         setCurrentDeviceSubscribed(false)
         setCurrentSubscriptionId(null)
       }

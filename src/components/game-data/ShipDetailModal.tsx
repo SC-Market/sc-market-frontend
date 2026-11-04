@@ -5,7 +5,6 @@ import {
   TableContainer, TableRow, Paper,
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
@@ -20,7 +19,6 @@ interface Props {
 
 export function ShipDetailModal({ shipId, open, onClose }: Props) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { data: ship, isLoading, error } = useGetShipDetailQuery(
     { id: shipId! },
     { skip: !shipId },
