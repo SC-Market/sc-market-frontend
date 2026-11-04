@@ -1,11 +1,11 @@
 {
-  "warnings": 1248,
+  "warnings": 905,
   "errors": 0,
   "byRule": {
     "(eslint)": 2,
     "@typescript-eslint/ban-ts-comment": 3,
-    "@typescript-eslint/no-restricted-imports": 99,
-    "@typescript-eslint/no-unused-vars": 665,
+    "@typescript-eslint/no-restricted-imports": 96,
+    "@typescript-eslint/no-unused-vars": 325,
     "jsx-a11y/anchor-is-valid": 1,
     "jsx-a11y/click-events-have-key-events": 1,
     "jsx-a11y/no-static-element-interactions": 1,
