@@ -1,5 +1,4 @@
 import React from "react"
-import { User } from "../../../datatypes/User"
 import type { Chat } from "../domain/types"
 
 export const CurrentChatContext = React.createContext<

@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from "react"
 import { useSearchParams } from "react-router-dom"
-import type { MarketSearchState, SaleTypeSelect } from "../domain/types"
+import type { MarketSearchState } from "../domain/types"
 import { paramsToSearchState, searchStateToParams } from "../domain/formatters"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 

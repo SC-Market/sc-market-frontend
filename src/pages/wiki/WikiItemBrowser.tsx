@@ -4,7 +4,7 @@
  * Main: UnifiedSearchBar (token-based) + card grid or table.
  */
 
-import React, { useState, useMemo, useCallback } from "react"
+import React, { useMemo, useCallback } from "react"
 import {
   Box, Card, CardContent, CardMedia, Grid, Typography, Pagination, Alert, Chip, Stack,
   ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow,
@@ -12,7 +12,6 @@ import {
 } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
-import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import {
   useSearchItemsQuery,
@@ -25,7 +24,6 @@ import {
 } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"

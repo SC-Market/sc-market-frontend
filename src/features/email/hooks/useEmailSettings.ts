@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { useCallback, useState, useEffect } from "react"
+import { useCallback, useState } from "react"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
   useGetEmailPreferencesQuery,

@@ -7,7 +7,6 @@ import {
   Paper,
   Stack,
   Avatar,
-  Box,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

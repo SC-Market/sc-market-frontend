@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useMemo, useState } from "react"
+import React, { MouseEventHandler, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -27,23 +27,11 @@ import {
 import { Link } from "react-router-dom"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { MinimalUser } from "../../datatypes/User"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  useApplyContractorRoleMutation,
-  useKickContractorMemberMutation,
-  useRemoveContractorRoleMutation,
-} from "../../features/contractor/api/contractorApi"
-import {
-  min_position,
-  getMemberPosition,
-  self_member_role_removal_forbidden,
-} from "./OrgRoles"
 import { Contractor, ContractorRole } from "../../features/contractor/domain/types"
 import { useMemberActions } from "../../features/contractor/hooks/useMemberActions"
-import { has_permission } from "../../features/contractor/domain/permissions"
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 import { MEMBER_LIST_PAGE_SIZE } from "../../features/contractor/domain/constants"
 import { USER_PATHS } from "../../routes/paths"

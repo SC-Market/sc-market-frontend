@@ -1,6 +1,5 @@
 import {
   Box,
-  Drawer,
   Grid,
   InputAdornment,
   MenuItem,
@@ -13,8 +12,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../features/market"
+import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useContractSidebar } from "../../features/contracting/hooks/ContractSidebar"
 import { useContractSearch } from "../../features/contracting/hooks/ContractSearch"

@@ -29,16 +29,13 @@ import type { Order } from "../../features/orders/domain/types"
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
-import { statusColors, statusNames } from "../../features/orders/domain/constants"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import {
   CancelRounded,
   DoneRounded,
   PlayArrowRounded,
-  Edit,
   Close,
-  Check,
 } from "@mui/icons-material"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
@@ -48,7 +45,6 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 import { SHOP_PATHS } from "../../routes/paths"
-import { isSiteAdmin } from "../../util/siteRole"
 import { useFormatters } from "../../util/format"
 import { useClearEntityNotifications } from "../../features/notifications/hooks/useClearEntityNotifications"
 

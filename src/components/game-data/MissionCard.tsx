@@ -10,7 +10,6 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  Stack,
   Typography,
   Box,
 } from "@mui/material"

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from "react"
+import React, { useMemo, useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { Box, useTheme } from "@mui/material"
 import { useIsMobile, useBreakpointDown, useBreakpointUp, useBreakpointBetween } from "../../hooks/layout/useBreakpoint"

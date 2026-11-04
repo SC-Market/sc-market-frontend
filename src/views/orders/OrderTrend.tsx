@@ -1,7 +1,7 @@
 import { Section } from "../../components/paper/Section"
 import { OrderStub } from "../../features/orders/domain/types"
 import React, { useMemo } from "react"
-import { Grid, List, ListItem, Typography } from "@mui/material"
+import { Grid, List, ListItem } from "@mui/material"
 import { MuiLineChart, MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"

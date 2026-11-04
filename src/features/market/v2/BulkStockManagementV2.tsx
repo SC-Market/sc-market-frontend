@@ -25,7 +25,6 @@ import {
   MenuItem,
   Paper,
   Stack,
-  Switch,
   TextField,
   Typography,
   InputAdornment,
@@ -34,7 +33,6 @@ import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
   Delete as DeleteIcon,
-  Save as SaveIcon,
   Add as AddIcon,
   EditOutlined as EditIcon,
 } from "@mui/icons-material"
@@ -63,13 +61,11 @@ import {
   useGetStockLotsQuery,
   useGetListingDetailQuery,
   useSearchResourcesQuery,
-  type MyListingItem,
-  type StockLotDetail,
   type LocationInfo,
   type QualityBand,
   type VariantAttributes,
 } from "../../../store/api/v2/market"
-import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
+import { getQualityMode } from "../../../util/qualityMode"
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"

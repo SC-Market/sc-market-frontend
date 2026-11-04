@@ -14,7 +14,6 @@ import {
   ActiveDelivery,
   makeActiveDeliveries,
 } from "../../datatypes/Deliveries"
-import { HeadCell } from "../../components/table/PaginatedTable"
 import { useTranslation } from "react-i18next" // Added for localization
 
 const statusColors = new Map<

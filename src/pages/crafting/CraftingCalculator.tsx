@@ -17,7 +17,7 @@ import {
   Stack,
   Divider,
 } from "@mui/material"
-import { Add, Delete } from "@mui/icons-material"
+import { Delete } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

@@ -4,7 +4,6 @@ import React, { useMemo } from "react"
 import {
 } from "../../features/market"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export interface SelectGameItemProps {
   item_type: string

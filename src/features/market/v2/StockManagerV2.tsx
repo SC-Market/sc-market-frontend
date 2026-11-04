@@ -18,19 +18,14 @@ import {
   GridRowSelectionModel,
 } from "@mui/x-data-grid"
 import {
-  Autocomplete,
-  Avatar,
   Box,
   Button,
-  Card,
-  CardActionArea,
   Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControlLabel,
   Grid,
   IconButton,
   Link as MaterialLink,
@@ -50,14 +45,10 @@ import {
   ArchiveOutlined,
   CreateRounded,
   DeleteRounded,
-  InventoryRounded,
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
   RefreshOutlined,
-  RemoveRounded,
   SaveRounded,
-  ShareRounded,
-  VisibilityRounded,
 } from "@mui/icons-material"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import LoadingButton from "@mui/lab/LoadingButton"
@@ -74,7 +65,6 @@ import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { MarketSearchAreaV2 } from "./ListingSearchV2"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { LongPressMenu, useLongPress } from "../../../components/gestures"
 import { EmptyListings } from "../../../components/empty-states"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import {

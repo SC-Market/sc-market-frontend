@@ -1,24 +1,14 @@
 import React, {
   MouseEventHandler,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from "react";
 import {
   Box,
-  Breadcrumbs,
   Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Fade,
   Grid,
-  IconButton,
   InputAdornment,
-  Link as MaterialLink,
-  Paper,
   Stack,
   TableCell,
   tableCellClasses,
@@ -31,12 +21,9 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import {
   AddShoppingCartRounded,
-  EditRounded,
   VisibilityRounded,
-  ZoomInRounded,
 } from "@mui/icons-material";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
-import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
 import { useCookies } from "react-cookie";
 import { FRONTEND_URL } from "../../../util/constants";
 import { Cart } from "../../../datatypes/Cart";
@@ -44,32 +31,21 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { MARKET_PATHS, PATHS } from "../../../routes/paths";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { MarketAggregateContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import {
   HeadCell,
-  PaginatedTable,
 } from "../../../components/table/PaginatedTable";
 import { SeoHead } from "../../../seo/SeoHead";
 import { buildAggregateHead } from "../../../seo/entityHeads";
 import { headDescription } from "../../../seo/pageHead";
-import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal";
-import { ImageSearch } from "../components/ImageSearch";
-import { HeaderTitle } from "../../../components/typography/HeaderTitle";
 import { Section } from "../../../components/paper/Section";
-import { DynamicKlineChart } from "../../../components/charts/DynamicCharts";
 import { MuiAreaChart, MuiBarChart } from "../../../components/charts/MuiCharts";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
-import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
-import { QualityFilter } from "../../../components/market/v2/QualityFilter";
-import { VariantSelector } from "../../../components/market/v2/VariantSelector";
-import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
 import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog";
 import { MarketAggregateViewV2Admin } from "./MarketAggregateViewV2Admin";
 import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, type StandingBuyOrder } from "../../../store/api/v2/market";
-import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 import { remainingQuantity } from "../domain/buyOrders";
 import { useFormatters } from "../../../util/format"
 import { useCancelBuyOrder } from "../hooks/useBuyOrderActions";

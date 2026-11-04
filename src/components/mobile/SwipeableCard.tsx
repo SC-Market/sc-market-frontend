@@ -7,9 +7,7 @@
 import {
   Box,
   Card,
-  CardContent,
   CardProps,
-  IconButton,
   Stack,
   useTheme,
 } from "@mui/material"

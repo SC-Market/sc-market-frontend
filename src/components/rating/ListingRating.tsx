@@ -14,12 +14,11 @@ import {
 } from "@mui/icons-material"
 import {
   Box,
-  Link as MaterialLink,
   Tooltip,
 } from "@mui/material"
 import { Rating } from "../../features/contractor/domain/types"
-import React, { useEffect, useMemo } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"
 import { StaticRatingStars } from "./StaticRatingStars"
 import { useTheme } from "@mui/material/styles"
@@ -28,7 +27,6 @@ import { useTranslation } from "react-i18next"
 import {
   prioritizeBadges,
   calculateBadgesFromRating,
-  calculateBadgesFromShopMetrics,
   BADGE_RATING_99_9,
   BADGE_RATING_99,
   BADGE_RATING_95,
@@ -58,7 +56,6 @@ import {
   BADGE_DONOR_COPPER,
   BADGE_EARLY_ADOPTER,
   BADGE_RESPONSIVE,
-  type ShopMetricsForBadges,
 } from "../../util/badges"
 
 import { useFormatters } from "../../util/format"

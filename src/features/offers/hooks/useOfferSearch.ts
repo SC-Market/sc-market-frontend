@@ -3,7 +3,7 @@ import {
   useSearchOfferSessionsQuery,
   useMergeOfferSessionsMutation,
 } from "../api/offerApi"
-import type { OfferSearchStatus, OfferSessionStub } from "../domain/types"
+import type { OfferSearchStatus } from "../domain/types"
 import type { OrderSearchSortMethod } from "../../orders/domain/types"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useGetOfferSessionQuery } from "../../../store/api/v2/market"
-import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import { CounterOfferBody } from "../domain/types"
 
 /**

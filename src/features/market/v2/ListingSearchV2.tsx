@@ -55,8 +55,6 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet";
 import { useMarketSidebar } from "../hooks/MarketSidebar";
 import { AddShoppingCartRounded } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { useCartDrawer } from "../hooks/AddToCartContext";

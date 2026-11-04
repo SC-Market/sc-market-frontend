@@ -6,7 +6,6 @@
 
 import {
   AppBar,
-  Box,
   Toolbar,
   useScrollTrigger,
   useTheme,

@@ -3,7 +3,6 @@ import {
   BreadcrumbsProps,
   Link,
   Typography,
-  TypographyProps,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link as RouterLink } from "react-router-dom"

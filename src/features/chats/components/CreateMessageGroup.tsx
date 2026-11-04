@@ -1,7 +1,6 @@
 import {
   Autocomplete,
   Avatar,
-  AvatarGroup,
   Box,
   Button,
   Chip,
@@ -22,7 +21,6 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { User } from "../../../datatypes/User"
 import {
-  useGetUserProfileQuery,
   useSearchUsersQuery,
 } from "../../profile/api/profileApi"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
@@ -32,12 +30,10 @@ import {
   CloseRounded,
   PersonAddRounded,
 } from "@mui/icons-material"
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
 import throttle from "lodash/throttle"
 import { useCreateChatMutation, useGetMyChatsQuery } from "../api/chatsApi"
 import { useTranslation } from "react-i18next"
-import { useCurrentChatID } from "../hooks/CurrentChatID"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 function MessageHeader(props: {

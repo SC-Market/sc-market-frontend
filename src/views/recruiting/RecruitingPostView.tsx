@@ -10,8 +10,6 @@ import {
   Grid,
   IconButton,
   Link as MaterialLink,
-  Rating,
-  Skeleton,
   Typography,
 } from "@mui/material"
 import React, { useMemo } from "react"
@@ -19,7 +17,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
-import { CreateRounded, StarRounded } from "@mui/icons-material"
+import { CreateRounded } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { RecruitingPost } from "../../features/recruiting/api/recruitingApi"
 import { RecruitmentVotes } from "../../components/button/RecruitmentVotes"

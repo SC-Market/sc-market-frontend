@@ -24,7 +24,6 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import {
   useGetMyShopsQuery,
-  type ShopResponse,
 } from "../../../store/api/v2/market"
 import { canEditShopListings } from "../domain/shopPermissions"
 import { useQuickCreateShop } from "../hooks/useShopActions"

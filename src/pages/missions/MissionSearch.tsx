@@ -31,7 +31,6 @@ import {
   Paper,
   Chip,
   Stack,
-  Button,
   Avatar,
   Tooltip,
 } from "@mui/material"
@@ -53,7 +52,6 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
 import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 import { missionsCapabilityText } from "../../seo/missionText"
-import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"

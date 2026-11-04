@@ -4,7 +4,6 @@ import {
   CardMedia,
   CardContent,
   Box,
-  Stack,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { BaseSkeleton } from "./BaseSkeleton"

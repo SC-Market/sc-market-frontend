@@ -5,16 +5,26 @@
 
 import React, { useMemo, useCallback } from "react"
 import {
-  Alert, Avatar, Box, Card, CardActionArea, CardContent, Chip, Divider,
-  FormControl, Grid, InputLabel, MenuItem, Pagination, Select, Stack, TextField,
-  ToggleButton, ToggleButtonGroup, Typography,
+  Alert,
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Divider,
+  Grid,
+  Pagination,
+  Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import HardwareRoundedIcon from "@mui/icons-material/HardwareRounded"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import ConstructionIcon from "@mui/icons-material/Construction"
 import InventoryIcon from "@mui/icons-material/Inventory"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { useTranslation } from "react-i18next"
 import {
   useGetCommoditiesQuery, useGetResourceCategoriesQuery,
@@ -26,8 +36,6 @@ import {
 } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useTheme } from "@mui/material/styles"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getCommodityColor } from "../../util/gameIcons"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"

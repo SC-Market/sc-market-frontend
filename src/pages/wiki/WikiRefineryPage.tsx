@@ -1,14 +1,24 @@
 import React from "react"
 import {
-  Card, CardContent, Chip, Grid, Typography, Stack,
-  Table, TableBody, TableCell, TableHead, TableRow, Paper, Box,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  Typography,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { useGetRefiningMethodsQuery, type RefiningMethod } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { Speed, HighQuality, Science } from "@mui/icons-material"
+import { Speed, HighQuality } from "@mui/icons-material"
 
 const speedColor: Record<string, string> = { Fast: "#4caf50", Normal: "#ff9800", Slow: "#f44336" }
 const qualityColor: Record<string, string> = { Careful: "#4caf50", Normal: "#ff9800", Wasteful: "#f44336" }

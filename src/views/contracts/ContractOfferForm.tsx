@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Grid, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
+import { Grid, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { PAYMENT_TYPES } from "../../util/constants"

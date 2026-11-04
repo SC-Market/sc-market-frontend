@@ -1,7 +1,5 @@
 import {
   RecruitingPost,
-  useRecruitingDownvotePostMutation,
-  useRecruitingUpvotePostMutation,
 } from "../../features/recruiting/api/recruitingApi"
 import { Button, ButtonGroup } from "@mui/material"
 import {

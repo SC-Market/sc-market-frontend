@@ -25,7 +25,7 @@ import {
   TimerRounded,
   BuildRounded,
 } from "@mui/icons-material"
-import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
+import type { MissionDetailResponse, Mission } from "../../store/api/v2/market"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"

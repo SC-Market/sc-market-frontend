@@ -4,7 +4,6 @@
  * - Core listing types are re-exported from datatypes/MarketListing.
  */
 
-import type { MinimalUser } from "../../../datatypes/User"
 
 // Re-export core listing types from datatypes (used by API and views).
 // We omit MarketBid from datatypes to avoid conflict with API MarketBid (see MarketBidApi below).

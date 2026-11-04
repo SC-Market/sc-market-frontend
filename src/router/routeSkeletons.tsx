@@ -4,7 +4,6 @@ import {
   MarketPageSkeleton,
   DashboardSkeleton,
   ListPageSkeleton,
-  DetailPageSkeleton,
   FormPageSkeleton,
   AdminPageSkeleton,
   MessageListSkeleton,

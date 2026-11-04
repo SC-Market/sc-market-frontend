@@ -14,10 +14,6 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { User } from "../../datatypes/User"
-import {
-  useProfileGetBlocklistQuery,
-  useGetUserProfileQuery,
-} from "../../features/profile/api/profileApi"
 
 import { BlockUserButton, BlockUserForOrgButton } from "./BlockUserButton"
 import { UnblockUserButton, UnblockUserForOrgButton } from "./UnblockUserButton"

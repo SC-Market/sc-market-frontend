@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, Tooltip } from "@mui/material"
+import { Drawer } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import React from "react"
@@ -6,7 +6,6 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import { MessagingSidebarContent } from "./MessagingSidebarContent"
-import { MenuRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 

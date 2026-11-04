@@ -9,7 +9,7 @@
  * is invisible — no broken image state.
  */
 
-import React, { useState } from "react"
+import React from "react"
 import { Box, SxProps, Theme } from "@mui/material"
 
 // Career → color

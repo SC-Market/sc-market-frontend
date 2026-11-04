@@ -10,7 +10,7 @@ import "../../../util/i18n"
  */
 
 import React from "react"
-import { render, screen, waitFor, within } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"

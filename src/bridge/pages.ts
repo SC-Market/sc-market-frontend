@@ -84,8 +84,6 @@ import {
   buildRecruitingPostHead,
   buildShopHead,
   buildUserHead,
-  formatAuecShort,
-  listingPriceLabel,
   listingPriceRange,
   listingQuantity,
   orgPageTitle,

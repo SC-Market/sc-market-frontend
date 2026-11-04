@@ -1,6 +1,5 @@
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import React from "react"
-import { Authenticate } from "../../views/authentication/Authenticate"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {

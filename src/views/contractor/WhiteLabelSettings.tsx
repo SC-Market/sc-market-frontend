@@ -28,8 +28,7 @@ import {
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
 import { WHITE_LABEL_TAB_ICONS as ICON_MAP, DEFAULT_TAB_ICON as DEFAULT_ICON } from "../../features/contractor/components/whiteLabelIcons"
-import type { SidebarConfigItem } from "../../store/api/contractors"
-import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
+import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal } from "../../features/contractor/hooks/useWhiteLabelSettings"
 import { useTranslation } from "react-i18next"
 import { HelpTip } from "../../features/help/components/HelpTip"
 

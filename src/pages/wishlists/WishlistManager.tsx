@@ -34,7 +34,6 @@ import {
   Add,
   PlaylistAdd,
   Delete,
-  Edit,
   Share,
   Lock,
   Public,

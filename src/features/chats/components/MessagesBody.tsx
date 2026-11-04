@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material"
+import { Box } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useTheme } from "@mui/material/styles"
@@ -10,7 +10,6 @@ import {
   useGetChatByIDQuery,
 } from "../api/chatsApi"
 import { useParams } from "react-router-dom"
-import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"

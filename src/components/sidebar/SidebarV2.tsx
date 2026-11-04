@@ -90,7 +90,7 @@ import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { canManageOrgOrders } from "../../features/contractor/domain/orgPermissions"
 import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
 import { setSidebarShopContext, shopContextFromState } from "./shopContextState"
-import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
+import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import {
   ADMIN_PATHS,
   GAME_DATA_PATHS,

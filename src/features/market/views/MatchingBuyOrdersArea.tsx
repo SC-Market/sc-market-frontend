@@ -18,7 +18,6 @@ import { Section } from "../../../components/paper/Section"
 import { MARKET_PATHS } from "../../../routes/paths"
 import {
   useGetMatchesForSellerQuery,
-  type StandingBuyOrder,
 } from "../../../store/api/v2/market"
 import { remainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"

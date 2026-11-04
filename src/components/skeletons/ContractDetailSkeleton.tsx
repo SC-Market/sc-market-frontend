@@ -5,7 +5,6 @@ import {
   CardActions,
   Box,
   Stack,
-  Chip,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

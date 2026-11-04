@@ -5,8 +5,6 @@ import {
   Avatar,
   Stack,
   Paper,
-  Typography,
-  Checkbox,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

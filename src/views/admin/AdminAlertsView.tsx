@@ -20,7 +20,6 @@ import {
   FormControlLabel,
   Autocomplete,
 } from "@mui/material"
-import { AdminAlert } from "../../datatypes/AdminAlert"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useRef, useEffect } from "react"
 
 /**
  * Hook for infinite scroll pagination.

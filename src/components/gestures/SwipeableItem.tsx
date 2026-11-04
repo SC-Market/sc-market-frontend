@@ -3,7 +3,6 @@ import { Box, IconButton } from "@mui/material"
 import {
   DeleteRounded,
   FavoriteRounded,
-  MoreVertRounded,
 } from "@mui/icons-material"
 import { useHapticFeedback } from "../../hooks/gestures/useHapticFeedback"
 import { useTheme } from "@mui/material/styles"

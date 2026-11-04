@@ -9,11 +9,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
   Grid,
-  Paper,
   Skeleton,
-  Stack,
   Typography,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
@@ -21,12 +18,11 @@ import { FlatSection } from "../../components/paper/Section"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { BACKEND_URL, isCitizenIdEnabled } from "../../util/constants"
+import { isCitizenIdEnabled } from "../../util/constants"
 import { CheckCircle as CheckCircleIcon } from "@mui/icons-material"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
-import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
 import { LinkCitizenIDButton } from "../../components/button/LinkCitizenIDButton"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
 import { BottomSheet } from "../../components/mobile/BottomSheet"

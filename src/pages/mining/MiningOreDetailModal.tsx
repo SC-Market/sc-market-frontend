@@ -1,5 +1,5 @@
 import React from "react"
-import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Stack, Box, CircularProgress } from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, CircularProgress } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"

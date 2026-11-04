@@ -4,7 +4,6 @@ import {
   Badge,
   Box,
   Button,
-  Chip,
   IconButton,
   InputAdornment,
   List,
@@ -33,9 +32,8 @@ import type {
 } from "../domain/types"
 import { useGetMyChatsQuery } from "../api/chatsApi"
 import { useTranslation } from "react-i18next"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
-import { MenuRounded } from "@mui/icons-material"
 import { MessageListSkeleton } from "../../../components/skeletons"
 import {
   EmptyMessages,

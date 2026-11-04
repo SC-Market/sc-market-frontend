@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+
 import { serviceApi } from "./service"
 
 const temp_sample = {

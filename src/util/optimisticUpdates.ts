@@ -12,11 +12,6 @@
  * - Operations that don't redirect after completion
  */
 
-import {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query"
 import type { ThunkDispatch, AnyAction } from "@reduxjs/toolkit"
 import type { RootState } from "../store/store"
 

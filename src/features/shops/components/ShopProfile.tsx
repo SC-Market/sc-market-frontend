@@ -14,7 +14,6 @@ import {
   Pagination,
   Paper,
   Rating,
-  Skeleton,
   Stack,
   Switch,
   TableCell,

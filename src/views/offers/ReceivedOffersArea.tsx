@@ -1,8 +1,6 @@
 import {
   OfferSearchStatus,
   OfferSessionStub,
-  useSearchOfferSessionsQuery,
-  useMergeOfferSessionsMutation,
 } from "../../features/offers/api/offerApi"
 import {
   ControlledTable,
@@ -27,7 +25,6 @@ import {
   DialogTitle,
   FormControlLabel,
   Grid,
-  IconButton,
   Link as MaterialLink,
   Paper,
   Switch,
@@ -44,7 +41,6 @@ import {
   Announcement,
   Cancel,
   CheckCircle,
-  Close,
   ExpandLess,
   ExpandMore,
   HourglassTop,
@@ -59,12 +55,9 @@ import { useLongPress } from "../../components/gestures"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
-import { OrderSearchSortMethod } from "../../features/orders/domain/types"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
-import { useDebounce } from "../../hooks/useDebounce"
 import { OfferRowSkeleton } from "../../components/skeletons"
 import { canClaimOffer } from "../../features/offers/domain/status"
 import { useOfferSearch } from "../../features/offers/hooks/useOfferSearch"

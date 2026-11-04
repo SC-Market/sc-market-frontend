@@ -2,7 +2,7 @@ import "./setup";
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { BrowserRouter, MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { describe, it, expect, beforeEach, vi } from "vitest";

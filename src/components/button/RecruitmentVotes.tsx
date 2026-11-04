@@ -6,7 +6,6 @@ import { Button } from "@mui/material"
 import { KeyboardArrowUpRounded } from "@mui/icons-material"
 import React, { useState } from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 
 export function RecruitmentVotes(props: { post: RecruitingPost }) {

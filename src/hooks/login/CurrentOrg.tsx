@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Contractor } from "../../features/contractor/domain/types"
 
 export const CurrentOrgContext = React.createContext<

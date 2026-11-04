@@ -7,7 +7,6 @@ import {
   Avatar,
   AvatarGroup,
   Box,
-  IconButton,
   TextField,
   Typography,
   useTheme,
@@ -26,7 +25,6 @@ import React, {
   useState,
 } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import { useTheme as useMuiTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
@@ -49,7 +47,6 @@ import { useParams } from "react-router-dom"
 import { useChatSocket } from "../hooks/useChatSocket"
 import SCMarketLogo from "../../../assets/scmarket-logo.webp"
 import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
-import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"

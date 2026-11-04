@@ -1,7 +1,4 @@
 import { serviceApi } from "../../../store/service"
-import { MinimalUser } from "../../../datatypes/User"
-import type { MinimalContractor } from "../../contractor/domain/types"
-import type { OrderAvailability, Service } from "../../orders/domain/types"
 import { UniqueListing } from "../../market"
 import { unwrapResponse } from "../../../store/api-utils"
 import {

@@ -6,8 +6,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Typography,
-  Box,
   Grid,
 } from "@mui/material"
 import { PreferenceSection } from "./PreferenceSection"

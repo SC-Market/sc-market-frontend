@@ -13,7 +13,7 @@ import "../../../util/i18n"
  */
 
 import React from "react"
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent } from "@testing-library/react"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"

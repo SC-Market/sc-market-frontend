@@ -5,7 +5,6 @@ import {
   Divider,
   Grid,
   Skeleton,
-  Stack,
   Tabs,
 } from "@mui/material"
 import { HapticTab } from "../../../components/haptic"

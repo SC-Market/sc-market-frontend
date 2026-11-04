@@ -1,7 +1,6 @@
 import "./setup";
 import React from "react"
-import { render, screen, waitFor, within } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { render, screen, waitFor } from "@testing-library/react"
 import { MarketCartV2 } from "../MarketCartV2"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"

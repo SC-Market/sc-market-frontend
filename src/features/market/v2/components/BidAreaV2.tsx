@@ -21,7 +21,6 @@ import {
 import { GavelRounded, TimerRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetAuctionDetailQuery } from "../../../../store/api/v2/market"
-import { UserAvatar } from "../../../../components/avatar/UserAvatar"
 import { HelpLink } from "../../../help/components/HelpLink"
 
 import { useFormatters, useNow } from "../../../../util/format"

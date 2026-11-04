@@ -11,7 +11,6 @@ import {
   Fade,
   Grid,
   Link as MaterialLink,
-  Skeleton,
   Typography,
 } from "@mui/material"
 import { Contractor } from "../../features/contractor/domain/types"

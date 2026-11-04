@@ -5,8 +5,19 @@
 
 import React from "react"
 import {
-  Box, Button, Card, CardContent, Chip, Grid, Typography, Alert, Stack, Divider,
-  Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  Typography,
+  Stack,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
 } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"

@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
-  Box,
   CssBaseline,
   ThemeProvider,
-  Typography,
   useMediaQuery,
   createTheme,
   responsiveFontSizes,
@@ -18,9 +16,8 @@ import { CurrentChatIDContext } from "../features/chats/hooks/CurrentChatID"
 import { CurrentChatMessagesContext } from "../features/chats/hooks/CurrentChatMessages"
 import { CurrentChatContext } from "../features/chats/hooks/CurrentChat"
 import type { Chat, Message } from "../features/chats/domain/types"
-import { lightTheme, mainTheme } from "./styles/Theme"
+import { mainTheme } from "./styles/Theme"
 import { CLEAN_theme } from "./styles/themes/CLEAN"
-import { CLEAN_DARK_theme } from "./styles/themes/CLEAN_DARK"
 import { CurrentOrgProvider } from "./login/CurrentOrg"
 import { useAppDispatch } from "../store/hooks"
 import { AlertInterface } from "../datatypes/Alert"
@@ -45,7 +42,7 @@ import {
   buildOrgTheme,
 } from "./styles/themeCache"
 import { useLocation, useSearchParams } from "react-router-dom"
-import { isCitizenIdEnabled, BACKEND_URL } from "../util/constants"
+import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../features/profile/api/profileApi"
 import { startProactiveRefresh } from "../store/proactiveRefresh"
 

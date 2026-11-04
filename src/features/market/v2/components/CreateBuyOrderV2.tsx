@@ -1,7 +1,5 @@
 import React, { useState, useCallback } from "react";
 import {
-  Box,
-  Button,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -24,7 +22,7 @@ import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
 import { useNavigate } from "react-router-dom";
 import { MARKET_PATHS } from "../../../../routes/paths";
 
-import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
+import { getQualityMode } from "../../../../util/qualityMode";
 import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
 import { useFormatters } from "../../../../util/format"
 import { usePhotoUploads } from "../../hooks/usePhotoUploads";

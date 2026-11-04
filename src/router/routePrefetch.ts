@@ -1,4 +1,4 @@
-import { routeRegistry, RouteImportFunction } from "./routeRegistry"
+import { routeRegistry } from "./routeRegistry"
 import { ROUTE_PREFETCH_MAP } from "../types/routes"
 import { enqueueIdlePrefetch } from "./idlePrefetchQueue"
 

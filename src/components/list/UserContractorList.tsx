@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next"
-import { Contractor } from "../../features/contractor/domain/types"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
   Avatar,

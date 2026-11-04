@@ -7,11 +7,9 @@
 
 import React, { useState } from "react"
 import {
-  Alert,
   Avatar,
   Box,
   Chip,
-  CircularProgress,
   Divider,
   Grid,
   IconButton,
@@ -42,8 +40,6 @@ import {
   RefreshRounded,
   ShoppingCartRounded,
   StorefrontRounded,
-  TrendingUpRounded,
-  WarningAmberRounded,
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { Trans, useTranslation } from "react-i18next"

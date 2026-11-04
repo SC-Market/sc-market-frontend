@@ -9,9 +9,7 @@ import { ContractorReviewSummary } from "../../../views/contractor/OrgReviews"
 import { a11yProps } from "../../../components/tabs/Tabs"
 import {
   CreateRounded,
-  DesignServicesRounded,
   InfoRounded,
-  PersonAddRounded,
   StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"

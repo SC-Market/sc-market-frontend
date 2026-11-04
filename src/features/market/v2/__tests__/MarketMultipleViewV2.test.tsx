@@ -1,6 +1,6 @@
 import "./setup";
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -9,7 +9,7 @@ import { MarketMultipleViewV2 } from "../MarketMultipleViewV2";
 import { generatedApiV2 } from "../../../../store/generatedApiV2";
 import { serviceApi } from "../../../../store/service";
 import "@testing-library/jest-dom";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect } from "vitest";
 import { querySuccess } from "../../../../__tests__/rtkQueryMocks";
 import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
 import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";

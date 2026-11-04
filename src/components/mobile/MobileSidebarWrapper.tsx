@@ -6,7 +6,7 @@
 
 import { Box, Drawer, IconButton, useTheme } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import React, { ReactNode, useEffect, useRef } from "react"
+import React, { ReactNode } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "./BottomSheet"

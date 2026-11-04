@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react"
 import {
   Box,
   Grid,
-  Typography,
   List,
   Tabs,
   Tab,

@@ -5,15 +5,34 @@
 
 import React, { useMemo, useState } from "react"
 import {
-  Alert, Box, Card, CardActionArea, CardContent, Chip, Collapse, Divider,
-  FormControl, Grid, InputLabel, List, ListItem, ListItemButton, ListItemText,
-  MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup,
+  Alert,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Collapse,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 import {
-  ExpandLess, ExpandMore, HardwareRounded, Hotel,
-  LocalHospital, Storefront, FlightLand, Build, ShoppingBag, Public,
+  ExpandLess,
+  ExpandMore,
+  HardwareRounded,
+  Hotel,
+  LocalHospital,
+  Storefront,
+  FlightLand,
+  Build,
+  ShoppingBag,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
@@ -23,7 +42,6 @@ import {
 } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { wikiLocationsSeoText } from "../../seo/hubHeads"
 

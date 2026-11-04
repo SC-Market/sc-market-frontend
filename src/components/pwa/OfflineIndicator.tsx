@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { Snackbar, Alert } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { subscribe, getRegistrationState } from "../../util/pwa"
-import type { ServiceWorkerRegistrationState } from "../../util/pwa"
 
 export function OfflineIndicator() {
   const { t } = useTranslation()

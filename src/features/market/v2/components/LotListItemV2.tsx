@@ -24,7 +24,6 @@ import {
   Save as SaveIcon,
   Cancel as CancelIcon,
   SwapHoriz as TransferIcon,
-  Delete as DeleteIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {

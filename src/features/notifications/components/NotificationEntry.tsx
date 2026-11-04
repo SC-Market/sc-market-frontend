@@ -7,7 +7,6 @@ import {
   NotificationOrderReview,
   NotificationOrderMessage,
   NotificationOrderUpdateStatus,
-  NotificationBid,
   NotificationAdminAlert,
   NotificationReviewRevisionRequest,
   NotificationContractorInvite,

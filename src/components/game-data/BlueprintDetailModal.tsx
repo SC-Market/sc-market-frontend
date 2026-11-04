@@ -22,7 +22,7 @@ import {
   Tab,
   Avatar,
 } from "@mui/material"
-import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
+import { Close, BuildRounded, TimerRounded, TrackChangesRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { readableMissionText } from "../../seo/missionText"

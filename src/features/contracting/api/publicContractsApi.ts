@@ -1,6 +1,4 @@
 import { serviceApi } from "../../../store/service"
-import { MinimalUser } from "../../../datatypes/User"
-import { OrderKind, PaymentType } from "../../orders/domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
 
 // Re-export domain types for backward compatibility

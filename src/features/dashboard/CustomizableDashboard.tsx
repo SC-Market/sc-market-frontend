@@ -25,7 +25,7 @@ import { ImportExportControls } from "./ImportExportControls"
 import { DashboardOwnerProvider } from "./DashboardOwnerContext"
 import { defaultPersonalConfig, defaultSharedConfig } from "./defaultConfigs"
 import { DashboardGridSkeleton } from "./DashboardGridSkeleton"
-import { emptyConfig, type DashboardOwnerRef } from "./types"
+import { type DashboardOwnerRef } from "./types"
 
 export interface CustomizableDashboardProps {
   /** Owner of the dashboard. Omit for the current user's personal dashboard. */

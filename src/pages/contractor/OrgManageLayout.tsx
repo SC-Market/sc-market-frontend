@@ -20,7 +20,7 @@ import {
   StorefrontRounded,
   InsightsRounded,
 } from "@mui/icons-material"
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"

@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
-import { Grid } from "@mui/material"
 import React from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"

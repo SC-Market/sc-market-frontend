@@ -49,7 +49,6 @@ import { isOrderOpen } from "../../orders/domain/status"
 import { useListingPermissions } from "../hooks/useListingPermissions"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
-import { isSiteAdmin } from "../../../util/siteRole"
 import { useFormatters, useNow } from "../../../util/format"
 
 /**

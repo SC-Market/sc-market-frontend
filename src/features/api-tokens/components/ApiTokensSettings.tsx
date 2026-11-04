@@ -33,7 +33,6 @@ import {
 import { CreateTokenDialog } from "./CreateTokenDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
-import { UnderlineLink } from "../../../components/typography/UnderlineLink.tsx"
 import {
   LegacyTokensNotice,
   PublicApiTokensSettings,

@@ -1,7 +1,7 @@
 import "./setup";
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";

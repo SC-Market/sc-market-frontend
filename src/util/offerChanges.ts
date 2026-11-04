@@ -1,5 +1,4 @@
-import type { Offer } from "../features/offers/api/offerApi"
-import type { OfferV2 } from "../store/api/v2/market"
+
 
 export interface OfferChanges {
   costChanged: boolean

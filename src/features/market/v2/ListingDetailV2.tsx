@@ -1,5 +1,5 @@
 import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import {
   Box,
   Breadcrumbs,
@@ -25,7 +25,6 @@ import {
   useGetListingDetailQuery,
 } from "../../../store/api/v2/market"
 import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown"
-import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
 import { BidAreaV2 } from "./components/BidAreaV2"
 import { useGetUserProfileQuery } from "../../../features/profile/api/profileApi"
@@ -40,20 +39,16 @@ import { getLanguageName } from "../../../constants/languages"
 import { useFormatters, useNow } from "../../../util/format"
 import { isListingNew } from "../domain/listingBadges"
 import { useTranslation } from "react-i18next"
-import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../hooks/AddToCartContext"
 import {
   CreateRounded,
   RefreshRounded,
   LocationOnRounded,
-  LocalShippingRounded,
   PersonRounded,
   StarRounded,
   VisibilityRounded,
   ShoppingCartRounded,
   WarningRounded,
-  SportsEsportsRounded,
-  AccessTimeRounded,
   MenuBookRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"

@@ -23,7 +23,6 @@ import { SellerReachabilityCard } from "../../views/admin/SellerReachabilityCard
 import { StillSellingCampaignCard } from "../../views/admin/StillSellingCampaignCard"
 import {
   useSearchListingsQuery,
-  SearchListingsApiArg,
   ListingSearchResult,
 } from "../../store/api/v2/market"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

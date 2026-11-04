@@ -9,7 +9,6 @@ import {
   Typography,
   Box,
   Chip,
-  Divider,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"

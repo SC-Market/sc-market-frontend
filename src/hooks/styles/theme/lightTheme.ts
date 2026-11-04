@@ -1,4 +1,4 @@
-import { responsiveFontSizes } from "@mui/material"
+
 import { refTheme } from "./constants"
 import { themeBase } from "./baseTheme"
 import { createAppTheme } from "./createAppTheme"

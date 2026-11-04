@@ -8,7 +8,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
-import { StandardPageLayout, BreadcrumbItem } from "../StandardPageLayout"
+import { StandardPageLayout } from "../StandardPageLayout"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import fc from "fast-check"

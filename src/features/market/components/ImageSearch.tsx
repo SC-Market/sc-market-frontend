@@ -1,17 +1,13 @@
 import {
   Box,
   Button,
-  ButtonBase,
   CardMedia,
   Grid,
-  // ImageListItem,
-  // imageListItemClasses,
   Modal,
-  Paper,
   TextField,
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Section } from "../../../components/paper/Section"
 import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { external_resource_regex } from "../../profile"

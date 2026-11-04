@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Badge,
   Box,
   Button,
   Chip,

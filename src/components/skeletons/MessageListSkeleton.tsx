@@ -2,7 +2,6 @@ import { ListItemButton, AvatarGroup, Avatar, Box } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import BusinessIcon from "@mui/icons-material/BusinessRounded"
 
 export interface MessageListSkeletonProps {
   index?: number

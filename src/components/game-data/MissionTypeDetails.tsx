@@ -34,7 +34,6 @@ import {
   LocalShippingRounded,
   RecyclingRounded,
   BuildRounded,
-  ScienceRounded,
   SportsScoreRounded,
   HandymanRounded,
   SearchRounded,

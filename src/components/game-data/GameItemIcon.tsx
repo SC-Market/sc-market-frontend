@@ -8,7 +8,7 @@
  */
 
 import React from "react"
-import { Box, Avatar, Skeleton } from "@mui/material"
+import { Avatar, Skeleton } from "@mui/material"
 import ImageIcon from "@mui/icons-material/Image"
 
 interface GameItemIconProps {

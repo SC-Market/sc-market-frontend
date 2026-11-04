@@ -10,7 +10,7 @@ import { vi } from "vitest"
 import { render, cleanup } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import fc from "fast-check"
-import { SkipNavigation, SkipLink } from "../SkipNavigation"
+import { SkipNavigation } from "../SkipNavigation"
 
 // Mock i18next
 vi.mock("react-i18next", async (importOriginal) =>

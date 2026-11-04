@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import {
   useApplyContractorRoleMutation,
   useRemoveContractorRoleMutation,
@@ -8,7 +8,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { has_permission, min_position, getMemberPosition, self_member_role_removal_forbidden } from "../domain/permissions"
-import type { Contractor, ContractorRole } from "../domain/types"
+import type { Contractor } from "../domain/types"
 
 export function useMemberActions(contractor: Contractor, memberUsername: string, memberRoles: string[]) {
   const { t } = useTranslation()

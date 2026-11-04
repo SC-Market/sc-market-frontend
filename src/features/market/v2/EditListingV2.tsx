@@ -5,9 +5,7 @@ import {
   MenuItem,
   Typography,
   Button,
-  IconButton,
   Box,
-  Divider,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -22,7 +20,7 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { AddCircleOutlineRounded, DeleteOutline, CheckCircleRounded, PauseCircleRounded, ArchiveRounded } from "@mui/icons-material";
+import { CheckCircleRounded, PauseCircleRounded, ArchiveRounded } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";

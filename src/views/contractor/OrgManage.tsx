@@ -10,13 +10,11 @@ import {
   CardContent,
   CardHeader,
   Chip,
-  Collapse,
   Fab,
   Grid,
   IconButton,
   Link,
   Paper,
-  Rating,
   Skeleton,
   TextField,
   Typography,
@@ -37,13 +35,11 @@ import {
   AddAPhotoRounded,
   EditRounded,
   SaveRounded,
-  StarRounded,
 } from "@mui/icons-material"
 import {
   MarkdownEditor,
   MarkdownRender,
 } from "../../components/markdown/Markdown.lazy"
-import { external_resource_regex } from "../../features/profile"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { useOrgDetailEdit } from "../../features/contractor/hooks/useOrgDetailEdit"

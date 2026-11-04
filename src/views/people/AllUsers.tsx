@@ -1,7 +1,6 @@
 import React, {
   MouseEventHandler,
   ReactElement,
-  useMemo,
   useState,
 } from "react"
 import { Section } from "../../components/paper/Section"
@@ -29,7 +28,7 @@ import { HapticTablePagination } from "../../components/haptic"
 import { AdminUser } from "../../datatypes/User"
 import { Link } from "react-router-dom"
 import { styled } from "@mui/material/styles"
-import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
+import { HeadCell } from "../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import {
   useGetAdminUsersQuery,

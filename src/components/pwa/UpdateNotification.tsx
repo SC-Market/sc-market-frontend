@@ -1,13 +1,12 @@
 import { useTranslation } from "react-i18next"
 import React, { useEffect, useState } from "react"
-import { Box, Snackbar, Alert, Button, Stack, Typography } from "@mui/material"
+import { Snackbar, Alert, Button, Stack, Typography } from "@mui/material"
 import { RefreshRounded } from "@mui/icons-material"
 import {
   subscribe,
   getRegistrationState,
   reloadForUpdate,
 } from "../../util/pwa"
-import type { ServiceWorkerRegistrationState } from "../../util/pwa"
 
 export function UpdateNotification() {
   const { t } = useTranslation()

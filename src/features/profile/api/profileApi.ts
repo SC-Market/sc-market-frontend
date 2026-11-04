@@ -23,7 +23,6 @@ import { saveProfileCache, clearProfileCache } from "../profileCache"
 export type { SerializedError, BlocklistEntry } from "../domain/types"
 
 import type { BlocklistEntry } from "../domain/types"
-import type { Rating } from "../../contractor/domain/types"
 
 const baseUrl = `${BACKEND_URL}/api/profile`
 

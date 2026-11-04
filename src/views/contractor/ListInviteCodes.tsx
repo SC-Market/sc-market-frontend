@@ -2,7 +2,6 @@ import React, {
   MouseEventHandler,
   ReactElement,
   useCallback,
-  useEffect,
 } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
@@ -14,7 +13,6 @@ import {
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   ContentCopyRounded,
-  CopyAllRounded,
   DeleteRounded,
 } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

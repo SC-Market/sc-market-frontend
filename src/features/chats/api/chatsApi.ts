@@ -1,12 +1,10 @@
 import { serviceApi } from "../../../store/service"
-import { generatedApi } from "../../../store/generatedApi"
 import { unwrapResponse } from "../../../store/api-utils"
 import {
   generateTempId,
   createOptimisticUpdate,
   OptimisticPatch,
 } from "../../../util/optimisticUpdates"
-import type { RootState } from "../../../store/store"
 import type { Chat, Message } from "../domain/types"
 
 /**

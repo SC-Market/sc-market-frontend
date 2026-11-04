@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
-import { Typography, Chip, Stack } from "@mui/material"
+import { Chip, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"

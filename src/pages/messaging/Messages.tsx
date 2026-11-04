@@ -14,7 +14,6 @@ import {
   useCurrentChat,
   CurrentChatIDContext,
   usePageMessages,
-  type Message,
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MessageThreadSkeleton } from "../../components/skeletons"

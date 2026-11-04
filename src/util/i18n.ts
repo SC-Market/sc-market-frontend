@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 
 import en from "../locales/en/english.json"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toSupportedLocale } from "./locales"
 
 import {

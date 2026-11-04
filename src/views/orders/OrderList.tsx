@@ -1,12 +1,9 @@
 import {
-  OrderSearchSortMethod,
-  OrderSearchStatus,
   OrderStub,
 } from "../../features/orders/domain/types"
 import React, {
   MouseEventHandler,
   useMemo,
-  useState,
   useCallback,
 } from "react"
 import {
@@ -29,7 +26,6 @@ import {
   Typography,
 } from "@mui/material"
 import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -41,7 +37,6 @@ import {
 } from "../../components/table/PaginatedTable"
 import { Stack } from "@mui/system"
 import { a11yProps } from "../../components/tabs/Tabs"
-import SCMarketLogo from "../../assets/scmarket-logo.webp"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { useOrderSearch, type OrderSearchResult } from "../../features/orders/hooks/useOrderSearch"
@@ -54,7 +49,7 @@ import {
 } from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
-import { LongPressMenu, useLongPress } from "../../components/gestures"
+import { useLongPress } from "../../components/gestures"
 import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
 import { canClaimOrder } from "../../features/orders/domain/orderRoles"
 
