@@ -21,11 +21,10 @@ import {
 } from "@mui/material"
 import { Section } from "../../../components/paper/Section"
 import { formatMarketUrl } from "../domain/urls"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { TrashCan } from "mdi-material-ui"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { BackArrow } from "../../../components/button/BackArrow"
 import { NumericFormat } from "react-number-format"
@@ -39,9 +38,6 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ShoppingCartRounded, Warning, PlaylistAddRounded } from "@mui/icons-material"
 import {
   useGetCartQuery,
-  useUpdateCartItemMutation,
-  useRemoveCartItemMutation,
-  useCheckoutCartMutation,
   CartItemDetail,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
@@ -49,7 +45,8 @@ import { formatCraftedSource, hasDisplayableSource } from "../../../util/variant
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
-import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths"
+import { MARKET_PATHS } from "../../../routes/paths"
+import { useCartActions, useCartItemActions } from "../hooks/useCartActions"
 import { HelpLink } from "../../help/components/HelpLink"
 import { useFormatters } from "../../../util/format"
 
@@ -72,57 +69,8 @@ export function CartItemEntryV2(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { item, onRemove } = props
-  const issueAlert = useAlertHook()
-
-  const [updateCartItem, { isLoading: isUpdating }] = useUpdateCartItemMutation()
-
-  // Handle quantity change
-  const handleQuantityChange = useCallback(
-    async (newQuantity: number) => {
-      if (newQuantity < 1) return
-
-      try {
-        await updateCartItem({
-          id: item.cart_item_id,
-          updateCartItemRequest: { quantity: newQuantity },
-        }).unwrap()
-
-        issueAlert({
-          message: t("cart.quantityUpdated", "Quantity updated"),
-          severity: "success",
-        })
-      } catch (error) {
-        issueAlert({
-          message: error instanceof Error ? error.message : t("marketV2.updateQuantityFailed"),
-          severity: "error",
-        })
-      }
-    },
-    [item.cart_item_id, updateCartItem, issueAlert, t]
-  )
-
-  // Handle variant change
-  const handleVariantChange = useCallback(
-    async (variantId: string) => {
-      try {
-        await updateCartItem({
-          id: item.cart_item_id,
-          updateCartItemRequest: { variant_id: variantId },
-        }).unwrap()
-
-        issueAlert({
-          message: t("cart.variantUpdated", "Variant updated"),
-          severity: "success",
-        })
-      } catch (error) {
-        issueAlert({
-          message: error instanceof Error ? error.message : t("marketV2.updateVariantFailed"),
-          severity: "error",
-        })
-      }
-    },
-    [item.cart_item_id, updateCartItem, issueAlert, t]
-  )
+  const { changeQuantity: handleQuantityChange, isUpdating } =
+    useCartItemActions(item.cart_item_id)
 
   // Price change indicator
   const priceChanged = item.price_changed && item.current_price !== undefined
@@ -336,15 +284,13 @@ export function CartItemEntryV2(props: {
  * - Show availability warnings for unavailable variants
  * - Provide "Remove" button for each item
  * - Provide "Checkout" button
- * - Use useUpdateCartItemMutation and useRemoveCartItemMutation hooks
+ * - Cart actions go through useCartActions / useCartItemActions
  * - Maintain visual parity with V1 MarketCart component
  */
 export function MarketCartV2() {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const navigate = useNavigate()
-  const issueAlert = useAlertHook()
 
   // Fetch cart data
   const {
@@ -354,31 +300,11 @@ export function MarketCartV2() {
     refetch,
   } = useGetCartQuery()
 
-  const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
-  const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
+  const { removeItem: handleRemove, checkout, isRemoving, isCheckingOut } =
+    useCartActions()
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false)
   const [checkoutSellerId, setCheckoutSellerId] = useState<string | undefined>()
   const [notes, setNotes] = useState<Record<string, string>>({})
-
-  // Handle remove item
-  const handleRemove = useCallback(
-    async (cartItemId: string) => {
-      try {
-        await removeCartItem({ id: cartItemId }).unwrap()
-
-        issueAlert({
-          message: t("cart.itemRemoved", "Item removed from cart"),
-          severity: "success",
-        })
-      } catch (error) {
-        issueAlert({
-          message: error instanceof Error ? error.message : t("marketV2.removeItemFailed"),
-          severity: "error",
-        })
-      }
-    },
-    [removeCartItem, issueAlert, t]
-  )
 
   // Open checkout confirmation dialog
   const handleCheckout = useCallback((sellerId: string) => {
@@ -392,38 +318,14 @@ export function MarketCartV2() {
     async () => {
       if (!cartData) return
 
-      const hasPriceChanges = cartData.items.some((item) => item.price_changed)
-
       // Get note from the first seller group (cart is single-seller)
       const sellerName = cartData.items[0]?.listing.shop_name
       const note = sellerName ? notes[sellerName] : undefined
 
-      try {
-        const result = await checkoutCart({
-          checkoutCartRequest: {
-            confirm_price_changes: hasPriceChanges,
-            note: note || undefined,
-            shop_id: checkoutSellerId,
-          },
-        }).unwrap()
-
-        setCheckoutDialogOpen(false)
-        issueAlert({
-          message: t("cart.checkoutSuccess", "Offer submitted successfully"),
-          severity: "success",
-        })
-
-        if (result.discord_invite) {
-          window.open(`https://discord.gg/${result.discord_invite}`, "_blank")
-        }
-
-        navigate(ORDER_PATHS.offer(result.session_id))
-      } catch (err) {
-        setCheckoutDialogOpen(false)
-        issueAlert(err as UnwrappedErrorInterface)
-      }
+      await checkout({ items: cartData.items, shopId: checkoutSellerId, note })
+      setCheckoutDialogOpen(false)
     },
-    [cartData, checkoutCart, issueAlert, navigate, t, notes]
+    [cartData, checkout, checkoutSellerId, notes]
   )
 
   // Check if any items are unavailable
