@@ -57,8 +57,6 @@ import { EmptyOrders } from "../../components/empty-states"
 import { LongPressMenu, useLongPress } from "../../components/gestures"
 import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
 import { canClaimOrder } from "../../features/orders/domain/orderRoles"
-import { useAssignOrderMutation } from "../../features/orders/api/ordersApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 import {
   statusColors,
@@ -67,6 +65,7 @@ import {
 import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { useFormatters } from "../../util/format"
+import { useClaimOrder } from "../../features/orders/hooks/useClaimOrder"
 
 export { statusColors, statusNames }
 
@@ -133,8 +132,7 @@ export function OrderRow(props: {
   const isMobile = useBreakpointDown("sm")
   const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
-  const [assignOrder] = useAssignOrderMutation()
-  const issueAlert = useAlertHook()
+  const claimOrder = useClaimOrder()
 
   const roles = useOrderViewerRoles({
     customer: row.customer?.username,
@@ -418,10 +416,7 @@ export function OrderRow(props: {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                assignOrder({ order_id: row.order_id, username: profile!.username })
-                  .unwrap()
-                  .then(() => issueAlert({ message: t("orders.claimed", "Order claimed"), severity: "success" }))
-                  .catch(issueAlert)
+                void claimOrder(row.order_id, profile!.username)
               }}
             >
               {t("orders.claimOrder", "Claim")}

@@ -66,7 +66,6 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { OfferRowSkeleton } from "../../components/skeletons"
-import { useAssignOfferMutation } from "../../features/offers/api/offerApi"
 import { canClaimOffer } from "../../features/offers/domain/status"
 import { useOfferSearch } from "../../features/offers/hooks/useOfferSearch"
 import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
@@ -75,6 +74,7 @@ import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 import { normalizeOfferStatus } from "../../features/offers/domain/types"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { useFormatters } from "../../util/format"
+import { useClaimOffer } from "../../features/offers/hooks/useOfferActions"
 
 // Status icon mapping for offer rows
 
@@ -149,8 +149,7 @@ export function OfferRow(props: {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
-  const [assignOffer] = useAssignOfferMutation()
-  const issueAlert = useAlertHook()
+  const claimOffer = useClaimOffer()
 
   const isBuyerView = props.viewAs === "buyer"
 
@@ -420,10 +419,7 @@ export function OfferRow(props: {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                assignOffer({ session_id: row.id, username: profile!.username })
-                  .unwrap()
-                  .then(() => issueAlert({ message: t("orders.claimed", "Offer claimed"), severity: "success" }))
-                  .catch(issueAlert)
+                void claimOffer(row.id, profile!.username)
               }}
             >
               {t("orders.claimOrder", "Claim")}

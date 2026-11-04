@@ -1,41 +1,26 @@
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Stack } from "@mui/system"
 import React, { useCallback } from "react"
-import { useCounterOfferMutation } from "../../features/offers/api/offerApi"
+import { useCounterOfferSubmit } from "../../features/offers/hooks/useOfferActions"
 import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { useNavigate } from "react-router-dom"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { ORDER_PATHS } from "../../routes/paths"
 
 export function CounterOfferSubmitArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
-  const [counterOffer, { isLoading: counterOfferLoading }] =
-    useCounterOfferMutation()
-  const issueAlert = useAlertHook()
-  const navigate = useNavigate()
+  const { submit, isLoading: counterOfferLoading } = useCounterOfferSubmit(
+    session.session_id,
+  )
   const [body, setBody] = useCounterOffer()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   const counterOfferCallback = useCallback(() => {
-    counterOffer(body)
-      .unwrap()
-      .then((result) => {
-        issueAlert({
-          message: t("CounterOfferSubmitArea.counterOfferSubmitted", {
-            defaultValue: "Counter offer submitted successfully",
-          }),
-          severity: "success",
-        })
-        navigate(ORDER_PATHS.offer(session.session_id))
-      })
-      .catch(issueAlert)
-  }, [counterOffer, body, navigate, session.session_id, issueAlert, t])
+    void submit(body)
+  }, [submit, body])
 
   return (
     <Grid item xs={12}>

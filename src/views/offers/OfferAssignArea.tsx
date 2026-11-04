@@ -9,12 +9,10 @@ import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { useAppDispatch } from "../../store/hooks"
 import { PersonRemoveRounded, PersonRounded } from "@mui/icons-material"
 import {
-  useAssignOfferMutation,
-  useUnassignOfferMutation,
   OfferSession,
 } from "../../features/offers/api/offerApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { useOfferAssignment } from "../../features/offers/hooks/useOfferActions"
 
 export function OfferAssignArea(props: { offer: OfferSession }) {
   const [target, setTarget] = useState("")
@@ -27,7 +25,6 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
   const [options, setOptions] = useState<MinimalUser[]>([])
 
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const dispatch = useAppDispatch()
 
   const { data: membersData } = useGetContractorMembersQuery({
@@ -71,63 +68,12 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
     retrieve(target)
   }, [target, retrieve])
 
-  const [assignUser] = useAssignOfferMutation()
-  const [unassignUser] = useUnassignOfferMutation()
+  const { assign, unassign: removeAssignment } = useOfferAssignment(offer.id)
 
   const updateAssignment = useCallback(async () => {
-    if (!targetObject) {
-      return
-    }
-
-    const res = await assignUser({
-      session_id: offer.id,
-      username: targetObject.username!,
-    })
-
-    if ("data" in res && !("error" in res)) {
-      issueAlert({
-        message: t("memberAssignArea.assigned"),
-        severity: "success",
-      })
-    } else {
-      let reason = String(res.error || "")
-      if (res.error && 'data' in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error || errData.message || reason
-      } else if (res.error && 'message' in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: `${t("memberAssignArea.failed_assign")} ${reason}`,
-        severity: "error",
-      })
-    }
-  }, [assignUser, offer.id, issueAlert, targetObject, t])
-
-  const removeAssignment = useCallback(async () => {
-    const res = await unassignUser({
-      session_id: offer.id,
-    })
-
-    if ("data" in res && !("error" in res)) {
-      issueAlert({
-        message: t("memberAssignArea.unassigned"),
-        severity: "success",
-      })
-    } else {
-      let reason = String(res.error || "")
-      if (res.error && 'data' in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error || errData.message || reason
-      } else if (res.error && 'message' in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: `${t("memberAssignArea.failed_unassign")} ${reason}`,
-        severity: "error",
-      })
-    }
-  }, [unassignUser, offer.id, issueAlert, t])
+    if (!targetObject) return
+    await assign(targetObject.username)
+  }, [assign, targetObject])
 
   return (
     <Section
