@@ -58,13 +58,9 @@ import { ThemedDataGrid as DataGrid } from "../../../components/grid/ThemedDataG
 import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { EmptyState } from "../../../components/empty-states/EmptyState"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
   useGetMyListingsQuery,
   useGetStockLotsQuery,
-  useCreateStockLotMutation,
-  useUpdateStockLotMutation,
-  useDeleteStockLotMutation,
   useGetListingDetailQuery,
   useSearchResourcesQuery,
   type MyListingItem,
@@ -83,6 +79,7 @@ import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessN
 import { canEditShopStockLots } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 import { useFormatters } from "../../../util/format"
+import { useStockLotActions } from "../hooks/useStockLotActions"
 
 /**
  * This page's shop: lots, listings and permissions are scoped to it (without
@@ -319,7 +316,6 @@ function QuantityEditCell(params: GridRenderEditCellParams) {
 
 function AllStockLotsGridV2() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const { filters } = useStockFilter()
   const { shopId, canEditLots } = useStockShop()
 
@@ -333,9 +329,7 @@ function AllStockLotsGridV2() {
   const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId })
   const listings = listingsData?.listings ?? []
 
-  const [createLot] = useCreateStockLotMutation()
-  const [updateLot] = useUpdateStockLotMutation()
-  const [deleteLot] = useDeleteStockLotMutation()
+  const { deleteLot, updateLot } = useStockLotActions()
 
   const [addLotListingId, setAddLotListingId] = useState<string | null>(null)
   const [pendingDelete, setPendingDelete] = useState<string | null>(null)
@@ -587,12 +581,7 @@ function AllStockLotsGridV2() {
 
   const handleDelete = async (lotId: string) => {
     setPendingDelete(null)
-    try {
-      await deleteLot({ id: lotId }).unwrap()
-      issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
-    } catch (err) {
-      issueAlert({ message: (err as Error)?.message || t("marketUi.bulkStock.operationFailed"), severity: "error" })
-    }
+    await deleteLot(lotId)
   }
 
   const handleRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
@@ -626,36 +615,27 @@ function AllStockLotsGridV2() {
       }
     }
 
-    try {
-      const result = await updateLot({
-        id: newRow.lot_id,
-        updateStockLotRequest: {
-          quantity_total: Number(newRow.quantity),
-          location_id: newRow.location_id ?? undefined,
-          listed: newRow.listed,
-          notes: newRow.notes || null,
-          variant_attributes: variantAttrs,
-        },
-      }).unwrap()
-      issueAlert({ message: t("AllStockLots.updated", "Lot updated"), severity: "success" })
-      const lot = result.lot
-      return {
-        id: lot.lot_id,
-        lot_id: lot.lot_id,
-        listing_id: lot.item_id,
-        variant_display_name: lot.variant.display_name,
-        quality_tier: lot.variant.attributes.quality_tier ?? null,
-        quality_value: lot.variant.attributes.quality_value ?? null,
-        crafted_source: lot.variant.attributes.crafted_source ?? null,
-        quantity: lot.quantity_total,
-        location_id: lot.location?.location_id ?? null,
-        location_name: lot.location?.name ?? null,
-        listed: lot.listed,
-        notes: lot.notes ?? "",
-      }
-    } catch (err) {
-      issueAlert({ message: (err as Error)?.message || t("marketUi.bulkStock.operationFailed"), severity: "error" })
-      return oldRow
+    const lot = await updateLot(newRow.lot_id, {
+      quantity_total: Number(newRow.quantity),
+      location_id: newRow.location_id ?? undefined,
+      listed: newRow.listed,
+      notes: newRow.notes || null,
+      variant_attributes: variantAttrs,
+    })
+    if (!lot) return oldRow
+    return {
+      id: lot.lot_id,
+      lot_id: lot.lot_id,
+      listing_id: lot.item_id,
+      variant_display_name: lot.variant.display_name,
+      quality_tier: lot.variant.attributes.quality_tier ?? null,
+      quality_value: lot.variant.attributes.quality_value ?? null,
+      crafted_source: lot.variant.attributes.crafted_source ?? null,
+      quantity: lot.quantity_total,
+      location_id: lot.location?.location_id ?? null,
+      location_name: lot.location?.name ?? null,
+      listed: lot.listed,
+      notes: lot.notes ?? "",
     }
   }
 
