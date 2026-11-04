@@ -25,15 +25,14 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
 import {
-  useImportFromUexMutation,
   type UexImportItemResult,
   type UexImportPreviewItem,
   type UexImportSkipReason,
 } from "../../../store/api/v2/market"
-import { listingApiError } from "../domain/listingFormErrors"
 import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { HelpTip } from "../../help/components/HelpTip"
 import { useFormatters } from "../../../util/format"
+import { useImportFromUex } from "../hooks/useImportFromUex"
 
 type TFn = ReturnType<typeof useTranslation>["t"]
 
@@ -81,35 +80,25 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const [importFromUex, { isLoading }] = useImportFromUexMutation()
+  const uexImport = useImportFromUex(shopId)
+  const isLoading = uexImport.isLoading
 
   const handleFetchPreview = async () => {
     if (!username.trim()) return
     setImportResult(null)
     setError(null)
 
-    try {
-      const result = await importFromUex({
-        body: { uex_username: username.trim(), shop_id: shopId },
-      }).unwrap()
-
-      if (result.preview) {
-        setPreview(result.preview)
-        setSelectedIndices(new Set(importableIndices(result.preview)))
-      } else {
-        setPreview([])
-      }
-    } catch (e) {
+    const outcome = await uexImport.preview(username)
+    if (!outcome.ok) {
       setPreview(null)
-      setError(
-        listingApiError(
-          e,
-          t(
-            "ItemStock.importFromUexFetchError",
-            "Couldn't fetch your UEX listings",
-          ),
-        ).message,
-      )
+      setError(outcome.error)
+      return
+    }
+    if (outcome.result.preview) {
+      setPreview(outcome.result.preview)
+      setSelectedIndices(new Set(importableIndices(outcome.result.preview)))
+    } else {
+      setPreview([])
     }
   }
 
@@ -128,30 +117,18 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
       }))
 
     setError(null)
-    try {
-      const result = await importFromUex({
-        body: {
-          uex_username: username.trim(),
-          shop_id: shopId,
-          listings: selectedListings,
-          confirm: true,
-        },
-      }).unwrap()
-
-      setImportResult({
-        imported: result.imported || 0,
-        total: result.total || 0,
-        skipped: (result.results ?? []).filter((r) => r.status === "skipped"),
-      })
-      setPreview(null)
-    } catch (e) {
-      setError(
-        listingApiError(
-          e,
-          t("ItemStock.importFromUexError", "The import failed"),
-        ).message,
-      )
+    const outcome = await uexImport.confirm(username, selectedListings)
+    if (!outcome.ok) {
+      setError(outcome.error)
+      return
     }
+    const result = outcome.result
+    setImportResult({
+      imported: result.imported || 0,
+      total: result.total || 0,
+      skipped: (result.results ?? []).filter((r) => r.status === "skipped"),
+    })
+    setPreview(null)
   }
 
   const importable = preview ? importableIndices(preview) : []

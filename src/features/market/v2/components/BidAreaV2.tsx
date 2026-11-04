@@ -20,12 +20,12 @@ import {
 } from "@mui/material"
 import { GavelRounded, TimerRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetAuctionDetailQuery, usePlaceBidMutation } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { useGetAuctionDetailQuery } from "../../../../store/api/v2/market"
 import { UserAvatar } from "../../../../components/avatar/UserAvatar"
 import { HelpLink } from "../../../help/components/HelpLink"
 
 import { useFormatters, useNow } from "../../../../util/format"
+import { usePlaceBid } from "../../hooks/usePlaceBid"
 interface BidAreaV2Props {
   listingId: string
   startingPrice: number
@@ -36,9 +36,8 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
   const { t } = useTranslation()
   const fmt = useFormatters()
   const now = useNow(30_000)
-  const issueAlert = useAlertHook()
   const { data: auction, refetch } = useGetAuctionDetailQuery({ listingId })
-  const [placeBid, { isLoading }] = usePlaceBidMutation()
+  const { bid, isLoading } = usePlaceBid(listingId)
   const [bidAmount, setBidAmount] = useState<number>(0)
 
   if (!auction) return null
@@ -55,14 +54,7 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
   }
 
   const handlePlaceBid = async () => {
-    try {
-      await placeBid({ listingId, placeBidRequest: { amount: bidAmount } }).unwrap()
-      issueAlert({ message: t("BidAreaV2.bidPlaced", "Bid placed successfully!"), severity: "success" })
-      refetch()
-    } catch (err) {
-      const error = err as { data?: { message?: string } }
-      issueAlert({ message: error?.data?.message || t("BidAreaV2.bidFailed", "Failed to place bid"), severity: "error" })
-    }
+    if (await bid(bidAmount)) refetch()
   }
 
   return (
