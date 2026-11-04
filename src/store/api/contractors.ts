@@ -505,10 +505,8 @@ const injectedRtkApi = api
   })
 export { injectedRtkApi as contractorsApi }
 export type AuthLinkApiResponse =
-  /** status 201 Created - Resource successfully created */ {
-    // The backend means to send ContractorDetails but serialises an
-    // un-awaited Promise, so the body is an empty object.
-    data: Record<string, never>
+  /** status 200 OK - The org is verified; its details */ {
+    data: Contractor
   }
 export type AuthLinkApiArg = {
   body: {
@@ -809,7 +807,9 @@ export type AcceptContractorInviteApiArg = {
   spectrumId: string
 }
 export type DeclineContractorInviteApiResponse =
-  /** status 201 Created - Resource successfully created */ { result: string }
+  /** status 200 OK - The invite is declined */ {
+    data: { result: string }
+  }
 export type DeclineContractorInviteApiArg = {
   spectrumId: string
 }

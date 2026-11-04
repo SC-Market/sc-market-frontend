@@ -151,7 +151,7 @@ export type GetOfferByIdApiArg = {
 }
 export type UpdateAnOfferApiResponse =
   /** status 200 OK - Resource successfully updated */ {
-    data: { result: string } | { order_id: string } | { status: string }
+    data: { result: string } | { order_id: string }
   }
 export type UpdateAnOfferApiArg = {
   sessionId: string
