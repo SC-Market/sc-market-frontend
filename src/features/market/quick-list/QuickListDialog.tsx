@@ -845,8 +845,6 @@ export function QuickListDialog({ open, onClose, item: pageItem = null }: QuickL
               </Stack>
             </AccordionDetails>
           </Accordion>
-          {/* Enter in a field publishes */}
-          <button type="submit" hidden aria-hidden tabIndex={-1} />
         </Stack>
     </ResponsiveDialog>
   )
