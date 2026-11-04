@@ -21,13 +21,11 @@ import { BottomSheet } from "../../../../components/mobile/BottomSheet"
 import {
   useGetListingDetailQuery,
   useGetCartQuery,
-  useAddToCartMutation,
-  useRemoveCartItemMutation,
 } from "../../../../store/api/v2/market"
-import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
 import { MARKET_PATHS } from "../../../../routes/paths"
 
 import { useFormatters } from "../../../../util/format"
+import { useAddToCart, useRemoveCartItem } from "../../hooks/useCartActions"
 interface AddToCartDrawerProps {
   open: boolean
   onClose: () => void
@@ -38,15 +36,14 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
   const { t } = useTranslation()
   const fmt = useFormatters()
   const isMobile = useIsMobile()
-  const issueAlert = useAlertHook()
 
   const { data: listingData, isLoading } = useGetListingDetailQuery(
     { id: listingId },
     { skip: !open },
   )
   const { data: cartData } = useGetCartQuery(undefined, { skip: !open })
-  const [addToCart, { isLoading: isAdding }] = useAddToCartMutation()
-  const [removeCartItem] = useRemoveCartItemMutation()
+  const { add: addToCart, isAdding } = useAddToCart()
+  const handleRemoveCartItem = useRemoveCartItem()
 
   const [selectedVariantId, setSelectedVariantId] = useState<string>("")
   const [quantity, setQuantity] = useState(1)
@@ -98,23 +95,11 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
 
   const handleAdd = async () => {
     if (!selectedVariantId || quantity < 1 || validationError) return
-    try {
-      await addToCart({
-        addToCartRequest: { listing_id: listingId, variant_id: selectedVariantId, quantity },
-      }).unwrap()
-      issueAlert({ message: t("cart.added", "Added to cart"), severity: "success" })
-      setQuantity(1)
-    } catch (err) {
-      issueAlert(err as UnwrappedErrorInterface)
-    }
-  }
-
-  const handleRemoveCartItem = async (cartItemId: string) => {
-    try {
-      await removeCartItem({ id: cartItemId }).unwrap()
-    } catch (err) {
-      issueAlert(err as UnwrappedErrorInterface)
-    }
+    const added = await addToCart(
+      { listing_id: listingId, variant_id: selectedVariantId, quantity },
+      t("cart.added", "Added to cart"),
+    )
+    if (added) setQuantity(1)
   }
 
   const content = (

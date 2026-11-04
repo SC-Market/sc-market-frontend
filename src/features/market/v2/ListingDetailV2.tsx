@@ -1,5 +1,5 @@
 import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
-import React, { useMemo, useEffect, useState } from "react"
+import React, { useMemo, useState } from "react"
 import {
   Box,
   Breadcrumbs,
@@ -23,8 +23,6 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
   useGetListingDetailQuery,
-  useAddToCartMutation,
-  useTrackViewMutation,
 } from "../../../store/api/v2/market"
 import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
@@ -41,7 +39,6 @@ import { MARKET_PATHS, WIKI_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
 import { useFormatters, useNow } from "../../../util/format"
 import { isListingNew } from "../domain/listingBadges"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../hooks/AddToCartContext"
@@ -68,6 +65,7 @@ import { SeoHead } from "../../../seo/SeoHead"
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton"
 import { listingStatusLabel } from "../domain/listingStatus"
+import { useTrackListingView } from "../hooks/useTrackListingView"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -83,15 +81,10 @@ export function ListingDetailV2() {
     error,
   } = useGetListingDetailQuery({ id: id! })
 
-  const [addToCart] = useAddToCartMutation()
   const { openAddToCart } = useCartDrawer()
-  const [trackView] = useTrackViewMutation()
-  const issueAlert = useAlertHook()
   const { data: profile } = useGetUserProfileQuery()
 
-  useEffect(() => {
-    if (id) trackView({ id }).catch(() => {})
-  }, [id, trackView])
+  useTrackListingView(id)
 
   // Derived data
   const listing = listingData?.listing

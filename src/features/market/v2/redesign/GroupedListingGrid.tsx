@@ -33,7 +33,6 @@ import type {
 import {
   useSearchBuyOrdersQuery,
   useGetListingsQuery,
-  useAddToCartMutation,
 } from "../../../../store/api/v2/market"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states"
@@ -64,6 +63,7 @@ import {
 import { remainingQuantity } from "../../domain/buyOrders"
 
 import { useFormatters, useNow } from "../../../../util/format"
+import { useAddToCart } from "../../hooks/useCartActions"
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
  *
@@ -888,7 +888,7 @@ function variantLabel(v: GameItemListingResult): string | null {
 /** Add-to-cart button for a variant row — the unit buyers actually purchase. */
 function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
   const { t } = useTranslation()
-  const [addToCart, { isLoading }] = useAddToCartMutation()
+  const { add: addToCart, isAdding: isLoading } = useAddToCart()
   const outOfStock = (variant.quantity_available ?? 0) === 0
   return (
     <Button
@@ -899,12 +899,10 @@ function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
-        addToCart({
-          addToCartRequest: {
-            listing_id: variant.listing_id,
-            variant_id: variant.variant_id,
-            quantity: 1,
-          },
+        void addToCart({
+          listing_id: variant.listing_id,
+          variant_id: variant.variant_id,
+          quantity: 1,
         })
       }}
       sx={{ minWidth: 0, px: 1 }}

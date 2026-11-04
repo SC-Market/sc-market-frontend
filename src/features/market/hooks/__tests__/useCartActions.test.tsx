@@ -6,6 +6,8 @@ const navigate = vi.fn()
 vi.mock("../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => alert }))
 vi.mock("react-router-dom", () => ({ useNavigate: () => navigate }))
 vi.mock("../../../../store/api/v2/market", () => ({
+  useAddToCartMutation: vi.fn(),
+  useCreatePurchaseMutation: vi.fn(),
   useCheckoutCartMutation: vi.fn(),
   useRemoveCartItemMutation: vi.fn(),
   useUpdateCartItemMutation: vi.fn(),
@@ -16,7 +18,7 @@ vi.mock("../../../../store/api/v2/market", () => ({
 import * as market from "../../../../store/api/v2/market"
 import type { marketV2Api, CartItemDetail } from "../../../../store/api/v2/market"
 import { mockMutationTrigger, mutationIdle } from "../../../../__tests__/rtkQueryMocks"
-import { useCartActions, useCartItemActions } from "../useCartActions"
+import { useAddToCart, useCartActions, useCartItemActions } from "../useCartActions"
 import { useStockLotActions } from "../useStockLotActions"
 
 type E = typeof marketV2Api.endpoints
@@ -79,5 +81,28 @@ describe("useStockLotActions", () => {
     const { result } = renderHook(() => useStockLotActions())
     await result.current.deleteLot("lot-9")
     expect(deleteStockLot).toHaveBeenCalledWith({ id: "lot-9" })
+  })
+})
+
+describe("useAddToCart", () => {
+  it("adds, and alerts success only when given a message", async () => {
+    const addToCart = mockMutationTrigger<E["addToCart"]>()
+    vi.mocked(market.useAddToCartMutation).mockReturnValue([addToCart, mutationIdle<E["addToCart"]>()])
+    const { result } = renderHook(() => useAddToCart())
+    const request = { listing_id: "L1", variant_id: "V1", quantity: 1 }
+    await expect(result.current.add(request)).resolves.toBe(true)
+    expect(addToCart).toHaveBeenCalledWith({ addToCartRequest: request })
+    expect(alert).not.toHaveBeenCalled()
+    await result.current.add(request, "Added")
+    expect(alert).toHaveBeenCalledWith({ message: "Added", severity: "success" })
+  })
+
+  it("alerts the error", async () => {
+    const addToCart = mockMutationTrigger<E["addToCart"]>()
+    addToCart.mockReturnValueOnce({ unwrap: () => Promise.reject({ message: "Out of stock" }) })
+    vi.mocked(market.useAddToCartMutation).mockReturnValue([addToCart, mutationIdle<E["addToCart"]>()])
+    const { result } = renderHook(() => useAddToCart())
+    await expect(result.current.add({ listing_id: "L1", variant_id: "V1", quantity: 1 })).resolves.toBe(false)
+    expect(alert).toHaveBeenCalledWith({ message: "Out of stock" })
   })
 })

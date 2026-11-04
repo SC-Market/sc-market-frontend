@@ -35,15 +35,13 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import {
   useGetListingDetailQuery,
-  useAddToCartMutation,
-  useCreatePurchaseMutation,
 } from "../../../../store/api/v2/market"
 import type { VariantDetail, ListingItemDetail } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { SHOP_PATHS } from "../../../../routes/paths"
 import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 import { useFormatters } from "../../../../util/format"
+import { useAddToCart, useBuyNow } from "../../hooks/useCartActions"
 
 /**
  * ListingDetailRedesign — Phase 0 of the Market redesign (behind the
@@ -62,7 +60,6 @@ export function ListingDetailRedesign() {
   const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const { id } = useParams<{ id: string }>()
 
   const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetListingDetailQuery(
@@ -74,8 +71,8 @@ export function ListingDetailRedesign() {
     isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
 
-  const [addToCart, { isLoading: isAdding }] = useAddToCartMutation()
-  const [createPurchase, { isLoading: isBuying }] = useCreatePurchaseMutation()
+  const { add: addToCart, isAdding } = useAddToCart()
+  const { buy, isBuying } = useBuyNow()
 
   const listing = data?.listing
   const seller = data?.seller
@@ -139,43 +136,23 @@ export function ListingDetailRedesign() {
 
   const handleAddToCart = async () => {
     if (!listing || !selectedVariant) return
-    try {
-      await addToCart({
-        addToCartRequest: {
-          listing_id: listing.listing_id,
-          variant_id: selectedVariant.variant_id,
-          quantity: effectiveQty,
-        },
-      }).unwrap()
-      issueAlert({
-        message: t("MarketDetailRedesign.addedToCart", "Added to cart"),
-        severity: "success",
-      })
-    } catch (e) {
-      issueAlert(e as never)
-    }
+    await addToCart(
+      {
+        listing_id: listing.listing_id,
+        variant_id: selectedVariant.variant_id,
+        quantity: effectiveQty,
+      },
+      t("MarketDetailRedesign.addedToCart", "Added to cart"),
+    )
   }
 
   const handleBuyNow = async () => {
     if (!listing || !selectedVariant) return
-    try {
-      await createPurchase({
-        createBuyOrderRequest: {
-          listing_id: listing.listing_id,
-          variant_id: selectedVariant.variant_id,
-          quantity: effectiveQty,
-        },
-      }).unwrap()
-      issueAlert({
-        message: t(
-          "MarketDetailRedesign.orderPlaced",
-          "Order placed — the seller has been notified to coordinate handoff.",
-        ),
-        severity: "success",
-      })
-    } catch (e) {
-      issueAlert(e as never)
-    }
+    await buy({
+      listing_id: listing.listing_id,
+      variant_id: selectedVariant.variant_id,
+      quantity: effectiveQty,
+    })
   }
 
   if (isLoading) {

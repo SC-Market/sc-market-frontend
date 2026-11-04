@@ -11,10 +11,14 @@ import {
   type UnwrappedErrorInterface,
 } from "../../../hooks/alert/AlertHook"
 import {
+  useAddToCartMutation,
   useCheckoutCartMutation,
+  useCreatePurchaseMutation,
   useRemoveCartItemMutation,
   useUpdateCartItemMutation,
+  type AddToCartRequest,
   type CartItemDetail,
+  type CreateBuyOrderRequest,
 } from "../../../store/api/v2/market"
 import { ORDER_PATHS } from "../../../routes/paths"
 
@@ -111,4 +115,73 @@ export function useCartActions() {
   )
 
   return { removeItem, checkout, isRemoving, isCheckingOut }
+}
+
+/**
+ * Add a variant to the cart. Errors always alert; success alerts only with
+ * a message (the compact grid button adds silently). Resolves to whether
+ * it was added.
+ */
+export function useAddToCart() {
+  const issueAlert = useAlertHook()
+  const [addToCart, { isLoading: isAdding }] = useAddToCartMutation()
+
+  const add = useCallback(
+    async (request: AddToCartRequest, successMessage?: string) => {
+      try {
+        await addToCart({ addToCartRequest: request }).unwrap()
+        if (successMessage) issueAlert({ message: successMessage, severity: "success" })
+        return true
+      } catch (err) {
+        issueAlert(err as UnwrappedErrorInterface)
+        return false
+      }
+    },
+    [addToCart, issueAlert],
+  )
+
+  return { add, isAdding }
+}
+
+/** Remove a cart item quietly (errors alert). */
+export function useRemoveCartItem() {
+  const issueAlert = useAlertHook()
+  const [removeCartItem] = useRemoveCartItemMutation()
+  return useCallback(
+    async (cartItemId: string) => {
+      try {
+        await removeCartItem({ id: cartItemId }).unwrap()
+      } catch (err) {
+        issueAlert(err as UnwrappedErrorInterface)
+      }
+    },
+    [removeCartItem, issueAlert],
+  )
+}
+
+/** Buy a variant now (an order, not a cart item). */
+export function useBuyNow() {
+  const { t } = useTranslation()
+  const issueAlert = useAlertHook()
+  const [createPurchase, { isLoading: isBuying }] = useCreatePurchaseMutation()
+
+  const buy = useCallback(
+    async (request: CreateBuyOrderRequest) => {
+      try {
+        await createPurchase({ createBuyOrderRequest: request }).unwrap()
+        issueAlert({
+          message: t(
+            "MarketDetailRedesign.orderPlaced",
+            "Order placed — the seller has been notified to coordinate handoff.",
+          ),
+          severity: "success",
+        })
+      } catch (e) {
+        issueAlert(e as UnwrappedErrorInterface)
+      }
+    },
+    [createPurchase, issueAlert, t],
+  )
+
+  return { buy, isBuying }
 }
