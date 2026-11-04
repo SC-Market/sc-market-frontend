@@ -2016,7 +2016,7 @@
   "orders": {
     "status": {
       "fulfilled": "已完成",
-      "inProgress": "處理中",
+      "inProgress": "進行中",
       "cancelled": "已取消",
       "notStarted": "排隊中",
       "active": "進行中",
@@ -2035,7 +2035,7 @@
       "active": "進行中",
       "past": "過往",
       "fulfilled": "已完成",
-      "inProgress": "履行中",
+      "inProgress": "進行中",
       "notStarted": "排隊中",
       "cancelled": "已取消",
       "unclaimed": "未認領"
