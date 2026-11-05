@@ -1,7 +1,7 @@
 import { Paper, Fade, Box, Typography } from "@mui/material"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { AdConfig, PosterAdConfig } from "./types"
+import { AdConfig, ImageAdConfig, PosterAdConfig } from "./types"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -13,6 +13,56 @@ interface AdCardProps {
   index: number
   /** If true, renders without wrapper (for use in VirtualizedGrid) */
   noGridWrapper?: boolean
+}
+
+/**
+ * A ship poster image. Its copy is baked in and runs close to the image's
+ * edges (Ares: a line at the very top and bottom; Perseus: a tagline nearly
+ * as wide as the image), while the card's shape changes with the grid: from
+ * about 0.45 (a 130px card on a crowded desktop row) to 1.25 (380px) wide per
+ * unit of height, against the images' 0.64 (Ares) and 0.82 (Perseus).
+ * Cropping to fill the card (object-fit: cover) cut that copy off on every
+ * card not of the image's own shape, so the whole image is shown (contain),
+ * over a blurred, darkened copy of itself filling the bands either side.
+ */
+function ImageCreative(props: { ad: ImageAdConfig }) {
+  const { ad } = props
+  const { t } = useTranslation()
+  return (
+    <Box sx={{ position: "relative", height: "100%", bgcolor: "common.black" }}>
+      <Box
+        component="img"
+        src={ad.imageUrl}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        data-testid="ad-image-backdrop"
+        sx={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          filter: "blur(14px) brightness(0.55)",
+          transform: "scale(1.15)",
+        }}
+      />
+      <Box
+        component="img"
+        src={ad.imageUrl}
+        alt={t("appUi.ads.imageAlt", { title: ad.title })}
+        loading="lazy"
+        sx={{
+          position: "relative",
+          display: "block",
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          objectPosition: "center",
+        }}
+      />
+    </Box>
+  )
 }
 
 /**
@@ -188,7 +238,6 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
  */
 export function AdCard(props: AdCardProps) {
   const { ad, index, noGridWrapper = false } = props
-  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   const handleClick = (e: React.MouseEvent) => {
@@ -230,17 +279,7 @@ export function AdCard(props: AdCardProps) {
           }}
         >
           {ad.kind === "image" ? (
-            <img
-              src={ad.imageUrl}
-              alt={t("appUi.ads.imageAlt", { title: ad.title })}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-              loading="lazy"
-            />
+            <ImageCreative ad={ad} />
           ) : (
             <PosterCreative ad={ad} />
           )}
