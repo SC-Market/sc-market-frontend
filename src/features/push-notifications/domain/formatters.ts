@@ -1,3 +1,5 @@
+import i18n from "../../../util/i18n"
+
 /**
  * Get user-friendly label for notification action type
  */
@@ -7,7 +9,9 @@ export function formatActionName(action: string): string {
     order_create: "New Order Created",
     order_assigned: "Order Assigned to You",
     order_status_fulfilled: "Order Fulfilled",
-    order_status_in_progress: "Order In Progress",
+    order_status_in_progress: i18n.t(
+      "notifPrefsUi.actions.orderStatusInProgress",
+    ),
     order_status_not_started: "Order Not Started",
     order_status_cancelled: "Order Cancelled",
     order_comment: "Order Comments",

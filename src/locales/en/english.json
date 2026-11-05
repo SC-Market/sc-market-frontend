@@ -7168,7 +7168,7 @@
         },
         "orderStatusChange": {
           "label": "Order Status Change",
-          "description": "An order moves to in progress, fulfilled, cancelled or not started"
+          "description": "An order moves to being fulfilled, fulfilled, cancelled or not started"
         },
         "orderReview": {
           "label": "Order Review",
@@ -8561,7 +8561,7 @@
       "orderCreate": "New Order Created",
       "orderAssigned": "Order Assigned to You",
       "orderStatusFulfilled": "Order Fulfilled",
-      "orderStatusInProgress": "Order In Progress",
+      "orderStatusInProgress": "Order Being Fulfilled",
       "orderStatusNotStarted": "Order Not Started",
       "orderStatusCancelled": "Order Cancelled",
       "orderComment": "Order Comments",

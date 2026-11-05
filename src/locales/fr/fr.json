@@ -7252,7 +7252,7 @@
         },
         "orderStatusChange": {
           "label": "Changement de statut de commande",
-          "description": "Une commande passe à en cours, honorée, annulée ou non commencée"
+          "description": "Une commande passe à en cours de traitement, honorée, annulée ou non commencée"
         },
         "orderReview": {
           "label": "Avis sur la commande",
@@ -8696,7 +8696,7 @@
       "orderCreate": "Nouvelle commande créée",
       "orderAssigned": "Commande qui vous est assignée",
       "orderStatusFulfilled": "Commande honorée",
-      "orderStatusInProgress": "Commande en cours",
+      "orderStatusInProgress": "Commande en cours de traitement",
       "orderStatusNotStarted": "Commande non commencée",
       "orderStatusCancelled": "Commande annulée",
       "orderComment": "Commentaires de commande",
