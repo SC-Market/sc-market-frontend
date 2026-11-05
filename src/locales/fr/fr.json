@@ -940,7 +940,7 @@
         "order_created": "Nouvelle commande",
         "order_assigned": "Commande qui vous est assignée",
         "order_status_not_started": "Commande non commencée",
-        "order_status_in_progress": "Commande en cours",
+        "order_status_in_progress": "Commande en cours de traitement",
         "order_status_fulfilled": "Commande honorée",
         "order_status_cancelled": "Commande annulée",
         "order_message": "Message de commande",

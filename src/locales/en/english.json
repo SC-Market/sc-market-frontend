@@ -4865,7 +4865,7 @@
         "order_created": "New order",
         "order_assigned": "Order assigned to you",
         "order_status_not_started": "Order not started",
-        "order_status_in_progress": "Order in progress",
+        "order_status_in_progress": "Order being fulfilled",
         "order_status_fulfilled": "Order fulfilled",
         "order_status_cancelled": "Order cancelled",
         "order_message": "Order message",
