@@ -320,6 +320,42 @@
         "title": "Pilotez vos opés",
         "tagline": "Événements, effectifs et candidatures au même endroit. Essayez la démo en direct, sans inscription.",
         "cta": "Essayer la démo"
+      },
+      "lfo": {
+        "kicker": "Recherche d’org",
+        "title": "Faites-vous recruter",
+        "tagline": "Publiez une annonce et laissez les orgs qui recrutent vous trouver.",
+        "cta": "Publier une annonce"
+      },
+      "events": {
+        "kicker": "Ouvert à tous",
+        "title": "Rejoignez une opé",
+        "tagline": "Trouvez les prochains événements des orgs de tout le verse et participez.",
+        "cta": "Voir les événements"
+      },
+      "discord": {
+        "kicker": "Un serveur Discord ?",
+        "title": "Ajoutez le bot",
+        "tagline": "Événements et demandes de trésorerie arrivent dans vos salons, et les rôles de l’org se synchronisent sur Discord.",
+        "cta": "Lire le guide"
+      },
+      "fleet": {
+        "kicker": "Flottes d’org",
+        "title": "Connaissez votre flotte",
+        "tagline": "Chaque vaisseau de l’org : modèle, rôle, propriétaire et équipage, sur un seul tableau.",
+        "cta": "Voir la démo"
+      },
+      "treasury": {
+        "kicker": "Trésorerie d’org",
+        "title": "Suivez vos aUEC",
+        "tagline": "Solde, dons, paiements et prêts, tout dans les comptes de l’org.",
+        "cta": "Voir la démo"
+      },
+      "dispatch": {
+        "kicker": "Besoin de renfort ?",
+        "title": "Appelez à l’aide",
+        "tagline": "Appels de sauvetage, d’escorte, de ravitaillement et de transport, et qui y répond.",
+        "cta": "Voir la démo"
       }
     }
   },

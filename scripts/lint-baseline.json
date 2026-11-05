@@ -1,5 +1,5 @@
 {
-  "warnings": 788,
+  "warnings": 786,
   "errors": 0,
   "byRule": {
     "@typescript-eslint/ban-ts-comment": 3,
@@ -12,6 +12,6 @@
     "no-restricted-imports": 48,
     "no-restricted-syntax": 142,
     "react-hooks/exhaustive-deps": 27,
-    "scm-style/no-hex-colors": 123
+    "scm-style/no-hex-colors": 121
   }
 }

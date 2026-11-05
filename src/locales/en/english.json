@@ -645,6 +645,42 @@
         "title": "Run your ops",
         "tagline": "Events, rosters and applications in one place. Try the live demo, no sign-up.",
         "cta": "Try the demo"
+      },
+      "lfo": {
+        "kicker": "Looking for org",
+        "title": "Get recruited",
+        "tagline": "Post a listing and let the orgs that are recruiting find you.",
+        "cta": "Post a listing"
+      },
+      "events": {
+        "kicker": "Open invites",
+        "title": "Join an op",
+        "tagline": "Find upcoming events from orgs across the verse and join in.",
+        "cta": "Browse events"
+      },
+      "discord": {
+        "kicker": "Got a Discord?",
+        "title": "Add the bot",
+        "tagline": "New events and treasury requests post to your channels, and org roles sync to Discord.",
+        "cta": "Read the guide"
+      },
+      "fleet": {
+        "kicker": "Org fleets",
+        "title": "Know your fleet",
+        "tagline": "Every ship in the org: model, role, owner and crew, on one board.",
+        "cta": "See the demo"
+      },
+      "treasury": {
+        "kicker": "Org treasury",
+        "title": "Track your aUEC",
+        "tagline": "Balance, donations, payouts and loans, all on the org’s books.",
+        "cta": "See the demo"
+      },
+      "dispatch": {
+        "kicker": "Need backup?",
+        "title": "Call it in",
+        "tagline": "Rescue, escort, refuel and transport calls, and who’s answering them.",
+        "cta": "See the demo"
       }
     }
   },

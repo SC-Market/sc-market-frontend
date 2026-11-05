@@ -320,6 +320,42 @@
         "title": "Dirige tus ops",
         "tagline": "Eventos, plantillas y solicitudes en un solo lugar. Prueba la demo en vivo, sin registro.",
         "cta": "Probar la demo"
+      },
+      "lfo": {
+        "kicker": "Busco org",
+        "title": "Que te recluten",
+        "tagline": "Publica un anuncio y deja que te encuentren las orgs que reclutan.",
+        "cta": "Publicar anuncio"
+      },
+      "events": {
+        "kicker": "Abierto a todos",
+        "title": "Únete a una op",
+        "tagline": "Encuentra los próximos eventos de orgs de todo el verso y apúntate.",
+        "cta": "Ver eventos"
+      },
+      "discord": {
+        "kicker": "¿Tienes Discord?",
+        "title": "Añade el bot",
+        "tagline": "Los eventos y peticiones de tesorería llegan a tus canales, y los roles de la org se sincronizan con Discord.",
+        "cta": "Leer la guía"
+      },
+      "fleet": {
+        "kicker": "Flotas de org",
+        "title": "Conoce tu flota",
+        "tagline": "Cada nave de la org: modelo, rol, dueño y tripulación, en un solo panel.",
+        "cta": "Ver la demo"
+      },
+      "treasury": {
+        "kicker": "Tesorería de org",
+        "title": "Controla tus aUEC",
+        "tagline": "Saldo, donaciones, pagos y préstamos, todo en las cuentas de la org.",
+        "cta": "Ver la demo"
+      },
+      "dispatch": {
+        "kicker": "¿Necesitas refuerzos?",
+        "title": "Pide ayuda",
+        "tagline": "Avisos de rescate, escolta, repostaje y transporte, y quién los atiende.",
+        "cta": "Ver la demo"
       }
     }
   },

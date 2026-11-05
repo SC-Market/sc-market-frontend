@@ -1,3 +1,13 @@
+import {
+  green,
+  indigo,
+  lightBlue,
+  orange,
+  pink,
+  red,
+  teal,
+  yellow,
+} from "@mui/material/colors"
 import { AdConfig } from "./types"
 import ionImage from "../../assets/ion.webp"
 import infernoImage from "../../assets/inferno.webp"
@@ -11,9 +21,11 @@ function scOrgsLink(path: string, campaign: string): string {
 /**
  * The in-universe ads that appear between market listings. None of them pay:
  * the ship posters link to RSI's own pages, the SC Orgs posters to SC
- * Market's sister site (`sisterSite`). Every page that shows ads shows
- * exactly one SC Orgs poster; the ship posters fill the other slots. `weight`
- * is the share within each group (see insertAds).
+ * Market's sister site (`sisterSite`), one per SC Orgs feature, each with
+ * its own utm campaign. Every page that shows ads shows exactly one SC Orgs
+ * poster; the ship posters fill the other slots. `weight` is the share
+ * within each group (see insertAds). SC Orgs posters only advertise what is
+ * live today, and link to a page anyone can open without signing in.
  *
  * To add an ad: add an entry here. An "image" ad's picture should match the
  * listing card (300px tall, portrait); a "poster" ad needs its copy under
@@ -54,7 +66,7 @@ export const MARKET_ADS: AdConfig[] = [
     kind: "poster",
     id: "sc-orgs-finder",
     copyKey: "ads.scOrgs.finder",
-    accent: "#4fd1c5",
+    accent: teal[300],
     linkUrl: scOrgsLink("/communities", "org-finder"),
     weight: 1,
     sisterSite: true,
@@ -63,8 +75,66 @@ export const MARKET_ADS: AdConfig[] = [
     kind: "poster",
     id: "sc-orgs-ops-demo",
     copyKey: "ads.scOrgs.demo",
-    accent: "#f6ad55",
+    accent: orange[300],
     linkUrl: scOrgsLink("/demo", "ops-demo"),
+    weight: 1,
+    sisterSite: true,
+  },
+  // Players' Looking for Org listings, browsable by anyone.
+  {
+    kind: "poster",
+    id: "sc-orgs-lfo",
+    copyKey: "ads.scOrgs.lfo",
+    accent: pink[200],
+    linkUrl: scOrgsLink("/lfo", "looking-for-org"),
+    weight: 1,
+    sisterSite: true,
+  },
+  // The public events directory.
+  {
+    kind: "poster",
+    id: "sc-orgs-events",
+    copyKey: "ads.scOrgs.events",
+    accent: green[300],
+    linkUrl: scOrgsLink("/events", "events"),
+    weight: 1,
+    sisterSite: true,
+  },
+  // The Discord bot: its public guide (/connect-discord needs a sign-in).
+  {
+    kind: "poster",
+    id: "sc-orgs-discord",
+    copyKey: "ads.scOrgs.discord",
+    accent: indigo[200],
+    linkUrl: scOrgsLink("/guides/connect-discord-server", "discord-bot"),
+    weight: 1,
+    sisterSite: true,
+  },
+  // Org operations modules that orgs have today, shown in the public demo.
+  {
+    kind: "poster",
+    id: "sc-orgs-fleet",
+    copyKey: "ads.scOrgs.fleet",
+    accent: lightBlue[300],
+    linkUrl: scOrgsLink("/demo/fleet", "fleet-demo"),
+    weight: 1,
+    sisterSite: true,
+  },
+  {
+    kind: "poster",
+    id: "sc-orgs-treasury",
+    copyKey: "ads.scOrgs.treasury",
+    accent: yellow[300],
+    linkUrl: scOrgsLink("/demo/treasury", "treasury-demo"),
+    weight: 1,
+    sisterSite: true,
+  },
+  {
+    kind: "poster",
+    id: "sc-orgs-dispatch",
+    copyKey: "ads.scOrgs.dispatch",
+    accent: red[300],
+    linkUrl: scOrgsLink("/demo/dispatch", "dispatch-demo"),
     weight: 1,
     sisterSite: true,
   },

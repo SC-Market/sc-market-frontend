@@ -319,6 +319,42 @@
         "title": "Plane deine Ops",
         "tagline": "Events, Mitgliederlisten und Bewerbungen an einem Ort. Teste die Live-Demo, ohne Anmeldung.",
         "cta": "Demo testen"
+      },
+      "lfo": {
+        "kicker": "Org gesucht",
+        "title": "Werde entdeckt",
+        "tagline": "Veröffentliche ein Inserat und lass rekrutierende Orgs dich finden.",
+        "cta": "Inserat erstellen"
+      },
+      "events": {
+        "kicker": "Offen für alle",
+        "title": "Sei dabei",
+        "tagline": "Finde kommende Events von Orgs aus dem ganzen Verse und mach mit.",
+        "cta": "Events ansehen"
+      },
+      "discord": {
+        "kicker": "Eigener Discord?",
+        "title": "Hol dir den Bot",
+        "tagline": "Events und Kassenanfragen landen in deinen Kanälen, Org-Rollen werden zu Discord-Rollen.",
+        "cta": "Zur Anleitung"
+      },
+      "fleet": {
+        "kicker": "Org-Flotten",
+        "title": "Kenne deine Flotte",
+        "tagline": "Jedes Schiff der Org: Modell, Rolle, Besitzer und Crew auf einen Blick.",
+        "cta": "Demo ansehen"
+      },
+      "treasury": {
+        "kicker": "Org-Kasse",
+        "title": "Zähl deine aUEC",
+        "tagline": "Stand, Spenden, Auszahlungen und Darlehen, sauber in den Büchern der Org.",
+        "cta": "Demo ansehen"
+      },
+      "dispatch": {
+        "kicker": "In der Klemme?",
+        "title": "Ruf um Hilfe",
+        "tagline": "Einsätze für Rettung, Geleitschutz, Betankung und Transport, und wer sie übernimmt.",
+        "cta": "Demo ansehen"
       }
     }
   },

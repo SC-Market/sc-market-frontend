@@ -17,6 +17,17 @@ import {
 } from "../adConfig"
 import type { AdConfig } from "../types"
 
+const SC_ORGS_POSTERS = [
+  "sc-orgs-finder",
+  "sc-orgs-ops-demo",
+  "sc-orgs-lfo",
+  "sc-orgs-events",
+  "sc-orgs-discord",
+  "sc-orgs-fleet",
+  "sc-orgs-treasury",
+  "sc-orgs-dispatch",
+]
+
 const listings = (n: number, prefix = "l") =>
   Array.from({ length: n }, (_, i) => ({ listing_id: `${prefix}${i}` }))
 
@@ -35,7 +46,7 @@ describe("market ad rotation", () => {
 
   it("marks exactly the SC Orgs posters as sister-site ads", () => {
     expect(MARKET_ADS.filter((ad) => ad.sisterSite).map((ad) => ad.id)).toEqual(
-      ["sc-orgs-finder", "sc-orgs-ops-demo"],
+      SC_ORGS_POSTERS,
     )
   })
 
@@ -116,7 +127,7 @@ describe("market ad rotation", () => {
       }
       // Across pages, the SC Orgs ad moves between slots and posters.
       expect(seen.slot.size).toBe(slots)
-      expect(seen.poster.size).toBe(2)
+      expect(seen.poster.size).toBe(SC_ORGS_POSTERS.length)
     },
   )
 
@@ -142,10 +153,7 @@ describe("market ad rotation", () => {
     const posters = MARKET_ADS.filter(
       (ad): ad is Extract<AdConfig, { kind: "poster" }> => ad.kind === "poster",
     )
-    expect(posters.map((p) => p.id)).toEqual([
-      "sc-orgs-finder",
-      "sc-orgs-ops-demo",
-    ])
+    expect(posters.map((p) => p.id)).toEqual(SC_ORGS_POSTERS)
     for (const p of posters)
       expect(p.linkUrl.startsWith("https://sc-orgs.space/")).toBe(true)
     for (const locale of [en, de, es, fr, ja, uk, zhHans, zhHant]) {
@@ -165,6 +173,76 @@ describe("market ad rotation", () => {
           /RSI|Roberts|CIG|official/i,
         )
       }
+    }
+  })
+  it("gives every poster its own id, copy, accent and utm campaign, with all four lines in every locale", () => {
+    const posters = MARKET_ADS.filter(
+      (ad): ad is Extract<AdConfig, { kind: "poster" }> => ad.kind === "poster",
+    )
+    const unique = (values: string[]) => new Set(values).size === values.length
+    expect(unique(MARKET_ADS.map((ad) => ad.id))).toBe(true)
+    expect(unique(posters.map((p) => p.copyKey))).toBe(true)
+    expect(unique(posters.map((p) => p.accent.toLowerCase()))).toBe(true)
+    const campaigns = posters.map(
+      (p) => new URL(p.linkUrl).searchParams.get("utm_campaign") ?? "",
+    )
+    expect(campaigns.every((c) => c.length > 0)).toBe(true)
+    expect(unique(campaigns)).toBe(true)
+    for (const p of posters) {
+      const url = new URL(p.linkUrl)
+      expect(url.origin).toBe("https://sc-orgs.space")
+      expect(url.searchParams.get("utm_source")).toBe("sc-market")
+      expect(url.searchParams.get("utm_medium")).toBe("in-universe-ad")
+      expect(p.sisterSite).toBe(true)
+      expect(p.weight).toBeGreaterThan(0)
+    }
+
+    const locales = { en, de, es, fr, ja, uk, zhHans, zhHant }
+    for (const [name, locale] of Object.entries(locales)) {
+      for (const p of posters) {
+        // copyKey is a path into the catalog: ads.scOrgs.<poster>
+        const copy = p.copyKey
+          .split(".")
+          .reduce<unknown>(
+            (node, key) => (node as Record<string, unknown> | undefined)?.[key],
+            locale,
+          ) as Record<string, unknown> | undefined
+        for (const field of ["kicker", "title", "tagline", "cta"]) {
+          const text = copy?.[field]
+          expect(typeof text, `${name} ${p.copyKey}.${field}`).toBe("string")
+          expect((text as string).trim().length).toBeGreaterThan(0)
+        }
+        expect(Object.keys(copy ?? {}).sort()).toEqual([
+          "cta",
+          "kicker",
+          "tagline",
+          "title",
+        ])
+      }
+    }
+  })
+
+  it("draws every poster's accent at AA contrast on the poster's background", () => {
+    // Relative luminance (WCAG 2), of a #rrggbb colour.
+    const channel = (hex: string, i: number) =>
+      parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16)
+    const luminance = (rgb: number[]) =>
+      rgb
+        .map((c) => c / 255)
+        .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+        .reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0)
+    const rgb = (hex: string) => [0, 1, 2].map((i) => channel(hex, i))
+    const posters = MARKET_ADS.filter(
+      (ad): ad is Extract<AdConfig, { kind: "poster" }> => ad.kind === "poster",
+    )
+    for (const p of posters) {
+      // The lightest the background gets behind the text: its top colour
+      // (#0d1626) under the accent glow at its strongest (0x33 = 20%).
+      const glow = rgb(p.accent).map(
+        (c, i) => 0.2 * c + 0.8 * rgb("#0d1626")[i],
+      )
+      const ratio = (luminance(rgb(p.accent)) + 0.05) / (luminance(glow) + 0.05)
+      expect(ratio, `${p.id} ${p.accent}`).toBeGreaterThanOrEqual(4.5)
     }
   })
 })

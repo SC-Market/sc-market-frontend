@@ -36,7 +36,10 @@ export interface PosterAdConfig extends AdBase {
   kind: "poster"
   /** i18n key prefix of the poster's copy */
   copyKey: string
-  /** Accent colour of the poster (title, frame, call to action) */
+  /**
+   * Accent colour of the poster (title, frame, call to action): a #rrggbb
+   * colour (the poster appends alpha to it), AA-readable on its dark ground
+   */
   accent: string
 }
 

@@ -5,6 +5,16 @@ import { AdConfig, ImageAdConfig, PosterAdConfig } from "./types"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import {
+  AD_CARD_HEIGHT,
+  POSTER_GAP,
+  POSTER_MIN_SPACER,
+  POSTER_PADDING,
+  POSTER_RULE,
+  POSTER_SPINE_WIDTH,
+  POSTER_TYPE,
+  fluidCss,
+} from "./posterLayout"
 
 interface AdCardProps {
   /** The ad configuration to display */
@@ -70,10 +80,15 @@ function ImageCreative(props: { ad: ImageAdConfig }) {
  * brackets, a big condensed title and a call to action, in the ad's accent
  * colour. The copy is translated; the brand line and the fan-made
  * disclaimer sit at the foot so it never reads as an official RSI notice.
+ *
+ * Nothing is clamped or ellipsised: the box model and type scale come from
+ * posterLayout.ts, and __tests__/posterFit.test.ts checks that every
+ * locale's copy fits a card of every width the market grids use.
  */
 function PosterCreative(props: { ad: PosterAdConfig }) {
   const { ad } = props
   const { t } = useTranslation()
+  const type = POSTER_TYPE
   const bracket = {
     position: "absolute",
     width: 18,
@@ -110,18 +125,18 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           left: 0,
           top: 0,
           bottom: 0,
-          width: 10,
+          width: POSTER_SPINE_WIDTH,
           background: `repeating-linear-gradient(135deg, ${ad.accent} 0 6px, transparent 6px 12px)`,
           opacity: 0.55,
         }}
       />
       <Box
         aria-hidden
-        sx={{ ...bracket, top: 10, right: 10, borderWidth: "2px 2px 0 0" }}
+        sx={{ ...bracket, top: 6, right: 6, borderWidth: "2px 2px 0 0" }}
       />
       <Box
         aria-hidden
-        sx={{ ...bracket, bottom: 10, right: 10, borderWidth: "0 2px 2px 0" }}
+        sx={{ ...bracket, bottom: 6, right: 6, borderWidth: "0 2px 2px 0" }}
       />
       <Box
         sx={{
@@ -131,16 +146,19 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          pl: "20px",
-          pr: "14px",
-          py: "14px",
+          pl: `${POSTER_PADDING.left}px`,
+          pr: `${POSTER_PADDING.right}px`,
+          pt: `${POSTER_PADDING.top}px`,
+          pb: `${POSTER_PADDING.bottom}px`,
+          "& > p": { m: 0, flexShrink: 0 },
         }}
       >
         <Typography
           component="p"
           sx={{
-            fontSize: "0.7rem",
-            letterSpacing: "0.18em",
+            fontSize: type.kicker.size,
+            lineHeight: type.kicker.lineHeight,
+            letterSpacing: `${type.kicker.letterSpacing}em`,
             textTransform: "uppercase",
             color: ad.accent,
             fontWeight: 700,
@@ -151,15 +169,13 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Typography
           component="p"
           sx={{
-            mt: 1,
+            mt: `${POSTER_GAP}px`,
             fontWeight: 800,
             textTransform: "uppercase",
-            lineHeight: 0.95,
-            letterSpacing: "0.01em",
-            // Sized by the card's width: two-column phone grids get a
-            // ~175px card, desktop ones up to ~300px.
-            fontSize: "clamp(1.1rem, 11cqi, 2.4rem)",
-            overflowWrap: "anywhere",
+            lineHeight: type.title.lineHeight,
+            letterSpacing: `${type.title.letterSpacing}em`,
+            fontSize: fluidCss(type.title.size),
+            overflowWrap: "break-word",
             textShadow: `0 0 18px ${ad.accent}55`,
           }}
         >
@@ -168,42 +184,37 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Box
           aria-hidden
           sx={{
-            mt: 1,
+            mt: `${POSTER_GAP}px`,
             flexShrink: 0,
-            width: 40,
-            height: 3,
+            width: POSTER_RULE.width,
+            height: POSTER_RULE.height,
             bgcolor: ad.accent,
           }}
         />
         <Typography
           component="p"
           sx={{
-            mt: 1,
-            fontSize: "clamp(0.72rem, 4.6cqi, 0.9rem)",
-            lineHeight: 1.3,
+            mt: `${POSTER_GAP}px`,
+            fontSize: fluidCss(type.tagline.size),
+            lineHeight: type.tagline.lineHeight,
             opacity: 0.85,
-            // Long translations on narrow cards: clamp, never push the call
-            // to action or the disclaimer out of the card.
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 4,
-            overflow: "hidden",
           }}
         >
           {t(`${ad.copyKey}.tagline`)}
         </Typography>
-        <Box sx={{ flex: 1 }} />
+        <Box sx={{ flex: 1, minHeight: POSTER_MIN_SPACER }} />
         <Typography
           component="p"
           sx={{
             alignSelf: "flex-start",
-            px: 1.25,
-            py: 0.5,
-            border: `1px solid ${ad.accent}`,
+            px: `${type.cta.padX}px`,
+            py: `${type.cta.padY}px`,
+            border: `${type.cta.border}px solid ${ad.accent}`,
             color: ad.accent,
-            fontSize: "0.75rem",
+            fontSize: type.cta.size,
+            lineHeight: type.cta.lineHeight,
             fontWeight: 700,
-            letterSpacing: "0.08em",
+            letterSpacing: `${type.cta.letterSpacing}em`,
             textTransform: "uppercase",
           }}
         >
@@ -212,10 +223,11 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Typography
           component="p"
           sx={{
-            mt: 1,
-            fontSize: "0.75rem",
+            mt: `${POSTER_GAP}px`,
+            fontSize: type.brand.size,
+            lineHeight: type.brand.lineHeight,
             fontWeight: 800,
-            letterSpacing: "0.22em",
+            letterSpacing: `${type.brand.letterSpacing}em`,
             textTransform: "uppercase",
           }}
         >
@@ -223,7 +235,11 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         </Typography>
         <Typography
           component="p"
-          sx={{ fontSize: "0.6rem", lineHeight: 1.25, opacity: 0.55 }}
+          sx={{
+            fontSize: type.disclaimer.size,
+            lineHeight: type.disclaimer.lineHeight,
+            opacity: 0.55,
+          }}
         >
           {t("ads.scOrgs.disclaimer")}
         </Typography>
@@ -267,7 +283,7 @@ export function AdCard(props: AdCardProps) {
         <Paper
           elevation={3}
           sx={{
-            height: 300,
+            height: AD_CARD_HEIGHT,
             position: "relative",
             overflow: "hidden",
             borderRadius: theme.spacing(theme.borderRadius.topLevel),
