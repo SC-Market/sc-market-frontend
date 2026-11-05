@@ -5346,6 +5346,9 @@ export type OrderMarketListingV2 = {
   listing_id: string
   quantity: number
   title: string
+  /** Unit price on this order's lines for the listing (what the buyer pays),
+    not the listing's current price. The lowest when its variants were
+    priced differently; each variant's own is in v2_variants. */
   price: number
   /** First photo URL */
   photo?: string
@@ -5808,7 +5811,7 @@ export type UpdateNotificationOrgMuteRequest = {
 }
 export type DiscordReachabilityResponse = {
   discord_linked: boolean
-  /** Reachable by Discord DM by the one rule (linked, last DM not refused with 50007, shares a server with the bot). */
+  /** Reachable by Discord DM by the one rule (linked, last DM not refused with 50007 / 50278, shares a server with the bot). */
   dm_reachable: boolean
   /** Shares a server with the SC Market bot (checked periodically). */
   shares_server: boolean
@@ -8122,6 +8125,8 @@ export type Blueprint = {
   crafting_time_seconds?: number
   required_skill_level?: number
   icon_url?: string
+  /** Blueprint source (default, mission_reward) */
+  source?: string
   is_active: boolean
   created_at: string
   updated_at: string
@@ -8220,6 +8225,8 @@ export type BlueprintDetailResponse = {
   blueprint: Blueprint
   /** Output item reference */
   output_item: GameItem
+  /** Output item manufacturer name (same value as the search result's `manufacturer`) */
+  manufacturer?: string
   /** Ingredients required */
   ingredients: BlueprintIngredient[]
   /** Missions that reward this blueprint */
@@ -9173,7 +9180,7 @@ export type StillSellingProgress = {
   sent: number
   delivered: number
   failed: number
-  /** Of failed: Discord error 50007 (DMs closed / no shared server). */
+  /** Of failed: refused by Discord, error 50007 (DMs closed) or 50278 (no mutual server). */
   failed_closed: number
   /** Claimed but with no result (in flight, or the process stopped mid-send; never retried). */
   in_flight: number
@@ -9258,13 +9265,13 @@ export type SellerReachabilityBucket = {
   /** Sellers with at least one publicly listed listing. */
   sellers: number
   listings: number
-  /** Discord linked, the last Discord DM attempt (if any, last 90 days) did not fail with 50007, and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
+  /** Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
   discord_dm: ReachabilityCount
   /** Reachable by Discord DM, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed, or no shared server and no user install); an org: every contact with Discord linked. */
+  /** Not reachable by Discord DM: the last DM was refused with Discord error 50007 or 50278 (DMs closed, or no shared server); an org: every contact with Discord linked. */
   discord_dm_closed: ReachabilityCount
-  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later 50007). Not part of any / none. */
+  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later refused DM). Not part of any / none. */
   discord_server_or_app: ReachabilityCount
   /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
@@ -9282,13 +9289,13 @@ export type SellerReachabilityCounts = {
   /** Sellers with at least one publicly listed listing. */
   sellers: number
   listings: number
-  /** Discord linked, the last Discord DM attempt (if any, last 90 days) did not fail with 50007, and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
+  /** Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
   discord_dm: ReachabilityCount
   /** Reachable by Discord DM, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed, or no shared server and no user install); an org: every contact with Discord linked. */
+  /** Not reachable by Discord DM: the last DM was refused with Discord error 50007 or 50278 (DMs closed, or no shared server); an org: every contact with Discord linked. */
   discord_dm_closed: ReachabilityCount
-  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later 50007). Not part of any / none. */
+  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later refused DM). Not part of any / none. */
   discord_server_or_app: ReachabilityCount
   /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
@@ -9340,8 +9347,9 @@ export type SellerReachabilityReport = {
     discord_shared_server_fresh_days: number
     /** When the bot's server membership was last checked (ISO time), or null if never. */
     discord_shared_server_checked_at: string | null
-    /** The Discord error code counted as "DM failed (closed)" (50007). */
     discord_dm_closed_code: number
+    /** The Discord error codes counted as "DM failed (closed)": 50007 (DMs closed), 50278 (no mutual server). */
+    discord_dm_refusal_codes: number[]
     /** How long those results are kept. */
     discord_dm_result_retention_days: number
     /** Every Discord DM attempt (backend and bot) is recorded: sent, or failed with Discord's error code. */

@@ -68,6 +68,7 @@ const report = (
     discord_dm_delivery_results: true,
     discord_dm_result_retention_days: 90,
     discord_dm_closed_code: 50007,
+    discord_dm_refusal_codes: [50007, 50278],
     discord_shared_server_checked_at: checkedAt,
     discord_shared_server_fresh_days: 3,
     discord_user_install_counts_as_dm: installCounts,
@@ -133,7 +134,7 @@ describe("SellerReachabilityCard", () => {
     render(<SellerReachabilityCard />)
     expect(
       screen.getByText(
-        /last DM from SC Market \(kept 90 days\) wasn't refused with error 50007, and they share a server with the bot/,
+        /last DM from SC Market \(kept 90 days\) wasn't refused with error 50007 \/ 50278, and they share a server with the bot/,
       ),
     ).toBeInTheDocument()
     expect(
@@ -167,7 +168,7 @@ describe("SellerReachabilityCard", () => {
     expect(total.getByText("11 · 21")).toBeInTheDocument()
     expect(
       screen.getByText(
-        /Discord refused their last DM \(error 50007.*A refused DM also clears a recorded app install/,
+        /Discord refused their last DM \(error 50007 \/ 50278: .*A refused DM also clears a recorded app install/,
       ),
     ).toBeInTheDocument()
     const note = screen.getByTestId(

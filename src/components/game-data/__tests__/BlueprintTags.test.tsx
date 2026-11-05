@@ -35,11 +35,14 @@ const searchResult: BlueprintSearchResult = {
   item_category: "Weapons",
   rarity: "Rare",
   tier: 3,
+  manufacturer: "Gemini",
+  source: "default",
   ingredient_count: 0,
   ingredients: [],
   mission_count: 0,
   modifier_properties: WEAPON_MODS,
-  user_owns: true,
+  // A default blueprint: owned without an inventory entry.
+  user_owns: false,
 }
 
 const slotModifier = (property: string): SlotModifier => ({
@@ -64,11 +67,13 @@ const detail: BlueprintDetailResponse = {
     item_category: "Weapons",
     rarity: "Rare",
     tier: 3,
+    source: "default",
     is_active: true,
     created_at: "2026-01-01T00:00:00.000Z",
     updated_at: "2026-01-01T00:00:00.000Z",
   },
   output_item: { game_item_id: "gi-1", name: "FS-9 LMG", type: "weapon" },
+  manufacturer: "Gemini",
   ingredients: [],
   missions_rewarding: [],
   // Two slots share a property: the tags list each property once.
@@ -77,7 +82,7 @@ const detail: BlueprintDetailResponse = {
     { ...slotModifier("gpp_weapon_damage"), slot_name: "frame" },
   ],
   item_attributes: {},
-  user_owns: true,
+  user_owns: false,
 }
 
 const tagKinds = (root: HTMLElement) =>
@@ -113,7 +118,15 @@ describe("BlueprintTags", () => {
     const detailKinds = new Set(tagKinds(renderDetailTags()))
 
     expect(cardKinds).toEqual(
-      new Set(["owned", "rarity", "tier", "category", "modifier"]),
+      new Set([
+        "owned",
+        "default",
+        "rarity",
+        "tier",
+        "manufacturer",
+        "category",
+        "modifier",
+      ]),
     )
     expect(detailKinds).toEqual(cardKinds)
   })

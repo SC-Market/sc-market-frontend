@@ -34,16 +34,17 @@ export type BlueprintTagSource = Pick<
 >
 
 /**
- * Tag data from the blueprint detail response. The detail response has no
- * `source` or `manufacturer` (see the backend's getBlueprintDetail), so the
- * Default and manufacturer tags (and Owned for default blueprints) can only
- * show once it returns them.
+ * Tag data from the blueprint detail response: the same fields the search
+ * result has (`source` on the blueprint, `manufacturer` of the output item),
+ * so the detail shows the same tags as the card.
  */
 export function blueprintTagsFromDetail(
   data: BlueprintDetailResponse,
 ): BlueprintTagSource {
   const bp = data.blueprint
   return {
+    source: bp.source,
+    manufacturer: data.manufacturer,
     rarity: bp.rarity,
     tier: bp.tier,
     item_category: bp.item_category,

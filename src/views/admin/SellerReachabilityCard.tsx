@@ -325,7 +325,7 @@ export function SellerReachabilityCard() {
                 {data.signals.discord_dm_delivery_results
                   ? t("adminUi.sellerReachability.notes.discordRule", {
                       days: data.signals.discord_dm_result_retention_days,
-                      code: data.signals.discord_dm_closed_code,
+                      code: data.signals.discord_dm_refusal_codes.join(" / "),
                       defaultValue:
                         'Discord DM: Discord linked, their last DM from SC Market (kept {{days}} days) wasn\'t refused with error {{code}}, and they share a server with the bot. Sellers never DMed in that time count, unconfirmed; "DM delivered" counts those whose last DM arrived.',
                     })
@@ -340,7 +340,7 @@ export function SellerReachabilityCard() {
                 color="text.secondary"
               >
                 {t("adminUi.sellerReachability.notes.discordClosedInstall", {
-                  code: data.signals.discord_dm_closed_code,
+                  code: data.signals.discord_dm_refusal_codes.join(" / "),
                   defaultValue:
                     "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no way for the bot to reach them). A refused DM also clears a recorded app install. For an org, this holds for everyone who can be contacted.",
                 })}
