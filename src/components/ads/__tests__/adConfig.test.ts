@@ -10,6 +10,7 @@ import zhHant from "../../../locales/zh/zh_Hant.json"
 import {
   AD_FIRST_POSITION,
   AD_FREQUENCY,
+  AD_MIN_LISTINGS,
   MARKET_ADS,
   buildAdRotation,
   insertAds,
@@ -20,15 +21,22 @@ const listings = (n: number, prefix = "l") =>
   Array.from({ length: n }, (_, i) => ({ listing_id: `${prefix}${i}` }))
 
 describe("market ad rotation", () => {
-  it("gives each ad its weight's share, the ship posters most of it", () => {
-    const rotation = buildAdRotation(MARKET_ADS)
-    const total = MARKET_ADS.reduce((sum, ad) => sum + ad.weight, 0)
-    expect(rotation).toHaveLength(total)
-    for (const ad of MARKET_ADS) {
-      expect(rotation.filter((r) => r.id === ad.id)).toHaveLength(ad.weight)
+  it("gives each ad its weight's share of its group's rotation", () => {
+    for (const group of [true, false]) {
+      const ads = MARKET_ADS.filter((ad) => !!ad.sisterSite === group)
+      const rotation = buildAdRotation(ads)
+      const total = ads.reduce((sum, ad) => sum + ad.weight, 0)
+      expect(rotation).toHaveLength(total)
+      for (const ad of ads) {
+        expect(rotation.filter((r) => r.id === ad.id)).toHaveLength(ad.weight)
+      }
     }
-    const scOrgs = rotation.filter((ad) => ad.id.startsWith("sc-orgs")).length
-    expect(scOrgs / rotation.length).toBe(0.25)
+  })
+
+  it("marks exactly the SC Orgs posters as sister-site ads", () => {
+    expect(MARKET_ADS.filter((ad) => ad.sisterSite).map((ad) => ad.id)).toEqual(
+      ["sc-orgs-finder", "sc-orgs-ops-demo"],
+    )
   })
 
   it("never puts the same ad in two neighbouring slots", () => {
@@ -71,9 +79,63 @@ describe("market ad rotation", () => {
     expect(openers.size).toBeGreaterThan(1)
   })
 
-  it("adds nothing to short pages", () => {
-    const few = listings(9)
-    expect(insertAds(few, (l) => l.listing_id)).toBe(few)
+  it("adds nothing to pages shorter than AD_MIN_LISTINGS", () => {
+    for (let n = 0; n < AD_MIN_LISTINGS; n++) {
+      const few = listings(n)
+      expect(insertAds(few, (l) => l.listing_id)).toBe(few)
+    }
+  })
+
+  // 12 listings: 1 slot; 48: 2 slots; 120: 5 slots; 200: 8 slots.
+  it.each([
+    [12, 1],
+    [48, 2],
+    [120, 5],
+    [200, 8],
+  ])(
+    "puts exactly one SC Orgs ad in a page of %i listings (%i slots), whatever the page",
+    (size, slots) => {
+      const seen = { slot: new Set<number>(), poster: new Set<string>() }
+      for (let seed = 0; seed < 200; seed++) {
+        const ads = insertAds(
+          listings(size, `p${seed}-`),
+          (l) => l.listing_id,
+        ).flatMap((item) => ("_isAd" in item ? [item.ad] : []))
+        expect(ads).toHaveLength(slots)
+        const sister = ads.filter((ad) => ad.sisterSite)
+        expect(sister).toHaveLength(1)
+        expect(sister[0].id.startsWith("sc-orgs")).toBe(true)
+        seen.slot.add(ads.indexOf(sister[0]))
+        seen.poster.add(sister[0].id)
+        // The ship posters fill the rest, never the same one twice in a row.
+        const ships = ads.filter((ad) => !ad.sisterSite)
+        for (const ad of ships) expect(ad.kind).toBe("image")
+        ships.forEach((ad, i) => {
+          if (i > 0) expect(ad.id).not.toBe(ships[i - 1].id)
+        })
+      }
+      // Across pages, the SC Orgs ad moves between slots and posters.
+      expect(seen.slot.size).toBe(slots)
+      expect(seen.poster.size).toBe(2)
+    },
+  )
+
+  it("gives the same page the same ads every time", () => {
+    const key = (l: { listing_id: string }) => l.listing_id
+    for (const prefix of ["a", "b", "c", "d"]) {
+      const ids = () =>
+        insertAds(listings(120, prefix), key).map((item) =>
+          "_isAd" in item ? `ad:${item.ad.id}` : item.listing_id,
+        )
+      expect(ids()).toEqual(ids())
+    }
+  })
+
+  it("still places the one sister ad when there are no other ads", () => {
+    const sisterOnly = MARKET_ADS.filter((ad) => ad.sisterSite)
+    const out = insertAds(listings(60), (l) => l.listing_id, sisterOnly)
+    expect(out.filter((item) => "_isAd" in item)).toHaveLength(1)
+    expect(out.filter((item) => !("_isAd" in item))).toHaveLength(60)
   })
 
   it("SC Orgs posters link to SC Orgs, never imply RSI, and are translated everywhere", () => {

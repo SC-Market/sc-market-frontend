@@ -11,8 +11,9 @@ function scOrgsLink(path: string, campaign: string): string {
 /**
  * The in-universe ads that appear between market listings. None of them pay:
  * the ship posters link to RSI's own pages, the SC Orgs posters to SC
- * Market's sister site. The ship posters keep most of the slots (weight 2
- * each against 1 for each SC Orgs poster: SC Orgs gets a quarter).
+ * Market's sister site (`sisterSite`). Every page that shows ads shows
+ * exactly one SC Orgs poster; the ship posters fill the other slots. `weight`
+ * is the share within each group (see insertAds).
  *
  * To add an ad: add an entry here. An "image" ad's picture should match the
  * listing card (300px tall, portrait); a "poster" ad needs its copy under
@@ -56,6 +57,7 @@ export const MARKET_ADS: AdConfig[] = [
     accent: "#4fd1c5",
     linkUrl: scOrgsLink("/communities", "org-finder"),
     weight: 1,
+    sisterSite: true,
   },
   {
     kind: "poster",
@@ -64,6 +66,7 @@ export const MARKET_ADS: AdConfig[] = [
     accent: "#f6ad55",
     linkUrl: scOrgsLink("/demo", "ops-demo"),
     weight: 1,
+    sisterSite: true,
   },
 ]
 
@@ -99,8 +102,6 @@ export function buildAdRotation(ads: AdConfig[]): AdConfig[] {
   return rotation
 }
 
-const MARKET_AD_ROTATION = buildAdRotation(MARKET_ADS)
-
 /** A small stable string hash (FNV-1a). */
 function hashString(value: string): number {
   let hash = 0x811c9dc5
@@ -113,28 +114,61 @@ function hashString(value: string): number {
 
 export type WithAds<T> = T | { _isAd: true; ad: AdConfig }
 
+/** Where the ads go in a page of `count` listings (indexes in the result). */
+function adPositions(count: number): number[] {
+  const positions: number[] = []
+  for (
+    let i = AD_FIRST_POSITION;
+    i < count + positions.length;
+    i += AD_FREQUENCY + 1
+  ) {
+    positions.push(i)
+  }
+  return positions
+}
+
 /**
- * Splices ads into a page of listings. Where the rotation starts is derived
- * from the page's first listing, so different pages and searches open on
- * different ads, while the same results always get the same ads (no
- * Math.random: server and client render the same grid).
+ * Splices ads into a page of listings. A page that gets any ads gets exactly
+ * one sister-site (SC Orgs) ad: which slot it takes and which poster it is
+ * both come from a hash of the page's first listing. The other slots run
+ * through the remaining ads' rotation, starting at a point from the same
+ * hash, so neighbouring slots don't repeat an ad. A page with one slot shows
+ * just the SC Orgs ad. Different pages and searches get different ads, the
+ * same results always the same ones (no Math.random: server and client
+ * render the same grid).
+ *
+ * Call it once per page of results: each call places one SC Orgs ad.
  */
 export function insertAds<T>(
   listings: T[],
   keyOf: (listing: T) => string,
-  rotation: AdConfig[] = MARKET_AD_ROTATION,
+  ads: AdConfig[] = MARKET_ADS,
 ): WithAds<T>[] {
-  if (listings.length < AD_MIN_LISTINGS || rotation.length === 0)
-    return listings
-  const start = hashString(keyOf(listings[0])) % rotation.length
+  if (listings.length < AD_MIN_LISTINGS || ads.length === 0) return listings
+  const sisterRotation = buildAdRotation(ads.filter((ad) => ad.sisterSite))
+  const otherRotation = buildAdRotation(ads.filter((ad) => !ad.sisterSite))
+  const positions = adPositions(listings.length)
+  const hash = hashString(keyOf(listings[0]))
+  // A second hash for the poster choice, so it doesn't track the slot choice.
+  const posterHash = hashString(`sister:${keyOf(listings[0])}`)
+  const sisterSlot = sisterRotation.length > 0 ? hash % positions.length : -1
+  const otherStart = otherRotation.length > 0 ? hash % otherRotation.length : 0
+
   const result: WithAds<T>[] = [...listings]
-  let slot = 0
-  for (let i = AD_FIRST_POSITION; i < result.length; i += AD_FREQUENCY + 1) {
-    result.splice(i, 0, {
-      _isAd: true,
-      ad: rotation[(start + slot) % rotation.length],
-    })
-    slot++
-  }
+  let other = 0
+  let skipped = 0
+  positions.forEach((position, slot) => {
+    let ad: AdConfig
+    if (slot === sisterSlot) {
+      ad = sisterRotation[posterHash % sisterRotation.length]
+    } else if (otherRotation.length > 0) {
+      ad = otherRotation[(otherStart + other++) % otherRotation.length]
+    } else {
+      // No other ads: the slot stays a listing.
+      skipped++
+      return
+    }
+    result.splice(position - skipped, 0, { _isAd: true, ad })
+  })
   return result
 }

@@ -5,15 +5,22 @@
  *   every locale. `copyKey` is the i18n prefix: `${copyKey}.kicker`,
  *   `.title`, `.tagline`, `.cta`.
  *
- * `weight` is the ad's share of the rotation (see buildAdRotation).
+ * `sisterSite` marks an ad for SC Market's own sister site (SC Orgs). Every
+ * page that shows ads shows exactly one of them; the other slots go to the
+ * remaining ads (see insertAds).
+ *
+ * `weight` is the ad's share within its group: among the sister-site ads for
+ * the one sister slot, among the others for the rest (see buildAdRotation).
  */
 interface AdBase {
   /** Unique identifier for the ad */
   id: string
   /** URL to navigate to when the ad is clicked */
   linkUrl: string
-  /** Relative share of ad slots */
+  /** Relative share of ad slots, within its group (sister site or not) */
   weight: number
+  /** An ad for SC Market's sister site: exactly one per page of ads */
+  sisterSite?: boolean
 }
 
 export interface ImageAdConfig extends AdBase {
