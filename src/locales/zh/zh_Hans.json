@@ -6724,8 +6724,7 @@
       "missionSources_other": "{{count}} 个任务来源",
       "noMissionSources": "无任务来源",
       "missionsShort_other": "{{count}} 个任务",
-      "modDamageReduction": "减伤",
-      "modTemperature": "温度"
+      "qualityAffects": "品质影响"
     },
     "browser": {
       "collectionProgress": "收藏进度",
@@ -6759,7 +6758,6 @@
     },
     "detail": {
       "breadcrumb": "蓝图",
-      "ownedBadge": "已拥有",
       "removeFromOwned": "从已拥有中移除",
       "markAsOwned": "标记为已拥有",
       "missionsCount_other": "任务（{{count}}）",

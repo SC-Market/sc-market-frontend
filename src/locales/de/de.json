@@ -6783,8 +6783,7 @@
       "noMissionSources": "Keine Missionsquellen",
       "missionsShort_one": "{{count}} Miss.",
       "missionsShort_other": "{{count}} Miss.",
-      "modDamageReduction": "SR",
-      "modTemperature": "Temp."
+      "qualityAffects": "Qualität beeinflusst"
     },
     "browser": {
       "collectionProgress": "Sammlungsfortschritt",
@@ -6820,7 +6819,6 @@
     },
     "detail": {
       "breadcrumb": "Blaupausen",
-      "ownedBadge": "BESESSEN",
       "removeFromOwned": "Aus Besitz entfernen",
       "markAsOwned": "Als besessen markieren",
       "missionsCount_one": "Missionen ({{count}})",

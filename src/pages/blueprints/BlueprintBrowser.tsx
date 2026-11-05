@@ -80,17 +80,12 @@ import { useTranslation } from "react-i18next"
 import { formatCraftingTime } from "../../constants/crafting"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
+import { BlueprintTags } from "../../components/game-data/BlueprintTags"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 
-const microChip = {
-  height: 18,
-  fontSize: "0.65rem",
-  fontWeight: "bold",
-  textTransform: "uppercase" as const,
-}
 import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { blueprintsSeoText } from "../../seo/hubHeads"
@@ -749,44 +744,12 @@ export function BlueprintBrowser() {
                               spacing={0.5}
                               flexWrap="nowrap"
                             >
-                              {bp.user_owns && (
-                                <Chip
-                                  label={t("blueprintsUi.owned")}
-                                  size="small"
-                                  color="success"
-                                  sx={microChip}
-                                />
-                              )}
-                              {bp.source === "default" && (
-                                <Chip
-                                  label={t("blueprintsUi.default")}
-                                  size="small"
-                                  variant="outlined"
-                                  sx={microChip}
-                                />
-                              )}
-                              {bp.rarity && (
-                                <Chip
-                                  label={bp.rarity}
-                                  size="small"
-                                  sx={{
-                                    ...microChip,
-                                    bgcolor: "info.main",
-                                    color: "#fff",
-                                  }}
-                                />
-                              )}
-                              {bp.tier && (
-                                <Chip
-                                  label={`T${bp.tier}`}
-                                  size="small"
-                                  sx={{
-                                    ...microChip,
-                                    bgcolor: "warning.main",
-                                    color: "#fff",
-                                  }}
-                                />
-                              )}
+                              <BlueprintTags
+                                blueprint={bp}
+                                nested
+                                wrap={false}
+                                hide={["manufacturer", "category", "modifiers"]}
+                              />
                             </Stack>
                           </TableCell>
                           <TableCell>

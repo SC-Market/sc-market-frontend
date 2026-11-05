@@ -6718,8 +6718,7 @@
       "missionSources_other": "入手ミッション {{count}} 件",
       "noMissionSources": "入手ミッションなし",
       "missionsShort_other": "ミッション{{count}}件",
-      "modDamageReduction": "ダメ軽減",
-      "modTemperature": "温度"
+      "qualityAffects": "品質で変わる項目"
     },
     "browser": {
       "collectionProgress": "コレクションの進捗",
@@ -6753,7 +6752,6 @@
     },
     "detail": {
       "breadcrumb": "設計図",
-      "ownedBadge": "所有済み",
       "removeFromOwned": "所有済みから外す",
       "markAsOwned": "所有済みにする",
       "missionsCount_other": "ミッション（{{count}}）",

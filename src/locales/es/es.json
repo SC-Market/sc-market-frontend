@@ -6848,8 +6848,7 @@
       "missionsShort_one": "{{count}} mis.",
       "missionsShort_many": "{{count}} mis.",
       "missionsShort_other": "{{count}} mis.",
-      "modDamageReduction": "RD",
-      "modTemperature": "Temp."
+      "qualityAffects": "La calidad afecta a"
     },
     "browser": {
       "collectionProgress": "Progreso de la colección",
@@ -6887,7 +6886,6 @@
     },
     "detail": {
       "breadcrumb": "Planos",
-      "ownedBadge": "OBTENIDO",
       "removeFromOwned": "Quitar de obtenidos",
       "markAsOwned": "Marcar como obtenido",
       "missionsCount_one": "Misiones ({{count}})",

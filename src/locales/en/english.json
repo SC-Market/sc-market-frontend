@@ -6783,8 +6783,7 @@
       "noMissionSources": "No mission sources",
       "missionsShort_one": "{{count}} msn",
       "missionsShort_other": "{{count}} msn",
-      "modDamageReduction": "DR",
-      "modTemperature": "Temp"
+      "qualityAffects": "Quality affects"
     },
     "browser": {
       "collectionProgress": "Collection Progress",
@@ -6820,7 +6819,6 @@
     },
     "detail": {
       "breadcrumb": "Blueprints",
-      "ownedBadge": "OWNED",
       "removeFromOwned": "Remove from owned",
       "markAsOwned": "Mark as owned",
       "missionsCount_one": "Missions ({{count}})",

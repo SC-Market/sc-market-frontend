@@ -6913,8 +6913,7 @@
       "missionsShort_few": "{{count}} міс.",
       "missionsShort_many": "{{count}} міс.",
       "missionsShort_other": "{{count}} міс.",
-      "modDamageReduction": "ЗШ",
-      "modTemperature": "Темп."
+      "qualityAffects": "Якість впливає на"
     },
     "browser": {
       "collectionProgress": "Прогрес колекції",
@@ -6954,7 +6953,6 @@
     },
     "detail": {
       "breadcrumb": "Креслення",
-      "ownedBadge": "Є В НАЯВНОСТІ",
       "removeFromOwned": "Вилучити з наявних",
       "markAsOwned": "Позначити як наявне",
       "missionsCount_one": "Місії ({{count}})",

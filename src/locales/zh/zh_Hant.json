@@ -6718,8 +6718,7 @@
       "missionSources_other": "{{count}} 個任務來源",
       "noMissionSources": "無任務來源",
       "missionsShort_other": "{{count}} 個任務",
-      "modDamageReduction": "減傷",
-      "modTemperature": "溫度"
+      "qualityAffects": "品質影響"
     },
     "browser": {
       "collectionProgress": "收藏進度",
@@ -6753,7 +6752,6 @@
     },
     "detail": {
       "breadcrumb": "藍圖",
-      "ownedBadge": "已擁有",
       "removeFromOwned": "從已擁有中移除",
       "markAsOwned": "標記為已擁有",
       "missionsCount_other": "任務（{{count}}）",

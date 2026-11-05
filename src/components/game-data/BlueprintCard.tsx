@@ -14,18 +14,26 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { Bookmark, BookmarkBorder, Circle, PlaylistAddRounded } from "@mui/icons-material"
+import {
+  Bookmark,
+  BookmarkBorder,
+  Circle,
+  PlaylistAddRounded,
+} from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
-import { Link as RouterLink, useNavigate } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import { inAppClick } from "../links/inAppClick"
 import { GAME_DATA_PATHS } from "../../routes/paths"
-import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
+import {
+  getResourceCategoryIcon,
+  getCommodityColor,
+  getItemCategoryColor,
+} from "../../util/gameIcons"
 
-const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { GameItemAvatar } from "./GameItemAvatar"
+import { BlueprintTags, isBlueprintOwned } from "./BlueprintTags"
 import { Tooltip } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import type { TFunction } from "i18next"
 
 export interface BlueprintIngredientSummary {
   name: string
@@ -63,13 +71,24 @@ export interface BlueprintCardProps {
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
-  return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+  return name
+    .split(/[\s_-]+/)
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase()
 }
 import { formatCraftingTime } from "../../constants/crafting"
 
 function shortName(name: string): string {
   // "Lindinium" → "LIND", "Iron" → "IRON", "Hephaestanite" → "HEPH"
-  return name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || name.slice(0, 4).toUpperCase()
+  return (
+    name
+      .replace(/[aeiou]/gi, "")
+      .slice(0, 4)
+      .toUpperCase() || name.slice(0, 4).toUpperCase()
+  )
 }
 
 function ingIcon(ing: BlueprintIngredientSummary): string | undefined {
@@ -80,20 +99,6 @@ function ingColor(ing: BlueprintIngredientSummary): string {
   return getCommodityColor(ing.sub_type) || "#616161"
 }
 
-/** Abbreviate modifier property names like SCMDB: damagemitigation → DR, mintemp → Temp (values are i18n keys) */
-const MOD_ABBR: Record<string, string> = {
-  damagemitigation: "blueprintsUi.card.modDamageReduction",
-  mintemp: "blueprintsUi.card.modTemperature",
-  maxtemp: "blueprintsUi.card.modTemperature",
-  gpp_armor_damagemitigation: "blueprintsUi.card.modDamageReduction",
-  gpp_armor_mintemp: "blueprintsUi.card.modTemperature",
-  gpp_armor_maxtemp: "blueprintsUi.card.modTemperature",
-}
-function modAbbr(prop: string, t: TFunction): string {
-  const key = MOD_ABBR[prop.toLowerCase()]
-  return key ? t(key) : prop.replace(/^gpp_armor_/, "").slice(0, 4).toUpperCase()
-}
-
 export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   blueprint: bp,
   viewMode = "grid",
@@ -102,10 +107,9 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   onWishlistAdd,
 }) => {
   const { t } = useTranslation()
-  const nav = useNavigate()
   const ings = bp.ingredients || []
   // Default blueprints are always owned by everyone
-  const effectiveOwned = bp.source === "default" || bp.user_owns
+  const effectiveOwned = isBlueprintOwned(bp)
   // A real link (crawlable, prerendered with /blueprints, middle-click opens
   // the page); a plain click opens it in-app (onClick, e.g. the modal). The
   // detail route takes the blueprint name (or id), not blueprint_code.
@@ -119,31 +123,73 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
         data-id={bp.blueprint_id}
       >
         {onBookmarkToggle && bp.source !== "default" && (
-          <Tooltip title={effectiveOwned ? t("blueprintsUi.removeFromInventory") : t("blueprintsUi.addToInventory")} arrow>
-          <IconButton
-            size="small"
-            sx={{ position: "absolute", top: 4, right: 4, zIndex: 1 }}
-            color={effectiveOwned ? "primary" : "default"}
-            onClick={(e) => { e.stopPropagation(); e.preventDefault(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
+          <Tooltip
+            title={
+              effectiveOwned
+                ? t("blueprintsUi.removeFromInventory")
+                : t("blueprintsUi.addToInventory")
+            }
+            arrow
           >
-            {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
-          </IconButton>
+            <IconButton
+              size="small"
+              sx={{ position: "absolute", top: 4, right: 4, zIndex: 1 }}
+              color={effectiveOwned ? "primary" : "default"}
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                onBookmarkToggle(bp.blueprint_id, !bp.user_owns)
+              }}
+            >
+              {effectiveOwned ? (
+                <Bookmark fontSize="small" />
+              ) : (
+                <BookmarkBorder fontSize="small" />
+              )}
+            </IconButton>
           </Tooltip>
         )}
 
         <CardActionArea
           component={RouterLink}
           to={href}
-          onClick={inAppClick(() => onClick?.(bp.blueprint_id, bp.blueprint_name))}
-          sx={{ textDecoration: "none", color: "inherit", height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+          onClick={inAppClick(() =>
+            onClick?.(bp.blueprint_id, bp.blueprint_name),
+          )}
+          sx={{
+            textDecoration: "none",
+            color: "inherit",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+            justifyContent: "flex-start",
+          }}
+        >
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
             <Box sx={{ display: "flex", gap: 0.75, mb: 1, pr: 3 }}>
-              <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
+              <GameItemAvatar
+                name={bp.output_item_name}
+                iconUrl={bp.output_item_icon}
+                size={32}
+                useCommodityColor={false}
+                sx={{ bgcolor: getItemCategoryColor(bp.item_category) }}
+              />
               <Box sx={{ minWidth: 0 }}>
-                <Typography variant="body2" fontWeight={600} noWrap title={bp.output_item_name}>
+                <Typography
+                  variant="body2"
+                  fontWeight={600}
+                  noWrap
+                  title={bp.output_item_name}
+                >
                   {bp.output_item_name}
                 </Typography>
-                <Typography variant="caption" color="text.secondary" noWrap display="block">
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  noWrap
+                  display="block"
+                >
                   {formatCategoryName(bp.item_category, t)}
                 </Typography>
               </Box>
@@ -153,48 +199,81 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             {ings.length > 0 && (
               <Stack spacing={0.25} sx={{ mb: 0.5 }}>
                 {ings.slice(0, 4).map((ing, i) => (
-                  <Box key={i} sx={{ display: "flex", gap: 0.25, alignItems: "center" }}>
-                    <GameItemAvatar name={ing.name} iconUrl={ing.icon_url} subType={ing.sub_type} size={16} />
-                    <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ing.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">{ing.quantity_required.toFixed(2)} SCU</Typography>
+                  <Box
+                    key={i}
+                    sx={{ display: "flex", gap: 0.25, alignItems: "center" }}
+                  >
+                    <GameItemAvatar
+                      name={ing.name}
+                      iconUrl={ing.icon_url}
+                      subType={ing.sub_type}
+                      size={16}
+                    />
+                    <Typography variant="caption" noWrap sx={{ flex: 1 }}>
+                      {ing.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {ing.quantity_required.toFixed(2)} SCU
+                    </Typography>
                   </Box>
                 ))}
                 {ings.length > 4 && (
-                  <Typography variant="caption" color="text.secondary">{t("blueprintsUi.moreCount", { count: ings.length - 4 })}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {t("blueprintsUi.moreCount", { count: ings.length - 4 })}
+                  </Typography>
                 )}
               </Stack>
             )}
           </CardContent>
 
-          <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
-            {effectiveOwned && <Chip label={t("blueprintsUi.owned")} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?owned=true") }} sx={microChip} />}
-            {bp.source === "default" && <Chip label={t("blueprintsUi.default")} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?source=default") }} sx={microChip} />}
-            {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
-            {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
-            {bp.item_category && <Chip label={formatCategoryName(bp.item_category, t)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
-            {[...new Set((bp.modifier_properties || []).map((p) => modAbbr(p, t)))].map(tag => (
-              <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
-            ))}
+          <CardActions
+            disableSpacing
+            sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}
+          >
+            <BlueprintTags blueprint={bp} nested wrap={false} />
           </CardActions>
 
           <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
             {bp.crafting_time_seconds ? (
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.card.craftTime")}</Typography>
-                <Typography variant="caption">{formatCraftingTime(bp.crafting_time_seconds)}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {t("blueprintsUi.card.craftTime")}
+                </Typography>
+                <Typography variant="caption">
+                  {formatCraftingTime(bp.crafting_time_seconds)}
+                </Typography>
               </Box>
             ) : null}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
-              <Typography variant="caption" color="text.secondary" sx={{ flex: 1, opacity: bp.mission_count > 0 ? 1 : 0.7 }}>
-                {bp.mission_count > 0 ? t("blueprintsUi.card.missionSources", { count: bp.mission_count }) : t("blueprintsUi.card.noMissionSources")}
+              <Circle
+                sx={{
+                  fontSize: 8,
+                  color: bp.mission_count > 0 ? "success.main" : "error.main",
+                }}
+              />
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ flex: 1, opacity: bp.mission_count > 0 ? 1 : 0.7 }}
+              >
+                {bp.mission_count > 0
+                  ? t("blueprintsUi.card.missionSources", {
+                      count: bp.mission_count,
+                    })
+                  : t("blueprintsUi.card.noMissionSources")}
               </Typography>
               {onWishlistAdd && (
                 <Tooltip title={t("blueprintsUi.addToShoppingList")} arrow>
-                <IconButton size="small" onClick={(e) => { e.stopPropagation(); e.preventDefault(); onWishlistAdd(bp.blueprint_id) }}>
-                  <PlaylistAddRounded sx={{ fontSize: 16 }} />
-                </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault()
+                      onWishlistAdd(bp.blueprint_id)
+                    }}
+                  >
+                    <PlaylistAddRounded sx={{ fontSize: 16 }} />
+                  </IconButton>
                 </Tooltip>
               )}
             </Box>
@@ -209,55 +288,130 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
     <Card
       component={RouterLink}
       to={href}
-      sx={{ display: "block", cursor: "pointer", textDecoration: "none", "&:hover": { boxShadow: 3 } }}
+      sx={{
+        display: "block",
+        cursor: "pointer",
+        textDecoration: "none",
+        "&:hover": { boxShadow: 3 },
+      }}
       onClick={inAppClick(() => onClick?.(bp.blueprint_id, bp.blueprint_name))}
-      data-testid="blueprint-card" data-id={bp.blueprint_id}>
+      data-testid="blueprint-card"
+      data-id={bp.blueprint_id}
+    >
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-          <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
+          <GameItemAvatar
+            name={bp.output_item_name}
+            iconUrl={bp.output_item_icon}
+            size={36}
+            useCommodityColor={false}
+            sx={{ bgcolor: getItemCategoryColor(bp.item_category) }}
+          />
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
-            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
-              {effectiveOwned && <Chip label={t("blueprintsUi.owned")} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?owned=true") }} sx={microChip} />}
-              {bp.source === "default" && <Chip label={t("blueprintsUi.default")} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?source=default") }} sx={microChip} />}
-              {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
-              {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
-              {[...new Set((bp.modifier_properties || []).map((p) => modAbbr(p, t)))].map(tag => (
-                <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
-              ))}
+            <Typography variant="body2" fontWeight={600} noWrap>
+              {bp.output_item_name}
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={0.5}
+              flexWrap="wrap"
+              useFlexGap
+              sx={{ mt: 0.25 }}
+            >
+              <BlueprintTags
+                blueprint={bp}
+                nested
+                wrap={false}
+                hide={["category"]}
+              />
               {ings.map((ing, i) => (
-                <Tooltip key={i} title={`${ing.name} — ${ing.quantity_required.toFixed(2)} SCU`} arrow>
-                <Chip
-                  label={`${shortName(ing.name)}×${ing.quantity_required.toFixed(2)}`}
-                  size="small"
-                  sx={{ height: 18, fontSize: "0.6rem", bgcolor: ingColor(ing), color: "#fff" }}
-                />
+                <Tooltip
+                  key={i}
+                  title={`${ing.name} — ${ing.quantity_required.toFixed(2)} SCU`}
+                  arrow
+                >
+                  <Chip
+                    label={`${shortName(ing.name)}×${ing.quantity_required.toFixed(2)}`}
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: "0.6rem",
+                      bgcolor: ingColor(ing),
+                      color: "#fff",
+                    }}
+                  />
                 </Tooltip>
               ))}
             </Stack>
           </Box>
-          <Box sx={{ textAlign: "right", flexShrink: 0, display: "flex", alignItems: "center", gap: 0.75 }}>
-            <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
-            <Typography variant="caption" color="text.secondary">{t("blueprintsUi.card.missionsShort", { count: bp.mission_count })}</Typography>
-            {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatCraftingTime(bp.crafting_time_seconds)}</Typography>}
+          <Box
+            sx={{
+              textAlign: "right",
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: 0.75,
+            }}
+          >
+            <Circle
+              sx={{
+                fontSize: 8,
+                color: bp.mission_count > 0 ? "success.main" : "error.main",
+              }}
+            />
+            <Typography variant="caption" color="text.secondary">
+              {t("blueprintsUi.card.missionsShort", {
+                count: bp.mission_count,
+              })}
+            </Typography>
+            {bp.crafting_time_seconds && (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ ml: 1 }}
+              >
+                {formatCraftingTime(bp.crafting_time_seconds)}
+              </Typography>
+            )}
           </Box>
           {onWishlistAdd && (
             <Tooltip title={t("blueprintsUi.addToShoppingList")} arrow>
-            <IconButton size="small" onClick={(e) => { e.stopPropagation(); e.preventDefault(); onWishlistAdd(bp.blueprint_id) }}>
-              <PlaylistAddRounded fontSize="small" />
-            </IconButton>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  onWishlistAdd(bp.blueprint_id)
+                }}
+              >
+                <PlaylistAddRounded fontSize="small" />
+              </IconButton>
             </Tooltip>
           )}
           {onBookmarkToggle && bp.source !== "default" && (
-            <Tooltip title={effectiveOwned ? t("blueprintsUi.removeFromInventory") : t("blueprintsUi.addToInventory")} arrow>
-            <IconButton
-              size="small"
-              color={effectiveOwned ? "primary" : "default"}
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
+            <Tooltip
+              title={
+                effectiveOwned
+                  ? t("blueprintsUi.removeFromInventory")
+                  : t("blueprintsUi.addToInventory")
+              }
+              arrow
             >
-              {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
-            </IconButton>
+              <IconButton
+                size="small"
+                color={effectiveOwned ? "primary" : "default"}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  onBookmarkToggle(bp.blueprint_id, !bp.user_owns)
+                }}
+              >
+                {effectiveOwned ? (
+                  <Bookmark fontSize="small" />
+                ) : (
+                  <BookmarkBorder fontSize="small" />
+                )}
+              </IconButton>
             </Tooltip>
           )}
         </Box>

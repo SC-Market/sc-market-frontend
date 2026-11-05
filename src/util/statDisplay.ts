@@ -57,11 +57,14 @@ const LOWER_IS_BETTER = new Set([
  */
 export function propertyLabel(prop: string, t?: TFunction): string {
   const lower = prop.toLowerCase()
-  const stripped = lower
-    .replace(/^gpp_armor_/, "")
-    .replace(/^gpp_/, "")
-    .replace(/^weapon_/, "")
-  const known = PROPERTY_LABELS[lower] ?? PROPERTY_LABELS[stripped]
+  // Game codes look like gpp_weapon_firerate / gpp_armor_mintemp; the table
+  // is keyed by weapon_firerate / mintemp, so try each prefix-stripped form.
+  const noGpp = lower.replace(/^gpp_/, "")
+  const stripped = noGpp.replace(/^(armor|weapon)_/, "")
+  const known =
+    PROPERTY_LABELS[lower] ??
+    PROPERTY_LABELS[noGpp] ??
+    PROPERTY_LABELS[stripped]
   if (known)
     return t
       ? t(`gameTaxonomyUi.statProperties.${known[0]}`, known[1])

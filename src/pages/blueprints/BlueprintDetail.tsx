@@ -30,10 +30,13 @@ import {
 } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+import {
+  BlueprintTags,
+  blueprintTagsFromDetail,
+} from "../../components/game-data/BlueprintTags"
 import {
   TrackChangesRounded,
   BuildRounded,
@@ -233,36 +236,10 @@ export function BlueprintDetail() {
               <Typography variant="h5" fontWeight={700}>
                 {itemName}
               </Typography>
-              <Stack direction="row" spacing={0.5} alignItems="center">
-                {data.user_owns && (
-                  <Chip
-                    label={t("blueprintsUi.detail.ownedBadge")}
-                    size="small"
-                    color="success"
-                  />
-                )}
-                {bp.rarity && (
-                  <Chip
-                    label={bp.rarity}
-                    size="small"
-                    sx={{ bgcolor: "info.main", color: "#fff" }}
-                  />
-                )}
-                {bp.tier && (
-                  <Chip
-                    label={t("blueprintsUi.tierN", { tier: bp.tier })}
-                    size="small"
-                    sx={{ bgcolor: "warning.main", color: "#fff" }}
-                  />
-                )}
-                {bp.item_category && (
-                  <Chip
-                    label={formatCategoryName(bp.item_category, t)}
-                    size="small"
-                    variant="outlined"
-                  />
-                )}
-              </Stack>
+              <BlueprintTags
+                blueprint={blueprintTagsFromDetail(data)}
+                size="small"
+              />
             </Box>
             <IconButton
               color={data.user_owns ? "primary" : "default"}

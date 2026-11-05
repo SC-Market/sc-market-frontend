@@ -1,5 +1,5 @@
 {
-  "warnings": 791,
+  "warnings": 788,
   "errors": 0,
   "byRule": {
     "@typescript-eslint/ban-ts-comment": 3,
@@ -8,10 +8,10 @@
     "jsx-a11y/anchor-is-valid": 1,
     "jsx-a11y/click-events-have-key-events": 1,
     "jsx-a11y/no-static-element-interactions": 1,
-    "max-lines": 74,
-    "no-restricted-imports": 46,
+    "max-lines": 75,
+    "no-restricted-imports": 48,
     "no-restricted-syntax": 142,
     "react-hooks/exhaustive-deps": 27,
-    "scm-style/no-hex-colors": 129
+    "scm-style/no-hex-colors": 123
   }
 }
