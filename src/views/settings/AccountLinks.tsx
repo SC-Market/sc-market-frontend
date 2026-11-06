@@ -21,7 +21,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { CheckCircle as CheckCircleIcon } from "@mui/icons-material"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
 import { LinkCitizenIDButton } from "../../components/button/LinkCitizenIDButton"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
@@ -58,7 +58,7 @@ export function AccountLinks() {
   const getProviderIcon = (providerType: string) => {
     switch (providerType) {
       case "discord":
-        return <Discord />
+        return <DiscordIcon />
       case "citizenid":
         return isCitizenIdEnabled ? (
           <CitizenIDLogo height={24} />

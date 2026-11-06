@@ -17,8 +17,8 @@ vi.mock("../../../util/constants", () => ({
 }))
 
 // Mock icon to avoid MUI SvgIcon rendering complexity
-vi.mock("../../icon/DiscordIcon", () => ({
-  Discord: () => <span data-testid="discord-icon" />,
+vi.mock("../../icons/DiscordIcon", () => ({
+  DiscordIcon: () => <span data-testid="discord-icon" />,
 }))
 
 describe("DiscordLoginButton", () => {

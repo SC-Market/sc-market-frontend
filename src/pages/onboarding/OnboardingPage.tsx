@@ -15,7 +15,7 @@ import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { BACKEND_URL } from "../../util/constants"
 import {
   useGetOnboardingStatusQuery,
@@ -111,7 +111,7 @@ export function OnboardingPage() {
       s.push({
         key: "discord",
         label: t("onboarding.steps.discord", "Link Discord"),
-        icon: <Discord />,
+        icon: <DiscordIcon />,
       })
     }
     if (!status?.steps.hasAvailability) {
@@ -334,7 +334,7 @@ export function OnboardingPage() {
                 <Button
                   variant="contained"
                   color="discord"
-                  startIcon={<Discord />}
+                  startIcon={<DiscordIcon />}
                   onClick={handleLinkDiscord}
                 >
                   {t("onboarding.discord.link", "Link Discord")}

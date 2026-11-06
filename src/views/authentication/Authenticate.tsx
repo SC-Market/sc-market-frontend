@@ -11,7 +11,7 @@ import {
 import React from "react"
 import Checkbox from "@mui/material/Checkbox"
 import { Google } from "@mui/icons-material"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { useTranslation } from "react-i18next"
 
 export function Authenticate() {
@@ -60,7 +60,7 @@ export function Authenticate() {
             aria-label={t("auth.discord", "Discord")}
             color={"primary"}
           >
-            <Discord />
+            <DiscordIcon />
           </IconButton>
         </ButtonGroup>
       </Grid>

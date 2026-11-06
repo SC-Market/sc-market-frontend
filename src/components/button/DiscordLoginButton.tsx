@@ -2,7 +2,7 @@ import { BACKEND_URL } from "../../util/constants"
 import { Button } from "@mui/material"
 import React from "react"
 import { useLocation, useSearchParams } from "react-router-dom"
-import { Discord } from "../icon/DiscordIcon"
+import { DiscordIcon } from "../icons/DiscordIcon"
 import { useTranslation } from "react-i18next"
 import { safeRedirectPath } from "../../util/safeRedirect"
 
@@ -25,7 +25,7 @@ export function DiscordLoginButton() {
       }}
       color="discord"
       variant="contained"
-      startIcon={<Discord />}
+      startIcon={<DiscordIcon />}
       aria-label={t("auth.signInWithDiscord", "Sign in with Discord")}
       aria-describedby="discord-login-description"
     >

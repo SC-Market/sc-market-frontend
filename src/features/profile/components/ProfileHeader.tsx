@@ -10,7 +10,7 @@ import {
 import { User } from "../../../datatypes/User"
 import { UserActionsDropdown } from "../../../components/profile/UserActionsDropdown"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { Discord } from "../../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../../components/icons/DiscordIcon"
 import { ProfileAvatar } from "./ProfileAvatar"
 import { ShareButton } from "../../../components/buttons/ShareButton"
 
@@ -84,7 +84,7 @@ export function ProfileHeader({
               aria-label={t("profile.discordProfile", "Discord profile")}
               color="primary"
             >
-              <Discord />
+              <DiscordIcon />
             </IconButton>
           </MaterialLink>
         )}

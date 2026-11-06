@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
 import {
@@ -55,7 +55,7 @@ export function OrgManageLayout() {
       about: { label: t("org.aboutTab"), icon: <InfoRounded /> },
       roles: { label: t("org.rolesTab"), icon: <AccountBoxRounded /> },
       invites: { label: t("org.invitesTab"), icon: <PersonAddRounded /> },
-      discord: { label: t("org.discordTab"), icon: <Discord /> },
+      discord: { label: t("org.discordTab"), icon: <DiscordIcon /> },
       settings: { label: t("org.settingsTab"), icon: <SettingsRounded /> },
       audit: { label: t("org.auditLogsTab"), icon: <HistoryRounded /> },
       // The theme page holds both the theme editor and the white-label

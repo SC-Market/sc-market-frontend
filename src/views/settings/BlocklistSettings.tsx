@@ -27,7 +27,7 @@ import {
   Avatar,
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { USER_PATHS } from "../../routes/paths"
 
 // Custom UserList for blocked users with unblock functionality
@@ -98,7 +98,7 @@ function BlockedUserList(props: {
                 >
                   {user.discord_profile ? (
                     <>
-                      <Discord />
+                      <DiscordIcon />
                       &nbsp;{format_discord(user)}
                     </>
                   ) : null}

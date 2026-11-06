@@ -31,7 +31,7 @@ import { isSiteAdmin } from "../../util/siteRole"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
 
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
-import { Discord } from "../../components/icon/DiscordIcon"
+import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { ProfileSettings } from "../../views/settings/ProfileSettings"
 import { DiscordIntegrationSettings } from "../../views/settings/DiscordIntegrationSettings"
 import { MarketSettings } from "../../views/settings/MarketSettings"
@@ -147,7 +147,7 @@ export function SettingsPage() {
         {
           index: 2,
           label: t("settings.tabs.discordIntegration"),
-          icon: <Discord sx={{ marginRight: 0 }} />,
+          icon: <DiscordIcon sx={{ marginRight: 0 }} />,
         },
         { index: 6, label: "API Tokens", icon: <SecurityRounded /> },
         { index: 9, label: "SCMDB", icon: <SyncRounded /> },
@@ -269,7 +269,7 @@ export function SettingsPage() {
               )}
               <Tab
                 label={t("settings.tabs.discordIntegration")}
-                icon={<Discord sx={{ marginRight: 1 }} />}
+                icon={<DiscordIcon sx={{ marginRight: 1 }} />}
                 {...a11yProps(2)}
                 value={2}
               />
