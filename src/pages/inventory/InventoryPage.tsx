@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react"
 import {
-  Avatar,
   Box,
   Button,
   Chip,
@@ -24,6 +23,7 @@ import {
   Typography,
   Skeleton,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   AddRounded,
   DeleteRounded,
@@ -369,7 +369,8 @@ export default function InventoryPage() {
                           sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
                           {lot.game_item_image && (
-                            <Avatar
+                            <ImageAvatar
+                              alt=""
                               src={lot.game_item_image}
                               variant="rounded"
                               sx={{ width: 28, height: 28 }}
@@ -420,7 +421,8 @@ export default function InventoryPage() {
                             }}
                           >
                             {lot.listing_photo && (
-                              <Avatar
+                              <ImageAvatar
+                                alt=""
                                 src={lot.listing_photo}
                                 variant="rounded"
                                 sx={{ width: 24, height: 24 }}

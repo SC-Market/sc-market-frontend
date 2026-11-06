@@ -23,13 +23,12 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  FormControlLabel,
-  Switch,
   IconButton,
   LinearProgress,
   Chip,
   Stack,
 } from "@mui/material"
+import { LabeledSwitch } from "../../components/buttons/LabeledSwitch"
 import {
   Add,
   PlaylistAdd,
@@ -473,55 +472,36 @@ export function WishlistManager() {
               />
 
               {/* Public/Private Toggle */}
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={newWishlistIsPublic}
-                    onChange={(e) => setNewWishlistIsPublic(e.target.checked)}
-                  />
-                }
+              <LabeledSwitch
+                checked={newWishlistIsPublic}
+                onChange={setNewWishlistIsPublic}
                 label={
-                  <Box>
-                    <Typography variant="body2">
-                      {t("wishlistsUi.manager.createDialog.makePublic")}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("wishlistsUi.publicHelp")}
-                    </Typography>
-                  </Box>
+                  <Typography variant="body2">
+                    {t("wishlistsUi.manager.createDialog.makePublic")}
+                  </Typography>
                 }
+                helperText={t("wishlistsUi.publicHelp")}
               />
 
               {/* Collaborative Toggle — only available when an org is selected */}
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={newWishlistIsCollaborative}
-                    onChange={(e) =>
-                      setNewWishlistIsCollaborative(e.target.checked)
-                    }
-                    disabled={!primaryContractor}
-                  />
-                }
+              <LabeledSwitch
+                checked={newWishlistIsCollaborative}
+                onChange={setNewWishlistIsCollaborative}
+                disabled={!primaryContractor}
                 label={
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      color={!primaryContractor ? "text.disabled" : undefined}
-                    >
-                      {t("wishlistsUi.collaborative")}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {primaryContractor
-                        ? t(
-                            "wishlistsUi.manager.createDialog.collaborativeHelp",
-                            { org: primaryContractor.name },
-                          )
-                        : t(
-                            "wishlistsUi.manager.createDialog.collaborativeNoOrg",
-                          )}
-                    </Typography>
-                  </Box>
+                  <Typography
+                    variant="body2"
+                    color={!primaryContractor ? "text.disabled" : undefined}
+                  >
+                    {t("wishlistsUi.collaborative")}
+                  </Typography>
+                }
+                helperText={
+                  primaryContractor
+                    ? t("wishlistsUi.manager.createDialog.collaborativeHelp", {
+                        org: primaryContractor.name,
+                      })
+                    : t("wishlistsUi.manager.createDialog.collaborativeNoOrg")
                 }
               />
 

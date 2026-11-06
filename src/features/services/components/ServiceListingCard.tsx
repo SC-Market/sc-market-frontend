@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Avatar,
   Box,
   Card,
   CardActionArea,
@@ -9,6 +8,7 @@ import {
   Chip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -146,7 +146,8 @@ export const ServiceListingBase = React.memo(
                   </React.Suspense>
                 </Typography>
                 {service.photos[0] ? (
-                  <Avatar
+                  <ImageAvatar
+                    alt=""
                     src={
                       service.photos[0] ||
                       "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"

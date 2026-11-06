@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -12,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
@@ -195,7 +195,8 @@ function OrgAboutForm(props: { contractor: Contractor }) {
               onMouseEnter={() => setShowAvatarButton(true)}
               onMouseLeave={() => setShowAvatarButton(false)}
             >
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={contractor?.avatar || undefined}
                 variant="rounded"
                 sx={{
@@ -206,7 +207,7 @@ function OrgAboutForm(props: { contractor: Contractor }) {
                 }}
               >
                 <ImageRounded />
-              </Avatar>
+              </ImageAvatar>
             </Box>
             <input
               type="file"

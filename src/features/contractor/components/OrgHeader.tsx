@@ -1,6 +1,5 @@
 import React, { useMemo } from "react"
 import {
-  Avatar,
   Box,
   Button,
   Chip,
@@ -9,6 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { GroupAdd, LinkRounded } from "@mui/icons-material"
@@ -93,7 +93,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
-      <Avatar
+      <ImageAvatar
         src={contractor.avatar}
         alt={t("accessibility.contractorAvatar", "Avatar of {{name}}", {
           name: contractor.name,

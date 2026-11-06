@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink } from "react-router-dom"
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -11,6 +10,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { Groups, Settings } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ORG_PATHS, PATHS } from "../../routes/paths"
@@ -60,13 +60,14 @@ export function MyOrgs() {
                       mb: 1,
                     }}
                   >
-                    <Avatar
+                    <ImageAvatar
+                      alt=""
                       src={org.avatar || undefined}
                       variant="rounded"
                       sx={{ width: 48, height: 48 }}
                     >
                       {org.name[0]}
-                    </Avatar>
+                    </ImageAvatar>
                     <Box>
                       <Typography variant="h6" noWrap>
                         {org.name}

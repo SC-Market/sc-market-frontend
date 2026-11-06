@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { Avatar, Box, IconButton } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { AddAPhotoRounded, SaveRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -31,7 +32,7 @@ export function ProfileAvatar({
 
   if (!isMyProfile) {
     return (
-      <Avatar
+      <ImageAvatar
         src={avatar}
         alt={alt}
         sx={{
@@ -80,7 +81,7 @@ export function ProfileAvatar({
           {isUploadingAvatar ? <SaveRounded /> : <AddAPhotoRounded />}
         </IconButton>
       </label>
-      <Avatar
+      <ImageAvatar
         src={avatar}
         alt={alt}
         sx={{

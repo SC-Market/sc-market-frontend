@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useId, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom"
 import { Trans, useTranslation } from "react-i18next"
 import {
   Alert,
   Autocomplete,
-  Avatar,
   Box,
   Button,
   Checkbox,
@@ -26,10 +25,11 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { DeleteRounded, SaveRounded } from "@mui/icons-material"
@@ -280,6 +280,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
 }
 
 function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
+  const requireAvailabilityHelpId = useId()
   const { t } = useTranslation()
   const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({
     shopId,
@@ -407,14 +408,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
       >
         <Grid item xs={12}>
           <Box mb={2}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={offerEnabled}
-                  onChange={(e) => setOfferEnabled(e.target.checked)}
-                  disabled={saving}
-                />
-              }
+            <LabeledSwitch
+              checked={offerEnabled}
+              onChange={setOfferEnabled}
+              disabled={saving}
               label={t("shopsUi.orderSettings.offerEnabled")}
             />
             <TextField
@@ -432,14 +429,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         </Grid>
         <Grid item xs={12}>
           <Box mb={2}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={orderEnabled}
-                  onChange={(e) => setOrderEnabled(e.target.checked)}
-                  disabled={saving}
-                />
-              }
+            <LabeledSwitch
+              checked={orderEnabled}
+              onChange={setOrderEnabled}
+              disabled={saving}
               label={t("shopsUi.orderSettings.orderEnabled")}
             />
             <TextField
@@ -463,17 +456,18 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         subtitle={t("shopsUi.orderSettings.requirementsSubtitle")}
       >
         <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={requireAvailability}
-                onChange={(e) => setRequireAvailability(e.target.checked)}
-                disabled={saving}
-              />
-            }
+          <LabeledSwitch
+            checked={requireAvailability}
+            onChange={setRequireAvailability}
+            disabled={saving}
             label={t("shopsUi.orderSettings.requireAvailability")}
+            describedBy={requireAvailabilityHelpId}
           />
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            id={requireAvailabilityHelpId}
+            variant="body2"
+            color="text.secondary"
+          >
             {t("shopsUi.orderSettings.requireAvailabilityHelp")}
           </Typography>
         </Grid>
@@ -568,14 +562,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         subtitle={t("shopsUi.orderSettings.limitsSubtitle")}
       >
         <Grid item xs={12} md={6}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={minOrderSizeEnabled}
-                onChange={(e) => setMinOrderSizeEnabled(e.target.checked)}
-                disabled={saving}
-              />
-            }
+          <LabeledSwitch
+            checked={minOrderSizeEnabled}
+            onChange={setMinOrderSizeEnabled}
+            disabled={saving}
             label={t("shopsUi.orderSettings.minSize")}
           />
           <TextField
@@ -598,14 +588,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={maxOrderSizeEnabled}
-                onChange={(e) => setMaxOrderSizeEnabled(e.target.checked)}
-                disabled={saving}
-              />
-            }
+          <LabeledSwitch
+            checked={maxOrderSizeEnabled}
+            onChange={setMaxOrderSizeEnabled}
+            disabled={saving}
             label={t("shopsUi.orderSettings.maxSize")}
           />
           <TextField
@@ -628,14 +614,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={minOrderValueEnabled}
-                onChange={(e) => setMinOrderValueEnabled(e.target.checked)}
-                disabled={saving}
-              />
-            }
+          <LabeledSwitch
+            checked={minOrderValueEnabled}
+            onChange={setMinOrderValueEnabled}
+            disabled={saving}
             label={t("shopsUi.orderSettings.minValue")}
           />
           <TextField
@@ -656,14 +638,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={maxOrderValueEnabled}
-                onChange={(e) => setMaxOrderValueEnabled(e.target.checked)}
-                disabled={saving}
-              />
-            }
+          <LabeledSwitch
+            checked={maxOrderValueEnabled}
+            onChange={setMaxOrderValueEnabled}
+            disabled={saving}
             label={t("shopsUi.orderSettings.maxValue")}
           />
           <TextField
@@ -994,13 +972,14 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
                 {t("orgAbout.logo")}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar
+                <ImageAvatar
+                  alt=""
                   src={draft.logoUrl || undefined}
                   variant="rounded"
                   sx={{ width: 64, height: 64 }}
                 >
                   <ImageRounded />
-                </Avatar>
+                </ImageAvatar>
                 <Button
                   component="label"
                   variant="outlined"
@@ -1144,15 +1123,9 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
             subtitle={t("shopsUi.settings.ordersSubtitle")}
           >
             <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={draft.acceptsCustomOrders}
-                    onChange={(e) =>
-                      edit("acceptsCustomOrders", e.target.checked)
-                    }
-                  />
-                }
+              <LabeledSwitch
+                checked={draft.acceptsCustomOrders}
+                onChange={(checked) => edit("acceptsCustomOrders", checked)}
                 label={t("shopsUi.form.acceptCustomOrders")}
               />
             </Grid>

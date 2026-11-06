@@ -4,7 +4,6 @@
  */
 
 import {
-  Avatar,
   AvatarGroup,
   Box,
   TextField,
@@ -14,6 +13,7 @@ import {
   Stack,
   Button,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../components/haptic"
 import React, {
@@ -93,7 +93,7 @@ function MessageEntryMobile(props: { message: Message }) {
     <Stack direction={"row"} spacing={1.5} justifyContent={"flex-start"}>
       {message.author ? (
         <Link to={USER_PATHS.profile(message.author)}>
-          <Avatar
+          <ImageAvatar
             variant="rounded"
             sx={{
               width: 36,
@@ -107,7 +107,8 @@ function MessageEntryMobile(props: { message: Message }) {
           />
         </Link>
       ) : (
-        <Avatar
+        <ImageAvatar
+          alt=""
           variant="rounded"
           sx={{
             width: 36,
@@ -242,14 +243,14 @@ function MessageHeaderMobile() {
               <>
                 <AvatarGroup max={3} spacing={"small"} sx={{ flexShrink: 0 }}>
                   {otherUsers.map((part) => (
-                    <Avatar
+                    <ImageAvatar
                       alt={part.username}
                       src={part.avatar}
                       key={part.username}
                     />
                   ))}
                   {contractorParticipants.map((part) => (
-                    <Avatar
+                    <ImageAvatar
                       alt={part.name}
                       src={part.avatar}
                       key={part.spectrum_id}
@@ -258,7 +259,7 @@ function MessageHeaderMobile() {
                       }}
                     >
                       <BusinessIcon />
-                    </Avatar>
+                    </ImageAvatar>
                   ))}
                 </AvatarGroup>
 

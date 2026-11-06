@@ -15,7 +15,6 @@ import { useParams } from "react-router-dom"
 import { useHead } from "@unhead/react"
 import { useTranslation } from "react-i18next"
 import {
-  Avatar,
   Box,
   CssBaseline,
   Link,
@@ -23,6 +22,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import VerifiedRounded from "@mui/icons-material/VerifiedRounded"
 import { mainTheme } from "../../hooks/styles/Theme"
 import {
@@ -150,7 +150,7 @@ export function EmbedOrg(props: { variant?: "card" | "listings" }) {
         ) : (
           <Stack spacing={1.5}>
             <Stack direction="row" spacing={1.5} alignItems="center">
-              <Avatar
+              <ImageAvatar
                 src={org?.logo_url ?? undefined}
                 alt=""
                 variant="rounded"

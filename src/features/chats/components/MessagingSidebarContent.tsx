@@ -1,5 +1,4 @@
 import {
-  Avatar,
   AvatarGroup,
   Badge,
   Box,
@@ -12,6 +11,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
@@ -124,14 +124,14 @@ function ChatEntry(props: {
           >
             <AvatarGroup max={3} spacing={"small"}>
               {otherUsers.map((part) => (
-                <Avatar
+                <ImageAvatar
                   alt={part.username}
                   src={part.avatar}
                   key={part.username}
                 />
               ))}
               {contractorParticipants.map((part) => (
-                <Avatar
+                <ImageAvatar
                   alt={part.name}
                   src={part.avatar}
                   key={part.spectrum_id}
@@ -140,7 +140,7 @@ function ChatEntry(props: {
                   }}
                 >
                   <BusinessIcon />
-                </Avatar>
+                </ImageAvatar>
               ))}
             </AvatarGroup>
           </Badge>

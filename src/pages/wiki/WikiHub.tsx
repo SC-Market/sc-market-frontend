@@ -5,8 +5,8 @@ import {
   CardActionArea,
   CardContent,
   Typography,
-  Avatar,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   InventoryRounded,
   RocketLaunchRounded,
@@ -84,7 +84,8 @@ export function WikiHub() {
                     gap: 1.5,
                   }}
                 >
-                  <Avatar
+                  <ImageAvatar
+                    alt=""
                     sx={{
                       width: 56,
                       height: 56,
@@ -94,7 +95,7 @@ export function WikiHub() {
                     }}
                   >
                     {SECTION_ICONS[section.route]}
-                  </Avatar>
+                  </ImageAvatar>
                   <Typography
                     variant="subtitle1"
                     fontWeight={600}

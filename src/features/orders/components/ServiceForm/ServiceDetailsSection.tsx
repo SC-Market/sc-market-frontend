@@ -1,12 +1,6 @@
 import React from "react"
-import {
-  Grid,
-  TextField,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Switch,
-} from "@mui/material"
+import { Grid, TextField, Typography, FormGroup } from "@mui/material"
+import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import { Section } from "../../../../components/paper/Section"
 import { MarkdownEditor } from "../../../../components/markdown/Markdown.lazy"
 import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
@@ -56,18 +50,14 @@ export function ServiceDetailsSection({ isEditing }: { isEditing: boolean }) {
         </Grid>
         <Grid item xs={12}>
           <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  onChange={(e) =>
-                    setState({
-                      ...state,
-                      status: e.target.checked ? "active" : "inactive",
-                    })
-                  }
-                  checked={state.status === "active"}
-                />
+            <LabeledSwitch
+              onChange={(checked) =>
+                setState({
+                  ...state,
+                  status: checked ? "active" : "inactive",
+                })
               }
+              checked={state.status === "active"}
               label={
                 state.status === "active"
                   ? t("CreateServiceForm.serviceActive")

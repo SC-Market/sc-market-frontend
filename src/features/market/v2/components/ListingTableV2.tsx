@@ -1,7 +1,6 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import {
-  Avatar,
   Chip,
   Link as MuiLink,
   Table,
@@ -12,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { useTranslation } from "react-i18next"
 import { ListingSearchResult } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
@@ -43,7 +43,8 @@ export function ListingTableV2({
           {listings.map((l) => (
             <TableRow key={l.listing_id} hover>
               <TableCell padding="none" sx={{ width: 40, pl: 1 }}>
-                <Avatar
+                <ImageAvatar
+                  alt=""
                   src={l.photo || FALLBACK_IMAGE_URL}
                   sx={{ width: 40, height: 40 }}
                   variant="rounded"

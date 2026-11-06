@@ -36,7 +36,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  Avatar,
   Stack,
   Button,
   Tooltip,
@@ -44,6 +43,7 @@ import {
   CardContent,
   LinearProgress,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ViewModule, ViewList, RestartAltRounded } from "@mui/icons-material"
 import {
@@ -674,7 +674,8 @@ export function BlueprintBrowser() {
                           }
                         >
                           <TableCell sx={{ width: 40 }}>
-                            <Avatar
+                            <ImageAvatar
+                              alt=""
                               src={bp.output_item_icon}
                               variant="rounded"
                               sx={{
@@ -688,7 +689,7 @@ export function BlueprintBrowser() {
                               {(bp.output_item_name || "?")
                                 .slice(0, 2)
                                 .toUpperCase()}
-                            </Avatar>
+                            </ImageAvatar>
                           </TableCell>
                           <TableCell>
                             <Tooltip

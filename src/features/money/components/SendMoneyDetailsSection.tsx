@@ -1,5 +1,6 @@
 import React from "react"
-import { Avatar, Button, Grid, TextField, Typography } from "@mui/material"
+import { Button, Grid, TextField, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { User, MinimalUser } from "../../../datatypes/User"
 import type {
   Contractor,
@@ -25,7 +26,7 @@ export function SendMoneyDetailsSection(props: SendMoneyDetailsSectionProps) {
     <Grid container spacing={2}>
       <Grid item xs={12} container>
         <Grid item>
-          <Avatar
+          <ImageAvatar
             src={props.targetObject?.avatar}
             sx={{ marginRight: 3, height: 64, width: 64 }}
             alt={t("appUi.sendMoney.avatarAlt", {

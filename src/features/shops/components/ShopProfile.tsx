@@ -1,11 +1,9 @@
 import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 import { Link, useParams } from "react-router-dom"
 import {
-  Avatar,
   Box,
   Chip,
   Container,
-  FormControlLabel,
   Grid,
   InputAdornment,
   LinearProgress,
@@ -14,13 +12,14 @@ import {
   Paper,
   Rating,
   Stack,
-  Switch,
   TableCell,
   TableRow,
   Tabs,
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { styled, useTheme } from "@mui/material/styles"
 import {
   CreateRounded,
@@ -195,7 +194,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
-      <Avatar
+      <ImageAvatar
         src={shop.logo_url || undefined}
         alt={t("accessibility.shopLogo", "Logo of {{name}}", {
           name: shop.name,
@@ -209,7 +208,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
         }}
       >
         {shop.name[0]}
-      </Avatar>
+      </ImageAvatar>
       <Stack
         spacing={0.5}
         sx={{
@@ -628,17 +627,13 @@ export function ShopListingsTab(props: { slug: string }) {
           </MenuItem>
         </TextField>
         {isAdmin && (
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={showUnlisted}
-                onChange={(e) => {
-                  setShowUnlisted(e.target.checked)
-                  setPage(1)
-                }}
-              />
-            }
+          <LabeledSwitch
+            size="small"
+            checked={showUnlisted}
+            onChange={(checked) => {
+              setShowUnlisted(checked)
+              setPage(1)
+            }}
             label={t("market.showUnlistedAdmin", "Show unlisted (admin)")}
             sx={{ whiteSpace: "nowrap", ml: { sm: 1 } }}
           />
@@ -794,7 +789,7 @@ function ShopReviewRow(props: {
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item>
             <Link to={USER_PATHS.profile(row.author.username)}>
-              <Avatar
+              <ImageAvatar
                 src={row.author.avatar || undefined}
                 alt={t("accessibility.userAvatar", "Avatar of {{username}}", {
                   username: row.author.username,
@@ -983,12 +978,13 @@ function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
         alignItems="center"
         sx={{ textDecoration: "none", color: "inherit" }}
       >
-        <Avatar
+        <ImageAvatar
+          alt=""
           src={owner.avatar_url || undefined}
           sx={{ width: 40, height: 40 }}
         >
           {owner.name[0]}
-        </Avatar>
+        </ImageAvatar>
         <Typography variant="body1" fontWeight={500}>
           {owner.name}
         </Typography>

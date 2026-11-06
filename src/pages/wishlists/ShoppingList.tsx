@@ -29,9 +29,9 @@ import {
   Stack,
   IconButton,
   Tooltip,
-  Avatar,
   Grid,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   ArrowBack,
@@ -301,9 +301,12 @@ export function ShoppingList() {
             <Card>
               <CardContent>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+                  <ImageAvatar
+                    alt=""
+                    sx={{ bgcolor: theme.palette.primary.main }}
+                  >
                     <ShoppingCart />
-                  </Avatar>
+                  </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
                       {sortedMaterials.length}
@@ -321,9 +324,12 @@ export function ShoppingList() {
             <Card>
               <CardContent>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar sx={{ bgcolor: theme.palette.success.main }}>
+                  <ImageAvatar
+                    alt=""
+                    sx={{ bgcolor: theme.palette.success.main }}
+                  >
                     <CheckCircle />
-                  </Avatar>
+                  </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
                       {data.materials_fully_stocked}
@@ -341,9 +347,12 @@ export function ShoppingList() {
             <Card>
               <CardContent>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar sx={{ bgcolor: theme.palette.warning.main }}>
+                  <ImageAvatar
+                    alt=""
+                    sx={{ bgcolor: theme.palette.warning.main }}
+                  >
                     <Warning />
-                  </Avatar>
+                  </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
                       {data.materials_partially_stocked}
@@ -361,9 +370,12 @@ export function ShoppingList() {
             <Card>
               <CardContent>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar sx={{ bgcolor: theme.palette.error.main }}>
+                  <ImageAvatar
+                    alt=""
+                    sx={{ bgcolor: theme.palette.error.main }}
+                  >
                     <Cancel />
-                  </Avatar>
+                  </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
                       {data.materials_not_stocked}
@@ -498,7 +510,7 @@ export function ShoppingList() {
                             alignItems="center"
                           >
                             {material.game_item_icon && (
-                              <Avatar
+                              <ImageAvatar
                                 src={material.game_item_icon}
                                 alt={material.game_item_name}
                                 sx={{ width: 32, height: 32 }}

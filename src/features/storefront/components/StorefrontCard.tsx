@@ -1,5 +1,6 @@
 import React from "react"
-import { Avatar, Box, Chip, Paper, Stack, Typography } from "@mui/material"
+import { Box, Chip, Paper, Stack, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import VerifiedRounded from "@mui/icons-material/VerifiedRounded"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -45,7 +46,7 @@ export function StorefrontCard(props: { storefront: StorefrontCardData }) {
         alignItems="center"
         sx={{ minWidth: 0 }}
       >
-        <Avatar
+        <ImageAvatar
           src={s.logo_url ?? undefined}
           alt=""
           variant="rounded"

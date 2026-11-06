@@ -14,11 +14,10 @@ import {
   IconButton,
   Chip,
   TextField,
-  Switch,
-  FormControlLabel,
   Tooltip,
   CircularProgress,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import {
   Edit as EditIcon,
   Save as SaveIcon,
@@ -184,14 +183,10 @@ export function LotListItemV2({
 
           {/* Listed status */}
           {isEditing ? (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={editedListed}
-                  onChange={(e) => setEditedListed(e.target.checked)}
-                  size="small"
-                />
-              }
+            <LabeledSwitch
+              checked={editedListed}
+              onChange={setEditedListed}
+              size="small"
               label={t("LotListItemV2.listed", "Listed")}
             />
           ) : (

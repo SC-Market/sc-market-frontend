@@ -3,13 +3,13 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Avatar,
   Rating,
   Box,
   Chip,
   Typography,
   Fade,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import {
   ListAltRounded,
   ShoppingBagRounded,
@@ -56,13 +56,14 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
           >
             {/* Identity: logo + name + owner */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={shop.logo_url || undefined}
                 variant="rounded"
                 sx={{ width: 48, height: 48 }}
               >
                 {shop.name[0]}
-              </Avatar>
+              </ImageAvatar>
               <Box sx={{ minWidth: 0, flex: 1 }}>
                 <Typography variant="subtitle1" noWrap fontWeight={700}>
                   {shop.name}
@@ -76,7 +77,8 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                       minWidth: 0,
                     }}
                   >
-                    <Avatar
+                    <ImageAvatar
+                      alt=""
                       src={shop.owner.avatar_url || undefined}
                       sx={{
                         width: 16,
@@ -86,7 +88,7 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                       }}
                     >
                       {shop.owner.name[0]}
-                    </Avatar>
+                    </ImageAvatar>
                     <Typography
                       variant="caption"
                       color="text.secondary"

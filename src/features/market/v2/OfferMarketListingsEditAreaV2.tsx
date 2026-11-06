@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react"
 import {
   Autocomplete,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -19,6 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { InventoryRounded } from "@mui/icons-material"
 import { useCounterOffer } from "../../../hooks/offer/CounterOfferDetails"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
@@ -225,13 +225,14 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                   <TableRow key={item.variant_id}>
                     <TableCell>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Avatar
+                        <ImageAvatar
+                          alt=""
                           src={item.listing_photo}
                           variant="rounded"
                           sx={{ width: 32, height: 32, borderRadius: 1 }}
                         >
                           <InventoryRounded fontSize="small" />
-                        </Avatar>
+                        </ImageAvatar>
                         <Typography variant="body2" fontWeight={600}>
                           {item.listing_title}
                         </Typography>

@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   Button,
-  Avatar,
   Skeleton,
   Container,
   Grid,
@@ -14,6 +13,7 @@ import {
   Stack,
   useTheme,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import {
   Add,
   Store,
@@ -80,7 +80,8 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
         <Box
           sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 2.5 }}
         >
-          <Avatar
+          <ImageAvatar
+            alt=""
             src={shop.logo_url || undefined}
             variant="rounded"
             sx={{
@@ -92,7 +93,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             }}
           >
             {getInitials(shop.name)}
-          </Avatar>
+          </ImageAvatar>
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Stack

@@ -9,7 +9,6 @@
 
 import React, { useCallback, useEffect, useMemo } from "react"
 import {
-  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -19,6 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { StorefrontRounded, AddBusinessRounded } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
@@ -140,12 +140,13 @@ export function ShopSelector({
           if (!shop) return ""
           return (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={shop.logo_url || undefined}
                 sx={{ width: 20, height: 20 }}
               >
                 <StorefrontRounded sx={{ fontSize: 14 }} />
-              </Avatar>
+              </ImageAvatar>
               <Typography variant="body2">{shop.name}</Typography>
             </Box>
           )
@@ -155,12 +156,13 @@ export function ShopSelector({
       {filteredShops.map((shop) => (
         <MenuItem key={shop.shop_id} value={shop.shop_id}>
           <ListItemAvatar sx={{ minWidth: 36 }}>
-            <Avatar
+            <ImageAvatar
+              alt=""
               src={shop.logo_url || undefined}
               sx={{ width: 24, height: 24 }}
             >
               <StorefrontRounded sx={{ fontSize: 16 }} />
-            </Avatar>
+            </ImageAvatar>
           </ListItemAvatar>
           <ListItemText
             primary={shop.name}

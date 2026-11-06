@@ -1,7 +1,6 @@
 import React, { Fragment, useMemo, useState } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -20,6 +19,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import RefreshRounded from "@mui/icons-material/RefreshRounded"
 import AddRounded from "@mui/icons-material/AddRounded"
@@ -247,7 +247,7 @@ function ListingRow({
         </TableCell>
         <TableCell>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Avatar
+            <ImageAvatar
               variant="rounded"
               src={listing.photo || FALLBACK_IMAGE_URL}
               alt={listing.title}
@@ -362,7 +362,7 @@ function LotBreakdown({ listingId }: { listingId: string }) {
                 <TableCell>
                   <Stack direction="row" spacing={1} alignItems="center">
                     {lot.owner?.avatar_url && (
-                      <Avatar src={lot.owner.avatar_url} sx={{ width: 20, height: 20 }} />
+                      <ImageAvatar alt="" src={lot.owner.avatar_url} sx={{ width: 20, height: 20 }} />
                     )}
                     <Typography variant="body2" sx={{ color: "text.primary" }}>
                       {lot.owner?.display_name || lot.owner?.username || "—"}

@@ -39,12 +39,12 @@ import {
   Link as MaterialLink,
   Paper,
   Stack,
-  Switch,
   TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
@@ -647,11 +647,12 @@ function ShopListingsGridV2({
           if (nr && rowModesModel[params.id]?.mode === GridRowModes.Edit) {
             const editing = editingRows[params.id as string]
             return (
-              <Switch
-                inputProps={{ "aria-label": t("ItemStock.status") }}
+              <LabeledSwitch
+                hideLabel
+                label={t("ItemStock.status")}
                 checked={(editing?.status ?? "active") === "active"}
-                onChange={(e) => {
-                  const newStatus: "active" | "inactive" = e.target.checked
+                onChange={(checked) => {
+                  const newStatus: "active" | "inactive" = checked
                     ? "active"
                     : "inactive"
                   setEditingRows((prev) => ({

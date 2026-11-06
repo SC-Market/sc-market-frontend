@@ -19,7 +19,6 @@ import React, {
   ReactNode,
 } from "react"
 import {
-  Avatar,
   Autocomplete,
   Box,
   Button,
@@ -38,6 +37,7 @@ import {
   Typography,
   InputAdornment,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
@@ -541,7 +541,8 @@ function AllStockLotsGridV2() {
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {photo && (
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={photo}
                 variant="rounded"
                 sx={{ width: 28, height: 28 }}
@@ -870,7 +871,8 @@ function AllocatedStockGridV2() {
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {photo && (
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={photo}
                 variant="rounded"
                 sx={{ width: 28, height: 28 }}

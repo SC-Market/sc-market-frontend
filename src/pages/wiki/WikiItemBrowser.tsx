@@ -8,8 +8,9 @@ import React, { useMemo, useCallback } from "react"
 import {
   Box, Card, CardContent, CardMedia, Grid, Typography, Alert, Chip, Stack,
   ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow,
-  Paper, Avatar, Divider,
+  Paper, Divider,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { Helmet } from "@unhead/react/helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -150,7 +151,8 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
   return (
     <TableRow hover sx={{ cursor: "pointer" }} onClick={onClick}>
       <TableCell sx={{ py: 0.5, width: 40 }}>
-        <Avatar
+        <ImageAvatar
+          alt=""
           src={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
           variant="rounded"
           sx={{ width: 32, height: 32, bgcolor: "background.default" }}

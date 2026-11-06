@@ -1,12 +1,6 @@
 import React, { useState } from "react"
-import {
-  Avatar,
-  Grid,
-  Paper,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material"
+import { Grid, Paper, TableCell, TableRow, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useTranslation } from "react-i18next"
 import { useGetShopCustomersQuery } from "../../../store/api/v2/market"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
@@ -83,7 +77,8 @@ function CustomerRowComponent(props: {
       <TableCell padding="checkbox" sx={{ display: "none" }} />
       <TableCell>
         <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Avatar
+          <ImageAvatar
+            alt=""
             src={row.avatar || undefined}
             sx={{ width: 32, height: 32 }}
           />

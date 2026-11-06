@@ -1,7 +1,6 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import {
-  Avatar,
   Link as MuiLink,
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import type { GameItemAggregate } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
@@ -44,7 +44,8 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
           {items.map((item) => (
             <TableRow key={item.game_item_id} hover>
               <TableCell padding="none" sx={{ width: 40, pl: 1 }}>
-                <Avatar
+                <ImageAvatar
+                  alt=""
                   src={item.image_url || FALLBACK_IMAGE_URL}
                   sx={{ width: 40, height: 40 }}
                   variant="rounded"

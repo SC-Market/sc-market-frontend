@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Card,
@@ -19,6 +18,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import Grid from "@mui/material/Grid2"
 import { useTheme } from "@mui/material/styles"
 import AddRounded from "@mui/icons-material/AddRounded"
@@ -315,7 +315,7 @@ export function ListingDetailRedesign() {
                   to={SHOP_PATHS.profile(seller.slug)}
                   sx={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <Avatar
+                  <ImageAvatar
                     src={seller.logo_url || undefined}
                     alt={seller.name}
                   />

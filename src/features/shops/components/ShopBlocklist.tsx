@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import {
-  Avatar,
   Button,
   Grid,
   IconButton,
@@ -11,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { Block, PersonRemove } from "@mui/icons-material"
 import { useGetShopBlocklistQuery } from "../../../store/api/v2/market"
 import { FormPaper } from "../../../components/paper/FormPaper"
@@ -95,7 +95,8 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                 sx={{ borderRadius: 1 }}
               >
                 <ListItemAvatar>
-                  <Avatar
+                  <ImageAvatar
+                    alt=""
                     src={entry.avatar || undefined}
                     sx={{ width: 28, height: 28 }}
                   />

@@ -8,7 +8,6 @@
 
 import React, { useCallback, useMemo } from "react"
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -19,6 +18,7 @@ import {
   Typography,
   Fade,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { useTheme } from "@mui/material/styles"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -142,7 +142,8 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Avatar
+              <ImageAvatar
+                alt=""
                 src={listing.photo || FALLBACK_IMAGE_URL}
                 variant="rounded"
                 sx={{ width: 48, height: 48, flexShrink: 0 }}

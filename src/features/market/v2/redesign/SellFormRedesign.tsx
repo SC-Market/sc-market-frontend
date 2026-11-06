@@ -9,16 +9,15 @@ import {
   Collapse,
   Container,
   Divider,
-  FormControlLabel,
   IconButton,
   MenuItem,
   Stack,
-  Switch,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import Grid from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
 import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded"
@@ -262,16 +261,12 @@ export function SellFormRedesign() {
               <Typography variant="overline" sx={{ color: "text.primary" }}>
                 {t("SellFormRedesign.whatSelling", "What are you selling?")}
               </Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isCustom}
-                    onChange={(e) => {
-                      setIsCustom(e.target.checked)
-                      setSelectedItem(null)
-                    }}
-                  />
-                }
+              <LabeledSwitch
+                checked={isCustom}
+                onChange={(checked) => {
+                  setIsCustom(checked)
+                  setSelectedItem(null)
+                }}
                 label={t(
                   "SellFormRedesign.customItem",
                   "Custom item (not in catalog)",
@@ -423,13 +418,9 @@ export function SellFormRedesign() {
             {/* Optional: price by quality */}
             <Card>
               <CardContent>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={byQuality}
-                      onChange={(e) => setByQuality(e.target.checked)}
-                    />
-                  }
+                <LabeledSwitch
+                  checked={byQuality}
+                  onChange={setByQuality}
                   label={t(
                     "SellFormRedesign.priceByQuality",
                     "Price by quality",
@@ -545,13 +536,9 @@ export function SellFormRedesign() {
             {/* Optional: sell as a bundle */}
             <Card>
               <CardContent>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={asBundle}
-                      onChange={(e) => setAsBundle(e.target.checked)}
-                    />
-                  }
+                <LabeledSwitch
+                  checked={asBundle}
+                  onChange={setAsBundle}
                   label={t(
                     "SellFormRedesign.sellAsBundle",
                     "Sell as a bundle (multiple items per set)",

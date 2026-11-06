@@ -1,10 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Link as MaterialLink,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Box, Link as MaterialLink, Stack, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
@@ -57,7 +52,7 @@ export function MessageEntry2(props: { message: Message }) {
     >
       {message.author ? (
         <Link to={USER_PATHS.profile(message.author)}>
-          <Avatar
+          <ImageAvatar
             variant="rounded"
             sx={{
               width: { xs: 36, sm: 42 },
@@ -71,7 +66,8 @@ export function MessageEntry2(props: { message: Message }) {
           />
         </Link>
       ) : (
-        <Avatar
+        <ImageAvatar
+          alt=""
           variant="rounded"
           sx={{
             width: { xs: 36, sm: 42 },

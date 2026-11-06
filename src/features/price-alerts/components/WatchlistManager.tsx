@@ -1,7 +1,6 @@
 import React from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -14,6 +13,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import {
   DeleteOutlineRounded,
   EditRounded,
@@ -137,14 +137,14 @@ export function WatchlistManager() {
                   borderColor: "divider",
                 }}
               >
-                <Avatar
+                <ImageAvatar
                   variant="rounded"
                   src={item.item_image_url ?? undefined}
                   alt=""
                   sx={{ width: 40, height: 40 }}
                 >
                   {itemLabel(item).charAt(0).toUpperCase()}
-                </Avatar>
+                </ImageAvatar>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   {item.game_item_id ? (
                     <Link

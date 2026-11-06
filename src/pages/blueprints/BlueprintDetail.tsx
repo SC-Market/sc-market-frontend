@@ -17,8 +17,8 @@ import {
   ButtonGroup,
   Tabs,
   Tab,
-  Avatar,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   useGetBlueprintDetailQuery,
   useGetOrgBlueprintOwnersQuery,
@@ -810,12 +810,13 @@ export function BlueprintDetail() {
                       sx={{ cursor: "pointer" }}
                       onClick={() => navigate(USER_PATHS.profile(m.username))}
                     >
-                      <Avatar
+                      <ImageAvatar
+                        alt=""
                         src={m.avatar}
                         sx={{ width: 32, height: 32, fontSize: "0.65rem" }}
                       >
                         {m.display_name.slice(0, 2).toUpperCase()}
-                      </Avatar>
+                      </ImageAvatar>
                       <Box>
                         <Typography
                           variant="body2"

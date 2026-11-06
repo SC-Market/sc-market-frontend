@@ -8,7 +8,6 @@
 import React, { useState } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -30,6 +29,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   AddRounded,
   DeleteRounded,
@@ -508,9 +508,9 @@ function RequisitionDetailDialog({
                 {t("suppliersUi.requisitions.assignedSupplier")}
               </Typography>
               <Stack direction="row" spacing={1} alignItems="center">
-                <Avatar sx={{ width: 28, height: 28 }}>
+                <ImageAvatar alt="" sx={{ width: 28, height: 28 }}>
                   {req.supplier.display_name?.[0]}
-                </Avatar>
+                </ImageAvatar>
                 <Box>
                   <Typography variant="body2">
                     {req.supplier.display_name}

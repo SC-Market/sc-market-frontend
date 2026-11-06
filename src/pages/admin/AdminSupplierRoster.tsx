@@ -8,7 +8,6 @@
 import React, { useState } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -34,6 +33,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   AddRounded,
   DeleteRounded,
@@ -261,13 +261,13 @@ function EditSupplierDialog({
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Avatar sx={{ width: 32, height: 32 }}>
+            <ImageAvatar alt="" sx={{ width: 32, height: 32 }}>
               {rel?.supplier.kind === "contractor" ? (
                 <BusinessRounded fontSize="small" />
               ) : (
                 <PersonRounded fontSize="small" />
               )}
-            </Avatar>
+            </ImageAvatar>
             <Box>
               <Typography variant="subtitle2">
                 {rel?.supplier.display_name}
@@ -373,7 +373,8 @@ function SupplierRow({
     <TableRow hover>
       <TableCell>
         <Stack direction="row" spacing={1.5} alignItems="center">
-          <Avatar
+          <ImageAvatar
+            alt=""
             src={supplier.avatar || undefined}
             sx={{ width: 28, height: 28, fontSize: "0.75rem" }}
           >
@@ -382,7 +383,7 @@ function SupplierRow({
             ) : (
               supplier.display_name?.[0]?.toUpperCase()
             )}
-          </Avatar>
+          </ImageAvatar>
           <Box>
             <Typography variant="body2" fontWeight={500}>
               {supplier.display_name}
@@ -638,11 +639,12 @@ export function AdminSupplierRoster() {
                   <TableRow key={rel.relationship_id} hover>
                     <TableCell>
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Avatar
+                        <ImageAvatar
+                          alt=""
                           sx={{ width: 28, height: 28, fontSize: "0.75rem" }}
                         >
                           {rel.aggregator.display_name?.[0]?.toUpperCase()}
-                        </Avatar>
+                        </ImageAvatar>
                         <Box>
                           <Typography variant="body2" fontWeight={500}>
                             {rel.aggregator.display_name}

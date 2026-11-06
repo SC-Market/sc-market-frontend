@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Avatar,
   Box,
   Button,
   Chip,
@@ -15,6 +14,7 @@ import {
   Alert,
   Stack,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import React, { useEffect, useState } from "react"
 import { useTheme } from "@mui/material/styles"
@@ -137,7 +137,7 @@ function MessageHeader(props: {
             renderOption={(props, option) => (
               <ListItem {...props} key={option.username}>
                 <ListItemAvatar>
-                  <Avatar
+                  <ImageAvatar
                     src={option.avatar}
                     alt={option.display_name || option.username}
                   />
@@ -163,7 +163,7 @@ function MessageHeader(props: {
                     {...getTagProps({ index })}
                     key={option.username}
                     avatar={
-                      <Avatar
+                      <ImageAvatar
                         src={option.avatar}
                         alt={option.display_name || option.username}
                       />
@@ -374,7 +374,7 @@ function CreateChatBody(props: { selectedUsers: User[] }) {
               <Chip
                 key={user.username}
                 avatar={
-                  <Avatar
+                  <ImageAvatar
                     src={user.avatar}
                     alt={user.display_name || user.username}
                   />

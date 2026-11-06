@@ -11,16 +11,9 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react"
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Box, Button, Chip, Stack, TextField, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
+import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { NumericFormat } from "react-number-format"
@@ -167,7 +160,8 @@ export function QuickEditListingSheet({
           borderColor: "divider",
         }}
       >
-        <Avatar
+        <ImageAvatar
+          alt=""
           src={listing.photo || FALLBACK_IMAGE_URL}
           variant="rounded"
           sx={{ width: 44, height: 44, flexShrink: 0 }}
@@ -212,11 +206,12 @@ export function QuickEditListingSheet({
                 : t("quickEdit.inactiveDesc", "Hidden from buyers")}
             </Typography>
           </Box>
-          <Switch
+          <LabeledSwitch
             checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
+            onChange={setIsActive}
             color="success"
-            inputProps={{ "aria-label": t("quickEdit.active", "Active") }}
+            hideLabel
+            label={t("quickEdit.active", "Active")}
           />
         </Box>
 

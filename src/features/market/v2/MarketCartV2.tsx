@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from "react"
 import {
   Alert,
   AlertTitle,
-  Avatar,
   Box,
   Button,
   Dialog,
@@ -19,6 +18,7 @@ import {
   Skeleton,
   Stack,
 } from "@mui/material"
+import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { Section } from "../../../components/paper/Section"
 import { formatMarketUrl } from "../domain/urls"
 import { Link } from "react-router-dom"
@@ -89,7 +89,7 @@ export function CartItemEntryV2(props: {
       >
         {/* Avatar */}
         <Grid item>
-          <Avatar
+          <ImageAvatar
             src={FALLBACK_IMAGE_URL}
             alt={item.listing.title}
             variant="rounded"

@@ -6,7 +6,6 @@
 import React, { useMemo, useCallback } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -19,6 +18,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { Helmet } from "@unhead/react/helmet"
 import HardwareRoundedIcon from "@mui/icons-material/HardwareRounded"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
@@ -267,7 +267,8 @@ export function WikiCommodityBrowser() {
                     >
                       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
                         <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                          <Avatar
+                          <ImageAvatar
+                            alt=""
                             src={c.image_url || FALLBACK_IMAGE_URL}
                             variant="rounded"
                             sx={{

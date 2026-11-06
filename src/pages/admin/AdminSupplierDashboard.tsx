@@ -7,7 +7,6 @@
 
 import React, { useState } from "react"
 import {
-  Avatar,
   Box,
   Chip,
   Divider,
@@ -27,6 +26,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   AssignmentRounded,
   BoltRounded,
@@ -514,7 +514,8 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                 onClick={() => navigate(`/requisitions/${req.order_id}`)}
               >
                 <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                  <Avatar
+                  <ImageAvatar
+                    alt=""
                     sx={{
                       width: 32,
                       height: 32,
@@ -525,7 +526,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                     {initials(
                       req.buyer?.display_name ?? req.buyer?.username ?? "?",
                     )}
-                  </Avatar>
+                  </ImageAvatar>
                   <Box flex={1} minWidth={0}>
                     <Stack
                       direction="row"
@@ -650,7 +651,8 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                 >
                   <TableCell>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Avatar
+                      <ImageAvatar
+                        alt=""
                         sx={{
                           width: 24,
                           height: 24,
@@ -659,7 +661,7 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                         }}
                       >
                         {initials(order.buyer_username)}
-                      </Avatar>
+                      </ImageAvatar>
                       <Typography variant="body2" noWrap sx={{ maxWidth: 100 }}>
                         {order.buyer_username}
                       </Typography>

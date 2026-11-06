@@ -12,14 +12,8 @@ import { useTranslation } from "react-i18next"
  */
 
 import React, { useCallback } from "react"
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  IconButton,
-  Typography,
-} from "@mui/material"
+import { Box, Chip, Divider, IconButton, Typography } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { useTheme } from "@mui/material/styles"
 import {
   ArchiveRounded,
@@ -148,7 +142,8 @@ export function MobileListingRow({
           },
         }}
       >
-        <Avatar
+        <ImageAvatar
+          alt=""
           src={listing.photo || FALLBACK_IMAGE_URL}
           variant="rounded"
           sx={{ width: 48, height: 48, flexShrink: 0, ml: 0.5 }}

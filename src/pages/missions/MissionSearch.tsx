@@ -31,9 +31,9 @@ import {
   Paper,
   Chip,
   Stack,
-  Avatar,
   Tooltip,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import {
   ViewList,
@@ -498,7 +498,8 @@ export function MissionSearch() {
                                   title={getMissionTypeLabel(m.category, t)}
                                   arrow
                                 >
-                                  <Avatar
+                                  <ImageAvatar
+                                    alt=""
                                     src={
                                       getMissionIcon(m.category) || undefined
                                     }
@@ -519,7 +520,7 @@ export function MissionSearch() {
                                     }}
                                   >
                                     {(m.category || "?")[0].toUpperCase()}
-                                  </Avatar>
+                                  </ImageAvatar>
                                 </Tooltip>
                               </TableCell>
                               <TableCell>

@@ -14,7 +14,6 @@
 import React, { useState } from "react"
 import {
   Alert,
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -33,6 +32,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import {
   InventoryRounded,
   KeyboardArrowLeft,
@@ -93,7 +93,8 @@ function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
   }
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Avatar
+      <ImageAvatar
+        alt=""
         src={lot.owner.avatar_url || undefined}
         sx={{ width: 24, height: 24 }}
       />
@@ -290,13 +291,14 @@ function LineAllocation({
   return (
     <Box>
       <Stack direction="row" spacing={1} alignItems="center" mb={1}>
-        <Avatar
+        <ImageAvatar
+          alt=""
           src={line.listing_photo || undefined}
           sx={{ width: 32, height: 32, borderRadius: 1 }}
           variant="rounded"
         >
           <InventoryRounded />
-        </Avatar>
+        </ImageAvatar>
         <Link
           href={MARKET_PATHS.listing(line.listing_id)}
           target="_blank"

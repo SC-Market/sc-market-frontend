@@ -1,13 +1,6 @@
 import React from "react"
-import {
-  Alert,
-  Box,
-  FormControlLabel,
-  Paper,
-  Stack,
-  Switch,
-  Typography,
-} from "@mui/material"
+import { Alert, Box, Paper, Stack, Typography } from "@mui/material"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { useTranslation } from "react-i18next"
 import type { StorefrontDirectoryStatus } from "../../../store/api/v2/market"
 import { getErrorMessage } from "../../../util/errorHandling"
@@ -94,16 +87,12 @@ export function StorefrontDirectoryCard(props: {
             {t("storefront.directory.title", "Storefront directory")}
           </Typography>
         )}
-        <FormControlLabel
-          control={
-            <Switch
-              checked={status.show_in_directory}
-              disabled={!status.can_change || props.saving}
-              onChange={(e) => props.onChange(e.target.checked)}
-              inputProps={{ "aria-describedby": "storefront-directory-reason" }}
-              data-testid="storefront-directory-toggle"
-            />
-          }
+        <LabeledSwitch
+          checked={status.show_in_directory}
+          disabled={!status.can_change || props.saving}
+          onChange={(checked) => props.onChange(checked)}
+          describedBy="storefront-directory-reason"
+          data-testid="storefront-directory-toggle"
           label={t(
             "storefront.directory.toggle",
             "Show in the public storefront directory",

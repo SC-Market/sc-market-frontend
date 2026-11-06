@@ -15,8 +15,6 @@ import {
   Button,
   TextField,
   Stack,
-  FormControlLabel,
-  Switch,
   CircularProgress,
   Select,
   MenuItem,
@@ -26,6 +24,7 @@ import {
   Divider,
   Box,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../../hooks/accessibility/useFocusOnReveal"
 import type {
@@ -450,27 +449,19 @@ export function CreateLotDialogV2({
           />
 
           {/* Listed Toggle */}
-          <FormControlLabel
-            control={
-              <Switch
-                checked={listed}
-                onChange={(e) => setListed(e.target.checked)}
-                size="small"
-              />
-            }
+          <LabeledSwitch
+            checked={listed}
+            onChange={setListed}
+            size="small"
             label={
-              <Stack>
-                <Typography variant="body2">
-                  {t("CreateLotDialogV2.listed", "Listed")}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {t(
-                    "CreateLotDialogV2.listedHelper",
-                    "Listed stock appears in public listings",
-                  )}
-                </Typography>
-              </Stack>
+              <Typography variant="body2">
+                {t("CreateLotDialogV2.listed", "Listed")}
+              </Typography>
             }
+            helperText={t(
+              "CreateLotDialogV2.listedHelper",
+              "Listed stock appears in public listings",
+            )}
           />
 
           {/* Notes */}

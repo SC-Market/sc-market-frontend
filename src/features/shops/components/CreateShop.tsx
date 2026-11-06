@@ -11,10 +11,10 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
@@ -308,13 +308,9 @@ export function CreateShop() {
               <Typography variant="h6" gutterBottom>
                 {t("shopsUi.form.orders")}
               </Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={acceptsCustomOrders}
-                    onChange={(e) => setAcceptsCustomOrders(e.target.checked)}
-                  />
-                }
+              <LabeledSwitch
+                checked={acceptsCustomOrders}
+                onChange={setAcceptsCustomOrders}
                 label={t("shopsUi.form.acceptCustomOrders")}
               />
             </Box>

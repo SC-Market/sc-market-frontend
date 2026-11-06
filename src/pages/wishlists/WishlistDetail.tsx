@@ -27,13 +27,13 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
-  Avatar,
   LinearProgress,
   Select,
   FormControl,
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material"
+import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   Add,
   MoreVert,
@@ -436,14 +436,14 @@ export function WishlistDetail() {
                   <CardContent>
                     <Box sx={{ display: "flex", gap: 2 }}>
                       {/* Item Icon */}
-                      <Avatar
+                      <ImageAvatar
                         src={item.game_item_icon}
                         alt={item.game_item_name}
                         sx={{ width: 64, height: 64 }}
                         variant="rounded"
                       >
                         {item.game_item_name.charAt(0)}
-                      </Avatar>
+                      </ImageAvatar>
 
                       {/* Item Details */}
                       <Box sx={{ flex: 1 }}>

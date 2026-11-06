@@ -5,11 +5,10 @@ import {
   Checkbox,
   Chip,
   CircularProgress,
-  FormControlLabel,
   Grid,
-  Switch,
   Typography,
 } from "@mui/material"
+import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { useTranslation } from "react-i18next"
 import { FlatSection } from "../../../components/paper/Section"
 import {
@@ -77,23 +76,13 @@ export function ContractAlertSettings() {
               }
               return (
                 <Box key={scope.contractor_id ?? "personal"} sx={{ mb: 2 }}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={!!sub}
-                        disabled={isSaving}
-                        onChange={(e) =>
-                          save(
-                            scope.contractor_id ?? null,
-                            e.target.checked,
-                            kinds,
-                          )
-                        }
-                        inputProps={{
-                          "aria-label": `${t("settings.contractAlerts.toggle", "Contract alerts for")} ${name}`,
-                        }}
-                      />
+                  <LabeledSwitch
+                    checked={!!sub}
+                    disabled={isSaving}
+                    onChange={(checked) =>
+                      save(scope.contractor_id ?? null, checked, kinds)
                     }
+                    ariaLabel={`${t("settings.contractAlerts.toggle", "Contract alerts for")} ${name}`}
                     label={name}
                   />
                   {sub && (
