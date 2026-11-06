@@ -1,28 +1,22 @@
 import { serviceApi } from "./service"
 
-const temp_sample = {
-  pageid: 35591,
-  ns: 6,
-  title: "File:Demeco - on grey background - Left.jpg",
-  imagerepository: "local",
-  imageinfo: [
-    {
-      thumburl:
-        "https://media.starcitizen.tools/thumb/0/02/Demeco_-_on_grey_background_-_Left.jpg/200px-Demeco_-_on_grey_background_-_Left.jpg",
-      thumbwidth: 200,
-      thumbheight: 113,
-      responsiveUrls: {
-        "2": "https://media.starcitizen.tools/thumb/0/02/Demeco_-_on_grey_background_-_Left.jpg/400px-Demeco_-_on_grey_background_-_Left.jpg",
-        "1.5":
-          "https://media.starcitizen.tools/thumb/0/02/Demeco_-_on_grey_background_-_Left.jpg/300px-Demeco_-_on_grey_background_-_Left.jpg",
-      },
-      url: "https://media.starcitizen.tools/0/02/Demeco_-_on_grey_background_-_Left.jpg",
-      descriptionurl:
-        "https://starcitizen.tools/File:Demeco_-_on_grey_background_-_Left.jpg",
-    },
-  ],
+/** A starcitizen.tools image page (imageinfo query, with thumbnails). */
+interface WikiImagePage {
+  pageid: number
+  ns: number
+  title: string
+  imagerepository: string
+  imageinfo: {
+    thumburl: string
+    thumbwidth: number
+    thumbheight: number
+    responsiveUrls: { "2": string; "1.5": string }
+    url: string
+    descriptionurl: string
+  }[]
 }
-export const images_sample: { [key: string]: typeof temp_sample } = {
+
+export const images_sample: { [key: string]: WikiImagePage } = {
   "35591": {
     pageid: 35591,
     ns: 6,
@@ -229,9 +223,7 @@ export function transformSearchResults(results: typeof image_search_sample) {
       try {
         const value = (
           page.images.query.pages as unknown as typeof images_sample
-        )[
-          Object.keys(page.images.query.pages)[0] as string
-        ] as typeof temp_sample
+        )[Object.keys(page.images.query.pages)[0] as string] as WikiImagePage
         if (Object.keys(value.imageinfo[0].responsiveUrls).length) {
           const maxKey = Object.keys(value.imageinfo[0].responsiveUrls).reduce(
             (k1, k2) => (+k1 > +k2 ? k1 : k2),

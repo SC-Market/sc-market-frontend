@@ -4,7 +4,7 @@ import {
 } from "../../features/recruiting/api/recruitingApi"
 import { Button } from "@mui/material"
 import { KeyboardArrowUpRounded } from "@mui/icons-material"
-import React, { useState } from "react"
+import React from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
@@ -17,7 +17,6 @@ export function RecruitmentVotes(props: { post: RecruitingPost }) {
   ] = useRecruitingUpvotePostMutation()
 
   const { data: profile } = useGetUserProfileQuery()
-  const [pressed, setPressed] = useState(0)
 
   return (
     <Button
@@ -49,10 +48,10 @@ export function RecruitmentVotes(props: { post: RecruitingPost }) {
     >
       <span id={`recruitment-upvote-count-${post.post_id}`} className="sr-only">
         {t("accessibility.recruitmentUpvoteCount", "Upvotes: {{count}}", {
-          count: post.upvotes + pressed,
+          count: post.upvotes,
         })}
       </span>
-      {post.upvotes + pressed}
+      {post.upvotes}
     </Button>
   )
 }

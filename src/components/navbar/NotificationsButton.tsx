@@ -36,7 +36,6 @@ export function NotificationsButton() {
   const iconColor = getNavbarContrastText(theme)
 
   const {
-    isLoggedIn,
     shopsData,
     notifications,
     total,

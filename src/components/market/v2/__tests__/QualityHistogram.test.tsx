@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react"
 import { ThemeProvider } from "@mui/material/styles"
 import { QualityHistogram } from "../QualityHistogram"
 import { mainTheme } from "../../../../hooks/styles/Theme"
+import { omit } from "lodash"
 
 const mockDistribution = [
   {
@@ -132,8 +133,8 @@ describe("QualityHistogram", () => {
   })
 
   it("handles distribution with missing averagePrice", () => {
-    const distributionWithoutPrices = mockDistribution.map(
-      ({ averagePrice, ...rest }) => rest,
+    const distributionWithoutPrices = mockDistribution.map((entry) =>
+      omit(entry, "averagePrice"),
     )
 
     renderWithTheme(
@@ -148,9 +149,7 @@ describe("QualityHistogram", () => {
   })
 
   it("renders percentage bars for visual representation", () => {
-    const { container } = renderWithTheme(
-      <QualityHistogram distribution={mockDistribution} />,
-    )
+    renderWithTheme(<QualityHistogram distribution={mockDistribution} />)
 
     // Check that the component renders without errors
     expect(screen.getByText("Quality Distribution")).toBeInTheDocument()

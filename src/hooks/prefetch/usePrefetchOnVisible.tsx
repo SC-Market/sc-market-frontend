@@ -144,7 +144,6 @@ export function usePrefetchOnVisible({
   prefetchKey,
   threshold = 0.1,
   rootMargin = "100px",
-  triggerOnce = true,
   debounceMs = 100,
   maxConcurrent = 3,
 }: UsePrefetchOnVisibleOptions) {

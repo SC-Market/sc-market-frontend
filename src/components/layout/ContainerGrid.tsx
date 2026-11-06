@@ -96,7 +96,7 @@ export function ContainerGrid(
             [theme.breakpoints.down("sm")]: {
               width: drawerOpen ? "100%" : 1,
             },
-            display: props.noTopSpacer ? "none" : "block",
+            display: noTopSpacer ? "none" : "block",
             flexShrink: 0,
           }}
         />
@@ -140,7 +140,7 @@ export function ContainerGrid(
           >
             {props.children}
           </Grid>
-          {!props.noFooter && (
+          {!noFooter && (
             // The Grid's negative top margin (its spacing) can't be
             // overridden on the Grid itself (the breakpoint rule wins), so a
             // wrapper takes the spare height; its top padding restores the
@@ -186,7 +186,7 @@ export function OpenGrid(
   const theme = useTheme<ExtendedTheme>()
   const bottomNavHeight = useBottomNavHeight()
 
-  const [drawerOpen, setDrawerOpen] = useDrawerOpen()
+  const [, setDrawerOpen] = useDrawerOpen()
 
   const {
     sidebarOpen,
@@ -201,7 +201,7 @@ export function OpenGrid(
     if (noSidebar) {
       setDrawerOpen(!noSidebar)
     }
-  }, [setDrawerOpen, props.sidebarOpen, noSidebar])
+  }, [setDrawerOpen, sidebarOpen, noSidebar])
 
   const ref = useRef<HTMLDivElement | null>(null)
 
@@ -237,9 +237,9 @@ export function OpenGrid(
           sx={{ flexShrink: 0 }}
           {...gridProps}
         >
-          {props.children}
+          {children}
         </Grid>
-        {!props.noFooter && (
+        {!noFooter && (
           // See ContainerGrid: the wrapper takes the spare height.
           <Box
             sx={{
@@ -271,8 +271,6 @@ export function OpenLayout(
   } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
 ) {
   const theme = useTheme<ExtendedTheme>()
-  const bottomNavHeight = useBottomNavHeight()
-
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
   const {

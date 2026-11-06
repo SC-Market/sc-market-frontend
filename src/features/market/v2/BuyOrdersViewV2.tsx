@@ -118,7 +118,7 @@ export function BuyOrdersViewV2() {
             .fill(undefined)
             .map((_, i) => (
               <Grid item {...gridBreakpoints} key={i}>
-                <ListingSkeleton index={i} />
+                <ListingSkeleton />
               </Grid>
             ))
         ) : aggregates.length === 0 ? (

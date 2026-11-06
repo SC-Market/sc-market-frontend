@@ -205,7 +205,7 @@ describe("StandardPageLayout - Breadcrumb Property Tests", () => {
 describe("StandardPageLayout - Dynamic Breadcrumb Unit Tests", () => {
   it("breadcrumbs update when data loads", () => {
     // Initial render with loading state (no data yet)
-    const { rerender, container } = render(
+    const { rerender } = render(
       <TestWrapper>
         <StandardPageLayout
           breadcrumbs={[

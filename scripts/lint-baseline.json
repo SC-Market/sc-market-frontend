@@ -1,9 +1,8 @@
 {
-  "warnings": 752,
+  "warnings": 482,
   "errors": 0,
   "byRule": {
     "@typescript-eslint/no-restricted-imports": 96,
-    "@typescript-eslint/no-unused-vars": 270,
     "max-lines": 75,
     "no-restricted-imports": 48,
     "no-restricted-syntax": 142,

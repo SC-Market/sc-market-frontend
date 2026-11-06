@@ -42,7 +42,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
         return
       }
 
-      const { status, data, error } = await dispatch(
+      const { data } = await dispatch(
         contractorsApi.endpoints.searchContractorMembers.initiate({
           spectrum_id: contractorSpectrumId!,
           query: query,

@@ -96,7 +96,7 @@ export const offersApi = serviceApi.injectEndpoints({
         body: { status },
         method: "PUT",
       }),
-      invalidatesTags: (result, error, { session_id, status }) => [
+      invalidatesTags: (result, error, { session_id }) => [
         { type: "Offer" as const, id: session_id },
         "Orders" as const,
         "Offers" as const,

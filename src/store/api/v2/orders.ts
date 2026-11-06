@@ -17,7 +17,7 @@ const injectedRtkApi = api
     addTagTypes,
   })
   .injectEndpoints({
-    endpoints: (build) => ({}),
+    endpoints: () => ({}),
     overrideExisting: false,
   })
 export { injectedRtkApi as v2_ordersApi }

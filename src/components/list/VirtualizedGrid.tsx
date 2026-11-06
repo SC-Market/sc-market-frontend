@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react"
+import React, { useMemo } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { Box, useTheme } from "@mui/material"
 import {
@@ -41,7 +41,6 @@ interface VirtualizedGridProps<T> {
         xxl?: number
       }
   overscan?: number
-  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 /**
@@ -56,7 +55,6 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     columns = { xs: 1, sm: 2, md: 3, lg: 4 },
     gap = 2,
     overscan = 5,
-    containerRef: externalRef,
   } = props
 
   const theme = useTheme<ExtendedTheme>()
@@ -172,10 +170,6 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)
 
-  // Internal ref if external one not provided
-  const internalRef = useRef<HTMLDivElement>(null)
-  const parentRef = externalRef || internalRef
-
   // Use document element scroll for better UX
   const getScrollElement = (): Element | null => {
     return typeof document !== "undefined"
@@ -192,9 +186,6 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     estimateSize: () => heightValue + gapPx,
     overscan,
   })
-
-  // Calculate total height
-  const totalHeight = rowVirtualizer.getTotalSize()
 
   // Get visible rows
   const virtualRows = rowVirtualizer.getVirtualItems()

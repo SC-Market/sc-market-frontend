@@ -50,16 +50,13 @@ function PeopleRow(props: {
   const { row, onClick, isItemSelected, labelId, contractor } = props
   const { t } = useTranslation()
 
-  const [roles, setRoles] = useState(row.roles)
   const {
-    profile,
     myPosition,
     theirPosition,
     canKick,
     addRoleCallback,
     removeRoleCallback,
     kickCallback,
-    canRemoveRole,
   } = useMemberActions(contractor, row.username, row.roles)
   return (
     <TableRow
@@ -231,7 +228,7 @@ export function MemberList(props: { contractor: Contractor }) {
   const [roleFilter, setRoleFilter] = useState("any")
 
   // Use server-side pagination
-  const { data: membersData, isLoading } = useGetContractorMembersQuery({
+  const { data: membersData } = useGetContractorMembersQuery({
     spectrum_id: props.contractor?.spectrum_id || "",
     page,
     page_size: pageSize,
@@ -357,7 +354,7 @@ export function ManageMemberList() {
   const [pageSize, setPageSize] = useState(50)
 
   // Use the new paginated endpoint with server-side pagination
-  const { data: membersData, isLoading } = useGetContractorMembersQuery({
+  const { data: membersData } = useGetContractorMembersQuery({
     spectrum_id: contractor?.spectrum_id || "",
     page,
     page_size: pageSize,

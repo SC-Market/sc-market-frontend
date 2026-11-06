@@ -23,7 +23,7 @@ export function getNavbarContrastText(theme: Theme): string {
   return theme.palette.getContrastText(nav)
 }
 
-export const makeCut = (radius: string, _theme?: ExtendedTheme) => ({
+export const makeCut = (radius: string) => ({
   clipPath: `polygon(${radius} 0, 100% 0, 100% calc(100% - ${radius}), calc(100% - ${radius}) 100%, 0 100%, 0 ${radius})`,
 })
 

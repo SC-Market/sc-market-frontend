@@ -1,4 +1,4 @@
-import { Reducer, combineReducers } from "@reduxjs/toolkit"
+import { Reducer } from "@reduxjs/toolkit"
 import type { AppStore } from "./store"
 
 /**
@@ -57,13 +57,6 @@ export async function injectReducer(
 
     // Store in cache
     loadedReducers[key] = reducer
-
-    // Inject into store using replaceReducer
-    const currentReducer = store.getState()
-    const newReducer = combineReducers({
-      ...currentReducer,
-      [key]: reducer,
-    })
 
     // Note: RTK doesn't expose replaceReducer directly on the store
     // This is a placeholder for when we need to add traditional slices

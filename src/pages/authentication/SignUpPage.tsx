@@ -14,8 +14,7 @@ export function SignUpPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [searchParams] = useSearchParams()
-  const { isAuthenticated, isLoading, errorMessage, clearError } =
-    usePageSignUp()
+  const { isAuthenticated, errorMessage, clearError } = usePageSignUp()
 
   if (isAuthenticated) {
     const redirectTo = safeRedirectPath(

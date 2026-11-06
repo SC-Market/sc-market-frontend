@@ -120,32 +120,6 @@ export function QualityDistributionChart({
   }, [data])
 
   // Custom tooltip formatter
-  const tooltipFormatter = (
-    value: number | null,
-    context: { dataIndex: number },
-  ) => {
-    if (value === null || !chartData[context.dataIndex]) {
-      return ""
-    }
-
-    const tierData = chartData[context.dataIndex]
-    const tierName = getTierName(tierData.tier)
-
-    return [
-      `${tierName}`,
-      `Quantity: ${fmt.number(tierData.quantity)}`,
-      tierData.quantity > 0
-        ? `Price: ${fmt.number(tierData.minPrice)} - ${fmt.number(tierData.maxPrice)} aUEC`
-        : "",
-      tierData.quantity > 0
-        ? `Avg: ${fmt.integer(tierData.avgPrice)} aUEC`
-        : "",
-      tierData.quantity > 0 ? `Sellers: ${tierData.sellerCount}` : "",
-      tierData.quantity > 0 ? `Listings: ${tierData.listingCount}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n")
-  }
 
   // Loading state
   if (isLoading) {

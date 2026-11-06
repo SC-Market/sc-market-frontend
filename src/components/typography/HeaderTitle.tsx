@@ -15,11 +15,11 @@ export const HeaderTitle = React.forwardRef<
   return (
     <Grid
       item
-      xs={props.xs || 12}
-      lg={props.lg}
-      xl={props.xl}
-      md={props.md}
-      justifyContent={props.center ? "center" : "left"}
+      xs={xs || 12}
+      lg={lg}
+      xl={xl}
+      md={md}
+      justifyContent={center ? "center" : "left"}
       ref={ref}
     >
       <Typography

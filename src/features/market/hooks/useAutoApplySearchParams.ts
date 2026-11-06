@@ -217,7 +217,8 @@ export function useAutoApplySearchParams({
     if (done.length === 0) return
     for (const key of done) {
       if (key in pendingRef.current) {
-        const { [key]: _dropped, ...rest } = pendingRef.current
+        const rest = { ...pendingRef.current }
+        delete rest[key]
         pendingRef.current = rest
       }
     }

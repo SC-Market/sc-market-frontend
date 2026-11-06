@@ -72,7 +72,7 @@ export const BuyOrderHeadCells: readonly HeadCell<BuyOrderDashboardRow>[] = [
 ]
 
 /** Skeleton for buy order table rows (3 columns, no checkbox). */
-function BuyOrderRowSkeleton({ index = 0 }: { index?: number }) {
+function BuyOrderRowSkeleton() {
   const theme = useTheme<ExtendedTheme>()
   return (
     <TableRow>
@@ -349,7 +349,6 @@ export function BuyOrdersViewPaginated() {
     data: listings,
     currentData,
     isFetching,
-    refetch,
   } = useGetBuyOrderListingsQuery()
   const awaitingData = isAwaitingData({ isFetching, currentData })
 

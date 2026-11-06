@@ -24,11 +24,7 @@ import { formatCategoryName } from "../../util/categoryDisplay"
 import { Link as RouterLink } from "react-router-dom"
 import { inAppClick } from "../links/inAppClick"
 import { GAME_DATA_PATHS } from "../../routes/paths"
-import {
-  getResourceCategoryIcon,
-  getCommodityColor,
-  getItemCategoryColor,
-} from "../../util/gameIcons"
+import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 
 import { GameItemAvatar } from "./GameItemAvatar"
 import { BlueprintTags, isBlueprintOwned } from "./BlueprintTags"
@@ -69,16 +65,6 @@ export interface BlueprintCardProps {
   onWishlistAdd?: (blueprintId: string) => void
 }
 
-function initials(name: string | undefined): string {
-  if (!name) return "?"
-  return name
-    .split(/[\s_-]+/)
-    .map((w) => w[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase()
-}
 import { formatCraftingTime } from "../../constants/crafting"
 
 function shortName(name: string): string {
@@ -89,10 +75,6 @@ function shortName(name: string): string {
       .slice(0, 4)
       .toUpperCase() || name.slice(0, 4).toUpperCase()
   )
-}
-
-function ingIcon(ing: BlueprintIngredientSummary): string | undefined {
-  return ing.icon_url || getResourceCategoryIcon(ing.sub_type) || undefined
 }
 
 function ingColor(ing: BlueprintIngredientSummary): string {

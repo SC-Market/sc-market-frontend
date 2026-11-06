@@ -96,10 +96,6 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   )
 
   // Fetch details for all listings in the body (for variant info)
-  const uniqueListingIds = useMemo(
-    () => [...new Set((body.v2_variant_items || []).map((i) => i.listing_id))],
-    [body.v2_variant_items],
-  )
 
   // Cache variant details from offer data and newly added items
   const [variantCache, setVariantCache] = useState<Record<string, VariantDetail>>(() => {
@@ -169,9 +165,6 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
 
     // Cache variant details for display
     setVariantCache((prev) => ({ ...prev, [selectedVariantId]: variant }))
-
-    const existingMl = body.market_listings.find((ml) => ml.listing_id === selectedListing.listing_id)
-    const newMlQuantity = (existingMl?.quantity || 0) + addQuantity
 
     // Merge if same variant already exists, otherwise append
     const existingV2 = (body.v2_variant_items || []).find(

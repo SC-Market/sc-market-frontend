@@ -261,7 +261,7 @@ export function AdminGameItemAttributesView({
 
   const rows = React.useMemo(() => {
     if (!attributesData?.attributes) return []
-    return attributesData.attributes.map((attr, index) => ({
+    return attributesData.attributes.map((attr) => ({
       ...attr,
       id: `${attr.game_item_id}-${attr.attribute_name}`,
     }))

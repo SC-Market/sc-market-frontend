@@ -248,7 +248,7 @@ export function ServiceSellerOtherServices(props: {
           }}
         >
           <Box display={"flex"} gap={2}>
-            {otherServices.map((service, index) => (
+            {otherServices.map((service) => (
               <Box
                 key={service.service_id}
                 sx={{

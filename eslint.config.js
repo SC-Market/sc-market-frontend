@@ -484,7 +484,7 @@ export default [
       "@typescript-eslint/no-empty-object-type": "error",
       "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
       "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/ban-ts-comment": "error",
       "no-empty": "warn",
       // Accessibility rules

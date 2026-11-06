@@ -24,7 +24,6 @@ import { MARKET_PATHS, PATHS } from "../../../routes/paths"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { MarketAggregateContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
 import { ListingNameAndRating } from "../../../components/rating/ListingRating"
-import { HeadCell } from "../../../components/table/PaginatedTable"
 import { SeoHead } from "../../../seo/SeoHead"
 import { buildAggregateHead } from "../../../seo/entityHeads"
 import { headDescription } from "../../../seo/pageHead"
@@ -77,81 +76,8 @@ import { useCancelBuyOrder } from "../hooks/useBuyOrderActions"
  */
 
 // Localized headCells for sell orders table
-const headCells: readonly HeadCell<AggregateListingV2Row>[] = [
-  {
-    id: "shop_name",
-    numeric: false,
-    disablePadding: false,
-    label: "MarketAggregateView.sellerRating",
-  },
-  {
-    id: "quality_tier_min",
-    numeric: false,
-    disablePadding: false,
-    label: "market.qualityTier",
-  },
-  {
-    id: "price_min",
-    numeric: true,
-    disablePadding: false,
-    label: "MarketAggregateView.price",
-  },
-  {
-    id: "quantity_available",
-    numeric: true,
-    disablePadding: false,
-    label: "MarketAggregateView.quantityAvailable",
-  },
-  {
-    id: "listing_id",
-    numeric: true,
-    disablePadding: false,
-    noSort: true,
-    label: "",
-  },
-]
 
 // Localized headCells for buy orders table
-const buyOrderHeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
-  {
-    id: "buyer_name",
-    numeric: false,
-    disablePadding: false,
-    label: "MarketAggregateView.buyer",
-  },
-  {
-    id: "quality_tier_min",
-    numeric: false,
-    disablePadding: false,
-    label: "market.qualityTier",
-  },
-  {
-    id: "price_per_unit",
-    numeric: true,
-    disablePadding: false,
-    label: "MarketAggregateView.price",
-  },
-  {
-    id: "quantity",
-    numeric: true,
-    disablePadding: false,
-    label: "MarketAggregateView.quantity",
-  },
-  {
-    id: "total",
-    numeric: true,
-    disablePadding: false,
-    noSort: false,
-    label: "MarketAggregateView.total",
-  },
-  {
-    id: "buy_order_id",
-    numeric: true,
-    disablePadding: false,
-    noSort: true,
-    label: "",
-  },
-]
 
 /** Row shape for aggregate listings table */
 export interface AggregateListingV2Row {
@@ -441,9 +367,7 @@ export function AggregateRowV2(props: {
   const { t } = useTranslation()
   const { row: listing, index } = props
   const [quantity, setQuantity] = useState(1)
-  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
-    null,
-  )
+  const [selectedVariantId] = useState<string | null>(null)
   const issueAlert = useAlertHook()
   const [cookies, setCookie] = useCookies(["market_cart"])
   const [justAddedToCart, setJustAddedToCart] = useState(false)
@@ -593,7 +517,7 @@ export function AggregateRowV2(props: {
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
-            onValueChange={async (values, sourceInfo) => {
+            onValueChange={async (values) => {
               setQuantity(values.floatValue || 0)
               setJustAddedToCart(false)
             }}

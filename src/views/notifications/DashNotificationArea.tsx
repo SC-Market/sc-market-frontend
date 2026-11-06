@@ -12,7 +12,7 @@ export function DashNotificationArea({ shopId }: { shopId?: string } = {}) {
   const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(20)
-  const { data: notificationsData, refetch } = useGetNotificationsQuery({
+  const { data: notificationsData } = useGetNotificationsQuery({
     page: page,
     pageSize: pageSize,
     shopId: shopId || undefined,

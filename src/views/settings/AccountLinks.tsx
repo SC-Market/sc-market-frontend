@@ -47,7 +47,6 @@ export function AccountLinks() {
     authProviders,
     hasDiscord,
     hasCitizenID,
-    primaryProvider,
     unlinkDialog,
     handleUnlinkClick,
     handleConfirmUnlink,

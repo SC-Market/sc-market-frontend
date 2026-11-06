@@ -32,7 +32,6 @@ interface GameItemSearchAutocompleteProps {
 }
 
 export function GameItemSearchAutocomplete({
-  value,
   onChange,
   label,
   size = "medium",

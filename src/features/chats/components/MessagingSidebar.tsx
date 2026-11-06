@@ -17,7 +17,7 @@ export { messagingDrawerWidth }
 export function MessagingSidebar() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
-  const [drawerOpen, setDrawerOpen] = useDrawerOpen()
+  const [drawerOpen] = useDrawerOpen()
   const [messagingSidebar, setMessagingSidebar] = useMessagingSidebar()
   const { t } = useTranslation()
 

@@ -242,9 +242,6 @@ function LocationCard({
   )
 
   // topOres is string[] from the search endpoint
-  const hasTopOres = (location.groups || []).some(
-    (g) => (g.topOres || []).length > 0,
-  )
 
   return (
     <Card

@@ -78,7 +78,6 @@ import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
 import { formatCraftingTime } from "../../constants/crafting"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { BlueprintTags } from "../../components/game-data/BlueprintTags"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
@@ -183,10 +182,8 @@ export function BlueprintBrowser() {
     updateParam("subcategory", "")
   }
   const setSubcategory = (v: string) => updateParam("subcategory", v)
-  const setRarity = (v: string) => updateParam("rarity", v)
   const setTier = (v: number | "") =>
     updateParam("tier", v === "" ? "" : String(v))
-  const setCraftingStation = (v: string) => updateParam("station", v)
   const setOwnedOnly = (v: boolean) => updateParam("owned", v ? "true" : "")
   const setHasMissionSource = (v: boolean) =>
     updateParam("missions", v ? "true" : "")
@@ -200,8 +197,6 @@ export function BlueprintBrowser() {
   const ingredientName = searchParams.get("ingredient") || ""
   const setIngredientName = (v: string) => updateParam("ingredient", v)
   const isMobile = useBreakpointDown("lg")
-  const [filterOpen, setFilterOpen] = useState(false)
-  const bottomNavHeight = useBottomNavHeight()
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<BlueprintSearchResult[]>(
     [],

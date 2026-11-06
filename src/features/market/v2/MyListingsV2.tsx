@@ -59,7 +59,7 @@ function MyListingSectionV2({
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
   const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
-  const { data, isLoading, isFetching, currentData } = useGetMyListingsQuery({
+  const { data, isFetching, currentData } = useGetMyListingsQuery({
     status,
     page: 1,
     pageSize: 48,
@@ -76,7 +76,7 @@ function MyListingSectionV2({
       <Grid container spacing={1}>
         {Array.from({ length: 16 }).map((_, i) => (
           <Grid item {...gridBreakpoints} key={i}>
-            <ListingSkeleton index={i} sidebarOpen={false} />
+            <ListingSkeleton />
           </Grid>
         ))}
       </Grid>
@@ -146,7 +146,7 @@ function MobileListingsView() {
   const activeCount = activeData?.total ?? 0
   const showCombined = !activeLoading && activeCount === 0 && selectedStatus === "active"
 
-  const { data, isLoading, refetch } = useGetMyListingsQuery({
+  const { data, isLoading } = useGetMyListingsQuery({
     status: showCombined ? undefined : selectedStatus,
     page: 1,
     pageSize: 100,
@@ -229,7 +229,7 @@ function MobileListingsView() {
         >
           {isLoading ? (
             Array.from({ length: 8 }).map((_, i) => (
-              <ListingSkeleton key={i} index={i} sidebarOpen={false} />
+              <ListingSkeleton key={i} />
             ))
           ) : listings.length === 0 ? (
             <EmptyListings

@@ -422,7 +422,7 @@ describe("QualityDistributionChart", () => {
     )
 
     // Render component
-    const { container } = renderWithProviders(
+    renderWithProviders(
       <QualityDistributionChart gameItemId={mockGameItemId} />,
     )
 

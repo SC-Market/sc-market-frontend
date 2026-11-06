@@ -93,7 +93,7 @@ describe("Availability Page", () => {
   })
 
   it("renders AvailabilitySelector when data is loaded", async () => {
-    const { container } = render(
+    render(
       <TestWrapper>
         <Availability />
       </TestWrapper>,

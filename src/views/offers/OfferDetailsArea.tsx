@@ -99,11 +99,8 @@ export function OfferDetailsArea(props: {
 
   const {
     profile,
-    org,
-    issueAlert,
     publicContract,
     currentOffer,
-    previousOffer,
     offerChanges,
     isEditingAssigned,
     setIsEditingAssigned,

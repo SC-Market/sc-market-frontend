@@ -183,7 +183,7 @@ export function OfferDetailsEditArea(props: {
                       allowNegative={false}
                       customInput={TextField}
                       thousandSeparator
-                      onValueChange={async (values, sourceInfo) => {
+                      onValueChange={async (values) => {
                         setBody({ ...body, cost: values.value || "0" })
                       }}
                       inputProps={{

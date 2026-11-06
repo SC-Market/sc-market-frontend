@@ -56,7 +56,6 @@ interface OrderSummarySectionV2Props {
  */
 export function OrderSummarySectionV2({
   items,
-  total_cost,
   offerChanges,
 }: OrderSummarySectionV2Props) {
   const fmt = useFormatters()

@@ -46,28 +46,25 @@ export function AuthenticateContractor() {
 
   const issueAlert = useAlertHook()
 
-  const submit = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      if (!orgName) {
-        setError(true)
-        return
-      }
+  const submit = useCallback(async () => {
+    if (!orgName) {
+      setError(true)
+      return
+    }
 
-      activateContractorLink({
-        contractor: orgName,
+    activateContractorLink({
+      contractor: orgName,
+    })
+      .unwrap()
+      .then(() => {
+        setVerifiedOrg(orgName)
       })
-        .unwrap()
-        .then(() => {
-          setVerifiedOrg(orgName)
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
+      .catch((error) => {
+        issueAlert(error)
+      })
 
-      return false
-    },
-    [activateContractorLink, orgName, issueAlert],
-  )
+    return false
+  }, [activateContractorLink, orgName, issueAlert])
 
   // A failed identifier request is an error, not a skeleton forever. The
   // error body stays inside this tab so "New Contractor" still works.

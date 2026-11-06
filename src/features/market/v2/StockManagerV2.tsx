@@ -161,7 +161,6 @@ declare module "@mui/x-data-grid" {
 
 function ListingsToolbarV2(props: ListingsToolbarProps) {
   const {
-    listings,
     setNewRows,
     setRowModesModel,
     isMobile,
@@ -375,7 +374,6 @@ function ShopListingsGridV2({
   pageSize,
   onPageChange,
   onPageSizeChange,
-  onRefreshAll,
   isLoading,
 }: {
   listings: MyListingItem[]

@@ -11,17 +11,11 @@ import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 
-export interface HorizontalListingSkeletonProps {
-  index?: number
-}
-
 /**
  * Skeleton component for horizontal scrolling market listing cards
  * Matches the detailed layout of actual listing cards but in horizontal layout
  */
-export function HorizontalListingSkeleton({
-  index = 0,
-}: HorizontalListingSkeletonProps) {
+export function HorizontalListingSkeleton() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
 

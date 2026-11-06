@@ -71,7 +71,6 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
 import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 import { missionsCapabilityText } from "../../seo/missionText"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
@@ -226,8 +225,6 @@ export function MissionSearch() {
     if (v) setViewMode(v)
   }
   const isMobile = useBreakpointDown("lg")
-  const [filterOpen, setFilterOpen] = useState(false)
-  const bottomNavHeight = useBottomNavHeight()
 
   // Debounce search text for performance (Requirement 1.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)

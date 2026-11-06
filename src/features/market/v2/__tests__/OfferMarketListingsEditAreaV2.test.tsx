@@ -1,7 +1,6 @@
 import "./setup"
 import React from "react"
 import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { OfferMarketListingsEditAreaV2 } from "../OfferMarketListingsEditAreaV2"
 import { CounterOfferDetailsContext } from "../../../../hooks/offer/CounterOfferDetails"
@@ -201,10 +200,6 @@ const createMockStore = () => {
 }
 
 // Mock API responses
-const mockApiHandlers = {
-  searchListings: vi.fn(() => Promise.resolve(mockListingSearchResults)),
-  getListingDetail: vi.fn(() => Promise.resolve(mockListingDetail)),
-}
 
 // Setup test wrapper
 const renderWithProviders = (
@@ -299,7 +294,6 @@ describe("OfferMarketListingsEditAreaV2", () => {
   })
 
   it("allows selecting a listing from autocomplete", async () => {
-    const user = userEvent.setup()
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Find the autocomplete input

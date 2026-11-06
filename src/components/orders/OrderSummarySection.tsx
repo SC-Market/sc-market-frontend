@@ -13,7 +13,6 @@ interface OrderSummarySectionProps {
 
 export function OrderSummarySection({
   market_listings,
-  total_cost,
   offerChanges,
 }: OrderSummarySectionProps) {
   const fmt = useFormatters()

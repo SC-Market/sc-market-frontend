@@ -106,8 +106,6 @@ function IconPicker({
 // ── Tab definitions ────────────────────────────────────────────────────
 export function WhiteLabelSettings() {
   const {
-    spectrumId,
-    config,
     focusMode,
     setFocusMode,
     homepagePath,

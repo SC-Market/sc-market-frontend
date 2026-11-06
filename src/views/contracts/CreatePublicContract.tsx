@@ -41,44 +41,41 @@ export function CreatePublicContract() {
   ] = useCreatePublicContractMutation()
 
   const navigate = useNavigate()
-  const submitOrder = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      // event.preventDefault();
-      createPublicContract({
-        title,
-        description,
-        kind,
-        collateral,
-        cost,
-        payment_type: paymentType,
-      })
-        .unwrap()
-        .then((data) => {
-          issueAlert({
-            message: t("createPublicContract.submitted"),
-            severity: "success",
-          })
-
-          navigate(ORDER_PATHS.publicContract(data.contract_id))
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
-      return false
-    },
-    [
+  const submitOrder = useCallback(async () => {
+    // event.preventDefault();
+    createPublicContract({
+      title,
+      description,
+      kind,
       collateral,
       cost,
-      createPublicContract,
-      description,
-      issueAlert,
-      kind,
-      navigate,
-      paymentType,
-      title,
-      t,
-    ],
-  )
+      payment_type: paymentType,
+    })
+      .unwrap()
+      .then((data) => {
+        issueAlert({
+          message: t("createPublicContract.submitted"),
+          severity: "success",
+        })
+
+        navigate(ORDER_PATHS.publicContract(data.contract_id))
+      })
+      .catch((error) => {
+        issueAlert(error)
+      })
+    return false
+  }, [
+    collateral,
+    cost,
+    createPublicContract,
+    description,
+    issueAlert,
+    kind,
+    navigate,
+    paymentType,
+    title,
+    t,
+  ])
 
   return (
     <Grid item xs={12}>

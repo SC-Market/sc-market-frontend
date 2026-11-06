@@ -30,7 +30,7 @@ export function ShopListingsGridSkeleton({ count = 10 }: { count?: number }) {
     <Grid container spacing={2}>
       {Array.from({ length: count }).map((_, i) => (
         <Grid item {...SHOP_LISTING_GRID_BREAKPOINTS} key={i}>
-          <ListingSkeleton index={i} />
+          <ListingSkeleton />
         </Grid>
       ))}
     </Grid>

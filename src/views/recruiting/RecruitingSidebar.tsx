@@ -20,7 +20,6 @@ import SearchIcon from "@mui/icons-material/Search"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { StarRounded } from "@mui/icons-material"
 import {
@@ -52,7 +51,6 @@ export function RecruitingSidebar() {
   // States
   const [open, setOpen] = useRecruitingSidebar()
   const [, setSearchState] = useRecruitingSearch()
-  const [drawerOpen] = useDrawerOpen()
 
   const xs = useBreakpointDown("lg")
   const isMobile = useIsMobile()

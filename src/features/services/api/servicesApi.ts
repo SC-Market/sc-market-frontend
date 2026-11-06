@@ -48,7 +48,7 @@ export const servicesApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     getServices: builder.query<Service[], string>({
       query: (username) => `/api/services/user/${username}`,
-      providesTags: (result, error, order_id) => ["Service" as const],
+      providesTags: () => ["Service" as const],
       transformResponse: unwrapResponse,
     }),
     getPublicServices: builder.query<ServicesResponse, ServicesQueryParams>({
@@ -69,7 +69,7 @@ export const servicesApi = serviceApi.injectEndpoints({
           user: params.user,
         },
       }),
-      providesTags: (result, error, params) => ["Service" as const],
+      providesTags: () => ["Service" as const],
       transformResponse: unwrapResponse,
       serializeQueryArgs: ({ queryArgs }) => {
         const {
@@ -149,7 +149,7 @@ export const servicesApi = serviceApi.injectEndpoints({
     >({
       query: ({ service_id, photos }) => {
         const formData = new FormData()
-        photos.forEach((photo, index) => {
+        photos.forEach((photo) => {
           formData.append(`photos`, photo)
         })
 

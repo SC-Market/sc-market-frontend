@@ -465,7 +465,6 @@ describe("ShoppingList", () => {
       // genuine HTMLAnchorElement rather than a hand-rolled stand-in.
       const mockLink = originalCreateElement("a")
       const mockClick = vi.spyOn(mockLink, "click").mockImplementation(() => {})
-      const mockSetAttribute = vi.spyOn(mockLink, "setAttribute")
 
       vi.spyOn(document, "createElement").mockImplementation((tagName) =>
         tagName === "a" ? mockLink : originalCreateElement(tagName),

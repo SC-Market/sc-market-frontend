@@ -45,7 +45,6 @@ import { useNavigate } from "react-router-dom"
 import { Trans, useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import {
-  useGetMyBuyOrdersQuery,
   useSearchBuyOrdersQuery,
   useGetRequisitionsQuery,
   useGetOrdersQuery,
@@ -855,7 +854,6 @@ export function AdminSupplierDashboard() {
     isLoading: boLoading,
     refetch: boRefetch,
   } = useSearchBuyOrdersQuery({ pageSize: 50 })
-  const { data: myBuyOrders } = useGetMyBuyOrdersQuery({})
   const { data: requisitionsData, isLoading: reqLoading } =
     useGetRequisitionsQuery({ role: "supplier", pageSize: 20 })
   const { data: ordersData, isLoading: ordersLoading } = useGetOrdersQuery({

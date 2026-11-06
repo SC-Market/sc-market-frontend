@@ -98,7 +98,7 @@ export const moderationApi = serviceApi.injectEndpoints({
     // Get user's own content reports
     getUserReports: builder.query<UserReportsResponse, void>({
       query: () => `${baseUrl}/reports`,
-      providesTags: (result, error, arg) => [
+      providesTags: () => [
         "ModerationReports" as const,
         { type: "ModerationReports" as const },
       ],
@@ -117,7 +117,7 @@ export const moderationApi = serviceApi.injectEndpoints({
           ...(params.reporter_id && { reporter_id: params.reporter_id }),
         },
       }),
-      providesTags: (result, error, arg) => [
+      providesTags: () => [
         "ModerationReports" as const,
         { type: "ModerationReports" as const },
       ],

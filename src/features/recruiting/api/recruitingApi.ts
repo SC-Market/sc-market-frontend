@@ -57,7 +57,7 @@ export const recruitingApi = serviceApi.injectEndpoints({
     recruitingGetPostByOrg: builder.query<RecruitingPost, string>({
       query: (id) => `/api/recruiting/contractors/${id}/posts`,
       transformResponse: unwrapResponse,
-      providesTags: (result, error, spectrum_id) => [
+      providesTags: (result) => [
         "RecruitingPosts",
         {
           type: "RecruitingPosts" as const,

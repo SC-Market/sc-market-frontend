@@ -57,7 +57,6 @@ export const DynamicKlineChart = ({
   onInit,
   onDispose,
   children,
-  ...props
 }: {
   onInit?: (kline: typeof import("klinecharts")) => void
   onDispose?: (kline: typeof import("klinecharts")) => void

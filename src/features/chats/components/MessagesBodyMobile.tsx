@@ -37,7 +37,6 @@ import {
   useGetUserProfileQuery,
 } from "../../profile/api/profileApi"
 import { replaceDiscordTimestamps } from "../messages/utils/timestampFormatter"
-import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import { useCurrentChat } from "../hooks/CurrentChat"
 import {
   useSendChatMessageMutation,
@@ -68,7 +67,6 @@ function MessageEntryMobile(props: { message: Message }) {
   const fmt = useFormatters()
   const now = useNow()
   const { t } = useTranslation()
-  const { data: profile } = useGetUserProfileQuery()
   const { data: author } = useGetUserByUsernameQuery(message.author!, {
     skip: !message.author,
   })
@@ -172,7 +170,6 @@ function MessageEntryMobile(props: { message: Message }) {
 function MessageHeaderMobile() {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()
-  const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
   const navigate = useNavigate()
   const location = useLocation()
   const [chat] = useCurrentChat()
@@ -240,11 +237,6 @@ function MessageHeaderMobile() {
                 userParticipants.length === 1 ||
                 part.username !== profile.data?.username,
             )
-
-            const participantNames = [
-              ...otherUsers.map((u) => u.username),
-              ...contractorParticipants.map((c) => c.name),
-            ]
 
             return (
               <>
@@ -485,8 +477,6 @@ function MessageSendAreaMobile(props: {
     }
   }
 
-  const safeAreaBottom = "env(safe-area-inset-bottom)"
-
   return (
     <Box
       ref={inputRef}
@@ -618,7 +608,7 @@ function DateTimePickerBottomSheetMobile(props: {
   )
 }
 
-export function MessagesBodyMobile(props: { maxHeight?: number }) {
+export function MessagesBodyMobile() {
   const theme = useTheme<ExtendedTheme>()
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)

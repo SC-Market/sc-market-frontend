@@ -8,8 +8,7 @@ import { NotificationsButton } from "../../../components/navbar/NotificationsBut
 import { ProfileNavAvatar } from "../../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { Stack } from "@mui/system"
-import { useMarketSidebar } from "../hooks/MarketSidebar"
-import { Link as RouterLink, useSearchParams } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../../routes/paths"
 
@@ -112,11 +111,6 @@ export function MarketNavArea(props: { top?: boolean }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const profile = useGetUserProfileQuery()
-
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const [drawerOpen] = useDrawerOpen()
-  const [open, setOpen] = useMarketSidebar()
 
   return (
     <>

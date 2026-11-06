@@ -91,8 +91,6 @@ const AUDIT_LOG_ACTIONS = [
   "discord.linked",
 ] as const
 
-type AuditLogAction = (typeof AUDIT_LOG_ACTIONS)[number]
-
 const headCells: readonly HeadCell<AuditLogEntry & { expanded?: boolean }>[] = [
   {
     id: "expanded",

@@ -426,7 +426,7 @@ export function CreateListingV2() {
                   onAlert={(severity, message) =>
                     issueAlert({ severity, message })
                   }
-                  onImageUploaded={(resourceId, url) => {
+                  onImageUploaded={() => {
                     // Already handled in handleFileUpload
                   }}
                   uploadedImages={uploadedImages}

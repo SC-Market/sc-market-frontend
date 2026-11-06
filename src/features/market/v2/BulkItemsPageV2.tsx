@@ -271,7 +271,7 @@ export function BulkItemsPageV2() {
         <Grid container spacing={1}>
           {new Array(12).fill(undefined).map((_, i) => (
             <Grid item {...gridBreakpoints} key={i}>
-              <ListingSkeleton index={i} />
+              <ListingSkeleton />
             </Grid>
           ))}
         </Grid>

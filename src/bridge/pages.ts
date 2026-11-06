@@ -1046,8 +1046,6 @@ function missionDoc(
   const m = data.mission
   const version = ctx.related.versions?.LIVE ?? null
   const head = buildMissionHead(data, ctx.params.slug, ctx.origin, version)
-  const name =
-    readableMissionText(m.mission_name, missionGiver(m)) || "Unknown mission"
   const giver = m.mission_giver_org || m.faction
   const place = [m.location_detail, m.planet_moon, m.star_system]
     .filter(Boolean)

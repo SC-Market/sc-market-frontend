@@ -97,8 +97,6 @@ export const AUDIT_LOG_ACTIONS = [
   "shop.transferred",
 ] as const
 
-type AuditLogAction = (typeof AUDIT_LOG_ACTIONS)[number]
-
 /**
  * i18n key of an action's label. Keys are flat ("orgAuditLogs.action_org_created"):
  * "orgAuditLogs.action" is itself the column header string, so it can't also

@@ -16,7 +16,7 @@ export function CounterOfferSubmitArea(props: {
   const { submit, isLoading: counterOfferLoading } = useCounterOfferSubmit(
     session.session_id,
   )
-  const [body, setBody] = useCounterOffer()
+  const [body] = useCounterOffer()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 

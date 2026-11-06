@@ -55,6 +55,7 @@ import {
 import { HelpTip } from "../../features/help/components/HelpTip"
 
 import { useFormatters } from "../../util/format"
+import omit from "lodash/omit"
 function RolePermissionCheck(props: {
   permission_name: RolePermission
   role: ContractorRole
@@ -138,7 +139,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
   const theme = useTheme<ExtendedTheme>()
 
   const submitUpdate = useCallback(async () => {
-    const { contractor_id, role_id, ...body } = newRole
+    const body = omit(newRole, ["contractor_id", "role_id"])
 
     updateRole({
       contractor: currentOrg!.spectrum_id,
@@ -276,7 +277,7 @@ function RoleRow(props: {
   labelId: string
   manage?: boolean
 }): ReactElement {
-  const { row, index, onClick, isItemSelected, labelId } = props
+  const { row, index, isItemSelected } = props
   const { t } = useTranslation()
   const fmt = useFormatters()
   const [open, setOpen] = useState(false)
@@ -423,7 +424,7 @@ export function AddRole() {
   const issueAlert = useAlertHook()
 
   const submitUpdate = useCallback(async () => {
-    const { contractor_id, role_id, position, ...body } = newRole
+    const body = omit(newRole, ["contractor_id", "role_id", "position"])
 
     createRole({
       contractor: currentOrg!.spectrum_id,

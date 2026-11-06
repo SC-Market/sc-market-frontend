@@ -96,7 +96,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     // Find version type
     const versionType =
       Object.entries(activeVersions || {}).find(
-        ([_, version]) => version?.version_id === versionId,
+        ([, version]) => version?.version_id === versionId,
       )?.[0] || "LIVE"
 
     // Call API to persist selection (if authenticated)

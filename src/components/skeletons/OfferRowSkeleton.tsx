@@ -11,15 +11,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 
-export interface OfferRowSkeletonProps {
-  index?: number
-}
-
 /**
  * Skeleton component for offer table rows
  * Matches the layout of actual offer rows in ReceivedOffersArea
  */
-export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
+export function OfferRowSkeleton() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
 

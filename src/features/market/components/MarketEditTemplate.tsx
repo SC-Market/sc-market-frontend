@@ -61,7 +61,7 @@ export function MarketEditTemplate(props: {
 
     response
       .unwrap()
-      .then((res) => {
+      .then(() => {
         issueAlert({
           severity: "success",
           message: t("MarketEditTemplate.submitted"),

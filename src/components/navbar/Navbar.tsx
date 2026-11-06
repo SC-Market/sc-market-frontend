@@ -15,8 +15,6 @@ import {
 } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { useLocation } from "react-router-dom"
-import { messagingDrawerWidth } from "../../features/chats/constants"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
@@ -34,8 +32,6 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
   const { status: sessionStatus } = useSession()
   const [cookies] = useCookies(["cart"])
-  const location = useLocation()
-  const isMessagingPage = location.pathname.startsWith("/messages")
   const isMobile = useIsMobile()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
@@ -43,12 +39,6 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const { openCartPreview } = useCartDrawer()
 
   const cartItemCount = cookies.cart?.items?.length || 0
-
-  // Calculate total sidebar width (main sidebar + messaging sidebar if on messaging page)
-  // On desktop, messaging sidebar is always open (unless collapsed), so account for it
-  const totalSidebarWidth = drawerOpen ? sidebarDrawerWidth : 0
-  const messagingSidebarWidth =
-    isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
   const navbarIconColor = getNavbarContrastText(theme)
   const outline =

@@ -33,7 +33,6 @@ import type {
 import { useGetMyChatsQuery } from "../api/chatsApi"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useParams } from "react-router-dom"
-import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { MessageListSkeleton } from "../../../components/skeletons"
 import {
   EmptyMessages,
@@ -242,7 +241,6 @@ export function MessagingSidebarContent(
     data: chats,
     isFetching,
     currentData,
-    refetch,
     isLoading: pageIsLoading,
   } = useGetMyChatsQuery()
   // The chat list is primary content on the messages pages.
@@ -250,7 +248,6 @@ export function MessagingSidebarContent(
     isPrimaryLoading({ isLoading: pageIsLoading, isFetching, currentData }),
   )
   const [searchQuery, setSearchQuery] = useState("")
-  const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
   // Create a map of chat_id -> unread count from the chats data
   // The backend now provides unread_count for each chat
@@ -436,7 +433,7 @@ export function MessagingSidebarContent(
         {isAwaitingData({ isFetching, currentData }) ? (
           <>
             {Array.from({ length: 5 }).map((_, i) => (
-              <MessageListSkeleton key={i} index={i} />
+              <MessageListSkeleton key={i} />
             ))}
           </>
         ) : (chats || []).length === 0 ? (

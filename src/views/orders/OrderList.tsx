@@ -37,13 +37,7 @@ import {
   useOrderSearch,
   type OrderSearchResult,
 } from "../../features/orders/hooks/useOrderSearch"
-import {
-  ExpandLess,
-  ExpandMore,
-  Search,
-  ShareRounded,
-  VisibilityRounded,
-} from "@mui/icons-material"
+import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
@@ -175,41 +169,6 @@ export function OrderRow(props: {
   })
 
   // Long-press menu actions (for non-selection actions) - only show on desktop or as secondary
-  const longPressActions = useMemo(() => {
-    if (isMobile) {
-      // On mobile, selection is handled by long-press directly, menu is for other actions
-      // We'll show menu on a different gesture or make it less prominent
-      return []
-    }
-    return [
-      {
-        label: t("orders.viewDetails", { defaultValue: "View Details" }),
-        icon: <VisibilityRounded />,
-        onClick: () => navigate(ORDER_PATHS.contract(row.order_id)),
-      },
-      {
-        label: t("orders.share", { defaultValue: "Share" }),
-        icon: <ShareRounded />,
-        onClick: () => {
-          const url = `${window.location.origin}${ORDER_PATHS.contract(row.order_id)}`
-          if (navigator.share) {
-            navigator
-              .share({
-                title: t("orders.orderLabel", { defaultValue: "Order" }),
-                text: `${t("orders.orderLabel", { defaultValue: "Order" })} ${row.order_id.substring(0, 8).toUpperCase()}`,
-                url,
-              })
-              .catch(() => {
-                // User cancelled or error occurred
-              })
-          } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(url)
-          }
-        },
-      },
-    ]
-  }, [row.order_id, navigate, t, isMobile])
 
   const rowContent = (
     <TableRow

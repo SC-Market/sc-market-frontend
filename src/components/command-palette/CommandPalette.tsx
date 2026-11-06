@@ -258,20 +258,6 @@ export function CommandPalette() {
     }
   }
 
-  // Group by category for display
-  const grouped = useMemo(() => {
-    const groups = new Map<string, { items: CommandItem[]; startIndex: number }[]>()
-    let idx = 0
-    for (const item of filteredItems) {
-      if (!groups.has(item.category)) {
-        groups.set(item.category, [])
-      }
-      groups.get(item.category)!.push({ items: [item], startIndex: idx })
-      idx++
-    }
-    return groups
-  }, [filteredItems])
-
   return (
     <Dialog
       open={open}

@@ -45,7 +45,7 @@ export function isOptimisticItem(item: {
 /**
  * Type for optimistic update handler
  */
-export type OptimisticUpdateHandler<TArg, TResult> = (
+export type OptimisticUpdateHandler<TArg> = (
   arg: TArg,
   dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
   getState: () => RootState,
@@ -85,7 +85,7 @@ export type OptimisticUpdateHandler<TArg, TResult> = (
  * IMPORTANT: Do NOT use this for mutations that redirect after creation.
  * Redirects require real IDs from the server response.
  */
-export async function createOptimisticUpdate<TArg, TResult>(
+export async function createOptimisticUpdate<TResult>(
   updateFn: (
     dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
   ) => OptimisticPatch | OptimisticPatch[],

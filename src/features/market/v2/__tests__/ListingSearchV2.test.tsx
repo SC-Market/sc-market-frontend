@@ -24,7 +24,6 @@ import type { FadeProps } from "@mui/material"
 import type { QualityFilter as QualityFilterComponent } from "../../../../components/market/v2/QualityFilter"
 import type { HideOnScroll as HideOnScrollComponent } from "../../components/MarketNavArea"
 import type { ListingWrapper as ListingWrapperComponent } from "../../components/listings/ListingWrapper"
-import type { ListingSkeletonProps } from "../../../../components/skeletons"
 import type { NumberedPaginationProps } from "../../../../components/pagination/NumberedPagination"
 import type { EmptyListingsProps } from "../../../../components/empty-states"
 import type { BottomSheet as BottomSheetComponent } from "../../../../components/mobile/BottomSheet"
@@ -161,9 +160,7 @@ vi.mock("../../components/listings/ListingWrapper", () => ({
 }))
 
 vi.mock("../../../../components/skeletons", () => ({
-  ListingSkeleton: ({ index }: ListingSkeletonProps) => (
-    <div data-testid="listing-skeleton">Skeleton {index}</div>
-  ),
+  ListingSkeleton: () => <div data-testid="listing-skeleton">Skeleton</div>,
 }))
 
 vi.mock(
@@ -184,7 +181,7 @@ vi.mock(
 )
 
 vi.mock("../../../../components/empty-states", () => ({
-  EmptyListings: ({ isSearchResult, isError, onRetry }: EmptyListingsProps) => (
+  EmptyListings: ({ isError, onRetry }: EmptyListingsProps) => (
     <div data-testid="empty-listings">
       <p>No listings found</p>
       {isError && <button onClick={onRetry}>Retry</button>}
@@ -364,7 +361,7 @@ describe("ListingSearchV2", () => {
       }),
     )
 
-    const { container } = render(
+    render(
       <ThemeProvider theme={testTheme}>
         <Provider store={store}>
           <MemoryRouter initialEntries={["/market/v2/search"]}>

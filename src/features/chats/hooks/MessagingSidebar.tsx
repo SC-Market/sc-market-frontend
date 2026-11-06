@@ -8,10 +8,8 @@ export const useMessagingSidebar = () => {
   const val = React.useContext(MessagingSidebarContext)
   if (val == null) {
     // throw new Error("Cannot use useMessagingSidebar outside MessagingSidebarContext")
-    return [
-      undefined,
-      (arg: boolean | ((t: boolean) => boolean)) => null,
-    ] as const
+    const ignore: React.Dispatch<React.SetStateAction<boolean>> = () => {}
+    return [undefined, ignore] as const
   }
 
   return val

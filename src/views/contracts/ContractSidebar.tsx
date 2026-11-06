@@ -12,7 +12,6 @@ import SearchIcon from "@mui/icons-material/Search"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useContractSidebar } from "../../features/contracting/hooks/ContractSidebar"
 import { useContractSearch } from "../../features/contracting/hooks/ContractSearch"
@@ -38,7 +37,6 @@ export function ContractSidebar() {
   // States
   const [open, setOpen] = useContractSidebar()
   const [, setSearchState] = useContractSearch()
-  const [drawerOpen] = useDrawerOpen()
 
   const isMobile = useBreakpointDown("lg")
 

@@ -55,38 +55,35 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
 
   const navigate = useNavigate()
 
-  const submitPost = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      let request
-      if (!post) {
-        if (!contractor) return false
-        request = createPost({
-          ...state,
-          contractor: contractor.spectrum_id,
-        })
-      } else {
-        request = updatePost({
-          body: state,
-          post_id: post.post_id,
-        })
-      }
+  const submitPost = useCallback(async () => {
+    let request
+    if (!post) {
+      if (!contractor) return false
+      request = createPost({
+        ...state,
+        contractor: contractor.spectrum_id,
+      })
+    } else {
+      request = updatePost({
+        body: state,
+        post_id: post.post_id,
+      })
+    }
 
-      request
-        .unwrap()
-        .then((res) => {
-          issueAlert({
-            message: t("recruiting_post.alert.submitted"),
-            severity: "success",
-          })
-
-          navigate(`/recruiting/post/${res.post_id}`)
+    request
+      .unwrap()
+      .then((res) => {
+        issueAlert({
+          message: t("recruiting_post.alert.submitted"),
+          severity: "success",
         })
-        .catch(issueAlert)
 
-      return false
-    },
-    [contractor, createPost, post, issueAlert, state, updatePost, t, navigate],
-  )
+        navigate(`/recruiting/post/${res.post_id}`)
+      })
+      .catch(issueAlert)
+
+    return false
+  }, [contractor, createPost, post, issueAlert, state, updatePost, t, navigate])
 
   const [stateBuffer, setStateBuffer] = useState(state)
 

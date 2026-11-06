@@ -63,33 +63,30 @@ export function AuthenticateRSI({
   const issueAlert = useAlertHook()
   const [tosAccepted, setTosAccepted] = useState(false)
 
-  const submit = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      if (!username || !tosAccepted) {
-        setError(true)
-        return
-      }
-      // event.preventDefault();
-      activateAccountLink({
-        username: username,
+  const submit = useCallback(async () => {
+    if (!username || !tosAccepted) {
+      setError(true)
+      return
+    }
+    // event.preventDefault();
+    activateAccountLink({
+      username: username,
+    })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("authenticateRSI.authenticated"),
+          severity: "success",
+        })
+        setUsername("")
+        navigate(PATHS.home)
       })
-        .unwrap()
-        .then((result) => {
-          issueAlert({
-            message: t("authenticateRSI.authenticated"),
-            severity: "success",
-          })
-          setUsername("")
-          navigate(PATHS.home)
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
+      .catch((error) => {
+        issueAlert(error)
+      })
 
-      return false
-    },
-    [activateAccountLink, navigate, issueAlert, username, tosAccepted, t],
-  )
+    return false
+  }, [activateAccountLink, navigate, issueAlert, username, tosAccepted, t])
 
   const [isError, errorMessage] = useMemo(() => {
     if (!isAlphaNumeric(username) || username.length < 3) {

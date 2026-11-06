@@ -7,11 +7,9 @@ import { skipToken } from "@reduxjs/toolkit/query/react"
 export function OrgTransactions() {
   const [currentOrg] = useCurrentOrg()
 
-  const {
-    data: transactions,
-    isLoading,
-    error,
-  } = useGetTransactionsByContractor(currentOrg?.spectrum_id || skipToken)
+  const { data: transactions } = useGetTransactionsByContractor(
+    currentOrg?.spectrum_id || skipToken,
+  )
 
   return <TransactionTableView transactions={transactions || []} />
 }

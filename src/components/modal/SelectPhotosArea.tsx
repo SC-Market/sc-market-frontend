@@ -289,7 +289,6 @@ export function SelectPhotosArea(props: {
     pendingFiles = [],
     onRemovePendingFile,
     onAlert,
-    onImageUploaded,
     uploadedImages = [],
     onRemoveUploadedImage,
   } = props

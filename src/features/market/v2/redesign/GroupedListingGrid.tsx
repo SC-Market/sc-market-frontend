@@ -226,7 +226,7 @@ const GroupedListingGridInner = React.forwardRef<
   HTMLDivElement,
   ListingGridProps
 >(function GroupedListingGrid(
-  { listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen },
+  { listings, loading, error, onRetry, gridBreakpoints },
   ref,
 ) {
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -300,7 +300,7 @@ const GroupedListingGridInner = React.forwardRef<
       <Grid container spacing={1}>
         {new Array(16).fill(undefined).map((_, i) => (
           <Grid item {...gridBreakpoints} key={i}>
-            <ListingSkeleton index={i} sidebarOpen={marketSidebarOpen} />
+            <ListingSkeleton />
           </Grid>
         ))}
       </Grid>

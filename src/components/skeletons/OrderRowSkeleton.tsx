@@ -4,15 +4,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 
-export interface OrderRowSkeletonProps {
-  index?: number
-}
-
 /**
  * Skeleton component for order table rows
  * Matches the layout of actual order rows in OrderList
  */
-export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
+export function OrderRowSkeleton() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
 

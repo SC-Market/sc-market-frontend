@@ -9,12 +9,6 @@ import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 
-export interface ListingSkeletonProps {
-  /** Kept for callers; cards no longer fade in one after the other. */
-  index?: number
-  sidebarOpen?: boolean
-}
-
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 
 /**
@@ -27,7 +21,7 @@ import { ListingWrapper } from "../../features/market/components/listings/Listin
  * its own copy of these cards. With a fade, every swap blanked the cards and
  * faded them back in, so one load looked like several skeletons in a row.
  */
-export function ListingSkeleton({ sidebarOpen = false }: ListingSkeletonProps) {
+export function ListingSkeleton() {
   const theme = useTheme<ExtendedTheme>()
 
   return (

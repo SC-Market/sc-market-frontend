@@ -5,7 +5,7 @@ import { extractPrerenderedApiState } from "./hydration"
 
 export const serviceApi = createApi({
   baseQuery: createBaseQuery({ baseUrl: `${BACKEND_URL}`, retry: false }),
-  endpoints: (builder) => ({}),
+  endpoints: () => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,
   // Data from a prerendered page (store/hydration.ts).

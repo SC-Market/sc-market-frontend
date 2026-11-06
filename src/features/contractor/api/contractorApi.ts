@@ -270,7 +270,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         method: "POST",
         body: body,
       }),
-      invalidatesTags: (result, error, arg) => [
+      invalidatesTags: () => [
         { type: "MyProfile" as const },
         "MyProfile" as const,
         "AdminAuditLogs" as const,
@@ -312,7 +312,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         "AdminAuditLogs" as const,
         { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
-      transformResponse: (response: unknown) => {
+      transformResponse: () => {
         // Handle 204 No Content responses - RTK Query may return undefined or empty response
         // For void mutations, we just return undefined
         return undefined
@@ -391,7 +391,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         url: `/api/contractors/invites/${invite_id}/accept`,
         method: "POST",
       }),
-      invalidatesTags: (result, error, arg) => [
+      invalidatesTags: () => [
         "MyProfile" as const,
         { type: "MyProfile" as const },
         "Notifications" as const,
@@ -690,9 +690,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Contractor" as const },
-      ],
+      invalidatesTags: () => [{ type: "Contractor" as const }],
       transformResponse: unwrapResponse,
     }),
     getContractors: builder.query<

@@ -42,50 +42,47 @@ export function CreateNewContractor() {
 
   const issueAlert = useAlertHook()
 
-  const submit = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      if (!contractorName) {
-        setError(true)
-        return
-      }
+  const submit = useCallback(async () => {
+    if (!contractorName) {
+      setError(true)
+      return
+    }
 
-      registerNewContractor({
-        description,
-        name: contractorName,
-        identifier: contractorIdentifier,
-        logo: avatar,
-        banner,
-        language_codes: selectedLanguages,
-      })
-        .unwrap()
-        .then(() => {
-          issueAlert({
-            message: t("contractorCreate.success", {
-              defaultValue: "Contractor created successfully",
-            }),
-            severity: "success",
-          })
-          navigate(ORG_PATHS.profile(`~${contractorIdentifier}`))
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
-
-      return false
-    },
-    [
-      contractorName,
-      registerNewContractor,
+    registerNewContractor({
       description,
-      contractorIdentifier,
-      avatar,
+      name: contractorName,
+      identifier: contractorIdentifier,
+      logo: avatar,
       banner,
-      selectedLanguages,
-      navigate,
-      issueAlert,
-      t,
-    ],
-  )
+      language_codes: selectedLanguages,
+    })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("contractorCreate.success", {
+            defaultValue: "Contractor created successfully",
+          }),
+          severity: "success",
+        })
+        navigate(ORG_PATHS.profile(`~${contractorIdentifier}`))
+      })
+      .catch((error) => {
+        issueAlert(error)
+      })
+
+    return false
+  }, [
+    contractorName,
+    registerNewContractor,
+    description,
+    contractorIdentifier,
+    avatar,
+    banner,
+    selectedLanguages,
+    navigate,
+    issueAlert,
+    t,
+  ])
 
   return (
     <Section xs={12} lg={12}>
@@ -95,13 +92,6 @@ export function CreateNewContractor() {
           fullWidth
           value={contractorName}
           onChange={(event) => {
-            let ident = ""
-            for (let i = 0; i < event.target.value.length; i++) {
-              const c = event.target.value.charAt(i)
-              if ((isAlphaNumeric(c) || c === " ") && i < 50) {
-                ident += c.toUpperCase()
-              }
-            }
             setContractorName(event.target.value)
           }}
           error={error ? !contractorName : false}

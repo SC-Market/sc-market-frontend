@@ -314,7 +314,7 @@ export function MarketCartV2() {
   const theme = useTheme<ExtendedTheme>()
 
   // Fetch cart data
-  const { data: cartData, isLoading, error, refetch } = useGetCartQuery()
+  const { data: cartData, isLoading, error } = useGetCartQuery()
 
   const {
     removeItem: handleRemove,

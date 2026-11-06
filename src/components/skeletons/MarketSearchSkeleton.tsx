@@ -99,7 +99,7 @@ export function MarketSearchSkeleton({
     <Grid container spacing={1}>
       {Array.from({ length: LISTING_GRID_SKELETON_COUNT }).map((_, i) => (
         <Grid item {...gridBreakpoints} key={i}>
-          <ListingSkeleton index={i} sidebarOpen={marketSidebarOpen} />
+          <ListingSkeleton />
         </Grid>
       ))}
     </Grid>
@@ -170,7 +170,7 @@ export function ServiceListingsSkeleton({
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <ServiceListingSkeleton key={i} index={i} />
+        <ServiceListingSkeleton key={i} />
       ))}
     </>
   )

@@ -172,7 +172,7 @@ export function BuyOrdersRedesign() {
         {loading ? (
           new Array(Math.min(perPage, 12)).fill(undefined).map((_, i) => (
             <Grid item {...gridBreakpoints} key={i}>
-              <ListingSkeleton index={i} />
+              <ListingSkeleton />
             </Grid>
           ))
         ) : activeOrders.length === 0 ? (

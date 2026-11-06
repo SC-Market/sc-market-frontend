@@ -39,7 +39,6 @@ export function OrgMemberSearch({
   label,
   fullWidth = false,
   size = "medium",
-  includeSelf = true,
   sx,
 }: OrgMemberSearchProps) {
   const { t } = useTranslation()

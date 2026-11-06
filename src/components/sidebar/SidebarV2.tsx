@@ -81,7 +81,6 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { MobileNavDrawer } from "./MobileNavDrawer"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 import { useFeatureFlag } from "../../hooks/market"
@@ -164,7 +163,6 @@ export function SidebarV2() {
   // sidebar has the most items. They're hover/focus-only, so the first render
   // draws a look-alike static icon and the real buttons arrive when idle.
   const pinButtonsReady = useWarmWhenIdle(true)
-  const bottomNavHeight = useBottomNavHeight()
   const location = useLocation()
 
   const { profile } = useSession()

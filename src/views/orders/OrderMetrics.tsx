@@ -57,7 +57,6 @@ export function ContractorOrderMetricsDisplay(props: {
 
   const activeOrders =
     metrics.status_counts["in-progress"] + metrics.status_counts["not-started"]
-  const completedOrders = metrics.status_counts["fulfilled"]
 
   return (
     <React.Fragment>

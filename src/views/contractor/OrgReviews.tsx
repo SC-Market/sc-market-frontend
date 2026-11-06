@@ -43,7 +43,7 @@ function ReviewRow(props: {
 }) {
   const { row, onClick, isItemSelected, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   // The page's language (as rendered on the server), not the browser's.
   const locale = toSupportedLocale(i18n.language)
   const formatDate = useCallback(

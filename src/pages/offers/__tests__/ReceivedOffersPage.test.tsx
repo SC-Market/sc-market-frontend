@@ -76,7 +76,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
 
 describe("ReceivedOffersPage", () => {
   it("renders without crashing", () => {
-    const { container } = renderWithProviders(
+    renderWithProviders(
       <MemoryRouter>
         <ReceivedOffersPage />
       </MemoryRouter>,

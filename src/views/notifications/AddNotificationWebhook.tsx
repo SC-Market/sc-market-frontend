@@ -69,53 +69,50 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
   const issueAlert = useAlertHook()
   const { t } = useTranslation()
 
-  const submitCreateForm = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      // event.preventDefault();
-      let response
-      if (props.org) {
-        response = createContractorWebhook({
-          contractor: contractor_id!,
-          body: {
-            name: name,
-            webhook_url: url,
-            actions,
-          },
-        })
-      } else {
-        response = createUserWebhook({
+  const submitCreateForm = useCallback(async () => {
+    // event.preventDefault();
+    let response
+    if (props.org) {
+      response = createContractorWebhook({
+        contractor: contractor_id!,
+        body: {
           name: name,
           webhook_url: url,
           actions,
-        })
-      }
+        },
+      })
+    } else {
+      response = createUserWebhook({
+        name: name,
+        webhook_url: url,
+        actions,
+      })
+    }
 
-      response
-        .unwrap()
-        .then((res) => {
-          issueAlert({
-            message: t("AddNotificationWebhook.submitted"),
-            severity: "success",
-          })
+    response
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("AddNotificationWebhook.submitted"),
+          severity: "success",
         })
-        .catch((err) => {
-          issueAlert(err)
-        })
+      })
+      .catch((err) => {
+        issueAlert(err)
+      })
 
-      return false
-    },
-    [
-      createContractorWebhook,
-      createUserWebhook,
-      contractor_id,
-      name,
-      props.org,
-      issueAlert,
-      actions,
-      url,
-      t,
-    ],
-  )
+    return false
+  }, [
+    createContractorWebhook,
+    createUserWebhook,
+    contractor_id,
+    name,
+    props.org,
+    issueAlert,
+    actions,
+    url,
+    t,
+  ])
 
   return (
     <Section xs={12} lg={12}>

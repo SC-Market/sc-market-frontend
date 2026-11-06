@@ -255,8 +255,7 @@ export function MarkdownRender(props: {
           )
         },
 
-        a({ node, className, children, ...props }) {
-          const href = props.href
+        a({ href, children }) {
           const videoId = plainText ? null : youTubeVideoId(href)
           if (videoId) {
             return <YouTubeFacade videoId={videoId} />
@@ -278,9 +277,7 @@ export function MarkdownRender(props: {
             </Link>
           )
         },
-        img({ node, className, children, ...props }) {
-          const src = props.src
-
+        img({ src, alt, title, width, height }) {
           if (src) {
             let hostname: string
             try {
@@ -301,10 +298,13 @@ export function MarkdownRender(props: {
 
           return plainText ? null : (
             <img
-              {...props}
+              src={src}
+              title={title}
+              width={width}
+              height={height}
               style={{ maxWidth: "100%" }}
               loading="lazy"
-              alt={props.alt || t("appUi.markdown.imageAlt")}
+              alt={alt || t("appUi.markdown.imageAlt")}
             />
           )
         },

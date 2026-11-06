@@ -257,10 +257,7 @@ export function BlueprintDetail() {
           {/* Missions section */}
           {data.missions_rewarding?.length > 0 &&
             (() => {
-              const [expanded, setExpanded] = [
-                missionsExpanded,
-                setMissionsExpanded,
-              ]
+              const [expanded] = [missionsExpanded, setMissionsExpanded]
               const missions = expanded
                 ? data.missions_rewarding
                 : data.missions_rewarding.slice(0, 8)

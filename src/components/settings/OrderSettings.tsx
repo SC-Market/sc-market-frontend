@@ -63,7 +63,6 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     offerSettingId,
     orderSettingId,
     minOrderSizeSettingId,
-    maxOrderSizeSettingId,
     minOrderValueSettingId,
     maxOrderValueSettingId,
   } = useOrderSettings(entityType, entityId)

@@ -499,7 +499,6 @@ export function OffersViewPaginated(props: {
     setMergeModalOpen,
     isMerging,
     handleMergeOffers,
-    selectedOffers,
     totalCost,
     filtersOpen,
     setFiltersOpen,
@@ -515,8 +514,6 @@ export function OffersViewPaginated(props: {
     debouncedSellerUsername,
     activeFiltersCount,
     clearFilters,
-    profile,
-    issueAlert,
   } = useOfferSearch({ mine, assigned, unassigned, contractor, shop_id })
   // Offer lists are primary content on the orders and dashboard pages.
   usePageReady(awaitingData)

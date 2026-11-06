@@ -58,31 +58,6 @@ const createMockStore = () => {
 }
 
 // Mock data
-const mockItemsResponse = {
-  items: [
-    {
-      id: "item-1",
-      name: "Test Weapon",
-      type: "WeaponGun",
-      size: "3",
-      grade: "A",
-      manufacturer: "Aegis Dynamics",
-      image_url: "https://example.com/weapon.jpg",
-    },
-    {
-      id: "item-2",
-      name: "Test Shield",
-      type: "Shield",
-      size: "2",
-      grade: "B",
-      manufacturer: "Origin Jumpworks",
-      image_url: "https://example.com/shield.jpg",
-    },
-  ],
-  total: 2,
-  page: 1,
-  page_size: 20,
-}
 
 describe("WikiItemBrowser", () => {
   let store: ReturnType<typeof createMockStore>

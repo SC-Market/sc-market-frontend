@@ -109,7 +109,7 @@ export const notificationApi = serviceApi.injectEndpoints({
           unread_order_count: number
         }
       },
-      providesTags: (result, error, arg) => [
+      providesTags: () => [
         // Provide the general notifications tag
         "Notifications" as const,
       ],

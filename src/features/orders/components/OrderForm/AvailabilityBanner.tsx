@@ -10,8 +10,6 @@ export function AvailabilityBanner() {
   const {
     availabilityRequirement,
     hasAvailabilitySet,
-    formDisabled,
-    isAvailabilityModalOpen,
     setIsAvailabilityModalOpen,
     orderLimits,
     sellerName,

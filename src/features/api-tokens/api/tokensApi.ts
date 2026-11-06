@@ -1,4 +1,3 @@
-import { BACKEND_URL } from "../../../util/constants"
 import { serviceApi } from "../../../store/service"
 import { unwrapResponse } from "../../../store/api-utils"
 import type { Contractor } from "../../contractor/domain/types"
@@ -18,8 +17,6 @@ export type {
   TokenStats,
   ExtendTokenRequest,
 } from "../domain/types"
-
-const baseUrl = `${BACKEND_URL}/api`
 
 /**
  * API Tokens API endpoints

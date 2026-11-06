@@ -178,7 +178,7 @@ export const accentFill = cached((theme: Theme, color: AccentFill) => {
  * Disabled button colours: a muted label that still reads at AA on Paper,
  * the page and the disabled fill, and an outline at 3:1.
  */
-export const disabledButton = cached((theme: Theme, _key: "all") => {
+export const disabledButton = cached((theme: Theme) => {
   const { paper, page } = surfaces(theme)
   const base = flatten(theme.palette.text.primary, paper)
   const fill = mix(paper, base, 0.12)

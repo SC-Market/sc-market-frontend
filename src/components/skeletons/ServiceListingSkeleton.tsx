@@ -19,11 +19,6 @@ import { useTheme } from "@mui/material/styles"
  */
 export const SERVICE_LISTINGS_PAGE_SIZE = 20
 
-export interface ServiceListingSkeletonProps {
-  /** Kept for callers; cards no longer fade in one after the other. */
-  index?: number
-}
-
 /**
  * Skeleton component for service listing cards
  * Matches the exact structure of actual service cards
@@ -33,8 +28,7 @@ export interface ServiceListingSkeletonProps {
  * its own copy of these cards. With a fade, every swap blanked the cards and
  * faded them back in, so one load looked like several skeletons in a row.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- `index` is accepted, not used
-export function ServiceListingSkeleton(_props: ServiceListingSkeletonProps) {
+export function ServiceListingSkeleton() {
   const theme = useTheme<ExtendedTheme>()
 
   return (

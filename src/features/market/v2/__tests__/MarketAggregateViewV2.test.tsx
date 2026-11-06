@@ -21,7 +21,6 @@ import type {
   MuiLineChart,
 } from "../../../../components/charts/MuiCharts"
 import type { TabbedChartLayout } from "../../../../components/charts/TabbedChartLayout"
-import type { DynamicKlineChart } from "../../../../components/charts/DynamicCharts"
 import type { QualityHistogram } from "../../../../components/market/v2/QualityHistogram"
 import type { QualityBadge } from "../../../../components/market/v2/QualityBadge"
 import type { QualityFilter } from "../../../../components/market/v2/QualityFilter"
@@ -44,7 +43,6 @@ type MuiAreaChartProps = React.ComponentProps<typeof MuiAreaChart>
 type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>
 type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>
 type TabbedChartLayoutProps = React.ComponentProps<typeof TabbedChartLayout>
-type DynamicKlineChartProps = React.ComponentProps<typeof DynamicKlineChart>
 type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>
 type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>
 type QualityFilterProps = React.ComponentProps<typeof QualityFilter>
@@ -168,9 +166,7 @@ vi.mock("../../../../components/charts/TabbedChartLayout", () => ({
 vi.mock("../../../../components/charts/DynamicCharts", () => ({
   // `children` is a render prop receiving the lazily-imported klinecharts module;
   // the stub has no module to hand it, so it renders the container only.
-  DynamicKlineChart: (_props: DynamicKlineChartProps) => (
-    <div data-testid="dynamic-kline-chart" />
-  ),
+  DynamicKlineChart: () => <div data-testid="dynamic-kline-chart" />,
 }))
 
 // Mock V2 components

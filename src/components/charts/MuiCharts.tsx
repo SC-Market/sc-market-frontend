@@ -29,8 +29,6 @@ export function MuiLineChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
-  yAxisLabel,
-  smooth = true,
   yScaleType = "linear",
 }: MuiLineChartProps) {
   const fmt = useFormatters()
@@ -88,8 +86,6 @@ export function MuiAreaChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
-  yAxisLabel,
-  smooth = true,
   gradient = true,
   rightYAxis = false,
   colors,
@@ -179,7 +175,6 @@ export function MuiBarChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
-  yAxisLabel,
   colors,
   xValueFormatter,
 }: MuiBarChartProps) {

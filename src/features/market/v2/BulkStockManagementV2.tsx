@@ -71,11 +71,9 @@ import {
   useGetListingDetailQuery,
   useSearchResourcesQuery,
   type LocationInfo,
-  type QualityBand,
   type VariantAttributes,
 } from "../../../store/api/v2/market"
 import { getQualityMode } from "../../../util/qualityMode"
-import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { HelpLink } from "../../help/components/HelpLink"
@@ -275,7 +273,7 @@ export function BulkStockManagementV2() {
 
 function StockSearchAreaV2() {
   const { t } = useTranslation()
-  const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
+  const { filters, setSearch, setListingId } = useStockFilter()
   const { shopId } = useStockShop()
   const { data: listingsData } = useGetMyListingsQuery({
     pageSize: 100,
@@ -453,66 +451,6 @@ function AllStockLotsGridV2() {
     ),
     [locations],
   )
-
-  // Quality edit cell for tiered mode
-  function QualityTierEditCell(props: GridRenderEditCellParams) {
-    const apiRef = useGridApiContext()
-    return (
-      <TextField
-        select
-        fullWidth
-        size="small"
-        value={props.value ?? ""}
-        inputProps={{
-          "aria-label": t("AllStockLots.qualityTier", "Quality tier"),
-        }}
-        onChange={(e) => {
-          const val = e.target.value === "" ? null : Number(e.target.value)
-          apiRef.current.setEditCellValue({
-            id: props.id,
-            field: props.field,
-            value: val,
-          })
-        }}
-        SelectProps={{ native: true }}
-      >
-        <option value="">—</option>
-        {[1, 2, 3, 4, 5].map((tier) => (
-          <option key={tier} value={tier}>
-            {t("marketUi.bulkStock.tierOption", { tier })}
-          </option>
-        ))}
-      </TextField>
-    )
-  }
-
-  // Quality edit cell for value mode with quality bands.
-  // Stores the selected band mapped value in the quality_tier column field;
-  // handleRowUpdate interprets it as quality_value when qualityBands are present.
-  function QualityBandEditCell(
-    props: GridRenderEditCellParams & { bands: QualityBand[] },
-  ) {
-    const apiRef = useGridApiContext()
-    // Show the current quality_value as the initial selection
-    const currentValue = props.row.quality_value as number | null
-    return (
-      <QualityBandSelect
-        bands={props.bands}
-        value={currentValue}
-        onChange={(val) => {
-          apiRef.current.setEditCellValue({
-            id: props.id,
-            field: props.field,
-            value: val,
-          })
-        }}
-        label=""
-        allowAny
-        size="small"
-        fullWidth
-      />
-    )
-  }
 
   const allLots = lots
     .filter((lot) => !lot.notes?.includes("allocated"))

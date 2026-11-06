@@ -3,15 +3,11 @@ import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 
-export interface MessageListSkeletonProps {
-  index?: number
-}
-
 /**
  * Skeleton component for chat list entries
  * Matches the layout of ChatEntry in MessagingSidebarContent
  */
-export function MessageListSkeleton({ index = 0 }: MessageListSkeletonProps) {
+export function MessageListSkeleton() {
   const theme = useTheme<ExtendedTheme>()
 
   return (

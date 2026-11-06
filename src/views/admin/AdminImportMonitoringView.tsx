@@ -109,10 +109,6 @@ export function AdminImportMonitoringView() {
   }, [hasRunning])
 
   // Adjust polling: slow down when idle
-  const { data: polledData } = useListJobsQuery(undefined, {
-    pollingInterval: hasRunning ? 3000 : 30000,
-    skip: true, // The first query handles fetching; this just adjusts interval
-  })
 
   const handleStart = async (source: ImportSource) => {
     try {

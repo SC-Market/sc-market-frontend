@@ -15,7 +15,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useParams, useNavigate, Link as RouterLink } from "react-router-dom"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -56,7 +55,6 @@ export function BuyOrderDetailV2() {
   const { id } = useParams<{ id: string }>()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useBreakpointDown("sm")
 
   const { data: buyOrder, isLoading, error } = useGetBuyOrderDetailQuery({ id: id! })
   const { data: profile } = useGetUserProfileQuery()

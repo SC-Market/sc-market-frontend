@@ -117,7 +117,7 @@ export function ShopCustomers() {
   const [orderBy, setOrderBy] = useState("order_count")
   const [order, setOrder] = useState<"asc" | "desc">("desc")
 
-  const { data, isLoading } = useGetShopCustomersQuery({
+  const { data } = useGetShopCustomersQuery({
     shopId: shop.shop_id,
     page,
     pageSize,

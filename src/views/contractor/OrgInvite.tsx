@@ -47,31 +47,28 @@ export function OrgInvite() {
 
   const issueAlert = useAlertHook()
 
-  const submitInviteForm = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      // event.preventDefault();
-      if (!currentOrg) return
-      sendInvites({
-        contractor: currentOrg.spectrum_id,
-        users: choices.map((u) => u.username),
-        message: message,
-      })
-        .unwrap()
-        .then(() => {
-          setChoices([])
-          setBuffer("")
+  const submitInviteForm = useCallback(async () => {
+    // event.preventDefault();
+    if (!currentOrg) return
+    sendInvites({
+      contractor: currentOrg.spectrum_id,
+      users: choices.map((u) => u.username),
+      message: message,
+    })
+      .unwrap()
+      .then(() => {
+        setChoices([])
+        setBuffer("")
 
-          issueAlert({
-            message: t("orgInvite.submitted"),
-            severity: "success",
-          })
+        issueAlert({
+          message: t("orgInvite.submitted"),
+          severity: "success",
         })
-        .catch((err) => issueAlert(err))
+      })
+      .catch((err) => issueAlert(err))
 
-      return false
-    },
-    [choices, currentOrg, message, sendInvites, issueAlert, t],
-  )
+    return false
+  }, [choices, currentOrg, message, sendInvites, issueAlert, t])
 
   return (
     <Section xs={12} lg={12}>

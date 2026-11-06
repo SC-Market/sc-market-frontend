@@ -16,7 +16,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useParams, Link as RouterLink } from "react-router-dom"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -70,7 +69,6 @@ export function ListingDetailV2() {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const now = useNow()
-  const isMobile = useBreakpointDown("sm")
 
   const {
     data: listingData,
@@ -100,15 +98,6 @@ export function ListingDetailV2() {
       .filter((t): t is number => t != null)
     if (!tiers.length) return null
     return { min: Math.min(...tiers), max: Math.max(...tiers) }
-  }, [items])
-
-  const qualityValueRange = useMemo(() => {
-    const vals = items
-      .flatMap((i) => i.variants)
-      .map((v) => v.attributes.quality_value)
-      .filter((v): v is number => v != null)
-    if (!vals.length) return null
-    return { min: Math.min(...vals), max: Math.max(...vals) }
   }, [items])
 
   const priceRange = useMemo(() => {

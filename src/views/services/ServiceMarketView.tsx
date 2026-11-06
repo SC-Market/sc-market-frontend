@@ -2,7 +2,6 @@ import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings.lazy"
-import { useServiceSidebar } from "../../features/contracting/hooks/ServiceSidebar"
 import React, { Suspense } from "react"
 import { MARKET_FILTER_PANEL_SX } from "../../components/layout/MarketPageLayout"
 import { ServiceListingsSkeleton } from "../../components/skeletons/MarketSearchSkeleton"
@@ -14,7 +13,6 @@ import { PageBusy } from "../../components/metadata/PageReady"
 export function ServiceMarketView() {
   const theme = useTheme<ExtendedTheme>()
   const xs = useIsMobile()
-  const [open] = useServiceSidebar()
 
   return (
     <>

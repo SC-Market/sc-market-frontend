@@ -6,7 +6,6 @@ import {
   Link as MaterialLink,
   TableCell,
   TableRow,
-  Theme,
   Typography,
   FormControl,
   InputLabel,
@@ -22,7 +21,6 @@ import {
 } from "@mui/material"
 import { AdminUser } from "../../datatypes/User"
 import { Link } from "react-router-dom"
-import { styled } from "@mui/material/styles"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import {
@@ -140,16 +138,6 @@ function PeopleRow(props: {
   )
 }
 
-const SearchIconWrapper = styled("div")((args: { theme: Theme }) => ({
-  padding: args.theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}))
-
 const headCells: readonly HeadCell<AdminUser>[] = [
   {
     id: "username",
@@ -177,11 +165,7 @@ const headCells: readonly HeadCell<AdminUser>[] = [
   },
 ]
 
-export function AdminUserList(props: {
-  contractors?: boolean
-  members?: boolean
-  customers?: boolean
-}): ReactElement {
+export function AdminUserList(): ReactElement {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)

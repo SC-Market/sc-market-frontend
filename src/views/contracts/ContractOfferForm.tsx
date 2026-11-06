@@ -210,7 +210,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               allowNegative={false}
               customInput={TextField}
               thousandSeparator
-              onValueChange={async (values, sourceInfo) => {
+              onValueChange={async (values) => {
                 setCollateral(+(values.floatValue || 0))
               }}
               fullWidth={true}
@@ -249,7 +249,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               allowNegative={false}
               customInput={TextField}
               thousandSeparator
-              onValueChange={async (values, sourceInfo) => {
+              onValueChange={async (values) => {
                 console.log(values)
                 setCost(values.floatValue || 0)
               }}

@@ -110,31 +110,6 @@ export function ViewOrder() {
     return !!(order.contractor || order.assigned_to)
   }, [order])
 
-  const displayApply = useMemo(() => {
-    if (!order) {
-      return false
-    }
-
-    return (
-      profile &&
-      !(order.contractor || order.assigned_to) &&
-      order.status === "not-started"
-    )
-  }, [order, profile])
-
-  const displayApplicants = useMemo(() => {
-    if (!order) {
-      return false
-    }
-
-    return (
-      amCustomer &&
-      !order.assigned_to &&
-      !order.contractor &&
-      order.status === "not-started"
-    )
-  }, [amCustomer, order])
-
   return (
     <DetailPageLayout
       headerActions={<HelpLink guide="howOrdersWork" />}
@@ -182,10 +157,8 @@ export function ViewOrder() {
             <Tabs
               value={activeTab}
               onChange={(_, newValue) => {
-                // Calculate messages tab index
-                let tabIndex = 0
-                const detailsTab = tabIndex++
-                const messagesTab = isMobile && isAssigned ? tabIndex++ : -1
+                // The messages tab follows the details tab (index 0)
+                const messagesTab = isMobile && isAssigned ? 1 : -1
 
                 // If clicking messages tab on mobile, navigate to chat
                 if (isMobile && newValue === messagesTab && chatObj?.chat_id) {

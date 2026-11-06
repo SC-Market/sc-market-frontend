@@ -121,7 +121,6 @@ const CreateOrderFormComponent = React.forwardRef<
     orderLimits,
     sellerName,
     submitOrder,
-    issueAlert,
   } = useCreateOrderForm({
     contractor_id: props.contractor_id,
     assigned_to: props.assigned_to,
@@ -444,7 +443,7 @@ const CreateOrderFormComponent = React.forwardRef<
               allowNegative={false}
               customInput={TextField}
               thousandSeparator
-              onValueChange={async (values, sourceInfo) => {
+              onValueChange={async (values) => {
                 setState({
                   ...state,
                   collateral: +(values.floatValue || 0),
@@ -486,7 +485,7 @@ const CreateOrderFormComponent = React.forwardRef<
               allowNegative={false}
               customInput={TextField}
               thousandSeparator
-              onValueChange={async (values, sourceInfo) => {
+              onValueChange={async (values) => {
                 console.log(values)
                 setState({
                   ...state,

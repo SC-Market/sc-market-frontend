@@ -17,40 +17,37 @@ export function CreateOrgInviteCode() {
 
   const issueAlert = useAlertHook()
 
-  const submitCreateForm = useCallback(
-    async (_event: React.SyntheticEvent) => {
-      // event.preventDefault();
-      const res = await createContractorInvite({
-        contractor: currentOrg!.spectrum_id,
-        body: {
-          max_uses: maxUses,
-        },
+  const submitCreateForm = useCallback(async () => {
+    // event.preventDefault();
+    const res = await createContractorInvite({
+      contractor: currentOrg!.spectrum_id,
+      body: {
+        max_uses: maxUses,
+      },
+    })
+
+    if (res?.data && !res?.error) {
+      setMaxUses(0)
+
+      issueAlert({
+        message: t("inviteCodes.submitted"),
+        severity: "success",
       })
-
-      if (res?.data && !res?.error) {
-        setMaxUses(0)
-
-        issueAlert({
-          message: t("inviteCodes.submitted"),
-          severity: "success",
-        })
-      } else {
-        let reason = t("sharedUi.errors.unknown")
-        if (res.error && "data" in res.error && res.error.data) {
-          const errData = res.error.data as { error?: string; message?: string }
-          reason = errData.error ?? errData.message ?? reason
-        } else if (res.error && "message" in res.error) {
-          reason = res.error.message ?? reason
-        }
-        issueAlert({
-          message: t("inviteCodes.failed_submit", { reason }),
-          severity: "error",
-        })
+    } else {
+      let reason = t("sharedUi.errors.unknown")
+      if (res.error && "data" in res.error && res.error.data) {
+        const errData = res.error.data as { error?: string; message?: string }
+        reason = errData.error ?? errData.message ?? reason
+      } else if (res.error && "message" in res.error) {
+        reason = res.error.message ?? reason
       }
-      return false
-    },
-    [createContractorInvite, currentOrg, maxUses, issueAlert, t],
-  )
+      issueAlert({
+        message: t("inviteCodes.failed_submit", { reason }),
+        severity: "error",
+      })
+    }
+    return false
+  }, [createContractorInvite, currentOrg, maxUses, issueAlert, t])
 
   return (
     <Section xs={12} lg={12}>

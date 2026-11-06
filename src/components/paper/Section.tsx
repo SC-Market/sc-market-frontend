@@ -9,8 +9,6 @@ export const Section = React.forwardRef<
     children: React.ReactNode
     fill?: boolean
     h?: number
-    outline?: boolean
-    pad?: boolean
     title?: string | React.ReactElement
     element_title?: React.ReactElement
     subtitle?: React.ReactElement
@@ -23,8 +21,6 @@ export const Section = React.forwardRef<
   const {
     fill,
     h,
-    outline,
-    pad,
     title,
     disablePadding,
     children,

@@ -14,8 +14,7 @@ export function LoginPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [searchParams] = useSearchParams()
-  const { isAuthenticated, isLoading, errorMessage, clearError } =
-    usePageLogin()
+  const { isAuthenticated, errorMessage, clearError } = usePageLogin()
 
   if (isAuthenticated) {
     const redirectTo = safeRedirectPath(

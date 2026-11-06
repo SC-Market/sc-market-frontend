@@ -40,63 +40,6 @@ function getInitials(name: string): string {
     .toUpperCase()
 }
 
-function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-  const totalShops = shops.length
-  const activeShops = shops.filter((s) => s.status === "active").length
-
-  return (
-    <Grid container spacing={2} sx={{ mb: 3 }}>
-      {[
-        { label: t("shops.mine.totalShops"), value: totalShops.toString() },
-        {
-          label: t("shops.mine.activeShops"),
-          value: activeShops.toString(),
-          color: "success.main",
-        },
-        {
-          label: t("shops.mine.customOrders"),
-          value: shops.filter((s) => s.accepts_custom_orders).length.toString(),
-        },
-        {
-          label: t("shops.mine.languages"),
-          value: [
-            ...new Set(shops.flatMap((s) => s.supported_languages)),
-          ].length.toString(),
-          color: "secondary.main",
-        },
-      ].map((stat) => (
-        <Grid item xs={6} md={3} key={stat.label}>
-          <Card
-            variant="outlined"
-            sx={{
-              p: 2,
-              transition: "border-color 0.2s",
-              "&:hover": { borderColor: theme.palette.divider },
-            }}
-          >
-            <Typography
-              variant="overline"
-              color="text.secondary"
-              sx={{ fontSize: "0.7rem", letterSpacing: "0.1em" }}
-            >
-              {stat.label}
-            </Typography>
-            <Typography
-              variant="h4"
-              fontWeight={700}
-              sx={{ color: stat.color || "text.primary", lineHeight: 1.2 }}
-            >
-              {stat.value}
-            </Typography>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
-  )
-}
-
 function ShopManagementCard({ shop }: { shop: ShopResponse }) {
   const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()

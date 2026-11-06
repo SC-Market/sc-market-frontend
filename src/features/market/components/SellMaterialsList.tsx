@@ -262,7 +262,7 @@ export function SellMaterialsList(): ReactElement {
                     .map((c) => c.kind)
                     .filter(onlyUnique),
                 )
-                .map((choice, idx) => (
+                .map((choice) => (
                   <MenuItem value={choice} key={choice}>
                     {t(`SellMaterialsList.kind.${choice}`, choice)}
                   </MenuItem>

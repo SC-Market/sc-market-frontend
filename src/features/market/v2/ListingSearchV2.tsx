@@ -62,7 +62,6 @@ import {
   NumberedPagination,
 } from "../../../components/pagination/NumberedPagination"
 import { EmptyListings } from "../../../components/empty-states"
-import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { ViewModeToggle, useViewMode } from "../../../hooks/market/useViewMode"
 import { ListingTableV2 } from "./components/ListingTableV2"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
@@ -120,7 +119,6 @@ export function ListingSearchV2() {
   const { t } = useTranslation()
   const showMobileSidebar = useBreakpointDown("lg")
   const isMobile = useIsMobile()
-  const marketSidebarOpen = useMarketSidebarExp()
   const [drawerOpen] = useDrawerOpen()
   const [viewMode, setViewMode] = useViewMode()
   const { flags } = useFeatureFlag()
@@ -285,7 +283,6 @@ export function ListingSearchV2() {
                     error={!!error}
                     onRetry={refetch}
                     gridBreakpoints={gridBreakpoints}
-                    marketSidebarOpen={marketSidebarOpen}
                     ref={ref}
                   />
                 ) : (
@@ -295,7 +292,6 @@ export function ListingSearchV2() {
                     error={!!error}
                     onRetry={refetch}
                     gridBreakpoints={gridBreakpoints}
-                    marketSidebarOpen={marketSidebarOpen}
                     ref={ref}
                   />
                 )}
@@ -360,7 +356,6 @@ export function ListingSearchV2() {
                         error={!!error}
                         onRetry={refetch}
                         gridBreakpoints={gridBreakpoints}
-                        marketSidebarOpen={marketSidebarOpen}
                         ref={ref}
                       />
                     ) : (
@@ -370,7 +365,6 @@ export function ListingSearchV2() {
                         error={!!error}
                         onRetry={refetch}
                         gridBreakpoints={gridBreakpoints}
-                        marketSidebarOpen={marketSidebarOpen}
                         ref={ref}
                       />
                     )}
@@ -976,16 +970,12 @@ export interface ListingGridProps {
   error: boolean
   onRetry: () => void
   gridBreakpoints: Record<string, number>
-  marketSidebarOpen: boolean
 }
 
 type ListingOrAd = WithAds<ListingSearchResult>
 
 const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
-  (
-    { listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen },
-    ref,
-  ) => {
+  ({ listings, loading, error, onRetry, gridBreakpoints }, ref) => {
     const listingsWithAds = useMemo(
       (): ListingOrAd[] => insertAds(listings, (listing) => listing.listing_id),
       [listings],
@@ -1009,7 +999,7 @@ const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
             .fill(undefined)
             .map((_, i) => (
               <Grid item {...gridBreakpoints} key={i}>
-                <ListingSkeleton index={i} sidebarOpen={marketSidebarOpen} />
+                <ListingSkeleton />
               </Grid>
             ))}
         </Grid>

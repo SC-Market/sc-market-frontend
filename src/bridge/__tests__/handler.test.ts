@@ -54,8 +54,8 @@ function setup(
   const cache = new MemoryCache()
   const pending: Promise<unknown>[] = []
   const next = vi.fn(async () => new Response("NEXT", { status: 200 }))
-  const assets = vi.fn(
-    async (_input: Request | URL | string) =>
+  const assets = vi.fn<(input: Request | URL | string) => Promise<Response>>(
+    async () =>
       new Response(SHELL, {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       }),

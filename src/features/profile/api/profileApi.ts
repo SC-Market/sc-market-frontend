@@ -106,7 +106,7 @@ export const userApi = serviceApi.injectEndpoints({
       },
       // Keep user profile in cache for 5 minutes (frequently accessed)
       keepUnusedDataFor: 300,
-      providesTags: (result, error, arg) => [
+      providesTags: (result) => [
         {
           type: "Profile" as const,
           id: result?.username,
@@ -128,7 +128,7 @@ export const userApi = serviceApi.injectEndpoints({
     }),
     profileGetDiscordSettings: builder.query<DiscordSettings, void>({
       query: () => `${baseUrl}/settings/discord`,
-      providesTags: (result, error) => [{ type: "MyProfile" as const }],
+      providesTags: () => [{ type: "MyProfile" as const }],
     }),
     profileUseOfficialDiscordSettings: builder.mutation<void, void>({
       query: () => ({
@@ -145,7 +145,7 @@ export const userApi = serviceApi.injectEndpoints({
         spectrum_id
           ? `${baseUrl}/availability/contractor/${spectrum_id}`
           : `${baseUrl}/availability`,
-      providesTags: (result, error, arg) => [
+      providesTags: () => [
         { type: "MyProfile" as const },
         "MyProfile" as const,
       ],
@@ -236,7 +236,7 @@ export const userApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      async onQueryStarted(body, { dispatch, queryFulfilled, getState }) {
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
         await createOptimisticUpdate(
           (dispatch) => {
             const patches: Array<{ undo: () => void }> = []
@@ -265,7 +265,7 @@ export const userApi = serviceApi.injectEndpoints({
           dispatch,
         )
       },
-      invalidatesTags: (result, error, arg) => [
+      invalidatesTags: (result) => [
         {
           type: "Profile" as const,
           id: result?.username,
