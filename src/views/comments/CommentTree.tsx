@@ -1,7 +1,6 @@
 import {
   Comment,
   RecruitingPost,
-  useRecruitingCommentOnPostMutation,
 } from "../../features/recruiting/api/recruitingApi"
 import {
   Avatar,
@@ -20,9 +19,9 @@ import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { ReplyRounded } from "@mui/icons-material"
 import {
-  useCommentsDeleteMutation,
-  useCommentsReplyMutation,
-} from "../../features/recruiting/api/commentsApi"
+  useDeleteComment,
+  useReplyToComment,
+} from "../../features/recruiting/hooks/useCommentActions"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { TrashCan } from "mdi-material-ui"
@@ -42,9 +41,8 @@ export function CommentTree(props: {
   const [replyOpen, setReplyOpen] = useState(false)
   const { t } = useTranslation()
 
-  const [submitComment] = useCommentsReplyMutation()
-  const [deleteComment] = useCommentsDeleteMutation()
-  const [submitCommentPost] = useRecruitingCommentOnPostMutation()
+  const replyToComment = useReplyToComment(post?.post_id)
+  const deleteComment = useDeleteComment(post?.post_id)
   const [content, setContent] = useState("")
 
   const { data: profile } = useGetUserProfileQuery()
@@ -102,12 +100,7 @@ export function CommentTree(props: {
             <IconButton
               color={"error"}
               aria-label={t("comments.delete", "Delete comment")}
-              onClick={() =>
-                deleteComment({
-                  comment_id: comment.comment_id,
-                  post_id: post?.post_id,
-                })
-              }
+              onClick={() => deleteComment(comment.comment_id)}
             >
               <TrashCan />
             </IconButton>
@@ -130,15 +123,7 @@ export function CommentTree(props: {
 
             <Button
               onClick={() => {
-                if (post) {
-                  submitCommentPost({
-                    reply_to: comment.comment_id,
-                    content,
-                    post_id: post?.post_id,
-                  })
-                } else {
-                  submitComment({ comment_id: comment.comment_id, content })
-                }
+                replyToComment(comment.comment_id, content)
                 setContent("")
                 setReplyOpen(false)
               }}

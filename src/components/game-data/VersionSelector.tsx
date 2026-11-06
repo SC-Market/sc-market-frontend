@@ -22,9 +22,9 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import UpdateIcon from "@mui/icons-material/Update"
 import {
   useGetActiveVersionsQuery,
-  useSelectVersionMutation,
   type GameVersion,
 } from "../../features/game-data/api/gameDataApi"
+import { useSelectGameVersion } from "../../features/game-data/hooks/useGameDataActions"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNow } from "../../util/format"
 
@@ -59,7 +59,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   const theme = useTheme<ExtendedTheme>()
   const now = useNow()
   const { data: activeVersions, isLoading } = useGetActiveVersionsQuery()
-  const [selectVersion] = useSelectVersionMutation()
+  const persistVersion = useSelectGameVersion()
 
   const [selectedVersionId, setSelectedVersionId] = useState<string>("")
 
@@ -102,14 +102,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
       )?.[0] || "LIVE"
 
     // Call API to persist selection (if authenticated)
-    try {
-      await selectVersion({
-        selectVersionRequest: { version_id: versionId },
-      }).unwrap()
-    } catch {
-      // Ignore auth errors for guest users
-      console.debug("Version selection not persisted (guest user)")
-    }
+    await persistVersion(versionId)
 
     onVersionChange?.(versionId, versionType)
   }

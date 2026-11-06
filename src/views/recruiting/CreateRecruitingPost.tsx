@@ -1,19 +1,14 @@
 import { Button, Grid, Link, TextField, Typography } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Section } from "../../components/paper/Section"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import {
-  RecruitingPost,
-  useRecruitingCreatePostMutation,
-  useRecruitingUpdatePostMutation,
-} from "../../features/recruiting/api/recruitingApi"
+import { RecruitingPost } from "../../features/recruiting/api/recruitingApi"
+import { useSubmitRecruitingPost } from "../../features/recruiting/hooks/useSubmitRecruitingPost"
 import { useSelectedOrg } from "../../hooks/login/useSelectedOrg"
 import throttle from "lodash/throttle"
 import { RecruitingPostView } from "./RecruitingPostView"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -40,50 +35,16 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
     }
   }, [post])
 
-  const issueAlert = useAlertHook()
   // A new post is for the org selected in the sidebar (the same org that
   // /recruiting/post/create checks Manage Recruiting in); an edit keeps its org.
   const { org: selectedOrg } = useSelectedOrg()
   const contractor = post?.contractor ?? selectedOrg
 
-  const [
-    createPost, // This is the mutation trigger
-  ] = useRecruitingCreatePostMutation()
-  const [
-    updatePost, // This is the mutation trigger
-  ] = useRecruitingUpdatePostMutation()
-
-  const navigate = useNavigate()
-
+  const submit = useSubmitRecruitingPost(post)
   const submitPost = useCallback(async () => {
-    let request
-    if (!post) {
-      if (!contractor) return false
-      request = createPost({
-        ...state,
-        contractor: contractor.spectrum_id,
-      })
-    } else {
-      request = updatePost({
-        body: state,
-        post_id: post.post_id,
-      })
-    }
-
-    request
-      .unwrap()
-      .then((res) => {
-        issueAlert({
-          message: t("recruiting_post.alert.submitted"),
-          severity: "success",
-        })
-
-        navigate(`/recruiting/post/${res.post_id}`)
-      })
-      .catch(issueAlert)
-
+    await submit(state, contractor?.spectrum_id)
     return false
-  }, [contractor, createPost, post, issueAlert, state, updatePost, t, navigate])
+  }, [submit, state, contractor])
 
   const [stateBuffer, setStateBuffer] = useState(state)
 

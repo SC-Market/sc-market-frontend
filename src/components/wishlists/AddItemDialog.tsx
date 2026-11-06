@@ -33,10 +33,8 @@ import {
   useSearchGameItemsQuery,
   useSearchBlueprintsQuery,
 } from "../../features/game-data/api/gameDataApi"
-import {
-  useAddWishlistItemMutation,
-  type AcquisitionMode,
-} from "../../features/wishlists/api/wishlistsApi"
+import type { AcquisitionMode } from "../../features/wishlists/api/wishlistsApi"
+import { useAddWishlistItem } from "../../features/wishlists/hooks/useWishlistActions"
 import { debounce } from "lodash"
 import { Link } from "react-router-dom"
 import { GAME_DATA_PATHS } from "../../routes/paths"
@@ -77,7 +75,7 @@ export function AddItemDialog({
       { query: searchQuery },
       { skip: searchQuery.length < 2 },
     )
-  const [addItem, { isLoading: isAdding }] = useAddWishlistItemMutation()
+  const { add: addItem, isAdding } = useAddWishlistItem(wishlistId)
 
   // Search for blueprints that produce the selected item
   const { data: blueprintData } = useSearchBlueprintsQuery(
@@ -151,30 +149,20 @@ export function AddItemDialog({
     }
 
     setError(null)
-    try {
-      await addItem({
-        wishlistId,
-        addWishlistItemRequest: {
-          game_item_id: selectedItem.id,
-          desired_quantity: quantity,
-          desired_quality_tier: qualityTier || undefined,
-          blueprint_id:
-            acquisitionMode === "craft"
-              ? selectedBlueprintId || undefined
-              : undefined,
-          acquisition_mode: acquisitionMode,
-          priority,
-          notes: notes || undefined,
-        },
-      }).unwrap()
-      handleClose()
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : t("marketUi.addItemDialog.addFailed")
-      setError(message)
-    }
+    const failure = await addItem({
+      game_item_id: selectedItem.id,
+      desired_quantity: quantity,
+      desired_quality_tier: qualityTier || undefined,
+      blueprint_id:
+        acquisitionMode === "craft"
+          ? selectedBlueprintId || undefined
+          : undefined,
+      acquisition_mode: acquisitionMode,
+      priority,
+      notes: notes || undefined,
+    })
+    if (failure) setError(failure)
+    else handleClose()
   }
 
   return (

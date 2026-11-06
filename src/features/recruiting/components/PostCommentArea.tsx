@@ -1,10 +1,8 @@
 import React, { useState } from "react"
 import { Box, Button, Grid, TextField } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import {
-  RecruitingPost,
-  useRecruitingCommentOnPostMutation,
-} from "../api/recruitingApi"
+import { RecruitingPost } from "../api/recruitingApi"
+import { useCommentOnPost } from "../hooks/useCommentActions"
 import { CommentTree } from "../../../views/comments/CommentTree"
 import { Comment } from "../api/recruitingApi"
 
@@ -15,7 +13,7 @@ interface PostCommentAreaProps {
 
 export function PostCommentArea(props: PostCommentAreaProps) {
   const { post, comments } = props
-  const [submitCommentPost] = useRecruitingCommentOnPostMutation()
+  const commentOnPost = useCommentOnPost()
   const [content, setContent] = useState("")
   const { t } = useTranslation()
 
@@ -36,7 +34,7 @@ export function PostCommentArea(props: PostCommentAreaProps) {
 
           <Button
             onClick={() => {
-              submitCommentPost({ content, post_id: post!.post_id })
+              commentOnPost(post!.post_id, content)
               setContent("")
             }}
           >

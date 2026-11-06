@@ -5,13 +5,9 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { AccessTimeRounded } from "@mui/icons-material"
 import { useCurrentChat } from "../hooks/CurrentChat"
-import {
-  useSendChatMessageMutation,
-  useGetChatByIDQuery,
-} from "../api/chatsApi"
+import { useGetChatByIDQuery } from "../api/chatsApi"
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
 import {
   MessageHeader,
@@ -22,6 +18,7 @@ import {
 import type { Message } from "../domain/types"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useChatSocket } from "../hooks/useChatSocket"
+import { useSendChatMessage } from "../hooks/useChatActions"
 import { useNow } from "../../../util/format"
 
 /**
@@ -36,7 +33,7 @@ export function MessagesBody(props: {
   const isMobile = props.forceDesktop ? false : isMobileQuery
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
-  const [sendChatMessage] = useSendChatMessageMutation()
+  const sendChatMessage = useSendChatMessage()
   const { data: profile } = useGetUserProfileQuery()
 
   useChatSocket(currentChat?.chat_id, setCurrentChat)
@@ -118,31 +115,12 @@ export function MessagesBody(props: {
     }
   }, [chatFromCache, currentChat, setCurrentChat])
 
-  const issueAlert = useAlertHook()
-
   const onSend = useCallback(
     (content: string) => {
       if (content && currentChat && profile?.username) {
-        console.log("[MessagesBody] Sending message:", {
-          content,
-          username: profile.username,
-          chat_id: currentChat.chat_id,
-        })
         // RTK Query handles optimistic updates, so we just send the message
         // The cache update will sync to currentChat via the useEffect
-        sendChatMessage({
-          chat_id: currentChat.chat_id,
-          content,
-          username: profile.username,
-        })
-          .unwrap()
-          .then((response) => {
-            console.log("[MessagesBody] Message sent successfully:", response)
-          })
-          .catch((error) => {
-            console.error("[MessagesBody] Message send failed:", error)
-            issueAlert(error)
-          })
+        sendChatMessage(currentChat.chat_id, content, profile.username)
       } else {
         console.warn("[MessagesBody] Cannot send - missing data:", {
           hasContent: !!content,
@@ -151,7 +129,7 @@ export function MessagesBody(props: {
         })
       }
     },
-    [currentChat, profile?.username, sendChatMessage, issueAlert],
+    [currentChat, profile?.username, sendChatMessage],
   )
 
   const { t } = useTranslation()

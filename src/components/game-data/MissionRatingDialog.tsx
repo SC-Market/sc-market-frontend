@@ -31,7 +31,7 @@ import {
   Alert,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useRateMissionMutation } from "../../features/game-data/api/gameDataApi"
+import { useRateMission } from "../../features/game-data/hooks/useGameDataActions"
 
 export interface MissionRatingDialogProps {
   open: boolean
@@ -74,7 +74,7 @@ export function MissionRatingDialog({
   const [error, setError] = useState<string | null>(null)
 
   // RTK Query mutation
-  const [rateMission, { isLoading }] = useRateMissionMutation()
+  const { rate, isLoading } = useRateMission(missionId)
 
   // Update form when existingRating changes
   useEffect(() => {
@@ -124,26 +124,15 @@ export function MissionRatingDialog({
 
     setError(null)
 
-    try {
-      // Submit rating (Requirement 49.8, 49.9)
-      await rateMission({
-        missionId: missionId,
-        body: {
-          difficulty_rating: difficultyRating,
-          satisfaction_rating: satisfactionRating,
-          rating_comment: comment || undefined,
-        },
-      }).unwrap()
-
-      // Close dialog on success
-      handleClose()
-    } catch (err: unknown) {
-      // Handle error
-      const errorMessage =
-        (err instanceof Error ? err.message : undefined) ||
-        t("missionToolsUi.errorSubmitFailed")
-      setError(errorMessage)
-    }
+    // Submit rating (Requirement 49.8, 49.9)
+    const failure = await rate({
+      difficulty_rating: difficultyRating,
+      satisfaction_rating: satisfactionRating,
+      rating_comment: comment || undefined,
+    })
+    if (failure) setError(failure)
+    // Close dialog on success
+    else handleClose()
   }
 
   return (

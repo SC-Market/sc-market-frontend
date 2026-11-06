@@ -1,7 +1,5 @@
-import {
-  RecruitingPost,
-  useRecruitingUpvotePostMutation,
-} from "../../features/recruiting/api/recruitingApi"
+import { RecruitingPost } from "../../features/recruiting/api/recruitingApi"
+import { useUpvoteRecruitingPost } from "../../features/recruiting/hooks/useCommentActions"
 import { Button } from "@mui/material"
 import { KeyboardArrowUpRounded } from "@mui/icons-material"
 import React from "react"
@@ -12,9 +10,7 @@ export function RecruitmentVotes(props: { post: RecruitingPost }) {
   const { post } = props
   const { t } = useTranslation()
 
-  const [
-    doUpvote, // This is the mutation trigger
-  ] = useRecruitingUpvotePostMutation()
+  const doUpvote = useUpvoteRecruitingPost()
 
   const { data: profile } = useGetUserProfileQuery()
 

@@ -168,6 +168,21 @@ export function useRemoveCartItem() {
   )
 }
 
+/** Remove a cart item without an alert (the cart drawer: the row goes). */
+export function useRemoveCartItemQuietly() {
+  const [removeCartItem] = useRemoveCartItemMutation()
+  return useCallback(
+    async (cartItemId: string) => {
+      try {
+        await removeCartItem({ id: cartItemId }).unwrap()
+      } catch {
+        /* silent */
+      }
+    },
+    [removeCartItem],
+  )
+}
+
 /** Buy a variant now (an order, not a cart item). */
 export function useBuyNow() {
   const { t } = useTranslation()

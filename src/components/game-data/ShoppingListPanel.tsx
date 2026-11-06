@@ -37,12 +37,11 @@ import {
   useGetWishlistsQuery,
   useGetWishlistQuery,
   useGenerateShoppingListQuery,
-  useUpdateWishlistItemMutation,
-  useRemoveWishlistItemMutation,
   type ShoppingListMaterial,
   type WishlistItemWithDetails,
 } from "../../features/wishlists/api/wishlistsApi"
 import { GameItemAvatar } from "../game-data/GameItemAvatar"
+import { useWishlistItemActions } from "../../features/wishlists/hooks/useWishlistActions"
 import { MARKET_PATHS } from "../../routes/paths"
 
 /** Format SCU quantity */
@@ -216,8 +215,7 @@ function BlueprintItemRow({
   wishlistId: string
 }) {
   const { t } = useTranslation()
-  const [updateItem] = useUpdateWishlistItemMutation()
-  const [removeItem] = useRemoveWishlistItemMutation()
+  const { setQuantity, remove } = useWishlistItemActions(wishlistId)
 
   return (
     <Stack direction="row" spacing={0.75} alignItems="center">
@@ -235,18 +233,14 @@ function BlueprintItemRow({
         value={item.desired_quantity}
         onChange={(e) => {
           const qty = Math.max(1, parseInt(e.target.value) || 1)
-          updateItem({
-            wishlistId,
-            itemId: item.item_id,
-            updateWishlistItemRequest: { desired_quantity: qty },
-          })
+          setQuantity(item.item_id, qty)
         }}
         inputProps={{ min: 1, style: { textAlign: "center" } }}
         sx={{ width: 50, "& input": { py: 0.25, fontSize: "0.8rem" } }}
       />
       <IconButton
         size="small"
-        onClick={() => removeItem({ wishlistId, itemId: item.item_id })}
+        onClick={() => remove(item.item_id)}
         aria-label={
           item.game_item_name
             ? t("shoppingListUi.panel.removeNamed", {

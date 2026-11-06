@@ -30,9 +30,9 @@ import {
 } from "@mui/icons-material"
 import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
 import throttle from "lodash/throttle"
-import { useCreateChatMutation, useGetMyChatsQuery } from "../api/chatsApi"
+import { useGetMyChatsQuery } from "../api/chatsApi"
+import { useCreateChat } from "../hooks/useChatActions"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 function MessageHeader(props: {
   target: string
@@ -417,9 +417,7 @@ export function CreateMessageGroupBody() {
     retrieve()
   }, [retrieve])
 
-  const [createChatMutation, { isLoading: isCreating }] =
-    useCreateChatMutation()
-  const issueAlert = useAlertHook()
+  const { create: createChatMutation, isCreating } = useCreateChat()
 
   // Refetch chats after creation to get the new chat
   const { refetch: refetchChats } = useGetMyChatsQuery()
@@ -440,31 +438,19 @@ export function CreateMessageGroupBody() {
     }
 
     setError(null)
-    createChatMutation({ users: targetObject.map((u) => u.username) })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("messages.chatCreated", {
-            defaultValue: "Chat created",
-          }),
-          severity: "success",
-        })
-        // Refetch chats to get the newly created chat
-        refetchChats()
-        setGroupCreate(false)
-        setTarget("")
-        setTargetObject([])
-        setError(null)
-      })
-      .catch((err) => {
-        issueAlert(err)
-        setError(
-          err && "data" in err && err.data
-            ? (err.data as { error?: { message?: string } })?.error?.message ||
-                t("messagesUi2.createChat.failed")
-            : t("messagesUi2.createChat.failed"),
-        )
-      })
+    const failure = await createChatMutation(
+      targetObject.map((u) => u.username),
+    )
+    if (failure) {
+      setError(failure)
+    } else {
+      // Refetch chats to get the newly created chat
+      refetchChats()
+      setGroupCreate(false)
+      setTarget("")
+      setTargetObject([])
+      setError(null)
+    }
   }
 
   const removeUser = (userToRemove: User) => {

@@ -48,7 +48,7 @@ import {
   Info,
 } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
-import { useUpdateWishlistMutation } from "../../features/wishlists/api/wishlistsApi"
+import { useWishlistSharing } from "../../features/wishlists/hooks/useWishlistActions"
 import type { Wishlist } from "../../features/wishlists/api/wishlistsApi"
 
 export interface WishlistShareProps {
@@ -79,7 +79,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
   const [success, setSuccess] = useState<string | null>(null)
 
   // RTK Query mutation
-  const [updateWishlist, { isLoading }] = useUpdateWishlistMutation()
+  const sharing = useWishlistSharing(wishlist.wishlist_id)
+  const { isLoading } = sharing
 
   // Reset state when wishlist changes
   useEffect(() => {
@@ -119,24 +120,12 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
     setError(null)
     setSuccess(null)
 
-    try {
-      await updateWishlist({
-        wishlistId: wishlist.wishlist_id,
-        updateWishlistRequest: {
-          is_public: checked,
-        },
-      }).unwrap()
-
+    const result = await sharing.setPublic(checked)
+    if ("success" in result) {
       setIsPublic(checked)
-      setSuccess(
-        checked
-          ? t("wishlistsUi.share.nowPublic")
-          : t("wishlistsUi.share.nowPrivate"),
-      )
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : t("wishlistsUi.share.privacyError")
-      setError(errorMessage)
+      setSuccess(result.success)
+    } else {
+      setError(result.error)
       // Revert toggle on error
       setIsPublic(!checked)
     }
@@ -147,24 +136,12 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
     setError(null)
     setSuccess(null)
 
-    try {
-      await updateWishlist({
-        wishlistId: wishlist.wishlist_id,
-        updateWishlistRequest: {
-          is_collaborative: checked,
-        },
-      }).unwrap()
-
+    const result = await sharing.setCollaborative(checked)
+    if ("success" in result) {
       setIsCollaborative(checked)
-      setSuccess(
-        checked
-          ? t("wishlistsUi.share.collabEnabled")
-          : t("wishlistsUi.share.collabDisabled"),
-      )
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : t("wishlistsUi.share.collabError")
-      setError(errorMessage)
+      setSuccess(result.success)
+    } else {
+      setError(result.error)
       // Revert toggle on error
       setIsCollaborative(!checked)
     }

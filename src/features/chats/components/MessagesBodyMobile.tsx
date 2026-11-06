@@ -38,17 +38,14 @@ import {
 } from "../../profile/api/profileApi"
 import { replaceDiscordTimestamps } from "../messages/utils/timestampFormatter"
 import { useCurrentChat } from "../hooks/CurrentChat"
-import {
-  useSendChatMessageMutation,
-  useGetChatByIDQuery,
-} from "../api/chatsApi"
+import { useGetChatByIDQuery } from "../api/chatsApi"
 import { useParams } from "react-router-dom"
 import { useChatSocket } from "../hooks/useChatSocket"
+import { useSendChatMessage } from "../hooks/useChatActions"
 import SCMarketLogo from "../../../assets/scmarket-logo.webp"
 import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { useTranslation } from "react-i18next"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { LongPressMenu } from "../../../components/gestures"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
 import { BottomSheet } from "../../../components/mobile"
@@ -613,7 +610,7 @@ export function MessagesBodyMobile() {
   const theme = useTheme<ExtendedTheme>()
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
-  const [sendChatMessage] = useSendChatMessageMutation()
+  const sendChatMessage = useSendChatMessage()
   const { data: profile } = useGetUserProfileQuery()
   const bottomNavHeight = useBottomNavHeight()
   const isMobile = useIsMobile()
@@ -707,25 +704,15 @@ export function MessagesBodyMobile() {
     }
   }, [chatFromCache, currentChat, setCurrentChat])
 
-  const issueAlert = useAlertHook()
-
   const onSend = useCallback(
     (content: string) => {
       if (content && currentChat && profile?.username) {
         // RTK Query handles optimistic updates, so we just send the message
         // The cache update will sync to currentChat via the useEffect
-        sendChatMessage({
-          chat_id: currentChat.chat_id,
-          content,
-          username: profile.username,
-        })
-          .unwrap()
-          .catch((error) => {
-            issueAlert(error)
-          })
+        sendChatMessage(currentChat.chat_id, content, profile.username)
       }
     },
-    [currentChat, profile?.username, sendChatMessage, issueAlert],
+    [currentChat, profile?.username, sendChatMessage],
   )
 
   const { t } = useTranslation()

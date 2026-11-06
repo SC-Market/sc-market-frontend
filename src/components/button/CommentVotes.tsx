@@ -6,11 +6,8 @@ import {
 } from "@mui/icons-material"
 import React from "react"
 import { Comment as RecruitingComment } from "../../features/recruiting/api/recruitingApi"
-import {
-  Comment,
-  useCommentsDownvoteMutation,
-  useCommentsUpvoteMutation,
-} from "../../features/recruiting/api/commentsApi"
+import { Comment } from "../../features/recruiting/api/commentsApi"
+import { useCommentVotes } from "../../features/recruiting/hooks/useCommentActions"
 import { useTranslation } from "react-i18next"
 
 export function CommentVotes(props: {
@@ -20,13 +17,7 @@ export function CommentVotes(props: {
   const { comment, post } = props
   const { t } = useTranslation()
 
-  const [
-    doUpvote, // This is the mutation trigger
-  ] = useCommentsUpvoteMutation()
-
-  const [
-    doDownvote, // This is the mutation trigger
-  ] = useCommentsDownvoteMutation()
+  const { upvote, downvote } = useCommentVotes(post?.post_id)
 
   return (
     <ButtonGroup
@@ -38,9 +29,7 @@ export function CommentVotes(props: {
       <Button
         color={"success"}
         startIcon={<KeyboardArrowUpRounded />}
-        onClick={() =>
-          doUpvote({ comment_id: comment.comment_id, post_id: post?.post_id })
-        }
+        onClick={() => upvote(comment.comment_id)}
         title={t("commentVotes.upvoteTooltip", "Upvote this comment")}
         aria-label={t("accessibility.upvoteComment", "Upvote this comment")}
         aria-describedby={`upvote-count-${comment.comment_id}`}
@@ -55,9 +44,7 @@ export function CommentVotes(props: {
       <Button
         color={"error"}
         startIcon={<KeyboardArrowDownRounded />}
-        onClick={() =>
-          doDownvote({ comment_id: comment.comment_id, post_id: post?.post_id })
-        }
+        onClick={() => downvote(comment.comment_id)}
         title={t("commentVotes.downvoteTooltip", "Downvote this comment")}
         aria-label={t("accessibility.downvoteComment", "Downvote this comment")}
         aria-describedby={`downvote-count-${comment.comment_id}`}

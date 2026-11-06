@@ -21,10 +21,10 @@ import { useNavigate } from "react-router-dom"
 import { BottomSheet } from "../mobile/BottomSheet"
 import {
   useGetCartQuery,
-  useRemoveCartItemMutation,
   type GetCartResponse,
   type CartItemDetail,
 } from "../../features/market/api/marketV2Api"
+import { useRemoveCartItemQuietly } from "../../features/market/hooks/useCartActions"
 import { EmptyCart } from "../empty-states"
 import { MARKET_PATHS } from "../../routes/paths"
 
@@ -41,7 +41,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const isMobile = useIsMobile()
 
   const { data: cart, isLoading } = useGetCartQuery(undefined, { skip: !open })
-  const [removeItem] = useRemoveCartItemMutation()
+  const handleRemove = useRemoveCartItemQuietly()
 
   const cartData = cart as GetCartResponse | undefined
   const items: CartItemDetail[] = cartData?.items || []
@@ -51,14 +51,6 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const handleCheckout = () => {
     onClose()
     navigate(MARKET_PATHS.cart)
-  }
-
-  const handleRemove = async (cartItemId: string) => {
-    try {
-      await removeItem({ id: cartItemId }).unwrap()
-    } catch {
-      /* silent */
-    }
   }
 
   const content = (

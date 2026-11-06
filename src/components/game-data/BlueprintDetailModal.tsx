@@ -36,13 +36,12 @@ import { readableMissionText } from "../../seo/missionText"
 import {
   useGetBlueprintDetailQuery,
   useGetOrgBlueprintOwnersQuery,
-  useAddBlueprintToInventoryMutation,
-  useRemoveBlueprintFromInventoryMutation,
   type BlueprintIngredient,
   type SlotModifier,
   type MissionRewardingBlueprint,
 } from "../../features/game-data/api/gameDataApi"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useBlueprintOwnership } from "../../features/game-data/hooks/useGameDataActions"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
 import { BlueprintTags, blueprintTagsFromDetail } from "./BlueprintTags"
@@ -101,22 +100,10 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const [tab, setTab] = useState(0)
   const [missionsExpanded, setMissionsExpanded] = useState(false)
 
-  const [addToInventory] = useAddBlueprintToInventoryMutation()
-  const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
+  const toggleOwned = useBlueprintOwnership(blueprintId)
   const userOwns = data?.user_owns ?? false
 
-  const handleToggleOwned = async () => {
-    if (!blueprintId) return
-    if (userOwns) {
-      await removeFromInventory({ blueprintId })
-        .unwrap()
-        .catch(() => {})
-    } else {
-      await addToInventory({ blueprintId, body: {} })
-        .unwrap()
-        .catch(() => {})
-    }
-  }
+  const handleToggleOwned = () => toggleOwned(userOwns)
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
     { blueprintId: blueprintId!, spectrumId: spectrumId! },
