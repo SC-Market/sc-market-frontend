@@ -4,6 +4,10 @@
  * Part 1 drives the real /market page (real routes + providers, fake API)
  * and records which search request the URL turns into, how in-app URL
  * changes re-query, and where the market/buy-orders toggle navigates.
+ * happy-dom's default viewport (1024px) is below the `lg` breakpoint, so the
+ * page renders its tablet layout: the filter sidebar (search box with
+ * suggestions, market/buy-orders toggle) lives in the Filters bottom sheet,
+ * which mounts its content only while open.
  *
  * Part 2 pins the React Router primitives the market code uses with the
  * real useMarketSearch hook: setSearchParams push vs. replace, functional
@@ -24,6 +28,7 @@ import { routes } from "../../router/routeObjects"
 import { APP_TEST_TIMEOUT_MS, mountApp } from "./regression/harness"
 import { useMarketSearch } from "../../features/market/hooks/MarketSearch"
 import { MARKET_PATHS } from "../../routes/paths"
+import en from "../../locales/en/english.json"
 
 vi.unmock("../../features/profile/api/profileApi")
 vi.mock("react-router-dom", async (importOriginal) =>
@@ -58,20 +63,10 @@ describe("/market page (real app)", () => {
         "/market?query=laser&page=2&price_min=100&sort_by=price&sort_order=asc",
         { session: "anonymous" },
       )
-      // The search box also fires a debounced 5-result suggestion query
-      // (ListingSearchV2 / CommandPalette, pageSize 5); wait for it so the
-      // snapshot doesn't depend on whether the debounce fired before settle.
-      const waitForSuggestion = (text: string) =>
-        waitFor(
-          () =>
-            expect(searchRequests(app.requests)).toContain(
-              `/api/v2/listings/search?text=${text}&page_size=5`,
-            ),
-          { timeout: 15_000 },
-        )
+      // The filters sheet is closed, so its search box (and its 5-result
+      // suggestion query) isn't mounted: only the results query runs.
       try {
         await app.settle()
-        await waitForSuggestion("laser")
         const initial = searchRequests(app.requests)
 
         // In-app URL change (what setSearchParams does) re-queries.
@@ -79,7 +74,6 @@ describe("/market page (real app)", () => {
           await app.router.navigate("/market?query=rifle")
         })
         await app.settle()
-        await waitForSuggestion("rifle")
         const afterNavigate = searchRequests(app.requests).filter(
           (p) => !initial.includes(p),
         )
@@ -111,13 +105,30 @@ describe("/market page (real app)", () => {
       const app = mountApp(routes, "/market?query=laser", {
         session: "anonymous",
       })
+      // The toggle is in the Filters sheet: open it (if it isn't open
+      // already) before looking for a tab button.
+      const tabButton = async (value: string) => {
+        const selector = `button[value="${value}"]`
+        if (!document.querySelector(selector)) {
+          const fab = document.querySelector(
+            `button[aria-label="${en.market.toggleSidebar}"]`,
+          )
+          if (fab) {
+            await act(async () => {
+              fireEvent.click(fab)
+            })
+            await app.settle()
+          }
+        }
+        return document.querySelector(selector)
+      }
       try {
         await app.settle()
+        const buyOrders = await tabButton("buyorders")
         const toggles = [...document.querySelectorAll("button[value]")].map(
           (b) => b.getAttribute("value"),
         )
         const visited: string[] = []
-        const buyOrders = document.querySelector('button[value="buyorders"]')
         if (buyOrders) {
           await act(async () => {
             fireEvent.click(buyOrders)
@@ -126,7 +137,7 @@ describe("/market page (real app)", () => {
           visited.push(
             `${app.router.state.historyAction} ${app.router.state.location.pathname}${app.router.state.location.search}`,
           )
-          const market = document.querySelector('button[value="market"]')
+          const market = await tabButton("market")
           if (market) {
             await act(async () => {
               fireEvent.click(market)
