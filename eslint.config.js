@@ -271,7 +271,7 @@ export default [
     files: ["src/components/**/*.tsx", "src/components/**/*.ts"],
     rules: {
       "no-restricted-imports": [
-        "warn",
+        "error",
         {
           patterns: [
             {
@@ -290,7 +290,7 @@ export default [
     files: ["src/features/**/*.ts", "src/features/**/*.tsx"],
     rules: {
       "no-restricted-imports": [
-        "warn",
+        "error",
         {
           patterns: [
             {
