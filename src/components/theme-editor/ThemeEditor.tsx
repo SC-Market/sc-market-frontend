@@ -3,11 +3,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -18,19 +13,22 @@ import {
   Tab,
   Tabs,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material"
 import { SaveRounded, RestoreRounded } from "@mui/icons-material"
 import { ThemePreview } from "./ThemePreview"
+import { ResetThemeDialog } from "./ResetThemeDialog"
+import { ThemePresetPicker } from "./ThemePresetPicker"
+import { ThemeColorFields } from "./ThemeColorFields"
+import { ThemeBorderRadiusFields } from "./ThemeBorderRadiusFields"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { ThemeOptions } from "@mui/material"
-import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
-import { grey } from "@mui/material/colors"
-import { COLOR_INPUT_EMPTY } from "../../hooks/styles/fixedColors"
-
-type ThemeModeData = ThemeOptions & Record<string, unknown>
+import {
+  ThemeModeData,
+  setNestedValue,
+  stripBackgroundOverlayKeys,
+} from "./themeEditorFields"
 
 interface ThemeEditorProps {
   initialThemeData: { light: ThemeModeData; dark: ThemeModeData }
@@ -41,176 +39,6 @@ interface ThemeEditorProps {
   }) => Promise<void>
   onReset: () => Promise<void>
   isSaving?: boolean
-}
-
-interface ColorField {
-  key: string
-  labelKey: string
-  fallback: string
-  path: string[]
-  /** Short note under the control — where this token is used in the app */
-  usageNoteKey?: string
-  usageNoteFallback?: string
-}
-
-const COLOR_FIELDS: ColorField[] = [
-  {
-    key: "primary",
-    labelKey: "chromeUi.themeEditor.primary",
-    fallback: "Primary",
-    path: ["palette", "primary", "main"],
-  },
-  {
-    key: "primaryContrast",
-    labelKey: "chromeUi.themeEditor.primaryContrast",
-    fallback: "Button Text",
-    path: ["palette", "primary", "contrastText"],
-  },
-  {
-    key: "primaryDark",
-    labelKey: "chromeUi.themeEditor.primaryDark",
-    fallback: "Primary hover (filled buttons)",
-    path: ["palette", "primary", "dark"],
-    usageNoteKey: "chromeUi.themeEditor.usagePrimaryDark",
-    usageNoteFallback:
-      "MUI uses this for contained primary buttons on hover, not the “Menu & list hover” color.",
-  },
-  {
-    key: "secondary",
-    labelKey: "chromeUi.themeEditor.secondary",
-    fallback: "Secondary",
-    path: ["palette", "secondary", "main"],
-    usageNoteKey: "chromeUi.themeEditor.usageSecondary",
-    usageNoteFallback:
-      "The buy side and premium: buy order prices, top bids, the bid side of the price chart, and premium and supporter badges.",
-  },
-  {
-    key: "bgDefault",
-    labelKey: "chromeUi.themeEditor.bgDefault",
-    fallback: "Background",
-    path: ["palette", "background", "default"],
-  },
-  {
-    key: "bgPaper",
-    labelKey: "chromeUi.themeEditor.bgPaper",
-    fallback: "Paper",
-    path: ["palette", "background", "paper"],
-  },
-  {
-    key: "bgSidebar",
-    labelKey: "chromeUi.themeEditor.bgSidebar",
-    fallback: "Sidebar",
-    path: ["palette", "background", "sidebar"],
-    usageNoteKey: "chromeUi.themeEditor.usageSidebar",
-    usageNoteFallback:
-      "Dark-mode listing thumbnails and photo-picker surfaces (e.g. SelectPhotosArea) fade toward this color.",
-  },
-  {
-    key: "bgNavbar",
-    labelKey: "chromeUi.themeEditor.bgNavbar",
-    fallback: "Navbar",
-    path: ["palette", "background", "navbar"],
-  },
-  {
-    key: "textPrimary",
-    labelKey: "chromeUi.themeEditor.textPrimary",
-    fallback: "Text",
-    path: ["palette", "text", "primary"],
-  },
-  {
-    key: "textSecondary",
-    labelKey: "chromeUi.themeEditor.textSecondary",
-    fallback: "Text Secondary",
-    path: ["palette", "text", "secondary"],
-  },
-  {
-    key: "outline",
-    labelKey: "chromeUi.themeEditor.outline",
-    fallback: "Border Color",
-    path: ["palette", "outline", "main"],
-  },
-  {
-    key: "actionHover",
-    labelKey: "chromeUi.themeEditor.actionHover",
-    fallback: "Menu & list hover",
-    path: ["palette", "action", "hover"],
-    usageNoteKey: "chromeUi.themeEditor.usageActionHover",
-    usageNoteFallback:
-      "Sidebar rows, menus, autocomplete, and Skeleton “wave”. Not filled primary buttons.",
-  },
-]
-
-const BORDER_RADIUS_FIELDS = [
-  {
-    key: "topLevel",
-    labelKey: "chromeUi.themeEditor.borderRadiusTopLevel",
-    fallback: "Cards",
-    path: ["borderRadius", "topLevel"],
-  },
-  {
-    key: "button",
-    labelKey: "chromeUi.themeEditor.borderRadiusButton",
-    fallback: "Buttons",
-    path: ["borderRadius", "button"],
-  },
-  {
-    key: "chip",
-    labelKey: "chromeUi.themeEditor.borderRadiusChip",
-    fallback: "Chips",
-    path: ["borderRadius", "chip"],
-  },
-  {
-    key: "image",
-    labelKey: "chromeUi.themeEditor.borderRadiusImage",
-    fallback: "Images",
-    path: ["borderRadius", "image"],
-  },
-]
-
-function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
-  let current: unknown = obj
-  for (const key of path) {
-    if (!current || typeof current !== "object") return undefined
-    current = (current as Record<string, unknown>)[key]
-  }
-  return current
-}
-
-function setNestedValue(
-  obj: Record<string, unknown>,
-  path: string[],
-  value: unknown,
-): Record<string, unknown> {
-  const result = { ...obj }
-  let current: Record<string, unknown> = result
-  for (let i = 0; i < path.length - 1; i++) {
-    current[path[i]] = {
-      ...((current[path[i]] as Record<string, unknown>) || {}),
-    }
-    current = current[path[i]] as Record<string, unknown>
-  }
-  current[path[path.length - 1]] = value
-  return result
-}
-
-/** Scrim overlays use app defaults; strip so saved theme_data does not keep old custom overlay keys. */
-function stripBackgroundOverlayKeys(themeData: {
-  light: Record<string, unknown>
-  dark: Record<string, unknown>
-}) {
-  const clone = {
-    light: structuredClone(themeData.light) as Record<string, unknown>,
-    dark: structuredClone(themeData.dark) as Record<string, unknown>,
-  }
-  for (const mode of ["light", "dark"] as const) {
-    const palette = clone[mode].palette as Record<string, unknown> | undefined
-    if (!palette || typeof palette !== "object") continue
-    const bg = palette.background as Record<string, unknown> | undefined
-    if (!bg || typeof bg !== "object") continue
-    delete bg.overlay
-    delete bg.overlayDark
-  }
-  return clone
 }
 
 export function ThemeEditor({
@@ -372,143 +200,14 @@ export function ThemeEditor({
       <Grid item xs={12} md={7}>
         <Paper sx={{ p: 2 }}>
           {/* Presets from custom themes */}
-          <Typography variant="subtitle2" gutterBottom>
-            {t("theme.presets", "Load Preset")}
-          </Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
-            {Array.from(CUSTOM_THEMES.entries()).map(([name, themeObj]) => {
-              const primary = themeObj.palette?.primary?.main || grey[600]
-              const bg = themeObj.palette?.background?.default || grey[900]
-              return (
-                <Tooltip
-                  key={name}
-                  title={name.replace(/_/g, " ")}
-                  placement="top"
-                >
-                  <Box
-                    onClick={() => {
-                      const p = themeObj.palette
-                      const mode = p?.mode || "dark"
-                      const bg = p?.background as
-                        | {
-                            default?: string
-                            paper?: string
-                            sidebar?: string
-                            navbar?: string
-                          }
-                        | undefined
-                      const outline = (
-                        p as { outline?: { main?: string } } | undefined
-                      )?.outline
-                      const thm = themeObj as unknown as ThemeModeData
-                      const preset: ThemeModeData = {
-                        palette: {
-                          mode,
-                          ...(p?.primary?.main && {
-                            primary: {
-                              main: p.primary.main,
-                              contrastText: p.primary.contrastText,
-                            },
-                          }),
-                          ...(p?.secondary?.main && {
-                            secondary: {
-                              main: p.secondary.main,
-                              contrastText: p.secondary.contrastText,
-                            },
-                          }),
-                          background: {
-                            default: bg?.default,
-                            paper: bg?.paper,
-                            sidebar: bg?.sidebar,
-                            navbar: bg?.navbar,
-                          },
-                          text: {
-                            primary: p?.text?.primary,
-                            secondary: p?.text?.secondary,
-                          },
-                          ...(outline?.main && {
-                            outline: { main: outline.main },
-                          }),
-                          action: { hover: p?.action?.hover },
-                        },
-                        navKind: thm.navKind,
-                      }
-                      setThemeData((prev) => ({ ...prev, [editMode]: preset }))
-                    }}
-                    sx={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: 0.5,
-                      cursor: "pointer",
-                      border: "1px solid",
-                      borderColor: "divider",
-                      background: `linear-gradient(to right, ${primary} 50%, ${bg} 50%)`,
-                      transition: "transform 0.15s, box-shadow 0.15s",
-                      "&:hover": {
-                        transform: "scale(1.2)",
-                        boxShadow: `0 0 8px ${primary}`,
-                      },
-                      flexShrink: 0,
-                    }}
-                  />
-                </Tooltip>
-              )
-            })}
-          </Box>
+          <ThemePresetPicker
+            onApply={(preset) =>
+              setThemeData((prev) => ({ ...prev, [editMode]: preset }))
+            }
+          />
 
           {/* Colors */}
-          <Typography variant="subtitle2" gutterBottom>
-            {t("theme.colors", "Colors")}
-          </Typography>
-          <Grid container spacing={1.5}>
-            {COLOR_FIELDS.map((field) => (
-              <Grid item xs={6} sm={4} key={field.key}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <input
-                    type="color"
-                    aria-label={t(field.labelKey, field.fallback)}
-                    value={
-                      (getNestedValue(currentMode, field.path) as string) ||
-                      COLOR_INPUT_EMPTY
-                    }
-                    onChange={(e) => updateValue(field.path, e.target.value)}
-                    style={{
-                      width: 32,
-                      height: 32,
-                      border: "none",
-                      cursor: "pointer",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Box sx={{ minWidth: 0 }}>
-                    <Typography variant="caption" display="block" noWrap>
-                      {t(field.labelKey, field.fallback)}
-                    </Typography>
-                    <TextField
-                      size="small"
-                      inputProps={{
-                        "aria-label": t("appUi.themeEditor.hexAria", {
-                          label: t(field.labelKey, field.fallback),
-                        }),
-                      }}
-                      value={getNestedValue(currentMode, field.path) ?? ""}
-                      onChange={(e) => updateValue(field.path, e.target.value)}
-                      sx={{ "& input": { fontSize: 11, py: 0.5, px: 0.75 } }}
-                    />
-                    {field.usageNoteKey && (
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ display: "block", mt: 0.5, lineHeight: 1.35 }}
-                      >
-                        {t(field.usageNoteKey, field.usageNoteFallback ?? "")}
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+          <ThemeColorFields currentMode={currentMode} onChange={updateValue} />
 
           {/* Style */}
           <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
@@ -618,78 +317,11 @@ export function ThemeEditor({
           </Grid>
 
           {/* Border Radius */}
-          <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
-            {t("theme.borderRadius", "Border Radius")}
-          </Typography>
-          <Box sx={{ mb: 1 }}>
-            <FormControl size="small" sx={{ minWidth: 100 }}>
-              <InputLabel id={`${labelIds}-unit`}>
-                {t("theme.unit", "Unit")}
-              </InputLabel>
-              <Select
-                labelId={`${labelIds}-unit`}
-                value={borderRadiusUnit}
-                label={t("theme.unit", "Unit")}
-                onChange={(e) =>
-                  updateValue(["borderRadiusUnit"], e.target.value)
-                }
-              >
-                <MenuItem value="px">px</MenuItem>
-                <MenuItem value="rem">rem</MenuItem>
-                <MenuItem value="em">em</MenuItem>
-                <MenuItem value="%">%</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Grid container spacing={1.5}>
-            {BORDER_RADIUS_FIELDS.map((field) => (
-              <Grid item xs={4} key={field.key}>
-                <Typography variant="caption">
-                  {t(field.labelKey, field.fallback)}
-                </Typography>
-                <Slider
-                  size="small"
-                  aria-label={t(field.labelKey, field.fallback)}
-                  min={0}
-                  max={
-                    borderRadiusUnit === "px"
-                      ? 32
-                      : borderRadiusUnit === "%"
-                        ? 50
-                        : 3
-                  }
-                  step={
-                    borderRadiusUnit === "px"
-                      ? 1
-                      : borderRadiusUnit === "%"
-                        ? 1
-                        : 0.125
-                  }
-                  value={
-                    (getNestedValue(currentMode, field.path) as number) ??
-                    (borderRadiusUnit === "px" ? 3 : 0.375)
-                  }
-                  onChange={(_, v) => updateValue(field.path, v as number)}
-                  valueLabelDisplay="auto"
-                  valueLabelFormat={(v) => `${v}${borderRadiusUnit}`}
-                />
-                {field.key === "image" && (
-                  <Box
-                    component="img"
-                    src="https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
-                    alt={t("appUi.themeEditor.imageRadiusPreview")}
-                    sx={{
-                      width: "100%",
-                      height: 80,
-                      objectFit: "cover",
-                      borderRadius: `${getNestedValue(currentMode, field.path) ?? 3}${borderRadiusUnit}`,
-                      mt: 0.5,
-                    }}
-                  />
-                )}
-              </Grid>
-            ))}
-          </Grid>
+          <ThemeBorderRadiusFields
+            currentMode={currentMode}
+            borderRadiusUnit={borderRadiusUnit}
+            onChange={updateValue}
+          />
 
           {/* Favicon */}
           <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
@@ -762,27 +394,12 @@ export function ThemeEditor({
       </Grid>
 
       {/* Reset confirmation dialog */}
-      <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
-        <DialogTitle>
-          {t("theme.resetConfirmTitle", "Reset Theme?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t(
-              "theme.resetConfirmMessage",
-              "This will remove all custom theme settings and revert to the default theme. This action cannot be undone.",
-            )}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setResetDialogOpen(false)}>
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <Button onClick={handleReset} color="error" disabled={isResetting}>
-            {t("theme.reset", "Reset to Default")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ResetThemeDialog
+        open={resetDialogOpen}
+        onClose={() => setResetDialogOpen(false)}
+        onConfirm={handleReset}
+        isResetting={isResetting}
+      />
     </Grid>
   )
 }

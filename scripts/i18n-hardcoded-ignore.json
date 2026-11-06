@@ -1,16 +1,16 @@
 [
   {
-    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "file": "src/components/theme-editor/ThemeBorderRadiusFields.tsx",
     "text": "px",
     "reason": "CSS unit name in the font-size unit picker"
   },
   {
-    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "file": "src/components/theme-editor/ThemeBorderRadiusFields.tsx",
     "text": "rem",
     "reason": "CSS unit name in the font-size unit picker"
   },
   {
-    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "file": "src/components/theme-editor/ThemeBorderRadiusFields.tsx",
     "text": "em",
     "reason": "CSS unit name in the font-size unit picker"
   },

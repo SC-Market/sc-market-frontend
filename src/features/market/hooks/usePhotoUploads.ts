@@ -5,7 +5,7 @@
  */
 import { useCallback, useState } from "react"
 import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
-import type { UploadedImageStatus } from "../../../components/modal/SelectPhotosArea"
+import type { UploadedImageStatus } from "../../../components/modal/PhotoEntries"
 import { uploadErrorDetail } from "../domain/uploadError"
 
 /** `failedMessage`: shown when the API gives no reason. */

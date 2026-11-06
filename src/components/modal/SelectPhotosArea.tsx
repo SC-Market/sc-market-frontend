@@ -1,30 +1,25 @@
 import { Stack } from "@mui/system"
 import {
-  Avatar,
   Box,
   ButtonBase,
-  Fab,
   Paper,
-  Button,
   Typography,
   useTheme,
-  Modal,
-  TextField,
-  Grid,
   CircularProgress,
-  Tooltip,
 } from "@mui/material"
-import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import {
-  AddAPhotoRounded,
-  CheckCircleRounded,
-  CloseRounded,
-  CloudUploadRounded,
-  ErrorRounded,
-} from "@mui/icons-material"
-import React, { useState, useRef, useCallback, Suspense } from "react"
+import { AddAPhotoRounded, CloudUploadRounded } from "@mui/icons-material"
+import { useState, useRef, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ImageUrlDialog } from "./ImageUrlDialog"
+import { usePhotoFileDrop } from "./usePhotoFileDrop"
+import {
+  PhotoEntry,
+  PendingPhotoEntry,
+  UploadingPhotoEntry,
+  UploadedImageStatus,
+} from "./PhotoEntries"
 
 // Lazy load heavy modal components
 const ImageSearch = lazyWithRetry(() =>
@@ -32,239 +27,6 @@ const ImageSearch = lazyWithRetry(() =>
     default: module.ImageSearch,
   })),
 )
-import { ContainerGrid } from "../layout/ContainerGrid"
-import { Section } from "../paper/Section"
-import { external_resource_regex } from "../../features/profile"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { BottomSheet } from "../mobile/BottomSheet"
-import { resizeImageFiles, PHOTO_RESIZE } from "../../util/imageResize"
-
-// Sanity cap on the raw input before we attempt to decode/downscale it. This is
-// deliberately generous — downscaling brings the actual upload well below the
-// backend limits, so this only guards against pathologically huge inputs.
-const MAX_INPUT_SIZE = 25 * 1024 * 1024 // 25MB
-
-export function PhotoEntry(props: { url: string; onClose: () => void }) {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  return (
-    <Paper
-      sx={{
-        width: 96,
-        height: 96,
-        bgcolor: theme.palette.background.imageOverlay,
-        position: "relative",
-      }}
-    >
-      <Fab
-        aria-label={t("photos.removePhoto", "Remove photo")}
-        size={"small"}
-        sx={{
-          transform: "scale(0.6)",
-          position: "absolute",
-          top: -4,
-          right: -4,
-        }}
-        onClick={props.onClose}
-      >
-        <CloseRounded />
-      </Fab>
-      <Avatar
-        src={props.url}
-        sx={{ borderRadius: 0, width: "100%", height: "100%" }}
-      />
-    </Paper>
-  )
-}
-
-export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const [previewUrl, setPreviewUrl] = useState<string>("")
-
-  React.useEffect(() => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target?.result) {
-        setPreviewUrl(e.target.result as string)
-      }
-    }
-    reader.readAsDataURL(props.file)
-  }, [props.file])
-
-  return (
-    <Paper
-      sx={{
-        width: 96,
-        height: 96,
-        bgcolor: theme.palette.background.imageOverlay,
-        position: "relative",
-      }}
-    >
-      <Fab
-        aria-label={t("photos.removePhoto", "Remove photo")}
-        size={"small"}
-        sx={{
-          transform: "scale(0.6)",
-          position: "absolute",
-          top: -4,
-          right: -4,
-        }}
-        onClick={props.onClose}
-      >
-        <CloseRounded />
-      </Fab>
-      <Avatar
-        src={previewUrl}
-        sx={{ borderRadius: 0, width: "100%", height: "100%" }}
-      />
-    </Paper>
-  )
-}
-
-export interface UploadedImageStatus {
-  resource_id: string
-  url: string
-  status: "uploading" | "success" | "error"
-  error?: string
-  file: File
-}
-
-export function UploadingPhotoEntry(props: {
-  imageStatus: UploadedImageStatus
-  onClose: () => void
-}) {
-  const { imageStatus, onClose } = props
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-  const [previewUrl, setPreviewUrl] = useState<string>("")
-  // Controlled so the failure reason can be revealed by tap on touch devices
-  // (where hover doesn't exist) as well as by hover on desktop.
-  const [errorTipOpen, setErrorTipOpen] = useState(false)
-
-  React.useEffect(() => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target?.result) {
-        setPreviewUrl(e.target.result as string)
-      }
-    }
-    reader.readAsDataURL(imageStatus.file)
-  }, [imageStatus.file])
-
-  return (
-    <Paper
-      sx={{
-        width: 96,
-        height: 96,
-        bgcolor: theme.palette.background.imageOverlay,
-        position: "relative",
-      }}
-    >
-      <Fab
-        aria-label={t("photos.cancelUpload", "Cancel upload")}
-        size={"small"}
-        sx={{
-          transform: "scale(0.6)",
-          position: "absolute",
-          top: -4,
-          right: -4,
-          zIndex: 2,
-        }}
-        onClick={onClose}
-      >
-        <CloseRounded />
-      </Fab>
-      <Avatar
-        src={previewUrl}
-        sx={{ borderRadius: 0, width: "100%", height: "100%" }}
-      />
-      {/* Status overlay */}
-      {imageStatus.status === "uploading" && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            borderRadius: 0,
-          }}
-        >
-          <CircularProgress size={32} sx={{ color: "white" }} />
-        </Box>
-      )}
-      {imageStatus.status === "success" && (
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 2,
-            right: 2,
-          }}
-        >
-          <CheckCircleRounded
-            sx={{ color: theme.palette.success.main, fontSize: 22 }}
-          />
-        </Box>
-      )}
-      {imageStatus.status === "error" && (
-        <Tooltip
-          title={
-            imageStatus.error ||
-            t("SelectPhotosArea.uploadFailed", "Upload failed")
-          }
-          arrow
-          open={errorTipOpen}
-          onOpen={() => setErrorTipOpen(true)}
-          onClose={() => setErrorTipOpen(false)}
-          enterTouchDelay={0}
-          leaveTouchDelay={5000}
-        >
-          <Box
-            role="button"
-            tabIndex={0}
-            aria-label={
-              imageStatus.error ||
-              t("SelectPhotosArea.uploadFailed", "Upload failed")
-            }
-            onClick={(e) => {
-              // Toggle on tap/click so touch users (no hover) can read why it failed.
-              e.stopPropagation()
-              setErrorTipOpen((prev) => !prev)
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault()
-                setErrorTipOpen((prev) => !prev)
-              }
-            }}
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "rgba(0,0,0,0.4)",
-              borderRadius: 0,
-              cursor: "pointer",
-            }}
-          >
-            <ErrorRounded
-              sx={{ color: theme.palette.error.main, fontSize: 32 }}
-            />
-          </Box>
-        </Tooltip>
-      )}
-    </Paper>
-  )
-}
 
 export function SelectPhotosArea(props: {
   setPhotos: (photos: string[]) => void
@@ -290,148 +52,19 @@ export function SelectPhotosArea(props: {
     uploadedImages = [],
     onRemoveUploadedImage,
   } = props
-  const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
   const [photoOpen, setPhotoOpen] = useState(false)
   const [urlModalOpen, setUrlModalOpen] = useState(false)
-  const [urlInput, setUrlInput] = useState("")
 
-  const handleFileUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files
-      if (files) {
-        console.log(`[SelectPhotosArea] File upload initiated:`, {
-          file_count: files.length,
-          files: Array.from(files).map((f) => ({
-            name: f.name,
-            size: f.size,
-            type: f.type,
-          })),
-        })
-
-        const fileArray = Array.from(files)
-        const withinCap = fileArray.filter(
-          (file) => file.size <= MAX_INPUT_SIZE,
-        )
-        const oversizedFiles = fileArray.filter(
-          (file) => file.size > MAX_INPUT_SIZE,
-        )
-
-        if (oversizedFiles.length > 0) {
-          console.warn(`[SelectPhotosArea] Files too large, skipping:`, {
-            count: oversizedFiles.length,
-            files: oversizedFiles.map((f) => ({ name: f.name, size: f.size })),
-          })
-
-          // Show warning for oversized files
-          if (onAlert) {
-            if (oversizedFiles.length === 1) {
-              onAlert("warning", t("SelectPhotosArea.fileTooLarge"))
-            } else {
-              onAlert("warning", t("SelectPhotosArea.someFilesTooLarge"))
-            }
-          }
-        }
-
-        if (withinCap.length > 0 && onFileUpload) {
-          // Downscale in the browser before uploading to keep payloads small.
-          const resized = await resizeImageFiles(withinCap, PHOTO_RESIZE)
-          onFileUpload(resized)
-        }
-      }
-      // Reset the input value so the same file can be selected again
-      event.target.value = ""
-    },
-    [onFileUpload, t, onAlert],
-  )
-
-  const handleDragOver = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault()
-      event.stopPropagation()
-      if (!isDragOver) {
-        console.log(`[SelectPhotosArea] Drag over started`)
-        setIsDragOver(true)
-      }
-    },
-    [isDragOver],
-  )
-
-  const handleDragLeave = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault()
-      event.stopPropagation()
-      if (isDragOver) {
-        console.log(`[SelectPhotosArea] Drag over ended`)
-        setIsDragOver(false)
-      }
-    },
-    [isDragOver],
-  )
-
-  const handleDrop = useCallback(
-    async (event: React.DragEvent) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setIsDragOver(false)
-
-      const files = Array.from(event.dataTransfer.files)
-      const imageFiles = files.filter((file) => file.type.startsWith("image/"))
-      const withinCap = imageFiles.filter((file) => file.size <= MAX_INPUT_SIZE)
-      const oversizedImageFiles = imageFiles.filter(
-        (file) => file.size > MAX_INPUT_SIZE,
-      )
-
-      if (oversizedImageFiles.length > 0) {
-        console.warn(`[SelectPhotosArea] Image files too large, skipping:`, {
-          count: oversizedImageFiles.length,
-          files: oversizedImageFiles.map((f) => ({
-            name: f.name,
-            size: f.size,
-          })),
-        })
-
-        // Show warning for oversized files
-        if (onAlert) {
-          if (oversizedImageFiles.length === 1) {
-            onAlert("warning", t("SelectPhotosArea.fileTooLarge"))
-          } else {
-            onAlert("warning", t("SelectPhotosArea.someFilesTooLarge"))
-          }
-        }
-      }
-
-      if (withinCap.length > 0) {
-        console.log(`[SelectPhotosArea] Drag and drop file upload:`, {
-          file_count: withinCap.length,
-          files: withinCap.map((f) => ({
-            name: f.name,
-            size: f.size,
-            type: f.type,
-          })),
-        })
-
-        if (onFileUpload) {
-          // Downscale in the browser before uploading to keep payloads small.
-          const resized = await resizeImageFiles(withinCap, PHOTO_RESIZE)
-          onFileUpload(resized)
-        }
-      } else if (files.length > 0) {
-        console.warn(`[SelectPhotosArea] Non-image files dropped, ignoring:`, {
-          file_count: files.length,
-          files: files.map((f) => ({
-            name: f.name,
-            size: f.size,
-            type: f.type,
-          })),
-        })
-      }
-    },
-    [onFileUpload, onAlert, t],
-  )
+  const {
+    isDragOver,
+    handleFileUpload,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+  } = usePhotoFileDrop({ onFileUpload, onAlert })
 
   const handleRemovePendingFile = (file: File) => {
     console.log(`[SelectPhotosArea] Removing pending file:`, {
@@ -700,134 +333,11 @@ export function SelectPhotosArea(props: {
       )}
 
       {/* URL Input Modal */}
-      {isMobile ? (
-        <BottomSheet
-          open={urlModalOpen}
-          onClose={() => setUrlModalOpen(false)}
-          title={t("SelectPhotosArea.urlModalTitle", "Add Image URL")}
-          maxHeight="90vh"
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Box sx={{ marginBottom: 2 }}>
-                <TextField
-                  variant={"outlined"}
-                  label={t("SelectPhotosArea.imageUrl", "Image URL")}
-                  fullWidth
-                  focused
-                  helperText={t(
-                    "SelectPhotosArea.imageUrlHelp",
-                    "Paste a direct image link (i.imgur.com, robertsspaceindustries.com, starcitizen.tools, or cstone.space)",
-                  )}
-                  onChange={(event: React.ChangeEvent<{ value: string }>) => {
-                    setUrlInput(event.target.value)
-                  }}
-                  value={urlInput}
-                  error={!!urlInput && !urlInput.match(external_resource_regex)}
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-                <Button
-                  color={"error"}
-                  variant={"contained"}
-                  onClick={() => {
-                    setUrlModalOpen(false)
-                    setUrlInput("")
-                  }}
-                >
-                  {t("ui.dialog.selectImage.buttons.cancel", "Cancel")}
-                </Button>
-                <Button
-                  color={"primary"}
-                  variant={"contained"}
-                  disabled={
-                    !urlInput || !urlInput.match(external_resource_regex)
-                  }
-                  onClick={() => {
-                    if (urlInput && urlInput.trim()) {
-                      setPhotos([...photos, urlInput.trim()])
-                      setUrlModalOpen(false)
-                      setUrlInput("")
-                    }
-                  }}
-                >
-                  {t("ui.dialog.selectImage.buttons.saveAndClose", "Add URL")}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </BottomSheet>
-      ) : (
-        <Modal open={urlModalOpen} onClose={() => setUrlModalOpen(false)}>
-          <ContainerGrid sidebarOpen={false} maxWidth={"sm"} noFooter>
-            <Section
-              title={t("SelectPhotosArea.urlModalTitle", "Add Image URL")}
-              xs={12}
-              onClick={(event: React.MouseEvent) => {
-                event.preventDefault()
-                event.stopPropagation()
-                return false
-              }}
-            >
-              <Grid item xs={12}>
-                <Box sx={{ marginBottom: 2 }}>
-                  <TextField
-                    variant={"outlined"}
-                    label={t("SelectPhotosArea.imageUrl", "Image URL")}
-                    fullWidth
-                    focused
-                    helperText={t(
-                      "SelectPhotosArea.imageUrlHelp",
-                      "Paste a direct image link (i.imgur.com, robertsspaceindustries.com, starcitizen.tools, or cstone.space)",
-                    )}
-                    onChange={(event: React.ChangeEvent<{ value: string }>) => {
-                      setUrlInput(event.target.value)
-                    }}
-                    value={urlInput}
-                    error={
-                      !!urlInput && !urlInput.match(external_resource_regex)
-                    }
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box
-                  sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
-                >
-                  <Button
-                    color={"error"}
-                    variant={"contained"}
-                    onClick={() => {
-                      setUrlModalOpen(false)
-                      setUrlInput("")
-                    }}
-                  >
-                    {t("ui.dialog.selectImage.buttons.cancel", "Cancel")}
-                  </Button>
-                  <Button
-                    color={"primary"}
-                    variant={"contained"}
-                    disabled={
-                      !urlInput || !urlInput.match(external_resource_regex)
-                    }
-                    onClick={() => {
-                      if (urlInput && urlInput.trim()) {
-                        setPhotos([...photos, urlInput.trim()])
-                        setUrlModalOpen(false)
-                        setUrlInput("")
-                      }
-                    }}
-                  >
-                    {t("ui.dialog.selectImage.buttons.saveAndClose", "Add URL")}
-                  </Button>
-                </Box>
-              </Grid>
-            </Section>
-          </ContainerGrid>
-        </Modal>
-      )}
+      <ImageUrlDialog
+        open={urlModalOpen}
+        onClose={() => setUrlModalOpen(false)}
+        onAdd={(url) => setPhotos([...photos, url])}
+      />
 
       {/* ImageSearch component - lazy loaded */}
       {photoOpen && (
