@@ -1725,7 +1725,7 @@
     "how_to_communicate": "How to communicate with buyers through Discord",
     "how_to_communicate_answer": "Add the official SC Market Discord Bot to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. In your shop's **Settings › Discord**, or your org's **Discord Integration** tab, press **[Add the bot to a server]({{BOT_INSTALL_PATH}})** and pick your server in Discord. You come back with the server linked.\n\n2. Pick the channel for order threads and, optionally, channels for order alerts (a post for each new order and offer with a Claim button), then save.\n\nAdded the bot from Discord instead? Link your Discord account in your SC Market settings, then run `/setup threads` in the channel that should hold the order threads. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty. Run `/setup alerts` (with the same `org`) in a staff channel for alerts.\n\nAdding the bot needs the **Manage Server** permission in the Discord server, and `/setup threads` and `/setup alerts` need **Manage Channels**. For an org, you also need the org's **Manage Webhooks** permission on SC Market (or **Manage Orders** for `/setup alerts`). In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
     "how_to_get_notified": "How to get notified when an order is placed",
-    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server and pick an order alert channel: each new order and offer is posted there, and each one can get its own order thread. The bot can also send you direct messages, such as a reminder when an offer is waiting for your reply, once your Discord account is linked and you share a server with the bot. Choose what reaches you by DM in Settings › Notifications. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server and pick an order alert channel: each new order and offer is posted there, and each one can get its own order thread. The bot can also send you direct messages, such as a reminder when an offer is waiting for your reply, once your Discord account is linked and you either share a server with the bot or have added the SC Market app to your Discord account. Choose what reaches you by DM in Settings › Notifications. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
     "integrating_with_discord": "Integrating with Discord",
     "learn_connect": "Connect the Discord bot",
     "learn_alerts": "Order alerts and claiming"
@@ -7824,12 +7824,10 @@
         "pushChecked": "Push: at least one push subscription.",
         "anyNone": "Any channel: reachable by Discord DM, email or push. None: by none of them.",
         "lastSeen": "Last seen counts every seller, including those who hide their online status from buyers.",
-        "discordRule": "Discord DM: Discord linked, their last DM from SC Market (kept {{days}} days) wasn't refused with error {{code}}, and they share a server with the bot. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
-        "discordClosedInstall": "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no way for the bot to reach them). A refused DM also clears a recorded app install. For an org, this holds for everyone who can be contacted.",
+        "discordRule": "Discord DM: Discord linked, they share a server with the bot or installed the app on their own Discord account, and their last DM from SC Market (kept {{days}} days) wasn't refused with error {{code}}. A refusal because they shared no server with the bot stops counting once they install the app or share a server after it. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
+        "discordClosedInstall": "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no shared server with the bot). A refused DM also clears a recorded app install. A refusal for no shared server is lifted once they install the app or share a server after it. For an org, this holds for everyone who can be contacted.",
         "serverOrApp": "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
-        "serverOrAppNever": "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours, without sending anything; not checked yet), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
-        "installCounts": "Installing the app counts as reachable by Discord DM.",
-        "installNotCounted": "App installs are recorded but not counted as reachable by Discord DM until it's confirmed the bot can DM someone who shares no server with it."
+        "serverOrAppNever": "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours, without sending anything; not checked yet), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None."
       },
       "installClicks": {
         "title": "\"Add SC Market to Discord\" clicks",
@@ -8951,26 +8949,22 @@
     "choose": "How do you want to add SC Market?",
     "user": "To your Discord account",
     "userHint": "So we can reach you about offers and orders even if you're not in a shared server.",
-    "userHintNoDm": "So you can use SC Market commands anywhere in Discord.",
     "server": "To a Discord server",
     "serverHint": "For order threads and alerts in your own server.",
     "cta": {
       "title": "Add SC Market to your Discord",
       "why": "So we can reach you about offers and orders even if you're not in a shared server.",
-      "whyNoDm": "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now.",
       "unreachableTitle": "Buyers' offers can't reach you on Discord",
       "alsoLinks": "Adding it also links your Discord account to SC Market."
     },
     "result": {
       "user_linked": {
         "title": "SC Market is on your Discord",
-        "body": "Your Discord account is now linked to SC Market, so we can reach you about offers and orders.",
-        "bodyNoDm": "Your Discord account is now linked to SC Market. You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now."
+        "body": "Your Discord account is now linked to SC Market, so we can reach you about offers and orders."
       },
       "user_installed": {
         "title": "SC Market is on your Discord",
-        "body": "We can now reach you about offers and orders even if you're not in a shared server.",
-        "bodyNoDm": "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now."
+        "body": "We can now reach you about offers and orders even if you're not in a shared server."
       },
       "user_sign_in": {
         "title": "SC Market is on your Discord",

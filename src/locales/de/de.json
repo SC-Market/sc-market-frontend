@@ -1708,7 +1708,7 @@
   "discord_bot": {
     "integrating_with_discord": "Integration mit Discord",
     "how_to_get_notified": "So wirst du benachrichtigt, wenn eine Bestellung aufgegeben wird",
-    "how_to_get_notified_answer": "Füge den offiziellen [SC-Market-Discord-Bot]({{BOT_INSTALL_PATH}}) zu deinem Server hinzu und wähle einen Kanal für Bestellbenachrichtigungen: Jede neue Bestellung und jedes neue Angebot wird dort gepostet und kann einen eigenen Bestell-Thread bekommen. Der Bot kann dir auch Direktnachrichten senden, etwa eine Erinnerung, wenn ein Angebot auf deine Antwort wartet, sobald dein Discord-Konto verknüpft ist und du einen Server mit dem Bot teilst. Was du per DM erhältst, legst du unter Einstellungen › Benachrichtigungen fest. Alternativ kannst du mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
+    "how_to_get_notified_answer": "Füge den offiziellen [SC-Market-Discord-Bot]({{BOT_INSTALL_PATH}}) zu deinem Server hinzu und wähle einen Kanal für Bestellbenachrichtigungen: Jede neue Bestellung und jedes neue Angebot wird dort gepostet und kann einen eigenen Bestell-Thread bekommen. Der Bot kann dir auch Direktnachrichten senden, etwa eine Erinnerung, wenn ein Angebot auf deine Antwort wartet, sobald dein Discord-Konto verknüpft ist und du entweder einen Server mit dem Bot teilst oder die SC-Market-App zu deinem Discord-Konto hinzugefügt hast. Was du per DM erhältst, legst du unter Einstellungen › Benachrichtigungen fest. Alternativ kannst du mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
     "how_to_communicate": "So kommunizierst du mit Käufern über Discord",
     "how_to_communicate_answer": "Füge den offiziellen SC-Market-Discord-Bot zu deinem Server hinzu und wähle einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu deinem Server eingeladen, damit ihr die Bestellung gemeinsam abwickeln könnt.\n\n1. Klicke in den **Einstellungen › Discord** deines Shops oder im Tab **Discord-Integration** deiner Org auf **[Bot zu einem Server hinzufügen]({{BOT_INSTALL_PATH}})** und wähle in Discord deinen Server. Du kommst mit verknüpftem Server zurück.\n\n2. Wähle den Kanal für Bestell-Threads und optional Kanäle für Bestell-Alerts (ein Beitrag für jede neue Bestellung und jedes neue Angebot mit einer Schaltfläche zum Übernehmen) und speichere.\n\nDu hast den Bot stattdessen über Discord hinzugefügt? Verknüpfe dein Discord-Konto in deinen SC-Market-Einstellungen und führe dann `/setup threads` in dem Kanal aus, der die Bestell-Threads enthalten soll. Für die Bestellungen deiner Org gibst du bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei dir selbst lässt du das Feld leer. Für Alerts führst du `/setup alerts` (mit derselben `org`) in einem Team-Kanal aus.\n\nZum Hinzufügen des Bots brauchst du die Berechtigung **Server verwalten** auf dem Discord-Server, für `/setup threads` und `/setup alerts` die Berechtigung **Kanäle verwalten**. Für eine Org brauchst du auf SC Market außerdem die Berechtigung **Webhooks verwalten** der Org (oder **Bestellungen verwalten** für Alerts, die mit `/setup alerts` eingerichtet werden). Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` siehst du, was ein Kanal erhält, und mit `/help` alle Befehle.",
     "learn_connect": "Discord-Bot verbinden",
@@ -7824,12 +7824,10 @@
         "pushChecked": "Push: mindestens ein Push-Abonnement.",
         "anyNone": "Mindestens ein Kanal: per Discord-DM, E-Mail oder Push erreichbar. Keiner: über keinen davon.",
         "lastSeen": "„Zuletzt gesehen“ zählt alle Verkäufer, auch die, die ihren Online-Status vor Käufern verbergen.",
-        "discordRule": "Discord-DM: Discord verknüpft, ihre letzte DM von SC Market ({{days}} Tage gespeichert) wurde nicht mit Fehler {{code}} abgelehnt, und sie teilen einen Server mit dem Bot. Verkäufer ohne DM in diesem Zeitraum zählen, unbestätigt; „DM zugestellt“ zählt die, deren letzte DM ankam.",
-        "discordClosedInstall": "DM fehlgeschlagen (geschlossen): per DM nicht erreichbar, weil Discord ihre letzte DM abgelehnt hat (Fehler {{code}}: DMs geschlossen oder der Bot kann sie nicht erreichen). Eine abgelehnte DM löscht auch eine erfasste App-Installation. Bei einer Org gilt das für alle Kontaktpersonen.",
+        "discordRule": "Discord-DM: Discord verknüpft, sie teilen einen Server mit dem Bot oder haben die App in ihrem eigenen Discord-Konto installiert, und ihre letzte DM von SC Market ({{days}} Tage gespeichert) wurde nicht mit Fehler {{code}} abgelehnt. Eine Ablehnung, weil sie keinen Server mit dem Bot teilten, zählt nicht mehr, sobald sie danach die App installieren oder einen Server mit ihm teilen. Verkäufer ohne DM in diesem Zeitraum zählen, unbestätigt; „DM zugestellt“ zählt die, deren letzte DM ankam.",
+        "discordClosedInstall": "DM fehlgeschlagen (geschlossen): per DM nicht erreichbar, weil Discord ihre letzte DM abgelehnt hat (Fehler {{code}}: DMs geschlossen oder kein gemeinsamer Server mit dem Bot). Eine abgelehnte DM löscht auch eine erfasste App-Installation. Eine Ablehnung wegen fehlendem gemeinsamem Server entfällt, sobald sie danach die App installieren oder einen Server mit ihm teilen. Bei einer Org gilt das für alle Kontaktpersonen.",
         "serverOrApp": "Gemeinsamer Server oder App installiert: Discord verknüpft und entweder Mitglied auf mindestens einem Server, auf dem der SC-Market-Bot ist (etwa alle 12 Stunden anhand der Mitgliederlisten des Bots geprüft, ohne etwas zu senden; zuletzt geprüft {{when}}), oder beim Nutzen des Bots über die im eigenen Discord-Konto installierte App gesehen. Nicht in Beliebiger Kanal oder Keiner gezählt.",
-        "serverOrAppNever": "Gemeinsamer Server oder App installiert: Discord verknüpft und entweder Mitglied auf mindestens einem Server, auf dem der SC-Market-Bot ist (etwa alle 12 Stunden geprüft, ohne etwas zu senden; noch nicht geprüft), oder beim Nutzen des Bots über die im eigenen Discord-Konto installierte App gesehen. Nicht in Beliebiger Kanal oder Keiner gezählt.",
-        "installCounts": "Eine App-Installation zählt als per Discord-DM erreichbar.",
-        "installNotCounted": "App-Installationen werden erfasst, aber erst als per Discord-DM erreichbar gezählt, wenn bestätigt ist, dass der Bot jemandem ohne gemeinsamen Server DMs senden kann."
+        "serverOrAppNever": "Gemeinsamer Server oder App installiert: Discord verknüpft und entweder Mitglied auf mindestens einem Server, auf dem der SC-Market-Bot ist (etwa alle 12 Stunden geprüft, ohne etwas zu senden; noch nicht geprüft), oder beim Nutzen des Bots über die im eigenen Discord-Konto installierte App gesehen. Nicht in Beliebiger Kanal oder Keiner gezählt."
       },
       "installClicks": {
         "title": "Klicks auf „SC Market zu Discord hinzufügen“",
@@ -8951,26 +8949,22 @@
     "choose": "Wie möchtest du SC Market hinzufügen?",
     "user": "Zu deinem Discord-Konto",
     "userHint": "Damit wir dich zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
-    "userHintNoDm": "Damit du SC-Market-Befehle überall in Discord verwenden kannst.",
     "server": "Zu einem Discord-Server",
     "serverHint": "Für Bestell-Threads und Alerts auf deinem eigenen Server.",
     "cta": {
       "title": "SC Market zu deinem Discord hinzufügen",
       "why": "Damit wir dich zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
-      "whyNoDm": "Du kannst SC-Market-Befehle überall in Discord verwenden. Um DMs zu Angeboten und Bestellungen zu erhalten, bleib vorerst auf einem Server mit dem Bot.",
       "unreachableTitle": "Angebote von Käufern erreichen dich nicht über Discord",
       "alsoLinks": "Dabei wird auch dein Discord-Konto mit SC Market verknüpft."
     },
     "result": {
       "user_linked": {
         "title": "SC Market ist in deinem Discord",
-        "body": "Dein Discord-Konto ist jetzt mit SC Market verknüpft, damit wir dich zu Angeboten und Bestellungen erreichen können.",
-        "bodyNoDm": "Dein Discord-Konto ist jetzt mit SC Market verknüpft. Du kannst SC-Market-Befehle überall in Discord verwenden. Um DMs zu Angeboten und Bestellungen zu erhalten, bleib vorerst auf einem Server mit dem Bot."
+        "body": "Dein Discord-Konto ist jetzt mit SC Market verknüpft, damit wir dich zu Angeboten und Bestellungen erreichen können."
       },
       "user_installed": {
         "title": "SC Market ist in deinem Discord",
-        "body": "Wir können dich jetzt zu Angeboten und Bestellungen erreichen, auch ohne gemeinsamen Server.",
-        "bodyNoDm": "Du kannst SC-Market-Befehle überall in Discord verwenden. Um DMs zu Angeboten und Bestellungen zu erhalten, bleib vorerst auf einem Server mit dem Bot."
+        "body": "Wir können dich jetzt zu Angeboten und Bestellungen erreichen, auch ohne gemeinsamen Server."
       },
       "user_sign_in": {
         "title": "SC Market ist in deinem Discord",

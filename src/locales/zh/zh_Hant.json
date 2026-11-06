@@ -1645,7 +1645,7 @@
   "discord_bot": {
     "integrating_with_discord": "整合進Discord",
     "how_to_get_notified": "如何在有訂單建立時收到提醒",
-    "how_to_get_notified_answer": "將官方的[SC Market Discord 機器人]({{BOT_INSTALL_PATH}})加入到你的伺服器，並選擇一個訂單提醒頻道：每個新訂單和報價都會發布在那裡，並且都可以有自己的訂單討論串。連結 Discord 帳號並與機器人在同一伺服器後，機器人還可以給你發送私訊，例如有報價等待你回覆時的提醒。在 設定 › 通知 中選擇哪些內容透過私訊發送。你也可以用下方設定去在[SC Market的官方伺服器]({{DISCORD_INVITE}})裡完成訂單。",
+    "how_to_get_notified_answer": "將官方的[SC Market Discord 機器人]({{BOT_INSTALL_PATH}})加入到你的伺服器，並選擇一個訂單提醒頻道：每個新訂單和報價都會發布在那裡，並且都可以有自己的訂單討論串。連結 Discord 帳號，並且與機器人在同一伺服器或已將 SC Market 應用程式新增到你的 Discord 帳號後，機器人還可以給你發送私訊，例如有報價等待你回覆時的提醒。在 設定 › 通知 中選擇哪些內容透過私訊發送。你也可以用下方設定去在[SC Market的官方伺服器]({{DISCORD_INVITE}})裡完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
     "how_to_communicate_answer": "將官方 SC Market Discord 機器人加入你的伺服器，並選擇一個訂單討論串頻道：之後每個新訂單或報價都會在那裡開啟一個包含買家和指派賣家的私人討論串，買家會被邀請加入你的伺服器，方便你們一起處理訂單。\n\n1. 在你商店的 **設定 › Discord** 或組織的 **Discord 整合** 分頁中，點擊 **[將機器人加入伺服器]({{BOT_INSTALL_PATH}})**，然後在 Discord 中選擇你的伺服器。返回時伺服器已連結。\n\n2. 選擇訂單討論串頻道，並可選擇訂單提醒頻道（為每個新訂單和報價發布一則附「認領」按鈕的訊息），然後儲存。\n\n如果你是從 Discord 加入的機器人，請先在 SC Market 設定中連結你的 Discord 帳號，然後在用於存放訂單討論串的頻道中執行 `/setup threads`。對於組織的訂單，在 `org` 中填寫其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；對於向你本人下的訂單，請留空。如需提醒，請在員工頻道中執行 `/setup alerts`（使用相同的 `org`）。\n\n加入機器人需要 Discord 伺服器中的 **管理伺服器** 權限，`/setup threads`, `/setup alerts` 指令需要 **管理頻道** 權限。對於組織，你還需要在 SC Market 上擁有該組織的 **Manage Webhooks** 權限（或使用 `/setup alerts` 設定提醒時擁有 **Manage Orders** 權限）。在討論串頻道中，機器人需要「檢影片道」「建立私人討論串」「在討論串中傳送訊息」和「建立邀請」權限。執行 `/setup status` 可查看頻道接收的內容，執行 `/help` 可查看所有指令。",
     "learn_connect": "連結 Discord 機器人",
@@ -7710,12 +7710,10 @@
         "pushChecked": "推播：至少有一個推播訂閱。",
         "anyNone": "任一管道：可透過 Discord 私訊、電子郵件或推播聯絡。無：以上皆不行。",
         "lastSeen": "最近上線統計所有賣家，包括對買家隱藏上線狀態的賣家。",
-        "discordRule": "Discord 私訊：已連結 Discord，SC Market 傳給他們的最後一則私訊（保留 {{days}} 天）沒有被錯誤 {{code}} 拒絕，並且與機器人共享伺服器。此期間未收到私訊的賣家計入，但未確認；「私訊已送達」統計最後一則私訊已送達的賣家。",
-        "discordClosedInstall": "私訊失敗（已關閉）：Discord 拒絕了最後一則私訊，無法透過私訊聯絡（錯誤 {{code}}：私訊已關閉，或機器人無法聯絡到對方）。被拒絕的私訊也會清除已記錄的應用程式安裝。對於組織，這適用於所有可聯絡的成員。",
+        "discordRule": "Discord 私訊：已連結 Discord，與機器人共享伺服器或已在自己的 Discord 帳號上安裝應用程式，並且 SC Market 傳給他們的最後一則私訊（保留 {{days}} 天）沒有被錯誤 {{code}} 拒絕。因未與機器人共享伺服器而被拒絕的情況，在他們之後安裝應用程式或共享伺服器後不再計入。此期間未收到私訊的賣家計入，但未確認；「私訊已送達」統計最後一則私訊已送達的賣家。",
+        "discordClosedInstall": "私訊失敗（已關閉）：Discord 拒絕了最後一則私訊，無法透過私訊聯絡（錯誤 {{code}}：私訊已關閉，或未與機器人共享伺服器）。被拒絕的私訊也會清除已記錄的應用程式安裝。因未共享伺服器而被拒絕的情況，在對方之後安裝應用程式或共享伺服器後即解除。對於組織，這適用於所有可聯絡的成員。",
         "serverOrApp": "共享伺服器或已安裝應用程式：已連結 Discord，並且要麼是 SC Market 機器人所在的至少一個伺服器的成員（約每 12 小時根據機器人的成員清單檢查一次，不傳送任何內容；上次檢查 {{when}}），要麼曾透過安裝在自己 Discord 帳號上的應用程式使用機器人。不計入「任一管道」或「無」。",
-        "serverOrAppNever": "共享伺服器或已安裝應用程式：已連結 Discord，並且要麼是 SC Market 機器人所在的至少一個伺服器的成員（約每 12 小時檢查一次，不傳送任何內容；尚未檢查），要麼曾透過安裝在自己 Discord 帳號上的應用程式使用機器人。不計入「任一管道」或「無」。",
-        "installCounts": "安裝應用程式視為可透過 Discord 私訊聯絡。",
-        "installNotCounted": "應用程式安裝會被記錄，但在確認機器人能私訊與其不共享伺服器的人之前，不計為可透過 Discord 私訊聯絡。"
+        "serverOrAppNever": "共享伺服器或已安裝應用程式：已連結 Discord，並且要麼是 SC Market 機器人所在的至少一個伺服器的成員（約每 12 小時檢查一次，不傳送任何內容；尚未檢查），要麼曾透過安裝在自己 Discord 帳號上的應用程式使用機器人。不計入「任一管道」或「無」。"
       },
       "installClicks": {
         "title": "「將 SC Market 新增到 Discord」點擊次數",
@@ -8814,26 +8812,22 @@
     "choose": "你想如何新增 SC Market？",
     "user": "新增到你的 Discord 帳號",
     "userHint": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
-    "userHintNoDm": "讓你可以在 Discord 的任何地方使用 SC Market 指令。",
     "server": "新增到 Discord 伺服器",
     "serverHint": "用於在你自己的伺服器中使用訂單討論串和提醒。",
     "cta": {
       "title": "將 SC Market 新增到你的 Discord",
       "why": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
-      "whyNoDm": "你可以在 Discord 的任何地方使用 SC Market 指令。若要接收有關報價和訂單的私訊，目前請留在有機器人的伺服器中。",
       "unreachableTitle": "買家的報價無法透過 Discord 通知到你",
       "alsoLinks": "加入後，你的 Discord 帳號也會連結到 SC Market。"
     },
     "result": {
       "user_linked": {
         "title": "SC Market 已加入你的 Discord",
-        "body": "你的 Discord 帳號現已連結到 SC Market，我們可以就報價和訂單聯絡你。",
-        "bodyNoDm": "你的 Discord 帳號現已連結到 SC Market。你可以在 Discord 的任何地方使用 SC Market 指令。若要接收有關報價和訂單的私訊，目前請留在有機器人的伺服器中。"
+        "body": "你的 Discord 帳號現已連結到 SC Market，我們可以就報價和訂單聯絡你。"
       },
       "user_installed": {
         "title": "SC Market 已加入你的 Discord",
-        "body": "即使沒有共同的伺服器，我們現在也能就報價和訂單聯絡你。",
-        "bodyNoDm": "你可以在 Discord 的任何地方使用 SC Market 指令。若要接收有關報價和訂單的私訊，目前請留在有機器人的伺服器中。"
+        "body": "即使沒有共同的伺服器，我們現在也能就報價和訂單聯絡你。"
       },
       "user_sign_in": {
         "title": "SC Market 已加入你的 Discord",

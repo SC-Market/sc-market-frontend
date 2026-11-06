@@ -1713,7 +1713,7 @@
   "discord_bot": {
     "integrating_with_discord": "Intégration avec Discord",
     "how_to_get_notified": "Comment être notifié lorsqu'une commande est passée",
-    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon d'alertes de commande : chaque nouvelle commande et offre y est publiée, et chacune peut avoir son propre fil de commande. Le bot peut aussi vous envoyer des messages privés, par exemple un rappel quand une offre attend votre réponse, dès que votre compte Discord est lié et que vous partagez un serveur avec le bot. Choisissez ce que vous recevez en MP dans Paramètres › Notifications. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon d'alertes de commande : chaque nouvelle commande et offre y est publiée, et chacune peut avoir son propre fil de commande. Le bot peut aussi vous envoyer des messages privés, par exemple un rappel quand une offre attend votre réponse, dès que votre compte Discord est lié et que vous partagez un serveur avec le bot ou avez ajouté l'application SC Market à votre compte Discord. Choisissez ce que vous recevez en MP dans Paramètres › Notifications. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Comment communiquer avec les acheteurs via Discord",
     "how_to_communicate_answer": "Ajoutez le bot Discord officiel de SC Market à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour traiter la commande ensemble.\n\n1. Dans **Paramètres › Discord** de votre boutique, ou dans l'onglet **Intégration Discord** de votre organisation, cliquez sur **[Ajouter le bot à un serveur]({{BOT_INSTALL_PATH}})** et choisissez votre serveur dans Discord. Vous revenez avec le serveur lié.\n\n2. Choisissez le salon des fils de commande et, si vous le souhaitez, des salons pour les alertes de commande (une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer), puis enregistrez.\n\nVous avez ajouté le bot depuis Discord ? Liez votre compte Discord dans vos paramètres SC Market, puis lancez `/setup threads` dans le salon qui doit accueillir les fils de commande. Pour les commandes de votre organisation, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées auprès de vous, laissez-le vide. Pour les alertes, lancez `/setup alerts` (avec le même `org`) dans un salon d'équipe.\n\nAjouter le bot nécessite la permission **Gérer le serveur** sur le serveur Discord, et les commandes `/setup threads`, `/setup alerts` nécessitent **Gérer les salons**. Pour une organisation, il vous faut aussi sa permission **Gérer les webhooks** sur SC Market (ou **Gérer les commandes** pour les alertes créées avec `/setup alerts`). Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Lancez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
     "learn_connect": "Connecter le bot Discord",
@@ -7938,12 +7938,10 @@
         "pushChecked": "Push : au moins un abonnement push.",
         "anyNone": "Au moins un canal : joignable par MP Discord, e-mail ou push. Aucun : par aucun d'eux.",
         "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs.",
-        "discordRule": "MP Discord : Discord lié, leur dernier MP de SC Market (conservé {{days}} jours) n'a pas été refusé avec l'erreur {{code}}, et ils partagent un serveur avec le bot. Les vendeurs sans MP sur cette période comptent, non confirmés ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
-        "discordClosedInstall": "MP échoué (fermé) : injoignable par MP car Discord a refusé leur dernier MP (erreur {{code}} : MP fermés, ou le bot ne peut pas les joindre). Un MP refusé efface aussi une installation de l'application enregistrée. Pour une org, cela vaut pour toutes les personnes à contacter.",
+        "discordRule": "MP Discord : Discord lié, ils partagent un serveur avec le bot ou ont installé l'application sur leur propre compte Discord, et leur dernier MP de SC Market (conservé {{days}} jours) n'a pas été refusé avec l'erreur {{code}}. Un refus parce qu'ils ne partageaient aucun serveur avec le bot ne compte plus dès qu'ils installent l'application ou partagent un serveur avec lui ensuite. Les vendeurs sans MP sur cette période comptent, non confirmés ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
+        "discordClosedInstall": "MP échoué (fermé) : injoignable par MP car Discord a refusé leur dernier MP (erreur {{code}} : MP fermés, ou aucun serveur en commun avec le bot). Un MP refusé efface aussi une installation de l'application enregistrée. Un refus faute de serveur en commun est levé dès qu'ils installent l'application ou partagent un serveur avec lui ensuite. Pour une org, cela vaut pour toutes les personnes à contacter.",
         "serverOrApp": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures à partir des listes de membres du bot, sans rien envoyer ; dernière vérification {{when}}), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
-        "serverOrAppNever": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures, sans rien envoyer ; pas encore vérifié), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
-        "installCounts": "Installer l'application compte comme joignable par MP Discord.",
-        "installNotCounted": "Les installations de l'application sont enregistrées mais ne comptent pas comme joignables par MP Discord tant qu'il n'est pas confirmé que le bot peut écrire à quelqu'un sans serveur en commun."
+        "serverOrAppNever": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures, sans rien envoyer ; pas encore vérifié), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun."
       },
       "installClicks": {
         "title": "Clics sur « Ajouter SC Market à Discord »",
@@ -9088,26 +9086,22 @@
     "choose": "Comment voulez-vous ajouter SC Market ?",
     "user": "À votre compte Discord",
     "userHint": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
-    "userHintNoDm": "Pour utiliser les commandes SC Market partout dans Discord.",
     "server": "À un serveur Discord",
     "serverHint": "Pour les fils de commande et les alertes sur votre propre serveur.",
     "cta": {
       "title": "Ajoutez SC Market à votre Discord",
       "why": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
-      "whyNoDm": "Vous pouvez utiliser les commandes SC Market partout dans Discord. Pour recevoir des MP au sujet des offres et des commandes, restez pour l'instant sur un serveur avec le bot.",
       "unreachableTitle": "Les offres des acheteurs ne vous parviennent pas sur Discord",
       "alsoLinks": "L'ajouter lie aussi votre compte Discord à SC Market."
     },
     "result": {
       "user_linked": {
         "title": "SC Market est sur votre Discord",
-        "body": "Votre compte Discord est maintenant lié à SC Market, pour que nous puissions vous joindre au sujet des offres et des commandes.",
-        "bodyNoDm": "Votre compte Discord est maintenant lié à SC Market. Vous pouvez utiliser les commandes SC Market partout dans Discord. Pour recevoir des MP au sujet des offres et des commandes, restez pour l'instant sur un serveur avec le bot."
+        "body": "Votre compte Discord est maintenant lié à SC Market, pour que nous puissions vous joindre au sujet des offres et des commandes."
       },
       "user_installed": {
         "title": "SC Market est sur votre Discord",
-        "body": "Nous pouvons maintenant vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
-        "bodyNoDm": "Vous pouvez utiliser les commandes SC Market partout dans Discord. Pour recevoir des MP au sujet des offres et des commandes, restez pour l'instant sur un serveur avec le bot."
+        "body": "Nous pouvons maintenant vous joindre au sujet des offres et des commandes, même sans serveur en commun."
       },
       "user_sign_in": {
         "title": "SC Market est sur votre Discord",

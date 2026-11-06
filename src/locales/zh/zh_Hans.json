@@ -1705,7 +1705,7 @@
   "discord_bot": {
     "integrating_with_discord": "集成进Discord",
     "how_to_get_notified": "如何在有订单创建时收到提醒",
-    "how_to_get_notified_answer": "将官方的[SC Market Discord机器人]({{BOT_INSTALL_PATH}})加入到你的服务器，并选择一个订单提醒频道：每个新订单和报价都会发布在那里，并且都可以有自己的订单讨论帖。关联 Discord 账号并与机器人处于同一服务器后，机器人还可以给你发送私信，例如有报价等待你回复时的提醒。在 设置 › 通知 中选择哪些内容通过私信发送。你也可以用下方设置去在[SC Market 的官方服务器]({{DISCORD_INVITE}})里完成订单。",
+    "how_to_get_notified_answer": "将官方的[SC Market Discord机器人]({{BOT_INSTALL_PATH}})加入到你的服务器，并选择一个订单提醒频道：每个新订单和报价都会发布在那里，并且都可以有自己的订单讨论帖。关联 Discord 账号，并且与机器人处于同一服务器或已将 SC Market 应用添加到你的 Discord 账号后，机器人还可以给你发送私信，例如有报价等待你回复时的提醒。在 设置 › 通知 中选择哪些内容通过私信发送。你也可以用下方设置去在[SC Market 的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
     "how_to_communicate_answer": "将官方 SC Market Discord 机器人添加到你的服务器，并选择一个订单讨论帖频道：之后每个新订单或报价都会在那里开启一个包含买家和指派卖家的私密讨论帖，买家会被邀请加入你的服务器，方便你们一起处理订单。\n\n1. 在你店铺的 **设置 › Discord** 或组织的 **Discord 集成** 标签页中，点击 **[将机器人添加到服务器]({{BOT_INSTALL_PATH}})**，然后在 Discord 中选择你的服务器。返回时服务器已关联。\n\n2. 选择订单讨论帖频道，并可选择订单提醒频道（为每个新订单和报价发布一条带“认领”按钮的消息），然后保存。\n\n如果你是从 Discord 添加的机器人，请先在 SC Market 设置中关联你的 Discord 账号，然后在用于存放订单讨论帖的频道中运行 `/setup threads`。对于组织的订单，在 `org` 中填写其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；对于向你本人下的订单，请留空。如需提醒，请在员工频道中运行 `/setup alerts`（使用相同的 `org`）。\n\n添加机器人需要 Discord 服务器中的 **管理服务器** 权限，`/setup threads`, `/setup alerts` 命令需要 **管理频道** 权限。对于组织，你还需要在 SC Market 上拥有该组织的 **Manage Webhooks** 权限（或使用 `/setup alerts` 设置提醒时拥有 **Manage Orders** 权限）。在讨论帖频道中，机器人需要“查看频道”“创建私密子区”“在子区中发送消息”和“创建邀请”权限。运行 `/setup status` 可查看频道接收的内容，运行 `/help` 可查看所有命令。",
     "learn_connect": "连接 Discord 机器人",
@@ -7716,12 +7716,10 @@
         "pushChecked": "推送：至少有一个推送订阅。",
         "anyNone": "任一渠道：可通过 Discord 私信、电子邮件或推送联系。无：以上都不行。",
         "lastSeen": "最近上线统计所有卖家，包括对买家隐藏在线状态的卖家。",
-        "discordRule": "Discord 私信：已关联 Discord，SC Market 发给他们的最后一条私信（保留 {{days}} 天）没有被错误 {{code}} 拒绝，并且与机器人共享服务器。此期间未收到私信的卖家计入，但未确认；“私信已送达”统计最后一条私信已送达的卖家。",
-        "discordClosedInstall": "私信失败（已关闭）：Discord 拒绝了最后一条私信，无法通过私信联系（错误 {{code}}：私信已关闭，或机器人无法联系到对方）。被拒绝的私信也会清除已记录的应用安装。对于组织，这适用于所有可联系的成员。",
+        "discordRule": "Discord 私信：已关联 Discord，与机器人共享服务器或已在自己的 Discord 账号上安装应用，并且 SC Market 发给他们的最后一条私信（保留 {{days}} 天）没有被错误 {{code}} 拒绝。因未与机器人共享服务器而被拒绝的情况，在他们之后安装应用或共享服务器后不再计入。此期间未收到私信的卖家计入，但未确认；“私信已送达”统计最后一条私信已送达的卖家。",
+        "discordClosedInstall": "私信失败（已关闭）：Discord 拒绝了最后一条私信，无法通过私信联系（错误 {{code}}：私信已关闭，或未与机器人共享服务器）。被拒绝的私信也会清除已记录的应用安装。因未共享服务器而被拒绝的情况，在对方之后安装应用或共享服务器后即解除。对于组织，这适用于所有可联系的成员。",
         "serverOrApp": "共享服务器或已安装应用：已关联 Discord，并且要么是 SC Market 机器人所在的至少一个服务器的成员（约每 12 小时根据机器人的成员列表检查一次，不发送任何内容；上次检查 {{when}}），要么曾通过安装在自己 Discord 账号上的应用使用机器人。不计入“任一渠道”或“无”。",
-        "serverOrAppNever": "共享服务器或已安装应用：已关联 Discord，并且要么是 SC Market 机器人所在的至少一个服务器的成员（约每 12 小时检查一次，不发送任何内容；尚未检查），要么曾通过安装在自己 Discord 账号上的应用使用机器人。不计入“任一渠道”或“无”。",
-        "installCounts": "安装应用视为可通过 Discord 私信联系。",
-        "installNotCounted": "应用安装会被记录，但在确认机器人能私信与其不共享服务器的人之前，不计为可通过 Discord 私信联系。"
+        "serverOrAppNever": "共享服务器或已安装应用：已关联 Discord，并且要么是 SC Market 机器人所在的至少一个服务器的成员（约每 12 小时检查一次，不发送任何内容；尚未检查），要么曾通过安装在自己 Discord 账号上的应用使用机器人。不计入“任一渠道”或“无”。"
       },
       "installClicks": {
         "title": "“将 SC Market 添加到 Discord”点击次数",
@@ -8820,26 +8818,22 @@
     "choose": "你想如何添加 SC Market？",
     "user": "添加到你的 Discord 账号",
     "userHint": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
-    "userHintNoDm": "让你可以在 Discord 的任何地方使用 SC Market 命令。",
     "server": "添加到 Discord 服务器",
     "serverHint": "用于在你自己的服务器中使用订单讨论帖和提醒。",
     "cta": {
       "title": "将 SC Market 添加到你的 Discord",
       "why": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
-      "whyNoDm": "你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。",
       "unreachableTitle": "买家的报价无法通过 Discord 通知到你",
       "alsoLinks": "添加后，你的 Discord 账号也会关联到 SC Market。"
     },
     "result": {
       "user_linked": {
         "title": "SC Market 已添加到你的 Discord",
-        "body": "你的 Discord 账号现已关联到 SC Market，我们可以就报价和订单联系你。",
-        "bodyNoDm": "你的 Discord 账号现已关联到 SC Market。你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。"
+        "body": "你的 Discord 账号现已关联到 SC Market，我们可以就报价和订单联系你。"
       },
       "user_installed": {
         "title": "SC Market 已添加到你的 Discord",
-        "body": "即使没有共同的服务器，我们现在也能就报价和订单联系你。",
-        "bodyNoDm": "你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。"
+        "body": "即使没有共同的服务器，我们现在也能就报价和订单联系你。"
       },
       "user_sign_in": {
         "title": "SC Market 已添加到你的 Discord",

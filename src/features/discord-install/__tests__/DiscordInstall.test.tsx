@@ -58,7 +58,7 @@ const reach = (r: Partial<marketApi.DiscordReachabilityResponse> | undefined) =>
       dm_reachable: false,
       shares_server: false,
       user_installed: false,
-      user_install_counts_as_dm: false,
+      user_install_counts_as_dm: true,
       user_install_available: true,
       user_install_url: null,
       ...r,
@@ -156,29 +156,21 @@ describe("/discord/install", () => {
     expect(redirect.to).not.toHaveBeenCalled()
   })
 
-  it("doesn't promise DMs from a user install until that's confirmed", () => {
-    reach({ user_install_counts_as_dm: false })
-    const a = at("?result=user_installed&type=user")
-    expect(
-      screen.getByText(/stay in a server with the bot for now/),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByText(/even if you're not in a shared server/),
-    ).toBeNull()
-    a.unmount()
-    reach({ user_install_counts_as_dm: true })
+  it("a user install says we can now DM you, even before reachability loads", () => {
+    reach(undefined)
     at("?result=user_installed&type=user")
     expect(
       screen.getByText(/even if you're not in a shared server/),
     ).toBeInTheDocument()
+    expect(screen.queryByText(/stay in a server with the bot/)).toBeNull()
   })
 
-  it("signed out (flag unknown): the choices don't promise DMs either", () => {
+  it("signed out: the choices say a user install lets us reach you", () => {
     reach(undefined)
     at("?src=discord_app")
     expect(
       screen.getByText(
-        "So you can use SC Market commands anywhere in Discord.",
+        "So we can reach you about offers and orders even if you're not in a shared server.",
       ),
     ).toBeInTheDocument()
   })
@@ -253,7 +245,7 @@ describe("DiscordUserInstallCta", () => {
     )
 
   it("links the user install through the counted route, with the reason", () => {
-    reach({ user_install_counts_as_dm: true })
+    reach({})
     cta("panel")
     expect(
       screen.getByTestId("discord-user-install").getAttribute("href"),
@@ -264,16 +256,13 @@ describe("DiscordUserInstallCta", () => {
   })
 
   it.each(["panel", "unreachable", "hint"] as const)(
-    "%s: doesn't promise DMs while a user install isn't confirmed to reach them",
+    "%s: says a user install lets us reach you without a shared server",
     (variant) => {
-      reach({ user_install_counts_as_dm: false })
+      reach({})
       cta(variant)
       expect(
-        screen.getByText(/stay in a server with the bot for now/),
+        screen.getByText(/even if you're not in a shared server/),
       ).toBeInTheDocument()
-      expect(
-        screen.queryByText(/even if you're not in a shared server/),
-      ).toBeNull()
     },
   )
 

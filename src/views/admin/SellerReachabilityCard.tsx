@@ -327,7 +327,7 @@ export function SellerReachabilityCard() {
                       days: data.signals.discord_dm_result_retention_days,
                       code: data.signals.discord_dm_refusal_codes.join(" / "),
                       defaultValue:
-                        'Discord DM: Discord linked, their last DM from SC Market (kept {{days}} days) wasn\'t refused with error {{code}}, and they share a server with the bot. Sellers never DMed in that time count, unconfirmed; "DM delivered" counts those whose last DM arrived.',
+                        'Discord DM: Discord linked, they share a server with the bot or installed the app on their own Discord account, and their last DM from SC Market (kept {{days}} days) wasn\'t refused with error {{code}}. A refusal because they shared no server with the bot stops counting once they install the app or share a server after it. Sellers never DMed in that time count, unconfirmed; "DM delivered" counts those whose last DM arrived.',
                     })
                   : t(
                       "adminUi.sellerReachability.notes.discordNoSignal",
@@ -342,7 +342,7 @@ export function SellerReachabilityCard() {
                 {t("adminUi.sellerReachability.notes.discordClosedInstall", {
                   code: data.signals.discord_dm_refusal_codes.join(" / "),
                   defaultValue:
-                    "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no way for the bot to reach them). A refused DM also clears a recorded app install. For an org, this holds for everyone who can be contacted.",
+                    "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no shared server with the bot). A refused DM also clears a recorded app install. A refusal for no shared server is lifted once they install the app or share a server after it. For an org, this holds for everyone who can be contacted.",
                 })}
               </Typography>
               <Typography
@@ -362,15 +362,6 @@ export function SellerReachabilityCard() {
                   : t(
                       "adminUi.sellerReachability.notes.serverOrAppNever",
                       "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours, without sending anything; not checked yet), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
-                    )}{" "}
-                {data.signals.discord_user_install_counts_as_dm
-                  ? t(
-                      "adminUi.sellerReachability.notes.installCounts",
-                      "Installing the app counts as reachable by Discord DM.",
-                    )
-                  : t(
-                      "adminUi.sellerReachability.notes.installNotCounted",
-                      "App installs are recorded but not counted as reachable by Discord DM until it's confirmed the bot can DM someone who shares no server with it.",
                     )}
               </Typography>
               <Typography
