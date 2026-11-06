@@ -82,6 +82,8 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 import { useFormatters } from "../../util/format"
+import { common } from "@mui/material/colors"
+
 const VIEW_MODES = ["list", "grid"] as const
 
 const microChip = {
@@ -657,7 +659,7 @@ export function MissionSearch() {
                                           ...microChip,
                                           maxWidth: 100,
                                           bgcolor: "info.main",
-                                          color: "#fff",
+                                          color: common.white,
                                         }}
                                       />
                                     </Tooltip>

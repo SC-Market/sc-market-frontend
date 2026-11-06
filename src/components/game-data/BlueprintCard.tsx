@@ -66,6 +66,7 @@ export interface BlueprintCardProps {
 }
 
 import { formatCraftingTime } from "../../constants/crafting"
+import { common, grey } from "@mui/material/colors"
 
 function shortName(name: string): string {
   // "Lindinium" → "LIND", "Iron" → "IRON", "Hephaestanite" → "HEPH"
@@ -78,7 +79,7 @@ function shortName(name: string): string {
 }
 
 function ingColor(ing: BlueprintIngredientSummary): string {
-  return getCommodityColor(ing.sub_type) || "#616161"
+  return getCommodityColor(ing.sub_type) || grey[700]
 }
 
 export const BlueprintCard: React.FC<BlueprintCardProps> = ({
@@ -319,7 +320,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                       height: 18,
                       fontSize: "0.6rem",
                       bgcolor: ingColor(ing),
-                      color: "#fff",
+                      color: common.white,
                     }}
                   />
                 </Tooltip>

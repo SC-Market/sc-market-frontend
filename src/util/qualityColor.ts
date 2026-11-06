@@ -1,3 +1,6 @@
+import { blue, common, green, grey, orange, purple } from "@mui/material/colors"
+import { QUALITY_DARK_TEXT } from "../hooks/styles/fixedColors"
+
 /**
  * The one quality colour scheme for the site (tiers 1-5 and values 0-1000).
  *
@@ -15,16 +18,16 @@ export interface QualityColor {
   fg: string
 }
 
-const LIGHT_TEXT = "#ffffff"
+const LIGHT_TEXT = common.white
 /** The paper colour of the dark theme, so dark text matches the surface. */
-const DARK_TEXT = "#111828"
+const DARK_TEXT = QUALITY_DARK_TEXT
 
 export const QUALITY_TIER_COLORS: Record<1 | 2 | 3 | 4 | 5, QualityColor> = {
-  1: { bg: "#757575", fg: LIGHT_TEXT }, // grey    4.61:1
-  2: { bg: "#4caf50", fg: DARK_TEXT }, // green   6.37:1
-  3: { bg: "#2196f3", fg: DARK_TEXT }, // blue    5.67:1
-  4: { bg: "#9c27b0", fg: LIGHT_TEXT }, // purple  6.30:1
-  5: { bg: "#ff9800", fg: DARK_TEXT }, // gold    8.22:1
+  1: { bg: grey[600], fg: LIGHT_TEXT }, // grey    4.61:1
+  2: { bg: green[500], fg: DARK_TEXT }, // green   6.37:1
+  3: { bg: blue[500], fg: DARK_TEXT }, // blue    5.67:1
+  4: { bg: purple[500], fg: LIGHT_TEXT }, // purple  6.30:1
+  5: { bg: orange[500], fg: DARK_TEXT }, // gold    8.22:1
 }
 
 /** Colour for a quality tier (1-5). Out-of-range tiers get the tier-1 grey. */

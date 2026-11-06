@@ -73,6 +73,8 @@ import {
 import { SeoHead } from "../../seo/SeoHead"
 
 import { useFormatters } from "../../util/format"
+import { grey } from "@mui/material/colors"
+
 export function BlueprintDetail() {
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -484,7 +486,7 @@ export function BlueprintDetail() {
                     )
                   const qr = qualityRanges[idx] || { min: 0, max: 1000 }
                   const color =
-                    getCommodityColor(ing.game_item?.sub_type) || "#616161"
+                    getCommodityColor(ing.game_item?.sub_type) || grey[700]
                   return (
                     <Box
                       key={idx}

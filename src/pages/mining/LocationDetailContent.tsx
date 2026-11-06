@@ -28,12 +28,14 @@ import type {
 import { Section } from "../../components/paper/Section"
 
 import { useFormatters } from "../../util/format"
+import { blue, green, grey, orange, purple } from "@mui/material/colors"
+
 const RARITY_COLORS: Record<string, string> = {
-  common: "#9e9e9e",
-  uncommon: "#4caf50",
-  rare: "#2196f3",
-  epic: "#9c27b0",
-  legendary: "#ff9800",
+  common: grey[500],
+  uncommon: green[500],
+  rare: blue[500],
+  epic: purple[500],
+  legendary: orange[500],
 }
 
 function friendlyName(name: string): string {
@@ -44,11 +46,11 @@ function groupIcon(groupName: string) {
   const g = (groupName || "").toLowerCase()
   const sx = { fontSize: 18, mr: 0.5, verticalAlign: "text-bottom" }
   if (g.includes("ship"))
-    return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+    return <RocketLaunchRounded sx={{ ...sx, color: blue[500] }} />
   if (g.includes("ground") || g.includes("vehicle"))
-    return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+    return <DirectionsCarRounded sx={{ ...sx, color: orange[500] }} />
   if (g.includes("fps") || g.includes("hand"))
-    return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+    return <PanToolRounded sx={{ ...sx, color: green[500] }} />
   return null
 }
 
@@ -194,8 +196,8 @@ function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
                       label={rarity.charAt(0).toUpperCase() + rarity.slice(1)}
                       size="small"
                       sx={{
-                        bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22",
-                        color: RARITY_COLORS[rarity] || "#9e9e9e",
+                        bgcolor: (RARITY_COLORS[rarity] || grey[500]) + "22",
+                        color: RARITY_COLORS[rarity] || grey[500],
                         fontWeight: 600,
                         height: 20,
                         fontSize: "0.7rem",

@@ -39,6 +39,8 @@ import { missionGiver, usableGiver } from "../../seo/missionText"
 import { missionHubText } from "../../seo/missionHubs"
 
 import { useFormatters } from "../../util/format"
+import { common } from "@mui/material/colors"
+
 // ============================================================================
 // Helpers
 // ============================================================================
@@ -190,7 +192,7 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
           label={m.associated_event}
           size="small"
           {...go({ show_events: "true", event: m.associated_event! })}
-          sx={{ bgcolor: "info.main", color: "#fff" }}
+          sx={{ bgcolor: "info.main", color: common.white }}
         />
       )}
       {m.difficulty_level && (

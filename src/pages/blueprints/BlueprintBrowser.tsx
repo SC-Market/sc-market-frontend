@@ -90,6 +90,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { blueprintsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { common } from "@mui/material/colors"
 
 type ViewMode = "grid" | "list"
 const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
@@ -780,7 +781,7 @@ export function BlueprintBrowser() {
                                           bgcolor:
                                             getCommodityColor(ing.sub_type) ||
                                             "grey.600",
-                                          color: "#fff",
+                                          color: common.white,
                                         }}
                                       />
                                     </Tooltip>

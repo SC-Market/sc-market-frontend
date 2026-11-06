@@ -74,6 +74,15 @@ import {
   NumberedPagination,
   parsePageSize,
 } from "../../components/pagination/NumberedPagination"
+import {
+  blueGrey,
+  cyan,
+  indigo,
+  orange,
+  purple,
+  red,
+  teal,
+} from "@mui/material/colors"
 
 const PAGE_SIZE = 24
 
@@ -93,18 +102,18 @@ function getVehicleCategory(
 
 // Maps career string → accent color hex
 const CAREER_PILL_COLORS: Record<string, string> = {
-  combat: "#ef5350",
-  exploration: "#5c6bc0",
-  industrial: "#ffa726",
-  support: "#26a69a",
-  transporter: "#ab47bc",
-  transport: "#ab47bc",
-  competition: "#26c6da",
-  multirole: "#78909c",
+  combat: red[400],
+  exploration: indigo[400],
+  industrial: orange[400],
+  support: teal[400],
+  transporter: purple[400],
+  transport: purple[400],
+  competition: cyan[400],
+  multirole: blueGrey[400],
 }
 
 function getCareerPillColor(career: string): string {
-  return CAREER_PILL_COLORS[career.toLowerCase()] ?? "#78909c"
+  return CAREER_PILL_COLORS[career.toLowerCase()] ?? blueGrey[400]
 }
 
 // ─── Section divider with count badge ───────────────────────────────────────
@@ -228,12 +237,12 @@ function VehicleCard({
               ...(vehicleCategory === "ground"
                 ? {
                     bgcolor: "rgba(255,167,38,0.18)",
-                    color: "#ffa726",
+                    color: orange[400],
                     border: "1px solid rgba(255,167,38,0.35)",
                   }
                 : {
                     bgcolor: "rgba(171,71,188,0.18)",
-                    color: "#ce93d8",
+                    color: purple[200],
                     border: "1px solid rgba(171,71,188,0.35)",
                   }),
             }}

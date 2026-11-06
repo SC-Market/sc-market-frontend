@@ -22,16 +22,17 @@ import {
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { Speed, HighQuality } from "@mui/icons-material"
+import { green, orange, red } from "@mui/material/colors"
 
 const speedColor: Record<string, string> = {
-  Fast: "#4caf50",
-  Normal: "#ff9800",
-  Slow: "#f44336",
+  Fast: green[500],
+  Normal: orange[500],
+  Slow: red[500],
 }
 const qualityColor: Record<string, string> = {
-  Careful: "#4caf50",
-  Normal: "#ff9800",
-  Wasteful: "#f44336",
+  Careful: green[500],
+  Normal: orange[500],
+  Wasteful: red[500],
 }
 const speedDesc: Record<string, { key: string; en: string }> = {
   Fast: {

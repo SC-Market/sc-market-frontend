@@ -65,6 +65,8 @@ import { DetailPageSkeleton } from "./GameDataSkeletons"
 import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 
 import { useFormatters } from "../../util/format"
+import { grey } from "@mui/material/colors"
+
 interface Props {
   blueprintId: string | null
   open: boolean
@@ -548,7 +550,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   )
                 const qr = qualityRanges[idx] || { min: 0, max: 1000 }
                 const color =
-                  getCommodityColor(ing.game_item?.sub_type) || "#616161"
+                  getCommodityColor(ing.game_item?.sub_type) || grey[700]
                 return (
                   <Box
                     key={idx}

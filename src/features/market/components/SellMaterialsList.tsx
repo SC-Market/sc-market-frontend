@@ -30,6 +30,7 @@ import FastfoodIcon from "@mui/icons-material/Fastfood"
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital"
 import {
   brown,
+  common,
   green,
   grey,
   lightBlue,
@@ -83,7 +84,7 @@ function SellItemRow(props: {
   const { t } = useTranslation()
   const { row, onClick, isItemSelected, labelId } = props
   const bgColor = useMemo(
-    () => (kindIcons[row.kind] ? kindIcons[row.kind][1] : "#FFF"),
+    () => (kindIcons[row.kind] ? kindIcons[row.kind][1] : common.white),
     [row],
   )
   return (

@@ -21,6 +21,7 @@ import {
 } from "../../features/profile/api/profileApi"
 import { useEffect, useMemo, useCallback, useState } from "react"
 import { isSiteAdmin } from "../../util/siteRole"
+import { grey } from "@mui/material/colors"
 
 // Font names are proper nouns; `labelKey` options add a translated descriptor
 // around the font name (passed as {{font}}).
@@ -112,8 +113,8 @@ function ThemePresetSwatch({
   isActive: boolean
 }) {
   const themeObj = CUSTOM_THEMES.get(name)
-  const primary = themeObj?.palette?.primary?.main || "#888"
-  const bg = themeObj?.palette?.background?.default || "#1A1A2E"
+  const primary = themeObj?.palette?.primary?.main || grey[600]
+  const bg = themeObj?.palette?.background?.default || grey[900]
 
   return (
     <Tooltip title={name.replace(/_/g, " ")} placement="top">

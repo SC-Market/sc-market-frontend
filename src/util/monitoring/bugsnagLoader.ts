@@ -13,6 +13,7 @@ import { currentDeploymentStage } from "../deploymentStage"
 let bugsnagInitialized = false
 import type { Client } from "@bugsnag/core"
 import type { BugsnagPluginReactResult } from "@bugsnag/plugin-react"
+import { grey } from "@mui/material/colors"
 
 let bugsnagInstance: Client | null = null
 
@@ -189,7 +190,7 @@ export function getBugsnagErrorBoundary(
               {
                 style: {
                   fontSize: "12px",
-                  color: "#888",
+                  color: grey[600],
                   textAlign: "left",
                   maxWidth: "600px",
                   margin: "10px auto",

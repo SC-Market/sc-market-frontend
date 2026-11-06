@@ -58,6 +58,7 @@ import type {
 import { usePageReady } from "../../components/metadata/PageReady"
 import { remainingQuantity } from "../../features/market/domain/buyOrders"
 import { formatNumber, useFormatters } from "../../util/format"
+import { amber, blue, cyan, deepPurple, red, teal } from "@mui/material/colors"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -94,12 +95,12 @@ function initials(name: string): string {
 
 function avatarColor(name: string): string {
   const colors = [
-    "#3b82f6",
-    "#8b5cf6",
-    "#06b6d4",
-    "#10b981",
-    "#f59e0b",
-    "#ef4444",
+    blue[500],
+    deepPurple[300],
+    cyan[500],
+    teal[400],
+    amber[700],
+    red[500],
   ]
   let h = 0
   for (let i = 0; i < name.length; i++)
@@ -285,7 +286,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         onChange={(_, v) => setTab(v)}
         sx={{ px: 2, borderBottom: 1, borderColor: "divider" }}
         textColor="inherit"
-        TabIndicatorProps={{ style: { backgroundColor: "#3b82f6" } }}
+        TabIndicatorProps={{ style: { backgroundColor: blue[500] } }}
       >
         <Tab label={t("common.all")} value="all" sx={{ fontSize: 12 }} />
         <Tab
@@ -367,7 +368,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                   sx={{
                     cursor: "pointer",
                     borderLeft: isTargeted
-                      ? "3px solid #3b82f6"
+                      ? `3px solid ${blue[500]}`
                       : "3px solid transparent",
                     "&:hover": { bgcolor: "action.hover" },
                   }}

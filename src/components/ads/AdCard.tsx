@@ -14,6 +14,7 @@ import {
   POSTER_TYPE,
   fluidCss,
 } from "./posterLayout"
+import { AD_POSTER } from "../../hooks/styles/fixedColors"
 
 interface AdCardProps {
   /** The ad configuration to display */
@@ -103,8 +104,8 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         height: "100%",
         containerType: "inline-size",
         overflow: "hidden",
-        color: "#e8eef7",
-        background: `radial-gradient(120% 70% at 85% 10%, ${ad.accent}33 0%, transparent 60%), linear-gradient(165deg, #0d1626 0%, #0a101c 55%, #06090f 100%)`,
+        color: AD_POSTER.text,
+        background: `radial-gradient(120% 70% at 85% 10%, ${ad.accent}33 0%, transparent 60%), linear-gradient(165deg, ${AD_POSTER.skyTop} 0%, ${AD_POSTER.skyMiddle} 55%, ${AD_POSTER.skyBottom} 100%)`,
         // Faint scan lines, like a holo-billboard.
         "&::after": {
           content: '""',

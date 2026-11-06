@@ -44,6 +44,7 @@ import {
 import { remainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
 import { useCancelBuyOrder } from "../hooks/useBuyOrderActions"
+import { amber, green } from "@mui/material/colors"
 
 /**
  * MarketAggregateViewV2 Component
@@ -1027,7 +1028,7 @@ export function AggregateBuySellWallV2(props: {
         ]}
         height={200}
         xAxisType="category"
-        colors={["#22c55e", "#f59e0b"]}
+        colors={[green[500], amber[700]]}
       />
     )
   }
@@ -1063,7 +1064,7 @@ export function AggregateBuySellWallV2(props: {
           ]}
           height={400}
           xAxisType="category"
-          colors={["#22c55e", "#f59e0b"]}
+          colors={[green[500], amber[700]]}
           xTickInterval={10}
           xValueFormatter={formatPrice}
         />

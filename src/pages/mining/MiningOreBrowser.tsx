@@ -41,12 +41,22 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 import { useFormatters } from "../../util/format"
+import {
+  blue,
+  common,
+  cyan,
+  green,
+  grey,
+  orange,
+  purple,
+} from "@mui/material/colors"
+
 const RARITY_COLORS: Record<string, string> = {
-  common: "#9e9e9e",
-  uncommon: "#4caf50",
-  rare: "#2196f3",
-  epic: "#9c27b0",
-  legendary: "#ff9800",
+  common: grey[500],
+  uncommon: green[500],
+  rare: blue[500],
+  epic: purple[500],
+  legendary: orange[500],
 }
 
 function friendlyName(name: string): string {
@@ -201,7 +211,7 @@ function OreCard({
   onClick: () => void
 }) {
   const rarityColor =
-    RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
+    RARITY_COLORS[(ore.rarity || "").toLowerCase()] || grey[600]
   const displayName = ore.displayName || friendlyName(ore.name)
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -265,7 +275,7 @@ function OreCard({
                 sx={{
                   ...microChip,
                   bgcolor: rarityColor,
-                  color: "#fff",
+                  color: common.white,
                   ml: 0.5,
                 }}
               />
@@ -341,9 +351,9 @@ function OreCard({
 }
 
 const SYSTEM_COLORS: Record<string, string> = {
-  Stanton: "#00bcd4",
-  Pyro: "#ff9800",
-  Nyx: "#4caf50",
+  Stanton: cyan[500],
+  Pyro: orange[500],
+  Nyx: green[500],
 }
 
 function OreLocationChips({
@@ -367,7 +377,7 @@ function OreLocationChips({
   return (
     <Box sx={{ mt: 0.5 }}>
       {Array.from(bySystem.entries()).map(([sys, locs]) => {
-        const color = SYSTEM_COLORS[sys] || "#9e9e9e"
+        const color = SYSTEM_COLORS[sys] || grey[500]
         return (
           <Box key={sys} sx={{ mb: 0.25 }}>
             <Chip

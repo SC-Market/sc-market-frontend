@@ -33,40 +33,51 @@ import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { manufacturersSeoText } from "../../seo/hubHeads"
+import {
+  blue,
+  blueGrey,
+  cyan,
+  green,
+  indigo,
+  orange,
+  purple,
+  red,
+  teal,
+} from "@mui/material/colors"
 
 const VIEW_MODES = ["grid", "list"] as const
 
 // Accent color + known specialty metadata per manufacturer code
 const MFR_META: Record<string, { color: string; specialties: string[]; tagline?: string }> = {
-  "Roberts Space Industries": { color: "#00acc1", specialties: ["Ships", "Armor", "Weapons"], tagline: "From the Earth to the Stars" },
-  RSI: { color: "#00acc1", specialties: ["Ships", "Armor", "Weapons"], tagline: "From the Earth to the Stars" },
-  "Aegis Dynamics": { color: "#1976d2", specialties: ["Ships", "Weapons", "Armor"], tagline: "Prepared for the Worst" },
-  Aegis: { color: "#1976d2", specialties: ["Ships", "Weapons", "Armor"], tagline: "Prepared for the Worst" },
-  "Drake Interplanetary": { color: "#e53935", specialties: ["Ships", "Weapons"], tagline: "What You Do Is Your Business" },
-  Drake: { color: "#e53935", specialties: ["Ships", "Weapons"], tagline: "What You Do Is Your Business" },
-  "Anvil Aerospace": { color: "#fb8c00", specialties: ["Ships", "Weapons", "Armor"], tagline: "Built to Last" },
-  Anvil: { color: "#fb8c00", specialties: ["Ships", "Weapons", "Armor"], tagline: "Built to Last" },
-  "Origin Jumpworks": { color: "#7b1fa2", specialties: ["Ships", "Consumer"], tagline: "Luxury Redefined" },
-  Origin: { color: "#7b1fa2", specialties: ["Ships", "Consumer"], tagline: "Luxury Redefined" },
-  MISC: { color: "#388e3c", specialties: ["Ships", "Components"], tagline: "Today, Tomorrow, Together" },
-  "Greycat Industrial": { color: "#546e7a", specialties: ["Vehicles", "Tools", "Equipment"], tagline: "Industrial Grade. Always." },
-  Greycat: { color: "#546e7a", specialties: ["Vehicles", "Tools", "Equipment"], tagline: "Industrial Grade. Always." },
-  "Tumbril Land Systems": { color: "#c62828", specialties: ["Vehicles", "Weapons"], tagline: "Ground Dominance" },
-  Tumbril: { color: "#c62828", specialties: ["Vehicles", "Weapons"], tagline: "Ground Dominance" },
-  "Klaus & Werner": { color: "#5c6bc0", specialties: ["Ship Weapons", "Turrets", "Components"], tagline: "Precision in Every Shot" },
-  "Behring Applied Technology": { color: "#455a64", specialties: ["Weapons", "Components"], tagline: "Reliability When It Matters" },
-  Behring: { color: "#455a64", specialties: ["Weapons", "Components"], tagline: "Reliability When It Matters" },
-  "Gallenson Tactical Systems": { color: "#37474f", specialties: ["Weapons", "Armor"], tagline: "No Compromises" },
-  Gallenson: { color: "#37474f", specialties: ["Weapons", "Armor"] },
-  "Amon & Reese": { color: "#4db6ac", specialties: ["Ship Weapons", "Components"] },
-  "Aopoa (Xi'an)": { color: "#7b1fa2", specialties: ["Ships", "Hoverbikes"], tagline: "Xi'an Craftsmanship" },
-  Aopoa: { color: "#7b1fa2", specialties: ["Ships", "Hoverbikes"], tagline: "Xi'an Craftsmanship" },
-  "Crusader Industries": { color: "#1565c0", specialties: ["Ships", "Components"], tagline: "Your Home in the Stars" },
-  Crusader: { color: "#1565c0", specialties: ["Ships", "Components"], tagline: "Your Home in the Stars" },
+  "Roberts Space Industries": { color: cyan[600], specialties: ["Ships", "Armor", "Weapons"], tagline: "From the Earth to the Stars" },
+  RSI: { color: cyan[600], specialties: ["Ships", "Armor", "Weapons"], tagline: "From the Earth to the Stars" },
+  "Aegis Dynamics": { color: blue[700], specialties: ["Ships", "Weapons", "Armor"], tagline: "Prepared for the Worst" },
+  Aegis: { color: blue[700], specialties: ["Ships", "Weapons", "Armor"], tagline: "Prepared for the Worst" },
+  "Drake Interplanetary": { color: red[600], specialties: ["Ships", "Weapons"], tagline: "What You Do Is Your Business" },
+  Drake: { color: red[600], specialties: ["Ships", "Weapons"], tagline: "What You Do Is Your Business" },
+  "Anvil Aerospace": { color: orange[600], specialties: ["Ships", "Weapons", "Armor"], tagline: "Built to Last" },
+  Anvil: { color: orange[600], specialties: ["Ships", "Weapons", "Armor"], tagline: "Built to Last" },
+  "Origin Jumpworks": { color: purple[700], specialties: ["Ships", "Consumer"], tagline: "Luxury Redefined" },
+  Origin: { color: purple[700], specialties: ["Ships", "Consumer"], tagline: "Luxury Redefined" },
+  MISC: { color: green[700], specialties: ["Ships", "Components"], tagline: "Today, Tomorrow, Together" },
+  "Greycat Industrial": { color: blueGrey[600], specialties: ["Vehicles", "Tools", "Equipment"], tagline: "Industrial Grade. Always." },
+  Greycat: { color: blueGrey[600], specialties: ["Vehicles", "Tools", "Equipment"], tagline: "Industrial Grade. Always." },
+  "Tumbril Land Systems": { color: red[800], specialties: ["Vehicles", "Weapons"], tagline: "Ground Dominance" },
+  Tumbril: { color: red[800], specialties: ["Vehicles", "Weapons"], tagline: "Ground Dominance" },
+  "Klaus & Werner": { color: indigo[400], specialties: ["Ship Weapons", "Turrets", "Components"], tagline: "Precision in Every Shot" },
+  "Behring Applied Technology": { color: blueGrey[700], specialties: ["Weapons", "Components"], tagline: "Reliability When It Matters" },
+  Behring: { color: blueGrey[700], specialties: ["Weapons", "Components"], tagline: "Reliability When It Matters" },
+  "Gallenson Tactical Systems": { color: blueGrey[800], specialties: ["Weapons", "Armor"], tagline: "No Compromises" },
+  Gallenson: { color: blueGrey[800], specialties: ["Weapons", "Armor"] },
+  "Amon & Reese": { color: teal[300], specialties: ["Ship Weapons", "Components"] },
+  "Aopoa (Xi'an)": { color: purple[700], specialties: ["Ships", "Hoverbikes"], tagline: "Xi'an Craftsmanship" },
+  Aopoa: { color: purple[700], specialties: ["Ships", "Hoverbikes"], tagline: "Xi'an Craftsmanship" },
+  "Crusader Industries": { color: blue[800], specialties: ["Ships", "Components"], tagline: "Your Home in the Stars" },
+  Crusader: { color: blue[800], specialties: ["Ships", "Components"], tagline: "Your Home in the Stars" },
 }
 
 function getMfrMeta(name: string) {
-  return MFR_META[name] ?? { color: "#546e7a", specialties: [] }
+  return MFR_META[name] ?? { color: blueGrey[600], specialties: [] }
 }
 
 /** Specialty chip labels -> gameTaxonomyUi.manufacturerSpecialties keys */

@@ -52,6 +52,7 @@ import {
 } from "@mui/icons-material"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { blue, cyan, green, grey, orange } from "@mui/material/colors"
 
 // The API sends English display names for mining groups and location types;
 // translate the known ones, show anything else as sent.
@@ -77,11 +78,11 @@ function GroupIcon({ groupName }: { groupName: string }) {
   const g = (groupName || "").toLowerCase()
   const sx = { fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }
   if (g.includes("ship"))
-    return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+    return <RocketLaunchRounded sx={{ ...sx, color: blue[500] }} />
   if (g.includes("ground"))
-    return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+    return <DirectionsCarRounded sx={{ ...sx, color: orange[500] }} />
   if (g.includes("fps") || g.includes("hand"))
-    return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+    return <PanToolRounded sx={{ ...sx, color: green[500] }} />
   return null
 }
 
@@ -217,13 +218,13 @@ export function MiningLocationBrowser() {
 }
 
 const SYSTEM_COLORS: Record<string, string> = {
-  Stanton: "#00bcd4",
-  Pyro: "#ff9800",
-  Nyx: "#4caf50",
+  Stanton: cyan[500],
+  Pyro: orange[500],
+  Nyx: green[500],
 }
 
 function systemChipColor(system: string): string {
-  return SYSTEM_COLORS[system] || "#9e9e9e"
+  return SYSTEM_COLORS[system] || grey[500]
 }
 
 function LocationCard({

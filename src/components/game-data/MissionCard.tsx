@@ -34,6 +34,8 @@ import { Tooltip } from "@mui/material"
 import { ShieldRounded, BuildRounded } from "@mui/icons-material"
 
 import { useFormatters } from "../../util/format"
+import { common } from "@mui/material/colors"
+
 export interface MissionCardProps {
   mission: {
     mission_id: string
@@ -274,7 +276,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                     `/missions?show_events=true&event=${mission.associated_event}`,
                   )
                 }}
-                sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }}
+                sx={{ ...microChip, bgcolor: "info.main", color: common.white }}
               />
             )}
             {mission.ship_encounter_count > 0 && (

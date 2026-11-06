@@ -20,6 +20,7 @@ import type {
   BlueprintDetailResponse,
   BlueprintSearchResult,
 } from "../../store/api/v2/market"
+import { common } from "@mui/material/colors"
 
 /** The blueprint fields the tags are built from. */
 export type BlueprintTagSource = Pick<
@@ -177,7 +178,7 @@ export function BlueprintTags({
           label={bp.rarity}
           size="small"
           {...filterLink({ rarity: bp.rarity })}
-          sx={{ ...base, bgcolor: "secondary.main", color: "#fff" }}
+          sx={{ ...base, bgcolor: "secondary.main", color: common.white }}
         />
       )}
       {show("tier") && bp.tier && (
@@ -187,7 +188,7 @@ export function BlueprintTags({
             micro ? `T${bp.tier}` : t("blueprintsUi.tierN", { tier: bp.tier })
           }
           size="small"
-          sx={{ ...base, bgcolor: "warning.main", color: "#fff" }}
+          sx={{ ...base, bgcolor: "warning.main", color: common.white }}
         />
       )}
       {show("manufacturer") && bp.manufacturer && (

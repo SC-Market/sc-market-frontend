@@ -27,6 +27,8 @@ import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { ThemeOptions } from "@mui/material"
 import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
+import { grey } from "@mui/material/colors"
+import { COLOR_INPUT_EMPTY } from "../../hooks/styles/fixedColors"
 
 type ThemeModeData = ThemeOptions & Record<string, unknown>
 
@@ -372,8 +374,8 @@ export function ThemeEditor({
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
             {Array.from(CUSTOM_THEMES.entries()).map(([name, themeObj]) => {
-              const primary = themeObj.palette?.primary?.main || "#888"
-              const bg = themeObj.palette?.background?.default || "#1A1A2E"
+              const primary = themeObj.palette?.primary?.main || grey[600]
+              const bg = themeObj.palette?.background?.default || grey[900]
               return (
                 <Tooltip
                   key={name}
@@ -464,7 +466,7 @@ export function ThemeEditor({
                     aria-label={t(field.labelKey, field.fallback)}
                     value={
                       (getNestedValue(currentMode, field.path) as string) ||
-                      "#000000"
+                      COLOR_INPUT_EMPTY
                     }
                     onChange={(e) => updateValue(field.path, e.target.value)}
                     style={{

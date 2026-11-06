@@ -46,10 +46,12 @@ import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { wikiLocationsSeoText } from "../../seo/hubHeads"
 
 import { useFormatters } from "../../util/format"
+import { common, cyan, green, orange } from "@mui/material/colors"
+
 const SYSTEM_COLORS: Record<string, string> = {
-  Stanton: "#00bcd4",
-  Pyro: "#ff9800",
-  Nyx: "#4caf50",
+  Stanton: cyan[500],
+  Pyro: orange[500],
+  Nyx: green[500],
 }
 
 const TYPE_FILTERS = ["All", "Planet", "Moon", "Station", "Outpost"] as const
@@ -145,7 +147,7 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
           <Chip
             label={node.jurisdiction}
             size="small"
-            sx={{ bgcolor: systemColor, color: "#fff", fontWeight: 600, height: 22, fontSize: "0.7rem" }}
+            sx={{ bgcolor: systemColor, color: common.white, fontWeight: 600, height: 22, fontSize: "0.7rem" }}
           />
         )}
         {node.respawnType && node.respawnType !== "None" && (

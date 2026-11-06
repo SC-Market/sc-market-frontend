@@ -422,8 +422,9 @@ export default [
     },
   },
 
-  // ── Guard rails: no hard-coded hex colours (warn) ──
-  // Theme files and the game-icon colour table are where hex values belong.
+  // ── Guard rails: no hard-coded hex colours (error) ──
+  // Theme files and the game-icon colour table are where hex values belong;
+  // colours that must stay exact live in src/hooks/styles/fixedColors.ts.
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: [
@@ -435,7 +436,7 @@ export default [
     ],
     plugins: { "scm-style": scmStyle },
     rules: {
-      "scm-style/no-hex-colors": "warn",
+      "scm-style/no-hex-colors": "error",
     },
   },
 
