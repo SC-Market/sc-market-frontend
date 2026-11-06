@@ -13,7 +13,8 @@ import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { BlueprintBrowser } from "../BlueprintBrowser"
-import { marketV2Api } from "../../../store/api/v2/market"
+import { gameDataApi } from "../../../features/game-data/api/gameDataApi"
+import { serviceApi } from "../../../store/service"
 
 // Mock StandardPageLayout to avoid pulling in serviceApi/profileApi dependencies.
 // Render headerTitle since the page title ("Blueprint Browser") is passed via that prop.
@@ -89,6 +90,12 @@ const MOCK_BLUEPRINT_SEARCH = {
   error: undefined,
 }
 
+const MOCK_MANUFACTURERS = {
+  data: [{ manufacturer: "behr", display_name: "Behring", item_count: 12 }],
+  isLoading: false,
+  error: undefined,
+}
+
 const MOCK_CATEGORIES = {
   data: [{ category: "Weapons", count: 10 }],
   isLoading: false,
@@ -103,16 +110,12 @@ vi.mock("../../../store/api/v2/market", async () => {
   const actual = await vi.importActual("../../../store/api/v2/market")
   return {
     ...actual,
-    marketV2Api: {
-      reducerPath: "marketV2Api",
-      reducer: () => ({}),
-      middleware: { concat: () => [] },
-    },
     useSearchBlueprintsQuery: (args: Record<string, unknown>) => {
       searchArgs.push(args)
       return MOCK_BLUEPRINT_SEARCH
     },
     useGetBlueprintCategoriesQuery: () => MOCK_CATEGORIES,
+    useGetManufacturersQuery: () => MOCK_MANUFACTURERS,
     useGetUserBlueprintInventoryQuery: () => ({
       data: undefined,
       isLoading: false,
@@ -133,13 +136,19 @@ vi.mock("../../../store/api/v2/market", async () => {
   }
 })
 
-// Create a mock store
+// The real API slices (reducer + middleware), as the app store registers
+// them. Any hook the mock above doesn't cover runs against these.
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [gameDataApi.reducerPath]: gameDataApi.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(
+        gameDataApi.middleware,
+        serviceApi.middleware,
+      ),
   })
 }
 
