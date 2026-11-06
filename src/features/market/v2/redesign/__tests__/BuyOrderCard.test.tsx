@@ -11,7 +11,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { describe, expect, it, vi } from "vitest"
 import type { StandingBuyOrder } from "../../../../../store/api/v2/market"
-import { BuyOrderCard } from "../BuyOrdersRedesign"
+import { BuyOrderCard } from "../BuyOrderCard"
 
 vi.mock("react-i18next", async (importOriginal) =>
   (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
