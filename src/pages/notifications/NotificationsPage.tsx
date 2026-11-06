@@ -14,7 +14,6 @@ import {
   Tooltip,
   Divider,
 } from "@mui/material"
-import { HapticTablePagination } from "../../components/haptic"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
@@ -27,6 +26,7 @@ import { EmptyNotifications } from "../../components/empty-states"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { NotificationScope } from "../../features/notifications/domain/types"
 import type { Notification } from "../../hooks/login/UserProfile"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 export function NotificationsPage() {
   const theme = useTheme<ExtendedTheme>()
@@ -50,17 +50,14 @@ export function NotificationsPage() {
   const shopsData = pageData.data?.shops || []
   const total = pagination?.total || 0
 
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
+  const handleChangePage = useCallback((newPage: number) => {
     setPage(newPage)
   }, [])
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPageSize(parseInt(event.target.value, 10))
-      setPage(0)
-    },
-    [],
-  )
+  const handleChangeRowsPerPage = useCallback((rowsPerPage: number) => {
+    setPageSize(rowsPerPage)
+    setPage(0)
+  }, [])
 
   const markAllReadCallback = useCallback(async () => {
     try {
@@ -257,21 +254,13 @@ export function NotificationsPage() {
       {/* Pagination */}
       {total > 0 && (
         <Grid item xs={12}>
-          <HapticTablePagination
-            labelRowsPerPage={t("rows_per_page")}
-            labelDisplayedRows={({ from, to, count }) =>
-              t("displayed_rows", { from, to, count })
-            }
-            rowsPerPageOptions={[10, 20, 50, 100]}
-            component="div"
+          <NumberedPagination
             count={total}
-            rowsPerPage={pageSize}
             page={page}
+            rowsPerPage={pageSize}
             onPageChange={handleChangePage}
+            rowsPerPageOptions={[10, 20, 50, 100]}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            color={"primary"}
-            nextIconButtonProps={{ color: "primary" }}
-            backIconButtonProps={{ color: "primary" }}
           />
         </Grid>
       )}

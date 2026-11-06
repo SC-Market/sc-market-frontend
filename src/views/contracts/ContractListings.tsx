@@ -16,7 +16,6 @@ import {
   Link as MaterialLink,
   Typography,
 } from "@mui/material"
-import { HapticTablePagination } from "../../components/haptic"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import {
@@ -36,6 +35,7 @@ import { isAwaitingData } from "../../util/queryLoading"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { useFormatters, useNow } from "../../util/format"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 /**
  * "<author> - <time ago> - <price> <payment type>" line on an open contract card.
@@ -262,10 +262,9 @@ export function ContractListings(props: { user?: string }) {
   const { user } = props
 
   const ref = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation()
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
       if (ref.current) {
         ref.current.scrollIntoView({
@@ -277,10 +276,8 @@ export function ContractListings(props: { user?: string }) {
     [ref],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setPerPage(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
     setPage(0)
   }
 
@@ -389,21 +386,13 @@ export function ContractListings(props: { user?: string }) {
         <Divider light />
       </Grid>
       <Grid item xs={12}>
-        <HapticTablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) =>
-            t("displayed_rows", { from, to, count })
-          }
-          rowsPerPageOptions={[6, 10, 16]}
-          component="div"
+        <NumberedPagination
           count={filteredListings ? filteredListings.length : 0}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
+          rowsPerPageOptions={[6, 10, 16]}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </React.Fragment>

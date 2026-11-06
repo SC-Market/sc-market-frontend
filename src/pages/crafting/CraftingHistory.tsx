@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TablePagination,
   Chip,
   Box,
 } from "@mui/material"
@@ -18,6 +17,7 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 const TIER_COLORS: Record<
   number,
@@ -120,17 +120,16 @@ export function CraftingHistory() {
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              component="div"
+            <NumberedPagination
               count={data.total}
               page={page}
-              onPageChange={(_, p) => setPage(p)}
               rowsPerPage={pageSize}
-              onRowsPerPageChange={(e) => {
-                setPageSize(parseInt(e.target.value, 10))
+              onPageChange={setPage}
+              rowsPerPageOptions={[10, 20, 50]}
+              onRowsPerPageChange={(size) => {
+                setPageSize(size)
                 setPage(0)
               }}
-              rowsPerPageOptions={[10, 20, 50]}
             />
           </Paper>
         )}

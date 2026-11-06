@@ -4,7 +4,6 @@ import { ContractorCardsSkeleton } from "../../components/skeletons"
 import { Divider, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
-import { HapticTablePagination } from "../../components/haptic"
 import {
   ContractorSearchContext,
   ContractorSearchState,
@@ -12,7 +11,6 @@ import {
 import { ContractorSidebarContext } from "../../features/contractor/hooks/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
-import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
 import { useTranslation } from "react-i18next"
 import { EmptyContractors } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
@@ -20,6 +18,7 @@ import { usePageContractors } from "../../features/contractor/hooks/usePageContr
 import { contractorsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 export function Contractors() {
   const { t } = useTranslation()
@@ -29,7 +28,7 @@ export function Contractors() {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
       if (ref.current) {
         ref.current.scrollIntoView({
@@ -41,10 +40,8 @@ export function Contractors() {
     [ref],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setPerPage(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
     setPage(0)
   }
 
@@ -125,22 +122,14 @@ export function Contractors() {
 
           <Divider light sx={{ mt: 2 }} />
 
-          <HapticTablePagination
-            labelRowsPerPage={t("rows_per_page")}
-            labelDisplayedRows={({ from, to, count }) =>
-              t("displayed_rows", { from, to, count })
-            }
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
+          <NumberedPagination
             count={pageData.isLoading ? 0 : pageData.data?.total || 0}
-            rowsPerPage={perPage}
             page={page}
+            rowsPerPage={perPage}
             onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            color={"primary"}
-            nextIconButtonProps={{ color: "primary" }}
-            backIconButtonProps={{ color: "primary" }}
-            sx={{ mt: 2, ...MOBILE_WRAP_PAGINATION_SX }}
+            sx={{ mt: 2 }}
           />
         </ContractorSearchContext.Provider>
       </ContractorSidebarContext.Provider>

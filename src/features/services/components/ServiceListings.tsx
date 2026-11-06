@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Divider, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { HapticTablePagination } from "../../../components/haptic"
 import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"
 import { SERVICE_LISTINGS_PAGE_SIZE } from "../../../components/skeletons/ServiceListingSkeleton"
 import { ServiceListingsSkeleton } from "../../../components/skeletons/MarketSearchSkeleton"
@@ -28,7 +27,7 @@ import { isAwaitingData } from "../../../util/queryLoading"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
-import { useFormatters } from "../../../util/format"
+import { NumberedPagination } from "../../../components/pagination/NumberedPagination"
 export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(SERVICE_LISTINGS_PAGE_SIZE)
@@ -38,7 +37,6 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
-  const fmt = useFormatters()
   const { customOrg } = useCustomDomain()
 
   const queryParams: ServicesQueryParams = useMemo(() => {
@@ -79,7 +77,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   )
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
       if (ref.current) {
         ref.current.scrollIntoView({
@@ -91,10 +89,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     [ref],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setPerPage(+event.target.value)
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
     setPage(0)
   }
 
@@ -193,31 +189,13 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
         <Divider light />
       </Grid>
       <Grid item xs={12}>
-        <HapticTablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) => (
-            <>
-              {t("displayed_rows", {
-                from: fmt.number(from),
-                to: fmt.number(to),
-                count: count,
-              })}
-            </>
-          )}
-          SelectProps={{
-            "aria-label": t("rows_per_page"),
-            color: "primary",
-          }}
-          rowsPerPageOptions={[10, 20, 50]}
-          component="div"
+        <NumberedPagination
           count={servicesResponse?.pagination.totalItems ?? 0}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
+          rowsPerPageOptions={[10, 20, 50]}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </React.Fragment>

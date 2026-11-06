@@ -20,7 +20,6 @@ import {
   TableHead,
   TableSortLabel,
 } from "@mui/material"
-import { HapticTablePagination } from "../../components/haptic"
 import { AdminUser } from "../../datatypes/User"
 import { Link } from "react-router-dom"
 import { styled } from "@mui/material/styles"
@@ -37,6 +36,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { USER_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 function PeopleRow(props: {
   row: AdminUser
@@ -339,22 +339,16 @@ export function AdminUserList(props: {
 
               {/* Custom Pagination Controls */}
               {pagination && (
-                <HapticTablePagination
-                  component="div"
+                <NumberedPagination
                   count={pagination.total_users}
-                  page={page - 1} // MUI uses 0-based indexing
+                  page={page - 1}
                   rowsPerPage={pageSize}
-                  onPageChange={(_, newPage) => setPage(newPage + 1)}
-                  onRowsPerPageChange={(event) => {
-                    const newPageSize = parseInt(event.target.value, 10)
+                  onPageChange={(newPage) => setPage(newPage + 1)}
+                  rowsPerPageOptions={[5, 10, 20, 50, 100]}
+                  onRowsPerPageChange={(newPageSize) => {
                     setPageSize(newPageSize)
                     setPage(1) // Reset to first page when changing page size
                   }}
-                  rowsPerPageOptions={[5, 10, 20, 50, 100]}
-                  labelRowsPerPage={t("rows_per_page")}
-                  labelDisplayedRows={({ from, to, count }) =>
-                    t("displayed_rows", { from, to, count })
-                  }
                 />
               )}
             </Box>

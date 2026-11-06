@@ -22,11 +22,9 @@ import {
   TableRow,
   TextField,
   Typography,
-  TablePagination,
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { HeadCell } from "../../components/table/PaginatedTable"
-import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
 import { MinimalUser } from "../../datatypes/User"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -38,6 +36,7 @@ import { useMemberActions } from "../../features/contractor/hooks/useMemberActio
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 import { MEMBER_LIST_PAGE_SIZE } from "../../features/contractor/domain/constants"
 import { USER_PATHS } from "../../routes/paths"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 function PeopleRow(props: {
   row: OrgMember
@@ -245,12 +244,12 @@ export function MemberList(props: { contractor: Contractor }) {
   const total = membersData?.total || 0
 
   // Handle page changes for server-side pagination
-  const handlePageChange = (event: unknown, newPage: number) => {
+  const handlePageChange = (newPage: number) => {
     setPage(newPage)
   }
 
-  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPageSize(parseInt(event.target.value, 10))
+  const handlePageSizeChange = (rowsPerPage: number) => {
+    setPageSize(rowsPerPage)
     setPage(0)
   }
 
@@ -334,15 +333,13 @@ export function MemberList(props: { contractor: Contractor }) {
             ))}
           </TableBody>
         </Table>
-        <TablePagination
-          sx={MOBILE_WRAP_PAGINATION_SX}
-          component="div"
+        <NumberedPagination
           count={total}
           page={page}
-          onPageChange={handlePageChange}
           rowsPerPage={pageSize}
-          onRowsPerPageChange={handlePageSizeChange}
+          onPageChange={handlePageChange}
           rowsPerPageOptions={[25, 50, 100]}
+          onRowsPerPageChange={handlePageSizeChange}
         />
       </Grid>
     </Section>
@@ -373,12 +370,12 @@ export function ManageMemberList() {
   const total = membersData?.total || 0
 
   // Handle page changes for server-side pagination
-  const handlePageChange = (event: unknown, newPage: number) => {
+  const handlePageChange = (newPage: number) => {
     setPage(newPage)
   }
 
-  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPageSize(parseInt(event.target.value, 10))
+  const handlePageSizeChange = (rowsPerPage: number) => {
+    setPageSize(rowsPerPage)
     setPage(0)
   }
 
@@ -466,15 +463,13 @@ export function ManageMemberList() {
             ))}
           </TableBody>
         </Table>
-        <TablePagination
-          sx={MOBILE_WRAP_PAGINATION_SX}
-          component="div"
+        <NumberedPagination
           count={total}
           page={page}
-          onPageChange={handlePageChange}
           rowsPerPage={pageSize}
-          onRowsPerPageChange={handlePageSizeChange}
+          onPageChange={handlePageChange}
           rowsPerPageOptions={[25, 50, 100]}
+          onRowsPerPageChange={handlePageSizeChange}
         />
       </Grid>
     </Section>

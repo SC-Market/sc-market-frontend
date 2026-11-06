@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback, useRef, useState } from "react"
 import { Button, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import { HapticTablePagination } from "../../components/haptic"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { NoteAddRounded } from "@mui/icons-material"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
@@ -28,6 +27,7 @@ import { EmptyRecruiting } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageRecruiting } from "../../features/recruiting/hooks/usePageRecruiting"
 import { recruitingSeoText } from "../../seo/hubHeads"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 export function Recruiting() {
   const { t } = useTranslation()
@@ -64,7 +64,7 @@ export function Recruiting() {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
       if (ref.current) {
         ref.current.scrollIntoView({
@@ -76,10 +76,8 @@ export function Recruiting() {
     [ref],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setPerPage(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
     setPage(0)
   }
 
@@ -163,21 +161,13 @@ export function Recruiting() {
 
           <RecruitingListFrame
             pagination={
-              <HapticTablePagination
-                labelRowsPerPage={t("rows_per_page")}
-                labelDisplayedRows={({ from, to, count }) =>
-                  t("displayed_rows", { from, to, count })
-                }
-                rowsPerPageOptions={[5, 15, 25]}
-                component="div"
+              <NumberedPagination
                 count={pageData.data?.posts?.total || 0}
-                rowsPerPage={perPage}
                 page={page}
+                rowsPerPage={perPage}
                 onPageChange={handleChangePage}
+                rowsPerPageOptions={[5, 15, 25]}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-                color={"primary"}
-                nextIconButtonProps={{ color: "primary" }}
-                backIconButtonProps={{ color: "primary" }}
                 sx={{ mt: 2 }}
               />
             }
