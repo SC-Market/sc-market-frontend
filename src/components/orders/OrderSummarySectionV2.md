@@ -48,7 +48,7 @@ Maintains identical styling to V1:
 
 ```tsx
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
-import { OrderItemDetail } from "../../store/api/v2/market"
+import type { OrderItemDetail } from "../../features/orders/api/ordersV2Api"
 
 function OrderDetailsPage() {
   const { data: orderDetail } = useGetOrderDetailQuery(orderId)

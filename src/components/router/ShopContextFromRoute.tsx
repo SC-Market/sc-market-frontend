@@ -6,7 +6,7 @@ import {
   useGetShopQuery,
   useGetMyShopsQuery,
   ShopResponse,
-} from "../../store/api/v2/market"
+} from "../../features/shops/api/shopsApi"
 import { PATHS } from "../../routes/paths"
 
 interface ShopRouteContext {

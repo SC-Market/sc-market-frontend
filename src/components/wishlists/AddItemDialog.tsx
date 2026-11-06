@@ -31,10 +31,12 @@ import {
 import { Star, StarBorder, ShoppingCart, Build } from "@mui/icons-material"
 import {
   useSearchGameItemsQuery,
-  useAddWishlistItemMutation,
   useSearchBlueprintsQuery,
+} from "../../features/game-data/api/gameDataApi"
+import {
+  useAddWishlistItemMutation,
   type AcquisitionMode,
-} from "../../store/api/v2/market"
+} from "../../features/wishlists/api/wishlistsApi"
 import { debounce } from "lodash"
 import { Link } from "react-router-dom"
 import { GAME_DATA_PATHS } from "../../routes/paths"

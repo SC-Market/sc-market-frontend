@@ -19,7 +19,7 @@ import {
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetShipDetailQuery } from "../../store/api/v2/market"
+import { useGetShipDetailQuery } from "../../features/game-data/api/gameDataApi"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../wiki/ShipSilhouette"
 import { formatShipRole, formatShipCareer } from "../../util/shipDisplay"

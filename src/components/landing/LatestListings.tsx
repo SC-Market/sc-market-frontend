@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Paper, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useSearchListingsQuery } from "../../store/api/v2/market"
+import { useSearchListingsQuery } from "../../features/market/api/marketV2Api"
 import { ListingCardV2 } from "../../features/market/v2/ListingSearchV2"
 import { usePageReady } from "../metadata/PageReady"
 import { isPrimaryLoading } from "../metadata/pageReadyStore"

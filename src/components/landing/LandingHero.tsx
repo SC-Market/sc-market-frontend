@@ -4,7 +4,7 @@ import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
 import {
   useSearchBuyOrdersQuery,
   useSearchListingsQuery,
-} from "../../store/api/v2/market"
+} from "../../features/market/api/marketV2Api"
 import { usePageReady } from "../metadata/PageReady"
 import { isPrimaryLoading } from "../metadata/pageReadyStore"
 import { LandingHeroLayout } from "./LandingHeroLayout"

@@ -16,7 +16,7 @@ import type {
   SearchBuyOrdersResponse,
   SearchListingsResponse,
   StandingBuyOrder,
-} from "../../../store/api/v2/market"
+} from "../../../features/market/api/marketV2Api"
 import english from "../../../locales/en/english.json"
 
 type StatsResult = { data?: MarketStats; isError: boolean; isLoading: boolean }

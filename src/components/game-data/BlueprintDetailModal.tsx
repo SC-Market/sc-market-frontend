@@ -41,7 +41,7 @@ import {
   type BlueprintIngredient,
   type SlotModifier,
   type MissionRewardingBlueprint,
-} from "../../store/api/v2/market"
+} from "../../features/game-data/api/gameDataApi"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"

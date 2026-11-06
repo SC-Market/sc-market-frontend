@@ -18,7 +18,7 @@ import {
   Divider,
 } from "@mui/material"
 import { RestartAltRounded } from "@mui/icons-material"
-import { useGetGameEventsQuery } from "../../store/api/v2/market"
+import { useGetGameEventsQuery } from "../../features/game-data/api/gameDataApi"
 import { getMissionTypeLabel } from "../../util/missionDisplay"
 
 export interface MissionFiltersProps {

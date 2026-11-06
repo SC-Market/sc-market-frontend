@@ -1,7 +1,7 @@
 import { Box, Typography, Divider, Stack, Link, Chip } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
-import { OrderItemDetail } from "../../store/api/v2/market"
+import { OrderItemDetail } from "../../features/orders/api/ordersV2Api"
 import { formatMarketUrl } from "../../features/market/domain/urls"
 import { useFormatters } from "../../util/format"
 

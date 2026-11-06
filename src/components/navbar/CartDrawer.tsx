@@ -24,7 +24,7 @@ import {
   useRemoveCartItemMutation,
   type GetCartResponse,
   type CartItemDetail,
-} from "../../store/api/v2/market"
+} from "../../features/market/api/marketV2Api"
 import { EmptyCart } from "../empty-states"
 import { MARKET_PATHS } from "../../routes/paths"
 

@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Button, Paper, Typography } from "@mui/material"
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
 import { useTranslation } from "react-i18next"
-import { useGetContractorSisterLinksQuery } from "../../store/api/v2/market"
+import { useGetContractorSisterLinksQuery } from "../../features/contractor/api/contractorV2Api"
 
 /** SC Orgs, our sister site for running orgs (directory, applications, events, members). */
 export const SC_ORGS_ORIGIN = "https://sc-orgs.space"

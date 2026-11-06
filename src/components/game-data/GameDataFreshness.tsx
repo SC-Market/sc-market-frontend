@@ -1,6 +1,6 @@
 import React from "react"
 import { Typography, type TypographyProps } from "@mui/material"
-import { useGetActiveVersionsQuery } from "../../store/api/v2/market"
+import { useGetActiveVersionsQuery } from "../../features/game-data/api/gameDataApi"
 import { freshnessStamp } from "../../seo/missionText"
 
 /**

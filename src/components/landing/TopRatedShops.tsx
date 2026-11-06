@@ -1,7 +1,7 @@
 import React from "react"
 import { Paper, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useBrowseShopsQuery } from "../../store/api/v2/market"
+import { useBrowseShopsQuery } from "../../features/shops/api/shopsApi"
 import { ShopCard } from "../../features/shops/components/ShopCard"
 import { usePageReady } from "../metadata/PageReady"
 import { isPrimaryLoading } from "../metadata/pageReadyStore"

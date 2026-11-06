@@ -8,7 +8,7 @@ import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
-import type { ShopResponse } from "../../../store/api/v2/market"
+import type { ShopResponse } from "../../../features/shops/api/shopsApi"
 import { querySuccess } from "../../../__tests__/rtkQueryMocks"
 import { OrgShopRedirectListings, OrgShopRedirectStock } from "../ShopRedirect"
 

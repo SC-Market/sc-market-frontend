@@ -2,7 +2,7 @@ import { MARKET_PATHS, PATHS } from "../../routes/paths"
 import type {
   SearchBuyOrdersApiArg,
   SearchListingsApiArg,
-} from "../../store/api/v2/market"
+} from "../../features/market/api/marketV2Api"
 
 /**
  * A link to a signed-in-only page: the page itself when signed in. Signed

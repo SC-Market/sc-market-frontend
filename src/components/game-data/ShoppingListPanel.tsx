@@ -41,7 +41,7 @@ import {
   useRemoveWishlistItemMutation,
   type ShoppingListMaterial,
   type WishlistItemWithDetails,
-} from "../../store/api/v2/market"
+} from "../../features/wishlists/api/wishlistsApi"
 import { GameItemAvatar } from "../game-data/GameItemAvatar"
 import { MARKET_PATHS } from "../../routes/paths"
 

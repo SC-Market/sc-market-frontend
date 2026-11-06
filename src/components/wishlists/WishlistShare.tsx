@@ -48,8 +48,8 @@ import {
   Info,
 } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
-import { useUpdateWishlistMutation } from "../../store/api/v2/market"
-import type { Wishlist } from "../../store/api/v2/market"
+import { useUpdateWishlistMutation } from "../../features/wishlists/api/wishlistsApi"
+import type { Wishlist } from "../../features/wishlists/api/wishlistsApi"
 
 export interface WishlistShareProps {
   open: boolean

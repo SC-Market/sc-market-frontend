@@ -8,7 +8,7 @@ import type {
   LastSeenBucket,
   ReplyTimeBucket,
   SellerActivity,
-} from "../../store/api/v2/market"
+} from "../../features/shops/api/shopsApi"
 
 /**
  * What a buyer knows about a seller before asking: when they were last

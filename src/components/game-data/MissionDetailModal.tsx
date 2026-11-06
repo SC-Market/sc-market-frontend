@@ -14,7 +14,7 @@ import {
   Alert,
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
-import { useGetMissionDetailQuery } from "../../store/api/v2/market"
+import { useGetMissionDetailQuery } from "../../features/game-data/api/gameDataApi"
 import { MissionName } from "./MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "./MissionDetailContent"
 import { DetailSkeleton } from "./GameDataSkeletons"

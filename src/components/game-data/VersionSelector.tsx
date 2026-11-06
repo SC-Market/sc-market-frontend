@@ -24,7 +24,7 @@ import {
   useGetActiveVersionsQuery,
   useSelectVersionMutation,
   type GameVersion,
-} from "../../store/api/v2/market"
+} from "../../features/game-data/api/gameDataApi"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNow } from "../../util/format"
 

@@ -2,7 +2,7 @@ import "../../../util/i18n"
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect } from "vitest"
 import { OrderSummarySectionV2 } from "../OrderSummarySectionV2"
-import { OrderItemDetail } from "../../../store/api/v2/market"
+import { OrderItemDetail } from "../../../features/orders/api/ordersV2Api"
 import { OfferChanges } from "../../../util/offerChanges"
 
 describe("OrderSummarySectionV2", () => {

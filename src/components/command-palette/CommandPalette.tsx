@@ -37,11 +37,11 @@ import {
   HelpOutlineRounded,
 } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useSearchListingsQuery } from "../../store/api/v2/market"
+import { useSearchListingsQuery } from "../../features/market/api/marketV2Api"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { HELP_PATHS, PATHS, SHOP_PATHS } from "../../routes/paths"
-import { useGetMyShopsQuery } from "../../store/api/v2/market"
+import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 

@@ -19,7 +19,7 @@ import { propertyLabel } from "../../util/statDisplay"
 import type {
   BlueprintDetailResponse,
   BlueprintSearchResult,
-} from "../../store/api/v2/market"
+} from "../../features/game-data/api/gameDataApi"
 import { common } from "@mui/material/colors"
 
 /** The blueprint fields the tags are built from. */

@@ -18,36 +18,39 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { MissionRatingDialog } from "../MissionRatingDialog"
-import { marketV2Api } from "../../../store/api/v2/market"
+import { gameDataApi } from "../../../features/game-data/api/gameDataApi"
 import {
   mockMutationTrigger,
   mutationIdle,
   mutationLoading,
 } from "../../../__tests__/rtkQueryMocks"
 
-type RateMission = typeof marketV2Api.endpoints.rateMission
+type RateMission = typeof gameDataApi.endpoints.rateMission
 
 // Mock store setup
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [gameDataApi.reducerPath]: gameDataApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(gameDataApi.middleware),
   })
 }
 
 // Mock the mutation hook
-vi.mock("../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual("../../../store/api/v2/market")
+vi.mock("../../../features/game-data/api/gameDataApi", async () => {
+  const actual = await vi.importActual(
+    "../../../features/game-data/api/gameDataApi",
+  )
   return {
     ...actual,
     useRateMissionMutation: vi.fn(),
   }
 })
 
-const { useRateMissionMutation } = await import("../../../store/api/v2/market")
+const { useRateMissionMutation } =
+  await import("../../../features/game-data/api/gameDataApi")
 
 describe("MissionRatingDialog", () => {
   const mockOnClose = vi.fn()

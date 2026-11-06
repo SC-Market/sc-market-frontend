@@ -16,7 +16,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { type ResourceSearchResult } from "../../store/api/v2/market"
+import { type ResourceSearchResult } from "../../features/game-data/api/gameDataApi"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 import { useFormatters } from "../../util/format"

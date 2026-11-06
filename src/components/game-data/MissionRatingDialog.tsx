@@ -31,7 +31,7 @@ import {
   Alert,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useRateMissionMutation } from "../../store/api/v2/market"
+import { useRateMissionMutation } from "../../features/game-data/api/gameDataApi"
 
 export interface MissionRatingDialogProps {
   open: boolean

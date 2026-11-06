@@ -1,7 +1,7 @@
 import React from "react"
 import { Navigate, useParams } from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { useGetMyShopsQuery } from "../../store/api/v2/market"
+import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
 import { PATHS } from "../../routes/paths"
 
 /**

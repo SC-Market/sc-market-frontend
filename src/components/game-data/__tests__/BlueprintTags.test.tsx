@@ -17,7 +17,7 @@ import type {
   BlueprintDetailResponse,
   BlueprintSearchResult,
   SlotModifier,
-} from "../../../store/api/v2/market"
+} from "../../../features/game-data/api/gameDataApi"
 
 const WEAPON_MODS = [
   "gpp_weapon_damage",

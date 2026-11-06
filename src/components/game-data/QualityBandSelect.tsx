@@ -2,7 +2,7 @@ import React from "react"
 import { TextField, MenuItem } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { type QualityBand } from "../../store/api/v2/market"
+import { type QualityBand } from "../../features/game-data/api/gameDataApi"
 
 interface QualityBandSelectProps {
   bands: QualityBand[]

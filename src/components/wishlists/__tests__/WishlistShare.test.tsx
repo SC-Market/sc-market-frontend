@@ -20,8 +20,8 @@ import { describe, it, expect, beforeEach, vi } from "vitest"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { WishlistShare } from "../WishlistShare"
-import { marketV2Api } from "../../../store/api/v2/market"
-import type { Wishlist } from "../../../store/api/v2/market"
+import { wishlistsApi } from "../../../features/wishlists/api/wishlistsApi"
+import type { Wishlist } from "../../../features/wishlists/api/wishlistsApi"
 
 // Mock window.location so share links get a deterministic origin. `location`
 // is a non-configurable accessor in happy-dom, so it is replaced wholesale;
@@ -37,10 +37,10 @@ Object.defineProperty(window, "location", {
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [wishlistsApi.reducerPath]: wishlistsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(wishlistsApi.middleware),
     preloadedState: initialState,
   })
 }

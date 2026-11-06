@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Button, Skeleton } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useGetStorefrontsQuery } from "../../store/api/v2/market"
+import { useGetStorefrontsQuery } from "../../features/storefront/api/storefrontApi"
 import { LandingSection, LandingSectionHeader } from "./LandingSection"
 import {
   StorefrontCard,

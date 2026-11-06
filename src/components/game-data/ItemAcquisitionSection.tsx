@@ -27,7 +27,9 @@ import {
 import { ShoppingCart } from "@mui/icons-material"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import type { ItemAcquisitionDocument } from "../../store/api/v2/market"
+import type {
+  ItemAcquisitionDocument,
+} from "../../features/game-data/api/gameDataApi"
 import { MARKET_PATHS } from "../../routes/paths"
 import {
   acquisitionBlueprintPath,

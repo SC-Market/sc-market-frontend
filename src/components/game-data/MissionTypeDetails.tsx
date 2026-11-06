@@ -38,7 +38,7 @@ import type {
   NpcEncounter,
   HaulingOrder,
   EntitySpawn,
-} from "../../store/api/v2/market"
+} from "../../features/game-data/api/gameDataApi"
 
 import { useFormatters } from "../../util/format"
 // ============================================================================

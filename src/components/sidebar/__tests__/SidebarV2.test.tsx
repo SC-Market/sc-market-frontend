@@ -25,10 +25,10 @@ import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { configureStore } from "@reduxjs/toolkit"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
-import type { ShopResponse } from "../../../store/api/v2/market"
+import type { ShopResponse } from "../../../features/shops/api/shopsApi"
 import type { Contractor } from "../../../features/contractor/domain/types"
 import type { has_permission as HasPermission } from "../../../features/contractor/domain/permissions"
-import type { SidebarConfigItem } from "../../../store/api/contractors"
+import type { SidebarConfigItem } from "../../../features/contractor/api/contractorV2Api"
 import { withShopContext } from "../shopContextState"
 
 // ---- Mutable mock state -----------------------------------------------------
@@ -84,15 +84,15 @@ vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
   }
 })
 
-vi.mock("../../../store/api/v2/market", async () => {
+vi.mock("../../../features/shops/api/shopsApi", async () => {
   const actual = await vi.importActual<
-    typeof import("../../../store/api/v2/market")
-  >("../../../store/api/v2/market")
+    typeof import("../../../features/shops/api/shopsApi")
+  >("../../../features/shops/api/shopsApi")
   return {
     ...actual,
     useGetMyShopsQuery: (_arg?: void, opts?: { skip?: boolean }) => {
       shopsMineSkips.push(opts?.skip)
-      return querySuccess<typeof actual.marketV2Api.endpoints.getMyShops>(
+      return querySuccess<typeof actual.shopsApi.endpoints.getMyShops>(
         mockShops,
       )
     },
@@ -164,8 +164,8 @@ vi.mock("react-i18next", async (importOriginal) =>
 
 // Import AFTER mocks are declared.
 import { SidebarV2 } from "../SidebarV2"
-import { marketV2Api } from "../../../store/api/v2/market"
-import { serviceApi } from "../../../store/service"
+import { shopsApi } from "../../../features/shops/api/shopsApi"
+import { contractorsApi } from "../../../features/contractor/api/contractorApi"
 import { querySuccess } from "../../../__tests__/rtkQueryMocks"
 
 const testTheme = createTheme({
@@ -182,13 +182,13 @@ const testTheme = createTheme({
 const createStore = () =>
   configureStore({
     reducer: {
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
-      [serviceApi.reducerPath]: serviceApi.reducer,
+      [shopsApi.reducerPath]: shopsApi.reducer,
+      [contractorsApi.reducerPath]: contractorsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(
-        marketV2Api.middleware,
-        serviceApi.middleware,
+        shopsApi.middleware,
+        contractorsApi.middleware,
       ),
   })
 

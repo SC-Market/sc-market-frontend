@@ -18,7 +18,7 @@ import {
   Slider,
 } from "@mui/material"
 import { Trans, useTranslation } from "react-i18next"
-import { useGetReputationRanksQuery } from "../../store/api/v2/market"
+import { useGetReputationRanksQuery } from "../../features/game-data/api/gameDataApi"
 
 import { useFormatters } from "../../util/format"
 interface Props {
