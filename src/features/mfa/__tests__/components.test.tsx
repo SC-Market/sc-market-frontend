@@ -132,6 +132,30 @@ describe("MfaEnrollDialog", () => {
   })
 })
 
+describe("MfaEnrollDialog enrollment start", () => {
+  it("starts one enrollment per open, however often it re-renders", async () => {
+    api.start.mockResolvedValue({
+      data: {
+        factor_id: "f1",
+        otpauth_uri: "x",
+        qr_data_url: "data:x",
+        manual_key: "K",
+      },
+    })
+    const { rerender } = render(<MfaEnrollDialog open onClose={vi.fn()} />)
+    fireEvent.click(await screen.findByRole("button", { name: /next/i }))
+    fireEvent.change(screen.getByLabelText("authentication code"), {
+      target: { value: "1234" },
+    })
+    rerender(<MfaEnrollDialog open onClose={vi.fn()} />)
+    expect(api.start).toHaveBeenCalledTimes(1)
+
+    rerender(<MfaEnrollDialog open={false} onClose={vi.fn()} />)
+    rerender(<MfaEnrollDialog open onClose={vi.fn()} />)
+    await waitFor(() => expect(api.start).toHaveBeenCalledTimes(2))
+  })
+})
+
 describe("MfaCodeForm", () => {
   it("verifies a code, or a recovery code", async () => {
     api.verify.mockResolvedValue({

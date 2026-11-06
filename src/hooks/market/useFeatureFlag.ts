@@ -12,7 +12,7 @@
  * storage is a first-paint cache, not a second source of truth.
  */
 
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
@@ -74,15 +74,16 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
   const [flags, setFlags] = useState<FeatureFlags>(() =>
     hydrated ? readStoredFlags() : DEFAULT_FLAGS,
   )
+  // Only the first render's value matters: it says whether this render
+  // hydrated server HTML (and so started from DEFAULT_FLAGS).
+  const startedFromDefaults = useRef(!hydrated)
   useEffect(() => {
-    if (!hydrated) setFlags(readStoredFlags())
+    if (startedFromDefaults.current) setFlags(readStoredFlags())
     try {
       localStorage.removeItem(LEGACY_MARKET_VERSION_KEY)
     } catch {
       // Storage unavailable or corrupt: use the defaults.
     }
-    // Only the first render's value matters: it says whether we hydrated.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const [overriddenFlags, setOverriddenFlags] = useState<string[]>([])
   const [hasOverride, setHasOverride] = useState(false)

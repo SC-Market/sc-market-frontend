@@ -78,11 +78,14 @@ export function CreateLotDialogV2({
   // A lot belongs to a listing item; resolve the chosen listing's items
   const { data: listingDetail, isFetching: listingLoading } =
     useGetListingDetailQuery({ id: listingId }, { skip: !listingId })
-  const listingItems = listingDetail?.items ?? []
+  // RTK Query keeps this reference while the data is unchanged, so the reset
+  // below runs only when a different listing's items arrive.
+  const detailItems = listingDetail?.items
+  const listingItems = detailItems ?? []
   const [itemId, setItemId] = useState("")
   useEffect(() => {
-    setItemId(listingItems.length === 1 ? listingItems[0].item_id : "")
-  }, [listingDetail]) // eslint-disable-line react-hooks/exhaustive-deps
+    setItemId(detailItems?.length === 1 ? detailItems[0].item_id : "")
+  }, [detailItems])
 
   const createLot = useCreateLot()
 

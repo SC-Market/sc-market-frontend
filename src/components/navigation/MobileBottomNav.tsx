@@ -57,6 +57,16 @@ const DEFAULT_LOGGED_IN_TABS = [
   "dashboard",
 ]
 
+function readSavedTabIds(): string[] | null {
+  if (typeof window === "undefined") return null
+  const saved = window.localStorage.getItem("mobile_nav_tabs")
+  if (!saved) return null
+  const parsed: unknown = JSON.parse(saved)
+  return Array.isArray(parsed)
+    ? parsed.filter((id): id is string => typeof id === "string")
+    : null
+}
+
 /**
  * Mobile bottom navigation bar for quick access to primary pages
  * Only visible on mobile devices (xs and sm breakpoints)
@@ -196,43 +206,32 @@ export function MobileBottomNav() {
     return configs[tabId] || null
   }
 
-  const getActiveTabs = (): NavTabConfig[] => {
-    const defaultTabs = isLoggedIn
-      ? DEFAULT_LOGGED_IN_TABS
-      : DEFAULT_LOGGED_OUT_TABS
-
-    // Only use saved tabs if logged in
-    const saved = isLoggedIn ? localStorage.getItem("mobile_nav_tabs") : null
-    const userTabs = saved ? JSON.parse(saved) : null
-    const tabIds = userTabs || defaultTabs
-
-    return tabIds
-      .map((id: string) => getTabConfig(id))
-      .filter((tab: NavTabConfig | null): tab is NavTabConfig => {
-        if (!tab) return false
-        if (tab.requiresAuth && !isLoggedIn) return false
-        // Hide tabs the white-label org hid (same settings as the sidebar)
-        if (whiteLabel.hidden.has(tab.id)) return false
-        return true
-      })
-      .slice(0, 5)
-  }
-
-  const [activeTabs, setActiveTabs] = useState<NavTabConfig[]>(getActiveTabs())
-
-  // Update tabs when login state or the white-label sidebar settings change
+  // The user's saved tab order; re-read when MobileNavSettings saves it.
+  const [savedTabIds, setSavedTabIds] = useState<string[] | null>(
+    readSavedTabIds,
+  )
   useEffect(() => {
-    setActiveTabs(getActiveTabs())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, whiteLabel.hidden])
-
-  // Listen for settings updates
-  useEffect(() => {
-    const handleUpdate = () => setActiveTabs(getActiveTabs())
+    const handleUpdate = () => setSavedTabIds(readSavedTabIds())
     window.addEventListener("mobile-nav-updated", handleUpdate)
     return () => window.removeEventListener("mobile-nav-updated", handleUpdate)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn])
+  }, [])
+
+  // Derived every render so login state, white-label settings and the
+  // badge counts are always current. Saved tabs only apply when logged in.
+  const tabIds: string[] = isLoggedIn
+    ? (savedTabIds ?? DEFAULT_LOGGED_IN_TABS)
+    : DEFAULT_LOGGED_OUT_TABS
+  const activeTabs = tabIds
+    .map((id) => getTabConfig(id))
+    .filter((tab): tab is NavTabConfig => {
+      if (!tab) return false
+      if (tab.requiresAuth && !isLoggedIn) return false
+      // Hide tabs the white-label org hid (same settings as the sidebar)
+      if (whiteLabel.hidden.has(tab.id)) return false
+      return true
+    })
+    .slice(0, 5)
+  const tabKey = activeTabs.map((tab) => tab.id).join(",")
 
   // Determine current active route
   const getActiveValue = () => {
@@ -277,7 +276,7 @@ export function MobileBottomNav() {
         width: buttonRect.width,
       })
     }
-  }, [activeValue, location.pathname, isMobile, isLoggedIn])
+  }, [activeValue, location.pathname, isMobile, isLoggedIn, tabKey])
 
   // Early return AFTER all hooks to maintain hook order
   if (!isMobile) {

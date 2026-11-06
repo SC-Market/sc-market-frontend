@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Alert,
   Box,
@@ -45,22 +45,23 @@ export function MfaEnrollDialog(props: {
   const enrollment = startState.data
   const recoveryCodes = confirmState.data?.recovery_codes
 
+  // The mutation functions are read through a ref: reset() changes identity
+  // once a request is in flight, and depending on it would re-run the effect
+  // below and start a new enrollment (a new secret) after every request.
+  const mutationsRef = useRef({ start, startState, confirmState })
+  mutationsRef.current = { start, startState, confirmState }
+
+  // Each time the dialog opens: clear the form and start one enrollment.
+  // Once closed: drop the secret and recovery codes from the store.
   useEffect(() => {
-    if (!props.open) {
-      // Drop the secret and recovery codes from the store once closed.
-      startState.reset()
-      confirmState.reset()
-      return
-    }
-    if (props.open) {
-      setStep(0)
-      setCode("")
-      setCopied(false)
-      startState.reset()
-      confirmState.reset()
-      start({ totpEnrollRequest: {} })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const m = mutationsRef.current
+    m.startState.reset()
+    m.confirmState.reset()
+    if (!props.open) return
+    setStep(0)
+    setCode("")
+    setCopied(false)
+    m.start({ totpEnrollRequest: {} })
   }, [props.open])
 
   const submitCode = async (e: React.FormEvent) => {

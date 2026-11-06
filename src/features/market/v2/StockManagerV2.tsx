@@ -975,25 +975,32 @@ const RENEW_WINDOW_MS = 3 * 24 * 60 * 60 * 1000
 function RenewFromLink() {
   const [searchParams, setSearchParams] = useSearchParams()
   const renewListings = useRenewListings()
+  // Once per page load: the ref keeps a re-render (or the URL update below)
+  // from renewing again.
   const done = useRef(false)
-  const ids = (searchParams.get("renew") || "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^[0-9a-f-]{36}$/i.test(s))
-    .slice(0, 50)
+  const renewParam = searchParams.get("renew") || ""
 
   useEffect(() => {
-    if (done.current || !ids.length) return
+    if (done.current) return
+    const ids = renewParam
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => /^[0-9a-f-]{36}$/i.test(s))
+      .slice(0, 50)
+    if (!ids.length) return
     done.current = true
     void (async () => {
       await renewListings(ids)
-      const next = new URLSearchParams(searchParams)
-      next.delete("renew")
-      setSearchParams(next, { replace: true })
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev)
+          next.delete("renew")
+          return next
+        },
+        { replace: true },
+      )
     })()
-    // Runs once per page load.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [renewParam, renewListings, setSearchParams])
 
   return null
 }

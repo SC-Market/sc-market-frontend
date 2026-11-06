@@ -93,8 +93,7 @@ export function App() {
       // Cleanup shared intersection observer
       SharedIntersectionObserver.getInstance().cleanup()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [periodicSyncSupported])
+  }, [periodicSyncSupported, registerPeriodicSync, dispatch])
 
   return <Outlet />
 }

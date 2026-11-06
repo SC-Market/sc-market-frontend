@@ -4,7 +4,7 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/API/PeriodicBackgroundSync
  */
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface PeriodicSyncManager {
   register: (tag: string, options?: { minInterval?: number }) => Promise<void>
@@ -66,79 +66,86 @@ export function usePeriodicBackgroundSync() {
     checkSupport()
   }, [])
 
-  const registerPeriodicSync = async (
-    tag: string = "sync-data",
-    minInterval: number = 86400000, // 24 hours in milliseconds
-  ) => {
-    if (!isSupported) {
-      console.debug("Periodic Background Sync not supported")
-      return false
-    }
-
-    try {
-      const registration = await navigator.serviceWorker.ready
-      const periodicSync = (
-        registration as ServiceWorkerRegistration & {
-          periodicSync?: PeriodicSyncManager
-        }
-      ).periodicSync
-
-      if (!periodicSync) {
-        console.debug("PeriodicSync API not available")
+  // Stable until support is known, so callers can list it as an effect dep.
+  const registerPeriodicSync = useCallback(
+    async (
+      tag: string = "sync-data",
+      minInterval: number = 86400000, // 24 hours in milliseconds
+    ) => {
+      if (!isSupported) {
+        console.debug("Periodic Background Sync not supported")
         return false
       }
 
-      // Request permission (required for periodic sync)
-      if ("permissions" in navigator) {
-        const permission = await navigator.permissions.query({
-          name: "periodic-background-sync" as PermissionName,
-        })
+      try {
+        const registration = await navigator.serviceWorker.ready
+        const periodicSync = (
+          registration as ServiceWorkerRegistration & {
+            periodicSync?: PeriodicSyncManager
+          }
+        ).periodicSync
 
-        if (permission.state === "denied") {
-          console.debug("Periodic Background Sync permission denied")
+        if (!periodicSync) {
+          console.debug("PeriodicSync API not available")
           return false
         }
-      }
 
-      // Register periodic sync
-      await periodicSync.register(tag, {
-        minInterval, // Minimum interval between syncs (24 hours)
-      })
+        // Request permission (required for periodic sync)
+        if ("permissions" in navigator) {
+          const permission = await navigator.permissions.query({
+            name: "periodic-background-sync" as PermissionName,
+          })
 
-      setIsRegistered(true)
-      console.debug(`Periodic Background Sync registered: ${tag}`)
-      return true
-    } catch (error) {
-      console.debug("Failed to register periodic sync:", error)
-      return false
-    }
-  }
-
-  const unregisterPeriodicSync = async (tag: string = "sync-data") => {
-    if (!isSupported) {
-      return false
-    }
-
-    try {
-      const registration = await navigator.serviceWorker.ready
-      const periodicSync = (
-        registration as ServiceWorkerRegistration & {
-          periodicSync?: PeriodicSyncManager
+          if (permission.state === "denied") {
+            console.debug("Periodic Background Sync permission denied")
+            return false
+          }
         }
-      ).periodicSync
 
-      if (periodicSync) {
-        await periodicSync.unregister(tag)
-        setIsRegistered(false)
-        console.debug(`Periodic Background Sync unregistered: ${tag}`)
+        // Register periodic sync
+        await periodicSync.register(tag, {
+          minInterval, // Minimum interval between syncs (24 hours)
+        })
+
+        setIsRegistered(true)
+        console.debug(`Periodic Background Sync registered: ${tag}`)
         return true
+      } catch (error) {
+        console.debug("Failed to register periodic sync:", error)
+        return false
       }
-      return false
-    } catch (error) {
-      console.debug("Failed to unregister periodic sync:", error)
-      return false
-    }
-  }
+    },
+    [isSupported],
+  )
+
+  const unregisterPeriodicSync = useCallback(
+    async (tag: string = "sync-data") => {
+      if (!isSupported) {
+        return false
+      }
+
+      try {
+        const registration = await navigator.serviceWorker.ready
+        const periodicSync = (
+          registration as ServiceWorkerRegistration & {
+            periodicSync?: PeriodicSyncManager
+          }
+        ).periodicSync
+
+        if (periodicSync) {
+          await periodicSync.unregister(tag)
+          setIsRegistered(false)
+          console.debug(`Periodic Background Sync unregistered: ${tag}`)
+          return true
+        }
+        return false
+      } catch (error) {
+        console.debug("Failed to unregister periodic sync:", error)
+        return false
+      }
+    },
+    [isSupported],
+  )
 
   return {
     isSupported,

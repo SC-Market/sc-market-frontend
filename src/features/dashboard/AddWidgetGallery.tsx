@@ -120,6 +120,14 @@ export function AddWidgetButton({
   )
 }
 
+/** The scopes in `allowed` that the owner allowlist permits (all if none). */
+function filterScopes(
+  allowed: WidgetScopeKind[],
+  allowlist: WidgetScopeKind[] | null,
+): WidgetScopeKind[] {
+  return allowlist ? allowed.filter((k) => allowlist.includes(k)) : allowed
+}
+
 interface AddWidgetDialogProps {
   open: boolean
   onClose: () => void
@@ -152,9 +160,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   }, [owner])
 
   const scopesFor = (allowed: WidgetScopeKind[]): WidgetScopeKind[] =>
-    ownerScopeAllowlist
-      ? allowed.filter((k) => ownerScopeAllowlist.includes(k))
-      : allowed
+    filterScopes(allowed, ownerScopeAllowlist)
 
   const definition = useMemo(
     () => WIDGET_DEFINITIONS.find((d) => d.type === selectedType) ?? null,
@@ -164,8 +170,9 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   // Only widgets that support at least one owner-allowed scope are offered.
   const availableWidgets = useMemo(
     () =>
-      WIDGET_DEFINITIONS.filter((d) => scopesFor(d.allowedScopes).length > 0),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      WIDGET_DEFINITIONS.filter(
+        (d) => filterScopes(d.allowedScopes, ownerScopeAllowlist).length > 0,
+      ),
     [ownerScopeAllowlist],
   )
 

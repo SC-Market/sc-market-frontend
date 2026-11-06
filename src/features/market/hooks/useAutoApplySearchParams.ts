@@ -83,19 +83,23 @@ export function useAutoApplySearchParams({
   const [drafts, setDraftsState] = useState<FilterChanges>({})
   const draftsRef = useRef<FilterChanges>({})
   const draftBaseRef = useRef<FilterChanges>({})
-  const setDrafts = (next: FilterChanges) => {
+  // Only refs and a state setter: stable for the hook's lifetime.
+  const setDrafts = useCallback((next: FilterChanges) => {
     draftsRef.current = next
     setDraftsState(next)
-  }
-  const dropDrafts = (keys: string[]) => {
-    if (keys.length === 0) return
-    const next = { ...draftsRef.current }
-    for (const key of keys) {
-      delete next[key]
-      delete draftBaseRef.current[key]
-    }
-    setDrafts(next)
-  }
+  }, [])
+  const dropDrafts = useCallback(
+    (keys: string[]) => {
+      if (keys.length === 0) return
+      const next = { ...draftsRef.current }
+      for (const key of keys) {
+        delete next[key]
+        delete draftBaseRef.current[key]
+      }
+      setDrafts(next)
+    },
+    [setDrafts],
+  )
   /** Drafts not applied yet (written on the next commit). */
   const pendingRef = useRef<FilterChanges>({})
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -174,7 +178,7 @@ export function useAutoApplySearchParams({
       paramsRef.current = next
       setSearchParams(next, { replace: continuesBurst })
     },
-    [aliases, readFrom, setSearchParams],
+    [aliases, readFrom, setSearchParams, setDrafts],
   )
 
   const commitRef = useRef(commit)
@@ -193,7 +197,7 @@ export function useAutoApplySearchParams({
         commitRef.current({}, "debounce")
       }, delay)
     },
-    [delay, readFrom],
+    [delay, readFrom, setDrafts],
   )
 
   const setNow = useCallback(
@@ -224,8 +228,7 @@ export function useAutoApplySearchParams({
     }
     if (Object.keys(pendingRef.current).length === 0) clearTimer()
     dropDrafts(done)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, readFrom])
+  }, [searchParams, readFrom, dropDrafts])
 
   // Don't write to the URL after unmount (we may be on another page by then).
   useEffect(() => clearTimer, [])

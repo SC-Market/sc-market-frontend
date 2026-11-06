@@ -71,12 +71,16 @@ export function WatchPriceDialog({
   const [tier, setTier] = React.useState<number | null>(initialTier)
   const showQuality = qualityRelevant || initialTier != null
 
-  React.useEffect(() => {
-    if (!open) return
-    setValue(initial != null ? String(initial) : "")
-    setTier(initialTier)
-    // Reset the fields each time the dialog opens.
-  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Reset the fields each time the dialog opens (only then: a price update
+  // while it is open must not overwrite what the user typed).
+  const [wasOpen, setWasOpen] = React.useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) {
+      setValue(initial != null ? String(initial) : "")
+      setTier(initialTier)
+    }
+  }
 
   const [add, addState] = useAddWatchlistItemMutation()
   const [update, updateState] = useUpdateWatchlistItemMutation()
