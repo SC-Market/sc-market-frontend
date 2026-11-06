@@ -5,7 +5,8 @@
  * - `virtual:help-content`: the content index (categories + guide metadata,
  *   no bodies) and a lazy loader per page body. Only the guides/about route
  *   chunks import it, so nothing reaches the main bundle.
- * - `/content/<page>.md?help-body`: one compiled body per page, a lazy chunk
+ * - `/content/<page>.md?help-body`: one compiled body per page (and per
+ *   published guide translation, keyed "<guide id>@<locale>"), a lazy chunk
  *   each. Screenshots become imports, so they get hashed /assets/ URLs.
  * - Build only: emits /content/manifest.json (backend sitemap), the
  *   /content/bridge/*.json files the edge bridge renders for crawlers and
@@ -33,6 +34,7 @@ import {
 } from "../../src/features/help/build/compile"
 import { CONTENT_ASSET_PATHS } from "../../src/features/help/domain/assetPaths"
 import { CHANGELOG_PATHS } from "../../src/routes/paths"
+import { guideBodyKey } from "../../src/features/help/domain/locales"
 import { DEFAULT_FRONTEND_URL } from "../../src/seo/constants"
 import {
   changelogBodyKey,
@@ -174,7 +176,16 @@ export function contentPlugin(): Plugin {
           return fail(this, error)
         }
         const loaders = [
-          ...compiled.guides.map((g) => [g.meta.id, bodyId(g.file)] as const),
+          ...compiled.guides.flatMap((g) => [
+            [g.meta.id, bodyId(g.file)] as const,
+            // Published translations only: a stale one is never loaded.
+            ...g.translations
+              .filter((t) => t.status === "published")
+              .map(
+                (t) =>
+                  [guideBodyKey(g.meta.id, t.locale), bodyId(t.file)] as const,
+              ),
+          ]),
           ["about", bodyId(ABOUT_FILE)] as const,
           ...compiled.changelog.map(
             (e) => [changelogBodyKey(e.meta.slug), bodyId(e.file)] as const,
@@ -207,9 +218,14 @@ export function contentPlugin(): Plugin {
         file === ABOUT_FILE
           ? compiled.about
           : (compiled.guides.find((g) => g.file === file) ??
+            compiled.guides
+              .flatMap((g) => g.translations)
+              .find((t) => t.file === file && t.status === "published") ??
             compiled.changelog.find((e) => e.file === file))
       if (!page)
-        return this.error(`${file}: not a content page (draft or unknown)`)
+        return this.error(
+          `${file}: not a content page (draft, stale translation or unknown)`,
+        )
 
       // Swap image placeholders for imports so they get hashed asset URLs.
       const imports: string[] = []
@@ -271,6 +287,18 @@ export function contentPlugin(): Plugin {
           ...asset,
           body: bridgeBody(asset.body),
         })
+        for (const translation of guide.translations) {
+          if (translation.status !== "published") continue
+          const localized = guideAsset(compiled, guide, translation)
+          emit(
+            CONTENT_ASSET_PATHS.guide(
+              guide.meta.category,
+              guide.meta.slug,
+              translation.locale,
+            ),
+            { ...localized, body: bridgeBody(localized.body) },
+          )
+        }
       }
     },
   }

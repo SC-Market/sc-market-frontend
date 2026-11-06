@@ -82,6 +82,10 @@ unknown slug a 404 with noindex, and an API failure the plain shell.
   or the next frontend deploy: the browser doesn't refetch the shipped data
   (searches, filters and other pages of a list are fetched live).
 - **Guides and About** are the `content/` markdown of the deployed commit.
+  Only the English guides are prerendered. A guide's published translation
+  (`content/STYLE.md`, "Translations") is served on `?lng=<locale>` by the
+  edge bridge (the SPA shell with the translation's head and text), and the
+  English file's head lists it as an `hreflang` alternate.
 - **Live data** (listings, buy orders, shops, prices, stats, anything
   per-user) is never shipped. The build renders it in its loading state
   and the browser fetches it, so a prerendered page never shows stale

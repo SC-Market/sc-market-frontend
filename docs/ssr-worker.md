@@ -115,6 +115,12 @@ visitor).
   canonical is the clean URL, and there is no `hreflang`. `?lng=de` is not
   a page query (`src/document/pageQuery.ts`): a crawler on it gets the
   English page with the clean canonical, never a German duplicate.
+  The one exception is a guide with a published translation
+  (content/STYLE.md, "Translations"): its `?lng=<locale>` is that
+  translation's own page (the edge bridge serves it, with its own
+  canonical, `<html lang>` and `hreflang` alternates), and only the
+  languages that have one are listed. Missing or stale translations keep
+  the rule above.
   Visitors get their language on the same URL (dynamic serving, `Vary:
 Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   wanted, they are a route-table and sitemap change; this variant would

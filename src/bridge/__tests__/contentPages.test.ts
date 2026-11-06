@@ -13,7 +13,15 @@ import {
   type SourceFile,
 } from "../../features/help/build/compile"
 import { CONTENT_ASSET_PATHS } from "../../features/help/domain/assetPaths"
-import { resolvePage, type BridgeEnv, type BridgeRuntime } from "../handler"
+import {
+  handleBridgeRequest,
+  resolvePage,
+  SHELL_PATH,
+  type BridgeEnv,
+  type BridgeRuntime,
+} from "../handler"
+import { matchBridgeRoute } from "../routes"
+import type { HtmlRewriterLike } from "../render"
 import { headMarkup, summaryChunks } from "../render"
 import type { BridgeDocument } from "../pages"
 
@@ -206,5 +214,158 @@ describe("bridge: hubs and About", () => {
       expect(html(d)).toContain(
         `<a href="/guides/${g.meta.category}/${g.meta.slug}">`,
       )
+  })
+})
+
+describe("bridge: guide translations", () => {
+  // The real content plus a German translation of `guide`, up to date with
+  // its English body, and a stale French one.
+  const english = guide.file
+  const translated = compileSite(
+    [
+      ...files,
+      {
+        path: english.replace(/\.md$/, ".de.md"),
+        source: `---\ntitle: Anleitung auf Deutsch\ndescription: Kurz gesagt.\nsource_hash: ${guide.sourceHash}\n---\nHallo [Markt](/market).\n`,
+      },
+      {
+        path: english.replace(/\.md$/, ".fr.md"),
+        source: `---\ntitle: Guide en français\ndescription: En bref.\nsource_hash: 0123456789ab\n---\nBonjour.\n`,
+      },
+    ],
+    { today: "2100-01-01" },
+  )
+  const tGuide = translated.guides.find((g) => g.meta.id === guide.meta.id)!
+  const de = tGuide.translations.find((t) => t.locale === "de")!
+  const path = `/guides/${guide.meta.category}/${guide.meta.slug}`
+  const origin = "https://sc-market.space"
+  const assets: Record<string, unknown> = {
+    [CONTENT_ASSET_PATHS.guide(guide.meta.category, guide.meta.slug)]:
+      guideAsset(translated, tGuide),
+    [CONTENT_ASSET_PATHS.guide(guide.meta.category, guide.meta.slug, "de")]:
+      guideAsset(translated, tGuide, de),
+  }
+  const SHELL = "<!doctype html><html><head></head><body></body></html>"
+  const assetFetch = vi.fn(async (input: Request | URL | string) => {
+    const url = new URL(input instanceof Request ? input.url : input.toString())
+    if (url.pathname === SHELL_PATH)
+      return new Response(SHELL, { headers: { "Content-Type": "text/html" } })
+    const body = assets[url.pathname]
+    return body
+      ? new Response(JSON.stringify(body), {
+          headers: { "Content-Type": "application/json" },
+        })
+      : new Response("Not found", { status: 404 })
+  })
+  const tEnv: BridgeEnv = {
+    ASSETS: { fetch: assetFetch },
+    VITE_FRONTEND_URL: origin,
+  }
+
+  async function translatedDoc(lng: string) {
+    const match = matchBridgeRoute(path)!
+    const outcome = await resolvePage(
+      new URL(`${origin}${path}?lng=${lng}`),
+      tEnv,
+      runtime,
+      () => {},
+      { route: match.route, params: { ...match.params, lng } },
+    )
+    if (outcome.kind !== "page") throw new Error(outcome.kind)
+    return outcome.doc
+  }
+
+  it("publishes only the up-to-date translation", () => {
+    expect(tGuide.meta.translations.map((t) => t.locale)).toEqual(["de"])
+  })
+
+  it("renders the translation with its own canonical, lang and hreflang alternates", async () => {
+    const d = await translatedDoc("de")
+    expect(d.title).toBe("Anleitung auf Deutsch — SC Market Guides")
+    expect(d.canonical).toBe(`${origin}${path}?lng=de`)
+    expect(d.head.lang).toBe("de")
+    expect(d.head.alternates).toEqual([
+      { hreflang: "en", href: `${origin}${path}` },
+      { hreflang: "de", href: `${origin}${path}?lng=de` },
+      { hreflang: "x-default", href: `${origin}${path}` },
+    ])
+    const article = d.head.jsonLd[1] as { inLanguage: string }
+    expect(article.inLanguage).toBe("de")
+    expect(html(d)).toContain("Hallo Markt.")
+    const markup = headMarkup(d.head, d.canonical, false)
+    expect(markup).toContain(
+      `<link rel="alternate" hreflang="de" href="${origin}${path}?lng=de">`,
+    )
+  })
+
+  it("lists the alternates on the English page too", async () => {
+    const match = matchBridgeRoute(path)!
+    const outcome = await resolvePage(
+      new URL(`${origin}${path}`),
+      tEnv,
+      runtime,
+      () => {},
+      match,
+    )
+    if (outcome.kind !== "page") throw new Error(outcome.kind)
+    expect(outcome.doc.canonical).toBe(`${origin}${path}`)
+    expect(outcome.doc.head.lang).toBe("en")
+    expect(outcome.doc.head.alternates?.map((a) => a.hreflang)).toEqual([
+      "en",
+      "de",
+      "x-default",
+    ])
+  })
+
+  it("has no alternates for an English-only guide", async () => {
+    const d = await doc(path)
+    expect(d.head.alternates).toBeUndefined()
+  })
+
+  class RecordingRewriter implements HtmlRewriterLike {
+    static selectors: string[] = []
+    on(selector: string): HtmlRewriterLike {
+      RecordingRewriter.selectors.push(selector)
+      return this
+    }
+    transform(response: Response): Response {
+      return new Response("TRANSLATED", response)
+    }
+  }
+
+  async function request(search: string) {
+    RecordingRewriter.selectors = []
+    const next = vi.fn(async () => new Response("ENGLISH FILE"))
+    const response = await handleBridgeRequest(
+      {
+        request: new Request(`${origin}${path}${search}`),
+        env: tEnv,
+        next,
+        waitUntil: () => {},
+      },
+      { ...runtime, HTMLRewriter: RecordingRewriter },
+    )
+    return { response, next }
+  }
+
+  it("serves ?lng=<locale> of a translated guide as its own page, <html lang> included", async () => {
+    for (const search of ["?lng=de", "?lng=de-AT"]) {
+      const { response, next } = await request(search)
+      expect(await response.text()).toBe("TRANSLATED")
+      expect(response.headers.get("X-SCM-Bridge")).toBe("page")
+      expect(next).not.toHaveBeenCalled()
+      expect(RecordingRewriter.selectors).toContain("html")
+    }
+  })
+
+  it.each([
+    ["a missing translation", "?lng=ja"],
+    ["a stale translation", "?lng=fr"],
+    ["English", "?lng=en"],
+    ["an unknown language", "?lng=pt"],
+  ])("serves the English file for %s", async (_name, search) => {
+    const { response, next } = await request(search)
+    expect(next).toHaveBeenCalledOnce()
+    expect(await response.text()).toBe("ENGLISH FILE")
   })
 })

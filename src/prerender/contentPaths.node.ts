@@ -9,6 +9,9 @@ import path from "node:path"
 import { changelogStatus } from "../features/help/build/compile"
 import { CHANGELOG_PATHS } from "../routes/paths"
 
+/** An English guide's file name (kebab-case slug, no locale suffix). */
+const GUIDE_FILE_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/
+
 export function contentPathsFromDisk(contentDir: string): string[] {
   const guidesDir = path.join(contentDir, "guides")
   const paths = ["/guides"]
@@ -17,7 +20,9 @@ export function contentPathsFromDisk(contentDir: string): string[] {
     if (!statSync(dir).isDirectory()) continue
     paths.push(`/guides/${category}`)
     for (const file of readdirSync(dir).sort()) {
-      if (file.endsWith(".md"))
+      // English guides only: a translation (<slug>.<locale>.md) is served
+      // on its guide's URL with ?lng=, by the edge bridge (not a file).
+      if (GUIDE_FILE_NAME.test(file))
         paths.push(`/guides/${category}/${file.slice(0, -3)}`)
     }
   }

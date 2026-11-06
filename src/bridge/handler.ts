@@ -28,6 +28,8 @@ import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { isMainSiteHostname } from "../util/mainSiteHost"
 import { guideRedirectTarget } from "../features/help/domain/redirects"
+import { isGuideLocale } from "../features/help/domain/locales"
+import { toSupportedLocale } from "../util/locales"
 
 export interface BridgeEnv {
   ASSETS: { fetch(input: Request | URL | string): Promise<Response> }
@@ -483,6 +485,25 @@ export async function handleBridgeRequest(
   const page = BRIDGE_PAGES[route.route.kind]
   const paginated = !!page.paginated && indexing.pageNumber !== null
 
+  // A guide's published translation is its own page, on `?lng=<locale>`
+  // (the language query the whole site reads). The prerendered file is the
+  // English guide, so the shell gets the translation's head and text. No
+  // translation (or a stale one): the English file below, whose canonical is
+  // the clean URL.
+  if (route.route.kind === "guide" && !indexing.hasQuery) {
+    const locale = requestedGuideLocale(url)
+    if (locale) {
+      const translated = await serveTranslatedGuide(
+        ctx,
+        runtime,
+        url,
+        route,
+        locale,
+      )
+      if (translated) return translated
+    }
+  }
+
   // Prerendered pages (src/prerender/paths.ts): the static file already has
   // this head (built with these same builders) and the real page body. A
   // clean URL is served as is; `?page=N` of a paginated hub gets that page's
@@ -590,6 +611,56 @@ export async function handleBridgeRequest(
         )
 
   return htmlResponse(request, html, status, outcome.kind, url, shell)
+}
+
+/** The translation locale a guide URL asks for (`?lng=de`, `?lng=de-AT`), if any. */
+export function requestedGuideLocale(url: URL): string | null {
+  const lng = url.searchParams.get("lng")
+  if (!lng) return null
+  const locale = toSupportedLocale(lng)
+  return isGuideLocale(locale) ? locale : null
+}
+
+/**
+ * A guide in another language: the SPA shell with the translation's head
+ * (title, description, canonical `?lng=<locale>`, hreflang alternates,
+ * `<html lang>`) and its text, or null when the guide has no published
+ * translation in that language (the caller serves the English file).
+ */
+async function serveTranslatedGuide(
+  ctx: BridgeContext,
+  runtime: BridgeRuntime,
+  url: URL,
+  route: BridgeMatch,
+  locale: string,
+): Promise<Response | null> {
+  const outcome = await resolvePage(url, ctx.env, runtime, ctx.waitUntil, {
+    route: route.route,
+    params: { ...route.params, lng: locale },
+  })
+  if (outcome.kind !== "page") {
+    if (outcome.kind === "passthrough")
+      console.warn(
+        `bridge: translated guide ${url.pathname}${url.search}: ${outcome.reason}`,
+      )
+    return null
+  }
+  const shell = await ctx.env.ASSETS.fetch(
+    new Request(new URL(SHELL_PATH, url), { method: "GET" }),
+  )
+  if (!shell.ok || !shell.body) return null
+  return htmlResponse(
+    ctx.request,
+    rewriteShell(
+      shell,
+      { kind: "page", doc: outcome.doc },
+      runtime.HTMLRewriter,
+    ),
+    200,
+    "page",
+    url,
+    shell,
+  )
 }
 
 /** The marker renderDocument puts on a prerendered page's #root (the SPA shell has none). */

@@ -20,6 +20,7 @@ import {
   type IndexAsset,
 } from "../features/help/domain/types"
 import { CONTENT_ASSET_PATHS } from "../features/help/domain/assetPaths"
+import { isGuideLocale } from "../features/help/domain/locales"
 import type { ContentDirectory } from "../features/help/domain/directory"
 import { HELP_PATHS } from "../routes/paths"
 import {
@@ -252,18 +253,29 @@ export const CONTENT_PAGES: Record<
     },
   },
 
+  // `params.lng`: a translation's locale (handler.ts serves a guide's
+  // published translation on `?lng=<locale>`); its own file, its own head.
   guide: {
     asset: (params) =>
       SEGMENT.test(params.category) && SEGMENT.test(params.slug)
-        ? CONTENT_ASSET_PATHS.guide(params.category, params.slug)
+        ? CONTENT_ASSET_PATHS.guide(
+            params.category,
+            params.slug,
+            params.lng && isGuideLocale(params.lng) ? params.lng : "en",
+          )
         : null,
     build: (json, _s, ctx): BridgeDocument => {
       const page = asset<GuideAsset>(json, "guide")
+      const translation =
+        page.locale && page.locale !== "en"
+          ? page.guide.translations.find((t) => t.locale === page.locale)
+          : undefined
       const head = buildGuideHead(
         page.guide,
         page.category,
         page.body.steps,
         ctx.origin,
+        translation,
       )
       const links: SeoLink[] = []
       const body = blocksToSummary(page.body.blocks, links)

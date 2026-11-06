@@ -119,7 +119,8 @@
     "analyze:detailed": "node scripts/analyze-bundle.js",
     "i18n:validate": "i18next --config i18next-parser.config.cjs 'src/**/*.{ts,tsx}' --fail-on-update",
     "i18n:coverage": "tsx scripts/i18n-coverage.ts",
-    "i18n:check": "node scripts/check-i18n.mjs"
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "content:translations": "tsx scripts/content/translation-status.ts"
   },
   "webpackConfig": {
     "target": "web"

@@ -1,7 +1,7 @@
 /**
  * Heads for Help & Guides, About and the changelog, shared by the SPA pages and the edge
  * bridge (src/bridge/pages.ts) so the two can't drift. Pure: no React, no
- * browser globals. English only, like the content itself.
+ * browser globals. English, except a guide's translations (buildGuideHead).
  */
 import { CHANGELOG_PATHS, HELP_PATHS } from "../routes/paths"
 import type {
@@ -10,7 +10,12 @@ import type {
   ChangelogMeta,
   ContentIndex,
   GuideMeta,
+  GuideTranslationMeta,
 } from "../features/help/domain/types"
+import {
+  localizedGuideMeta,
+  localizedGuidePath,
+} from "../features/help/domain/locales"
 import { buildHubHead, type HubCrumb, type SeoText } from "./hubHeads"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 import { WEBSITE_JSON_LD_ID, type SeoLink } from "./siteHeads"
@@ -86,15 +91,36 @@ export function buildGuideCategoryHead(
 /**
  * A guide: BreadcrumbList (SC Market › Help & Guides › Category › Guide),
  * TechArticle, and HowTo when the guide opts in and has a Steps list.
+ *
+ * With `translation` (a published one, domain/locales.ts) the head is the
+ * translated page's: its title and description, canonical `<path>?lng=<locale>`
+ * and `inLanguage`. A guide with published translations lists every language
+ * version as hreflang alternates (plus x-default, the English page) on each
+ * of them; an English-only guide has none.
  */
 export function buildGuideHead(
-  guide: GuideMeta,
+  english: GuideMeta,
   category: CategoryMeta,
   steps: readonly string[],
   origin: string,
+  translation?: GuideTranslationMeta,
 ): PageHead {
+  const guide = localizedGuideMeta(english, translation)
+  const locale = translation?.locale ?? "en"
   const title = guideTitle(guide)
-  const canonical = `${origin}${HELP_PATHS.guide(guide.category, guide.slug)}`
+  const path = HELP_PATHS.guide(guide.category, guide.slug)
+  const canonical = `${origin}${localizedGuidePath(path, locale)}`
+  const alternates =
+    english.translations.length > 0
+      ? [
+          { hreflang: "en", href: `${origin}${path}` },
+          ...english.translations.map((t) => ({
+            hreflang: t.locale,
+            href: `${origin}${localizedGuidePath(path, t.locale)}`,
+          })),
+          { hreflang: "x-default", href: `${origin}${path}` },
+        ]
+      : undefined
   const author = { "@type": "Person", name: guide.author }
   const jsonLd: object[] = [
     breadcrumbJsonLd([
@@ -114,7 +140,7 @@ export function buildGuideHead(
       url: canonical,
       mainEntityOfPage: canonical,
       dateModified: guide.updated,
-      inLanguage: "en",
+      inLanguage: locale,
       author,
       publisher: { "@id": ORGANIZATION_JSON_LD_ID },
       isPartOf: { "@id": WEBSITE_JSON_LD_ID },
@@ -153,6 +179,8 @@ export function buildGuideHead(
       { property: "article:modified_time", content: guide.updated },
     ],
     jsonLd,
+    lang: locale,
+    ...(alternates && { alternates }),
   }
 }
 

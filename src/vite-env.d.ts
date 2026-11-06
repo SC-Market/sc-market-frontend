@@ -9,7 +9,7 @@ declare module "*.webp" {
 /** Help & Guides content index + lazy body loaders (scripts/vite/contentPlugin.ts). */
 declare module "virtual:help-content" {
   export const index: import("./features/help/domain/types").ContentIndex
-  /** Keyed by guide id ("buying/buy-an-item") or "about". */
+  /** Keyed by guide id ("buying/buy-an-item"), "<guide id>@<locale>" for a translation, or "about". */
   export const bodies: Record<
     string,
     () => Promise<{

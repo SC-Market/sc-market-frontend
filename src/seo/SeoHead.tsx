@@ -12,15 +12,27 @@ import {
  * PageHead into the static shell, so JSON-LD uses the same serializer: the
  * script content then matches byte for byte and Unhead adopts the
  * server-injected tags instead of duplicating them (the BreadcrumbList by
- * its key, BREADCRUMB_JSONLD_KEY).
+ * its key, BREADCRUMB_JSONLD_KEY). `head.lang` sets `<html lang>` (the
+ * content's language, e.g. an English guide shown to a German visitor) over
+ * the UI language useLocaleMeta sets.
  */
 export function SeoHead({ head }: { head: PageHead }) {
   return (
     <Helmet
       title={head.title}
+      htmlAttributes={head.lang ? { lang: head.lang } : undefined}
       link={
-        head.canonical
-          ? [{ rel: "canonical", href: head.canonical }]
+        head.canonical || head.alternates
+          ? [
+              ...(head.canonical
+                ? [{ rel: "canonical", href: head.canonical }]
+                : []),
+              ...(head.alternates ?? []).map((a) => ({
+                rel: "alternate",
+                hreflang: a.hreflang,
+                href: a.href,
+              })),
+            ]
           : undefined
       }
       meta={head.meta.map((m) => ({ ...m }))}

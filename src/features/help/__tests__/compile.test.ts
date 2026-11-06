@@ -9,7 +9,9 @@ import {
   ContentError,
   DEFAULT_AUTHOR,
   parseFrontmatter,
+  guideAsset,
   sitemapManifest,
+  sourceHash,
   type SourceFile,
 } from "../build/compile"
 
@@ -170,6 +172,7 @@ describe("compileSite", () => {
         keywords: [],
         related: [],
         howto: true,
+        translations: [],
       },
     ])
     expect(DEFAULT_AUTHOR).toBe("Khuzdul")
@@ -262,6 +265,172 @@ describe("compileSite", () => {
     ],
   ])("fails the build on %s, naming the file", (_name, overrides) => {
     expect(() => compileSite(site(overrides), { today })).toThrow(ContentError)
+  })
+})
+
+const ENGLISH_BODY = "## Steps\n\n1. Do it.\n"
+
+function translation(hash: string, extra = "", body = ""): string {
+  return `---\ntitle: Einen Artikel kaufen\ndescription: Kaufen.\nsource_hash: ${hash}\n${extra}---\n${body || "## Schritte\n\n1. Mach es.\n"}`
+}
+
+describe("guide translations", () => {
+  const hash = sourceHash(ENGLISH_BODY)
+
+  it("hashes the English body, ignoring line endings and outer whitespace", () => {
+    expect(hash).toMatch(/^[0-9a-f]{12}$/)
+    expect(sourceHash("\n## Steps\r\n\r\n1. Do it.\r\n\n")).toBe(hash)
+    expect(sourceHash("## Steps\n\n1. Do it now.\n")).not.toBe(hash)
+  })
+
+  it("accepts a quoted all-digit source_hash", () => {
+    const compiled = compileSite(
+      site({
+        "guides/buying/buy-an-item.de.md": translation('"123456789012"'),
+      }),
+      { today },
+    )
+    expect(compiled.guides[0].translations[0]).toMatchObject({
+      sourceHash: "123456789012",
+      status: "stale",
+    })
+  })
+
+  it("publishes a translation whose source_hash matches the English body", () => {
+    const compiled = compileSite(
+      site({ "guides/buying/buy-an-item.de.md": translation(hash) }),
+      { today },
+    )
+    const [guide] = compiled.guides
+    expect(guide.sourceHash).toBe(hash)
+    expect(guide.translations).toHaveLength(1)
+    expect(guide.translations[0]).toMatchObject({
+      locale: "de",
+      status: "published",
+      file: "guides/buying/buy-an-item.de.md",
+    })
+    expect(guide.meta.translations).toEqual([
+      {
+        locale: "de",
+        title: "Einen Artikel kaufen",
+        description: "Kaufen.",
+        keywords: [],
+        updated: "2026-01-02",
+      },
+    ])
+    // Same anchors as English, steps from the list under the same heading.
+    const body = guide.translations[0].body
+    expect(body.blocks[0]).toMatchObject({ t: "h", id: "steps" })
+    expect(body.steps).toEqual(["Mach es."])
+    // Its own bridge file, in German.
+    const asset = guideAsset(compiled, guide, guide.translations[0])
+    expect(asset.locale).toBe("de")
+    expect(asset.guide.title).toBe("Einen Artikel kaufen")
+    expect(guideAsset(compiled, guide).locale).toBe("en")
+  })
+
+  it("keeps a stale translation out of the published metadata", () => {
+    const compiled = compileSite(
+      site({
+        "guides/buying/buy-an-item.fr.md": translation("0123456789ab"),
+      }),
+      { today },
+    )
+    const [guide] = compiled.guides
+    expect(guide.translations.map((t) => [t.locale, t.status])).toEqual([
+      ["fr", "stale"],
+    ])
+    expect(guide.meta.translations).toEqual([])
+    expect(sitemapManifest(compiled).pages).toContainEqual({
+      path: "/guides/buying/buy-an-item",
+      updated: "2026-01-02",
+    })
+  })
+
+  it("lists each published translation in the sitemap with hreflang alternates", () => {
+    const compiled = compileSite(
+      site({
+        "guides/buying/buy-an-item.de.md": translation(
+          hash,
+          "updated: 2026-01-05\n",
+        ),
+        "guides/buying/buy-an-item.zh-CN.md": translation(hash),
+        "guides/buying/buy-an-item.ja.md": translation("0123456789ab"),
+      }),
+      { today },
+    )
+    const alternates = [
+      { hreflang: "en", path: "/guides/buying/buy-an-item" },
+      { hreflang: "de", path: "/guides/buying/buy-an-item?lng=de" },
+      { hreflang: "zh-CN", path: "/guides/buying/buy-an-item?lng=zh-CN" },
+      { hreflang: "x-default", path: "/guides/buying/buy-an-item" },
+    ]
+    const guidePages = sitemapManifest(compiled).pages.filter((p) =>
+      p.path.startsWith("/guides/buying/"),
+    )
+    expect(guidePages).toEqual([
+      { path: "/guides/buying/buy-an-item", updated: "2026-01-02", alternates },
+      {
+        path: "/guides/buying/buy-an-item?lng=de",
+        updated: "2026-01-05",
+        lang: "de",
+        alternates,
+      },
+      {
+        path: "/guides/buying/buy-an-item?lng=zh-CN",
+        updated: "2026-01-02",
+        lang: "zh-CN",
+        alternates,
+      },
+    ])
+  })
+
+  it("drops the translations of a draft guide with it", () => {
+    const files = site({
+      "guides/buying/later.md":
+        "---\ntitle: Later\ndescription: Soon.\nupdated: 2026-01-01\ndraft: true\n---\nWIP\n",
+      "guides/buying/later.de.md": translation("0123456789ab"),
+    })
+    expect(compileSite(files, { today }).guides).toHaveLength(1)
+  })
+
+  it.each([
+    ["an unknown locale", "guides/buying/buy-an-item.pt.md", translation(hash)],
+    [
+      "English as a translation",
+      "guides/buying/buy-an-item.en.md",
+      translation(hash),
+    ],
+    ["no English guide", "guides/buying/nope.de.md", translation(hash)],
+    [
+      "a missing source_hash",
+      "guides/buying/buy-an-item.de.md",
+      "---\ntitle: T\ndescription: D.\n---\nX\n",
+    ],
+    [
+      "a malformed source_hash",
+      "guides/buying/buy-an-item.de.md",
+      translation("abc"),
+    ],
+    [
+      "an unquoted all-digit source_hash",
+      "guides/buying/buy-an-item.de.md",
+      translation("123456789012"),
+    ],
+    [
+      "a key only English guides have",
+      "guides/buying/buy-an-item.de.md",
+      translation(hash, "related: [buying/buy-an-item]\n"),
+    ],
+    [
+      "invalid Markdown",
+      "guides/buying/buy-an-item.de.md",
+      translation(hash, "", "<div>x</div>\n"),
+    ],
+  ])("fails the build on %s", (_name, file, source) => {
+    expect(() => compileSite(site({ [file]: source }), { today })).toThrow(
+      ContentError,
+    )
   })
 })
 

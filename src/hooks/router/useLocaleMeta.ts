@@ -8,11 +8,12 @@ import { SUPPORTED_LOCALES } from "../../util/i18n"
 // itself serves every language from the same URL (language is chosen at runtime
 // by i18next-browser-languagedetector: ?lng= → cookie → localStorage → browser).
 //
-// True per-language <link rel="alternate" hreflang> is intentionally NOT emitted
-// here: hreflang requires distinct, crawlable URLs per language, and until the
-// prerendering project serves per-language HTML to bots those URLs would be
-// byte-identical duplicates. hreflang belongs to that phase; this hook covers
-// the language-declaration wins that are safe today.
+// Per-language <link rel="alternate" hreflang> is NOT emitted here: hreflang
+// needs distinct, crawlable URLs per language, and most pages have none (the
+// language is a runtime choice on the same URL). Guides with published
+// translations are the exception: their head lists them (seo/contentHeads.ts
+// buildGuideHead, served on ?lng=<locale> by the edge bridge), and its `lang`
+// sets <html lang> to the guide's language over this hook's.
 const OG_LOCALE: Record<string, string> = {
   en: "en_US",
   de: "de_DE",

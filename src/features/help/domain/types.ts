@@ -57,6 +57,23 @@ export interface GuideMeta {
   related: string[]
   /** Emit HowTo JSON-LD from the guide's "Steps" list. */
   howto: boolean
+  /**
+   * Published translations (content/guides/<category>/<slug>.<locale>.md
+   * whose `source_hash` matches this English text). Missing and stale ones
+   * aren't listed: those languages get the English guide.
+   */
+  translations: GuideTranslationMeta[]
+}
+
+/** A guide's metadata in another language (domain/locales.ts). */
+export interface GuideTranslationMeta {
+  /** A shipped locale other than English ("de", "zh-CN"). */
+  locale: string
+  title: string
+  description: string
+  keywords: string[]
+  /** ISO date (YYYY-MM-DD): the translation's own, else the English guide's. */
+  updated: string
 }
 
 export interface AboutMeta {
@@ -107,6 +124,11 @@ interface WithDirectory {
 /** /content/bridge/guides/<category>/<slug>.json */
 export interface GuideAsset extends WithDirectory {
   version: 1
+  /**
+   * The language of `guide` (title, description) and `body`: "en", or a
+   * translation's locale for /content/bridge/guides/<category>/<slug>.<locale>.json.
+   */
+  locale: string
   guide: GuideMeta
   category: CategoryMeta
   body: ContentBody
@@ -138,7 +160,21 @@ export interface IndexAsset extends ContentIndex {
  */
 export interface SitemapManifest {
   version: 1
-  pages: { path: string; updated: string }[]
+  pages: SitemapPage[]
+}
+
+export interface SitemapPage {
+  /** Site-relative URL; a translated guide is its path plus `?lng=<locale>`. */
+  path: string
+  updated: string
+  /** The page's language, on translated guides only (English otherwise). */
+  lang?: string
+  /**
+   * A guide with published translations: every language version, itself
+   * included, plus "x-default" (the English page), for the sitemap's
+   * xhtml:link hreflang alternates.
+   */
+  alternates?: { hreflang: string; path: string }[]
 }
 
 /** Plain text of inline nodes (links flattened to their text). */

@@ -10,6 +10,9 @@ export const CONTENT_ASSET_PATHS = {
   index: "/content/bridge/index.json",
   about: "/content/bridge/about.json",
   category: (category: string) => `/content/bridge/guides/${category}.json`,
-  guide: (category: string, slug: string) =>
-    `/content/bridge/guides/${category}/${slug}.json`,
+  /** A guide; with a locale, its published translation (domain/locales.ts). */
+  guide: (category: string, slug: string, locale = "en") =>
+    locale === "en"
+      ? `/content/bridge/guides/${category}/${slug}.json`
+      : `/content/bridge/guides/${category}/${slug}.${locale}.json`,
 } as const

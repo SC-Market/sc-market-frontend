@@ -12,10 +12,14 @@
  * - Changelog entries (changelog/<YYYY-MM-DD>.md) need `status: draft` or
  *   `status: published`; drafts are dropped before anything else reads them,
  *   so a draft never reaches the bundle, the bridge files or the feed.
+ * - Translations (guides/<category>/<slug>.<locale>.md) carry the
+ *   `source_hash` of the English body they were translated from; only those
+ *   matching the current English text are published (content/STYLE.md).
  * - Callouts use GitHub alert syntax (`> [!TIP]`), screenshots are a
  *   paragraph holding one `![alt](./img/x.webp "caption")`, a CTA button is a
  *   paragraph holding one `[Label](/path "cta")`.
  */
+import { createHash } from "node:crypto"
 import { unified } from "unified"
 import remarkParse from "remark-parse"
 import remarkGfm from "remark-gfm"
@@ -31,6 +35,11 @@ import { CHANGELOG_PATHS, HELP_PATHS } from "../../../routes/paths"
 import { buildDirectory } from "../domain/directory"
 import { GUIDE_REDIRECTS } from "../domain/redirects"
 import {
+  GUIDE_LOCALES,
+  localizedGuideMeta,
+  localizedGuidePath,
+} from "../domain/locales"
+import {
   inlineText,
   type AboutAsset,
   type AboutMeta,
@@ -43,8 +52,10 @@ import {
   type ContentIndex,
   type GuideAsset,
   type GuideMeta,
+  type GuideTranslationMeta,
   type Inline,
   type SitemapManifest,
+  type SitemapPage,
 } from "../domain/types"
 
 /** Byline when a page doesn't set `author`. */
@@ -130,6 +141,13 @@ const KNOWN_GUIDE_KEYS = new Set([
   "related",
   "howto",
   "draft",
+])
+const KNOWN_TRANSLATION_KEYS = new Set([
+  "title",
+  "description",
+  "updated",
+  "keywords",
+  "source_hash",
 ])
 const KNOWN_ABOUT_KEYS = new Set(["title", "description", "updated", "author"])
 const KNOWN_CHANGELOG_KEYS = new Set([
@@ -482,6 +500,63 @@ export function extractSteps(blocks: readonly Block[]): string[] {
   return []
 }
 
+/**
+ * A translation's steps: the first ordered list under the heading at the
+ * position of the English guide's "Steps" heading (the heading text is
+ * translated, its place isn't).
+ */
+function translatedSteps(
+  english: readonly Block[],
+  translated: readonly Block[],
+): string[] {
+  const englishHeadings = english.filter((b) => b.t === "h")
+  const at = englishHeadings.findIndex(
+    (b) => inlineText(b.c).trim().toLowerCase() === "steps",
+  )
+  if (at === -1) return []
+  let seen = -1
+  for (const block of translated) {
+    if (block.t === "h") {
+      seen++
+      continue
+    }
+    if (seen === at && block.t === "ol") {
+      return block.items.map((item) =>
+        blocksText(item).replace(/\s+/g, " ").trim(),
+      )
+    }
+  }
+  return []
+}
+
+/**
+ * Give a translation's headings the English anchors, position by position,
+ * so links to "#post-a-buy-order" (in-app help links, other guides) land on
+ * the same section in every language. Only when the headings line up.
+ */
+function englishAnchors(english: readonly Block[], translated: Block[]): void {
+  const ids = english.flatMap((b) => (b.t === "h" ? [b.id] : []))
+  const headings = translated.filter((b) => b.t === "h")
+  if (headings.length !== ids.length) return
+  headings.forEach((h, i) => {
+    if (h.t === "h") h.id = ids[i]
+  })
+}
+
+/**
+ * The `source_hash` a translation of this English guide body must carry:
+ * the first 12 hex digits of its SHA-256 (line endings and surrounding
+ * whitespace ignored). Any edit to the English body changes it, which marks
+ * every translation stale until it is updated.
+ */
+export function sourceHash(body: string): string {
+  const text = body
+    .replace(/^\uFEFF/, "")
+    .replace(/\r\n?/g, "\n")
+    .trim()
+  return createHash("sha256").update(text, "utf8").digest("hex").slice(0, 12)
+}
+
 export function compileBody(
   markdown: string,
   file: string,
@@ -513,6 +588,21 @@ export interface CompiledGuide {
   meta: GuideMeta
   body: CompiledBody
   file: string
+  /** The English body's hash (what a current translation's `source_hash` is). */
+  sourceHash: string
+  /** Every translation file, published or stale (`meta.translations`: published only). */
+  translations: CompiledTranslation[]
+}
+
+export interface CompiledTranslation {
+  locale: string
+  file: string
+  meta: GuideTranslationMeta
+  body: CompiledBody
+  /** Its `source_hash`: the English body it was translated from. */
+  sourceHash: string
+  /** "published" when `sourceHash` matches the English body, else "stale". */
+  status: "published" | "stale"
 }
 
 export interface CompiledChangelogEntry {
@@ -539,6 +629,9 @@ export const IGNORED_FILES: ReadonlySet<string> = new Set([
 
 const GUIDE_FILE =
   /^guides\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/
+/** guides/<category>/<slug>.<locale>.md: a translation (locale checked separately). */
+const TRANSLATION_FILE =
+  /^guides\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.([A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,4})?)\.md$/
 const CHANGELOG_FILE = /^changelog\/(\d{4}-\d{2}-\d{2})\.md$/
 
 /**
@@ -639,6 +732,56 @@ function parseCategories(source: string): CategoryMeta[] {
   })
 }
 
+const SOURCE_HASH = /^[0-9a-f]{12}$/
+
+function compileTranslation(
+  file: { path: string; source: string; locale: string },
+  guide: CompiledGuide,
+  opts: {
+    today: string
+    imageResolver?: (file: string) => CompileOptions["resolveImage"]
+  },
+): CompiledTranslation {
+  const { path, source, locale } = file
+  const { data, body } = parseFrontmatter(source, path)
+  checkUnknownKeys(data, KNOWN_TRANSLATION_KEYS, path)
+  // An all-digit hash would read as a number (and lose leading zeros).
+  if (typeof data.source_hash === "number")
+    throw new ContentError(
+      path,
+      `quote an all-digit "source_hash" (source_hash: "…"), as npm run content:translations prints it`,
+    )
+  const hash = requireString(data, "source_hash", path)
+  if (!SOURCE_HASH.test(hash))
+    throw new ContentError(
+      path,
+      `"source_hash" must be 12 hex digits (npm run content:translations prints it)`,
+    )
+  const description = requireString(data, "description", path)
+  checkDescription(description, path)
+  const updated = optionalString(data, "updated", path) ?? guide.meta.updated
+  checkUpdated(updated, opts.today, path)
+  const compiled = compileBody(body, path, {
+    resolveImage: opts.imageResolver?.(path),
+  })
+  englishAnchors(guide.body.blocks, compiled.blocks)
+  compiled.steps = translatedSteps(guide.body.blocks, compiled.blocks)
+  return {
+    locale,
+    file: path,
+    sourceHash: hash,
+    status: hash === guide.sourceHash ? "published" : "stale",
+    meta: {
+      locale,
+      title: requireString(data, "title", path),
+      description,
+      keywords: stringList(data, "keywords", path),
+      updated,
+    },
+    body: compiled,
+  }
+}
+
 /**
  * Compile every content file. `today` (YYYY-MM-DD) bounds `updated`;
  * `includeDrafts` keeps `draft: true` guides (dev server only).
@@ -665,6 +808,14 @@ export function compileSite(
 
   const guides: CompiledGuide[] = []
   const changelog: CompiledChangelogEntry[] = []
+  const pendingTranslations: {
+    path: string
+    source: string
+    id: string
+    locale: string
+  }[] = []
+  /** Guides left out as drafts: their translations are left out too. */
+  const draftIds = new Set<string>()
   for (const { path, source } of files) {
     if (
       path === CATEGORIES_FILE ||
@@ -686,11 +837,27 @@ export function compileSite(
       changelog.push(compileChangelogEntry(path, source, entry[1], opts))
       continue
     }
+    const translation = TRANSLATION_FILE.exec(path)
+    if (translation) {
+      const [, category, slug, locale] = translation
+      if (!GUIDE_LOCALES.includes(locale))
+        throw new ContentError(
+          path,
+          `"${locale}" is not a translation locale (${GUIDE_LOCALES.join(", ")})`,
+        )
+      pendingTranslations.push({
+        path,
+        source,
+        id: `${category}/${slug}`,
+        locale,
+      })
+      continue
+    }
     const match = GUIDE_FILE.exec(path)
     if (!match) {
       throw new ContentError(
         path,
-        "content files must be guides/<category>/<slug>.md (kebab-case)",
+        "content files must be guides/<category>/<slug>.md (kebab-case) or a translation, guides/<category>/<slug>.<locale>.md",
       )
     }
     const [, category, slug] = match
@@ -702,7 +869,10 @@ export function compileSite(
     }
     const { data, body } = parseFrontmatter(source, path)
     checkUnknownKeys(data, KNOWN_GUIDE_KEYS, path)
-    if (data.draft === true && !opts.includeDrafts) continue
+    if (data.draft === true && !opts.includeDrafts) {
+      draftIds.add(`${category}/${slug}`)
+      continue
+    }
     const description = requireString(data, "description", path)
     checkDescription(description, path)
     const updated = requireString(data, "updated", path)
@@ -737,9 +907,32 @@ export function compileSite(
         keywords: stringList(data, "keywords", path),
         related: stringList(data, "related", path),
         howto,
+        translations: [],
       },
       body: compiled,
+      sourceHash: sourceHash(body),
+      translations: [],
     })
+  }
+
+  for (const pending of pendingTranslations) {
+    const guide = guides.find((g) => g.meta.id === pending.id)
+    if (!guide) {
+      if (draftIds.has(pending.id)) continue
+      throw new ContentError(
+        pending.path,
+        `translation of "${pending.id}", which has no English guide (guides/${pending.id}.md)`,
+      )
+    }
+    const compiled = compileTranslation(pending, guide, opts)
+    guide.translations.push(compiled)
+    if (compiled.status === "published")
+      guide.meta.translations.push(compiled.meta)
+  }
+  for (const guide of guides) {
+    const order = (locale: string) => GUIDE_LOCALES.indexOf(locale)
+    guide.translations.sort((a, b) => order(a.locale) - order(b.locale))
+    guide.meta.translations.sort((a, b) => order(a.locale) - order(b.locale))
   }
 
   const ids = new Set(guides.map((g) => g.meta.id))
@@ -856,10 +1049,30 @@ export function sitemapManifest(site: CompiledSite): SitemapManifest {
     })
   }
   for (const guide of site.guides) {
-    pages.push({
-      path: HELP_PATHS.guide(guide.meta.category, guide.meta.slug),
-      updated: guide.meta.updated,
-    })
+    const path = HELP_PATHS.guide(guide.meta.category, guide.meta.slug)
+    const translations = guide.meta.translations
+    if (translations.length === 0) {
+      pages.push({ path, updated: guide.meta.updated })
+      continue
+    }
+    // Every language version lists all of them (hreflang must be reciprocal).
+    const alternates: NonNullable<SitemapPage["alternates"]> = [
+      { hreflang: "en", path },
+      ...translations.map((t) => ({
+        hreflang: t.locale,
+        path: localizedGuidePath(path, t.locale),
+      })),
+      { hreflang: "x-default", path },
+    ]
+    pages.push({ path, updated: guide.meta.updated, alternates })
+    for (const t of translations) {
+      pages.push({
+        path: localizedGuidePath(path, t.locale),
+        updated: t.updated,
+        lang: t.locale,
+        alternates,
+      })
+    }
   }
   pages.push({ path: HELP_PATHS.about, updated: site.about.meta.updated })
   // The changelog index is noindex until an entry is published: not listed.
@@ -931,17 +1144,23 @@ function publicBody(body: CompiledBody): ContentBody {
   return { blocks: body.blocks, steps: body.steps }
 }
 
+/**
+ * A guide's bridge file: the English guide, or with `translation` (a
+ * published one) the guide in that language (title, description, body).
+ */
 export function guideAsset(
   site: CompiledSite,
   guide: CompiledGuide,
+  translation?: CompiledTranslation,
 ): GuideAsset {
   const category = site.categories.find((c) => c.id === guide.meta.category)!
   return {
     version: 1,
     directory: buildDirectory(contentIndex(site)),
-    guide: guide.meta,
+    locale: translation?.locale ?? "en",
+    guide: localizedGuideMeta(guide.meta, translation?.meta),
     category,
-    body: publicBody(guide.body),
+    body: publicBody(translation?.body ?? guide.body),
     related: guide.meta.related.map((id) => {
       const target = site.guides.find((g) => g.meta.id === id)!
       return {

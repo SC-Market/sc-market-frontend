@@ -36,6 +36,7 @@ export interface RewriterContentOptions {
 }
 export interface RewriterElement {
   getAttribute(name: string): string | null
+  setAttribute(name: string, value: string): unknown
   setInnerContent(content: string, options?: RewriterContentOptions): unknown
   append(content: string, options?: RewriterContentOptions): unknown
   remove(): unknown
@@ -130,6 +131,11 @@ export function headMarkup(
   if (noindex) parts.push(`<meta name="robots" content="noindex">`)
   if (canonical) {
     parts.push(`<link rel="canonical" href="${escapeAttribute(canonical)}">`)
+  }
+  for (const alternate of head?.alternates ?? []) {
+    parts.push(
+      `<link rel="alternate" hreflang="${escapeAttribute(alternate.hreflang)}" href="${escapeAttribute(alternate.href)}">`,
+    )
   }
   for (const meta of head?.meta ?? []) {
     const key = meta.name !== undefined ? "name" : "property"
@@ -298,8 +304,9 @@ export type RenderInput =
 
 /**
  * Rewrite the shell. For a page: replace <title>, swap the shell's generic
- * description/og:/twitter: tags for the page's, add canonical + JSON-LD,
- * and put the summary in #root. For an unknown entity: only add
+ * description/og:/twitter: tags for the page's, add canonical, hreflang
+ * alternates + JSON-LD, set <html lang> when the page has one (a translated
+ * guide), and put the summary in #root. For an unknown entity: only add
  * robots noindex (the response status is set to 404 by the caller).
  */
 export function rewriteShell(
@@ -339,6 +346,15 @@ export function rewriteShell(
         )
       },
     })
+
+  const lang = doc?.head.lang
+  if (lang) {
+    rewriter = rewriter.on("html", {
+      element(el) {
+        el.setAttribute("lang", lang)
+      },
+    })
+  }
 
   if (doc) {
     rewriter = rewriter

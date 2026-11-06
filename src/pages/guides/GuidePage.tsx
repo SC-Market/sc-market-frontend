@@ -1,5 +1,6 @@
 import React, { Suspense } from "react"
 import {
+  Alert,
   Box,
   Divider,
   Grid,
@@ -35,6 +36,12 @@ import { buildGuideHead, HELP_HUB_NAME } from "../../seo/contentHeads"
 import type { GuideMeta } from "../../features/help/domain/types"
 import { PageBody404 } from "../errors/Error404"
 import { guideRedirectTarget } from "../../features/help/domain/redirects"
+import {
+  guideBodyKey,
+  guideTranslation,
+  localizedGuideMeta,
+} from "../../features/help/domain/locales"
+import { toSupportedLocale } from "../../util/locales"
 
 function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
   if (guides.length === 0) return null
@@ -60,7 +67,7 @@ function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
 }
 
 export function GuidePage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { category: categoryId, slug } = useParams<{
     category: string
     slug: string
@@ -68,9 +75,17 @@ export function GuidePage() {
   const location = useLocation()
   // A moved guide or category (the edge answers these with a 301 first).
   const moved = guideRedirectTarget(location.pathname)
-  const guide = findGuide(categoryId, slug)
-  const category = findCategory(guide?.category)
-  const { body, error } = useContentBody(guide?.id)
+  const english = findGuide(categoryId, slug)
+  const category = findCategory(english?.category)
+  // The visitor's language: its published translation, else the English
+  // guide with a notice (a missing or stale translation is never shown).
+  const language = toSupportedLocale(i18n.language || "en")
+  const translation = english ? guideTranslation(english, language) : undefined
+  const guide = english && localizedGuideMeta(english, translation)
+  const bodyKey = english
+    ? guideBodyKey(english.id, translation?.locale ?? "en")
+    : undefined
+  const { body, error } = useContentBody(bodyKey)
   const helpCrumb = {
     label: t("help.hubTitle", HELP_HUB_NAME),
     href: HELP_PATHS.hub,
@@ -80,7 +95,7 @@ export function GuidePage() {
     return (
       <Navigate to={`${moved}${location.search}${location.hash}`} replace />
     )
-  if (!guide || !category) {
+  if (!english || !guide || !bodyKey || !category) {
     return (
       <HelpLayout
         head={null}
@@ -101,7 +116,13 @@ export function GuidePage() {
 
   return (
     <HelpLayout
-      head={buildGuideHead(guide, category, body?.steps ?? [], FRONTEND_URL)}
+      head={buildGuideHead(
+        english,
+        category,
+        body?.steps ?? [],
+        FRONTEND_URL,
+        translation,
+      )}
       path={HELP_PATHS.guide(guide.category, guide.slug)}
       headerTitle={guide.title}
       loading={!body && !error}
@@ -113,6 +134,14 @@ export function GuidePage() {
     >
       <Grid item xs={12}>
         <Paper sx={{ p: { xs: 2, sm: 3 } }}>
+          {language !== "en" && !translation && (
+            <Alert severity="info" sx={{ mb: 2 }}>
+              {t(
+                "help.notTranslated",
+                "This guide isn't translated yet; showing English.",
+              )}
+            </Alert>
+          )}
           <UpdatedStamp updated={guide.updated} author={guide.author} />
           <Suspense
             fallback={
@@ -124,7 +153,7 @@ export function GuidePage() {
               </Box>
             }
           >
-            <ContentBody contentKey={guide.id} />
+            <ContentBody contentKey={bodyKey} />
           </Suspense>
           <Divider sx={{ mt: 3 }} />
           <GuideLinks

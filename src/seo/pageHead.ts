@@ -20,6 +20,13 @@ export interface PageHead {
   meta: HeadMeta[]
   /** JSON-LD objects, one <script type="application/ld+json"> each. */
   jsonLd: object[]
+  /**
+   * `<link rel="alternate" hreflang>` for each language version (absolute
+   * URLs), only where real translations exist (translated guides).
+   */
+  alternates?: { hreflang: string; href: string }[]
+  /** The language of the page's content, for `<html lang>` (default: the UI's). */
+  lang?: string
 }
 
 /**
