@@ -31,6 +31,7 @@ import {
 } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
 import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 interface NavTab {
   id: string
@@ -235,6 +236,7 @@ export function MobileNavSettings() {
                             size="small"
                             onClick={() => handleToggle(tabId)}
                             disabled={selectedTabs.length === 1}
+                            startIcon={<DeleteRounded />}
                           >
                             {t("ui.remove")}
                           </Button>

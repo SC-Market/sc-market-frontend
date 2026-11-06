@@ -19,8 +19,6 @@ import {
   StoreRounded,
   PersonRounded,
   GroupsRounded,
-  VisibilityRounded,
-  SettingsRounded,
   CalendarTodayRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -210,7 +208,6 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           <Button
             variant="outlined"
             size="small"
-            startIcon={<VisibilityRounded />}
             component={RouterLink}
             to={SHOP_PATHS.profile(shop.slug)}
           >
@@ -220,7 +217,6 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Button
               variant="contained"
               size="small"
-              startIcon={<SettingsRounded />}
               component={RouterLink}
               to={SHOP_PATHS.settings(shop.slug)}
             >

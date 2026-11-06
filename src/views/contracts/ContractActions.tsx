@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Button, Grid } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import { CreateRounded } from "@mui/icons-material"
+import AddRounded from "@mui/icons-material/AddRounded"
 import React from "react"
 import { useTranslation } from "react-i18next"
 
@@ -17,7 +17,7 @@ export function ContractActions() {
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >
           <Button
-            startIcon={<CreateRounded />}
+            startIcon={<AddRounded />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
             fullWidth={isMobile}

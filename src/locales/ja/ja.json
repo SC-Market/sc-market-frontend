@@ -1880,8 +1880,8 @@
     "viewContractor": "契約者を見る",
     "share": "共有",
     "title": "募集",
-    "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →",
-    "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります →",
+    "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります",
+    "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります",
     "editPost": "投稿を編集"
   },
   "scOrgs": {
@@ -5573,7 +5573,11 @@
       "breadcrumb": "パンくずリスト",
       "currentContractor": "現在のコントラクター",
       "loadingButtonGroup": "読み込み中のボタングループ",
-      "orgInfoArea": "組織情報エリア"
+      "orgInfoArea": "組織情報エリア",
+      "showDetails": "詳細を表示",
+      "hideDetails": "詳細を隠す",
+      "copyToClipboard": "クリップボードにコピー",
+      "changeAvatar": "アバターを変更"
     },
     "buttons": {
       "save": "保存"
@@ -5752,7 +5756,7 @@
       "noRecipeWarning": "このアイテムのクラフトレシピが見つからないため、分解コンポーネントは不明です。",
       "notSoldNpc": "どの NPC ショップでも販売されていません",
       "openInCalculator": "計算機で開く",
-      "owned": "所有済み ✓",
+      "owned": "所有済み",
       "perCraft": "クラフトあたり",
       "perItem": "アイテムあたり",
       "priceHistory": "価格履歴",
@@ -7036,7 +7040,7 @@
       "acceptCustomOrders": "カスタム注文を受け付ける"
     },
     "create": {
-      "backToMyShops": "← マイショップに戻る",
+      "backToMyShops": "マイショップに戻る",
       "intro": "SC Market にストアフロントを開設しましょう。設定は作成後に調整できます。",
       "namePlaceholder": "素敵なショップ",
       "descriptionPlaceholder": "ショップの内容を購入者に紹介しましょう...",
@@ -7260,8 +7264,8 @@
       "analytics": "分析",
       "priceHistory": "価格履歴",
       "orderDepth": "注文の厚み",
-      "createListing": "+ 出品を作成",
-      "createBuyOrder": "+ 買い注文",
+      "createListing": "出品を作成",
+      "createBuyOrder": "買い注文を作成",
       "qualityDistribution": "品質分布",
       "priceByQualityTier": "品質ティア別価格"
     },
@@ -7437,7 +7441,9 @@
       "pathOrUrlPlaceholder": "/custom-page または https://...",
       "willOpenInNewTab": "新しいタブで開きます",
       "add": "追加",
-      "saveSidebar": "サイドバーを保存"
+      "saveSidebar": "サイドバーを保存",
+      "showTab": "{{name}} をサイドバーに表示",
+      "hideTab": "{{name}} をサイドバーから隠す"
     }
   },
   "accountUi": {

@@ -7,6 +7,7 @@ import type {
   MinimalContractor,
 } from "../../contractor/domain/types"
 import { useTranslation } from "react-i18next"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 interface SendMoneyDetailsSectionProps {
   targetObject: User | Contractor | null
@@ -113,6 +114,7 @@ export function SendMoneyDetailsSection(props: SendMoneyDetailsSectionProps) {
             "Go back to recipient selection",
           )}
           aria-describedby="go-back-help"
+          startIcon={<ChevronLeftRounded />}
         >
           {t("sendMoney.back")}
           <span id="go-back-help" className="sr-only">

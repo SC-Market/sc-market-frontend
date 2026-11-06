@@ -2,7 +2,7 @@ import React from "react"
 import { ShipStatus } from "../../views/fleet/ShipStatus"
 import { ActiveDeliveries } from "../../views/fleet/ActiveDeliveries"
 import { Box, Button } from "@mui/material"
-import { AddRounded, LocalShippingRounded } from "@mui/icons-material"
+import { AddRounded } from "@mui/icons-material"
 import { useGetMyShips } from "../../features/fleet/api/shipsApi"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -32,7 +32,7 @@ export function MemberFleet() {
         </Button>
       </Link>
       <Button
-        startIcon={<LocalShippingRounded />}
+        startIcon={<AddRounded />}
         variant={"outlined"}
         sx={{
           marginRight: 2,

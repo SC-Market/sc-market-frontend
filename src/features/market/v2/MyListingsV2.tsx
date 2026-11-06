@@ -43,6 +43,7 @@ import { isAwaitingData } from "../../../util/queryLoading"
 import { lazyWithRetry } from "../../../util/lazyWithRetry"
 import { useListingStatusActions } from "../hooks/useListingMutations"
 import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -340,7 +341,7 @@ export function MyListingsV2() {
               <Button
                 variant="contained"
                 size="small"
-                startIcon={<AddCircleOutlineRounded />}
+                startIcon={<AddRounded />}
               >
                 {t("market.createListing", "Create Listing")}
               </Button>

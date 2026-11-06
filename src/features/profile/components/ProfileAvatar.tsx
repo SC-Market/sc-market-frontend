@@ -63,6 +63,7 @@ export function ProfileAvatar({
       <label htmlFor="avatar-upload-input">
         <IconButton
           component="span"
+          aria-label={t("ui.aria.changeAvatar")}
           disabled={isUploadingAvatar}
           sx={{
             opacity: showAvatarButton ? 1 : 0,

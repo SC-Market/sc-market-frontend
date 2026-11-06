@@ -17,6 +17,8 @@ import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import { useTotpEnrollment } from "../hooks/useMfaActions"
 import { describeMfaError } from "../errors"
 import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 /**
  * Authenticator enrollment: QR + manual key, first code, recovery codes.
@@ -145,7 +147,11 @@ export function MfaEnrollDialog(props: {
                 <Button color="inherit" onClick={() => props.onClose(false)}>
                   {t("mfa.common.cancel", "Cancel")}
                 </Button>
-                <Button variant="contained" onClick={() => setStep(1)}>
+                <Button
+                  variant="contained"
+                  onClick={() => setStep(1)}
+                  endIcon={<ChevronRightRounded />}
+                >
                   {t("mfa.common.next", "Next")}
                 </Button>
               </Stack>
@@ -185,7 +191,11 @@ export function MfaEnrollDialog(props: {
               </Alert>
             )}
             <Stack direction="row" spacing={1} justifyContent="flex-end">
-              <Button color="inherit" onClick={() => setStep(0)}>
+              <Button
+                color="inherit"
+                onClick={() => setStep(0)}
+                startIcon={<ChevronLeftRounded />}
+              >
                 {t("mfa.common.back", "Back")}
               </Button>
               <Button

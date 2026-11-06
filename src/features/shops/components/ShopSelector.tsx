@@ -19,12 +19,13 @@ import {
   Typography,
 } from "@mui/material"
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
-import { StorefrontRounded, AddBusinessRounded } from "@mui/icons-material"
+import { StorefrontRounded } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../../store/api/v2/market"
 import { canEditShopListings } from "../domain/shopPermissions"
 import { useQuickCreateShop } from "../hooks/useShopActions"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 interface ShopSelectorProps {
   value: string
@@ -106,7 +107,7 @@ export function ShopSelector({
           variant="outlined"
           color="neutral"
           size="small"
-          startIcon={<AddBusinessRounded />}
+          startIcon={<AddRounded />}
           loading={isCreating}
           onClick={handleQuickCreate}
           sx={{ alignSelf: "flex-start" }}

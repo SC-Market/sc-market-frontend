@@ -140,7 +140,11 @@ export function ScmdbSyncSettings() {
                           readOnly: true,
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton onClick={handleCopy} size="small">
+                              <IconButton
+                                onClick={handleCopy}
+                                size="small"
+                                aria-label={t("ui.aria.copyToClipboard")}
+                              >
                                 {copied ? (
                                   <CheckIcon color="success" />
                                 ) : (

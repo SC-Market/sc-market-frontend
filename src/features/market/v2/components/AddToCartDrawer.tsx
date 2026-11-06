@@ -11,7 +11,10 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material"
-import { ShoppingCartRounded, DeleteOutlineRounded } from "@mui/icons-material"
+import {
+  AddShoppingCartRounded,
+  DeleteOutlineRounded,
+} from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -226,7 +229,7 @@ export function AddToCartDrawer({
           <Button
             variant="contained"
             fullWidth
-            startIcon={<ShoppingCartRounded />}
+            startIcon={<AddShoppingCartRounded />}
             onClick={handleAdd}
             disabled={
               isAdding ||

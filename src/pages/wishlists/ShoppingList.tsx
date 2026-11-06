@@ -34,7 +34,6 @@ import {
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
-  ArrowBackRounded,
   DownloadRounded,
   ShoppingCartRounded,
   CheckCircleRounded,
@@ -49,6 +48,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useFormatters } from "../../util/format"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 type SortField = "name" | "quantity" | "cost" | "stock"
 type SortOrder = "asc" | "desc"
@@ -245,7 +245,7 @@ export function ShoppingList() {
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"
-              startIcon={<ArrowBackRounded />}
+              startIcon={<ChevronLeftRounded />}
               onClick={handleBackToWishlist}
             >
               {t("shoppingListUi.backToWishlist")}
@@ -279,7 +279,7 @@ export function ShoppingList() {
         >
           <Button
             variant="outlined"
-            startIcon={<ArrowBackRounded />}
+            startIcon={<ChevronLeftRounded />}
             onClick={handleBackToWishlist}
           >
             {t("shoppingListUi.backToWishlist")}

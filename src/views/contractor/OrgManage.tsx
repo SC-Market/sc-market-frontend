@@ -123,6 +123,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 <label htmlFor="org-avatar-upload-input">
                   <IconButton
                     component="span"
+                    aria-label={t("ui.aria.changeAvatar")}
                     disabled={isUploadingAvatar}
                     sx={{
                       opacity: showAvatarButton ? 1 : 0,

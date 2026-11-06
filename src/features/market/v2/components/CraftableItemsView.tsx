@@ -353,6 +353,12 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
                   <IconButton
                     size="small"
                     onClick={() => toggleExpanded(item.blueprint_id)}
+                    aria-label={
+                      expandedItems.has(item.blueprint_id)
+                        ? t("ui.aria.hideDetails")
+                        : t("ui.aria.showDetails")
+                    }
+                    aria-expanded={expandedItems.has(item.blueprint_id)}
                   >
                     {expandedItems.has(item.blueprint_id) ? (
                       <ExpandLessIcon />

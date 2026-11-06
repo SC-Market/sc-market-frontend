@@ -28,7 +28,6 @@ import {
   CancelRounded,
   CheckCircleRounded,
   HourglassTopRounded,
-  CloseRounded,
 } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
@@ -300,9 +299,6 @@ export function OfferDetailsArea(props: {
                     <Button
                       size="small"
                       variant="text"
-                      startIcon={
-                        isEditingAssigned ? <CloseRounded /> : undefined
-                      }
                       onClick={() => setIsEditingAssigned(!isEditingAssigned)}
                       sx={{ textTransform: "none", fontSize: "0.75rem" }}
                     >

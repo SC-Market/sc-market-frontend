@@ -35,6 +35,7 @@ import {
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { formatCraftedSource, hasDisplayableSource } from "../../../util/variantDisplay"
 import { useFormatters } from "../../../util/format"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 /** A single variant item in the counteroffer */
 interface V2Item {
@@ -391,6 +392,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
               size="small"
               disabled={!selectedListing || !selectedVariantId}
               onClick={handleAdd}
+              startIcon={<AddRounded />}
             >
               {t("OfferMarketListingsEditArea.add")}
             </Button>

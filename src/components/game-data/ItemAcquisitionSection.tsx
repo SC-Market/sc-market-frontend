@@ -15,6 +15,7 @@ import {
   CardContent,
   Chip,
   Divider,
+  IconButton,
   Link,
   Stack,
   Table,
@@ -24,7 +25,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
-import { ShoppingCartRounded } from "@mui/icons-material"
+import AddShoppingCartRounded from "@mui/icons-material/AddShoppingCartRounded"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type {
@@ -165,15 +166,15 @@ export function ItemAcquisitionSection({
                         </TableCell>
                         {onAddToCart && (
                           <TableCell align="right">
-                            <Button
+                            <IconButton
                               size="small"
-                              variant="outlined"
+                              color="primary"
                               aria-label={t("itemAcquisition.addToCart", "Add to cart")}
                               onClick={() => onAddToCart(listing.listing_id)}
                               disabled={listing.quantity_available === 0}
                             >
-                              <ShoppingCartRounded fontSize="small" />
-                            </Button>
+                              <AddShoppingCartRounded fontSize="small" />
+                            </IconButton>
                           </TableCell>
                         )}
                       </TableRow>
@@ -186,7 +187,6 @@ export function ItemAcquisitionSection({
                 to={MARKET_PATHS.aggregate(doc.item.id, doc.item.name)}
                 size="small"
                 variant="contained"
-                startIcon={<ShoppingCartRounded />}
                 sx={{ mt: 1.5 }}
               >
                 {t("itemAcquisition.compareAll", { defaultValue: "Compare all {{name}} listings", name: itemName })}

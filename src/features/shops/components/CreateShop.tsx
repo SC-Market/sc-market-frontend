@@ -2,12 +2,12 @@ import React, { useState, useMemo } from "react"
 import {
   Autocomplete,
   Box,
+  Button,
   Card,
   CardContent,
   Chip,
   Container,
   FormControlLabel,
-  Link as MuiLink,
   Radio,
   RadioGroup,
   Stack,
@@ -16,7 +16,7 @@ import {
 } from "@mui/material"
 import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { StorefrontRounded } from "@mui/icons-material"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { type ShopSlugAvailabilityResponse } from "../../../store/api/v2/market"
@@ -130,14 +130,14 @@ export function CreateShop() {
 
   return (
     <Container maxWidth="md" sx={{ pt: 12, pb: 6 }}>
-      <MuiLink
+      <Button
         component={Link}
         to={PATHS.dashboardShops}
-        underline="hover"
-        sx={{ mb: 2, display: "inline-block" }}
+        startIcon={<ChevronLeftRounded />}
+        sx={{ mb: 2 }}
       >
         {t("shopsUi.create.backToMyShops")}
-      </MuiLink>
+      </Button>
 
       <Card>
         <CardContent sx={{ p: 4 }}>
@@ -320,7 +320,6 @@ export function CreateShop() {
               <LoadingButton
                 variant="contained"
                 loading={isLoading}
-                startIcon={<StorefrontRounded />}
                 onClick={handleSubmit}
                 disabled={
                   !name.trim() ||

@@ -2,8 +2,9 @@ import React from "react"
 import { Button, Divider, Grid, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
-import { RefreshRounded, ArrowBackRounded } from "@mui/icons-material"
+import { RefreshRounded } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 export function ErrorPageBody() {
   const { t } = useTranslation()
@@ -69,7 +70,7 @@ export function ErrorPageBody() {
               variant={"outlined"}
               size={"large"}
               fullWidth
-              startIcon={<ArrowBackRounded />}
+              startIcon={<ChevronLeftRounded />}
               onClick={handleGoBack}
             >
               {t("errorPage.goBackToPage", "Go Back to Page")}

@@ -1890,8 +1890,8 @@
     "viewContractor": "Ver contratista",
     "share": "Compartir",
     "title": "Reclutamiento",
-    "scOrgsNote": "¿Reclutando? SC Orgs tiene solicitudes, un directorio de organizaciones y herramientas para miembros →",
-    "scOrgsLfoNote": "¿Buscas una organización? Publica en el tablón Looking for Org de SC Orgs y las organizaciones vendrán a ti →",
+    "scOrgsNote": "¿Reclutando? SC Orgs tiene solicitudes, un directorio de organizaciones y herramientas para miembros",
+    "scOrgsLfoNote": "¿Buscas una organización? Publica en el tablón Looking for Org de SC Orgs y las organizaciones vendrán a ti",
     "editPost": "Editar publicación"
   },
   "scOrgs": {
@@ -5647,7 +5647,11 @@
       "breadcrumb": "ruta de navegación",
       "currentContractor": "contratista actual",
       "loadingButtonGroup": "grupo de botones de carga primarios",
-      "orgInfoArea": "área de información de la organización"
+      "orgInfoArea": "área de información de la organización",
+      "showDetails": "Mostrar detalles",
+      "hideDetails": "Ocultar detalles",
+      "copyToClipboard": "Copiar al portapapeles",
+      "changeAvatar": "Cambiar avatar"
     },
     "buttons": {
       "save": "Guardar"
@@ -5826,7 +5830,7 @@
       "noRecipeWarning": "No se encontró ninguna receta de fabricación para este artículo, así que sus componentes de desmontaje son desconocidos.",
       "notSoldNpc": "No se vende en ninguna tienda de NPC",
       "openInCalculator": "Abrir en la calculadora",
-      "owned": "En propiedad ✓",
+      "owned": "En propiedad",
       "perCraft": "por fabricación",
       "perItem": "por artículo",
       "priceHistory": "Historial de precios",
@@ -7204,7 +7208,7 @@
       "acceptCustomOrders": "Aceptar pedidos personalizados"
     },
     "create": {
-      "backToMyShops": "← Volver a Mis tiendas",
+      "backToMyShops": "Volver a Mis tiendas",
       "intro": "Configura tu escaparate en SC Market. Podrás ajustar la configuración después de crearla.",
       "namePlaceholder": "Mi tienda increíble",
       "descriptionPlaceholder": "Cuéntales a los compradores de qué trata tu tienda...",
@@ -7440,8 +7444,8 @@
       "analytics": "Análisis",
       "priceHistory": "Historial de precios",
       "orderDepth": "Profundidad de órdenes",
-      "createListing": "+ Crear anuncio",
-      "createBuyOrder": "+ Orden de compra",
+      "createListing": "Crear anuncio",
+      "createBuyOrder": "Crear orden de compra",
       "qualityDistribution": "Distribución de calidad",
       "priceByQualityTier": "Precio por nivel de calidad"
     },
@@ -7631,7 +7635,9 @@
       "pathOrUrlPlaceholder": "/pagina-personalizada o https://...",
       "willOpenInNewTab": "Se abrirá en una pestaña nueva",
       "add": "Añadir",
-      "saveSidebar": "Guardar barra lateral"
+      "saveSidebar": "Guardar barra lateral",
+      "showTab": "Mostrar {{name}} en la barra lateral",
+      "hideTab": "Ocultar {{name}} de la barra lateral"
     }
   },
   "accountUi": {

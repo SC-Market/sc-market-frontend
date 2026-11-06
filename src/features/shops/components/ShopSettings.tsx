@@ -28,7 +28,7 @@ import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { LabeledSwitch } from "../../../components/buttons/LabeledSwitch"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { DeleteRounded, SaveRounded } from "@mui/icons-material"
+import { DeleteRounded } from "@mui/icons-material"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import {
   useGetShopWebhooksQuery,
@@ -77,6 +77,7 @@ import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { shopDiscordChannelError } from "../utils/discordChannel"
 import { LinkedDiscordServers } from "../../discord-install/LinkedDiscordServers"
 import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -265,6 +266,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
             actions.length === 0
           }
           onClick={handleCreate}
+          startIcon={<AddRounded />}
         >
           {t("shopsUi.webhooks.add")}
         </Button>
@@ -659,7 +661,6 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           <LoadingButton
             variant="contained"
             loading={saving}
-            startIcon={<SaveRounded />}
             onClick={handleSave}
           >
             {t("shopsUi.orderSettings.save")}
@@ -1216,7 +1217,6 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
             <LoadingButton
               variant="contained"
               loading={isLoading}
-              startIcon={<SaveRounded />}
               onClick={handleSave}
               disabled={!draft.name.trim()}
             >

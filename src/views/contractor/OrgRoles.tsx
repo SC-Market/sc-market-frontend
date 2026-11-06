@@ -50,6 +50,7 @@ import {
 import { HelpTip } from "../../features/help/components/HelpTip"
 
 import { useFormatters } from "../../util/format"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 function RolePermissionCheck(props: {
   permission_name: RolePermission
   role: ContractorRole
@@ -221,6 +222,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                         aria-label={t("orgAdminUi.roles.deleteRole", {
                           role: role.name,
                         })}
+                        startIcon={<DeleteRounded />}
                       >
                         {t("manageRoles.delete")}
                       </Button>

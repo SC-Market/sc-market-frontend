@@ -12,6 +12,7 @@ import CancelIcon from "@mui/icons-material/CancelRounded"
 import EditIcon from "@mui/icons-material/EditRounded"
 import DeleteIcon from "@mui/icons-material/DeleteRounded"
 import { useTranslation } from "react-i18next"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 interface EmailStatusProps {
   email: string | null
@@ -56,7 +57,7 @@ export function EmailStatus({
         <Button
           variant="contained"
           color="primary"
-          startIcon={<EmailIcon />}
+          startIcon={<AddRounded />}
           onClick={onAddEmail}
           sx={{ mt: 2 }}
         >

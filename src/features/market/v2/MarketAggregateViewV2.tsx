@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   InputAdornment,
   Stack,
   TableCell,
@@ -14,7 +15,10 @@ import {
 } from "@mui/material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { AddShoppingCartRounded, VisibilityRounded } from "@mui/icons-material"
+import {
+  AddShoppingCartRounded,
+  ShoppingCartRounded,
+} from "@mui/icons-material"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useCookies } from "react-cookie"
 import { FRONTEND_URL } from "../../../util/constants"
@@ -550,25 +554,23 @@ export function AggregateRowV2(props: {
         }}
       >
         {justAddedToCart ? (
-          <Button
+          <IconButton
             component={Link}
             to={MARKET_PATHS.cart}
-            variant={"contained"}
-            size={"large"}
+            color="primary"
+            aria-label={t("cart.viewCart", "View Cart")}
           >
-            <VisibilityRounded />
-          </Button>
+            <ShoppingCartRounded />
+          </IconButton>
         ) : (
-          <Button
-            variant={"contained"}
-            color={"primary"}
-            size={"large"}
+          <IconButton
+            color="primary"
             onClick={addToCart}
             disabled={listing.variant_count > 1 && !selectedVariantId}
             aria-label={t("MarketAggregateView.addToCart")}
           >
             <AddShoppingCartRounded />
-          </Button>
+          </IconButton>
         )}
       </TableCell>
     </TableRow>

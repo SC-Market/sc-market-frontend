@@ -1027,7 +1027,7 @@ export function WikiShipBrowser() {
             "&:hover": { borderColor: "text.disabled", color: "text.primary" },
           }}
         >
-          ✕ {t("wiki.shipBrowser.clearAllFilters", "Clear all filters")}
+          {t("wiki.shipBrowser.clearAllFilters", "Clear all filters")}
         </Box>
       )}
     </Stack>

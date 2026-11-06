@@ -34,6 +34,7 @@ import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import { AlertChannelsField } from "../../features/admin/components/AlertChannelsField"
 import { useFormatters } from "../../util/format"
+import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
 
 export function AdminAlertsView() {
   const fmt = useFormatters()
@@ -146,6 +147,7 @@ export function AdminAlertsView() {
               const path = safeRedirectPath(params.value, "")
               if (path) window.open(path, "_blank", "noopener")
             }}
+            endIcon={<OpenInNewRounded />}
           >
             {t("admin.alerts.openLink", "Open Link")}
           </Button>

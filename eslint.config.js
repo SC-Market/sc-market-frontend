@@ -6,6 +6,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import tseslint from "typescript-eslint"
 import { isIgnored, isTranslatable } from "./scripts/i18n-hardcoded.mjs"
+import { buttonIconsRule } from "./scripts/button-icons.mjs"
 
 // local/no-hardcoded-jsx-text: user-facing English written straight into JSX
 // (text children and aria-label / title / placeholder / alt / label /
@@ -187,6 +188,10 @@ const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
 const scmStyle = {
   rules: {
+    // Button icons (ARCHITECTURE.md): no glyph standing in for an icon at
+    // either end of a label, no fontSize on startIcon/endIcon, icon-only
+    // actions are a labelled IconButton. See scripts/button-icons.mjs.
+    "button-icons": buttonIconsRule,
     // Components and views render; mutations and permission checks live in
     // feature hooks and domain rules. Its own rule (not no-restricted-syntax)
     // so it doesn't replace the route-string and new Date() selectors.
@@ -940,6 +945,18 @@ export default [
     plugins: { "scm-style": scmStyle },
     rules: {
       "scm-style/mui-rounded-icons": "error",
+    },
+  },
+
+  // ── Buttons (error): icons per ARCHITECTURE.md "Button icons" ──
+  // Labels carry no "+", "→", "←", "✓", "×" or "▸" at either end (the icon
+  // goes in startIcon/endIcon); icon-only actions are a labelled IconButton.
+  {
+    files: ["src/**/*.tsx"],
+    ignores: ["**/*.test.tsx", "**/__tests__/**"],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/button-icons": "error",
     },
   },
 

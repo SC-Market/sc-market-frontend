@@ -421,6 +421,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
         onClick={() =>
           canAdd && scope && onAdd(definition.type, scope, settings)
         }
+        startIcon={<AddIcon />}
       >
         {t("dashboard.addNamed", "Add {{name}}", {
           name: widgetTitle(definition, t),

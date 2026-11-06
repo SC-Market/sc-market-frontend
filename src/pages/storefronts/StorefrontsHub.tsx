@@ -35,6 +35,7 @@ import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { FRONTEND_URL } from "../../util/constants"
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { scrollPageToTop } from "../../components/layout/pageScroll"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 /**
  * /storefronts: verified orgs' storefronts (backend: RSI-verified, a public
@@ -200,6 +201,7 @@ export function StorefrontsHub() {
               to={PATHS.orgRegister}
               variant="outlined"
               size="small"
+              startIcon={<AddRounded />}
             >
               {t("storefront.hub.register", "Register your org")}
             </Button>

@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Button, Paper, Typography } from "@mui/material"
 import { alpha, useTheme } from "@mui/material/styles"
-import EditRounded from "@mui/icons-material/EditRounded"
+import AddRounded from "@mui/icons-material/AddRounded"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import logo96 from "../../assets/scmarket-logo-96.webp"
@@ -199,7 +199,7 @@ export function StartSelling(props: { signedIn: boolean }) {
             to={landingSellHref(props.signedIn)}
             variant="contained"
             size="large"
-            startIcon={<EditRounded />}
+            startIcon={<AddRounded />}
           >
             {t("landing.intentSellAction")}
           </Button>
@@ -209,6 +209,7 @@ export function StartSelling(props: { signedIn: boolean }) {
             variant="outlined"
             color="neutral"
             size="large"
+            startIcon={<AddRounded />}
           >
             {t("landing.sellRegisterOrg")}
           </Button>

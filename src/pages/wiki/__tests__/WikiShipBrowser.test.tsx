@@ -7,10 +7,12 @@ import { render, screen } from "@testing-library/react"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider } from "@mui/material/styles"
 import { vi } from "vitest"
 import { WikiShipBrowser } from "../WikiShipBrowser"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
+import { mainTheme } from "../../../hooks/styles/Theme"
 
 // Mock Page to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", () => ({
@@ -59,9 +61,11 @@ describe("WikiShipBrowser", () => {
   it("renders the component with title", () => {
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <WikiShipBrowser />
-        </BrowserRouter>
+        <ThemeProvider theme={mainTheme}>
+          <BrowserRouter>
+            <WikiShipBrowser />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     )
 
@@ -71,9 +75,11 @@ describe("WikiShipBrowser", () => {
   it("renders search bar", () => {
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <WikiShipBrowser />
-        </BrowserRouter>
+        <ThemeProvider theme={mainTheme}>
+          <BrowserRouter>
+            <WikiShipBrowser />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     )
 

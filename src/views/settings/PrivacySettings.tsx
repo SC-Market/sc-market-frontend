@@ -19,6 +19,7 @@ import { useUpdateAccountSettings } from "../../features/profile/hooks/useAccoun
 import { DeleteAccountDialog } from "../../features/account-deletion/components/DeleteAccountDialog"
 import { PendingDeletionBanner } from "../../features/account-deletion/components/PendingDeletionBanner"
 import { CookiePreferences } from "./CookiePreferences"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 export function PrivacySettings() {
   const { data: profile, refetch } = useGetUserProfileQuery()
@@ -109,6 +110,7 @@ export function PrivacySettings() {
             variant="outlined"
             onClick={() => setDeleteDialogOpen(true)}
             disabled={deletionStatus?.pending}
+            startIcon={<DeleteRounded />}
           >
             {t("privacy_settings.delete_account_button", {
               defaultValue: "Delete Account",

@@ -29,8 +29,6 @@ import {
   Typography,
 } from "@mui/material"
 import DeleteRounded from "@mui/icons-material/DeleteRounded"
-import PersonAddRounded from "@mui/icons-material/PersonAddRounded"
-import SaveRounded from "@mui/icons-material/SaveRounded"
 import {
   useGetStatsQuery,
   useGetUserOverridesQuery,
@@ -42,6 +40,7 @@ import {
 } from "../../features/admin/hooks/useFeatureFlagAdmin"
 import { UserSearch } from "../../components/search/UserSearch"
 import { useFormatters } from "../../util/format"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 interface Props {
   flagName: string
@@ -193,7 +192,6 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
               <Grid item xs={12}>
                 <Button
                   variant="contained"
-                  startIcon={<SaveRounded />}
                   onClick={handleSave}
                   disabled={saving}
                 >
@@ -219,7 +217,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
         </Typography>
         <Button
           variant="outlined"
-          startIcon={<PersonAddRounded />}
+          startIcon={<AddRounded />}
           onClick={() => setAddOpen(true)}
           size="small"
         >

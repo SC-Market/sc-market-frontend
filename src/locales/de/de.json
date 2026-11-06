@@ -1885,8 +1885,8 @@
     "viewContractor": "Auftragnehmer anzeigen",
     "share": "Teilen",
     "title": "Rekrutierung",
-    "scOrgsNote": "Du rekrutierst? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder →",
-    "scOrgsLfoNote": "Du suchst eine Org? Erstelle einen Beitrag auf dem „Looking for Org“-Board von SC Orgs, und die Orgs kommen zu dir →",
+    "scOrgsNote": "Du rekrutierst? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder",
+    "scOrgsLfoNote": "Du suchst eine Org? Erstelle einen Beitrag auf dem „Looking for Org“-Board von SC Orgs, und die Orgs kommen zu dir",
     "editPost": "Beitrag bearbeiten"
   },
   "scOrgs": {
@@ -5610,7 +5610,11 @@
       "breadcrumb": "Brotkrümelnavigation",
       "currentContractor": "aktueller Auftragnehmer",
       "loadingButtonGroup": "gefüllte primäre Ladeschaltflächengruppe",
-      "orgInfoArea": "Organisationsinfobereich"
+      "orgInfoArea": "Organisationsinfobereich",
+      "showDetails": "Details anzeigen",
+      "hideDetails": "Details ausblenden",
+      "copyToClipboard": "In die Zwischenablage kopieren",
+      "changeAvatar": "Avatar ändern"
     },
     "buttons": {
       "save": "Speichern"
@@ -5789,7 +5793,7 @@
       "noRecipeWarning": "Kein Herstellungsrezept für diesen Gegenstand gefunden, daher sind die Zerlegungskomponenten unbekannt.",
       "notSoldNpc": "In keinem NPC-Shop erhältlich",
       "openInCalculator": "Im Rechner öffnen",
-      "owned": "Besessen ✓",
+      "owned": "Besessen",
       "perCraft": "pro Herstellung",
       "perItem": "pro Gegenstand",
       "priceHistory": "Preisverlauf",
@@ -7120,7 +7124,7 @@
       "acceptCustomOrders": "Individuelle Bestellungen annehmen"
     },
     "create": {
-      "backToMyShops": "← Zurück zu Meine Shops",
+      "backToMyShops": "Zurück zu Meine Shops",
       "intro": "Richte deine Ladenfront auf SC Market ein. Deine Einstellungen kannst du nach dem Erstellen anpassen.",
       "namePlaceholder": "Mein toller Shop",
       "descriptionPlaceholder": "Erzähl Käufern, worum es in deinem Shop geht...",
@@ -7350,8 +7354,8 @@
       "analytics": "Analysen",
       "priceHistory": "Preisverlauf",
       "orderDepth": "Auftragstiefe",
-      "createListing": "+ Inserat erstellen",
-      "createBuyOrder": "+ Kaufauftrag",
+      "createListing": "Inserat erstellen",
+      "createBuyOrder": "Kaufauftrag erstellen",
       "qualityDistribution": "Qualitätsverteilung",
       "priceByQualityTier": "Preis nach Qualitätsstufe"
     },
@@ -7534,7 +7538,9 @@
       "pathOrUrlPlaceholder": "/eigene-seite oder https://...",
       "willOpenInNewTab": "Wird in einem neuen Tab geöffnet",
       "add": "Hinzufügen",
-      "saveSidebar": "Seitenleiste speichern"
+      "saveSidebar": "Seitenleiste speichern",
+      "showTab": "{{name}} in der Seitenleiste anzeigen",
+      "hideTab": "{{name}} in der Seitenleiste ausblenden"
     }
   },
   "accountUi": {

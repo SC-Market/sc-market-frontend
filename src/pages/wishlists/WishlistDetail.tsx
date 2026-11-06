@@ -43,7 +43,6 @@ import {
   RadioButtonUncheckedRounded,
   StarRounded,
   StarBorderRounded,
-  ArrowBackRounded,
   SortRounded,
   BuildRounded,
   ShoppingCartRounded,
@@ -58,6 +57,7 @@ import {
 import { AddItemDialog } from "../../components/wishlists"
 import { PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 type SortOption = "priority" | "name" | "status" | "quality"
 
@@ -222,7 +222,7 @@ export function WishlistDetail() {
           )}
         </Alert>
         <Button
-          startIcon={<ArrowBackRounded />}
+          startIcon={<ChevronLeftRounded />}
           onClick={handleBack}
           sx={{ ml: 3 }}
         >
@@ -251,7 +251,6 @@ export function WishlistDetail() {
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
-            startIcon={<ShoppingCartRounded />}
             onClick={handleViewShoppingList}
             disabled={items.length === 0}
           >

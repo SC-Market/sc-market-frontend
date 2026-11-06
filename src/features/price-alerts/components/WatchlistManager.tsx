@@ -41,6 +41,7 @@ import { getErrorMessage } from "../../../util/errorHandling"
 import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { useFormatters, useNow } from "../../../util/format"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 function itemLabel(item: WatchlistItem): string {
   return item.item_name ?? item.query
@@ -462,7 +463,7 @@ function AddWatchlistItemForm({ disabled }: { disabled: boolean }) {
           />
           <Button
             variant="contained"
-            startIcon={<NotificationAddRounded />}
+            startIcon={<AddRounded />}
             onClick={submit}
             disabled={disabled || isLoading || !item || parsed == null}
             sx={{ whiteSpace: "nowrap", height: 40, flexShrink: 0 }}

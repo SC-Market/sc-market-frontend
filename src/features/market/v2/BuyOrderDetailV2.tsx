@@ -30,7 +30,6 @@ import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import {
   PersonRounded,
   AccessTimeRounded,
-  ShoppingCartRounded,
   VisibilityRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
@@ -352,7 +351,6 @@ export function BuyOrderDetailV2() {
                 to={`/market/aggregate/${buyOrder.game_item_id}`}
                 variant="text"
                 color="neutral"
-                startIcon={<ShoppingCartRounded />}
               >
                 {t("marketV2.viewAllListingsFor", { item: buyOrder.game_item_name })}
               </Button>

@@ -108,7 +108,37 @@ Shared type definitions. New types go in `features/<name>/domain/types.ts`. Type
 | No hard-coded route strings in `to=` / `href=` / `navigate()` (helpers in `src/routes/paths.ts`); no `new Date()` in tsx (`useNow()` from `util/format`) | ESLint `no-restricted-syntax` (error)                                                                                                                                                                    |
 | Components and views don't call mutations or `has_permission` (mutations go in a named hook in `features/<f>/hooks/`)                                    | ESLint `scm-style/render-layer` (error)                                                                                                                                                                  |
 | `palette.secondary` (the buy side and premium) is not used on form controls, buttons, tabs, links, sliders, toggles, progress or focus styles            | ESLint `scm-style/no-secondary-accent` (error; the theme files and the theme editor are exempt); fixtures in `scripts/__tests__/secondaryAccentLint.test.ts`                                             |
+| Button icons follow "Button icons" below; no glyph at either end of a button label                                                                       | ESLint `scm-style/button-icons` (error); catalogs: `src/util/__tests__/i18nButtonGlyphs.test.ts`                                                                                                         |
 | tsx files stay under 400 lines                                                                                                                           | ESLint warning (`max-lines`), ratcheted: `npm run lint:ratchet` (CI) fails if the warning or error count rises above `scripts/lint-baseline.json`. Lower the baseline with `--update` when you fix some. |
+
+---
+
+## Button icons
+
+One rule for every button, so similar actions look alike. Icons go in MUI's `startIcon` / `endIcon` (Rounded icons only), never as a glyph in the label.
+
+**Which actions get an icon**
+
+| Action                                                                         | Icon                                                                                     | Examples                                                                                                     |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Create / add (the entry point: opens the create page or dialog, or adds a row) | leading `AddRounded`                                                                     | Create Listing, Create Buy Order, Create Service, Create Shop, Add Lot, Add Webhook, Register your org       |
+| Delete / remove (the button that starts it)                                    | leading `DeleteRounded`                                                                  | Delete, Remove, Delete Account, Remove Email                                                                 |
+| Next / continue (a step forward in a flow)                                     | trailing `ChevronRightRounded`                                                           | Next, Continue                                                                                               |
+| Back (a step back, or back to the parent page)                                 | leading `ChevronLeftRounded`                                                             | Back, Back to My Shops, Back to Wishlist                                                                     |
+| External link (another site, or a new tab)                                     | trailing `OpenInNewRounded`                                                              | Join via SC Orgs, Copy Code and Open Profile, a guide's external link                                        |
+| Cart and checkout                                                              | leading `AddShoppingCartRounded` / `ShoppingCartRounded` / `ShoppingCartCheckoutRounded` | Add to Cart (`AddShoppingCartRounded`); My Cart, Place Order, Submit Offer (`ShoppingCartRounded`); Checkout |
+| Navigation (go to, view, see all, browse, manage, home)                        | none                                                                                     | See all, View Shop, Manage, Browse the market, Go Home                                                       |
+| Dialog and form actions (submit, save, confirm, cancel, close)                 | none: the dialog or form already names the action                                        | Create, Save Changes, Unlink, Cancel                                                                         |
+
+Other verbs (filters, refresh / retry, export, import, copy, block, bid, assign, order status steps) may take one leading icon when it helps scanning; the same verb uses the same icon everywhere (retry is `RefreshRounded`, filters `FilterListRounded`). Brand sign-in buttons carry the brand mark (Discord, Citizen iD). A toggle's state can use a leading icon (`CheckRounded` on "Owned").
+
+**Size.** Don't set `fontSize` on a `startIcon` / `endIcon` icon: MUI sizes it from the button (small 18px, medium 20px, large 22px). In an `IconButton`, a `size="small"` button takes `fontSize="small"` (20px) on its icon; medium and large take the default 24px.
+
+**Icon-only actions** are an `IconButton` (or a `Fab`) with an `aria-label` (a `Tooltip` around it names it too), never a `Button` holding only an icon. A text link to another site ends with a small `OpenInNewRounded` (`fontSize: "1em"`, `aria-hidden`), not "→".
+
+**Labels.** No "+", "→", "←", "✓", "×" or "▸" at either end of a label, in code or in any of the 8 catalogs.
+
+Enforced by ESLint `scm-style/button-icons` (error; `scripts/button-icons.mjs`, fixtures in `scripts/__tests__/buttonIconsLint.test.ts`): glyphs at either end of a `Button` / `LoadingButton` / `ToggleButton` / `Fab` label (JSX text, literals, and `t()`: the en value or the default), `fontSize` on a `startIcon` / `endIcon` icon, a `Button` holding only an icon, and an `IconButton` without an `aria-label` or `Tooltip`. The catalogs: `src/util/__tests__/i18nButtonGlyphs.test.ts` (no value in any locale starts or ends with one of the glyphs, except a short list of non-label keys such as "+3 more").
 
 ---
 

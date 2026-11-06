@@ -13,7 +13,7 @@ import {
   useSearchParams,
 } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { ArrowBackRounded, RefreshRounded } from "@mui/icons-material"
+import { RefreshRounded } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import {
@@ -198,7 +198,7 @@ export function FrontendErrorBody() {
                 variant={"contained"}
                 size={"large"}
                 fullWidth
-                startIcon={<ArrowBackRounded />}
+                startIcon={<RefreshRounded />}
                 onClick={handleGoBack}
               >
                 {routeError

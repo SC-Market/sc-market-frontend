@@ -18,11 +18,7 @@ import { useTheme } from "@mui/material/styles"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { NumericFormat } from "react-number-format"
 import LoadingButton from "@mui/lab/LoadingButton"
-import {
-  AddCircleOutlineRounded,
-  DeleteOutlineRounded,
-  ExpandMoreRounded,
-} from "@mui/icons-material"
+import { DeleteOutlineRounded, ExpandMoreRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
@@ -62,6 +58,7 @@ import {
   type CraftedSource,
   type ListingDraft,
 } from "../domain/listingDraft"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 /**
  * Stock lot form data with variant attributes
@@ -1326,7 +1323,7 @@ export function CreateListingV2() {
                       <Button
                         variant="outlined"
                         color="neutral"
-                        startIcon={<AddCircleOutlineRounded />}
+                        startIcon={<AddRounded />}
                         onClick={handleAddStockLot}
                       >
                         {t("CreateListingV2.addStockLot", "Add Stock Lot")}

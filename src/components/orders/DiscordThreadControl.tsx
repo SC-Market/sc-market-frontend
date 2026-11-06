@@ -8,6 +8,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 /** How often the order/offer is re-read while the bot creates the thread. */
 export const THREAD_POLL_INTERVAL_MS = 2500
@@ -110,6 +111,7 @@ export function DiscordThreadControl(props: {
           .catch((err) => issueAlert(err))
           .finally(() => setSubmitting(false))
       }}
+      startIcon={<AddRounded />}
     >
       {t("discordThread.create")}
     </LoadingButton>

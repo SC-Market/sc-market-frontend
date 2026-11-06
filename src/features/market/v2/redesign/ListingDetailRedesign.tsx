@@ -23,7 +23,7 @@ import Grid from "@mui/material/Grid2"
 import { useTheme } from "@mui/material/styles"
 import AddRounded from "@mui/icons-material/AddRounded"
 import RemoveRounded from "@mui/icons-material/RemoveRounded"
-import ShoppingCartRounded from "@mui/icons-material/ShoppingCartRounded"
+import AddShoppingCartRounded from "@mui/icons-material/AddShoppingCartRounded"
 import BoltRounded from "@mui/icons-material/BoltRounded"
 import GavelRounded from "@mui/icons-material/GavelRounded"
 import ChatBubbleOutlineRounded from "@mui/icons-material/ChatBubbleOutlineRounded"
@@ -551,7 +551,7 @@ export function ListingDetailRedesign() {
                         color="neutral"
                         size="large"
                         fullWidth
-                        startIcon={<ShoppingCartRounded />}
+                        startIcon={<AddShoppingCartRounded />}
                         disabled={!canTransact || isAdding}
                         onClick={handleAddToCart}
                       >

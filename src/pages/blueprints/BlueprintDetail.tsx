@@ -246,6 +246,11 @@ export function BlueprintDetail() {
             <IconButton
               color={data.user_owns ? "primary" : "default"}
               onClick={handleBookmarkToggle}
+              aria-label={
+                data.user_owns
+                  ? t("blueprintsUi.detail.removeFromOwned")
+                  : t("blueprintsUi.detail.markAsOwned")
+              }
               title={
                 data.user_owns
                   ? t("blueprintsUi.detail.removeFromOwned")

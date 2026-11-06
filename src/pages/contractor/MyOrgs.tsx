@@ -11,10 +11,11 @@ import {
   Typography,
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
-import { GroupsRounded, SettingsRounded } from "@mui/icons-material"
+import { GroupsRounded } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ORG_PATHS, PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 export function MyOrgs() {
   const { t } = useTranslation()
@@ -44,6 +45,7 @@ export function MyOrgs() {
             variant="contained"
             component={RouterLink}
             to={PATHS.orgRegister}
+            startIcon={<AddRounded />}
           >
             {t("orgsUi.createOrg")}
           </Button>
@@ -91,7 +93,6 @@ export function MyOrgs() {
                   <Button
                     size="small"
                     variant="contained"
-                    startIcon={<SettingsRounded />}
                     component={RouterLink}
                     to={ORG_PATHS.manage(org.spectrum_id)}
                   >

@@ -566,8 +566,11 @@ describe("MarketAggregateViewV2", () => {
       </TestWrapper>,
     )
 
-    // Check that create buy order section is present
-    expect(screen.getByText(/Create Buy Order/i)).toBeInTheDocument()
+    // The create buy order section, and the header's link to the full form
+    expect(screen.getAllByText(/Create Buy Order/i).length).toBeGreaterThan(1)
+    expect(
+      screen.getByRole("link", { name: /Create Buy Order/i }),
+    ).toBeInTheDocument()
   })
 
   it("displays buy/sell wall charts", () => {

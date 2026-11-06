@@ -1822,8 +1822,8 @@
     "viewContractor": "查看承包商",
     "share": "分享",
     "title": "招募",
-    "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具 →",
-    "scOrgsLfoNote": "在找組織？在 SC Orgs 的「Looking for Org」看板上發文，讓組織主動來找你 →",
+    "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具",
+    "scOrgsLfoNote": "在找組織？在 SC Orgs 的「Looking for Org」看板上發文，讓組織主動來找你",
     "editPost": "編輯貼文"
   },
   "scOrgs": {
@@ -5573,7 +5573,11 @@
       "breadcrumb": "麵包屑導覽",
       "currentContractor": "目前承包商",
       "loadingButtonGroup": "填色主要 loadingButton 群組",
-      "orgInfoArea": "組織資訊區域"
+      "orgInfoArea": "組織資訊區域",
+      "showDetails": "顯示詳情",
+      "hideDetails": "隱藏詳情",
+      "copyToClipboard": "複製到剪貼簿",
+      "changeAvatar": "更換頭像"
     },
     "buttons": {
       "save": "儲存"
@@ -5752,7 +5756,7 @@
       "noRecipeWarning": "找不到此物品的製作配方，因此拆解元件未知。",
       "notSoldNpc": "任何 NPC 商店均未販售",
       "openInCalculator": "在計算機中開啟",
-      "owned": "已擁有 ✓",
+      "owned": "已擁有",
       "perCraft": "每次製作",
       "perItem": "每件",
       "priceHistory": "價格歷史",
@@ -7036,7 +7040,7 @@
       "acceptCustomOrders": "接受客製訂單"
     },
     "create": {
-      "backToMyShops": "← 返回我的商店",
+      "backToMyShops": "返回我的商店",
       "intro": "在 SC Market 上開設你的店面。建立後可以再調整設定。",
       "namePlaceholder": "我的超棒商店",
       "descriptionPlaceholder": "告訴買家你的商店是做什麼的…",
@@ -7260,8 +7264,8 @@
       "analytics": "分析",
       "priceHistory": "價格歷史",
       "orderDepth": "訂單深度",
-      "createListing": "+ 建立商品",
-      "createBuyOrder": "+ 收購單",
+      "createListing": "建立商品",
+      "createBuyOrder": "建立收購單",
       "qualityDistribution": "品質分佈",
       "priceByQualityTier": "依品質等級區分的價格"
     },
@@ -7437,7 +7441,9 @@
       "pathOrUrlPlaceholder": "/custom-page 或 https://...",
       "willOpenInNewTab": "將在新分頁中開啟",
       "add": "新增",
-      "saveSidebar": "儲存側邊欄"
+      "saveSidebar": "儲存側邊欄",
+      "showTab": "在側邊欄顯示 {{name}}",
+      "hideTab": "在側邊欄隱藏 {{name}}"
     }
   },
   "accountUi": {

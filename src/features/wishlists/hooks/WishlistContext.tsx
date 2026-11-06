@@ -14,7 +14,6 @@ import {
   TextField,
   Stack,
 } from "@mui/material"
-import { PlaylistAddRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import {
@@ -23,6 +22,7 @@ import {
   useAddWishlistItemMutation,
 } from "../../../store/api/v2/market"
 import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 interface ShoppingListRequest {
   blueprintId?: string
@@ -131,7 +131,7 @@ export function ShoppingListProvider({
             </List>
             <Button
               size="small"
-              startIcon={<PlaylistAddRounded />}
+              startIcon={<AddRounded />}
               onClick={() => setCreating(true)}
               sx={{ mt: 1, textTransform: "none" }}
             >

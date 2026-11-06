@@ -26,7 +26,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
-import { CheckCircleRounded, CancelRounded, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCartRounded } from "@mui/icons-material"
+import { CheckCircleRounded, CancelRounded, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS, MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
@@ -137,7 +137,6 @@ export function WikiCommodityDetail() {
                   <Button
                     size="small"
                     variant="outlined"
-                    startIcon={<ShoppingCartRounded />}
                     onClick={() => navigate(`${MARKET_PATHS.search}?item=${encodeURIComponent(r.resource_name)}`)}
                   >
                     {t("wiki.commodityDetail.viewOnMarket", "View on Market")}

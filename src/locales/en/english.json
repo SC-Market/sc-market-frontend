@@ -4210,8 +4210,8 @@
     "title": "Recent Orders"
   },
   "recruiting": {
-    "scOrgsNote": "Recruiting? SC Orgs has applications, an org directory and member tools →",
-    "scOrgsLfoNote": "Looking for an org? Post on the Looking for Org board on SC Orgs, and orgs come to you →",
+    "scOrgsNote": "Recruiting? SC Orgs has applications, an org directory and member tools",
+    "scOrgsLfoNote": "Looking for an org? Post on the Looking for Org board on SC Orgs, and orgs come to you",
     "share": "Share",
     "title": "Recruiting",
     "viewContractor": "View Contractor",
@@ -5579,7 +5579,11 @@
       "breadcrumb": "breadcrumb",
       "currentContractor": "current contractor",
       "loadingButtonGroup": "contained primary loadingButton group",
-      "orgInfoArea": "org info area"
+      "orgInfoArea": "org info area",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "copyToClipboard": "Copy to clipboard",
+      "changeAvatar": "Change avatar"
     },
     "buttons": {
       "save": "Save"
@@ -5789,7 +5793,7 @@
       "noRecipeWarning": "No crafting recipe found for this item, so its disassembly components are unknown.",
       "notSoldNpc": "Not sold at any NPC shop",
       "openInCalculator": "Open in Calculator",
-      "owned": "Owned ✓",
+      "owned": "Owned",
       "perCraft": "per craft",
       "perItem": "per item",
       "priceHistory": "Price History",
@@ -7120,7 +7124,7 @@
       "acceptCustomOrders": "Accept custom orders"
     },
     "create": {
-      "backToMyShops": "← Back to My Shops",
+      "backToMyShops": "Back to My Shops",
       "intro": "Set up your storefront on SC Market. You can refine your settings after creation.",
       "namePlaceholder": "My Awesome Shop",
       "descriptionPlaceholder": "Tell buyers what your shop is about...",
@@ -7350,8 +7354,8 @@
       "analytics": "Analytics",
       "priceHistory": "Price History",
       "orderDepth": "Order Depth",
-      "createListing": "+ Create Listing",
-      "createBuyOrder": "+ Buy Order",
+      "createListing": "Create Listing",
+      "createBuyOrder": "Create Buy Order",
       "qualityDistribution": "Quality Distribution",
       "priceByQualityTier": "Price by Quality Tier"
     },
@@ -7534,7 +7538,9 @@
       "pathOrUrlPlaceholder": "/custom-page or https://...",
       "willOpenInNewTab": "Will open in a new tab",
       "add": "Add",
-      "saveSidebar": "Save Sidebar"
+      "saveSidebar": "Save Sidebar",
+      "showTab": "Show {{name}} in the sidebar",
+      "hideTab": "Hide {{name}} from the sidebar"
     }
   },
   "accountUi": {

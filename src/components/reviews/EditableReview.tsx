@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Chip,
 } from "@mui/material"
-import { SaveRounded, EditRounded, CancelRounded } from "@mui/icons-material"
+import { SaveRounded, EditRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useUpdateReview } from "../../features/orders/hooks/useReviewRevision"
 import { OrderReview } from "../../features/orders/domain/types"
@@ -169,7 +169,6 @@ export function EditableReview({ review }: EditableReviewProps) {
       <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
         <Button
           variant="outlined"
-          startIcon={<CancelRounded />}
           onClick={handleCancel}
           disabled={isLoading}
           sx={{ textTransform: "none" }}

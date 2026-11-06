@@ -52,6 +52,7 @@ import { QuickListProvider, SellYoursButton } from "../../features/market/quick-
 
 import { useFormatters } from "../../util/format"
 import { TagChip } from "../../components/tags/TagChip"
+import CheckRounded from "@mui/icons-material/CheckRounded"
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
 const TAB_DISASSEMBLY = 2
@@ -298,6 +299,7 @@ export function WikiItemDetail() {
                         <Button
                           size="small"
                           variant={((bp as BlueprintReference & { user_owns?: boolean }).user_owns) ? "contained" : "outlined"}
+                          startIcon={(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? <CheckRounded /> : undefined}
                           sx={{ ml: 1 }}
                           onClick={() => {
                             if ((bp as BlueprintReference & { user_owns?: boolean }).user_owns) {
@@ -307,7 +309,7 @@ export function WikiItemDetail() {
                             }
                           }}
                         >
-                          {(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? t("wiki.itemDetail.owned", "Owned ✓") : t("wiki.itemDetail.markOwned", "Mark Owned")}
+                          {(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? t("wiki.itemDetail.owned", "Owned") : t("wiki.itemDetail.markOwned", "Mark Owned")}
                         </Button>
                       </Box>
                     </Paper>

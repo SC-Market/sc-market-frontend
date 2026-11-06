@@ -210,6 +210,10 @@ export function MobileServiceRow(props: ServiceRowProps) {
           align={"right"}
         >
           <IconButton
+            aria-label={
+              open ? t("ui.aria.hideDetails") : t("ui.aria.showDetails")
+            }
+            aria-expanded={open}
             onClick={(event) => {
               setOpen((o) => !o)
               event.stopPropagation()

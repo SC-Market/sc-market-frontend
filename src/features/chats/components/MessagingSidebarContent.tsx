@@ -21,7 +21,6 @@ import { useCurrentChatID } from "../hooks/CurrentChatID"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import SearchIcon from "@mui/icons-material/SearchRounded"
-import CreateIcon from "@mui/icons-material/CreateRounded"
 import AddIcon from "@mui/icons-material/AddRounded"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
@@ -387,7 +386,7 @@ export function MessagingSidebarContent(
         ) : (
           <Button
             variant={"contained"}
-            startIcon={<CreateIcon />}
+            startIcon={<AddIcon />}
             size={"large"}
             onClick={() => setCreatingMessageGroup(true)}
           >

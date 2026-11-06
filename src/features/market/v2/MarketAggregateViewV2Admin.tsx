@@ -22,6 +22,7 @@ import {
   Chip,
   Divider,
   Grid,
+  IconButton,
   InputAdornment,
   Paper,
   Stack,
@@ -61,6 +62,8 @@ import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
 import { useCancelBuyOrder } from "../hooks/useBuyOrderActions"
 import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
+import AddRounded from "@mui/icons-material/AddRounded"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -891,20 +894,17 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                       "Cancel your buy order",
                     )}
                   >
-                    <Button
+                    <IconButton
                       size="small"
-                      variant="outlined"
                       color="error"
-                      sx={{
-                        fontSize: "10px",
-                        minWidth: 0,
-                        px: 0.75,
-                        py: 0.25,
-                      }}
+                      aria-label={t(
+                        "MarketAggregateView.cancel",
+                        "Cancel your buy order",
+                      )}
                       onClick={() => doCancel(order.buy_order_id)}
                     >
-                      ✕
-                    </Button>
+                      <DeleteRounded fontSize="small" />
+                    </IconButton>
                   </Tooltip>
                 )}
               </Stack>
@@ -1195,6 +1195,7 @@ export function MarketAggregateViewV2Admin({
                   color="warning"
                   size="small"
                   sx={{ fontWeight: 600 }}
+                  startIcon={<AddRounded />}
                 >
                   {t("marketUi.aggregateAdmin.createBuyOrder")}
                 </Button>

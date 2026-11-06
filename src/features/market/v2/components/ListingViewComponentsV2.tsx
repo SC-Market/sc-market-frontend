@@ -5,7 +5,6 @@
 
 import React, { useMemo } from "react"
 import { Box, Grid, Typography, Skeleton, Button } from "@mui/material"
-import { ArrowForwardRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import {
@@ -65,7 +64,6 @@ function ListingRow({
             component={Link}
             to={seeAllHref}
             size="small"
-            endIcon={<ArrowForwardRounded />}
             sx={{ textTransform: "none" }}
           >
             {t("landing.seeAll")}

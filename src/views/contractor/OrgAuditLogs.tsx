@@ -360,6 +360,12 @@ export function OrgAuditLogs() {
                         <IconButton
                           size="small"
                           onClick={() => toggleExpanded(entry.audit_log_id)}
+                          aria-label={
+                            isExpanded
+                              ? t("ui.aria.hideDetails")
+                              : t("ui.aria.showDetails")
+                          }
+                          aria-expanded={isExpanded}
                           disabled={!hasMetadata}
                         >
                           {isExpanded ? (

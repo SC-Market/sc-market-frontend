@@ -43,6 +43,8 @@ import GroupsIcon from "@mui/icons-material/GroupsRounded"
 import { PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 const AvailabilitySelector = lazyWithRetry(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
@@ -384,7 +386,11 @@ export function OnboardingPage() {
                       "Verification email sent. You can verify it later.",
                     )}
                   </Typography>
-                  <Button variant="contained" onClick={handleNext}>
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    endIcon={<ChevronRightRounded />}
+                  >
                     {t("onboarding.continue", "Continue")}
                   </Button>
                 </Stack>
@@ -431,6 +437,7 @@ export function OnboardingPage() {
                 <Button
                   variant="contained"
                   onClick={() => navigate(PATHS.orgRegister)}
+                  startIcon={<AddRounded />}
                 >
                   {t("onboarding.org.register", "Register Organization")}
                 </Button>
@@ -484,7 +491,11 @@ export function OnboardingPage() {
                 </Stack>
               ) : (
                 <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-                  <Button variant="contained" onClick={handleNext}>
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    endIcon={<ChevronRightRounded />}
+                  >
                     {t("onboarding.continue", "Continue")}
                   </Button>
                   <Button variant="text" onClick={handleNext}>

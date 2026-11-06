@@ -8,7 +8,7 @@ import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
 import { ServiceSidebarContext } from "../../features/contracting/hooks/ServiceSidebar"
 import { ServiceListings } from "../../views/contracts/ServiceListings.lazy"
 import { Link } from "react-router-dom"
-import { CreateRounded } from "@mui/icons-material"
+import AddRounded from "@mui/icons-material/AddRounded"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageServices } from "../../features/contracting/hooks/usePageServices"
@@ -65,11 +65,7 @@ export function Services() {
       to={"/order/service/create"}
       style={{ color: "inherit", textDecoration: "none" }}
     >
-      <Button
-        startIcon={<CreateRounded />}
-        variant={"contained"}
-        size={"large"}
-      >
+      <Button startIcon={<AddRounded />} variant={"contained"} size={"large"}>
         {t("services.createService")}
       </Button>
     </Link>

@@ -27,6 +27,7 @@ import {
   SC_ORGS_ORIGIN,
   ScOrgsCard,
 } from "../../components/sisterSites/ScOrgsCard"
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -92,6 +93,7 @@ export function AuthenticateContractor() {
                 navigate(PATHS.home)
                 window.location.reload()
               }}
+              endIcon={<ChevronRightRounded />}
             >
               {t("orgLinkBack.continue")}
             </Button>

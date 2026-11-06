@@ -84,6 +84,8 @@ function IconPicker({
             <IconButton
               key={key}
               size="small"
+              aria-label={key}
+              aria-pressed={key === value}
               onClick={() => {
                 onChange(key)
                 setAnchorEl(null)
@@ -213,7 +215,20 @@ export function WhiteLabelSettings() {
               <ListItem
                 key={tab.key}
                 secondaryAction={
-                  <IconButton edge="end" onClick={() => toggleTab(tab.key)}>
+                  <IconButton
+                    edge="end"
+                    onClick={() => toggleTab(tab.key)}
+                    aria-label={t(
+                      disabledTabs.has(tab.key)
+                        ? "orgAdminUi.whiteLabel.showTab"
+                        : "orgAdminUi.whiteLabel.hideTab",
+                      {
+                        name: TAB_LABEL_KEYS[tab.key]
+                          ? t(TAB_LABEL_KEYS[tab.key])
+                          : tab.label,
+                      },
+                    )}
+                  >
                     {disabledTabs.has(tab.key) ? (
                       <VisibilityOffRounded />
                     ) : (

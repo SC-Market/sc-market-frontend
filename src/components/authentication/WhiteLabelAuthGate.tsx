@@ -7,6 +7,7 @@ import {
 } from "../../hooks/contractor/CustomDomain"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 /**
  * Auth gate for internal-mode white-label domains.
@@ -104,7 +105,11 @@ export function WhiteLabelAuthGate({
               "You must be a member of this organization to access this workspace.",
             )}
           </Typography>
-          <Button variant="outlined" href="https://sc-market.space">
+          <Button
+            variant="outlined"
+            href="https://sc-market.space"
+            startIcon={<ChevronLeftRounded />}
+          >
             {t("whitelabel.backToMain", "Back to SC Market")}
           </Button>
         </Box>

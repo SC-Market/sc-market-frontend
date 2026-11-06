@@ -13,6 +13,7 @@ import type { Contractor } from "../../contractor/domain/types"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTranslation } from "react-i18next"
 import { RecipientType } from "../hooks/usePageSendMoney"
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
 
 interface SendMoneyRecipientSectionProps {
   recipientType: RecipientType
@@ -125,6 +126,7 @@ export function SendMoneyRecipientSection(
           onClick={props.onNext}
           aria-label={t("accessibility.nextStep", "Continue to next step")}
           aria-describedby="next-step-help"
+          endIcon={<ChevronRightRounded />}
         >
           {t("sendMoney.next")}
           <span id="next-step-help" className="sr-only">

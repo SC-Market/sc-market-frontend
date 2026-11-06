@@ -1890,8 +1890,8 @@
     "viewContractor": "Voir le prestataire",
     "share": "Partager",
     "title": "Recrutement",
-    "scOrgsNote": "Vous recrutez ? SC Orgs propose les candidatures, un annuaire des orgs et des outils pour gérer les membres →",
-    "scOrgsLfoNote": "Vous cherchez une org ? Publiez une annonce sur le tableau Looking for Org de SC Orgs, et les orgs viennent à vous →",
+    "scOrgsNote": "Vous recrutez ? SC Orgs propose les candidatures, un annuaire des orgs et des outils pour gérer les membres",
+    "scOrgsLfoNote": "Vous cherchez une org ? Publiez une annonce sur le tableau Looking for Org de SC Orgs, et les orgs viennent à vous",
     "editPost": "Modifier la publication"
   },
   "scOrgs": {
@@ -5647,7 +5647,11 @@
       "breadcrumb": "fil d'Ariane",
       "currentContractor": "prestataire actuel",
       "loadingButtonGroup": "groupe de boutons de chargement principaux",
-      "orgInfoArea": "zone d'informations de l'organisation"
+      "orgInfoArea": "zone d'informations de l'organisation",
+      "showDetails": "Afficher les détails",
+      "hideDetails": "Masquer les détails",
+      "copyToClipboard": "Copier dans le presse-papiers",
+      "changeAvatar": "Changer d'avatar"
     },
     "buttons": {
       "save": "Enregistrer"
@@ -5826,7 +5830,7 @@
       "noRecipeWarning": "Aucune recette de fabrication trouvée pour cet objet, ses composants de démontage sont donc inconnus.",
       "notSoldNpc": "Vendu dans aucune boutique PNJ",
       "openInCalculator": "Ouvrir dans le calculateur",
-      "owned": "Possédé ✓",
+      "owned": "Possédé",
       "perCraft": "par fabrication",
       "perItem": "par objet",
       "priceHistory": "Historique des prix",
@@ -7204,7 +7208,7 @@
       "acceptCustomOrders": "Accepter les commandes sur mesure"
     },
     "create": {
-      "backToMyShops": "← Retour à Mes boutiques",
+      "backToMyShops": "Retour à Mes boutiques",
       "intro": "Configurez votre vitrine sur SC Market. Vous pourrez affiner vos paramètres après la création.",
       "namePlaceholder": "Ma super boutique",
       "descriptionPlaceholder": "Expliquez aux acheteurs ce que propose votre boutique...",
@@ -7440,8 +7444,8 @@
       "analytics": "Analyses",
       "priceHistory": "Historique des prix",
       "orderDepth": "Profondeur des ordres",
-      "createListing": "+ Créer une annonce",
-      "createBuyOrder": "+ Ordre d'achat",
+      "createListing": "Créer une annonce",
+      "createBuyOrder": "Créer un ordre d'achat",
       "qualityDistribution": "Répartition par qualité",
       "priceByQualityTier": "Prix par palier de qualité"
     },
@@ -7631,7 +7635,9 @@
       "pathOrUrlPlaceholder": "/page-personnalisee ou https://...",
       "willOpenInNewTab": "S'ouvrira dans un nouvel onglet",
       "add": "Ajouter",
-      "saveSidebar": "Enregistrer la barre latérale"
+      "saveSidebar": "Enregistrer la barre latérale",
+      "showTab": "Afficher {{name}} dans la barre latérale",
+      "hideTab": "Masquer {{name}} de la barre latérale"
     }
   },
   "accountUi": {

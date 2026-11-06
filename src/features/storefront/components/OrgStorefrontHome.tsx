@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material"
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
-import StorefrontRounded from "@mui/icons-material/StorefrontRounded"
 import DesignServicesRounded from "@mui/icons-material/DesignServicesRounded"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -256,7 +255,6 @@ export function OrgStorefrontHome(props: { spectrumId: string; children?: React.
                 variant="contained"
                 component={Link}
                 to={SHOP_PATHS.profile(mainShop.slug)}
-                startIcon={<StorefrontRounded />}
               >
                 {t("storefront.cta.shop", "Shop")}
               </Button>
@@ -266,7 +264,6 @@ export function OrgStorefrontHome(props: { spectrumId: string; children?: React.
                 variant="outlined"
                 component={Link}
                 to={SHOP_PATHS.profileTab(mainShop.slug, "services")}
-                startIcon={<DesignServicesRounded />}
               >
                 {t("storefront.cta.service", "Request a service")}
               </Button>

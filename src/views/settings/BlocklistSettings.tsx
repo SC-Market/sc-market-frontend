@@ -108,6 +108,7 @@ function BlockedUserList(props: {
             <IconButton
               color="error"
               onClick={() => props.onUnblock(user.username)}
+              aria-label={t("unblockUser.button")}
               disabled={props.unblocking}
               sx={{ ml: 1 }}
             >

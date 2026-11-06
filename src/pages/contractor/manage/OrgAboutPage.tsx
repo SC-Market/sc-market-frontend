@@ -300,7 +300,6 @@ function OrgAboutForm(props: { contractor: Contractor }) {
         <LoadingButton
           variant="contained"
           loading={saving}
-          startIcon={<SaveRounded />}
           onClick={handleSave}
           disabled={!newName.trim()}
         >

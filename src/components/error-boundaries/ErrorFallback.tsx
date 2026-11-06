@@ -8,11 +8,7 @@ import {
   Stack,
 } from "@mui/material"
 import { ErrorInfo } from "react"
-import {
-  RefreshRounded,
-  HomeRounded,
-  ReportProblemRounded,
-} from "@mui/icons-material"
+import { RefreshRounded, ReportProblemRounded } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -183,7 +179,6 @@ export function ErrorFallback({
           <Button
             variant="outlined"
             color="primary"
-            startIcon={<HomeRounded />}
             onClick={handleGoHome}
             size="large"
           >

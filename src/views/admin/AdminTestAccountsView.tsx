@@ -32,6 +32,7 @@ import {
   type TestAccountCredential,
 } from "../../util/testAccountCredentials"
 import { useFormatters } from "../../util/format"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 const USERNAME_RE = /^~?test[a-z0-9_-]{2,36}$/i
 
@@ -271,7 +272,7 @@ export function AdminTestAccountsView() {
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    <Button size="small" color="error" onClick={() => setConfirmDelete(a.username)}>
+                    <Button size="small" color="error" onClick={() => setConfirmDelete(a.username)} startIcon={<DeleteRounded />}>
                       {t("admin.testAccounts.delete", "Delete")}
                     </Button>
                   </TableCell>

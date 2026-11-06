@@ -40,6 +40,7 @@ import {
 import { useFormatters } from "../../../../util/format"
 import { useFulfillBuyOrder } from "../../hooks/useBuyOrderActions"
 import { ResponsiveDialog } from "../../../../components/dialog/ResponsiveDialog"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -158,6 +159,7 @@ export function FulfillBuyOrderDialog({
               component={RouterLink}
               to={MARKET_PATHS.create}
               variant="outlined"
+              startIcon={<AddRounded />}
             >
               {t("buyorder.createListingToFulfill", "Create a listing")}
             </Button>

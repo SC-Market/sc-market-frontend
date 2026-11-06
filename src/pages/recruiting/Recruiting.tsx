@@ -29,6 +29,7 @@ import { usePageRecruiting } from "../../features/recruiting/hooks/usePageRecrui
 import { recruitingSeoText } from "../../seo/hubHeads"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 import { FloatingAction } from "../../components/layout/FloatingActions"
+import AddRounded from "@mui/icons-material/AddRounded"
 
 export function Recruiting() {
   const { t } = useTranslation()
@@ -101,7 +102,7 @@ export function Recruiting() {
           to={"/recruiting/post/create"}
           style={{ color: "inherit", textDecoration: "none" }}
         >
-          <Button startIcon={<NoteAddRounded />} variant={"contained"}>
+          <Button startIcon={<AddRounded />} variant={"contained"}>
             {t("create_post")}
           </Button>
         </Link>

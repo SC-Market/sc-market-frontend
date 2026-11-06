@@ -257,6 +257,11 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             size="small"
             onClick={handleToggleOwned}
             color={userOwns ? "primary" : "default"}
+            aria-label={
+              userOwns
+                ? t("blueprintsUi.removeFromInventory")
+                : t("blueprintsUi.detail.markAsOwned")
+            }
             title={
               userOwns
                 ? t("blueprintsUi.removeFromInventory")

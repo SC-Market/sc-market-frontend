@@ -20,6 +20,7 @@ import {
 } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import type { Block, CalloutKind, Inline } from "../domain/types"
+import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
 
 const CALLOUT_SEVERITY: Record<
   CalloutKind,
@@ -217,6 +218,7 @@ function BlockNode({ block, dense }: { block: Block; dense?: boolean }) {
               href={block.href}
               target="_blank"
               rel="noopener noreferrer"
+              endIcon={<OpenInNewRounded />}
             >
               {block.label}
             </Button>

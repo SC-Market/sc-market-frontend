@@ -19,7 +19,6 @@ import { Section } from "../../../components/paper/Section"
 import { formatMarketUrl } from "../domain/urls"
 import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { TrashCan } from "mdi-material-ui"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { BackArrow } from "../../../components/button/BackArrow"
 import { NumericFormat } from "react-number-format"
@@ -48,6 +47,7 @@ import { useCartActions, useCartItemActions } from "../hooks/useCartActions"
 import { HelpLink } from "../../help/components/HelpLink"
 import { useFormatters } from "../../../util/format"
 import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
@@ -269,7 +269,7 @@ export function CartItemEntryV2(props: {
             <Button
               color={"error"}
               variant={"text"}
-              startIcon={<TrashCan />}
+              startIcon={<DeleteRounded />}
               size={"small"}
               onClick={() => onRemove(item.cart_item_id)}
               disabled={isUpdating}

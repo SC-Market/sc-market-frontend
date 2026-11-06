@@ -143,7 +143,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
               : "—"}
         </TableCell>
         <TableCell>
-          <IconButton size="small">{open ? <ExpandLessRounded /> : <ExpandMoreRounded />}</IconButton>
+          <IconButton size="small" aria-label={open ? t("ui.aria.hideDetails") : t("ui.aria.showDetails")} aria-expanded={open}>{open ? <ExpandLessRounded /> : <ExpandMoreRounded />}</IconButton>
         </TableCell>
       </TableRow>
       <TableRow>

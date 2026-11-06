@@ -17,6 +17,7 @@ import { PATHS } from "../../routes/paths"
 import { FlatSection } from "../paper/Section"
 import { useTranslation } from "react-i18next"
 import { useOrderSettings } from "../../features/orders/hooks/useOrderSettings"
+import DeleteRounded from "@mui/icons-material/DeleteRounded"
 
 interface OrderSettingsProps {
   entityType: "user" | "contractor"
@@ -153,6 +154,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 color="error"
                 onClick={() => handleDelete("offer_message")}
                 disabled={saving}
+                startIcon={<DeleteRounded />}
               >
                 {t("OrderSettings.delete")}
               </Button>
@@ -196,6 +198,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 color="error"
                 onClick={() => handleDelete("order_message")}
                 disabled={saving}
+                startIcon={<DeleteRounded />}
               >
                 {t("OrderSettings.delete")}
               </Button>
@@ -373,6 +376,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                   onClick={() => handleDelete("min_order_size")}
                   disabled={saving}
                   sx={{ mt: 1 }}
+                  startIcon={<DeleteRounded />}
                 >
                   {t("OrderSettings.delete")}
                 </Button>
@@ -507,6 +511,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                   onClick={() => handleDelete("min_order_value")}
                   disabled={saving}
                   sx={{ mt: 1 }}
+                  startIcon={<DeleteRounded />}
                 >
                   {t("OrderSettings.delete")}
                 </Button>
@@ -581,6 +586,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                   onClick={() => handleDelete("max_order_value")}
                   disabled={saving}
                   sx={{ mt: 1 }}
+                  startIcon={<DeleteRounded />}
                 >
                   {t("OrderSettings.delete")}
                 </Button>
