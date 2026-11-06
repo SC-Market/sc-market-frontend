@@ -193,6 +193,47 @@ const scmStyle = {
         }
       },
     },
+    // Green is the one accent (2026-11). palette.secondary is the neutral
+    // now, and themes still carry their old second colour there; pages say
+    // what they mean: the accent (primary, the default), `neutral` for
+    // secondary-role controls, or `demand` for the buy side.
+    "no-secondary-accent": {
+      meta: {
+        type: "problem",
+        messages: {
+          secondary:
+            'palette.secondary is not an accent. Use the default (primary, green) for main actions, fields, controls and links; color="neutral" for secondary actions; "demand" for the buy side; text.* for text.',
+        },
+        schema: [],
+      },
+      create(context) {
+        const report = (node) =>
+          context.report({ node, messageId: "secondary" })
+        return {
+          Literal(node) {
+            if (
+              node.value === "secondary" ||
+              (typeof node.value === "string" &&
+                /^secondary\.(main|light|dark|contrastText)$/.test(node.value))
+            )
+              report(node)
+          },
+          MemberExpression(node) {
+            const { object, property } = node
+            if (
+              !node.computed &&
+              property.type === "Identifier" &&
+              property.name === "secondary" &&
+              object.type === "MemberExpression" &&
+              !object.computed &&
+              object.property.type === "Identifier" &&
+              object.property.name === "palette"
+            )
+              report(node)
+          },
+        }
+      },
+    },
     "no-hex-colors": {
       meta: {
         type: "suggestion",
@@ -464,6 +505,23 @@ export default [
     plugins: { "scm-style": scmStyle },
     rules: {
       "scm-style/no-hex-colors": "error",
+    },
+  },
+
+  // ── Guard rails: palette.secondary is not an accent (error) ──
+  // The theme files define it (as the neutral); the theme editor edits it.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/hooks/styles/**",
+      "src/components/theme-editor/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/__tests__/**",
+    ],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/no-secondary-accent": "error",
     },
   },
 
