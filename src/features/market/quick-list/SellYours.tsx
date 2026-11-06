@@ -87,7 +87,6 @@ export function QuickListProvider({
         open={signInOpen}
         onClose={() => setSignInOpen(false)}
         maxWidth="xs"
-        fullScreenOnMobile={false}
         title={t("quickList.signIn.title", "Sign in to sell")}
         closeLabel={t("quickList.close", "Close")}
         actions={

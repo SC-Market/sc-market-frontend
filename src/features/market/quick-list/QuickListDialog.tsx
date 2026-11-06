@@ -371,6 +371,7 @@ export function QuickListDialog({
     <ResponsiveDialog
       open={open}
       onClose={onClose}
+      mobile="fullScreen"
       title={t("quickList.title", "List an item")}
       closeLabel={t("quickList.close", "Close")}
       dividers
