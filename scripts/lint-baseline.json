@@ -1,10 +1,10 @@
 {
-  "warnings": 361,
+  "warnings": 335,
   "errors": 0,
   "byRule": {
     "@typescript-eslint/no-restricted-imports": 96,
     "max-lines": 75,
     "no-restricted-imports": 48,
-    "no-restricted-syntax": 142
+    "scm-style/render-layer": 116
   }
 }

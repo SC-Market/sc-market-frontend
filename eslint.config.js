@@ -86,6 +86,20 @@ const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
 const scmStyle = {
   rules: {
+    // Components and views render; mutations and permission checks live in
+    // feature hooks and domain rules. Its own rule (not no-restricted-syntax)
+    // so it can ratchet at warn while route strings and new Date() are errors.
+    "render-layer": {
+      meta: { type: "suggestion", schema: [] },
+      create(context) {
+        return Object.fromEntries(
+          RENDER_LAYER_SELECTORS.map(({ selector, message }) => [
+            selector,
+            (node) => context.report({ node, message }),
+          ]),
+        )
+      },
+    },
     // Server and browser must format the same: a locale-less toLocale*() or
     // Intl formatter uses the machine's language (util/format instead).
     "no-locale-less-format": {
@@ -307,28 +321,27 @@ export default [
     },
   },
 
-  // ── Route helpers: discourage hardcoded internal route strings ──
+  // ── Route helpers: no hardcoded internal route strings (error) ──
   // All routes live in src/routes/paths.ts — use the PATHS.* helpers instead
   // of hardcoding leading-slash paths in `to=` / `href=` props or navigate().
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
     ignores: LINT_TEST_AND_ROUTE_IGNORES,
     rules: {
-      "no-restricted-syntax": ["warn", ...ROUTE_STRING_SELECTORS],
+      "no-restricted-syntax": ["error", ...ROUTE_STRING_SELECTORS],
     },
   },
 
-  // ── Ratchet (warn): server and browser must format the same ──
-  // Flat config replaces no-restricted-syntax per matching block, so each
-  // block below repeats the route-string selectors. These blocks stay above
-  // the route-module block, which must keep the last word on its files.
-  // The warning count may only go down: scripts/lint-ratchet.mjs (CI).
+  // ── Server and browser must format the same (error) ──
+  // Flat config replaces no-restricted-syntax per matching block, so this
+  // block repeats the route-string selectors. It stays above the
+  // route-module block, which must keep the last word on its files.
   {
     files: ["src/**/*.tsx"],
     ignores: LINT_TEST_AND_ROUTE_IGNORES,
     rules: {
       "no-restricted-syntax": [
-        "warn",
+        "error",
         ...ROUTE_STRING_SELECTORS,
         ...FORMAT_SELECTORS,
       ],
@@ -336,6 +349,7 @@ export default [
   },
 
   // ── Ratchet (warn): components and views render; hooks call the API ──
+  // The warning count may only go down: scripts/lint-ratchet.mjs (CI).
   {
     files: [
       "src/features/*/components/**/*.tsx",
@@ -344,13 +358,9 @@ export default [
       "src/features/market/v2/**/*.tsx",
     ],
     ignores: LINT_TEST_AND_ROUTE_IGNORES,
+    plugins: { "scm-style": scmStyle },
     rules: {
-      "no-restricted-syntax": [
-        "warn",
-        ...ROUTE_STRING_SELECTORS,
-        ...FORMAT_SELECTORS,
-        ...RENDER_LAYER_SELECTORS,
-      ],
+      "scm-style/render-layer": "warn",
     },
   },
 
