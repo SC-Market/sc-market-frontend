@@ -3,9 +3,9 @@
  * coloured text and a 1px border for palette hues; the quality scale for
  * rarity; the neutral outlined chip for manufacturer.
  *
- * Any Chip prop passes through (link props, onClick, icon, size), and the
- * ref, so it works under a Tooltip; `sx` is
- * merged after the tag colour, for layout only (height, font size, width).
+ * Any Chip prop passes through (link props, onClick, icon, size), and so
+ * does the ref, so it works under a Tooltip. `sx` is merged after the tag
+ * colour, for layout only (height, font size, width).
  */
 
 import React from "react"

@@ -13,6 +13,7 @@ The canonical example is `features/email/`. When in doubt, look there.
 - Numbers, prices and dates go through `util/format` (`useFormatters()` in components: the render language, and UTC until hydrated), never a bare `toLocale*()` (a lint error), and "now" comes from `useNow()` or is passed in, so server and browser agree.
 - If you are about to write the same `if` a second time, it belongs in `domain/`.
 - Colour has roles. Green (`primary`, the default) is the one accent: main actions, fields, selection controls, links and the focus ring. `secondary` is the buy side and premium (bid and buy-order prices, "Top bid", the bid curve, supporter and premium badges) and only colours text, chips, badges, chart series and `sx` colours. Secondary-role buttons and outlined chips use `color="neutral"`. Every theme keeps `secondary` and `neutral` at AA as text (`src/hooks/styles/theme/__tests__/accentRoles.test.tsx`).
+- Tags are coloured by type, never per call site: `<TagChip tag="category" … />` (`components/tags/tagColors.ts` maps each tag type to one colour from `palette.tag`, which every theme derives at AA). See `docs/theme-tag-colors.md`.
 
 ---
 
