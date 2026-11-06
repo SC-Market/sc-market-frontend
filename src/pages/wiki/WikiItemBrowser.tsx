@@ -28,7 +28,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { getFactionIcon } from "../../util/gameIcons"
+import { wikiItemImage } from "./wikiItemImage"
 import {
   UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, manufacturerSearchTokens, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
@@ -118,7 +118,7 @@ function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
       <CardMedia
         component="img"
         height="160"
-        image={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
+        image={wikiItemImage(item)}
         alt={item.name}
         // Lazy: no server-render preload (Early Hint) per card.
         loading="lazy"
@@ -154,7 +154,7 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
       <TableCell sx={{ py: 0.5, width: 40 }}>
         <ImageAvatar
           alt=""
-          src={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
+          src={wikiItemImage(item)}
           variant="rounded"
           sx={{ width: 32, height: 32, bgcolor: "background.default" }}
           imgProps={{ loading: "lazy", style: { objectFit: "contain" } }}
