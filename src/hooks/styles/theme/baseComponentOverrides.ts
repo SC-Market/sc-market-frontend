@@ -9,8 +9,6 @@ import {
   withContrast,
 } from "./contrast"
 
-const fontStack = `var(--sc-custom-font, "Electrolize"), "Electrolize Fallback", "Electrolize Fallback Roboto", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`
-
 export function getBaseComponentOverrides(): Components<
   Omit<Theme, "components">
 > {
@@ -27,11 +25,6 @@ export function getBaseComponentOverrides(): Components<
         root: {
           color: "inherit",
         },
-      },
-    },
-    MuiTypography: {
-      defaultProps: {
-        fontFamily: fontStack,
       },
     },
     MuiAvatar: {
@@ -94,14 +87,12 @@ export function getBaseComponentOverrides(): Components<
         outlined: ({ theme }) => {
           const extTheme = theme as ExtendedTheme
           return {
-            fontFamily: fontStack,
             borderRadius: theme.spacing(extTheme.borderRadius.button),
           }
         },
         text: ({ theme }) => {
           const extTheme = theme as ExtendedTheme
           return {
-            fontFamily: fontStack,
             borderRadius: theme.spacing(extTheme.borderRadius.button),
           }
         },
@@ -186,6 +177,7 @@ export function getBaseComponentOverrides(): Components<
                 }
               : {}
           return {
+            fontFamily: theme.typography.fontFamilyHeading,
             borderRadius: theme.spacing(extTheme.borderRadius.chip),
             ...neutral,
             ...accent,

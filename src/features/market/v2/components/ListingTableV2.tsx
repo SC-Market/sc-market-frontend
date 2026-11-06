@@ -19,6 +19,7 @@ import { formatMarketUrl } from "../../domain/urls"
 import { SHOP_PATHS } from "../../../../routes/paths"
 
 import { useFormatters } from "../../../../util/format"
+import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
 export function ListingTableV2({
   listings,
 }: {
@@ -78,14 +79,19 @@ export function ListingTableV2({
                 )}
               </TableCell>
               <TableCell sx={{ whiteSpace: "nowrap" }}>
-                <Typography variant="body2" color="primary" fontWeight="bold">
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  fontWeight="bold"
+                  sx={NUMERIC_SX}
+                >
                   {l.price_min === l.price_max
                     ? `${fmt.number(l.price_min)} aUEC`
                     : `${fmt.number(l.price_min)} – ${fmt.number(l.price_max)} aUEC`}
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={NUMERIC_SX}>
                   {fmt.number(l.quantity_available)}
                 </Typography>
               </TableCell>

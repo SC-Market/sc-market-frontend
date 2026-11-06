@@ -6,6 +6,11 @@ import {
   type ExtendedThemeOptions,
 } from "./constants"
 import { getBaseComponentOverrides } from "./baseComponentOverrides"
+import { FONT_FAMILY_BODY, FONT_FAMILY_HEADING } from "./fonts"
+
+// Headings get the heading font. h1 and h2 are 400 rather than MUI's 300:
+// Electrolize had no light weight, so 400 is how they have always looked.
+const heading = { fontFamily: FONT_FAMILY_HEADING }
 
 export const themeBase: ExtendedThemeOptions = {
   layoutSpacing: defaultLayoutSpacing,
@@ -22,11 +27,18 @@ export const themeBase: ExtendedThemeOptions = {
     },
   },
   typography: {
-    allVariants: {
-      // Electrolize, then metric-matched fallbacks (src/fonts.css) so its
-      // font-display swap doesn't reflow the page
-      fontFamily: `var(--sc-custom-font, "Electrolize"), "Electrolize Fallback", "Electrolize Fallback Roboto", "Roboto", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
-    },
+    // Body text (Sofia Sans, src/fonts.css). Headings and buttons (and,
+    // through them, tabs and toggle buttons) take the heading font (Exo 2).
+    fontFamily: FONT_FAMILY_BODY,
+    fontFamilyBody: FONT_FAMILY_BODY,
+    fontFamilyHeading: FONT_FAMILY_HEADING,
+    h1: { ...heading, fontWeight: 400 },
+    h2: { ...heading, fontWeight: 400 },
+    h3: heading,
+    h4: heading,
+    h5: heading,
+    h6: heading,
+    button: heading,
   },
   components: getBaseComponentOverrides(),
   breakpoints: {

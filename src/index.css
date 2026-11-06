@@ -1,15 +1,15 @@
 body {
   margin: 0;
   /*
-   * The theme's font stack (hooks/styles/theme), so text shown before the app
-   * renders (the edge bridge's HTML summary) is already in Electrolize or its
-   * metric-matched fallback (fonts.css): no Roboto web-font swap shifting it,
-   * and no font change when the app takes over.
+   * The theme's body font stack (hooks/styles/theme/fonts.ts), so text shown
+   * before the app renders (the edge bridge's HTML summary) is already in
+   * Sofia Sans or its metric-matched fallback (fonts.css): no font change
+   * when the app takes over.
    */
   font-family:
-    "Electrolize",
-    "Electrolize Fallback",
-    "Electrolize Fallback Roboto",
+    "Sofia Sans",
+    "Sofia Sans Fallback",
+    "Sofia Sans Fallback Roboto",
     "Roboto",
     Arial,
     -apple-system,
@@ -24,6 +24,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* The heading font stack (hooks/styles/theme/fonts.ts), for headings outside
+   MUI's Typography (the edge bridge's summary, rendered markdown). */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family:
+    var(--sc-custom-font, "Exo 2"), "Exo 2 Fallback", "Exo 2 Fallback Roboto",
+    "Roboto", Arial, sans-serif;
 }
 
 code {

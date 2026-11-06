@@ -22,21 +22,28 @@ import {
 import { useEffect, useMemo, useCallback, useState } from "react"
 import { isSiteAdmin } from "../../util/siteRole"
 import { grey } from "@mui/material/colors"
+import { BODY_FONT, HEADING_FONT } from "../../hooks/styles/theme/fonts"
 
 // Font names are proper nouns; `labelKey` options add a translated descriptor
-// around the font name (passed as {{font}}).
+// around the font name (passed as {{font}}). The choice is stored in
+// localStorage ("sc-admin-font"): "" is the theme's own pair (Exo 2 headings,
+// Sofia Sans text), anything else replaces both. Fonts without a `url` are
+// self-hosted in src/fonts.css and download when first used.
 const FONT_OPTIONS: {
   label: string
   value: string
   url?: string
   labelKey?: string
 }[] = [
-  { label: "Roboto", labelKey: "chromeUi.fonts.default", value: "" },
+  {
+    label: `${HEADING_FONT} + ${BODY_FONT}`,
+    labelKey: "chromeUi.fonts.default",
+    value: "",
+  },
   {
     label: "Electrolize",
     labelKey: "chromeUi.fonts.scStyle",
     value: "Electrolize",
-    url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap",
   },
   {
     label: "Orbitron",
@@ -48,11 +55,7 @@ const FONT_OPTIONS: {
     value: "Rajdhani",
     url: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap",
   },
-  {
-    label: "Exo 2",
-    value: "Exo 2",
-    url: "https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap",
-  },
+  { label: HEADING_FONT, value: HEADING_FONT },
   {
     label: "Jura",
     value: "Jura",

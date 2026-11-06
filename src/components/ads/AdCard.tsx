@@ -6,6 +6,7 @@ import { ListingWrapper } from "../../features/market/components/listings/Listin
 import { ListingCardActionArea } from "../../features/market/components/listings/ListingCardActionArea"
 import {
   AD_CARD_HEIGHT,
+  POSTER_FONT,
   POSTER_GAP,
   POSTER_MIN_SPACER,
   POSTER_PADDING,
@@ -15,6 +16,13 @@ import {
   fluidCss,
 } from "./posterLayout"
 import { AD_POSTER } from "../../hooks/styles/fixedColors"
+
+/** A poster line's theme font, as an sx `fontFamily` (theme.typography key). */
+function posterFont(line: keyof typeof POSTER_FONT) {
+  return POSTER_FONT[line] === "heading"
+    ? "fontFamilyHeading"
+    : "fontFamilyBody"
+}
 
 interface AdCardProps {
   /** The ad configuration to display */
@@ -156,6 +164,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Typography
           component="p"
           sx={{
+            fontFamily: posterFont("kicker"),
             fontSize: type.kicker.size,
             lineHeight: type.kicker.lineHeight,
             letterSpacing: `${type.kicker.letterSpacing}em`,
@@ -170,6 +179,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           component="p"
           sx={{
             mt: `${POSTER_GAP}px`,
+            fontFamily: posterFont("title"),
             fontWeight: 800,
             textTransform: "uppercase",
             lineHeight: type.title.lineHeight,
@@ -195,6 +205,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           component="p"
           sx={{
             mt: `${POSTER_GAP}px`,
+            fontFamily: posterFont("tagline"),
             fontSize: fluidCss(type.tagline.size),
             lineHeight: type.tagline.lineHeight,
             opacity: 0.85,
@@ -211,6 +222,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
             py: `${type.cta.padY}px`,
             border: `${type.cta.border}px solid ${ad.accent}`,
             color: ad.accent,
+            fontFamily: posterFont("cta"),
             fontSize: type.cta.size,
             lineHeight: type.cta.lineHeight,
             fontWeight: 700,
@@ -224,6 +236,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           component="p"
           sx={{
             mt: `${POSTER_GAP}px`,
+            fontFamily: posterFont("brand"),
             fontSize: type.brand.size,
             lineHeight: type.brand.lineHeight,
             fontWeight: 800,
@@ -236,6 +249,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Typography
           component="p"
           sx={{
+            fontFamily: posterFont("disclaimer"),
             fontSize: type.disclaimer.size,
             lineHeight: type.disclaimer.lineHeight,
             opacity: 0.55,

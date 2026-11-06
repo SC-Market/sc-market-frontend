@@ -24,6 +24,17 @@ declare module "@mui/material/styles" {
     subtleHover: string
   }
 
+  /** The theme's font families (./fonts.ts). */
+  interface TypographyVariants {
+    fontFamilyHeading: string
+    fontFamilyBody: string
+  }
+
+  interface TypographyVariantsOptions {
+    fontFamilyHeading?: string
+    fontFamilyBody?: string
+  }
+
   interface TypeText {
     subtle: string
   }

@@ -22,6 +22,7 @@ import { useGetListingStatsQuery } from "../../../store/api/v2/market"
 import type { ResolvedScope } from "../useResolveScope"
 import type { DashboardWidget } from "../types"
 import { useFormatters } from "../../../util/format"
+import { NUMERIC_SX } from "../../../hooks/styles/theme/fonts"
 
 function readLimit(settings: DashboardWidget["settings"]): number {
   const value = settings?.limit
@@ -31,7 +32,7 @@ function readLimit(settings: DashboardWidget["settings"]): number {
 function Metric({ label, value }: { label: string; value: string | number }) {
   return (
     <Stack spacing={0} sx={{ minWidth: 80 }}>
-      <Typography variant="h6" fontWeight="bold">
+      <Typography variant="h6" fontWeight="bold" sx={NUMERIC_SX}>
         {value}
       </Typography>
       <Typography variant="caption" color="text.secondary">

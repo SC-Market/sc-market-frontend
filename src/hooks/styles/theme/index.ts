@@ -22,6 +22,7 @@ export {
 } from "./themeUtils"
 
 export { themeBase } from "./baseTheme"
+export { FONT_FAMILY_BODY, FONT_FAMILY_HEADING, NUMERIC_SX } from "./fonts"
 export { getBaseComponentOverrides } from "./baseComponentOverrides"
 
 export { mainThemeOptions, mainTheme } from "./mainTheme"

@@ -31,18 +31,110 @@
 }
 
 /*
- * Electrolize: the theme's primary font (hooks/styles/theme). Self-hosted
- * (OFL; Google Fonts v20 latin subset, the same file fonts.gstatic.com served)
- * and preloaded from src/document/document.html, instead of a render-blocking
- * fonts.googleapis.com stylesheet that only discovered the font file after the
- * CSS arrived from a second origin.
+ * The theme's fonts (hooks/styles/theme/fonts.ts): Exo 2 for headings, the
+ * brand, navigation, buttons, tabs and chips; Sofia Sans for everything else.
+ * Both are variable fonts (real weights, no faux bold) with Cyrillic, from
+ * Google Fonts (Exo 2 v26, Sofia Sans v20), self-hosted under the OFL
+ * (public/fonts/OFL.txt). One file per subset, as Google serves them, so a
+ * page only downloads the scripts it shows. The latin files are preloaded
+ * from src/document/document.html.
+ */
+
+/* Exo 2, cyrillic-ext */
+@font-face {
+  font-family: "Exo 2";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/exo-2-v26-cyrillic-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+/* Exo 2, cyrillic */
+@font-face {
+  font-family: "Exo 2";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/exo-2-v26-cyrillic-var.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* Exo 2, latin-ext */
+@font-face {
+  font-family: "Exo 2";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/exo-2-v26-latin-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Exo 2, latin */
+@font-face {
+  font-family: "Exo 2";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/exo-2-v26-latin-var.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* Sofia Sans, cyrillic-ext */
+@font-face {
+  font-family: "Sofia Sans";
+  font-style: normal;
+  font-weight: 1 1000;
+  font-display: swap;
+  src: url("/fonts/sofia-sans-v20-cyrillic-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+/*
+ * Sofia Sans, cyrillic. Sofia Sans draws Cyrillic in Bulgarian forms by
+ * default (т like m, д like g, ...) and has the standard (Russian) forms only
+ * as a "locl" variant for Russian, which a Ukrainian page never gets. This
+ * file is Google's cyrillic subset with its cmap pointed at those standard
+ * glyphs (29 letters; nothing else changed), so Ukrainian reads normally.
+ * Made with fontTools from sofia-sans-v20 cyrillic; see public/fonts/OFL.txt.
  */
 @font-face {
-  font-family: "Electrolize";
+  font-family: "Sofia Sans";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 1 1000;
   font-display: swap;
-  src: url("/fonts/electrolize-v20-latin-400.woff2") format("woff2");
+  src: url("/fonts/sofia-sans-v20-cyrillic-std-var.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* Sofia Sans, latin-ext */
+@font-face {
+  font-family: "Sofia Sans";
+  font-style: normal;
+  font-weight: 1 1000;
+  font-display: swap;
+  src: url("/fonts/sofia-sans-v20-latin-ext-var.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Sofia Sans, latin */
+@font-face {
+  font-family: "Sofia Sans";
+  font-style: normal;
+  font-weight: 1 1000;
+  font-display: swap;
+  src: url("/fonts/sofia-sans-v20-latin-var.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
@@ -50,36 +142,84 @@
 }
 
 /*
- * Metric-matched stand-ins shown while Electrolize loads (font-display: swap).
- * Without them the swap period renders in Roboto/Arial, whose glyphs are ~3%
- * narrower with a different line box, so every text node on the page reflowed
- * when Electrolize arrived: a page-wide layout shift on cold visits. Values
- * come from the font files: size-adjust = Electrolize / fallback advance width
- * over a mixed-case sample; ascent/descent = Electrolize hhea metrics
- * (0.911 / 0.275 em, no line gap) divided by size-adjust. Same unicode-range as
- * Electrolize so other scripts (Cyrillic, CJK) keep their normal fallback.
+ * Metric-matched stand-ins shown while the fonts load (font-display: swap),
+ * so text doesn't reflow when they arrive. Values come from the font files
+ * at weight 400: size-adjust = the font's / the fallback's mean advance
+ * width, weighted by English character frequency; ascent/descent = the
+ * font's hhea metrics (Exo 2 0.999 / 0.201 em, Sofia Sans 0.9 / 0.3 em, no
+ * line gap) divided by size-adjust. The range covers the fonts' Latin and
+ * Cyrillic subsets (Arial and Roboto have both), so Ukrainian text gets the
+ * same stand-in; other scripts (CJK) keep their normal fallback.
  */
 @font-face {
-  font-family: "Electrolize Fallback";
+  font-family: "Exo 2 Fallback";
   src: local("Arial"), local("ArialMT");
-  size-adjust: 102.63%;
-  ascent-override: 88.77%;
-  descent-override: 26.8%;
+  size-adjust: 102.31%;
+  ascent-override: 97.65%;
+  descent-override: 19.65%;
   line-gap-override: 0%;
   unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
-    U+2215, U+FEFF, U+FFFD;
+    U+0000-02FF, U+0301, U+0304, U+0308, U+0329, U+0400-052F, U+1C80-1C8A,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2000-206F, U+20A0-20C4, U+2113,
+    U+2116, U+2122, U+2191, U+2193, U+2212, U+2215, U+2C60-2C7F, U+2DE0-2DFF,
+    U+A640-A69F, U+A720-A7FF, U+FE2E-FE2F, U+FEFF, U+FFFD;
 }
 
 /* Android has no Arial; its system Roboto takes the same role. */
 @font-face {
-  font-family: "Electrolize Fallback Roboto";
+  font-family: "Exo 2 Fallback Roboto";
   src: local("Roboto"), local("Roboto-Regular");
-  size-adjust: 103.62%;
-  ascent-override: 87.92%;
-  descent-override: 26.54%;
+  size-adjust: 102.33%;
+  ascent-override: 97.62%;
+  descent-override: 19.64%;
   line-gap-override: 0%;
+  unicode-range:
+    U+0000-02FF, U+0301, U+0304, U+0308, U+0329, U+0400-052F, U+1C80-1C8A,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2000-206F, U+20A0-20C4, U+2113,
+    U+2116, U+2122, U+2191, U+2193, U+2212, U+2215, U+2C60-2C7F, U+2DE0-2DFF,
+    U+A640-A69F, U+A720-A7FF, U+FE2E-FE2F, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Sofia Sans Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 96.57%;
+  ascent-override: 93.2%;
+  descent-override: 31.07%;
+  line-gap-override: 0%;
+  unicode-range:
+    U+0000-02FF, U+0301, U+0304, U+0308, U+0329, U+0400-052F, U+1C80-1C8A,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2000-206F, U+20A0-20C4, U+2113,
+    U+2116, U+2122, U+2191, U+2193, U+2212, U+2215, U+2C60-2C7F, U+2DE0-2DFF,
+    U+A640-A69F, U+A720-A7FF, U+FE2E-FE2F, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Sofia Sans Fallback Roboto";
+  src: local("Roboto"), local("Roboto-Regular");
+  size-adjust: 96.59%;
+  ascent-override: 93.18%;
+  descent-override: 31.06%;
+  line-gap-override: 0%;
+  unicode-range:
+    U+0000-02FF, U+0301, U+0304, U+0308, U+0329, U+0400-052F, U+1C80-1C8A,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2000-206F, U+20A0-20C4, U+2113,
+    U+2116, U+2122, U+2191, U+2193, U+2212, U+2215, U+2C60-2C7F, U+2DE0-2DFF,
+    U+A640-A69F, U+A720-A7FF, U+FE2E-FE2F, U+FEFF, U+FFFD;
+}
+
+/*
+ * Electrolize, the site's font until 2026-11: now only an option in the
+ * font picker (components/settings/PreferencesControls.tsx). Self-hosted
+ * (OFL; Google Fonts v20 latin subset); the browser fetches it only when a
+ * visitor picks it.
+ */
+@font-face {
+  font-family: "Electrolize";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/electrolize-v20-latin-400.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,

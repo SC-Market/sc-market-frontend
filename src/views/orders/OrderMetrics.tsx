@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useFormatters } from "../../util/format"
+import { NUMERIC_SX } from "../../hooks/styles/theme/fonts"
 
 export function MetricSection(props: {
   title: string
@@ -35,6 +36,7 @@ export function MetricSection(props: {
             variant={"h6"}
             component={"div"}
             color={bodyColor || "text.secondary"}
+            sx={NUMERIC_SX}
           >
             {body}
           </Typography>

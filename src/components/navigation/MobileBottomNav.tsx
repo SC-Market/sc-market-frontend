@@ -343,6 +343,7 @@ export function MobileBottomNav() {
               },
             },
             "& .MuiBottomNavigationAction-label": {
+              fontFamily: theme.typography.fontFamilyHeading,
               fontSize: "0.75rem",
               marginTop: 0.5,
               "&.Mui-selected": {

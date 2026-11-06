@@ -16,6 +16,7 @@ import {
 } from "../../profile/api/profileApi"
 import { MarketListingRating } from "../../../components/rating/ListingRating"
 import { useFormatters } from "../../../util/format"
+import { NUMERIC_SX } from "../../../hooks/styles/theme/fonts"
 
 export function ReputationWidget({ t }: { t: TFunction }) {
   const fmt = useFormatters()
@@ -88,7 +89,7 @@ export function ReputationWidget({ t }: { t: TFunction }) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <Box>
-      <Typography variant="h6" component="div">
+      <Typography variant="h6" component="div" sx={NUMERIC_SX}>
         {value}
       </Typography>
       <Typography variant="caption" color="text.secondary">

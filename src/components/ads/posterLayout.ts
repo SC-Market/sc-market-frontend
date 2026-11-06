@@ -47,6 +47,20 @@ export const POSTER_TYPE = {
   disclaimer: { size: 9.5, lineHeight: 1.25 },
 } as const
 
+/**
+ * Which theme font each line is set in: the display lines in the heading
+ * font (Exo 2), the running text in the body font (Sofia Sans). The fit test
+ * measures each line in its font.
+ */
+export const POSTER_FONT = {
+  kicker: "heading",
+  title: "heading",
+  tagline: "body",
+  cta: "heading",
+  brand: "heading",
+  disclaimer: "body",
+} as const
+
 /** Vertical gaps: kicker → title → rule → tagline, and CTA → brand line. */
 export const POSTER_GAP = 7
 /** The accent rule under the title. */

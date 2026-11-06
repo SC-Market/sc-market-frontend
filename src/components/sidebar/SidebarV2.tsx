@@ -667,9 +667,11 @@ export function SidebarV2() {
       transition: "0.3s",
       fontSize: "0.9em",
     },
+    // Navigation is in the heading font; 600 now that the weight is real
     "& .MuiListItemText-primary": {
       color: sidebarContrast,
-      fontWeight: "bold",
+      fontFamily: theme.typography.fontFamilyHeading,
+      fontWeight: 600,
       transition: "0.3s",
     },
     "&.Mui-selected": {
@@ -685,7 +687,8 @@ export function SidebarV2() {
     px: 2,
     pt: 1.5,
     pb: 0.5,
-    fontWeight: "bold",
+    fontFamily: theme.typography.fontFamilyHeading,
+    fontWeight: 600,
     opacity: 0.7,
     textTransform: "uppercase" as const,
     fontSize: "0.85em",
@@ -1104,7 +1107,8 @@ export function SidebarV2() {
                     variant="body2"
                     component="span"
                     sx={{
-                      fontWeight: "bold",
+                      fontFamily: "inherit",
+                      fontWeight: "inherit",
                       fontSize: "1em",
                       textTransform: "uppercase",
                     }}
@@ -1503,7 +1507,12 @@ export function SidebarV2() {
               sx={{ width: 40, height: 40 }}
             />
             <Box sx={{ minWidth: 0 }}>
-              <Typography fontWeight={600} color="text.secondary" noWrap>
+              <Typography
+                fontWeight={600}
+                fontFamily={theme.typography.fontFamilyHeading}
+                color="text.secondary"
+                noWrap
+              >
                 {whiteLabelBrand.name}
               </Typography>
               <Typography
@@ -1536,7 +1545,11 @@ export function SidebarV2() {
               variant="rounded"
               sx={{ width: 40, height: 40 }}
             />
-            <Typography fontWeight={600} color="text.primary">
+            <Typography
+              fontWeight={600}
+              fontFamily={theme.typography.fontFamilyHeading}
+              color="text.primary"
+            >
               {t("sidebar.sc_market.title", "SC Market")}
             </Typography>
           </Box>

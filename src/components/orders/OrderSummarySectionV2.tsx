@@ -4,6 +4,7 @@ import { OfferChanges } from "../../util/offerChanges"
 import { OrderItemDetail } from "../../features/orders/api/ordersV2Api"
 import { formatMarketUrl } from "../../features/market/domain/urls"
 import { useFormatters } from "../../util/format"
+import { NUMERIC_SX } from "../../hooks/styles/theme/fonts"
 
 /**
  * OrderSummarySectionV2 Props
@@ -132,7 +133,7 @@ export function OrderSummarySectionV2({
               </Box>
 
               {/* Subtotal */}
-              <Typography variant="body1" fontWeight="medium">
+              <Typography variant="body1" fontWeight="medium" sx={NUMERIC_SX}>
                 {fmt.number(subtotal)} aUEC
               </Typography>
             </Box>
@@ -155,6 +156,7 @@ export function OrderSummarySectionV2({
             variant="subtitle2"
             color="text.secondary"
             fontWeight="bold"
+            sx={NUMERIC_SX}
           >
             {fmt.number(itemsTotal)}{" "}
             <Box

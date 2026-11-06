@@ -30,6 +30,7 @@ import { orgFeaturedListingsArgs, ratingLabel, sinceYear } from "../domain"
 import { EnquireBrandedStorefront } from "./EnquireBrandedStorefront"
 
 import { useFormatters } from "../../../util/format"
+import { NUMERIC_SX } from "../../../hooks/styles/theme/fonts"
 function SectionTitle(props: { children: React.ReactNode; action?: React.ReactNode }) {
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }} spacing={1}>
@@ -45,7 +46,7 @@ function SectionTitle(props: { children: React.ReactNode; action?: React.ReactNo
 function Stat(props: { value: React.ReactNode; label: string }) {
   return (
     <Box sx={{ minWidth: 96 }}>
-      <Typography variant="h5" component="p" color="text.secondary" fontWeight={700}>
+      <Typography variant="h5" component="p" color="text.secondary" fontWeight={700} sx={NUMERIC_SX}>
         {props.value}
       </Typography>
       <Typography variant="caption" color="text.primary">

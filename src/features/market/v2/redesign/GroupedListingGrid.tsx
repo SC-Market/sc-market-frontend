@@ -73,6 +73,7 @@ import { remainingQuantity } from "../../domain/buyOrders"
 import { useFormatters, useNow } from "../../../../util/format"
 import { useAddToCart } from "../../hooks/useCartActions"
 import { TagChip } from "../../../../components/tags/TagChip"
+import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
  *
@@ -584,9 +585,9 @@ function GroupCard({
               <Typography
                 variant="h6"
                 color="primary"
-                fontWeight="bold"
+                fontWeight={600}
                 noWrap
-                sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                sx={{ ...NUMERIC_SX, fontSize: "0.95rem", mb: 0.5 }}
               >
                 {t("MarketRedesign.fromPrice", "from")} {fmt.price(priceMin)}
               </Typography>
@@ -785,13 +786,19 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
               )}
               <Typography
                 variant="body2"
-                sx={{ color: "text.primary", width: 90, textAlign: "right" }}
+                sx={{
+                  ...NUMERIC_SX,
+                  color: "text.primary",
+                  width: 90,
+                  textAlign: "right",
+                }}
               >
                 {fmt.number(remainingQuantity(o))}
               </Typography>
               <Typography
                 variant="body2"
                 sx={{
+                  ...NUMERIC_SX,
                   // A bid price: the buy side's colour
                   color: "secondary.main",
                   fontWeight: 700,

@@ -43,6 +43,7 @@ import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 import { useFormatters } from "../../../../util/format"
 import { useAddToCart, useBuyNow } from "../../hooks/useCartActions"
+import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
 
 /**
  * ListingDetailRedesign — Phase 0 of the Market redesign (behind the
@@ -349,7 +350,7 @@ export function ListingDetailRedesign() {
             <Box>
               <Typography
                 variant="h3"
-                sx={{ color: "primary.main", fontWeight: 700 }}
+                sx={{ ...NUMERIC_SX, color: "primary.main", fontWeight: 700 }}
               >
                 {isBundle
                   ? fmt.price(unitPrice)
@@ -518,7 +519,11 @@ export function ListingDetailRedesign() {
                       </Typography>
                       <Typography
                         variant="h5"
-                        sx={{ color: "primary.main", fontWeight: 700 }}
+                        sx={{
+                          ...NUMERIC_SX,
+                          color: "primary.main",
+                          fontWeight: 700,
+                        }}
                       >
                         {fmt.price(subtotal)}
                       </Typography>

@@ -6,13 +6,14 @@
  *
  * There is no layout engine in the test environment, so the copy is laid out
  * here with the poster's own box model and type scale (posterLayout.ts), and
- * glyph widths that err wide:
- * - Latin: Electrolize, the theme font. Its advances are Arial's x 1.0263
- *   (the size-adjust of its metric-matched fallback, src/fonts.css), taken
- *   here from Arial *Bold*, which is wider than the regular face the poster's
- *   synthesised bold keeps.
- * - Cyrillic: the system fallback (Arial, Roboto, Segoe UI), Arial Bold
- *   widths, the same x 1.0263 margin.
+ * glyph widths that err wide. Each glyph is the wider of:
+ * - the poster's font: Exo 2 at 800 for the display lines (the title and
+ *   brand are 800; the kicker and call to action 700, narrower), Sofia Sans
+ *   at 400 for the tagline and disclaimer. Advances from the self-hosted
+ *   files (public/fonts), Latin and Cyrillic, without kerning;
+ * - its metric-matched fallback, shown until the font arrives: Arial *Bold*
+ *   (wider than the regular face the fallback uses) x the fallback's
+ *   size-adjust (src/fonts.css).
  * - CJK and full-width punctuation: 1em, as in every CJK system font.
  * Lines break at spaces and after hyphens, and between any two CJK
  * characters, greedily, as browsers do.
@@ -30,6 +31,7 @@ import { MARKET_ADS } from "../adConfig"
 import type { PosterAdConfig } from "../types"
 import {
   AD_CARD_HEIGHT,
+  POSTER_FONT,
   POSTER_GAP,
   POSTER_MIN_SPACER,
   POSTER_PADDING,
@@ -50,7 +52,7 @@ const CARD_WIDTHS = Array.from({ length: 51 }, (_, i) => 130 + i * 5)
 
 const LOCALES = { en, de, es, fr, ja, uk, zhHans, zhHant }
 
-/** Arial Bold advance widths, em. */
+/** The fallback: Arial Bold advance widths, em. */
 // prettier-ignore
 const LATIN: Record<string, number> = {
   A: 0.722, B: 0.722, C: 0.722, D: 0.722, E: 0.667, F: 0.611, G: 0.778,
@@ -86,22 +88,78 @@ const LOOKALIKE: Record<string, string> = {
   а: "a", в: "b", е: "e", к: "k", м: "m", н: "n", о: "o", р: "p", с: "c",
   т: "t", х: "x", у: "y",
 }
-const ELECTROLIZE = 1.0263
+/** The fallbacks' size-adjust (src/fonts.css, "Exo 2/Sofia Sans Fallback"). */
+const FALLBACK_SCALE = { heading: 1.0231, body: 0.9657 }
+
+/** The characters the font tables below cover, in order. */
+const FONT_CHARS =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \u00a0.,:;!?¿¡'’\"-–—&()/«»АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяЁЄІЇҐёєіїґ"
+
+function advances(units: number[]): Record<string, number> {
+  const chars = [...FONT_CHARS]
+  if (chars.length !== units.length) throw new Error("table length")
+  return Object.fromEntries(chars.map((ch, i) => [ch, units[i] / 1000]))
+}
+
+/** Exo 2 at wght 800 (exo-2-v26-*-var.woff2), em. */
+// prettier-ignore
+const EXO_2_800 = advances([
+  669, 651, 597, 693, 588, 566, 659, 704, 308, 390, 657, 547, 935, 731, 698,
+  633, 698, 663, 599, 613, 696, 656, 991, 662, 635, 596, 581, 607, 519, 609,
+  578, 416, 594, 612, 291, 292, 586, 344, 883, 612, 601, 611, 607, 440, 543,
+  425, 605, 585, 864, 588, 585, 534, 646, 451, 591, 573, 649, 561, 600, 536,
+  632, 600, 213, 213, 252, 249, 268, 268, 316, 529, 524, 299, 213, 217, 384,
+  395, 543, 836, 763, 369, 369, 572, 537, 537, 669, 637, 654, 546, 763, 589,
+  954, 578, 724, 724, 663, 697, 941, 710, 698, 707, 636, 597, 613, 609, 865,
+  663, 724, 678, 999, 1026, 777, 930, 625, 600, 1000, 652, 584, 606, 584, 471,
+  654, 579, 841, 526, 622, 622, 581, 608, 805, 618, 602, 611, 614, 520, 526,
+  586, 766, 589, 644, 588, 856, 895, 671, 815, 552, 551, 853, 577, 589, 600,
+  314, 308, 548, 579, 551, 296, 297, 486,
+])
+/**
+ * Sofia Sans at wght 400 (sofia-sans-v20-*-var.woff2; Cyrillic in its
+ * standard forms, src/fonts.css), em.
+ */
+// prettier-ignore
+const SOFIA_SANS_400 = advances([
+  560, 573, 633, 641, 533, 504, 653, 661, 255, 265, 595, 476, 769, 662, 642,
+  545, 642, 604, 568, 535, 644, 584, 847, 551, 535, 545, 494, 536, 517, 543,
+  519, 367, 517, 556, 235, 236, 491, 235, 845, 556, 536, 537, 541, 356, 464,
+  385, 542, 496, 716, 477, 497, 464, 580, 454, 540, 548, 542, 522, 568, 529,
+  576, 580, 210, 210, 232, 232, 232, 236, 231, 469, 465, 231, 185, 232, 325,
+  490, 740, 880, 672, 270, 270, 372, 498, 498, 560, 566, 573, 475, 627, 533,
+  857, 577, 658, 658, 580, 634, 769, 661, 642, 660, 545, 633, 535, 547, 823,
+  551, 652, 630, 889, 895, 656, 816, 561, 604, 871, 608, 494, 545, 488, 385,
+  507, 519, 699, 491, 544, 544, 484, 509, 626, 544, 536, 542, 537, 517, 430,
+  497, 701, 477, 543, 522, 795, 800, 561, 701, 488, 509, 723, 506, 533, 608,
+  255, 255, 475, 519, 518, 235, 235, 385,
+])
+
+const FONT_WIDTHS = { heading: EXO_2_800, body: SOFIA_SANS_400 }
 
 const isCjk = (ch: string) =>
   /[\u3000-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]/.test(ch)
 
-/** One glyph's advance, em. */
-function advance(ch: string): number {
-  if (isCjk(ch)) return 1
-  const base = ch.normalize("NFD")[0]
-  const latin = LATIN[base] ?? LATIN[LOOKALIKE[base] ?? ""]
-  const width = latin ?? CYRILLIC[base]
-  if (width === undefined) throw new Error(`no width for "${ch}"`)
-  return width * ELECTROLIZE
+/** The fallback's advance (Arial Bold), em. */
+function fallbackAdvance(base: string): number | undefined {
+  return LATIN[base] ?? LATIN[LOOKALIKE[base] ?? ""] ?? CYRILLIC[base]
 }
 
+/** One glyph's advance in `font`, em: the font or its fallback, the wider. */
+function advance(ch: string, font: PosterFont): number {
+  if (isCjk(ch)) return 1
+  const base = ch.normalize("NFD")[0]
+  const real = FONT_WIDTHS[font][base]
+  const fallback = fallbackAdvance(base)
+  if (real === undefined || fallback === undefined)
+    throw new Error(`no width for "${ch}"`)
+  return Math.max(real, fallback * FALLBACK_SCALE[font])
+}
+
+type PosterFont = "heading" | "body"
+
 interface Style {
+  font: PosterFont
   size: number
   letterSpacing?: number
   upper?: boolean
@@ -111,7 +169,7 @@ interface Style {
 function textWidth(text: string, style: Style): number {
   const spacing = (style.letterSpacing ?? 0) * style.size
   return [...text].reduce(
-    (sum, ch) => sum + advance(ch) * style.size + spacing,
+    (sum, ch) => sum + advance(ch, style.font) * style.size + spacing,
     0,
   )
 }
@@ -194,31 +252,48 @@ function posterLayout(copy: Copy, disclaimer: string, cardWidth: number) {
   }
   const cta = block(
     copy.cta,
-    { ...T.cta, upper: true },
+    { ...T.cta, font: POSTER_FONT.cta, upper: true },
     T.cta.lineHeight,
     ctaInner,
   )
   const blocks = {
     kicker: block(
       copy.kicker,
-      { ...T.kicker, upper: true },
+      { ...T.kicker, font: POSTER_FONT.kicker, upper: true },
       T.kicker.lineHeight,
     ),
     title: block(
       copy.title,
-      { size: titleSize, letterSpacing: T.title.letterSpacing, upper: true },
+      {
+        font: POSTER_FONT.title,
+        size: titleSize,
+        letterSpacing: T.title.letterSpacing,
+        upper: true,
+      },
       T.title.lineHeight,
     ),
     rule: { lines: 0, height: POSTER_RULE.height + 3 * POSTER_GAP },
-    tagline: block(copy.tagline, { size: taglineSize }, T.tagline.lineHeight),
+    tagline: block(
+      copy.tagline,
+      { font: POSTER_FONT.tagline, size: taglineSize },
+      T.tagline.lineHeight,
+    ),
     spacer: { lines: 0, height: POSTER_MIN_SPACER },
     cta: {
       lines: cta.lines,
       height: cta.height + 2 * (T.cta.padY + T.cta.border),
     },
-    brand: block("SC Orgs", { ...T.brand, upper: true }, T.brand.lineHeight),
+    brand: block(
+      "SC Orgs",
+      { ...T.brand, font: POSTER_FONT.brand, upper: true },
+      T.brand.lineHeight,
+    ),
     gap: { lines: 0, height: POSTER_GAP },
-    disclaimer: block(disclaimer, T.disclaimer, T.disclaimer.lineHeight),
+    disclaimer: block(
+      disclaimer,
+      { ...T.disclaimer, font: POSTER_FONT.disclaimer },
+      T.disclaimer.lineHeight,
+    ),
   }
   const height = Object.values(blocks).reduce((sum, b) => sum + b.height, 0)
   return { height, blocks }
@@ -259,11 +334,16 @@ describe("SC Orgs poster copy fits its card", () => {
   }
 
   it("measures what it is given (a check on the model)", () => {
-    // "WWWW" at 10px: 4 x 0.944em x 1.0263 = 38.75px.
-    expect(textWidth("WWWW", { size: 10 })).toBeCloseTo(38.75, 1)
-    expect(wrap("one two three", 1000, { size: 10 })).toHaveLength(1)
-    expect(wrap("one two three", 30, { size: 10 })).toHaveLength(3)
-    expect(wrap("组织组织", 20, { size: 10 })).toHaveLength(2)
-    expect(() => wrap("organisation", 20, { size: 10 })).toThrow(/wider/)
+    const heading = { font: "heading", size: 10 } as const
+    // "WWWW" at 10px: Exo 2's W (0.991em) is wider than the fallback's
+    // (0.944em x 1.0231 = 0.966em): 4 x 9.91 = 39.64px.
+    expect(textWidth("WWWW", heading)).toBeCloseTo(39.64, 1)
+    // "iiii" in Sofia Sans: its i (0.235em) is narrower than the fallback's
+    // (0.278em x 0.9657 = 0.268em), so the fallback counts: 10.74px.
+    expect(textWidth("iiii", { font: "body", size: 10 })).toBeCloseTo(10.74, 1)
+    expect(wrap("one two three", 1000, heading)).toHaveLength(1)
+    expect(wrap("one two three", 30, heading)).toHaveLength(3)
+    expect(wrap("组织组织", 20, heading)).toHaveLength(2)
+    expect(() => wrap("organisation", 20, heading)).toThrow(/wider/)
   })
 })

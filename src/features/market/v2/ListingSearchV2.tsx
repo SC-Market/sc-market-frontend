@@ -107,6 +107,7 @@ import {
   useFirstScreenRender,
 } from "../../../components/grid/firstScreen"
 import { TagChip } from "../../../components/tags/TagChip"
+import { NUMERIC_SX } from "../../../hooks/styles/theme/fonts"
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -1203,9 +1204,9 @@ export function ListingCardV2({
                 variant="h6"
                 component="p"
                 color="primary"
-                fontWeight="bold"
+                fontWeight={600}
                 noWrap
-                sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                sx={{ ...NUMERIC_SX, fontSize: "0.95rem", mb: 0.5 }}
               >
                 {priceDisplay}
               </Typography>

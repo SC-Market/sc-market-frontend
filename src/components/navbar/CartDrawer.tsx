@@ -29,6 +29,7 @@ import { EmptyCart } from "../empty-states"
 import { MARKET_PATHS } from "../../routes/paths"
 
 import { useFormatters } from "../../util/format"
+import { NUMERIC_SX } from "../../hooks/styles/theme/fonts"
 interface CartDrawerProps {
   open: boolean
   onClose: () => void
@@ -156,6 +157,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       variant="body2"
                       fontWeight="bold"
                       color="primary"
+                      sx={NUMERIC_SX}
                     >
                       {fmt.number(item.subtotal || 0)} aUEC
                     </Typography>
@@ -190,7 +192,12 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Typography variant="subtitle1" fontWeight="bold">
               {t("cart.total", "Total")}
             </Typography>
-            <Typography variant="h6" fontWeight="bold" color="primary">
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              color="primary"
+              sx={NUMERIC_SX}
+            >
               {fmt.number(totalPrice)} aUEC
             </Typography>
           </Box>
