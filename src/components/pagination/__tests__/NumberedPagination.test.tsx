@@ -9,6 +9,7 @@ import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider } from "@mui/material/styles"
 import { mainTheme } from "../../../hooks/styles/Theme"
 import {
+  CompactPagination,
   NumberedPagination,
   type NumberedPaginationProps,
 } from "../NumberedPagination"
@@ -188,6 +189,28 @@ describe("NumberedPagination", () => {
       ctrlKey: true,
     })
     expect(onPageChange).not.toHaveBeenCalled()
+  })
+})
+
+describe("CompactPagination", () => {
+  it("renders the compact prev/next toolbar for tight spots", () => {
+    const onPageChange = vi.fn()
+    render(
+      <ThemeProvider theme={mainTheme}>
+        <CompactPagination>
+          <NumberedPagination
+            count={40}
+            page={0}
+            rowsPerPage={5}
+            onPageChange={onPageChange}
+          />
+        </CompactPagination>
+      </ThemeProvider>,
+    )
+    expect(screen.queryByText("2")).not.toBeInTheDocument()
+    expect(screen.getByText("1-5 of 40")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Go to next page" }))
+    expect(onPageChange).toHaveBeenCalledWith(1)
   })
 })
 

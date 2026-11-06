@@ -34,6 +34,7 @@ import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { useResolveScope } from "../useResolveScope"
 import { useAggregateTargets } from "../useAggregateTargets"
+import { CompactPagination } from "../../../components/pagination/NumberedPagination"
 import {
   getWidgetDefinition,
   widgetTitle,
@@ -160,7 +161,7 @@ export function WidgetWrapper({
             />
           }
         >
-          {body}
+          <CompactPagination>{body}</CompactPagination>
         </Suspense>
       </Box>
     )
@@ -203,7 +204,7 @@ export function WidgetWrapper({
         <Suspense
           fallback={<Skeleton variant="rounded" sx={{ height: "100%" }} />}
         >
-          {body}
+          <CompactPagination>{body}</CompactPagination>
         </Suspense>
       </Box>
     </Paper>

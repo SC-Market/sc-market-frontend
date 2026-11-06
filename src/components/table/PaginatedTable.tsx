@@ -9,7 +9,6 @@ import {
   tableCellClasses,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TableSortLabel,
 } from "@mui/material"
@@ -19,9 +18,8 @@ import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useOnScreen } from "../../hooks/useOnScreen"
 import { useTranslation } from "react-i18next"
-import { MOBILE_WRAP_PAGINATION_SX } from "./paginationSx"
 
-import { useFormatters } from "../../util/format"
+import { NumberedPagination } from "../pagination/NumberedPagination"
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -210,7 +208,6 @@ export function PaginatedTable<T>(props: {
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const fmt = useFormatters()
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -257,7 +254,7 @@ export function PaginatedTable<T>(props: {
   const ref = useRef<HTMLDivElement>(null)
   const isVisible = useOnScreen(ref)
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       setPage(newPage)
       if (ref.current && !isVisible) {
         ref.current.scrollIntoView({
@@ -269,10 +266,8 @@ export function PaginatedTable<T>(props: {
     [ref, isVisible],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    setRowsPerPage(rowsPerPage)
     setPage(0)
   }
 
@@ -355,43 +350,13 @@ export function PaginatedTable<T>(props: {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        sx={MOBILE_WRAP_PAGINATION_SX}
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
+      <NumberedPagination
         count={rows.length}
-        rowsPerPage={rowsPerPage}
         page={page}
+        rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
+        rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        color={"primary"}
-        nextIconButtonProps={{
-          color: "primary",
-          "aria-label": t("accessibility.nextPage", "Go to next page"),
-        }}
-        backIconButtonProps={{
-          color: "primary",
-          "aria-label": t("accessibility.previousPage", "Go to previous page"),
-        }}
-        SelectProps={{
-          color: "primary",
-          "aria-label": t(
-            "accessibility.selectRowsPerPage",
-            "Select number of rows per page",
-          ),
-        }}
-        labelRowsPerPage={t("rows_per_page")}
-        labelDisplayedRows={({ from, to, count }) =>
-          t("displayed_rows", {
-            from: fmt.number(from),
-            to: fmt.number(to),
-            count: count,
-          })
-        }
-        aria-label={t(
-          "accessibility.tablePagination",
-          "Table pagination controls",
-        )}
       />
     </Grid>
   )
@@ -425,8 +390,6 @@ export function ControlledTable<T>(props: {
   loadingRowComponent?: React.ComponentType<{ index: number }>
   emptyStateComponent?: React.ReactNode
 }) {
-  const { t } = useTranslation()
-
   const {
     rows,
     keyAttr,
@@ -497,7 +460,7 @@ export function ControlledTable<T>(props: {
   const ref = useRef<HTMLDivElement>(null)
   const isVisible = useOnScreen(ref)
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       onPageChange(newPage)
       if (ref.current && !isVisible) {
         ref.current.scrollIntoView({
@@ -509,10 +472,8 @@ export function ControlledTable<T>(props: {
     [ref],
   )
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    onPageSizeChange(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = (rowsPerPage: number) => {
+    onPageSizeChange(rowsPerPage)
     onPageChange(0)
   }
 
@@ -598,32 +559,13 @@ export function ControlledTable<T>(props: {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        sx={MOBILE_WRAP_PAGINATION_SX}
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
+      <NumberedPagination
         count={rowCount}
-        rowsPerPage={pageSize}
         page={page}
+        rowsPerPage={pageSize}
         onPageChange={handleChangePage}
+        rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        color={"primary"}
-        nextIconButtonProps={{ color: "primary" }}
-        backIconButtonProps={{ color: "primary" }}
-        SelectProps={{
-          color: "primary",
-          "aria-label": t("select_rows_per_page"),
-        }}
-        labelRowsPerPage={t("rows_per_page")}
-        labelDisplayedRows={({ from, to, count }) => (
-          <>
-            {t("displayed_rows", {
-              from,
-              to,
-              count: count,
-            })}
-          </>
-        )}
       />
     </Grid>
   )

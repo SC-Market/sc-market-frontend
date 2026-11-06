@@ -1,4 +1,4 @@
-import React, { useId } from "react"
+import React, { createContext, useContext, useId } from "react"
 import {
   Box,
   MenuItem,
@@ -14,7 +14,39 @@ import { useTranslation } from "react-i18next"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useFormatters } from "../../util/format"
 import { haptic } from "../../util/haptics"
+import { HapticTablePagination } from "../haptic/HapticTablePagination"
 import { linkedPaginationItem } from "./linkedPaginationItem"
+
+/**
+ * Lists inside it get the compact prev/next pagination ("1–5 of 40 ‹ ›",
+ * MUI TablePagination) instead of numbered pages: for tight spots such as
+ * dashboard widgets, whose cells are sized to the list.
+ */
+const CompactPaginationContext = createContext(false)
+
+export function CompactPagination(props: { children: React.ReactNode }) {
+  return (
+    <CompactPaginationContext.Provider value>
+      {props.children}
+    </CompactPaginationContext.Provider>
+  )
+}
+
+/**
+ * The compact toolbar is one nowrap row (~380px), so on a phone it wraps:
+ * the spacer (a flex-basis-100% filler) goes and the row stays right aligned.
+ */
+const COMPACT_WRAP_SX = {
+  "& .MuiTablePagination-toolbar": {
+    flexWrap: { xs: "wrap", sm: "nowrap" },
+    justifyContent: { xs: "flex-end", sm: "flex-start" },
+    rowGap: { xs: 0.5, sm: 0 },
+    paddingLeft: { xs: 1, sm: 2 },
+  },
+  "& .MuiTablePagination-spacer": {
+    display: { xs: "none", sm: "block" },
+  },
+} as const
 
 export interface NumberedPaginationLink {
   /** The hub's path, e.g. `/market`. Its `?page=N` is 1-based. */
@@ -75,6 +107,43 @@ export function NumberedPagination(props: NumberedPaginationProps) {
   const fmt = useFormatters()
   const isMobile = useIsMobile()
   const selectLabelId = useId()
+
+  const compact = useContext(CompactPaginationContext)
+
+  if (compact) {
+    return (
+      <HapticTablePagination
+        component="div"
+        count={count}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={(_, newPage) => onPageChange(newPage)}
+        rowsPerPageOptions={
+          onRowsPerPageChange && rowsPerPageOptions
+            ? [...rowsPerPageOptions]
+            : []
+        }
+        onRowsPerPageChange={(event) =>
+          onRowsPerPageChange?.(parseInt(event.target.value, 10))
+        }
+        labelRowsPerPage={t("pagination.perPage")}
+        labelDisplayedRows={({ from, to, count: total }) =>
+          t("displayed_rows", {
+            from: fmt.number(from),
+            to: fmt.number(to),
+            count: total,
+          })
+        }
+        getItemAriaLabel={(type) =>
+          type === "previous"
+            ? t("accessibility.previousPage")
+            : t("accessibility.nextPage")
+        }
+        color="primary"
+        sx={[COMPACT_WRAP_SX, ...(Array.isArray(sx) ? sx : [sx])]}
+      />
+    )
+  }
 
   const totalPages = Math.max(1, Math.ceil(count / rowsPerPage))
   const from = count === 0 ? 0 : page * rowsPerPage + 1
