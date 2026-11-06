@@ -16,6 +16,10 @@ export const spaceThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
+    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
+    // controls and marks the buy side (green-only accent, 2026-11).
+    neutral: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
+    demand: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
     text: {
       primary: "#E1BEE7", // Light purple
       secondary: "#B39DDB",
@@ -34,6 +38,8 @@ export const spaceThemeOptions: ThemeOptions = {
     },
     outline: {
       main: "rgba(123, 31, 162, 0.4)", // Purple outline
+      // control borders, 3:1 on paper and the page
+      strong: "#7a6f9e",
     },
     divider: "rgba(123, 31, 162, 0.4)",
     action: {
@@ -41,7 +47,8 @@ export const spaceThemeOptions: ThemeOptions = {
     },
     common: {
       subheader: "#BA68C8", // Medium purple for subheaders
-      focus: "#7B1FA2",
+      // 3:1 or better on paper and the page (the accent itself is lighter)
+      focus: "#B388FF",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",

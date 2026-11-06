@@ -16,6 +16,10 @@ export const industrialThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
+    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
+    // controls and marks the buy side (green-only accent, 2026-11).
+    neutral: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
+    demand: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
     text: {
       primary: "#E8E8E8",
       secondary: "#B8B8B8",
@@ -34,6 +38,8 @@ export const industrialThemeOptions: ThemeOptions = {
     },
     outline: {
       main: "rgba(255, 193, 7, 0.3)", // Yellow outline with transparency
+      // control borders, 3:1 on paper and the page
+      strong: "#7a7a7a",
     },
     divider: "rgba(255, 193, 7, 0.3)",
     action: {

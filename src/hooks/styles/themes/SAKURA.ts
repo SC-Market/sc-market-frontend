@@ -13,9 +13,9 @@ export const sakuraThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#D4618C", contrastText: "#FFFFFF" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#A0466A", contrastText: "#FFFFFF" },
-    }),
+    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#A0466A" } }),
     text: { primary: "#2A1A20", secondary: "#6E4A56", disabled: "#C0A0B0" },
     background: {
       default: "#FFF8FA",
@@ -33,7 +33,8 @@ export const sakuraThemeOptions: ThemeOptions = {
     action: { hover: "rgba(212,97,140,0.1)" },
     common: {
       subheader: "#A0466A",
-      focus: "#D4618C",
+      // 3:1 or better on paper and the page (the accent itself is lighter)
+      focus: "#A0466A",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",

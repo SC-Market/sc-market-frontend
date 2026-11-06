@@ -7,9 +7,9 @@ export const ghostThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#F0F0F0", contrastText: "#050505" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#888888", contrastText: "#050505" },
-    }),
+    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#888888" } }),
     text: { primary: "#E0E0E0", secondary: "#808080", disabled: "#404040" },
     background: {
       default: "#050505",

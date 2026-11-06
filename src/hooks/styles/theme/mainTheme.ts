@@ -1,4 +1,4 @@
-import { refTheme, mainOutline } from "./constants"
+import { refTheme, mainOutline, NEUTRAL_DARK } from "./constants"
 import { ON_ACCENT_DARK } from "./contrast"
 import { themeBase } from "./baseTheme"
 import { createAppTheme } from "./createAppTheme"
@@ -8,12 +8,24 @@ import type { ExtendedThemeOptions } from "./constants"
 export const mainThemeOptions: ExtendedThemeOptions = {
   palette: {
     mode: "dark",
-    primary: refTheme.palette.augmentColor({ color: { main: "#10b881" } }),
+    // Green is the one accent: main actions, links, fields, selection
+    // controls and the focus ring. Dark text on it (7.47:1).
+    primary: refTheme.palette.augmentColor({
+      color: { main: "#10b881", contrastText: ON_ACCENT_DARK },
+    }),
+    // `secondary` is no longer an accent: it is the neutral, so stock MUI
+    // parts that reach for it stay calm. Pages use `neutral` (or `demand`);
+    // scm-style/no-secondary-accent keeps palette.secondary out of them.
     secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#7a7efe",
-        contrastText: "#111828",
-      },
+      color: { main: NEUTRAL_DARK, contrastText: "#111828" },
+    }),
+    neutral: refTheme.palette.augmentColor({
+      color: { main: NEUTRAL_DARK, contrastText: "#111828" },
+    }),
+    // The buy side: bid prices, "Top bid", the depth chart's bid curve.
+    // 5.69:1 on the page, 5.27:1 on paper; dark text on it 5.27:1.
+    demand: refTheme.palette.augmentColor({
+      color: { main: "#7a7efe", contrastText: "#111828" },
     }),
     // MUI's dark-mode shades, pinned with dark text: MUI would put white on
     // the red (3.68:1). Dark text is 5.20:1 and 9.85:1. These layers also
@@ -50,6 +62,8 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     },
     outline: {
       main: mainOutline,
+      // Control borders (neutral outlined buttons and chips): 3.09:1 on paper
+      strong: "#58677e",
     },
     divider: mainOutline,
     action: {
@@ -57,7 +71,8 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     },
     common: {
       subheader: "#929ca1",
-      focus: "#1976d2",
+      // The focus ring is the accent: 7.47:1 on the page, 6.92:1 on paper
+      focus: "#10b881",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",
@@ -153,7 +168,7 @@ export const mainThemeOptions: ExtendedThemeOptions = {
           backgroundColor: "var(--mui-palette-background-default, #0b0f1a)",
         },
         "*:focus": {
-          outlineColor: "var(--mui-palette-common-focus, #1976d2)",
+          outlineColor: "var(--mui-palette-common-focus, #10b881)",
         },
       },
     },

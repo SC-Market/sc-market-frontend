@@ -5,7 +5,7 @@ import { decomposeColor, hslToRgb, recomposeColor } from "@mui/material/styles"
 export const AA_TEXT = 4.5
 export const AA_UI = 3
 
-/** Dark ink for text on bright accent fills (orange, red, purple). */
+/** Dark ink for text on bright fills (orange, red, violet, neutral). */
 export const ON_ACCENT_DARK = "#0b0f1a"
 
 type RGB = [number, number, number]
@@ -140,7 +140,13 @@ function cached<K extends string, V>(compute: (theme: Theme, key: K) => V) {
 }
 
 /** Palette colours whose filled buttons and chips take dark text. */
-export const ACCENT_FILLS = ["secondary", "warning", "error"] as const
+export const ACCENT_FILLS = [
+  "secondary",
+  "neutral",
+  "demand",
+  "warning",
+  "error",
+] as const
 export type AccentFill = (typeof ACCENT_FILLS)[number]
 
 export function isAccentFill(color: unknown): color is AccentFill {

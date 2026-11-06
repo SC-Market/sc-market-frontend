@@ -16,6 +16,10 @@ export const neonBlueThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
+    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
+    // controls and marks the buy side (green-only accent, 2026-11).
+    neutral: refTheme.palette.augmentColor({ color: { main: "#3D8BFF" } }),
+    demand: refTheme.palette.augmentColor({ color: { main: "#3D8BFF" } }),
     text: {
       primary: "#C0E8FF",
       secondary: "#6CB4E0",

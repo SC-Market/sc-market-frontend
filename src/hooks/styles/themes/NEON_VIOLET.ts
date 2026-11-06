@@ -10,6 +10,10 @@ export const neonVioletThemeOptions: ThemeOptions = {
     secondary: refTheme.palette.augmentColor({
       color: { main: "#00E5FF", contrastText: "#060810" },
     }),
+    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
+    // controls and marks the buy side (green-only accent, 2026-11).
+    neutral: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
+    demand: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
     text: { primary: "#C0D0F0", secondary: "#5068A0", disabled: "#2A3460" },
     background: {
       default: "#060810",

@@ -13,9 +13,9 @@ export const cleanThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#1A1A1A", contrastText: "#FFFFFF" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#432dd2", contrastText: "#FFFFFF" },
-    }),
+    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
     text: { primary: "#1A1A1A", secondary: "#555555", disabled: "#AAAAAA" },
     background: {
       default: "#FFFFFF",
@@ -33,7 +33,8 @@ export const cleanThemeOptions: ThemeOptions = {
     action: { hover: "rgba(0,0,0,0.04)" },
     common: {
       subheader: "#555555",
-      focus: "#10b881",
+      // 3:1 or better on paper and the page (the accent itself is lighter)
+      focus: "#0b7a56",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",

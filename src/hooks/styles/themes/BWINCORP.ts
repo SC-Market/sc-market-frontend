@@ -12,13 +12,8 @@ export const bwinThemeOptions: ThemeOptions = {
         // contrastText: '#89348c'
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#60071f",
-        contrastText: "#FFF",
-        // light: '#79018C'
-      },
-    }),
+    // One accent. `demand` (the buy side) keeps the default violet, which
+    // is AA here; the neutral (secondary) comes from the base theme.
     background: {
       // default: "linear-gradient(45deg, #cb5cff, #9c61f8)",
       default: "rgb(30, 30, 30)",
@@ -28,6 +23,8 @@ export const bwinThemeOptions: ThemeOptions = {
       sidebar: "rgb(20, 20, 20)",
       navbar: "rgb(20, 20, 20)",
     },
+    // control borders, 3:1 on paper and the page
+    outline: { strong: "#6e6e6e" },
     common: {
       subheader: "#D13624", // Red-tinted gray for subheaders
       focus: "#D13624",

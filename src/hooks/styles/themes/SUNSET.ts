@@ -16,12 +16,10 @@ export const sunsetThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#E91E63", // Pink
-        contrastText: "#FFFFFF",
-      },
-    }),
+    // One accent. `demand` marks the buy side: the old second accent
+    // #E91E63, moved to reach AA as text. The neutral (secondary) comes
+    // from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#C2185B" } }),
     text: {
       primary: "#5D4037", // Brown-gray
       secondary: "#8D6E63",
@@ -47,7 +45,8 @@ export const sunsetThemeOptions: ThemeOptions = {
     },
     common: {
       subheader: "#E64A19", // Deep orange-red for subheaders
-      focus: "#FF6F00",
+      // 3:1 or better on paper and the page (the accent itself is lighter)
+      focus: "#B34E00",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",

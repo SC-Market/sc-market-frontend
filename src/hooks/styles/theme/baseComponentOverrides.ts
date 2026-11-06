@@ -48,7 +48,7 @@ export function getBaseComponentOverrides(): Components<
       styleOverrides: {
         // Contrast rules (computed from the active palette, so every theme
         // gets them): readable disabled labels, and dark text on
-        // secondary/warning/error fills. See ./contrast.ts.
+        // neutral/demand/warning/error fills. See ./contrast.ts.
         root: ({ theme, ownerState }) =>
           withContrast(() => {
             const disabled = disabledButton(theme, "all")
@@ -57,10 +57,28 @@ export function getBaseComponentOverrides(): Components<
               isAccentFill(ownerState.color)
                 ? accentFill(theme, ownerState.color)
                 : null
+            // Neutral (secondary) actions: an instrument-panel outline,
+            // bright neutral text on a crisp 3:1 border (outline.strong),
+            // the surface steps on hover. Two-tone presets tint `neutral`.
+            const neutral =
+              ownerState.color === "neutral" &&
+              ownerState.variant !== "contained"
             return {
               ...(accent && {
                 color: accent.text,
                 "&:hover": { backgroundColor: accent.hover },
+              }),
+              ...(neutral && {
+                color: theme.palette.neutral.main,
+                ...(ownerState.variant === "outlined" && {
+                  borderColor: theme.palette.outline.strong,
+                }),
+                "&:hover": {
+                  backgroundColor: theme.palette.action.hover,
+                  ...(ownerState.variant === "outlined" && {
+                    borderColor: theme.palette.text.primary,
+                  }),
+                },
               }),
               "&.Mui-disabled": {
                 color: disabled.text,
@@ -158,8 +176,18 @@ export function getBaseComponentOverrides(): Components<
                   }
                 })
               : {}
+          // Neutral outlined chips: bright text on the 3:1 control border
+          const neutral =
+            ownerState.variant === "outlined" &&
+            (ownerState.color ?? "default") === "default"
+              ? {
+                  color: theme.palette.neutral.main,
+                  borderColor: theme.palette.outline.strong,
+                }
+              : {}
           return {
             borderRadius: theme.spacing(extTheme.borderRadius.chip),
+            ...neutral,
             ...accent,
           }
         },

@@ -16,12 +16,10 @@ export const natureThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#6B8E23", // Olive green
-        contrastText: "#FFFFFF",
-      },
-    }),
+    // One accent. `demand` marks the buy side: the old second accent
+    // #6B8E23, moved to reach AA as text. The neutral (secondary) comes
+    // from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
     text: {
       primary: "#2C3E1F", // Dark green-gray
       secondary: "#4A5D2E",

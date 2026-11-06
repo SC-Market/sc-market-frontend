@@ -2,6 +2,14 @@ import { createTheme, type ThemeOptions } from "@mui/material"
 
 export const mainOutline = "rgb(45,55,72)"
 
+/**
+ * The neutral control colour (`palette.neutral`, and `palette.secondary`,
+ * which is no longer an accent): bright text on dark themes, dark ink on
+ * light ones. 11.93:1 on the dark paper, 10.41:1 on white.
+ */
+export const NEUTRAL_DARK = "#d0d4dc"
+export const NEUTRAL_LIGHT = "#3a404c"
+
 export const refTheme = createTheme()
 
 export type ExtendedThemeOptions = ThemeOptions

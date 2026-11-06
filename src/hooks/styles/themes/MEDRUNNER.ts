@@ -18,13 +18,9 @@ export const medrunnerThemeOptions: ThemeOptions = {
         // contrastText: '#89348c'
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "rgb(40, 217, 199)",
-        contrastText: "#FFF",
-        // light: '#79018C'
-      },
-    }),
+    // One accent. The buy side (was the second accent rgb(40, 217, 199), darkened/lightened to AA); the neutral (secondary)
+    // comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#0D6E65" } }),
     background: {
       // default: "linear-gradient(45deg, #cb5cff, #9c61f8)",
       default: "#eeeff2",

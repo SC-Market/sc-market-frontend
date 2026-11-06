@@ -1,5 +1,4 @@
 import React from "react"
-import { useTheme } from "@mui/material/styles"
 import { LandingPageLayout } from "../landing/LandingPageLayout"
 // Direct imports, not the components/landing barrel.
 import { LandingHeroSkeleton } from "../landing/LandingHero.skeleton"
@@ -11,7 +10,6 @@ import { LandingTrust } from "../landing/LandingTrust"
 import { FAQSection } from "../landing/FAQSection"
 import { Footer } from "../footer/Footer"
 import { StandardPageLayout } from "../layout/StandardPageLayout"
-import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { useSession } from "../../hooks/login/useSession"
 
 /**
@@ -20,7 +18,6 @@ import { useSession } from "../../hooks/login/useSession"
  * the static sections as themselves, so nothing moves when the page loads.
  */
 export function LandingPageSkeleton() {
-  const theme = useTheme<ExtendedTheme>()
   const session = useSession()
   return (
     <StandardPageLayout
@@ -34,7 +31,6 @@ export function LandingPageSkeleton() {
           overflowY: "scroll",
           overflowX: "hidden",
           paddingTop: 20,
-          background: radialGlowGradient(theme),
         },
       }}
     >

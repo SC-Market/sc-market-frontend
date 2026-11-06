@@ -15,15 +15,6 @@ export const bannerFadeGradient = (theme: Theme) =>
   `linear-gradient(to bottom, transparent, ${theme.palette.background.default}99 60%, ${theme.palette.background.default} 100%)`
 
 /**
- * Radial glow gradient using primary + secondary colors.
- * Used on landing page and its skeleton.
- */
-export const radialGlowGradient = (theme: Theme) =>
-  theme.palette.mode === "light"
-    ? "none"
-    : `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`
-
-/**
  * Navbar elevation shadow — uses the theme’s standard MUI shadow scale (same
  * idea as Paper elevation), not palette.background.overlay (overlay is for
  * modal/sheet scrims).

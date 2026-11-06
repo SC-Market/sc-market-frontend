@@ -58,14 +58,26 @@ declare module "@mui/material/styles" {
     minimal: number
   }
 
+  /** Borders: `main` is the hairline, `strong` the 3:1 control border. */
+  interface OutlineColor {
+    main: string
+    strong: string
+  }
+
   interface Palette {
     discord: Palette["primary"]
-    outline: Palette["primary"]
+    outline: OutlineColor
+    /** The buy side (bids, buy orders). Not an accent. */
+    demand: Palette["primary"]
+    /** Neutral controls: secondary buttons, outlined chips. */
+    neutral: Palette["primary"]
   }
 
   interface PaletteOptions {
     discord?: PaletteOptions["primary"]
-    outline?: PaletteOptions["primary"]
+    outline?: Partial<OutlineColor>
+    demand?: PaletteOptions["primary"]
+    neutral?: PaletteOptions["primary"]
   }
 
   interface ThemeOptions {
@@ -84,5 +96,12 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     discord: true
+    neutral: true
+  }
+}
+
+declare module "@mui/material/Chip" {
+  interface ChipPropsColorOverrides {
+    demand: true
   }
 }

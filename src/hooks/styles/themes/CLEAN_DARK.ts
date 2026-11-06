@@ -7,9 +7,9 @@ export const cleanDarkThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#FFFFFF", contrastText: "#050505" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#0d9c6c", contrastText: "#FFFFFF" },
-    }),
+    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#0d9c6c" } }),
     text: { primary: "#E0E0E0", secondary: "#808080", disabled: "#404040" },
     background: {
       default: "#050505",

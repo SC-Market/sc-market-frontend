@@ -13,9 +13,10 @@ export const princessThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#F48FB1", contrastText: "#FFFFFF" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#80CBC4", contrastText: "#2A1A28" },
-    }),
+    // One accent. `demand` marks the buy side: the old second accent
+    // #80CBC4, moved to reach AA as text. The neutral (secondary) comes
+    // from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
     text: { primary: "#2A1A28", secondary: "#6E4A6E", disabled: "#C0A0C0" },
     background: {
       default: "#FFF5F9",
@@ -33,7 +34,8 @@ export const princessThemeOptions: ThemeOptions = {
     action: { hover: "rgba(244,143,177,0.1)" },
     common: {
       subheader: "#6E4A6E",
-      focus: "#F48FB1",
+      // 3:1 or better on paper and the page (the accent itself is lighter)
+      focus: "#B0346A",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",

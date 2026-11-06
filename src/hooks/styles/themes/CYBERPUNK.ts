@@ -16,6 +16,10 @@ export const cyberpunkThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
+    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
+    // controls and marks the buy side (green-only accent, 2026-11).
+    neutral: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
+    demand: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
     text: {
       primary: "#00FF41", // Neon green text
       secondary: "#00D9FF", // Cyan

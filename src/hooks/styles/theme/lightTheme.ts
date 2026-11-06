@@ -1,4 +1,5 @@
-import { refTheme } from "./constants"
+import { alpha } from "@mui/material/styles"
+import { refTheme, NEUTRAL_LIGHT } from "./constants"
 import { themeBase } from "./baseTheme"
 import { createAppTheme } from "./createAppTheme"
 import { ON_ACCENT_DARK } from "./contrast"
@@ -13,9 +14,14 @@ export const lightThemeOptions: ExtendedThemeOptions = {
       },
     }),
     secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#4e36f5",
-      },
+      color: { main: NEUTRAL_LIGHT },
+    }),
+    neutral: refTheme.palette.augmentColor({
+      color: { main: NEUTRAL_LIGHT },
+    }),
+    // The buy side on white: 6.62:1 (the dark theme's #7a7efe is 3.1:1 here)
+    demand: refTheme.palette.augmentColor({
+      color: { main: "#4e36f5" },
     }),
     // Light-mode shades (mainThemeOptions sets the dark-mode ones). Orange
     // takes dark text (6.15:1); white stays on red, where dark can't reach AA.
@@ -25,6 +31,8 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     }),
     outline: {
       main: "rgba(0, 0, 0, 0.12)",
+      // 5.74:1 on white
+      strong: "#58677e",
     },
     divider: "rgba(0, 0, 0, 0.12)",
     text: {
@@ -50,7 +58,8 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     },
     common: {
       subheader: "rgba(0, 0, 0, 0.6)",
-      focus: "#1976d2",
+      // A darker green: #10b881 is 2.56:1 on white, this is 5.34:1
+      focus: "#0b7a56",
       badge: {
         gold: "#FFD700",
         silver: "#C0C0C0",
@@ -88,6 +97,19 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     MuiIconButton: {
       defaultProps: {
         color: "inherit",
+      },
+    },
+    // Links take the accent. On white the bright green is 2.56:1, so light
+    // themes use its dark shade for link text (#10b881 -> 4.9:1).
+    MuiLink: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) =>
+          (ownerState.color ?? "primary") === "primary"
+            ? {
+                color: theme.palette.primary.dark,
+                textDecorationColor: alpha(theme.palette.primary.dark, 0.4),
+              }
+            : {},
       },
     },
     MuiDivider: {

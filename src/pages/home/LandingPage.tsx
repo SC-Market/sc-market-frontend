@@ -16,8 +16,6 @@ import { StartSelling } from "../../components/landing/StartSelling"
 import { LandingGameData } from "../../components/landing/LandingGameData"
 import { LandingTrust } from "../../components/landing/LandingTrust"
 import { FAQSection } from "../../components/landing/FAQSection"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { useSession } from "../../hooks/login/useSession"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { homeSeoText } from "../../seo/siteHeads"
@@ -49,7 +47,6 @@ const TopRatedShops = lazyWithRetry(() =>
 
 export function LandingPage() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const session = useSession()
   const signedIn = session.status === "authenticated"
 
@@ -82,7 +79,6 @@ export function LandingPage() {
           overflowY: "scroll",
           overflowX: "hidden",
           paddingTop: 20,
-          background: radialGlowGradient(theme),
         },
       }}
     >

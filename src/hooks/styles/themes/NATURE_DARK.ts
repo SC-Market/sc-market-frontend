@@ -10,12 +10,10 @@ export const natureDarkThemeOptions: ThemeOptions = {
         contrastText: "#000000",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#66BB6A", // Medium green
-        contrastText: "#FFFFFF",
-      },
-    }),
+    // One accent. `demand` marks the buy side in lavender: the old second
+    // accent (#66BB6A) was the same green as the asks. The neutral
+    // (secondary) comes from the base theme.
+    demand: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
     text: {
       primary: "#E8F5E9", // Very light green-tinted white
       secondary: "#C8E6C9", // Light green-gray
@@ -34,6 +32,8 @@ export const natureDarkThemeOptions: ThemeOptions = {
     },
     outline: {
       main: "rgba(129, 199, 132, 0.3)", // Light green outline
+      // control borders, 3:1 on paper and the page
+      strong: "#6f8a72",
     },
     divider: "rgba(129, 199, 132, 0.3)",
     action: {
