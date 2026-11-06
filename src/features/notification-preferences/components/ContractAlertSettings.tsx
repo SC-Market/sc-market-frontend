@@ -13,9 +13,9 @@ import { useTranslation } from "react-i18next"
 import { FlatSection } from "../../../components/paper/Section"
 import {
   useGetContractAlertsQuery,
-  useUpdateContractAlertMutation,
   type ContractKind,
 } from "../../../store/api/v2/market"
+import { useSaveContractAlert } from "../hooks/useNotificationPreferenceActions"
 
 /**
  * Opt-in alert for new public contracts: in-app and push, personally or for
@@ -24,14 +24,7 @@ import {
 export function ContractAlertSettings() {
   const { t } = useTranslation()
   const { data, isLoading, isError } = useGetContractAlertsQuery()
-  const [update, { isLoading: isSaving, isError: saveFailed }] =
-    useUpdateContractAlertMutation()
-
-  const save = (
-    contractor_id: string | null,
-    enabled: boolean,
-    kinds: ContractKind[] | null,
-  ) => update({ updateContractAlertRequest: { contractor_id, enabled, kinds } })
+  const { save, isSaving, saveFailed } = useSaveContractAlert()
 
   return (
     <FlatSection

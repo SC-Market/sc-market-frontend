@@ -14,13 +14,11 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { useGetMfaStatusQuery } from "../../../store/api/v2/market"
 import {
-  useGetMfaStatusQuery,
-  useRegenerateMfaRecoveryCodesMutation,
-  useRemoveMfaFactorMutation,
-} from "../../../store/api/v2/market"
-import { serviceApi } from "../../../store/service"
-import { useAppDispatch } from "../../../store/hooks"
+  useRegenerateRecoveryCodes,
+  useRemoveMfaFactor,
+} from "../hooks/useMfaActions"
 import { safeRedirectPath } from "../../../util/safeRedirect"
 import { describeMfaError } from "../errors"
 import { MfaEnrollDialog } from "./MfaEnrollDialog"
@@ -35,12 +33,15 @@ export function MfaSettings() {
     iso
       ? formatters.dateTime(iso, { dateStyle: "medium", timeStyle: "short" })
       : null
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const { data: status, isLoading } = useGetMfaStatusQuery()
   const [enrollOpen, setEnrollOpen] = useState(false)
-  const [regenerate, regenState] = useRegenerateMfaRecoveryCodesMutation()
+  const {
+    regenerate,
+    dismiss: dismissRecoveryCodes,
+    state: regenState,
+  } = useRegenerateRecoveryCodes()
   const [removeOpen, setRemoveOpen] = useState(false)
 
   // /settings?mfa=setup opens enrollment straight away (from admin pages).
@@ -186,10 +187,7 @@ export function MfaSettings() {
           {regenState.data && (
             <RecoveryCodesPanel
               codes={regenState.data.recovery_codes}
-              onDone={() => {
-                regenState.reset()
-                dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
-              }}
+              onDone={dismissRecoveryCodes}
             />
           )}
         </DialogContent>
@@ -213,7 +211,7 @@ function RemoveFactorDialog(props: {
 }) {
   const { t } = useTranslation()
   const [code, setCode] = useState("")
-  const [remove, state] = useRemoveMfaFactorMutation()
+  const { remove, state } = useRemoveMfaFactor(props.factorId)
   return (
     <Dialog open={props.open} onClose={props.onClose} maxWidth="xs" fullWidth>
       <DialogTitle>
@@ -225,11 +223,7 @@ function RemoveFactorDialog(props: {
           component="form"
           onSubmit={async (e: React.FormEvent) => {
             e.preventDefault()
-            const r = await remove({
-              factorId: props.factorId,
-              mfaReauthRequest: { code },
-            })
-            if ("data" in r) props.onClose()
+            if (await remove(code)) props.onClose()
           }}
         >
           <Typography variant="body2" color="text.secondary">

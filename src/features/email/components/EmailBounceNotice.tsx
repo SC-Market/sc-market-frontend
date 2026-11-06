@@ -3,10 +3,13 @@ import { Alert, AlertTitle, Box, Button } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   useGetEmailDeliverabilityQuery,
-  useReverifyEmailMutation,
   type EmailBounceKind,
 } from "../../../store/api/v2/market"
 import { useFormatters } from "../../../util/format"
+import {
+  useReverifyBouncedEmail,
+  type ReverifyResult,
+} from "../hooks/useReverifyBouncedEmail"
 
 interface EmailBounceNoticeProps {
   /** The address shown in Settings › Email; a change refetches the status. */
@@ -30,10 +33,8 @@ export function EmailBounceNotice({
   const { data, refetch } = useGetEmailDeliverabilityQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  const [reverify, { isLoading: sending }] = useReverifyEmailMutation()
-  const [result, setResult] = useState<
-    { kind: "sent" } | { kind: "wait"; at: string } | { kind: "failed" } | null
-  >(null)
+  const { reverify, sending } = useReverifyBouncedEmail()
+  const [result, setResult] = useState<ReverifyResult | null>(null)
 
   // Changing (or removing) the address resets its bounce on the server.
   const shownEmail = useRef(email)
@@ -63,21 +64,7 @@ export function EmailBounceNotice({
     waitIso && new Date(waitIso).getTime() > Date.now() ? waitIso : null
 
   const onReverify = async () => {
-    try {
-      await reverify().unwrap()
-      setResult({ kind: "sent" })
-    } catch (error) {
-      const details = (
-        error as {
-          data?: { error?: { details?: { reverify_available_at?: string } } }
-        }
-      )?.data?.error?.details
-      setResult(
-        details?.reverify_available_at
-          ? { kind: "wait", at: details.reverify_available_at }
-          : { kind: "failed" },
-      )
-    }
+    setResult(await reverify())
   }
 
   return (

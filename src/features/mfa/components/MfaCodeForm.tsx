@@ -10,9 +10,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
-import { useVerifyMfaMutation } from "../../../store/api/v2/market"
-import { serviceApi } from "../../../store/service"
-import { useAppDispatch } from "../../../store/hooks"
+import { useVerifyMfa } from "../hooks/useMfaActions"
 import { describeMfaError } from "../errors"
 
 /**
@@ -31,10 +29,9 @@ export function MfaCodeForm(props: {
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>(
     props.focusOnOpen ?? false,
   )
-  const dispatch = useAppDispatch()
   const [useRecovery, setUseRecovery] = useState(false)
   const [value, setValue] = useState("")
-  const [verify, { isLoading, error, reset }] = useVerifyMfaMutation()
+  const { verify, isLoading, error, reset } = useVerifyMfa()
 
   const valid = useRecovery
     ? value.replace(/[\s-]/g, "").length === 10
@@ -43,14 +40,9 @@ export function MfaCodeForm(props: {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!valid) return
-    const body = useRecovery ? { recovery_code: value.trim() } : { code: value }
-    const result = await verify({ mfaVerifyRequest: body })
-    if ("data" in result && result.data) {
-      dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
-      props.onVerified({
-        usedRecoveryCode: result.data.method === "recovery_code",
-        remaining: result.data.recovery_codes_remaining,
-      })
+    const verified = await verify(useRecovery, value)
+    if (verified) {
+      props.onVerified(verified)
     } else {
       setValue("")
     }

@@ -18,13 +18,13 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
-import { useUpdateTokenMutation, ApiToken } from "../api/tokensApi"
+import { ApiToken } from "../api/tokensApi"
+import { useUpdateToken } from "../hooks/useTokenActions"
 import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { isSiteAdmin } from "../../../util/siteRole"
 
 /** Catalog key for a scope's label: "market:read" -> "...labels.marketRead". */
@@ -43,14 +43,13 @@ export function EditTokenDialog({
   token,
 }: EditTokenDialogProps) {
   const { t } = useTranslation()
-  const [updateToken, { isLoading }] = useUpdateTokenMutation()
+  const { update: updateToken, isLoading } = useUpdateToken()
   const { data: profile } = useGetUserProfileQuery()
   const contractors = useMemo(
     () => profile?.contractors || [],
     [profile?.contractors],
   )
   const isAdmin = isSiteAdmin(profile)
-  const issueAlert = useAlertHook()
 
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
   const allScopes = Object.values(SCOPE_CATEGORIES).flatMap((cat) =>
@@ -120,39 +119,26 @@ export function EditTokenDialog({
   const handleSubmit = async () => {
     if (!token) return
 
-    try {
-      setError(null)
+    setError(null)
+    // Convert spectrum IDs to contractor IDs
+    const contractorIds =
+      formData.contractor_spectrum_ids.length > 0
+        ? contractors
+            ?.filter((c) =>
+              formData.contractor_spectrum_ids.includes(c.spectrum_id),
+            )
+            .map((c) => c.spectrum_id) || []
+        : []
 
-      // Convert spectrum IDs to contractor IDs
-      const contractorIds =
-        formData.contractor_spectrum_ids.length > 0
-          ? contractors
-              ?.filter((c) =>
-                formData.contractor_spectrum_ids.includes(c.spectrum_id),
-              )
-              .map((c) => c.spectrum_id) || []
-          : []
-
-      await updateToken({
-        tokenId: token.id,
-        body: {
-          name: formData.name,
-          description: formData.description || undefined,
-          scopes: formData.scopes,
-          contractor_spectrum_ids: contractorIds,
-          expires_at: formData.expires_at || undefined,
-        },
-      }).unwrap()
-
-      issueAlert({
-        message: t("apiTokensUi.edit.success"),
-        severity: "success",
-      })
-      onClose()
-    } catch (err) {
-      const error = err as { data?: { error?: string } }
-      setError(error.data?.error || t("apiTokensUi.edit.error"))
-    }
+    const failure = await updateToken(token.id, {
+      name: formData.name,
+      description: formData.description || undefined,
+      scopes: formData.scopes,
+      contractor_spectrum_ids: contractorIds,
+      expires_at: formData.expires_at || undefined,
+    })
+    if (failure) setError(failure)
+    else onClose()
   }
 
   const handleClose = () => {

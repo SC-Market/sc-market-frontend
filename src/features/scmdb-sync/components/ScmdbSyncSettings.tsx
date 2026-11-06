@@ -26,23 +26,22 @@ import {
   Check as CheckIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import {
-  useGetScmdbStatusQuery,
-  useConnectScmdbMutation,
-  useRegenerateScmdbMutation,
-  useDisconnectScmdbMutation,
-} from "../api/scmdbApi"
+import { useGetScmdbStatusQuery } from "../api/scmdbApi"
+import { useScmdbSyncActions } from "../hooks/useScmdbSyncActions"
 import { useFormatters } from "../../../util/format"
 
 export function ScmdbSyncSettings() {
   const { t } = useTranslation()
   const fmt = useFormatters()
   const { data: status, isLoading } = useGetScmdbStatusQuery()
-  const [connect, { isLoading: isConnecting }] = useConnectScmdbMutation()
-  const [regenerate, { isLoading: isRegenerating }] =
-    useRegenerateScmdbMutation()
-  const [disconnect, { isLoading: isDisconnecting }] =
-    useDisconnectScmdbMutation()
+  const {
+    connect,
+    regenerate,
+    disconnect,
+    isConnecting,
+    isRegenerating,
+    isDisconnecting,
+  } = useScmdbSyncActions()
 
   const [copied, setCopied] = useState(false)
   // The ingest URL holds the secret token, which the server stores hashed:
@@ -52,8 +51,8 @@ export function ScmdbSyncSettings() {
   const [disconnectDialogOpen, setDisconnectDialogOpen] = useState(false)
 
   const handleConnect = async () => {
-    const res = await connect()
-    if ("data" in res && res.data) setNewIngestUrl(res.data.ingest_url)
+    const url = await connect()
+    if (url) setNewIngestUrl(url)
   }
 
   const handleCopy = async () => {
@@ -65,8 +64,8 @@ export function ScmdbSyncSettings() {
   }
 
   const handleRegenerate = async () => {
-    const res = await regenerate()
-    if ("data" in res && res.data) setNewIngestUrl(res.data.ingest_url)
+    const url = await regenerate()
+    if (url) setNewIngestUrl(url)
     setRegenerateDialogOpen(false)
   }
 

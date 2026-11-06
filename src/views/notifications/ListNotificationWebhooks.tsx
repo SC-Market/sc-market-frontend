@@ -2,18 +2,12 @@ import React, { MouseEventHandler, ReactElement, useCallback } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import {
-  useDeleteContractorWebhookMutation,
-  useGetContractorWebhooksQuery,
-} from "../../features/contractor/api/contractorApi"
-import {
-  useGetUserWebhooks,
-  useProfileDeleteWebhook,
-} from "../../features/profile/api/profileApi"
+import { useGetContractorWebhooksQuery } from "../../features/contractor/api/contractorApi"
+import { useGetUserWebhooks } from "../../features/profile/api/profileApi"
+import { useDeleteWebhook } from "../../features/notifications/hooks/useNotificationChannelActions"
 import { useParams } from "react-router-dom"
 import { OrderWebhook } from "../../features/contractor/domain/types"
 import { DeleteRounded } from "@mui/icons-material"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -45,59 +39,15 @@ export function WebhookRow(props: {
   const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
   const { contractor_id } = useParams<{ contractor_id: string }>()
 
-  const [
-    deleteUserWebhook, // This is the mutation trigger
-  ] = useProfileDeleteWebhook()
-  const [
-    deleteContractorWebhook, // This is the mutation trigger
-  ] = useDeleteContractorWebhookMutation()
+  const deleteWebhook = useDeleteWebhook(!!props.org, contractor_id)
 
   const theme = useTheme<ExtendedTheme>()
-  const issueAlert = useAlertHook()
   const { t } = useTranslation()
 
   const submitDelete = useCallback(async () => {
-    // event.preventDefault();
-    let res
-    if (props.org) {
-      res = await deleteContractorWebhook({
-        contractor: contractor_id!,
-        webhook_id: row.webhook_id,
-      })
-    } else {
-      res = await deleteUserWebhook({
-        webhook_id: row.webhook_id,
-      })
-    }
-
-    if ("data" in res && !("error" in res)) {
-      issueAlert({
-        message: t("Webhooks.submitted"),
-        severity: "success",
-      })
-    } else {
-      let reason = String(res?.error || "")
-      if (res?.error && "data" in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error || errData.message || reason
-      } else if (res?.error && "message" in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: t("Webhooks.failedToSubmit") + reason,
-        severity: "error",
-      })
-    }
+    await deleteWebhook(row.webhook_id)
     return false
-  }, [
-    contractor_id,
-    deleteContractorWebhook,
-    deleteUserWebhook,
-    props.org,
-    row.webhook_id,
-    issueAlert,
-    t,
-  ])
+  }, [deleteWebhook, row.webhook_id])
 
   return (
     <>

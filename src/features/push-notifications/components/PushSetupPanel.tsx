@@ -28,14 +28,9 @@ import {
   notificationHelpPlatform,
   type NotificationHelpPlatform,
 } from "../../../util/pwa-detection"
-import {
-  getCurrentPushSubscription,
-  unsubscribeFromPush,
-} from "../../../util/push-subscription"
-import {
-  useGetPushSubscriptionsQuery,
-  useUnsubscribePushMutation,
-} from "../api/pushApi"
+import { getCurrentPushSubscription } from "../../../util/push-subscription"
+import { useGetPushSubscriptionsQuery } from "../api/pushApi"
+import { useUnsubscribePushDevice } from "../hooks/useUnsubscribePushDevice"
 import { usePushSubscription } from "../hooks/usePushSubscription"
 
 import { useFormatters } from "../../../util/format"
@@ -120,7 +115,7 @@ export function PushSetupPanel() {
   const install = usePWAInstallPrompt()
   const { data: subscriptions, isLoading: subscriptionsLoading } =
     useGetPushSubscriptionsQuery()
-  const [unsubscribePush] = useUnsubscribePushMutation()
+  const unsubscribeDevice = useUnsubscribePushDevice()
 
   // Platform facts are browser-only: read after mount.
   const [platform, setPlatform] = useState<{
@@ -170,9 +165,7 @@ export function PushSetupPanel() {
   const handleUnsubscribe = useCallback(
     async (subscriptionId: string) => {
       try {
-        await unsubscribeFromPush(subscriptionId, async (id) => {
-          await unsubscribePush(id).unwrap()
-        })
+        await unsubscribeDevice(subscriptionId)
       } catch {
         push.setError(
           t(
@@ -182,7 +175,7 @@ export function PushSetupPanel() {
         )
       }
     },
-    [unsubscribePush, push, t],
+    [unsubscribeDevice, push, t],
   )
 
   const handleInstall = async () => {

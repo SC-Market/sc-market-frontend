@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { Trans, useTranslation } from "react-i18next"
-import { useCreateTokenMutation } from "../api/tokensApi"
+import { useCreateToken } from "../hooks/useTokenActions"
 import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
@@ -37,7 +37,7 @@ interface CreateTokenDialogProps {
 
 export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const { t } = useTranslation()
-  const [createToken, { isLoading }] = useCreateTokenMutation()
+  const { create: createToken, isLoading } = useCreateToken()
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
   const isAdmin = isSiteAdmin(profile)
@@ -82,35 +82,29 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   }
 
   const handleSubmit = async () => {
-    try {
-      setError(null)
-      // Convert spectrum IDs to contractor IDs
-      const contractorIds =
-        formData.contractor_spectrum_ids.length > 0
-          ? contractors
-              ?.filter((c) =>
-                formData.contractor_spectrum_ids.includes(c.spectrum_id),
-              )
-              .map((c) => c.spectrum_id)
-          : undefined
+    setError(null)
+    // Convert spectrum IDs to contractor IDs
+    const contractorIds =
+      formData.contractor_spectrum_ids.length > 0
+        ? contractors
+            ?.filter((c) =>
+              formData.contractor_spectrum_ids.includes(c.spectrum_id),
+            )
+            .map((c) => c.spectrum_id)
+        : undefined
 
-      const result = await createToken({
-        name: formData.name,
-        description: formData.description || undefined,
-        scopes: formData.scopes,
-        contractor_spectrum_ids: contractorIds,
-        expires_at: formData.expires_at || undefined,
-      }).unwrap()
-
+    const result = await createToken({
+      name: formData.name,
+      description: formData.description || undefined,
+      scopes: formData.scopes,
+      contractor_spectrum_ids: contractorIds,
+      expires_at: formData.expires_at || undefined,
+    })
+    if ("token" in result) {
       setCreatedToken(result.token)
       setShowToken(true)
-    } catch (err) {
-      const error = err as { data?: { error?: { message?: string } | string } }
-      const errorMsg =
-        typeof error.data?.error === "string"
-          ? error.data.error
-          : error.data?.error?.message
-      setError(errorMsg || t("apiTokensUi.create.error"))
+    } else {
+      setError(result.error)
     }
   }
 

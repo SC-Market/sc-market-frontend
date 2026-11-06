@@ -25,11 +25,8 @@ import {
   Schedule as ScheduleIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import {
-  useGetTokensQuery,
-  useDeleteTokenMutation,
-  ApiToken,
-} from "../api/tokensApi"
+import { useGetTokensQuery, ApiToken } from "../api/tokensApi"
+import { useDeleteToken } from "../hooks/useTokenActions"
 import { CreateTokenDialog } from "./CreateTokenDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
@@ -44,7 +41,7 @@ export function ApiTokensSettings() {
   const fmt = useFormatters()
   const now = useNow()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
-  const [deleteToken] = useDeleteTokenMutation()
+  const deleteToken = useDeleteToken()
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
@@ -74,12 +71,9 @@ export function ApiTokensSettings() {
 
   const confirmDeleteToken = async () => {
     if (tokenToDelete) {
-      try {
-        await deleteToken(tokenToDelete.id).unwrap()
+      if (await deleteToken(tokenToDelete.id)) {
         setDeleteDialogOpen(false)
         setTokenToDelete(null)
-      } catch {
-        // Error handled by RTK Query
       }
     }
   }

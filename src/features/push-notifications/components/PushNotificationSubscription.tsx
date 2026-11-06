@@ -14,14 +14,9 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff"
 import { useCallback, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import {
-  useGetPushSubscriptionsQuery,
-  useUnsubscribePushMutation,
-} from "../api/pushApi"
-import {
-  unsubscribeFromPush,
-  getCurrentPushSubscription,
-} from "../../../util/push-subscription"
+import { useGetPushSubscriptionsQuery } from "../api/pushApi"
+import { useUnsubscribePushDevice } from "../hooks/useUnsubscribePushDevice"
+import { getCurrentPushSubscription } from "../../../util/push-subscription"
 
 import { useFormatters } from "../../../util/format"
 interface PushNotificationSubscriptionProps {
@@ -43,7 +38,7 @@ export function PushNotificationSubscription({
   const fmt = useFormatters()
   const { data: subscriptions, isLoading: subscriptionsLoading } =
     useGetPushSubscriptionsQuery()
-  const [unsubscribePush] = useUnsubscribePushMutation()
+  const unsubscribeDevice = useUnsubscribePushDevice()
   const [currentDeviceSubscribed, setCurrentDeviceSubscribed] = useState<
     boolean | null
   >(null)
@@ -89,14 +84,12 @@ export function PushNotificationSubscription({
   const handleUnsubscribe = useCallback(
     async (subscriptionId: string) => {
       try {
-        await unsubscribeFromPush(subscriptionId, async (id) => {
-          await unsubscribePush(id).unwrap()
-        })
+        await unsubscribeDevice(subscriptionId)
       } catch (error) {
         console.error("Failed to unsubscribe:", error)
       }
     },
-    [unsubscribePush],
+    [unsubscribeDevice],
   )
 
   const hasSubscriptions = subscriptions && subscriptions.length > 0

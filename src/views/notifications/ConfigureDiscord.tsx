@@ -1,15 +1,10 @@
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
-import React, { useCallback } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
-import {
-  useProfileGetDiscordSettingsQuery,
-  useProfileUseOfficialDiscordSettingsMutation,
-} from "../../features/profile/api/profileApi"
-import {
-  useGetDiscordSettingsQuery,
-  useUseOfficialDiscordSettingsMutation,
-} from "../../features/contractor/api/contractorApi"
+import { useProfileGetDiscordSettingsQuery } from "../../features/profile/api/profileApi"
+import { useGetDiscordSettingsQuery } from "../../features/contractor/api/contractorApi"
+import { useOfficialDiscordBot } from "../../features/notifications/hooks/useNotificationChannelActions"
 import { Stack } from "@mui/system"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { DISCORD_INVITE } from "../../util/constants"
@@ -27,21 +22,11 @@ export function ConfigureDiscord(props: { org?: boolean }) {
     { skip: !props.org || !contractor_id },
   )
 
-  const [setUseUserOfficial] = useProfileUseOfficialDiscordSettingsMutation()
-  const [setUseContractorOfficial] = useUseOfficialDiscordSettingsMutation()
+  const callback = useOfficialDiscordBot(!!props.org, contractor_id)
 
   const settings = props.org ? orgSettings : userSettings
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-
-  const callback = useCallback(async () => {
-    if (props.org && contractor_id) {
-      setUseContractorOfficial(contractor_id)
-    } else {
-      setUseUserOfficial()
-    }
-    window.open(DISCORD_INVITE, "_blank")
-  }, [contractor_id, props.org, setUseContractorOfficial, setUseUserOfficial])
 
   return (
     <Section title={t("ConfigureDiscord.orderManagement")} xs={12}>

@@ -23,14 +23,15 @@ import { FlatSection } from "../../../components/paper/Section"
 import { PATHS } from "../../../routes/paths"
 import {
   useGetNotificationPreferencesQuery,
-  useUpdateNotificationPreferencesMutation,
-  useUpdateNotificationOrgMuteMutation,
   type NotificationChannelId,
   type NotificationEventKey,
   type NotificationPreferenceCell,
-  type NotificationPreferenceUpdate,
 } from "../../../store/api/v2/market"
 import { ContractAlertSettings } from "./ContractAlertSettings"
+import {
+  useMuteOrgNotifications,
+  useSaveNotificationPreferences,
+} from "../hooks/useNotificationPreferenceActions"
 import { HelpTip } from "../../help/components/HelpTip"
 import { NOTIFICATION_TABS, type NotificationRow } from "../domain/layout"
 import { useFormatters } from "../../../util/format"
@@ -74,26 +75,10 @@ export function NotificationPreferencesTabs() {
   const [open, setOpen] = React.useState<Record<string, boolean>>({})
   const { data, isLoading, isError, isFetching } =
     useGetNotificationPreferencesQuery(scope ? { contractorId: scope } : {})
-  const [update, { isLoading: isSaving, isError: saveFailed }] =
-    useUpdateNotificationPreferencesMutation()
-  const [updateMute, { isLoading: isMuting, isError: muteFailed }] =
-    useUpdateNotificationOrgMuteMutation()
+  const { save, isSaving, saveFailed } = useSaveNotificationPreferences(scope)
+  const { setMute, isMuting, muteFailed } = useMuteOrgNotifications(scope)
   const busy = isSaving || isFetching || isMuting
 
-  const MUTE_HOURS = { "8h": 8, "1w": 24 * 7 } as const
-  const setMute = (choice: "off" | "8h" | "1w" | "on") => {
-    if (!scope) return
-    updateMute({
-      updateNotificationOrgMuteRequest: {
-        contractor_id: scope,
-        muted: choice !== "off",
-        until:
-          choice === "8h" || choice === "1w"
-            ? new Date(Date.now() + MUTE_HOURS[choice] * 3600_000).toISOString()
-            : null,
-      },
-    })
-  }
   const scopeName = data?.scopes.find((s) => s.contractor_id === scope)?.name
 
   const cells: CellMap = React.useMemo(() => {
@@ -133,11 +118,6 @@ export function NotificationPreferencesTabs() {
                 "Not available for this notification yet",
               )
             : ""
-
-  const save = (updates: NotificationPreferenceUpdate[]) =>
-    update({
-      updateNotificationPreferencesRequest: { contractor_id: scope, updates },
-    })
 
   const pill = (
     key: string,

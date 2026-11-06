@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Alert,
   Box,
@@ -16,12 +16,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
-import {
-  useConfirmTotpEnrollmentMutation,
-  useStartTotpEnrollmentMutation,
-} from "../../../store/api/v2/market"
-import { serviceApi } from "../../../store/service"
-import { useAppDispatch } from "../../../store/hooks"
+import { useTotpEnrollment } from "../hooks/useMfaActions"
 import { describeMfaError } from "../errors"
 import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
 
@@ -36,42 +31,29 @@ export function MfaEnrollDialog(props: {
 }) {
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
-  const dispatch = useAppDispatch()
   const [step, setStep] = useState(0)
   const [code, setCode] = useState("")
   const [copied, setCopied] = useState(false)
-  const [start, startState] = useStartTotpEnrollmentMutation()
-  const [confirm, confirmState] = useConfirmTotpEnrollmentMutation()
+  const { begin, clear, confirm, startState, confirmState } =
+    useTotpEnrollment()
   const enrollment = startState.data
   const recoveryCodes = confirmState.data?.recovery_codes
-
-  // The mutation functions are read through a ref: reset() changes identity
-  // once a request is in flight, and depending on it would re-run the effect
-  // below and start a new enrollment (a new secret) after every request.
-  const mutationsRef = useRef({ start, startState, confirmState })
-  mutationsRef.current = { start, startState, confirmState }
 
   // Each time the dialog opens: clear the form and start one enrollment.
   // Once closed: drop the secret and recovery codes from the store.
   useEffect(() => {
-    const m = mutationsRef.current
-    m.startState.reset()
-    m.confirmState.reset()
+    clear()
     if (!props.open) return
     setStep(0)
     setCode("")
     setCopied(false)
-    m.start({ totpEnrollRequest: {} })
-  }, [props.open])
+    begin()
+  }, [props.open, clear, begin])
 
   const submitCode = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!enrollment || !/^\d{6}$/.test(code)) return
-    const result = await confirm({
-      totpConfirmRequest: { factor_id: enrollment.factor_id, code },
-    })
-    if ("data" in result && result.data) {
-      dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
+    if (await confirm(enrollment.factor_id, code)) {
       setStep(2)
     } else {
       setCode("")

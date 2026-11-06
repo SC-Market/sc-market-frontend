@@ -34,15 +34,17 @@ import {
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
-  useCreatePublicApiTokenMutation,
   useGetPublicApiTokenOptionsQuery,
   useListPublicApiTokensQuery,
-  useRevokePublicApiTokenMutation,
   type PublicApiTokenOptions,
   type PublicApiTokenSummary,
   type PublicTokenPreset,
 } from "../../../store/api/v2/market"
 import { HelpLink } from "../../help/components/HelpLink"
+import {
+  useCreatePublicApiToken,
+  useRevokePublicApiToken,
+} from "../hooks/usePublicApiTokenActions"
 import { useFormatters } from "../../../util/format"
 
 const PUBLIC_API_DOCS_URL = "https://api.sc-market.space/docs"
@@ -51,22 +53,6 @@ const EXPIRY_CHOICES = [30, 90, 180, 365]
 /** i18n key part of a scope ("orders:write" -> "orders_write"). */
 function scopeKey(scope: string): string {
   return scope.replace(/[^a-z_]/gi, "_")
-}
-
-/** The server's error message of a failed request, when it sent one. */
-function serverMessage(error: unknown): string | undefined {
-  if (typeof error !== "object" || error === null || !("data" in error)) {
-    return undefined
-  }
-  const data = error.data
-  if (typeof data !== "object" || data === null || !("error" in data)) {
-    return undefined
-  }
-  const inner = data.error
-  if (typeof inner !== "object" || inner === null || !("message" in inner)) {
-    return undefined
-  }
-  return typeof inner.message === "string" ? inner.message : undefined
 }
 
 function StatusChip({ status }: { status: PublicApiTokenSummary["status"] }) {
@@ -194,7 +180,7 @@ function CreatePublicTokenDialog({
   onClose: () => void
 }) {
   const { t } = useTranslation()
-  const [createToken, { isLoading }] = useCreatePublicApiTokenMutation()
+  const { create: createToken, isLoading } = useCreatePublicApiToken()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [preset, setPreset] = useState<PublicTokenPreset | "">("")
@@ -229,20 +215,15 @@ function CreatePublicTokenDialog({
   const submit = async () => {
     if (!preset) return
     setError(null)
-    try {
-      const result = await createToken({
-        createPublicApiTokenRequest: {
-          name: name.trim(),
-          description: description.trim() || null,
-          preset,
-          org_spectrum_ids: orgs,
-          expires_in_days: days,
-        },
-      }).unwrap()
-      setCreated(result.token)
-    } catch (e) {
-      setError(serverMessage(e) ?? t("settings.publicApi.dialog.error"))
-    }
+    const result = await createToken({
+      name: name.trim(),
+      description: description.trim() || null,
+      preset,
+      org_spectrum_ids: orgs,
+      expires_in_days: days,
+    })
+    if ("token" in result) setCreated(result.token)
+    else setError(result.error)
   }
 
   const copy = async () => {
@@ -427,8 +408,7 @@ export function PublicApiTokensSettings() {
   const { t } = useTranslation()
   const { data: options } = useGetPublicApiTokenOptionsQuery()
   const { data: list, isLoading, error } = useListPublicApiTokensQuery()
-  const [revokeToken, { isLoading: revoking }] =
-    useRevokePublicApiTokenMutation()
+  const { revoke: revokeToken, revoking } = useRevokePublicApiToken()
   const [createOpen, setCreateOpen] = useState(false)
   const [toRevoke, setToRevoke] = useState<PublicApiTokenSummary | null>(null)
   const [revokeError, setRevokeError] = useState<string | null>(null)
@@ -438,12 +418,9 @@ export function PublicApiTokensSettings() {
   const confirmRevoke = async () => {
     if (!toRevoke) return
     setRevokeError(null)
-    try {
-      await revokeToken({ tokenId: toRevoke.id }).unwrap()
-      setToRevoke(null)
-    } catch (e) {
-      setRevokeError(serverMessage(e) ?? t("settings.publicApi.revokeError"))
-    }
+    const failure = await revokeToken(toRevoke.id)
+    if (failure) setRevokeError(failure)
+    else setToRevoke(null)
   }
 
   return (

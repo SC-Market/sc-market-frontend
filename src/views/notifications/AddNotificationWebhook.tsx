@@ -10,9 +10,7 @@ import {
 import { Section } from "../../components/paper/Section"
 import React, { useCallback, useState } from "react"
 import { useParams } from "react-router-dom"
-import { useProfileCreateWebhook } from "../../features/profile/api/profileApi"
-import { useCreateContractorWebhookMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useCreateWebhook } from "../../features/notifications/hooks/useNotificationChannelActions"
 import { URL_REGEX } from "../../util/parsing"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -59,60 +57,13 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
   const [url, setURL] = useState("")
   const [actions, setActions] = useState<string[]>([])
 
-  const [
-    createUserWebhook, // This is the mutation trigger
-  ] = useProfileCreateWebhook()
-  const [
-    createContractorWebhook, // This is the mutation trigger
-  ] = useCreateContractorWebhookMutation()
-
-  const issueAlert = useAlertHook()
+  const createWebhook = useCreateWebhook(!!props.org, contractor_id)
   const { t } = useTranslation()
 
   const submitCreateForm = useCallback(async () => {
-    // event.preventDefault();
-    let response
-    if (props.org) {
-      response = createContractorWebhook({
-        contractor: contractor_id!,
-        body: {
-          name: name,
-          webhook_url: url,
-          actions,
-        },
-      })
-    } else {
-      response = createUserWebhook({
-        name: name,
-        webhook_url: url,
-        actions,
-      })
-    }
-
-    response
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("AddNotificationWebhook.submitted"),
-          severity: "success",
-        })
-      })
-      .catch((err) => {
-        issueAlert(err)
-      })
-
+    await createWebhook(name, url, actions)
     return false
-  }, [
-    createContractorWebhook,
-    createUserWebhook,
-    contractor_id,
-    name,
-    props.org,
-    issueAlert,
-    actions,
-    url,
-    t,
-  ])
+  }, [createWebhook, name, url, actions])
 
   return (
     <Section xs={12} lg={12}>

@@ -18,10 +18,7 @@ import {
 } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { Notification } from "../../../hooks/login/UserProfile"
-import {
-  useNotificationDeleteMutation,
-  useNotificationUpdateMutation,
-} from "../api/notificationApi"
+import { useNotificationActions } from "../hooks/useNotificationActions"
 import { useTranslation } from "react-i18next"
 import { useCallback, useMemo } from "react"
 import { LongPressMenu } from "../../../components/gestures"
@@ -41,15 +38,9 @@ export function NotificationBase(props: {
   const fmt = useFormatters()
   const now = useNow()
 
-  const [updateNotification] = useNotificationUpdateMutation()
-  const [deleteNotification] = useNotificationDeleteMutation()
+  const { setRead, remove } = useNotificationActions(notif.notification_id)
 
-  const defaultClick = useCallback(async () => {
-    await updateNotification({
-      notification_id: notif.notification_id,
-      read: true,
-    })
-  }, [notif.notification_id, updateNotification])
+  const defaultClick = useCallback(() => setRead(true), [setRead])
 
   const longPressActions = useMemo(() => {
     const actions = []
@@ -60,23 +51,13 @@ export function NotificationBase(props: {
           defaultValue: "Mark as Unread",
         }),
         icon: <MarkEmailUnreadRounded />,
-        onClick: async () => {
-          await updateNotification({
-            notification_id: notif.notification_id,
-            read: false,
-          })
-        },
+        onClick: () => setRead(false),
       })
     } else {
       actions.push({
         label: t("notifications.markAsRead", { defaultValue: "Mark as Read" }),
         icon: <MarkEmailReadRounded />,
-        onClick: async () => {
-          await updateNotification({
-            notification_id: notif.notification_id,
-            read: true,
-          })
-        },
+        onClick: () => setRead(true),
       })
     }
 
@@ -108,14 +89,12 @@ export function NotificationBase(props: {
     actions.push({
       label: t("notifications.delete", { defaultValue: "Delete" }),
       icon: <DeleteRounded />,
-      onClick: () => {
-        deleteNotification([notif.notification_id])
-      },
+      onClick: remove,
       destructive: true,
     })
 
     return actions
-  }, [notif, to, updateNotification, deleteNotification, t])
+  }, [notif, to, setRead, remove, t])
 
   const listItemButton = (
     <ListItemButton
@@ -168,7 +147,7 @@ export function NotificationBase(props: {
 }
 
 export function NotificationDeleteButton(props: { notif: Notification }) {
-  const [deleteNotification] = useNotificationDeleteMutation()
+  const { remove } = useNotificationActions(props.notif.notification_id)
   const { t } = useTranslation()
 
   return (
@@ -176,7 +155,7 @@ export function NotificationDeleteButton(props: { notif: Notification }) {
       <IconButton
         size={"small"}
         onClick={(event) => {
-          deleteNotification([props.notif.notification_id])
+          remove()
           event.preventDefault()
           event.stopPropagation()
           return false
