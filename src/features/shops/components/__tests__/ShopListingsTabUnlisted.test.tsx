@@ -64,7 +64,7 @@ vi.mock("../../../../components/metadata/PageReady", () => ({
   usePageReady: () => undefined,
 }))
 
-const { ShopListingsTab } = await import("../ShopProfile")
+const { ShopListingsTab } = await import("../ShopListingsTab")
 
 function renderTab() {
   return render(
