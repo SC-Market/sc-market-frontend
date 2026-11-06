@@ -27,7 +27,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
-import { useFormatters } from "../../../util/format"
+import { useFormatters, useNow } from "../../../util/format"
 
 interface TokenDetailsDialogProps {
   open: boolean
@@ -42,6 +42,7 @@ export function TokenDetailsDialog({
 }: TokenDetailsDialogProps) {
   const { t } = useTranslation()
   const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
@@ -54,7 +55,7 @@ export function TokenDetailsDialog({
 
   const isExpired = (expiresAt?: string) => {
     if (!expiresAt) return false
-    return new Date(expiresAt) < new Date()
+    return new Date(expiresAt).getTime() < now
   }
 
   const getExpiryStatus = (expiresAt?: string) => {
@@ -72,8 +73,7 @@ export function TokenDetailsDialog({
       }
 
     const daysUntilExpiry = Math.ceil(
-      (new Date(expiresAt).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
+      (new Date(expiresAt).getTime() - now) / (1000 * 60 * 60 * 24),
     )
 
     if (daysUntilExpiry <= 7)

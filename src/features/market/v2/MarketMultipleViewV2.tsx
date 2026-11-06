@@ -481,7 +481,7 @@ export function MarketMultipleViewV2() {
                                   sx={{ marginLeft: 1 }}
                                 >
                                   {dateDiffInDays(
-                                    new Date(),
+                                    new Date(now),
                                     new Date(complete.created_at),
                                   ) <= 1 && (
                                     <Chip

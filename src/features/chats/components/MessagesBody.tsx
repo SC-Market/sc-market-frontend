@@ -22,6 +22,7 @@ import {
 import type { Message } from "../domain/types"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useChatSocket } from "../hooks/useChatSocket"
+import { useNow } from "../../../util/format"
 
 /**
  * The main messages body used across Orders and Offers
@@ -154,7 +155,8 @@ export function MessagesBody(props: {
   )
 
   const { t } = useTranslation()
-  const [dateTime, setDateTime] = useState(new Date())
+  const now = useNow()
+  const [dateTime, setDateTime] = useState(() => new Date(now))
   const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)

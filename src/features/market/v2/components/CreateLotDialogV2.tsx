@@ -39,6 +39,7 @@ import {
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useCreateLot } from "../../hooks/useStockLotActions"
+import { useNow } from "../../../../util/format"
 
 export interface CreateLotDialogV2Props {
   open: boolean
@@ -66,6 +67,7 @@ export function CreateLotDialogV2({
   locations,
 }: CreateLotDialogV2Props) {
   const { t } = useTranslation()
+  const now = useNow()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const issueAlert = useAlertHook()
 
@@ -233,7 +235,7 @@ export function CreateLotDialogV2({
     is_preset: loc.is_preset,
     display_order: null,
     created_by: null,
-    created_at: new Date().toISOString(),
+    created_at: new Date(now).toISOString(),
   }))
 
   // Generate variant preview

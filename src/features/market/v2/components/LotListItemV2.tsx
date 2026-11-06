@@ -32,7 +32,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
-import { useFormatters } from "../../../../util/format"
+import { useFormatters, useNow } from "../../../../util/format"
 import { useEditLot } from "../../hooks/useStockLotActions"
 
 export interface LotListItemV2Props {
@@ -53,6 +53,7 @@ export function LotListItemV2({
   onTransfer,
 }: LotListItemV2Props) {
   const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
@@ -132,7 +133,7 @@ export function LotListItemV2({
     is_preset: loc.is_preset,
     display_order: null,
     created_by: null,
-    created_at: new Date().toISOString(),
+    created_at: new Date(now).toISOString(),
   }))
 
   return (

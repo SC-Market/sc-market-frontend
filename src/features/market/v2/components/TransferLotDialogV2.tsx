@@ -23,7 +23,7 @@ import {
   type LocationInfo,
 } from "../../../../store/api/v2/market"
 import { LocationSelector } from "../../components/stock/LocationSelector"
-import { useFormatters } from "../../../../util/format"
+import { useFormatters, useNow } from "../../../../util/format"
 import { useTransferLot } from "../../hooks/useStockLotActions"
 
 export interface TransferLotDialogV2Props {
@@ -45,6 +45,7 @@ export function TransferLotDialogV2({
   locations,
 }: TransferLotDialogV2Props) {
   const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation()
 
   const [newLocationId, setNewLocationId] = useState<string | null>(
@@ -64,7 +65,7 @@ export function TransferLotDialogV2({
     is_preset: loc.is_preset,
     display_order: null,
     created_by: null,
-    created_at: new Date().toISOString(),
+    created_at: new Date(now).toISOString(),
   }))
 
   return (

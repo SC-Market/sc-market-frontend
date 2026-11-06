@@ -728,7 +728,8 @@ export function MessagesBodyMobile() {
   )
 
   const { t } = useTranslation()
-  const [dateTime, setDateTime] = useState(new Date())
+  const now = useNow()
+  const [dateTime, setDateTime] = useState(() => new Date(now))
   const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
 
   return (

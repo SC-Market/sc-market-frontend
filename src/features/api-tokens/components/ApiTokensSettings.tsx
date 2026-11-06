@@ -37,11 +37,12 @@ import {
   LegacyTokensNotice,
   PublicApiTokensSettings,
 } from "./PublicApiTokensSettings"
-import { useFormatters } from "../../../util/format"
+import { useFormatters, useNow } from "../../../util/format"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
   const fmt = useFormatters()
+  const now = useNow()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
   const [deleteToken] = useDeleteTokenMutation()
 
@@ -88,7 +89,7 @@ export function ApiTokensSettings() {
 
   const isExpired = (expiresAt?: string) => {
     if (!expiresAt) return false
-    return new Date(expiresAt) < new Date()
+    return new Date(expiresAt).getTime() < now
   }
 
   const getExpiryStatus = (expiresAt?: string) => {
@@ -97,8 +98,7 @@ export function ApiTokensSettings() {
       return { status: "expired", color: "error" as const }
 
     const daysUntilExpiry = Math.ceil(
-      (new Date(expiresAt).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
+      (new Date(expiresAt).getTime() - now) / (1000 * 60 * 60 * 24),
     )
 
     if (daysUntilExpiry <= 7)
