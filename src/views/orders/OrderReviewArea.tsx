@@ -7,6 +7,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Order, OrderStatus } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useOrderReview } from "../../features/orders/hooks/useOrderReview"
+import { useNow } from "../../util/format"
 
 /** Reviews are accepted once an order is finished (matches the backend gate). */
 export const REVIEWABLE_ORDER_STATUSES: readonly OrderStatus[] = [
@@ -17,18 +18,15 @@ export const REVIEWABLE_ORDER_STATUSES: readonly OrderStatus[] = [
 /** An order still open this many days after it started is reviewable too. */
 export const REVIEW_OPEN_ORDER_AFTER_DAYS = 14
 
-/** Mirrors the backend's isOrderReviewable (orders.timestamp = start). */
+/** Mirrors the backend's isOrderReviewable (orders.timestamp = start). `now`: ms since epoch. */
 export function isOrderReviewable(
   order: Pick<Order, "status" | "timestamp">,
-  now: Date = new Date(),
+  now: number,
 ): boolean {
   if (REVIEWABLE_ORDER_STATUSES.includes(order.status)) return true
   const started = new Date(order.timestamp).getTime()
   if (Number.isNaN(started)) return false
-  return (
-    now.getTime() - started >=
-    REVIEW_OPEN_ORDER_AFTER_DAYS * 24 * 60 * 60 * 1000
-  )
+  return now - started >= REVIEW_OPEN_ORDER_AFTER_DAYS * 24 * 60 * 60 * 1000
 }
 
 export function OrderReviewArea(props: {
@@ -39,10 +37,11 @@ export function OrderReviewArea(props: {
   const { order } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const now = useNow()
   const role = props.asCustomer ? "customer" : "contractor"
   const { content, setContent, rating, setRating, submitReview } =
     useOrderReview(order.order_id, role)
-  const finished = isOrderReviewable(order)
+  const finished = isOrderReviewable(order, now)
 
   return (
     <>

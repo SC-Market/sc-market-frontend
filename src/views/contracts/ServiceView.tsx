@@ -604,7 +604,7 @@ export function ServiceView(props: {
                   display={"flex"}
                   alignItems={"center"}
                 >
-                  {dateDiffInDays(new Date(), new Date(service.timestamp)) <
+                  {dateDiffInDays(new Date(now), new Date(service.timestamp)) <
                     1 && (
                     <Chip
                       color={"secondary"}

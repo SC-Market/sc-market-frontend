@@ -130,6 +130,7 @@ export function ContractListing(props: {
   const { contract, index } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const now = useNow()
 
   return (
     <Grid item xs={12} lg={6}>
@@ -177,8 +178,10 @@ export function ContractListing(props: {
                     display={"flex"}
                     alignItems={"center"}
                   >
-                    {dateDiffInDays(new Date(), new Date(contract.timestamp)) <=
-                      1 && (
+                    {dateDiffInDays(
+                      new Date(now),
+                      new Date(contract.timestamp),
+                    ) <= 1 && (
                       <Chip
                         color={"secondary"}
                         label={t("contractListings.new")}

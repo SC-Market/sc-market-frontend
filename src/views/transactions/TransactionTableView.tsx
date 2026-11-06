@@ -7,7 +7,7 @@ import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
-import { useFormatters } from "../../util/format"
+import { useFormatters, useNow } from "../../util/format"
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",
@@ -46,15 +46,15 @@ function formatAMPM(date: Date, t: TFunction) {
   return hours + ":" + minutes + " " + ampm
 }
 
-function formatDate(someDateTimeStamp: number, t: TFunction) {
+function formatDate(someDateTimeStamp: number, t: TFunction, now: number) {
   const months = getLocalizedMonths(t)
+  const today = new Date(now)
   const dt = new Date(someDateTimeStamp),
     date = dt.getDate(),
     month = months[dt.getMonth()],
-    // timeDiff = someDateTimeStamp - Date.now(),
-    diffDays = new Date().getDate() - date,
-    diffMonths = new Date().getMonth() - dt.getMonth(),
-    diffYears = new Date().getFullYear() - dt.getFullYear()
+    diffDays = today.getDate() - date,
+    diffMonths = today.getMonth() - dt.getMonth(),
+    diffYears = today.getFullYear() - dt.getFullYear()
 
   if (diffYears === 0 && diffDays === 0 && diffMonths === 0) {
     return formatAMPM(dt, t)
@@ -77,6 +77,7 @@ export function TransactionTableRow(props: {
   const { row, index, isItemSelected } = props
   const { t } = useTranslation()
   const fmt = useFormatters()
+  const now = useNow()
 
   const { data: profile } = useGetUserProfileQuery()
   const userRec = useMemo(
@@ -115,7 +116,7 @@ export function TransactionTableRow(props: {
       >
         <TableCell>
           <Typography variant={"subtitle1"}>
-            {formatDate(new Date(row.timestamp).getTime(), t)}
+            {formatDate(new Date(row.timestamp).getTime(), t, now)}
           </Typography>
         </TableCell>
         <TableCell>

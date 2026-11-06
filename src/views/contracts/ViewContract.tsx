@@ -55,7 +55,8 @@ export function ViewContract(props: { listing: Order }) {
               display={"flex"}
               alignItems={"center"}
             >
-              {dateDiffInDays(new Date(), new Date(listing.timestamp)) <= 1 && (
+              {dateDiffInDays(new Date(now), new Date(listing.timestamp)) <=
+                1 && (
                 <Chip
                   color={"secondary"}
                   label={t("contracts.new")}

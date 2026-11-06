@@ -13,6 +13,7 @@ import {
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { ORG_PATHS, USER_PATHS } from "../../routes/paths"
+import { useNow } from "../../util/format"
 
 // Minimal interface for trend data
 interface TrendOrder {
@@ -31,8 +32,9 @@ function getTotalInInterval(
   orders: OrderStub[] | TrendOrder[],
   interval: number,
   first: Date,
+  now: number,
 ) {
-  const count = Math.ceil((new Date().getTime() - first.getTime()) / interval)
+  const count = Math.ceil((now - first.getTime()) / interval)
 
   const items = new Map<number, number>()
   for (let i = 0; i < count; i++) {
@@ -122,53 +124,54 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
 export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
   const { orders } = props
   const { t } = useTranslation()
+  const now = useNow()
 
   const first = useMemo(
     () =>
       orders.reduce(
         (c, o) => (c < new Date(o.timestamp) ? c : new Date(o.timestamp)),
-        new Date(),
+        new Date(now),
       ),
-    [orders],
+    [orders, now],
   )
 
   const dataDailyTotal = useMemo(
-    () => getTotalInInterval(orders, 86400 * 1000, first),
-    [first, orders],
+    () => getTotalInInterval(orders, 86400 * 1000, first, now),
+    [first, orders, now],
   )
 
   const dataDailyStatus = useMemo(
     () =>
       ["in-progress", "fulfilled", "cancelled", "not-started"]
         .map((status) => Array.from(orders.filter((o) => o.status === status)))
-        .map((os) => getTotalInInterval(os, 86400 * 1000, first)),
-    [first, orders],
+        .map((os) => getTotalInInterval(os, 86400 * 1000, first, now)),
+    [first, orders, now],
   )
 
   const dataWeeklyTotal = useMemo(
-    () => getTotalInInterval(orders, 604800 * 1000, first),
-    [first, orders],
+    () => getTotalInInterval(orders, 604800 * 1000, first, now),
+    [first, orders, now],
   )
 
   const dataWeeklyStatus = useMemo(
     () =>
       ["in-progress", "fulfilled", "cancelled", "not-started"]
         .map((status) => Array.from(orders.filter((o) => o.status === status)))
-        .map((os) => getTotalInInterval(os, 604800 * 1000, first)),
-    [first, orders],
+        .map((os) => getTotalInInterval(os, 604800 * 1000, first, now)),
+    [first, orders, now],
   )
 
   const dataMonthlyTotal = useMemo(
-    () => getTotalInInterval(orders, 2.628e6 * 1000, first),
-    [first, orders],
+    () => getTotalInInterval(orders, 2.628e6 * 1000, first, now),
+    [first, orders, now],
   )
 
   const dataMonthlyStatus = useMemo(
     () =>
       ["in-progress", "fulfilled", "cancelled", "not-started"]
         .map((status) => Array.from(orders.filter((o) => o.status === status)))
-        .map((os) => getTotalInInterval(os, 2.628e6 * 1000, first)),
-    [first, orders],
+        .map((os) => getTotalInInterval(os, 2.628e6 * 1000, first, now)),
+    [first, orders, now],
   )
 
   return (
@@ -304,15 +307,16 @@ function OrderTrendChart(props: {
 }) {
   const { metric, orderData } = props
   const { t } = useTranslation()
+  const now = useNow()
 
   const recent = orderData?.recent_orders
   const first = useMemo(
     () =>
       (recent ?? []).reduce(
         (c, o) => (c < new Date(o.timestamp) ? c : new Date(o.timestamp)),
-        new Date(),
+        new Date(now),
       ),
-    [recent],
+    [recent, now],
   )
 
   const trend = orderData?.metrics?.trend_data
@@ -321,7 +325,7 @@ function OrderTrendChart(props: {
     if (metric === "count") {
       const data = trend
         ? trend.daily_orders.map((d) => ({ x: d.date, y: d.count }))
-        : getTotalInInterval(recent ?? [], 86400 * 1000, first)
+        : getTotalInInterval(recent ?? [], 86400 * 1000, first, now)
       return {
         title: t("orderTrend.order_count_daily"),
         series: [{ name: t("orderTrend.orders_daily"), data }],
@@ -358,10 +362,11 @@ function OrderTrendChart(props: {
           (recent ?? []).filter((o) => o.status === status),
           86400 * 1000,
           first,
+          now,
         ),
       })),
     }
-  }, [metric, trend, recent, first, t])
+  }, [metric, trend, recent, first, now, t])
 
   return (
     <Section xs={12} title={title}>
