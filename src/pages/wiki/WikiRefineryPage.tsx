@@ -150,8 +150,9 @@ function MethodCard({ method }: { method: RefiningMethod }) {
     <Card
       sx={{
         height: "100%",
+        // A rail: only the left edge takes the quality colour.
         borderLeft: 3,
-        borderColor: qualityColor[method.quality] || "grey.500",
+        borderLeftColor: qualityColor[method.quality] || "grey.500",
       }}
     >
       <CardContent>

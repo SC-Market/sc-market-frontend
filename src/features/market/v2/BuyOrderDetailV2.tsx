@@ -120,7 +120,7 @@ export function BuyOrderDetailV2() {
                     <Card
                       sx={{
                         minHeight: 400,
-                        borderTop: `3px solid ${theme.palette.warning.main}`,
+                        borderTop: `${theme.borderWidth.emphasis}px solid ${theme.palette.warning.main}`,
                       }}
                     >
                       <CardHeader

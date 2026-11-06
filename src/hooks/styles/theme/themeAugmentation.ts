@@ -58,6 +58,18 @@ declare module "@mui/material/styles" {
     minimal: number
   }
 
+  /**
+   * Border widths, in px. `hairline` is every resting border; `emphasis`
+   * marks a selected or primary element; `focus` is the keyboard focus ring.
+   * Nothing is heavier than 2px, except accent rails (a coloured left edge),
+   * which are listed in scm-style/border-width (eslint.config.js).
+   */
+  interface BorderWidth {
+    hairline: number
+    emphasis: number
+    focus: number
+  }
+
   /** Borders: `main` is the hairline, `strong` the 3:1 control border. */
   interface OutlineColor {
     main: string
@@ -81,12 +93,14 @@ declare module "@mui/material/styles" {
     navKind?: "elevation" | "outlined"
     layoutSpacing?: Partial<LayoutSpacing>
     borderRadius?: Partial<BorderRadius>
+    borderWidth?: Partial<BorderWidth>
   }
 
   interface Theme {
     navKind?: "elevation" | "outlined"
     layoutSpacing: LayoutSpacing
     borderRadius: BorderRadius
+    borderWidth: BorderWidth
   }
 }
 

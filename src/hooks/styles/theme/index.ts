@@ -8,6 +8,7 @@ export {
   MISSING_IMAGE_URL,
   defaultLayoutSpacing,
   defaultBorderRadius,
+  defaultBorderWidth,
 } from "./constants"
 export type { ExtendedThemeOptions } from "./constants"
 

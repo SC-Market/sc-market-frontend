@@ -20,7 +20,7 @@ interface Intent {
   icon: React.ReactElement<{ sx?: object }>
   color: "primary" | "neutral"
   variant: "contained" | "outlined"
-  /** The Sell card: outlined in primary. */
+  /** The Sell card: its hairline border is the accent. */
   highlight?: boolean
 }
 
@@ -113,7 +113,6 @@ export function LandingIntents(props: { signedIn: boolean }) {
             ...(intent.highlight
               ? {
                   borderColor: "primary.main",
-                  boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
                   "&:hover": { borderColor: "primary.main" },
                 }
               : {}),

@@ -31,6 +31,12 @@ const defaultBorderRadius: NonNullable<ExtendedThemeOptions["borderRadius"]> = {
   minimal: 0,
 }
 
+const defaultBorderWidth: NonNullable<ExtendedThemeOptions["borderWidth"]> = {
+  hairline: 1,
+  emphasis: 2,
+  focus: 2,
+}
+
 export const breakpointsValues = {
   xs: 0,
   sm: 600,
@@ -44,4 +50,4 @@ export const breakpointsValues = {
 export const MISSING_IMAGE_URL =
   "https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
 
-export { defaultLayoutSpacing, defaultBorderRadius }
+export { defaultLayoutSpacing, defaultBorderRadius, defaultBorderWidth }

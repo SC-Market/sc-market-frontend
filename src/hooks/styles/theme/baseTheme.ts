@@ -1,6 +1,7 @@
 import {
   defaultLayoutSpacing,
   defaultBorderRadius,
+  defaultBorderWidth,
   breakpointsValues,
   type ExtendedThemeOptions,
 } from "./constants"
@@ -9,6 +10,7 @@ import { getBaseComponentOverrides } from "./baseComponentOverrides"
 export const themeBase: ExtendedThemeOptions = {
   layoutSpacing: defaultLayoutSpacing,
   borderRadius: defaultBorderRadius,
+  borderWidth: defaultBorderWidth,
   palette: {
     // The one Discord colour: official blurple. White text is 4.61:1 on
     // main and 6.42:1 on the hover (dark) shade.

@@ -500,7 +500,8 @@ function WidgetCard({
         sx={{
           height: "100%",
           borderColor: selected ? "primary.main" : "divider",
-          borderWidth: selected ? 2 : 1,
+          borderWidth: (t) =>
+            selected ? t.borderWidth.emphasis : t.borderWidth.hairline,
         }}
       >
         <CardActionArea

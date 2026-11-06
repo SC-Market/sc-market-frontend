@@ -1007,8 +1007,10 @@ function AnalyticsCard({
                   opacity: selectedTier === d.quality_tier ? 1 : 0.5,
                   transition: "opacity 0.15s",
                   "&:hover": { opacity: 1 },
-                  outline:
-                    selectedTier === d.quality_tier ? "2px solid" : "none",
+                  outline: (t) =>
+                    selectedTier === d.quality_tier
+                      ? `${t.borderWidth.emphasis}px solid`
+                      : "none",
                   outlineColor: "primary.main",
                   outlineOffset: 2,
                   borderRadius: 0.5,

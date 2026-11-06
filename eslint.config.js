@@ -148,6 +148,38 @@ const OTHER_ICON_PACKS = [
   "lucide-react",
   "react-icons",
 ]
+// Accent rails (scm-style/border-width): a coloured left edge, 3-4px, on a
+// card, row or quote. Not box borders, so they may be heavier than 2px.
+const BORDER_RAILS = [
+  {
+    file: "src/components/landing/StartSelling.tsx",
+    reason: "the sample listing card's primary left rail",
+  },
+  {
+    file: "src/components/markdown/Markdown.tsx",
+    reason: "blockquote rail",
+  },
+  {
+    file: "src/features/help/components/ContentBlocks.tsx",
+    reason: "help-article blockquote rail",
+  },
+  {
+    file: "src/pages/wiki/WikiRefineryPage.tsx",
+    reason: "refining method card, left rail in the quality colour",
+  },
+  {
+    file: "src/pages/mining/MiningOreBrowser.tsx",
+    reason: "ore card, left rail in the rarity colour",
+  },
+  {
+    file: "src/pages/widget/OrdersWidget.tsx",
+    reason: "order row, primary left rail",
+  },
+  {
+    file: "src/pages/admin/AdminSupplierDashboard.tsx",
+    reason: "targeted (private) buy order row rail",
+  },
+]
 const HEX = "#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})"
 const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
@@ -381,6 +413,138 @@ const scmStyle = {
               object.property.name === "palette"
             )
               check(node)
+          },
+        }
+      },
+    },
+    // Borders are 1px (theme.borderWidth.hairline), 2px for emphasis,
+    // selected states and focus rings (emphasis, focus). Accent rails, a
+    // coloured left edge of up to 4px, are the one exception, and only in
+    // the files on BORDER_RAILS (each with its reason). Checks border*,
+    // outline* and box-shadow rings (0 0 0 Npx) in sx, styled() objects and
+    // css`` / styled`` templates.
+    "border-width": {
+      meta: {
+        type: "suggestion",
+        messages: {
+          width:
+            "{{width}}px {{prop}} is heavier than 2px. Use theme.borderWidth.hairline (1px), or .emphasis (2px) for a selected or primary element.",
+          rail: "{{width}}px {{prop}}: an accent rail is at most {{max}}px.",
+        },
+        schema: [
+          {
+            type: "object",
+            properties: {
+              rails: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    file: { type: "string" },
+                    reason: { type: "string" },
+                  },
+                  required: ["file", "reason"],
+                  additionalProperties: false,
+                },
+              },
+            },
+            additionalProperties: false,
+          },
+        ],
+      },
+      create(context) {
+        const MAX = 2
+        const RAIL_MAX = 4
+        const file = relative(import.meta.dirname, context.filename)
+          .split(sep)
+          .join("/")
+        const railFile = (context.options[0]?.rails ?? []).some(
+          (r) => r.file === file,
+        )
+        const camel = (k) => k.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+        const BORDER =
+          /^(border|outline)(Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?(Width)?$/
+        const RAIL = /^border(Left|InlineStart)(Width)?$/
+        const SHADOW = /^boxShadow$/
+        const PX = /(\d+(?:\.\d+)?)px/g
+        const KEYWORD = /\b(medium|thick)\b/
+        const RING =
+          /(?:^|,)\s*(?:inset\s+)?0(?:px)?\s+0(?:px)?\s+0(?:px)?\s+(\d+(?:\.\d+)?)px/g
+        const pxIn = (text) => {
+          const out = [...text.matchAll(PX)].map((m) => Number(m[1]))
+          if (KEYWORD.test(text))
+            out.push(text.match(KEYWORD)[1] === "thick" ? 5 : 3)
+          return out
+        }
+        const ringsIn = (text) =>
+          [...text.matchAll(RING)].map((m) => Number(m[1]))
+        // The literal text of a value; `${…}` becomes a space.
+        const texts = (node) => {
+          if (!node) return []
+          switch (node.type) {
+            case "Literal":
+              return [node.value]
+            case "TemplateLiteral":
+              return [node.quasis.map((q) => q.value.cooked).join(" ")]
+            case "ConditionalExpression":
+              return [...texts(node.consequent), ...texts(node.alternate)]
+            case "LogicalExpression":
+              return [...texts(node.left), ...texts(node.right)]
+            case "ArrowFunctionExpression":
+              return node.body.type === "BlockStatement" ? [] : texts(node.body)
+            default:
+              return []
+          }
+        }
+        const check = (node, prop, widths) => {
+          const width = Math.max(...widths)
+          if (!(width > MAX)) return
+          if (railFile && RAIL.test(prop)) {
+            if (width > RAIL_MAX)
+              context.report({
+                node,
+                messageId: "rail",
+                data: { width, prop, max: RAIL_MAX },
+              })
+            return
+          }
+          context.report({ node, messageId: "width", data: { width, prop } })
+        }
+        const widthsOf = (prop, value) =>
+          texts(value).flatMap((v) =>
+            typeof v === "number"
+              ? SHADOW.test(prop)
+                ? []
+                : [v]
+              : typeof v === "string"
+                ? SHADOW.test(prop)
+                  ? ringsIn(v)
+                  : pxIn(v)
+                : [],
+          )
+        const CSS_DECL =
+          /(?:^|[;{\s])((?:border|outline)(?:-(?:top|right|bottom|left|inline|block)(?:-(?:start|end))?)?(?:-width)?|box-shadow)\s*:\s*([^;}]*)/g
+        return {
+          Property(node) {
+            if (node.computed) return
+            const key =
+              node.key.type === "Identifier"
+                ? node.key.name
+                : node.key.type === "Literal" &&
+                    typeof node.key.value === "string"
+                  ? node.key.value
+                  : null
+            if (!key) return
+            const prop = camel(key)
+            if (!BORDER.test(prop) && !SHADOW.test(prop)) return
+            check(node, prop, widthsOf(prop, node.value))
+          },
+          TaggedTemplateExpression(node) {
+            const css = node.quasi.quasis.map((q) => q.value.cooked).join(" ")
+            for (const m of css.matchAll(CSS_DECL)) {
+              const prop = camel(m[1])
+              check(node, prop, SHADOW.test(prop) ? ringsIn(m[2]) : pxIn(m[2]))
+            }
           },
         }
       },
@@ -728,6 +892,24 @@ export default [
     plugins: { "scm-style": scmStyle },
     rules: {
       "scm-style/no-hex-colors": "error",
+    },
+  },
+
+  // ── Guard rails: borders are 1px, 2px for emphasis (error) ──
+  // theme.borderWidth (hairline 1, emphasis 2, focus 2). Theme files define
+  // the widths. The accent rails below are the only heavier borders: a
+  // coloured left edge, not a box border.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/hooks/styles/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/__tests__/**",
+    ],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/border-width": ["error", { rails: BORDER_RAILS }],
     },
   },
 
