@@ -6,18 +6,11 @@ import {
   Button,
   Chip,
   CircularProgress,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Stack,
   Typography,
 } from "@mui/material"
 import {
-  AddBoxRounded,
-  DeleteRounded,
   GetAppRounded,
-  IosShareRounded,
   NotificationsActiveRounded,
   NotificationsOffRounded,
 } from "@mui/icons-material"
@@ -33,7 +26,7 @@ import { useGetPushSubscriptionsQuery } from "../api/pushApi"
 import { useUnsubscribePushDevice } from "../hooks/useUnsubscribePushDevice"
 import { usePushSubscription } from "../hooks/usePushSubscription"
 
-import { useFormatters } from "../../../util/format"
+import { IosInstallSteps, OtherPushDevices } from "./PushSetupPanelParts"
 /** This device's push state, most blocking first. */
 export type PushDeviceState =
   | "checking"
@@ -110,7 +103,6 @@ const DENIED_HELP: Record<NotificationHelpPlatform, [string, string]> = {
  */
 export function PushSetupPanel() {
   const { t } = useTranslation()
-  const fmt = useFormatters()
   const push = usePushSubscription()
   const install = usePWAInstallPrompt()
   const { data: subscriptions, isLoading: subscriptionsLoading } =
@@ -337,49 +329,7 @@ export function PushSetupPanel() {
         </Alert>
       )}
 
-      {state === "ios-install" && (
-        <Box
-          component="ol"
-          sx={{
-            m: 0,
-            pl: 3,
-            color: "text.secondary",
-            "& li": { mb: 1 },
-            "& svg": { verticalAlign: "middle", mx: 0.5 },
-          }}
-          aria-label={t(
-            "settings.pushNotifications.iosStepsLabel",
-            "How to add SC Market to your Home Screen",
-          )}
-        >
-          <li>
-            <Typography variant="body2" component="span">
-              {t(
-                "settings.pushNotifications.iosStep1",
-                "In Safari, tap the Share button",
-              )}
-              <IosShareRounded fontSize="small" aria-hidden />
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body2" component="span">
-              {t(
-                "settings.pushNotifications.iosStep2",
-                "Scroll down and tap Add to Home Screen",
-              )}
-              <AddBoxRounded fontSize="small" aria-hidden />
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body2" component="span">
-              {t(
-                "settings.pushNotifications.iosStep3",
-                "Open SC Market from your Home Screen, come back to this page and tap Enable push notifications.",
-              )}
-            </Typography>
-          </li>
-        </Box>
-      )}
+      {state === "ios-install" && <IosInstallSteps />}
 
       {state === "denied" && platform && (
         <Alert severity="warning">
@@ -442,62 +392,10 @@ export function PushSetupPanel() {
       )}
 
       {otherDevices.length > 0 && (
-        <Box>
-          <Typography
-            component="h3"
-            variant="subtitle2"
-            color="text.secondary"
-            sx={{ fontWeight: "bold" }}
-          >
-            {t(
-              "settings.pushNotifications.otherDevicesTitle",
-              "Other devices with push on",
-            )}
-          </Typography>
-          <List dense disablePadding>
-            {otherDevices.map((subscription) => {
-              const device =
-                subscription.user_agent ||
-                t("settings.pushNotifications.unknownDevice")
-              return (
-                <ListItem
-                  key={subscription.subscription_id}
-                  disableGutters
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      size="small"
-                      aria-label={t(
-                        "settings.pushNotifications.removeDeviceNamed",
-                        {
-                          device,
-                          defaultValue: "Remove {{device}}",
-                        },
-                      )}
-                      onClick={() =>
-                        handleUnsubscribe(subscription.subscription_id)
-                      }
-                    >
-                      <DeleteRounded fontSize="small" />
-                    </IconButton>
-                  }
-                >
-                  <ListItemText
-                    primary={device}
-                    secondary={t("settings.pushNotifications.subscribedOn", {
-                      date: fmt.date(subscription.created_at),
-                    })}
-                    primaryTypographyProps={{
-                      color: "text.secondary",
-                      sx: { wordBreak: "break-word", pr: 4 },
-                    }}
-                    secondaryTypographyProps={{ color: "text.primary" }}
-                  />
-                </ListItem>
-              )
-            })}
-          </List>
-        </Box>
+        <OtherPushDevices
+          otherDevices={otherDevices}
+          handleUnsubscribe={handleUnsubscribe}
+        />
       )}
     </Stack>
   )
