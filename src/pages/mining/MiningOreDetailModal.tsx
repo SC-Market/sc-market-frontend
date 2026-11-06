@@ -1,17 +1,9 @@
 import React from "react"
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Typography,
-  Box,
-  CircularProgress,
-} from "@mui/material"
-import { CloseRounded } from "@mui/icons-material"
+import { Box, CircularProgress } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { OreDetailContent } from "./OreDetailContent"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -35,31 +27,23 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
     : friendlyName(oreName || "")
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h6">{displayName}</Typography>
-        <IconButton
-          onClick={onClose}
-          size="small"
-          aria-label={t("accessibility.close")}
-        >
-          <CloseRounded />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
-        {isLoading && (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-            <CircularProgress />
-          </Box>
-        )}
-        {ore && <OreDetailContent ore={ore} onClose={onClose} />}
-      </DialogContent>
-    </Dialog>
+    // Desktop only: on narrow screens the browser opens the detail page
+    // instead, so this stays a centred dialog at every width.
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      mobile="dialog"
+      dividers
+      title={displayName}
+      closeLabel={t("accessibility.close")}
+    >
+      {isLoading && (
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      {ore && <OreDetailContent ore={ore} onClose={onClose} />}
+    </ResponsiveDialog>
   )
 }

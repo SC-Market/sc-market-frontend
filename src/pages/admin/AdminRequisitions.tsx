@@ -11,10 +11,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   IconButton,
   InputAdornment,
@@ -51,6 +47,7 @@ import type {
 import { Trans, useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { useFormatters } from "../../util/format"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 
 const STATUS_COLORS: Record<
   string,
@@ -203,163 +200,166 @@ function CreateRequisitionDialog({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>{t("suppliersUi.requisitions.createTitle")}</DialogTitle>
-      <DialogContent>
-        <Stack spacing={2.5} sx={{ mt: 1 }}>
-          {/* Header fields */}
-          <TextField
-            size="small"
-            label={t("suppliersUi.requisitions.fieldTitle")}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            fullWidth
-          />
-          <TextField
-            size="small"
-            label={t("suppliersUi.requisitions.descriptionOptional")}
-            multiline
-            rows={2}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            fullWidth
-          />
-          <TextField
-            size="small"
-            label={t("suppliersUi.requisitions.targetSupplier")}
-            placeholder={t("suppliersUi.requisitions.targetPlaceholder")}
-            value={targetId}
-            onChange={(e) => setTargetId(e.target.value)}
-            fullWidth
-            helperText={t("suppliersUi.requisitions.targetHelper")}
-          />
-
-          <Divider />
-
-          {/* Line items */}
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      title={t("suppliersUi.requisitions.createTitle")}
+      mobile="fullScreen"
+      disableClose={isLoading}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!canSubmit || isLoading}
           >
-            <Typography variant="subtitle2">
-              {t("suppliersUi.requisitions.lineItems")}
-            </Typography>
-            <Button size="small" startIcon={<AddRounded />} onClick={addItem}>
-              {t("suppliersUi.requisitions.addItem")}
-            </Button>
-          </Stack>
+            {t("common.create")}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2.5} sx={{ mt: 1 }}>
+        {/* Header fields */}
+        <TextField
+          size="small"
+          label={t("suppliersUi.requisitions.fieldTitle")}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          size="small"
+          label={t("suppliersUi.requisitions.descriptionOptional")}
+          multiline
+          rows={2}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          size="small"
+          label={t("suppliersUi.requisitions.targetSupplier")}
+          placeholder={t("suppliersUi.requisitions.targetPlaceholder")}
+          value={targetId}
+          onChange={(e) => setTargetId(e.target.value)}
+          fullWidth
+          helperText={t("suppliersUi.requisitions.targetHelper")}
+        />
 
-          {items.map((item, idx) => (
-            <Paper key={item.key} variant="outlined" sx={{ p: 1.5 }}>
-              <Stack direction="row" spacing={1.5} alignItems="center">
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ minWidth: 20 }}
-                >
-                  {idx + 1}.
-                </Typography>
-                <Box sx={{ flex: 2 }}>
-                  <GameItemPicker
-                    value={item.game_item}
-                    onChange={(gi) => updateItem(item.key, { game_item: gi })}
-                  />
-                </Box>
-                <TextField
-                  size="small"
-                  label={t("suppliersUi.requisitions.qty")}
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    updateItem(item.key, {
-                      quantity: Math.max(1, parseInt(e.target.value) || 1),
-                    })
-                  }
-                  sx={{ width: 90 }}
-                  inputProps={{ min: 1 }}
-                />
-                <TextField
-                  size="small"
-                  label={t("suppliersUi.requisitions.maxPricePerUnit")}
-                  type="number"
-                  value={item.price_per_unit}
-                  onChange={(e) =>
-                    updateItem(item.key, {
-                      price_per_unit: Math.max(
-                        0,
-                        parseInt(e.target.value) || 0,
-                      ),
-                    })
-                  }
-                  sx={{ width: 160 }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">aUEC</InputAdornment>
-                    ),
-                  }}
-                />
-                <Box sx={{ minWidth: 80, textAlign: "right" }}>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("suppliersUi.amountAuec", {
-                      amount: fmt.number(item.quantity * item.price_per_unit),
-                    })}
-                  </Typography>
-                </Box>
-                <Tooltip title={t("suppliersUi.requisitions.remove")}>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => removeItem(item.key)}
-                    disabled={items.length === 1}
-                  >
-                    <DeleteRounded fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            </Paper>
-          ))}
+        <Divider />
 
-          <Stack direction="row" justifyContent="flex-end">
-            <Typography variant="body2" color="text.secondary">
-              <Trans
-                i18nKey="suppliersUi.requisitions.totalWithAmount"
-                values={{ amount: fmt.number(totalPrice) }}
-                components={{
-                  strong: (
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      fontWeight="bold"
-                      color="text.primary"
-                    />
+        {/* Line items */}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="subtitle2">
+            {t("suppliersUi.requisitions.lineItems")}
+          </Typography>
+          <Button size="small" startIcon={<AddRounded />} onClick={addItem}>
+            {t("suppliersUi.requisitions.addItem")}
+          </Button>
+        </Stack>
+
+        {items.map((item, idx) => (
+          <Paper key={item.key} variant="outlined" sx={{ p: 1.5 }}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ minWidth: 20 }}
+              >
+                {idx + 1}.
+              </Typography>
+              <Box sx={{ flex: 2 }}>
+                <GameItemPicker
+                  value={item.game_item}
+                  onChange={(gi) => updateItem(item.key, { game_item: gi })}
+                />
+              </Box>
+              <TextField
+                size="small"
+                label={t("suppliersUi.requisitions.qty")}
+                type="number"
+                value={item.quantity}
+                onChange={(e) =>
+                  updateItem(item.key, {
+                    quantity: Math.max(1, parseInt(e.target.value) || 1),
+                  })
+                }
+                sx={{ width: 90 }}
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                size="small"
+                label={t("suppliersUi.requisitions.maxPricePerUnit")}
+                type="number"
+                value={item.price_per_unit}
+                onChange={(e) =>
+                  updateItem(item.key, {
+                    price_per_unit: Math.max(0, parseInt(e.target.value) || 0),
+                  })
+                }
+                sx={{ width: 160 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">aUEC</InputAdornment>
                   ),
                 }}
               />
-            </Typography>
-          </Stack>
+              <Box sx={{ minWidth: 80, textAlign: "right" }}>
+                <Typography variant="caption" color="text.secondary">
+                  {t("suppliersUi.amountAuec", {
+                    amount: fmt.number(item.quantity * item.price_per_unit),
+                  })}
+                </Typography>
+              </Box>
+              <Tooltip title={t("suppliersUi.requisitions.remove")}>
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={() => removeItem(item.key)}
+                  disabled={items.length === 1}
+                >
+                  <DeleteRounded fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Paper>
+        ))}
 
-          {error && (
-            <Alert severity="error">
-              {(error &&
-                "data" in error &&
-                (error.data as { message?: string })?.message) ||
-                t("suppliersUi.requisitions.createFailed")}
-            </Alert>
-          )}
+        <Stack direction="row" justifyContent="flex-end">
+          <Typography variant="body2" color="text.secondary">
+            <Trans
+              i18nKey="suppliersUi.requisitions.totalWithAmount"
+              values={{ amount: fmt.number(totalPrice) }}
+              components={{
+                strong: (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    fontWeight="bold"
+                    color="text.primary"
+                  />
+                ),
+              }}
+            />
+          </Typography>
         </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("common.cancel")}</Button>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={!canSubmit || isLoading}
-        >
-          {t("common.create")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+
+        {error && (
+          <Alert severity="error">
+            {(error &&
+              "data" in error &&
+              (error.data as { message?: string })?.message) ||
+              t("suppliersUi.requisitions.createFailed")}
+          </Alert>
+        )}
+      </Stack>
+    </ResponsiveDialog>
   )
 }
 
@@ -386,148 +386,154 @@ function RequisitionDetailDialog({
   const total = req.items.reduce((s, i) => s + i.price_per_unit * i.quantity, 0)
 
   return (
-    <Dialog open={!!orderId} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <InventoryRounded />
-          <Box>
-            <Typography variant="h6">{req.title}</Typography>
-            <Typography variant="caption" color="text.secondary">
-              {req.order_id}
-            </Typography>
-          </Box>
-        </Stack>
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2}>
-          <Stack direction="row" spacing={1}>
-            <Chip
-              label={
-                STATUS_LABEL_KEYS[req.status]
-                  ? t(STATUS_LABEL_KEYS[req.status])
-                  : req.status
-              }
-              size="small"
-              color={STATUS_COLORS[req.status] || "default"}
-            />
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ my: "auto" }}
-            >
-              {t("suppliersUi.requisitions.createdOn", {
-                date: fmt.date(req.created_at),
-              })}
-            </Typography>
-          </Stack>
-
-          {req.description && (
-            <Typography variant="body2" color="text.secondary">
-              {req.description}
-            </Typography>
-          )}
-
-          <Divider />
-
-          <Typography variant="subtitle2">
-            {t("suppliersUi.requisitions.items")}
-          </Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  {t("suppliersUi.requisitions.columns.item")}
-                </TableCell>
-                <TableCell align="right">
-                  {t("suppliersUi.requisitions.qty")}
-                </TableCell>
-                <TableCell align="right">
-                  {t("suppliersUi.requisitions.columns.pricePerUnit")}
-                </TableCell>
-                <TableCell align="right">
-                  {t("suppliersUi.requisitions.columns.subtotal")}
-                </TableCell>
-                <TableCell align="right">
-                  {t("suppliersUi.requisitions.columns.filled")}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {req.items.map((item: RequisitionLineItem) => (
-                <TableRow key={item.requisition_item_id}>
-                  <TableCell>{item.game_item_name}</TableCell>
-                  <TableCell align="right">
-                    {fmt.number(item.quantity)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {t("suppliersUi.amountAuec", {
-                      amount: fmt.number(item.price_per_unit),
-                    })}
-                  </TableCell>
-                  <TableCell align="right">
-                    {t("suppliersUi.amountAuec", {
-                      amount: fmt.number(item.price_per_unit * item.quantity),
-                    })}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="caption"
-                      color={
-                        item.fulfilled_quantity >= item.quantity
-                          ? "success.main"
-                          : "text.secondary"
-                      }
-                    >
-                      {item.fulfilled_quantity}/{item.quantity}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-              <TableRow>
-                <TableCell colSpan={3} align="right">
-                  <Typography variant="body2" fontWeight="bold">
-                    {t("suppliersUi.requisitions.total")}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="body2" fontWeight="bold">
-                    {t("suppliersUi.amountAuec", {
-                      amount: fmt.number(total),
-                    })}
-                  </Typography>
-                </TableCell>
-                <TableCell />
-              </TableRow>
-            </TableBody>
-          </Table>
-
-          {req.supplier && (
-            <>
-              <Divider />
-              <Typography variant="subtitle2">
-                {t("suppliersUi.requisitions.assignedSupplier")}
+    <ResponsiveDialog
+      open={!!orderId}
+      onClose={onClose}
+      maxWidth="sm"
+      title={
+        <>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <InventoryRounded />
+            <Box>
+              <Typography variant="h6">{req.title}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {req.order_id}
               </Typography>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <ImageAvatar alt="" sx={{ width: 28, height: 28 }}>
-                  {req.supplier.display_name?.[0]}
-                </ImageAvatar>
-                <Box>
-                  <Typography variant="body2">
-                    {req.supplier.display_name}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    @{req.supplier.username}
-                  </Typography>
-                </Box>
-              </Stack>
-            </>
-          )}
+            </Box>
+          </Stack>
+        </>
+      }
+      actions={
+        <>
+          <Button onClick={onClose}>
+            {t("suppliersUi.requisitions.close")}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2}>
+        <Stack direction="row" spacing={1}>
+          <Chip
+            label={
+              STATUS_LABEL_KEYS[req.status]
+                ? t(STATUS_LABEL_KEYS[req.status])
+                : req.status
+            }
+            size="small"
+            color={STATUS_COLORS[req.status] || "default"}
+          />
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ my: "auto" }}
+          >
+            {t("suppliersUi.requisitions.createdOn", {
+              date: fmt.date(req.created_at),
+            })}
+          </Typography>
         </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("suppliersUi.requisitions.close")}</Button>
-      </DialogActions>
-    </Dialog>
+
+        {req.description && (
+          <Typography variant="body2" color="text.secondary">
+            {req.description}
+          </Typography>
+        )}
+
+        <Divider />
+
+        <Typography variant="subtitle2">
+          {t("suppliersUi.requisitions.items")}
+        </Typography>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                {t("suppliersUi.requisitions.columns.item")}
+              </TableCell>
+              <TableCell align="right">
+                {t("suppliersUi.requisitions.qty")}
+              </TableCell>
+              <TableCell align="right">
+                {t("suppliersUi.requisitions.columns.pricePerUnit")}
+              </TableCell>
+              <TableCell align="right">
+                {t("suppliersUi.requisitions.columns.subtotal")}
+              </TableCell>
+              <TableCell align="right">
+                {t("suppliersUi.requisitions.columns.filled")}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {req.items.map((item: RequisitionLineItem) => (
+              <TableRow key={item.requisition_item_id}>
+                <TableCell>{item.game_item_name}</TableCell>
+                <TableCell align="right">{fmt.number(item.quantity)}</TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.amountAuec", {
+                    amount: fmt.number(item.price_per_unit),
+                  })}
+                </TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.amountAuec", {
+                    amount: fmt.number(item.price_per_unit * item.quantity),
+                  })}
+                </TableCell>
+                <TableCell align="right">
+                  <Typography
+                    variant="caption"
+                    color={
+                      item.fulfilled_quantity >= item.quantity
+                        ? "success.main"
+                        : "text.secondary"
+                    }
+                  >
+                    {item.fulfilled_quantity}/{item.quantity}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+            <TableRow>
+              <TableCell colSpan={3} align="right">
+                <Typography variant="body2" fontWeight="bold">
+                  {t("suppliersUi.requisitions.total")}
+                </Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="body2" fontWeight="bold">
+                  {t("suppliersUi.amountAuec", {
+                    amount: fmt.number(total),
+                  })}
+                </Typography>
+              </TableCell>
+              <TableCell />
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        {req.supplier && (
+          <>
+            <Divider />
+            <Typography variant="subtitle2">
+              {t("suppliersUi.requisitions.assignedSupplier")}
+            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <ImageAvatar alt="" sx={{ width: 28, height: 28 }}>
+                {req.supplier.display_name?.[0]}
+              </ImageAvatar>
+              <Box>
+                <Typography variant="body2">
+                  {req.supplier.display_name}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  @{req.supplier.username}
+                </Typography>
+              </Box>
+            </Stack>
+          </>
+        )}
+      </Stack>
+    </ResponsiveDialog>
   )
 }
 

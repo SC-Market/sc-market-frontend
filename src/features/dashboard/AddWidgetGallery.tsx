@@ -12,9 +12,6 @@ import {
   Button,
   Card,
   CardActionArea,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -51,6 +48,7 @@ import type {
   WidgetScope,
   WidgetScopeKind,
 } from "./types"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 
 const SCOPE_LABEL_KEYS: Record<
   WidgetScopeKind,
@@ -432,48 +430,51 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   )
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>{t("dashboard.addAWidget", "Add a widget")}</DialogTitle>
-      <DialogContent>
-        <Section xs={12} disablePadding>
-          <Grid item xs={12}>
-            <Stack spacing={3} sx={{ p: 2 }}>
-              {widgetsByCategory.map((group) => (
-                <Stack key={group.category} spacing={1.5}>
-                  <Typography
-                    variant="subtitle2"
-                    color="text.secondary"
-                    fontWeight="bold"
-                  >
-                    {categoryLabel(group.category)}
-                  </Typography>
-                  <Grid container spacing={1.5}>
-                    {group.widgets.map((def) => (
-                      <Fragment key={def.type}>
-                        <WidgetCard
-                          def={def}
-                          selected={def.type === selectedType}
-                          onSelect={() => handlePickType(def.type)}
-                          title={widgetTitle(def, t)}
-                          description={widgetDescription(def, t)}
-                        />
-                        {def.type === selectedType && (
-                          // Full-width row break so the panel sits directly
-                          // below the selected card, spanning the category.
-                          <Grid item xs={12}>
-                            {customizationPanel}
-                          </Grid>
-                        )}
-                      </Fragment>
-                    ))}
-                  </Grid>
-                </Stack>
-              ))}
-            </Stack>
-          </Grid>
-        </Section>
-      </DialogContent>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      title={t("dashboard.addAWidget", "Add a widget")}
+      mobile="fullScreen"
+    >
+      <Section xs={12} disablePadding>
+        <Grid item xs={12}>
+          <Stack spacing={3} sx={{ p: 2 }}>
+            {widgetsByCategory.map((group) => (
+              <Stack key={group.category} spacing={1.5}>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  fontWeight="bold"
+                >
+                  {categoryLabel(group.category)}
+                </Typography>
+                <Grid container spacing={1.5}>
+                  {group.widgets.map((def) => (
+                    <Fragment key={def.type}>
+                      <WidgetCard
+                        def={def}
+                        selected={def.type === selectedType}
+                        onSelect={() => handlePickType(def.type)}
+                        title={widgetTitle(def, t)}
+                        description={widgetDescription(def, t)}
+                      />
+                      {def.type === selectedType && (
+                        // Full-width row break so the panel sits directly
+                        // below the selected card, spanning the category.
+                        <Grid item xs={12}>
+                          {customizationPanel}
+                        </Grid>
+                      )}
+                    </Fragment>
+                  ))}
+                </Grid>
+              </Stack>
+            ))}
+          </Stack>
+        </Grid>
+      </Section>
+    </ResponsiveDialog>
   )
 }
 

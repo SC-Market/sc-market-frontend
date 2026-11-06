@@ -4,10 +4,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   Paper,
@@ -50,6 +46,8 @@ import { FirstUseHint } from "../../features/help/components/FirstUseHint"
 import { EmptyState } from "../../components/empty-states/EmptyState"
 import { useFormatters } from "../../util/format"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({
@@ -65,33 +63,20 @@ function ConfirmDeleteDialog({
 }) {
   const { t } = useTranslation()
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>
-        {t("inventory.confirmDeleteTitle", "Delete lot?")}
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2" color="text.secondary">
-          {t(
-            "inventory.confirmDeleteBody",
-            "This lot will be permanently deleted and cannot be recovered.",
-          )}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={loading}>
-          {t("common.cancel", "Cancel")}
-        </Button>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={onConfirm}
-          disabled={loading}
-          startIcon={loading ? <CircularProgress size={16} /> : undefined}
-        >
-          {t("inventory.deleteConfirm", "Delete")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ConfirmDialog
+      open={open}
+      onClose={onClose}
+      onConfirm={onConfirm}
+      title={t("inventory.confirmDeleteTitle", "Delete lot?")}
+      message={t(
+        "inventory.confirmDeleteBody",
+        "This lot will be permanently deleted and cannot be recovered.",
+      )}
+      cancelLabel={t("common.cancel", "Cancel")}
+      confirmLabel={t("inventory.deleteConfirm", "Delete")}
+      destructive
+      loading={loading}
+    />
   )
 }
 
@@ -521,89 +506,89 @@ export default function InventoryPage() {
       </Grid>
 
       {/* Create Lot Dialog */}
-      <Dialog
+      <ResponsiveDialog
         open={createOpen}
         onClose={() => {
-          if (!creating) {
-            setCreateOpen(false)
-            resetCreateForm()
-          }
+          setCreateOpen(false)
+          resetCreateForm()
         }}
         maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <WarehouseRounded />
-            <span>{t("inventory.createLot", "Add Stock Lot")}</span>
-          </Stack>
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <GameItemSearchAutocomplete
-              value={newGameItemName}
-              onChange={(name, _type, itemId) => {
-                setNewGameItemName(name)
-                setNewGameItemId(itemId)
+        title={
+          <>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <WarehouseRounded />
+              <span>{t("inventory.createLot", "Add Stock Lot")}</span>
+            </Stack>
+          </>
+        }
+        disableClose={creating}
+        actions={
+          <>
+            <Button
+              onClick={() => {
+                setCreateOpen(false)
+                resetCreateForm()
               }}
-              label={t("inventory.gameItem", "Item (optional)")}
-              size="small"
-            />
-            <TextField
-              fullWidth
-              label={t("inventory.quantity", "Quantity")}
-              type="number"
-              value={newQty}
-              onChange={(e) => setNewQty(parseInt(e.target.value) || 0)}
-              inputProps={{ min: 1 }}
-              size="small"
-              error={newQty <= 0}
-              helperText={
-                newQty <= 0
-                  ? t("inventory.qtyRequired", "Must be greater than 0")
-                  : t("inventory.qtyHelp", "Number of units in this lot")
-              }
-            />
-            <LocationSelector
-              value={newLocationId}
-              onChange={setNewLocationId}
-              size="small"
-              fullWidth
-              label={t("inventory.location", "Location (optional)")}
-            />
-            <TextField
-              fullWidth
-              label={t("inventory.notes", "Notes (optional)")}
-              value={newNotes}
-              onChange={(e) => setNewNotes(e.target.value)}
-              multiline
-              rows={2}
-              size="small"
-              inputProps={{ maxLength: 1000 }}
-              helperText={`${newNotes.length}/1000`}
-            />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setCreateOpen(false)
-              resetCreateForm()
+              disabled={creating}
+            >
+              {t("common.cancel", "Cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleCreate}
+              disabled={creating || newQty <= 0}
+              startIcon={creating ? <CircularProgress size={16} /> : undefined}
+            >
+              {t("common.create", "Create")}
+            </Button>
+          </>
+        }
+      >
+        <Stack spacing={2} sx={{ mt: 1 }}>
+          <GameItemSearchAutocomplete
+            value={newGameItemName}
+            onChange={(name, _type, itemId) => {
+              setNewGameItemName(name)
+              setNewGameItemId(itemId)
             }}
-            disabled={creating}
-          >
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            disabled={creating || newQty <= 0}
-            startIcon={creating ? <CircularProgress size={16} /> : undefined}
-          >
-            {t("common.create", "Create")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            label={t("inventory.gameItem", "Item (optional)")}
+            size="small"
+          />
+          <TextField
+            fullWidth
+            label={t("inventory.quantity", "Quantity")}
+            type="number"
+            value={newQty}
+            onChange={(e) => setNewQty(parseInt(e.target.value) || 0)}
+            inputProps={{ min: 1 }}
+            size="small"
+            error={newQty <= 0}
+            helperText={
+              newQty <= 0
+                ? t("inventory.qtyRequired", "Must be greater than 0")
+                : t("inventory.qtyHelp", "Number of units in this lot")
+            }
+          />
+          <LocationSelector
+            value={newLocationId}
+            onChange={setNewLocationId}
+            size="small"
+            fullWidth
+            label={t("inventory.location", "Location (optional)")}
+          />
+          <TextField
+            fullWidth
+            label={t("inventory.notes", "Notes (optional)")}
+            value={newNotes}
+            onChange={(e) => setNewNotes(e.target.value)}
+            multiline
+            rows={2}
+            size="small"
+            inputProps={{ maxLength: 1000 }}
+            helperText={`${newNotes.length}/1000`}
+          />
+        </Stack>
+      </ResponsiveDialog>
 
       <ConfirmDeleteDialog
         open={!!confirmDeleteId}

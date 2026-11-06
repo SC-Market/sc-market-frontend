@@ -10,11 +10,6 @@
 import { useMemo, useRef, useState } from "react"
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
@@ -36,6 +31,7 @@ import {
   type RemapResolution,
 } from "./importExport"
 import type { DashboardConfig } from "./types"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 
 export interface ImportExportControlsProps {
   config: DashboardConfig
@@ -143,92 +139,92 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
   }, [choices, parsed.remaps])
 
   return (
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {t("dashboard.mapImportedWidgets", "Map imported widgets")}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText sx={{ mb: 2 }}>
-          {t(
-            "dashboard.mapImportedWidgetsHint",
-            "These widgets were pinned to the author's own organizations or shops. Pick one of yours for each, or drop it.",
-          )}
-        </DialogContentText>
-        <Stack spacing={2}>
-          {parsed.remaps.map((remap) => {
-            const def = getWidgetDefinition(remap.widgetType)
-            const isOrg = remap.kind === "specific_org"
-            const options = isOrg ? orgs : shops
-            const widgetName = def ? widgetTitle(def, t) : remap.widgetType
-            const label = isOrg
-              ? t("dashboard.remapOrgLabel", "{{name}} (organization)", {
-                  name: widgetName,
-                })
-              : t("dashboard.remapShopLabel", "{{name}} (shop)", {
-                  name: widgetName,
-                })
-            return (
-              <FormControl key={remap.index} fullWidth size="small">
-                <InputLabel id={`remap-${remap.index}`}>{label}</InputLabel>
-                <Select
-                  labelId={`remap-${remap.index}`}
-                  label={label}
-                  value={choices[remap.index] ?? DROP}
-                  onChange={(e) =>
-                    setChoices((c) => ({
-                      ...c,
-                      [remap.index]: e.target.value,
-                    }))
-                  }
+    <ResponsiveDialog
+      open
+      onClose={onClose}
+      maxWidth="sm"
+      title={t("dashboard.mapImportedWidgets", "Map imported widgets")}
+      description={t(
+        "dashboard.mapImportedWidgetsHint",
+        "These widgets were pinned to the author's own organizations or shops. Pick one of yours for each, or drop it.",
+      )}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("dashboard.cancel", "Cancel")}</Button>
+          <Button variant="contained" onClick={() => onConfirm(resolutions)}>
+            {t("dashboard.import", "Import")}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2}>
+        {parsed.remaps.map((remap) => {
+          const def = getWidgetDefinition(remap.widgetType)
+          const isOrg = remap.kind === "specific_org"
+          const options = isOrg ? orgs : shops
+          const widgetName = def ? widgetTitle(def, t) : remap.widgetType
+          const label = isOrg
+            ? t("dashboard.remapOrgLabel", "{{name}} (organization)", {
+                name: widgetName,
+              })
+            : t("dashboard.remapShopLabel", "{{name}} (shop)", {
+                name: widgetName,
+              })
+          return (
+            <FormControl key={remap.index} fullWidth size="small">
+              <InputLabel id={`remap-${remap.index}`}>{label}</InputLabel>
+              <Select
+                labelId={`remap-${remap.index}`}
+                label={label}
+                value={choices[remap.index] ?? DROP}
+                onChange={(e) =>
+                  setChoices((c) => ({
+                    ...c,
+                    [remap.index]: e.target.value,
+                  }))
+                }
+              >
+                <MenuItem value={DROP}>
+                  <em>
+                    {t(
+                      "dashboard.dontImportWidget",
+                      "Don't import this widget",
+                    )}
+                  </em>
+                </MenuItem>
+                {isOrg
+                  ? orgs.map((org) => (
+                      <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
+                        {org.name || org.spectrum_id}
+                      </MenuItem>
+                    ))
+                  : shops.map((shop) => (
+                      <MenuItem key={shop.shop_id} value={shop.shop_id}>
+                        {shop.name}
+                      </MenuItem>
+                    ))}
+              </Select>
+              {options.length === 0 && (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 0.5 }}
                 >
-                  <MenuItem value={DROP}>
-                    <em>
-                      {t(
-                        "dashboard.dontImportWidget",
-                        "Don't import this widget",
-                      )}
-                    </em>
-                  </MenuItem>
                   {isOrg
-                    ? orgs.map((org) => (
-                        <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
-                          {org.name || org.spectrum_id}
-                        </MenuItem>
-                      ))
-                    : shops.map((shop) => (
-                        <MenuItem key={shop.shop_id} value={shop.shop_id}>
-                          {shop.name}
-                        </MenuItem>
-                      ))}
-                </Select>
-                {options.length === 0 && (
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ mt: 0.5 }}
-                  >
-                    {isOrg
-                      ? t(
-                          "dashboard.noOrgsWidgetDropped",
-                          "You have no organizations, so this widget will be dropped.",
-                        )
-                      : t(
-                          "dashboard.noShopsWidgetDropped",
-                          "You have no shops, so this widget will be dropped.",
-                        )}
-                  </Typography>
-                )}
-              </FormControl>
-            )
-          })}
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("dashboard.cancel", "Cancel")}</Button>
-        <Button variant="contained" onClick={() => onConfirm(resolutions)}>
-          {t("dashboard.import", "Import")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+                    ? t(
+                        "dashboard.noOrgsWidgetDropped",
+                        "You have no organizations, so this widget will be dropped.",
+                      )
+                    : t(
+                        "dashboard.noShopsWidgetDropped",
+                        "You have no shops, so this widget will be dropped.",
+                      )}
+                </Typography>
+              )}
+            </FormControl>
+          )
+        })}
+      </Stack>
+    </ResponsiveDialog>
   )
 }

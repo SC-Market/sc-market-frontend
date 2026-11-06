@@ -18,10 +18,6 @@ import {
   CardActions,
   CircularProgress,
   Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   IconButton,
   LinearProgress,
@@ -49,6 +45,8 @@ import { useFocusOnReveal } from "../../hooks/accessibility/useFocusOnReveal"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useFormatters } from "../../util/format"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 
 /**
  * WishlistManager Component
@@ -430,142 +428,127 @@ export function WishlistManager() {
         )}
 
         {/* Create Wishlist Dialog (Requirement 8.4) */}
-        <Dialog
+        <ResponsiveDialog
           open={createDialogOpen}
           onClose={handleCreateDialogClose}
           maxWidth="sm"
-          fullWidth
+          title={t("wishlistsUi.manager.createDialog.title")}
+          disableClose={isCreating}
+          actions={
+            <>
+              <Button onClick={handleCreateDialogClose} disabled={isCreating}>
+                {t("common.cancel")}
+              </Button>
+              <Button
+                onClick={handleCreateWishlist}
+                variant="contained"
+                disabled={isCreating || !newWishlistName.trim()}
+              >
+                {isCreating
+                  ? t("wishlistsUi.manager.createDialog.creating")
+                  : t("wishlistsUi.manager.createDialog.submit")}
+              </Button>
+            </>
+          }
         >
-          <DialogTitle>
-            {t("wishlistsUi.manager.createDialog.title")}
-          </DialogTitle>
-          <DialogContent>
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
-            >
-              {/* Wishlist Name */}
-              <TextField
-                size="small"
-                label={t("wishlistsUi.manager.createDialog.name")}
-                value={newWishlistName}
-                onChange={(e) => setNewWishlistName(e.target.value)}
-                fullWidth
-                required
-                inputRef={focusOnReveal}
-                placeholder={t(
-                  "wishlistsUi.manager.createDialog.namePlaceholder",
-                )}
-              />
-
-              {/* Description */}
-              <TextField
-                size="small"
-                label={t("wishlistsUi.manager.createDialog.description")}
-                value={newWishlistDescription}
-                onChange={(e) => setNewWishlistDescription(e.target.value)}
-                fullWidth
-                multiline
-                rows={3}
-                placeholder={t(
-                  "wishlistsUi.manager.createDialog.descriptionPlaceholder",
-                )}
-              />
-
-              {/* Public/Private Toggle */}
-              <LabeledSwitch
-                checked={newWishlistIsPublic}
-                onChange={setNewWishlistIsPublic}
-                label={
-                  <Typography variant="body2">
-                    {t("wishlistsUi.manager.createDialog.makePublic")}
-                  </Typography>
-                }
-                helperText={t("wishlistsUi.publicHelp")}
-              />
-
-              {/* Collaborative Toggle — only available when an org is selected */}
-              <LabeledSwitch
-                checked={newWishlistIsCollaborative}
-                onChange={setNewWishlistIsCollaborative}
-                disabled={!primaryContractor}
-                label={
-                  <Typography
-                    variant="body2"
-                    color={!primaryContractor ? "text.disabled" : undefined}
-                  >
-                    {t("wishlistsUi.collaborative")}
-                  </Typography>
-                }
-                helperText={
-                  primaryContractor
-                    ? t("wishlistsUi.manager.createDialog.collaborativeHelp", {
-                        org: primaryContractor.name,
-                      })
-                    : t("wishlistsUi.manager.createDialog.collaborativeNoOrg")
-                }
-              />
-
-              {newWishlistIsCollaborative && primaryContractor && (
-                <Alert severity="info" sx={{ mt: -1 }}>
-                  <Trans
-                    i18nKey="wishlistsUi.manager.createDialog.ownedBy"
-                    values={{ org: primaryContractor.name }}
-                    components={{ strong: <strong /> }}
-                  />
-                </Alert>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+            {/* Wishlist Name */}
+            <TextField
+              size="small"
+              label={t("wishlistsUi.manager.createDialog.name")}
+              value={newWishlistName}
+              onChange={(e) => setNewWishlistName(e.target.value)}
+              fullWidth
+              required
+              inputRef={focusOnReveal}
+              placeholder={t(
+                "wishlistsUi.manager.createDialog.namePlaceholder",
               )}
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCreateDialogClose} disabled={isCreating}>
-              {t("common.cancel")}
-            </Button>
-            <Button
-              onClick={handleCreateWishlist}
-              variant="contained"
-              disabled={isCreating || !newWishlistName.trim()}
-            >
-              {isCreating
-                ? t("wishlistsUi.manager.createDialog.creating")
-                : t("wishlistsUi.manager.createDialog.submit")}
-            </Button>
-          </DialogActions>
-        </Dialog>
+            />
+
+            {/* Description */}
+            <TextField
+              size="small"
+              label={t("wishlistsUi.manager.createDialog.description")}
+              value={newWishlistDescription}
+              onChange={(e) => setNewWishlistDescription(e.target.value)}
+              fullWidth
+              multiline
+              rows={3}
+              placeholder={t(
+                "wishlistsUi.manager.createDialog.descriptionPlaceholder",
+              )}
+            />
+
+            {/* Public/Private Toggle */}
+            <LabeledSwitch
+              checked={newWishlistIsPublic}
+              onChange={setNewWishlistIsPublic}
+              label={
+                <Typography variant="body2">
+                  {t("wishlistsUi.manager.createDialog.makePublic")}
+                </Typography>
+              }
+              helperText={t("wishlistsUi.publicHelp")}
+            />
+
+            {/* Collaborative Toggle — only available when an org is selected */}
+            <LabeledSwitch
+              checked={newWishlistIsCollaborative}
+              onChange={setNewWishlistIsCollaborative}
+              disabled={!primaryContractor}
+              label={
+                <Typography
+                  variant="body2"
+                  color={!primaryContractor ? "text.disabled" : undefined}
+                >
+                  {t("wishlistsUi.collaborative")}
+                </Typography>
+              }
+              helperText={
+                primaryContractor
+                  ? t("wishlistsUi.manager.createDialog.collaborativeHelp", {
+                      org: primaryContractor.name,
+                    })
+                  : t("wishlistsUi.manager.createDialog.collaborativeNoOrg")
+              }
+            />
+
+            {newWishlistIsCollaborative && primaryContractor && (
+              <Alert severity="info" sx={{ mt: -1 }}>
+                <Trans
+                  i18nKey="wishlistsUi.manager.createDialog.ownedBy"
+                  values={{ org: primaryContractor.name }}
+                  components={{ strong: <strong /> }}
+                />
+              </Alert>
+            )}
+          </Box>
+        </ResponsiveDialog>
 
         {/* Delete Confirmation Dialog (Requirement 8.6) */}
-        <Dialog
+        <ConfirmDialog
           open={deleteDialogOpen}
           onClose={handleDeleteCancel}
+          onConfirm={handleDeleteConfirm}
           maxWidth="sm"
-        >
-          <DialogTitle>
-            {t("wishlistsUi.manager.deleteDialog.title")}
-          </DialogTitle>
-          <DialogContent>
-            <Typography>
-              <Trans
-                i18nKey="wishlistsUi.manager.deleteDialog.body"
-                values={{ name: wishlistToDelete?.name ?? "" }}
-                components={{ strong: <strong /> }}
-              />
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDeleteCancel} disabled={isDeleting}>
-              {t("common.cancel")}
-            </Button>
-            <Button
-              onClick={handleDeleteConfirm}
-              variant="contained"
-              color="error"
-              disabled={isDeleting}
-            >
-              {isDeleting
-                ? t("wishlistsUi.manager.deleteDialog.deleting")
-                : t("common.delete")}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          title={t("wishlistsUi.manager.deleteDialog.title")}
+          message={
+            <Trans
+              i18nKey="wishlistsUi.manager.deleteDialog.body"
+              values={{ name: wishlistToDelete?.name ?? "" }}
+              components={{ strong: <strong /> }}
+            />
+          }
+          cancelLabel={t("common.cancel")}
+          confirmLabel={
+            isDeleting
+              ? t("wishlistsUi.manager.deleteDialog.deleting")
+              : t("common.delete")
+          }
+          destructive
+          loading={isDeleting}
+        />
       </Grid>
     </StandardPageLayout>
   )
