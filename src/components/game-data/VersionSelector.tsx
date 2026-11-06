@@ -26,6 +26,7 @@ import {
   type GameVersion,
 } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useNow } from "../../util/format"
 
 interface VersionSelectorProps {
   /** Callback when version changes */
@@ -56,6 +57,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
 }) => {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const now = useNow()
   const { data: activeVersions, isLoading } = useGetActiveVersionsQuery()
   const [selectVersion] = useSelectVersionMutation()
 
@@ -140,8 +142,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   const formatLastUpdate = (timestamp?: string): string => {
     if (!timestamp) return t("wikiUi.versionSelector.unknown")
     const date = new Date(timestamp)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
+    const diffMs = now - date.getTime()
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
     const diffDays = Math.floor(diffHours / 24)
 

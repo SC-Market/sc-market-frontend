@@ -16,6 +16,7 @@ import { Link as RouterLink } from "react-router-dom"
 import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "./developerLinks"
+import { useNow } from "../../util/format"
 
 /** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
 export const SC_ORGS_LINKS = [
@@ -48,6 +49,7 @@ export const SC_ORGS_LINKS = [
 
 export function Footer() {
   const { t } = useTranslation()
+  const now = useNow()
   const [, , removeCookie] = useCookies([CONSENT_COOKIE])
   const theme = useTheme<ExtendedTheme>()
   // Help pages render only on the official site; white-label domains link out.
@@ -255,7 +257,7 @@ export function Footer() {
             align="center"
           >
             {t("footer.copyright", "Copyright © ")} SC Market{" "}
-            {new Date().getFullYear() + 930}.
+            {new Date(now).getFullYear() + 930}.
             <br />
             {t(
               "footer.trademark",

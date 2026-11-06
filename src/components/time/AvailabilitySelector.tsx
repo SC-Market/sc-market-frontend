@@ -11,7 +11,7 @@ import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
-import { useFormatters } from "../../util/format"
+import { useFormatters, useNow } from "../../util/format"
 const ARROW_MOVES: Record<string, [number, number]> = {
   ArrowUp: [0, -1],
   ArrowDown: [0, 1],
@@ -104,7 +104,11 @@ function arrayRotate<T>(orig: T[], count: number) {
   return arr
 }
 
-const tzOffset = Math.floor(new Date().getTimezoneOffset() / 30)
+/** The visitor's UTC offset in half-hour slots (the grid's slot size). */
+function useTzOffset(): number {
+  const now = useNow()
+  return Math.floor(new Date(now).getTimezoneOffset() / 30)
+}
 
 export function AvailabilitySelector(props: {
   onSave: (selections: boolean[]) => void
@@ -112,6 +116,7 @@ export function AvailabilitySelector(props: {
 }) {
   const { t } = useTranslation()
   const fmt = useFormatters()
+  const tzOffset = useTzOffset()
   const { onSave, initialSelections } = props
 
   const [clicked, setClicked] = useState(false)
@@ -132,7 +137,7 @@ export function AvailabilitySelector(props: {
     setSelections(
       arrayRotate(initialSelections || generateInitialSelection(), tzOffset),
     )
-  }, [initialSelections])
+  }, [initialSelections, tzOffset])
 
   // Sunday first, in the page's language. A fixed UTC week, so the names
   // don't depend on the clock or the time zone (server and browser agree).
@@ -293,7 +298,11 @@ export function AvailabilityDisplay(
   const { t } = useTranslation()
   const fmt = useFormatters()
   const { value, name, ...gridprops } = props
-  const availability = useMemo(() => arrayRotate(value, tzOffset), [value])
+  const tzOffset = useTzOffset()
+  const availability = useMemo(
+    () => arrayRotate(value, tzOffset),
+    [value, tzOffset],
+  )
   const { data: profile } = useGetUserProfileQuery()
 
   // Sunday first, in the page's language. A fixed UTC week, so the names
