@@ -48,6 +48,7 @@ import { useFormatters } from "../../util/format"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
+import { scrollPageToTop } from "../../components/layout/pageScroll"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({
@@ -492,7 +493,7 @@ export default function InventoryPage() {
               rowsPerPage={pageSize}
               onPageChange={(newPage) => {
                 setPage(newPage + 1)
-                window.scrollTo({ top: 0, behavior: "smooth" })
+                scrollPageToTop()
               }}
               rowsPerPageOptions={[25, 50, 100]}
               onRowsPerPageChange={(size) => {

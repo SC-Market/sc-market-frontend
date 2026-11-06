@@ -33,6 +33,7 @@ import {
   CARD_GRID_PAGE_SIZE_OPTIONS,
   NumberedPagination,
 } from "../../components/pagination/NumberedPagination"
+import { scrollPageToTop } from "../../components/layout/pageScroll"
 
 export function ResourceBrowser() {
   const { t } = useTranslation()
@@ -195,7 +196,7 @@ export function ResourceBrowser() {
                   rowsPerPage={pageSize}
                   onPageChange={(newPage) => {
                     setPage(newPage + 1)
-                    window.scrollTo({ top: 0, behavior: "smooth" })
+                    scrollPageToTop()
                   }}
                   rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
                   onRowsPerPageChange={(size) => {

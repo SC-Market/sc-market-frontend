@@ -34,6 +34,7 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { FRONTEND_URL } from "../../util/constants"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { scrollPageToTop } from "../../components/layout/pageScroll"
 
 /**
  * /storefronts: verified orgs' storefronts (backend: RSI-verified, a public
@@ -174,7 +175,7 @@ export function StorefrontsHub() {
               rowsPerPage={pageSize}
               onPageChange={(newPage) => {
                 setPage(newPage + 1)
-                window.scrollTo({ top: 0, behavior: "smooth" })
+                scrollPageToTop()
               }}
               rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
               onRowsPerPageChange={setPageSize}

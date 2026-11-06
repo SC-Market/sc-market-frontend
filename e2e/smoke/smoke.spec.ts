@@ -41,6 +41,41 @@ test.describe("logged out", () => {
       .toBe(true)
   })
 
+  test("market grid scrolls with the page, in one full-height scroller", async ({
+    page,
+  }) => {
+    await page.goto("/market")
+    await waitForReady(page)
+    await expect(main(page).getByTestId("listing-card").first()).toBeVisible()
+    const layout = await page.evaluate(() => {
+      const scroller = document.querySelector<HTMLElement>(
+        "main#main-content [data-page-scroll]",
+      )!
+      const area = scroller.parentElement!
+      const card = document.querySelector('[data-testid="listing-card"]')!
+      // Every element between the first card and the scroller
+      const clipping: string[] = []
+      for (let el = card.parentElement; el && el !== scroller; ) {
+        const { overflowY } = getComputedStyle(el)
+        if (overflowY === "auto" || overflowY === "scroll") {
+          clipping.push(el.className)
+        }
+        el = el.parentElement
+      }
+      return {
+        scrollerHeight: scroller.getBoundingClientRect().height,
+        areaHeight: area.getBoundingClientRect().height,
+        areaScrolls: area.scrollHeight > area.clientHeight,
+        clipping,
+      }
+    })
+    // The page's scroller fills the page area (nothing pads it shorter)
+    expect(layout.scrollerHeight).toBe(layout.areaHeight)
+    // ...and is the only scroller: no nested scroll box around the grid
+    expect(layout.areaScrolls).toBe(false)
+    expect(layout.clipping).toEqual([])
+  })
+
   test("listing detail", async ({ page }) => {
     await page.goto(`/market/${RIFLE.id}`)
     await waitForReady(page)

@@ -83,6 +83,7 @@ import {
   red,
   teal,
 } from "@mui/material/colors"
+import { scrollPageToTop } from "../../components/layout/pageScroll"
 
 const PAGE_SIZE = 24
 
@@ -1208,7 +1209,7 @@ export function WikiShipBrowser() {
                   rowsPerPage={pageSize}
                   onPageChange={(newPage) => {
                     updateParam("page", newPage > 0 ? String(newPage + 1) : "")
-                    window.scrollTo({ top: 0, behavior: "smooth" })
+                    scrollPageToTop()
                   }}
                   rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
                   onRowsPerPageChange={(size) =>

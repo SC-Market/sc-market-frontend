@@ -1,10 +1,8 @@
-import { useTranslation } from "react-i18next"
 import { SidebarV2 } from "../sidebar/SidebarV2"
 import { Box } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Navbar } from "../navbar/Navbar"
-import React, { useState } from "react"
+import React from "react"
 import { PreferencesButton } from "../../views/settings/PreferencesButton"
 import { CookieConsent } from "../alert/CookieConsent"
 import { SkipNavigation } from "../accessibility/SkipNavigation"
@@ -13,18 +11,14 @@ import { InstallPrompt } from "../pwa/InstallPrompt"
 import { MobileBottomNav } from "../navigation/MobileBottomNav"
 import { ContextAwareFAB } from "../mobile/ContextAwareFAB"
 import { useLocation } from "react-router-dom"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useAppViewportHeight } from "../../hooks/layout/useAppViewportHeight"
 import { DebugPanel } from "../market/v2/DebugPanel"
-import { FloatingActions, FloatingActionsSlotContext } from "./FloatingActions"
+import { MainContent } from "./MainContent"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
 import { CommandPalette } from "../command-palette/CommandPalette"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
-import {
-  PageReadyProvider,
-  usePageReadyAttributes,
-} from "../metadata/PageReady"
+import { PageReadyProvider } from "../metadata/PageReady"
 
 export function Root(props: { children: React.ReactNode }) {
   const isMobile = useIsMobile()
@@ -89,75 +83,6 @@ export function Root(props: { children: React.ReactNode }) {
           </MainContent>
         </PageReadyProvider>
       </CartDrawerProvider>
-    </Box>
-  )
-}
-
-/**
- * The main content area. Carries the page-ready signal: `aria-busy` and
- * `data-ready` (see PageReady.tsx, docs/testing-with-mcp.md). Its own
- * component so a ready change re-renders only this element, not Root.
- * `floatingActions`: the bottom-right buttons, stacked by FloatingActions.
- * `floating`: other controls that sit beside the scrolling page area.
- */
-function MainContent(props: {
-  children: React.ReactNode
-  floatingActions: React.ReactNode
-  floating: React.ReactNode
-}) {
-  const { t } = useTranslation()
-  const theme = useTheme()
-  const bottomNavHeight = useBottomNavHeight()
-  // Height of the floating buttons, 0 when none show. While they do, the
-  // scroll area gets that much room at the end, so the last row of a page
-  // (a card's button, a checkout button) can scroll out from under them.
-  const [floatingHeight, setFloatingHeight] = useState(0)
-  // Where a page's own floating buttons go (<FloatingAction>)
-  const [floatingSlot, setFloatingSlot] = useState<HTMLElement | null>(null)
-  const readyAttributes = usePageReadyAttributes()
-  return (
-    <Box
-      component="main"
-      id="main-content"
-      role="main"
-      aria-label={t("ui.mainContent")}
-      {...readyAttributes}
-      sx={{
-        display: "flex",
-        flexDirection: "column", // Vertical layout for main content
-        flex: 1,
-        minHeight: 0, // Allow flex item to shrink below content size
-        overflow: "hidden", // Prevent this container from scrolling
-        position: "relative", // For absolute positioning of bottom nav
-        // Add padding bottom to account for bottom nav (dynamically adjusts when keyboard opens)
-        // The bottom nav is 64px plus the home-indicator inset it pads itself
-        // with (MobileBottomNav), so clear both.
-        paddingBottom: bottomNavHeight
-          ? `calc(${bottomNavHeight}px + env(safe-area-inset-bottom))`
-          : 0,
-      }}
-    >
-      <Box
-        sx={{
-          flex: 1,
-          minHeight: 0, // Allow flex item to shrink
-          overflow: "auto", // Main content can scroll internally
-          paddingBottom: floatingHeight
-            ? `calc(${floatingHeight}px + ${theme.spacing(2)})`
-            : 0,
-        }}
-      >
-        <FloatingActionsSlotContext.Provider value={floatingSlot}>
-          {props.children}
-        </FloatingActionsSlotContext.Provider>
-      </Box>
-      <FloatingActions
-        slotRef={setFloatingSlot}
-        onHeightChange={setFloatingHeight}
-      >
-        {props.floatingActions}
-      </FloatingActions>
-      {props.floating}
     </Box>
   )
 }

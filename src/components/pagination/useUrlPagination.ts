@@ -4,6 +4,7 @@ import {
   parsePageSize,
   type NumberedPaginationProps,
 } from "./NumberedPagination"
+import { scrollPageToTop } from "../layout/pageScroll"
 
 export interface UrlPaginationOptions {
   /** The hub's path, for the page links. */
@@ -64,7 +65,7 @@ export function useUrlPagination(opts: UrlPaginationOptions): UrlPagination {
         if (newPage > 0) params.set("page", String(newPage + 1))
         else params.delete("page")
         setSearchParams(params, { replace })
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        scrollPageToTop()
       },
       rowsPerPageOptions: pageSizeOptions,
       onRowsPerPageChange: (size) => {

@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material/styles"
 import { mainTheme } from "../../../hooks/styles/Theme"
 import { NumberedPagination } from "../NumberedPagination"
 import { useUrlPagination } from "../useUrlPagination"
+import { PAGE_SCROLL_ATTRIBUTE } from "../../layout/pageScroll"
 
 vi.mock("react-i18next", async (importOriginal) =>
   (await import("../../../test/mocks/reactI18next")).mockReactI18next(
@@ -32,15 +33,21 @@ function Hub() {
   )
 }
 
+/** The hub inside a page scroller, as the layouts render it. */
 function renderHub(url: string) {
-  window.scrollTo = vi.fn()
   render(
     <MemoryRouter initialEntries={[url]}>
       <ThemeProvider theme={mainTheme}>
-        <Hub />
+        <main data-testid="page-scroll" {...{ [PAGE_SCROLL_ATTRIBUTE]: "" }}>
+          <Hub />
+        </main>
       </ThemeProvider>
     </MemoryRouter>,
   )
+  const scroller = screen.getByTestId("page-scroll")
+  const scrollTo = vi.fn()
+  scroller.scrollTo = scrollTo
+  return { scrollTo }
 }
 
 describe("useUrlPagination", () => {
@@ -67,6 +74,12 @@ describe("useUrlPagination", () => {
     expect(screen.getByTestId("location").textContent).toBe(
       "/wiki/items?type=Helmet",
     )
+  })
+
+  it("a page change scrolls the page's scroller (not the window) to the top", () => {
+    const { scrollTo } = renderHub("/wiki/items")
+    fireEvent.click(screen.getByRole("link", { name: "Go to page 2" }))
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" })
   })
 
   it("a new page size starts on page 1", () => {

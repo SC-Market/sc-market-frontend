@@ -56,6 +56,7 @@ import {
 import { FRONTEND_URL } from "../../util/constants"
 import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { scrollPageToTop } from "../../components/layout/pageScroll"
 
 /** Hub pages are bare `?page=N` URLs: the links carry no other params. */
 const NO_PARAMS = new URLSearchParams()
@@ -293,7 +294,7 @@ function HubBody({
         rowsPerPage={MISSION_HUB_PAGE_SIZE}
         onPageChange={(newPage) => {
           navigate(pagedPath(path, newPage + 1))
-          window.scrollTo({ top: 0, behavior: "smooth" })
+          scrollPageToTop()
         }}
         link={{ path, searchParams: NO_PARAMS }}
         sx={{ mt: 1.5, px: 0 }}

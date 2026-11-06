@@ -19,6 +19,31 @@ export const FloatingActionsSlotContext = createContext<
 >(undefined)
 
 /**
+ * CSS variable MainContent sets on the page area: the room the floating
+ * buttons need at the end of the page's scroll area ("0px" when none show).
+ */
+export const FLOATING_ACTIONS_ROOM_VAR = "--floating-actions-room"
+
+/**
+ * The last child of a page's scroll container (the layouts' <main>): empty
+ * room the height of the floating buttons, so the end of the page can scroll
+ * out from under them. In the scroller's own content, not padding around it,
+ * so the scroller keeps the full height of the page area.
+ */
+export function FloatingActionsRoom() {
+  return (
+    <Box
+      aria-hidden
+      data-testid="floating-actions-room"
+      sx={{
+        flexShrink: 0,
+        height: `var(${FLOATING_ACTIONS_ROOM_VAR}, 0px)`,
+      }}
+    />
+  )
+}
+
+/**
  * The one bottom-right corner area for the app's floating buttons (the admin
  * debug toggle, page settings, the mobile context FAB, a page's own FAB).
  * They stack in a column with a gap, so they can't land on top of each other:
@@ -27,7 +52,8 @@ export const FloatingActionsSlotContext = createContext<
  * It sits inside `<main>` (position: relative), clears the mobile bottom nav
  * and the safe-area insets, and reports its own height through
  * `onHeightChange` so the page can reserve room at the bottom of its scroll
- * area for it (see Root's MainContent).
+ * area for it (MainContent sets FLOATING_ACTIONS_ROOM_VAR, the page's
+ * scroller ends in a FloatingActionsRoom).
  *
  * `children`: the app-wide buttons, rendered as direct children with no
  * positioning of their own. `slotRef`: receives the page slot at the bottom

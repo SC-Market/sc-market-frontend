@@ -32,6 +32,7 @@ import { FRONTEND_URL } from "../../../util/constants"
 import { shopDirectorySeoText } from "../../../seo/hubHeads"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
+import { scrollPageToTop } from "../../../components/layout/pageScroll"
 
 type SortOption = "rating" | "total_sales" | "created_at" | "name"
 
@@ -241,7 +242,7 @@ export function ShopDirectory() {
           rowsPerPage={pageSize}
           onPageChange={(newPage) => {
             setPage(newPage + 1)
-            window.scrollTo({ top: 0, behavior: "smooth" })
+            scrollPageToTop()
           }}
           rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
           onRowsPerPageChange={(size) => setPage(1, size)}

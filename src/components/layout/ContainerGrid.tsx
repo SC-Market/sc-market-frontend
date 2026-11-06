@@ -7,6 +7,8 @@ import { Footer } from "../footer/Footer"
 import { MainRefContext } from "../../hooks/layout/MainRef"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { FloatingActionsRoom } from "./FloatingActions"
+import { PAGE_SCROLL_ATTRIBUTE } from "./pageScroll"
 
 /**
  * The page area under the top bar: grows to fill the rest of the scrolling
@@ -85,6 +87,7 @@ export function ContainerGrid(
               : undefined,
         }}
         ref={ref}
+        {...{ [PAGE_SCROLL_ATTRIBUTE]: "" }}
       >
         <Box
           sx={{
@@ -167,6 +170,7 @@ export function ContainerGrid(
             </Box>
           )}
         </Container>
+        <FloatingActionsRoom />
       </main>
     </MainRefContext.Provider>
   )
@@ -221,6 +225,7 @@ export function OpenGrid(
           ...mainProps?.style,
         }}
         ref={ref}
+        {...{ [PAGE_SCROLL_ATTRIBUTE]: "" }}
       >
         <Box
           sx={{
@@ -256,6 +261,7 @@ export function OpenGrid(
             </Grid>
           </Box>
         )}
+        <FloatingActionsRoom />
       </main>
     </MainRefContext.Provider>
   )
@@ -304,6 +310,7 @@ export function OpenLayout(
           ...mainProps?.style,
         }}
         ref={ref}
+        {...{ [PAGE_SCROLL_ATTRIBUTE]: "" }}
       >
         <Box
           sx={{
@@ -342,6 +349,7 @@ export function OpenLayout(
             <Footer />
           </Box>
         )}
+        <FloatingActionsRoom />
       </main>
     </MainRefContext.Provider>
   )
