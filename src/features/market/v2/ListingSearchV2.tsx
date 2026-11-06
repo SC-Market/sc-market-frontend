@@ -57,7 +57,10 @@ import { ListingCardActionArea } from "../components/listings/ListingCardActionA
 import { ListingSkeleton } from "../../../components/skeletons"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
-import { ListingPagination } from "../components/listings/ListingPagination"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../../components/pagination/NumberedPagination"
 import { EmptyListings } from "../../../components/empty-states"
 import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { ViewModeToggle, useViewMode } from "../../../hooks/market/useViewMode"
@@ -124,6 +127,7 @@ export function ListingSearchV2() {
 
   // Read filter state from URL params
   const [searchParams, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
 
   // Unified search bar
   const marketSearchTokens = React.useMemo(
@@ -196,7 +200,7 @@ export function ListingSearchV2() {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (newPage: number) => {
       const params = new URLSearchParams(searchParams)
       params.set("page", String(newPage + 1)) // Convert 0-based to 1-based
       setSearchParams(params)
@@ -211,9 +215,9 @@ export function ListingSearchV2() {
   )
 
   const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (pageSize: number) => {
       const params = new URLSearchParams(searchParams)
-      params.set("page_size", event.target.value)
+      params.set("page_size", String(pageSize))
       params.set("page", "1") // Reset to first page
       setSearchParams(params)
     },
@@ -302,12 +306,14 @@ export function ListingSearchV2() {
               </Grid>
 
               <Grid item xs={12}>
-                <ListingPagination
+                <NumberedPagination
                   count={total}
                   page={currentPage - 1} // Convert 1-based to 0-based
                   rowsPerPage={currentPageSize}
                   onPageChange={handleChangePage}
+                  rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
                   onRowsPerPageChange={handleChangeRowsPerPage}
+                  link={{ path: pathname, searchParams }}
                 />
               </Grid>
             </Grid>
@@ -375,12 +381,14 @@ export function ListingSearchV2() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ListingPagination
+                    <NumberedPagination
                       count={total}
                       page={currentPage - 1} // Convert 1-based to 0-based
                       rowsPerPage={currentPageSize}
                       onPageChange={handleChangePage}
+                      rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
                       onRowsPerPageChange={handleChangeRowsPerPage}
+                      link={{ path: pathname, searchParams }}
                     />
                   </Grid>
                 </Grid>

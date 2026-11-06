@@ -1,7 +1,11 @@
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
-import { linkedPaginationItem } from "../../../components/pagination/linkedPaginationItem"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../../components/pagination/NumberedPagination"
 import { MARKET_PATHS } from "../../../routes/paths"
 import {
   Container,
@@ -11,7 +15,6 @@ import {
   Box,
   Chip,
   MenuItem,
-  Pagination,
   InputAdornment,
 } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
@@ -66,11 +69,17 @@ export function ShopDirectory() {
   // self-canonical URL (src/seo/queryIndexing.ts).
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
-  const setPage = (next: number) =>
-    setSearchParams(next > 1 ? { page: String(next) } : {}, {
-      replace: next === 1,
-    })
-  const pageSize = SHOP_DIRECTORY_PAGE_SIZE
+  const pageSize = parsePageSize(
+    searchParams.get("page_size"),
+    CARD_GRID_PAGE_SIZE_OPTIONS,
+    SHOP_DIRECTORY_PAGE_SIZE,
+  )
+  const setPage = (next: number, size = pageSize) => {
+    const params: Record<string, string> = {}
+    if (next > 1) params.page = String(next)
+    if (size !== SHOP_DIRECTORY_PAGE_SIZE) params.page_size = String(size)
+    setSearchParams(params, { replace: next === 1 && size === pageSize })
+  }
 
   const debouncedSearch = useDebounce(search, 300)
   const currentSort = SORT_OPTIONS[sortIndex]
@@ -225,17 +234,20 @@ export function ShopDirectory() {
       )}
 
       {/* Pagination */}
-      {data && data.total > pageSize && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Pagination
-            count={Math.ceil(data.total / pageSize)}
-            page={page}
-            onChange={(_, value) => setPage(value)}
-            color="primary"
-            shape="rounded"
-            renderItem={linkedPaginationItem(MARKET_PATHS.shops, searchParams)}
-          />
-        </Box>
+      {data && data.total > 0 && (
+        <NumberedPagination
+          count={data.total}
+          page={page - 1}
+          rowsPerPage={pageSize}
+          onPageChange={(newPage) => {
+            setPage(newPage + 1)
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+          rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+          onRowsPerPageChange={(size) => setPage(1, size)}
+          link={{ path: MARKET_PATHS.shops, searchParams }}
+          sx={{ mt: 3 }}
+        />
       )}
     </Container>
   )

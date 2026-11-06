@@ -77,6 +77,26 @@ describe("NumberedPagination", () => {
     expect(onPageChange).toHaveBeenCalledWith(1)
   })
 
+  it("renders nothing for a single page with nothing to choose", () => {
+    renderPagination({ count: 10, rowsPerPage: 12 })
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument()
+    expect(screen.queryByText("1-10 of 10")).not.toBeInTheDocument()
+  })
+
+  it("keeps the select on a single page a smaller size would split", () => {
+    renderPagination({
+      count: 50,
+      rowsPerPage: 96,
+      rowsPerPageOptions: [12, 24, 48, 96],
+      onRowsPerPageChange: vi.fn(),
+    })
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("combobox", { name: "Per page" }),
+    ).toBeInTheDocument()
+    expect(screen.getByText("1-50 of 50")).toBeInTheDocument()
+  })
+
   it("has no per-page select without options", () => {
     renderPagination()
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument()

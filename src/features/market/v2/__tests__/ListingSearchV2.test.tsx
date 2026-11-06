@@ -25,7 +25,7 @@ import type { QualityFilter as QualityFilterComponent } from "../../../../compon
 import type { HideOnScroll as HideOnScrollComponent } from "../../components/MarketNavArea"
 import type { ListingWrapper as ListingWrapperComponent } from "../../components/listings/ListingWrapper"
 import type { ListingSkeletonProps } from "../../../../components/skeletons"
-import type { ListingPaginationProps } from "../../components/listings/ListingPagination"
+import type { NumberedPaginationProps } from "../../../../components/pagination/NumberedPagination"
 import type { EmptyListingsProps } from "../../../../components/empty-states"
 import type { BottomSheet as BottomSheetComponent } from "../../../../components/mobile/BottomSheet"
 
@@ -166,18 +166,22 @@ vi.mock("../../../../components/skeletons", () => ({
   ),
 }))
 
-vi.mock("../../components/listings/ListingPagination", () => ({
-  ListingPagination: ({
-    count,
-    page,
-    onPageChange,
-  }: ListingPaginationProps) => (
-    <div data-testid="listing-pagination">
-      <button onClick={() => onPageChange(null, page + 1)}>Next Page</button>
-      <span>Total: {count}</span>
-    </div>
-  ),
-}))
+vi.mock(
+  "../../../../components/pagination/NumberedPagination",
+  async (importOriginal) => ({
+    ...(await importOriginal<object>()),
+    NumberedPagination: ({
+      count,
+      page,
+      onPageChange,
+    }: NumberedPaginationProps) => (
+      <div data-testid="listing-pagination">
+        <button onClick={() => onPageChange(page + 1)}>Next Page</button>
+        <span>Total: {count}</span>
+      </div>
+    ),
+  }),
+)
 
 vi.mock("../../../../components/empty-states", () => ({
   EmptyListings: ({ isSearchResult, isError, onRetry }: EmptyListingsProps) => (
@@ -696,7 +700,7 @@ describe("ListingSearchV2", () => {
  * ✅ Maintains visual parity with V1 styling
  *
  * Requirements Validated:
- * - 11.1-11.5: Component reuse (MarketPageLayout, StandardPageLayout, MarketSidebar, ListingCard, ListingPagination)
+ * - 11.1-11.5: Component reuse (MarketPageLayout, StandardPageLayout, MarketSidebar, ListingCard, NumberedPagination)
  * - 12.1-12.12: Visual parity (card styling, typography, grid spacing, animations)
  * - 13.1-13.12: URL-based filter state (useSearchParams, quality_tier_min/max, price_min/max)
  * - 15.1-15.12: Listing search with quality filters (API endpoint, filters, pagination, performance)

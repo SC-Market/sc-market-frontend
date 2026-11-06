@@ -38,10 +38,9 @@ export const STOREFRONTS_PAGE_SIZE = 24
 export function storefrontsHubArgs(
   page = 1,
   field?: string | null,
+  pageSize = STOREFRONTS_PAGE_SIZE,
 ): GetStorefrontsApiArg {
-  return field
-    ? { page, pageSize: STOREFRONTS_PAGE_SIZE, field }
-    : { page, pageSize: STOREFRONTS_PAGE_SIZE }
+  return field ? { page, pageSize, field } : { page, pageSize }
 }
 
 /**

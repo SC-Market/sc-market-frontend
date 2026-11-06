@@ -1,7 +1,7 @@
 import React from "react"
 import { PaginationItem, type PaginationRenderItemParams } from "@mui/material"
 import { Link } from "react-router-dom"
-import { pagedPath } from "../../seo/queryIndexing"
+import { isPaginatedPath, pagedPath } from "../../seo/queryIndexing"
 
 /** The query param linked pages are numbered by (1-based, like `pagedPath`). */
 const PAGE_PARAM = "page"
@@ -42,14 +42,17 @@ function isPlainLeftClick(event: React.MouseEvent): boolean {
  * page change is one history entry.
  *
  * Links keep the other query params (filters, page size). Those filtered
- * variants are noindex, so their links are `rel="nofollow"`: crawlers still
- * walk only the bare `?page=N` pages.
+ * variants are noindex, as is `?page=N` of a list that isn't a paginated hub
+ * (`isPaginatedPath`), so their links are `rel="nofollow"`: crawlers still
+ * walk only the hubs' bare `?page=N` pages.
  */
 export function linkedPaginationItem(
   path: string,
   searchParams: URLSearchParams,
 ) {
-  const filtered = [...searchParams.keys()].some((key) => key !== PAGE_PARAM)
+  const followable =
+    isPaginatedPath(path) &&
+    [...searchParams.keys()].every((key) => key === PAGE_PARAM)
   function LinkedPaginationItem(item: PaginationRenderItemParams) {
     if (
       item.page === null ||
@@ -64,7 +67,7 @@ export function linkedPaginationItem(
       <PaginationItem
         component={Link}
         to={linkedPageHref(path, searchParams, item.page)}
-        rel={filtered ? "nofollow" : undefined}
+        rel={followable ? undefined : "nofollow"}
         {...rest}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           // A modified click opens the page in a new tab: leave this one be.

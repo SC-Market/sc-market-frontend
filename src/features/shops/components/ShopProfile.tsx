@@ -11,7 +11,6 @@ import {
   LinearProgress,
   linearProgressClasses,
   MenuItem,
-  Pagination,
   Paper,
   Rating,
   Stack,
@@ -65,7 +64,7 @@ import {
 } from "../../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
-import { useMemo, useState, MouseEventHandler } from "react"
+import { useMemo, useRef, useState, MouseEventHandler } from "react"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { FRONTEND_URL } from "../../../util/constants"
 import { EmptyReviews } from "../../../components/empty-states"
@@ -90,6 +89,10 @@ import { isSiteAdmin } from "../../../util/siteRole"
 import { Trans, useTranslation } from "react-i18next"
 
 import { useFormatters } from "../../../util/format"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../../components/pagination/NumberedPagination"
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
@@ -523,7 +526,8 @@ export function ShopListingsTab(props: { slug: string }) {
   )
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [page, setPage] = useState(1)
-  const pageSize = SHOP_LISTINGS_PAGE_SIZE
+  const [pageSize, setPageSize] = useState(SHOP_LISTINGS_PAGE_SIZE)
+  const listTopRef = useRef<HTMLDivElement>(null)
   const debouncedSearch = useDebounce(search, 300)
   const { t } = useTranslation()
   // Admin-only: also show the shop's unlisted (link-only) listings. The
@@ -566,7 +570,7 @@ export function ShopListingsTab(props: { slug: string }) {
   )
 
   return (
-    <Box>
+    <Box ref={listTopRef}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mb: 2 }}>
         <TextField
           size="small"
@@ -674,15 +678,25 @@ export function ShopListingsTab(props: { slug: string }) {
               </Grid>
             ))}
           </Grid>
-          {(data.total || 0) > pageSize && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-              <Pagination
-                count={Math.ceil((data.total || 0) / pageSize)}
-                page={page}
-                onChange={(_, p) => setPage(p)}
-                color="primary"
-              />
-            </Box>
+          {(data.total || 0) > 0 && (
+            <NumberedPagination
+              count={data.total || 0}
+              page={page - 1}
+              rowsPerPage={pageSize}
+              onPageChange={(newPage) => {
+                setPage(newPage + 1)
+                listTopRef.current?.scrollIntoView({
+                  block: "start",
+                  behavior: "smooth",
+                })
+              }}
+              rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+              onRowsPerPageChange={(size) => {
+                setPageSize(size)
+                setPage(1)
+              }}
+              sx={{ mt: 3 }}
+            />
           )}
         </>
       )}

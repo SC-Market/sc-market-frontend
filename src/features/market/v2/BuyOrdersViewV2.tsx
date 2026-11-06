@@ -14,7 +14,10 @@ import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
 import { buyOrderSortArgs } from "./buyOrderSort"
-import { ListingPagination } from "../components/listings/ListingPagination"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../../components/pagination/NumberedPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
 import {
   LISTING_GRID_SKELETON_COUNT,
@@ -92,18 +95,15 @@ export function BuyOrdersViewV2() {
     [data],
   )
 
-  const handleChangePage = useCallback((_: unknown, newPage: number) => {
+  const handleChangePage = useCallback((newPage: number) => {
     setPage(newPage)
     ref.current?.scrollIntoView({ block: "end", behavior: "smooth" })
   }, [])
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setPage(0)
-    },
-    [],
-  )
+  const handleChangeRowsPerPage = useCallback((rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
+    setPage(0)
+  }, [])
 
   const gridBreakpoints = buyOrderGridBreakpoints(marketSidebarOpen)
 
@@ -146,11 +146,12 @@ export function BuyOrdersViewV2() {
         )}
       </Grid>
       <Divider light sx={{ my: 1 }} />
-      <ListingPagination
+      <NumberedPagination
         count={data?.total || aggregates.length}
         page={page}
         rowsPerPage={perPage}
         onPageChange={handleChangePage}
+        rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </>

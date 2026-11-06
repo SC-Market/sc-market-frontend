@@ -42,7 +42,10 @@ import { HideOnScroll, MarketNavArea } from "../../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "../ListingSearchV2"
 import { buyOrderSortArgs } from "../buyOrderSort"
 import { ListingWrapper } from "../../components/listings/ListingWrapper"
-import { ListingPagination } from "../../components/listings/ListingPagination"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../../../components/pagination/NumberedPagination"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
@@ -141,18 +144,15 @@ export function BuyOrdersRedesign() {
     return Array.from(grouped.values())
   }, [activeOrders])
 
-  const handleChangePage = useCallback((_: unknown, newPage: number) => {
+  const handleChangePage = useCallback((newPage: number) => {
     setPage(newPage)
     ref.current?.scrollIntoView({ block: "end", behavior: "smooth" })
   }, [])
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setPage(0)
-    },
-    [],
-  )
+  const handleChangeRowsPerPage = useCallback((rowsPerPage: number) => {
+    setPerPage(rowsPerPage)
+    setPage(0)
+  }, [])
 
   // Match ListingSearchV2's breakpoints EXACTLY so buy-order cards are the same
   // size as main-search cards (same per-row count at each width).
@@ -200,11 +200,12 @@ export function BuyOrdersRedesign() {
         )}
       </Grid>
       <Divider light sx={{ my: 1 }} />
-      <ListingPagination
+      <NumberedPagination
         count={data?.total || activeOrders.length}
         page={page}
         rowsPerPage={perPage}
         onPageChange={handleChangePage}
+        rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </>

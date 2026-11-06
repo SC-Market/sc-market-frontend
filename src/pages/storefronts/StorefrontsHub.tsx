@@ -4,7 +4,6 @@ import {
   Button,
   Chip,
   Grid,
-  Pagination,
   Skeleton,
   Stack,
   Typography,
@@ -26,7 +25,11 @@ import {
 import { PATHS } from "../../routes/paths"
 import { storefrontsSeoText } from "../../seo/hubHeads"
 import { pagedPath } from "../../seo/queryIndexing"
-import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../components/pagination/NumberedPagination"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { FRONTEND_URL } from "../../util/constants"
@@ -46,8 +49,13 @@ export function StorefrontsHub() {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
   const field = searchParams.get("field") || null
+  const pageSize = parsePageSize(
+    searchParams.get("page_size"),
+    CARD_GRID_PAGE_SIZE_OPTIONS,
+    STOREFRONTS_PAGE_SIZE,
+  )
   const { data, isLoading, isFetching, currentData } = useGetStorefrontsQuery(
-    storefrontsHubArgs(page, field),
+    storefrontsHubArgs(page, field, pageSize),
     {
       refetchOnMountOrArgChange: true,
     },
@@ -55,13 +63,20 @@ export function StorefrontsHub() {
   usePageReady(isPrimaryLoading({ isLoading, isFetching, currentData }))
   const storefronts = data?.storefronts ?? []
   const fields = data?.fields ?? []
-  const totalPages = data ? Math.ceil(data.total / STOREFRONTS_PAGE_SIZE) : 0
+  const totalPages = data ? Math.ceil(data.total / pageSize) : 0
 
   const setPage = (next: number) => {
     const params = new URLSearchParams(searchParams)
     if (next > 1) params.set("page", String(next))
     else params.delete("page")
     setSearchParams(params, { replace: next === 1 })
+  }
+  const setPageSize = (size: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.delete("page")
+    if (size !== STOREFRONTS_PAGE_SIZE) params.set("page_size", String(size))
+    else params.delete("page_size")
+    setSearchParams(params)
   }
   // A new filter starts on its first page.
   const setField = (next: string | null) =>
@@ -152,20 +167,19 @@ export function StorefrontsHub() {
               {t("storefront.hub.empty", "No storefronts yet.")}
             </Typography>
           )}
-          {totalPages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", pt: 1 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(_, value) => setPage(value)}
-                color="primary"
-                shape="rounded"
-                renderItem={linkedPaginationItem(
-                  PATHS.storefronts,
-                  searchParams,
-                )}
-              />
-            </Box>
+          {data && data.total > 0 && (
+            <NumberedPagination
+              count={data.total}
+              page={page - 1}
+              rowsPerPage={pageSize}
+              onPageChange={(newPage) => {
+                setPage(newPage + 1)
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }}
+              rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+              onRowsPerPageChange={setPageSize}
+              link={{ path: PATHS.storefronts, searchParams }}
+            />
           )}
           <Stack
             direction={{ xs: "column", sm: "row" }}

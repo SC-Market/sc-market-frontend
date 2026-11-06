@@ -10,7 +10,6 @@ import {
   Divider,
   Grid,
   MenuItem,
-  Pagination,
   Paper,
   Stack,
   TextField,
@@ -18,10 +17,18 @@ import {
 } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import { Link as RouterLink, useSearchParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useSearchGameItemAggregatesQuery, type GameItemAggregate, type SearchGameItemAggregatesApiArg } from "../../../store/api/v2/market"
+import {
+  useSearchGameItemAggregatesQuery,
+  type GameItemAggregate,
+  type SearchGameItemAggregatesApiArg,
+} from "../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
@@ -33,6 +40,13 @@ import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BulkItemsTableV2 } from "./components/BulkItemsTableV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { useFormatters } from "../../../util/format"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../../components/pagination/NumberedPagination"
+
+const BULK_PAGE_SIZE = 24
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
@@ -40,49 +54,70 @@ function BulkSearchArea() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const updateParam = useCallback((key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    params.set("page", "1")
-    setSearchParams(params)
-  }, [searchParams, setSearchParams])
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams)
+      if (value) params.set(key, value)
+      else params.delete(key)
+      params.set("page", "1")
+      setSearchParams(params)
+    },
+    [searchParams, setSearchParams],
+  )
 
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={1.5}>
         <Grid item xs={12}>
           <TextField
-            size="small" fullWidth
+            size="small"
+            fullWidth
             label={t("bulk.search", "Search items")}
             value={searchParams.get("text") || ""}
             onChange={(e) => updateParam("text", e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField select size="small" fullWidth
+          <TextField
+            select
+            size="small"
+            fullWidth
             label={t("bulk.sortBy", "Sort by")}
             value={searchParams.get("sort_by") || "quantity"}
             onChange={(e) => updateParam("sort_by", e.target.value)}
           >
-            <MenuItem value="quantity">{t("marketUi.bulkItems.sortQuantity")}</MenuItem>
-            <MenuItem value="price">{t("marketUi.bulkItems.sortLowestPrice")}</MenuItem>
+            <MenuItem value="quantity">
+              {t("marketUi.bulkItems.sortQuantity")}
+            </MenuItem>
+            <MenuItem value="price">
+              {t("marketUi.bulkItems.sortLowestPrice")}
+            </MenuItem>
             <MenuItem value="name">{t("marketUi.bulkItems.sortName")}</MenuItem>
-            <MenuItem value="shop_count">{t("marketUi.bulkItems.sortMostShops")}</MenuItem>
+            <MenuItem value="shop_count">
+              {t("marketUi.bulkItems.sortMostShops")}
+            </MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12}>
-          <TextField select size="small" fullWidth
+          <TextField
+            select
+            size="small"
+            fullWidth
             label={t("bulk.order", "Order")}
             value={searchParams.get("sort_order") || "desc"}
             onChange={(e) => updateParam("sort_order", e.target.value)}
           >
             <MenuItem value="asc">{t("marketUi.bulkItems.ascending")}</MenuItem>
-            <MenuItem value="desc">{t("marketUi.bulkItems.descending")}</MenuItem>
+            <MenuItem value="desc">
+              {t("marketUi.bulkItems.descending")}
+            </MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={6}>
-          <TextField size="small" fullWidth type="number"
+          <TextField
+            size="small"
+            fullWidth
+            type="number"
             label={t("bulk.minPrice", "Min Price")}
             value={searchParams.get("price_min") || ""}
             onChange={(e) => updateParam("price_min", e.target.value)}
@@ -90,7 +125,10 @@ function BulkSearchArea() {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField size="small" fullWidth type="number"
+          <TextField
+            size="small"
+            fullWidth
+            type="number"
             label={t("bulk.maxPrice", "Max Price")}
             value={searchParams.get("price_max") || ""}
             onChange={(e) => updateParam("price_max", e.target.value)}
@@ -98,7 +136,10 @@ function BulkSearchArea() {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField size="small" fullWidth type="number"
+          <TextField
+            size="small"
+            fullWidth
+            type="number"
             label={t("bulk.minQty", "Min Quantity")}
             value={searchParams.get("quantity_min") || ""}
             onChange={(e) => updateParam("quantity_min", e.target.value)}
@@ -106,7 +147,10 @@ function BulkSearchArea() {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField size="small" fullWidth type="number"
+          <TextField
+            size="small"
+            fullWidth
+            type="number"
             label={t("bulk.maxQty", "Max Quantity")}
             value={searchParams.get("quantity_max") || ""}
             onChange={(e) => updateParam("quantity_max", e.target.value)}
@@ -114,7 +158,9 @@ function BulkSearchArea() {
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField size="small" fullWidth
+          <TextField
+            size="small"
+            fullWidth
             label={t("bulk.itemType", "Item Type")}
             value={searchParams.get("item_type") || ""}
             onChange={(e) => updateParam("item_type", e.target.value)}
@@ -130,7 +176,11 @@ function BulkMobileSidebar() {
   const [open, setOpen] = useMarketSidebar()
   const { t } = useTranslation()
   return (
-    <BottomSheet open={open} onClose={() => setOpen(false)} title={t("market.filters", "Filters")}>
+    <BottomSheet
+      open={open}
+      onClose={() => setOpen(false)}
+      title={t("market.filters", "Filters")}
+    >
       <BulkSearchArea />
     </BottomSheet>
   )
@@ -143,46 +193,95 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
   const { t } = useTranslation()
 
   return (
-    <Card sx={{
-      height: "100%",
-      transition: "transform 0.15s",
-      "&:hover": { transform: "translateY(-2px)" },
-    }}>
+    <Card
+      sx={{
+        height: "100%",
+        transition: "transform 0.15s",
+        "&:hover": { transform: "translateY(-2px)" },
+      }}
+    >
       <CardActionArea
         component={RouterLink}
         to={MARKET_PATHS.aggregate(item.game_item_id)}
-        sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", textDecoration: "none", color: "inherit" }}
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          textDecoration: "none",
+          color: "inherit",
+        }}
       >
         <CardMedia
           component="img"
           image={item.image_url || FALLBACK_IMAGE_URL}
           alt={item.name}
-          sx={{ height: 120, objectFit: "contain", bgcolor: "background.default", p: 1 }}
+          sx={{
+            height: 120,
+            objectFit: "contain",
+            bgcolor: "background.default",
+            p: 1,
+          }}
         />
         <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 }, flex: 1 }}>
-          <Typography variant="body2" fontWeight="bold" noWrap>{item.name}</Typography>
-          <Typography variant="caption" color="text.secondary" noWrap>{item.type}</Typography>
+          <Typography variant="body2" fontWeight="bold" noWrap>
+            {item.name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary" noWrap>
+            {item.type}
+          </Typography>
 
-          <Typography variant="subtitle2" color="primary" fontWeight="bold" sx={{ mt: 0.5 }}>
+          <Typography
+            variant="subtitle2"
+            color="primary"
+            fontWeight="bold"
+            sx={{ mt: 0.5 }}
+          >
             {item.min_price === item.max_price
               ? `${fmt.number(item.min_price)} aUEC`
               : `${fmt.number(item.min_price)} – ${fmt.number(item.max_price)} aUEC`}
           </Typography>
 
-          <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
-            <Chip label={t("marketUi.bulkItems.availableShort", { quantity: fmt.number(item.total_quantity) })} size="small" variant="outlined" />
-            <Chip label={t("marketUi.bulkItems.sellerCount", { count: item.shop_count })} size="small" variant="outlined" />
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ mt: 0.5 }}
+            flexWrap="wrap"
+            useFlexGap
+          >
+            <Chip
+              label={t("marketUi.bulkItems.availableShort", {
+                quantity: fmt.number(item.total_quantity),
+              })}
+              size="small"
+              variant="outlined"
+            />
+            <Chip
+              label={t("marketUi.bulkItems.sellerCount", {
+                count: item.shop_count,
+              })}
+              size="small"
+              variant="outlined"
+            />
           </Stack>
 
           {(item.quality_tier_min || item.quality_tier_max) && (
-            <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 0.25 }}>
-              <QualityBadge tier={item.quality_tier_min || item.quality_tier_max || 1} size="small" />
-              {item.quality_tier_min !== item.quality_tier_max && item.quality_tier_max && (
-                <>
-                  <Typography variant="caption" sx={{ mx: 0.25 }}>–</Typography>
-                  <QualityBadge tier={item.quality_tier_max} size="small" />
-                </>
-              )}
+            <Box
+              sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 0.25 }}
+            >
+              <QualityBadge
+                tier={item.quality_tier_min || item.quality_tier_max || 1}
+                size="small"
+              />
+              {item.quality_tier_min !== item.quality_tier_max &&
+                item.quality_tier_max && (
+                  <>
+                    <Typography variant="caption" sx={{ mx: 0.25 }}>
+                      –
+                    </Typography>
+                    <QualityBadge tier={item.quality_tier_max} size="small" />
+                  </>
+                )}
             </Box>
           )}
         </CardContent>
@@ -197,34 +296,58 @@ export function BulkItemsPageV2() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
   const showMobileSidebar = useBreakpointDown("lg")
   const [viewMode, setViewMode] = useViewMode()
 
-  const queryArgs = useMemo(() => ({
-    text: searchParams.get("text") || undefined,
-    itemType: searchParams.get("item_type") || undefined,
-    priceMin: searchParams.get("price_min") ? Number(searchParams.get("price_min")) : undefined,
-    priceMax: searchParams.get("price_max") ? Number(searchParams.get("price_max")) : undefined,
-    quantityMin: searchParams.get("quantity_min") ? Number(searchParams.get("quantity_min")) : undefined,
-    quantityMax: searchParams.get("quantity_max") ? Number(searchParams.get("quantity_max")) : undefined,
-    sortBy: (searchParams.get("sort_by") as SearchGameItemAggregatesApiArg["sortBy"]) || "quantity",
-    sortOrder: (searchParams.get("sort_order") as SearchGameItemAggregatesApiArg["sortOrder"]) || "desc",
-    page: Number(searchParams.get("page")) || 1,
-    pageSize: 24,
-  }), [searchParams])
+  const queryArgs = useMemo(
+    () => ({
+      text: searchParams.get("text") || undefined,
+      itemType: searchParams.get("item_type") || undefined,
+      priceMin: searchParams.get("price_min")
+        ? Number(searchParams.get("price_min"))
+        : undefined,
+      priceMax: searchParams.get("price_max")
+        ? Number(searchParams.get("price_max"))
+        : undefined,
+      quantityMin: searchParams.get("quantity_min")
+        ? Number(searchParams.get("quantity_min"))
+        : undefined,
+      quantityMax: searchParams.get("quantity_max")
+        ? Number(searchParams.get("quantity_max"))
+        : undefined,
+      sortBy:
+        (searchParams.get(
+          "sort_by",
+        ) as SearchGameItemAggregatesApiArg["sortBy"]) || "quantity",
+      sortOrder:
+        (searchParams.get(
+          "sort_order",
+        ) as SearchGameItemAggregatesApiArg["sortOrder"]) || "desc",
+      page: Number(searchParams.get("page")) || 1,
+      pageSize: parsePageSize(
+        searchParams.get("page_size"),
+        CARD_GRID_PAGE_SIZE_OPTIONS,
+        BULK_PAGE_SIZE,
+      ),
+    }),
+    [searchParams],
+  )
 
   const { data, isLoading } = useSearchGameItemAggregatesQuery(queryArgs)
   const items = data?.items ?? []
   const total = data?.total ?? 0
-  const totalPages = Math.ceil(total / (data?.page_size ?? 24))
 
-  const updateParam = useCallback((key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    params.set("page", "1")
-    setSearchParams(params)
-  }, [searchParams, setSearchParams])
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams)
+      if (value) params.set(key, value)
+      else params.delete(key)
+      params.set("page", "1")
+      setSearchParams(params)
+    },
+    [searchParams, setSearchParams],
+  )
 
   const gridBreakpoints = { xs: 6, sm: 4, md: 3, lg: 2 }
 
@@ -240,7 +363,12 @@ export function BulkItemsPageV2() {
         </Grid>
       ) : items.length === 0 ? (
         <EmptyListings
-          isSearchResult={!!searchParams.get("text") || !!searchParams.get("item_type") || !!searchParams.get("price_min") || !!searchParams.get("quantity_min")}
+          isSearchResult={
+            !!searchParams.get("text") ||
+            !!searchParams.get("item_type") ||
+            !!searchParams.get("price_min") ||
+            !!searchParams.get("quantity_min")
+          }
           title={
             searchParams.get("text") || searchParams.get("item_type")
               ? t("bulk.noResults", "No items match your filters")
@@ -248,8 +376,14 @@ export function BulkItemsPageV2() {
           }
           description={
             searchParams.get("text") || searchParams.get("item_type")
-              ? t("bulk.noResultsDesc", "Try adjusting your search or clearing filters")
-              : t("bulk.noItemsDesc", "There are no items with active listings right now. Check back later or create a listing.")
+              ? t(
+                  "bulk.noResultsDesc",
+                  "Try adjusting your search or clearing filters",
+                )
+              : t(
+                  "bulk.noItemsDesc",
+                  "There are no items with active listings right now. Check back later or create a listing.",
+                )
           }
           showCreateAction={!searchParams.get("text")}
         />
@@ -265,15 +399,26 @@ export function BulkItemsPageV2() {
         </Grid>
       )}
 
-      {totalPages > 1 && (
-        <Box display="flex" justifyContent="center" sx={{ mt: 3 }}>
-          <Pagination
-            count={totalPages}
-            page={queryArgs.page}
-            onChange={(_, p) => updateParam("page", String(p))}
-            color="primary"
-          />
-        </Box>
+      {total > 0 && (
+        <NumberedPagination
+          count={total}
+          page={queryArgs.page - 1}
+          rowsPerPage={queryArgs.pageSize}
+          onPageChange={(newPage) => {
+            // Not updateParam: that goes back to page 1.
+            const params = new URLSearchParams(searchParams)
+            if (newPage > 0) params.set("page", String(newPage + 1))
+            else params.delete("page")
+            setSearchParams(params)
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+          rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+          onRowsPerPageChange={(pageSize) =>
+            updateParam("page_size", String(pageSize))
+          }
+          link={{ path: pathname, searchParams }}
+          sx={{ mt: 2 }}
+        />
       )}
     </>
   )
@@ -287,15 +432,21 @@ export function BulkItemsPageV2() {
           {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
-                <HideOnScroll><MarketNavArea /></HideOnScroll>
+                <HideOnScroll>
+                  <MarketNavArea />
+                </HideOnScroll>
               </Grid>
-              <Grid item xs={12}><Divider light /></Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
               <Grid item xs={12}>
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
               </Grid>
-              <Grid item xs={12}>{itemGrid}</Grid>
+              <Grid item xs={12}>
+                {itemGrid}
+              </Grid>
             </Grid>
           ) : (
             <Stack
@@ -305,20 +456,24 @@ export function BulkItemsPageV2() {
               sx={{ width: "100%", maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar — same as ListingSearchV2 */}
-              <Paper sx={{
-                position: "sticky",
-                top: "calc(64px + 16px)",
-                maxHeight: "calc(100vh - 64px - 32px)",
-                height: "fit-content",
-                width: 300,
-                flexShrink: 0,
-                overflowY: "auto",
-              }}>
+              <Paper
+                sx={{
+                  position: "sticky",
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
+                  height: "fit-content",
+                  width: 300,
+                  flexShrink: 0,
+                  overflowY: "auto",
+                }}
+              >
                 <BulkSearchArea />
               </Paper>
 
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}
+                >
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
                 {itemGrid}

@@ -40,7 +40,6 @@ import {
   Paper,
   Stack,
   Switch,
-  TablePagination,
   TextField,
   Toolbar,
   Tooltip,
@@ -68,6 +67,7 @@ import { RefreshCircle } from "mdi-material-ui"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
+import { NumberedPagination } from "../../../components/pagination/NumberedPagination"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { MarketSearchAreaV2 } from "./ListingSearchV2"
@@ -99,6 +99,8 @@ import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallC
 import { selectOnFocus } from "../../../util/selectOnFocus"
 import { useFormatters } from "../../../util/format"
 import { WipeRelistBanner } from "./components/WipeRelistBanner"
+
+const STOCK_PAGE_SIZE_OPTIONS: readonly number[] = [24, 48, 96]
 
 /* ── Types ── */
 
@@ -897,17 +899,16 @@ function ShopListingsGridV2({
             ))
           )}
         </Paper>
-        <TablePagination
-          component="div"
+        <NumberedPagination
           count={total}
           page={page}
-          onPageChange={(_, p) => onPageChange(p)}
+          onPageChange={onPageChange}
           rowsPerPage={pageSize}
-          onRowsPerPageChange={(e) =>
-            onPageSizeChange(parseInt(e.target.value, 10))
-          }
-          rowsPerPageOptions={[24, 48, 96]}
-          labelRowsPerPage={t("common.rowsPerPage", "Rows per page")}
+          onRowsPerPageChange={(size) => {
+            onPageSizeChange(size)
+            onPageChange(0)
+          }}
+          rowsPerPageOptions={STOCK_PAGE_SIZE_OPTIONS}
         />
         <QuickEditListingSheet
           listing={editTarget}
@@ -955,7 +956,7 @@ function ShopListingsGridV2({
           onPageChange(m.page)
           onPageSizeChange(m.pageSize)
         }}
-        pageSizeOptions={[24, 48, 96]}
+        pageSizeOptions={[...STOCK_PAGE_SIZE_OPTIONS]}
         loading={isLoading}
       />
     </Box>

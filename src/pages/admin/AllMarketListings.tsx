@@ -27,7 +27,10 @@ import {
 } from "../../store/api/v2/market"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
-import { ListingPagination } from "../../features/market/components/listings/ListingPagination"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../components/pagination/NumberedPagination"
 import { useFormatters } from "../../util/format"
 
 type ListingStatus = "active" | "inactive" | "expired" | "sold" | "cancelled"
@@ -174,13 +177,14 @@ function AdminListingsSection({ status }: { status: ListingStatus }) {
         ))}
       </Grid>
       <Box sx={{ mt: 2 }}>
-        <ListingPagination
+        <NumberedPagination
           count={data.total}
           page={page - 1}
           rowsPerPage={pageSize}
-          onPageChange={(_, newPage) => setPage(newPage + 1)}
-          onRowsPerPageChange={(e) => {
-            setPageSize(parseInt(e.target.value, 10))
+          onPageChange={(newPage) => setPage(newPage + 1)}
+          rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+          onRowsPerPageChange={(rowsPerPage) => {
+            setPageSize(rowsPerPage)
             setPage(1)
           }}
         />

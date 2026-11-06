@@ -3,7 +3,7 @@
  * args as the homepage row on page 1), the MUI pagination's page buttons are
  * real /storefronts?page=N links that navigate in the app, the bare pages
  * get rel prev/next, and a focus chip filters on the server (?field=),
- * starting on its first page.
+ * starting on its first page; its page links keep the filter (nofollow).
  */
 import React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
@@ -195,11 +195,14 @@ describe("StorefrontsHub pagination", () => {
       "/storefronts?field=freight",
     )
     expect(h.calls.at(-1)).toEqual({ page: 1, pageSize: 24, field: "freight" })
-    // A filtered view is a noindex variant: no prev/next, plain page buttons.
+    // A filtered view is a noindex variant: no prev/next, and its page links
+    // keep the filter but are nofollow.
     expect(screen.queryByTestId("head")).toBeNull()
     expect(headLink("next")).toBeNull()
-    expect(within(nav()).queryByRole("link", { name: /page 2/i })).toBeNull()
-    fireEvent.click(within(nav()).getByRole("button", { name: /page 2/i }))
+    const page2 = within(nav()).getByRole("link", { name: /page 2/i })
+    expect(page2.getAttribute("href")).toBe("/storefronts?field=freight&page=2")
+    expect(page2.getAttribute("rel")).toBe("nofollow")
+    fireEvent.click(page2)
     expect(screen.getByTestId("location").textContent).toBe(
       "/storefronts?field=freight&page=2",
     )

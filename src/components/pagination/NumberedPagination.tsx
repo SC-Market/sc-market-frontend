@@ -84,6 +84,16 @@ export function NumberedPagination(props: NumberedPaginationProps) {
     !!rowsPerPageOptions &&
     rowsPerPageOptions.length > 1
 
+  // One page: no page buttons. The select stays while a smaller page size
+  // would split the list, so a big size can be undone.
+  const showPages = totalPages > 1
+  if (
+    !showPages &&
+    (!showSelect || count <= Math.min(...(rowsPerPageOptions ?? [])))
+  ) {
+    return null
+  }
+
   const renderItem = link
     ? linkedPaginationItem(link.path, link.searchParams)
     : (item: PaginationRenderItemParams) => <PaginationItem {...item} />
@@ -155,29 +165,48 @@ export function NumberedPagination(props: NumberedPaginationProps) {
           )}
         </Box>
       )}
-      <Pagination
-        aria-label={t("pagination.navLabel")}
-        count={totalPages}
-        page={Math.min(page + 1, totalPages)}
-        onChange={(_, newPage) => {
-          if (newPage - 1 === page) return
-          haptic.selection()
-          onPageChange(newPage - 1)
-        }}
-        color="primary"
-        size={isMobile ? "small" : "medium"}
-        siblingCount={isMobile ? 0 : 1}
-        boundaryCount={1}
-        renderItem={renderItem}
-        getItemAriaLabel={(type, itemPage, selected) => {
-          if (type === "previous") return t("accessibility.previousPage")
-          if (type === "next") return t("accessibility.nextPage")
-          return selected
-            ? t("pagination.currentPage", { page: fmt.number(itemPage ?? 0) })
-            : t("pagination.goToPage", { page: fmt.number(itemPage ?? 0) })
-        }}
-        sx={{ order: { xs: 1, sm: 0 }, ml: { sm: "auto" } }}
-      />
+      {showPages && (
+        <Pagination
+          aria-label={t("pagination.navLabel")}
+          count={totalPages}
+          page={Math.min(page + 1, totalPages)}
+          onChange={(_, newPage) => {
+            if (newPage - 1 === page) return
+            haptic.selection()
+            onPageChange(newPage - 1)
+          }}
+          color="primary"
+          size={isMobile ? "small" : "medium"}
+          siblingCount={isMobile ? 0 : 1}
+          boundaryCount={1}
+          renderItem={renderItem}
+          getItemAriaLabel={(type, itemPage, selected) => {
+            if (type === "previous") return t("accessibility.previousPage")
+            if (type === "next") return t("accessibility.nextPage")
+            return selected
+              ? t("pagination.currentPage", { page: fmt.number(itemPage ?? 0) })
+              : t("pagination.goToPage", { page: fmt.number(itemPage ?? 0) })
+          }}
+          sx={{ order: { xs: 1, sm: 0 }, ml: { sm: "auto" } }}
+        />
+      )}
     </Box>
   )
 }
+
+/**
+ * The page size of a URL-driven list from its `?page_size=` param: one of
+ * `options`, else `fallback` (the list's default, the size prerendered and
+ * linked pages use).
+ */
+export function parsePageSize(
+  value: string | null,
+  options: readonly number[],
+  fallback: number,
+): number {
+  const n = Number(value)
+  return options.includes(n) ? n : fallback
+}
+
+/** "Per page" choices of the card grids that show 24 (or 48) by default. */
+export const CARD_GRID_PAGE_SIZE_OPTIONS: readonly number[] = [12, 24, 48, 96]

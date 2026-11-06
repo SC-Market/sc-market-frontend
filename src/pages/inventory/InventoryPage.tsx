@@ -49,6 +49,7 @@ import { HelpLink } from "../../features/help/components/HelpLink"
 import { FirstUseHint } from "../../features/help/components/FirstUseHint"
 import { EmptyState } from "../../components/empty-states/EmptyState"
 import { useFormatters } from "../../util/format"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({
@@ -99,6 +100,7 @@ export default function InventoryPage() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(50)
   const [search, setSearch] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
@@ -112,7 +114,7 @@ export default function InventoryPage() {
 
   const { data, isLoading, refetch } = useGetInventoryQuery({
     page,
-    pageSize: 50,
+    pageSize,
   })
   const [createLot, { isLoading: creating }] = useCreateInventoryLotMutation()
   const [deleteLot, { isLoading: deleting }] = useDeleteInventoryLotMutation()
@@ -496,21 +498,22 @@ export default function InventoryPage() {
           )}
 
           {/* Pagination */}
-          {data && data.total > data.page_size && (
-            <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-              <Button disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                {t("common.previous", "Previous")}
-              </Button>
-              <Typography sx={{ mx: 2, alignSelf: "center" }}>
-                {page} / {Math.ceil(data.total / data.page_size)}
-              </Typography>
-              <Button
-                disabled={page >= Math.ceil(data.total / data.page_size)}
-                onClick={() => setPage(page + 1)}
-              >
-                {t("common.next", "Next")}
-              </Button>
-            </Stack>
+          {data && data.total > 0 && (
+            <NumberedPagination
+              count={data.total}
+              page={page - 1}
+              rowsPerPage={pageSize}
+              onPageChange={(newPage) => {
+                setPage(newPage + 1)
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }}
+              rowsPerPageOptions={[25, 50, 100]}
+              onRowsPerPageChange={(size) => {
+                setPageSize(size)
+                setPage(1)
+              }}
+              sx={{ mt: 2 }}
+            />
           )}
         </Paper>
       </Grid>
