@@ -42,28 +42,19 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import {
-  useAutoAllocateOrderStockMutation,
   useGetOrderAllocationsQuery,
-  useManualAllocateOrderStockMutation,
-  useReleaseOrderStockMutation,
   type OrderAllocation,
   type OrderAllocationLine,
   type OrderAllocationLot,
 } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import {
+  apiErrorMessage,
+  useOrderAllocationActions,
+} from "../../hooks/useOrderAllocationActions"
 import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface SplitAllocationViewProps {
   orderId: string
-}
-
-/** The message of a failed V2 request ({ error: { message } }). */
-function apiErrorMessage(error: unknown, fallback: string): string {
-  if (error && typeof error === "object" && "data" in error) {
-    const data = (error as { data?: { error?: { message?: unknown } } }).data
-    if (typeof data?.error?.message === "string") return data.error.message
-  }
-  return fallback
 }
 
 function lotLocation(lot: OrderAllocationLot | null, t: TFunction) {
@@ -107,72 +98,14 @@ function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
 
 export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const { data, isLoading, error } = useGetOrderAllocationsQuery({ orderId })
-  const [manualAllocate] = useManualAllocateOrderStockMutation()
-  const [autoAllocate, { isLoading: autoLoading }] =
-    useAutoAllocateOrderStockMutation()
-  const [release, { isLoading: releaseLoading }] =
-    useReleaseOrderStockMutation()
-
-  /** Sets the units `lotId` holds for the line (absolute, 0 releases). */
-  const setLotAllocation = async (
-    line: OrderAllocationLine,
-    lotId: string,
-    quantity: number,
-    success: string,
-  ) => {
-    try {
-      await manualAllocate({
-        orderId,
-        manualOrderAllocationRequest: {
-          allocations: [
-            { lot_id: lotId, quantity, order_item_id: line.order_item_id },
-          ],
-        },
-      }).unwrap()
-      issueAlert({ severity: "success", message: success })
-    } catch (e) {
-      issueAlert({
-        severity: "error",
-        message: apiErrorMessage(e, t("allocationUi.updateFailed")),
-      })
-    }
-  }
-
-  const handleAutoAllocate = async () => {
-    try {
-      const res = await autoAllocate({ orderId }).unwrap()
-      issueAlert({
-        severity:
-          res.total_allocated < res.total_requested ? "warning" : "success",
-        message: t("allocationUi.unitsAllocated", {
-          allocated: res.total_allocated,
-          count: res.total_requested,
-        }),
-      })
-    } catch (e) {
-      issueAlert({
-        severity: "error",
-        message: apiErrorMessage(e, t("allocationUi.allocateFailed")),
-      })
-    }
-  }
-
-  const handleReleaseAll = async () => {
-    try {
-      await release({ orderId, releaseOrderAllocationsRequest: {} }).unwrap()
-      issueAlert({
-        severity: "success",
-        message: t("allocationUi.releasedSuccess"),
-      })
-    } catch (e) {
-      issueAlert({
-        severity: "error",
-        message: apiErrorMessage(e, t("allocationUi.releaseFailed")),
-      })
-    }
-  }
+  const {
+    setLotAllocation,
+    autoAllocateAll: handleAutoAllocate,
+    releaseAll: handleReleaseAll,
+    autoLoading,
+    releaseLoading,
+  } = useOrderAllocationActions(orderId)
 
   if (isLoading) {
     return (

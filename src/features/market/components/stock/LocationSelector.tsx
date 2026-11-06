@@ -20,10 +20,9 @@ import {
 import { useTranslation } from "react-i18next"
 import {
   useGetLocationsQuery,
-  useCreateLocationMutation,
   Location,
 } from "../../../../store/api/stockLotsApi"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { useCreateStockLocation } from "../../hooks/useCreateStockLocation"
 import { useDebounce } from "../../../../hooks/useDebounce"
 
 export interface LocationSelectorProps {
@@ -57,7 +56,6 @@ export function LocationSelector({
   sx,
 }: LocationSelectorProps) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
 
   const [inputValue, setInputValue] = useState("")
 
@@ -72,8 +70,7 @@ export function LocationSelector({
       { skip: !!providedLocations },
     )
 
-  const [createLocation, { isLoading: isCreating }] =
-    useCreateLocationMutation()
+  const { create: createLocation, isCreating } = useCreateStockLocation()
 
   // Use provided locations or fetched locations
   const locations = useMemo(
@@ -129,36 +126,7 @@ export function LocationSelector({
   }
 
   // Handle creating a new custom location
-  const handleCreateLocation = async (name: string) => {
-    if (!name || name.trim().length === 0) {
-      return
-    }
-
-    if (name.length > 255) {
-      issueAlert({
-        message: t(
-          "LocationSelector.nameTooLong",
-          "Location name must be 255 characters or less",
-        ),
-        severity: "error",
-      })
-      return
-    }
-
-    try {
-      const result = await createLocation({ name: name.trim() }).unwrap()
-      onChange(result.location.location_id)
-      issueAlert({
-        message: t("LocationSelector.createSuccess", "Custom location created"),
-        severity: "success",
-      })
-    } catch {
-      issueAlert({
-        message: t("LocationSelector.createError", "Failed to create location"),
-        severity: "error",
-      })
-    }
-  }
+  const handleCreateLocation = (name: string) => createLocation(name, onChange)
 
   return (
     <Autocomplete

@@ -1,17 +1,11 @@
 import { FlatSection } from "../../../components/paper/Section"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import React, { useCallback, useEffect, useState } from "react"
-import {
-  useGetUserProfileQuery,
-  useUpdateProfile,
-} from "../../profile/api/profileApi"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
-import {
-  useUpdateContractorMutation,
-  useGetContractorBySpectrumIDQuery,
-} from "../../contractor/api/contractorApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
+import { useSaveMarketOrderTemplate } from "../hooks/useSaveMarketOrderTemplate"
 import { useTranslation } from "react-i18next" // Localization
 import { OrderSettings } from "../../../components/settings/OrderSettings"
 
@@ -37,38 +31,11 @@ export function MarketEditTemplate(props: {
     )
   }, [contractor, props.org, profile])
 
-  const [updateProfile, { isLoading: profileUpdateLoading }] =
-    useUpdateProfile()
-  const [updateOrg, { isLoading: orgUpdateLoading }] =
-    useUpdateContractorMutation()
-
-  const issueAlert = useAlertHook()
+  const { save, isLoading: saving } = useSaveMarketOrderTemplate(!!props.org)
 
   const callback = useCallback(() => {
-    let response
-    if (props.org) {
-      response = updateOrg({
-        contractor: contractor!.spectrum_id,
-        body: {
-          market_order_template: template,
-        },
-      })
-    } else {
-      response = updateProfile({
-        market_order_template: template,
-      })
-    }
-
-    response
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          severity: "success",
-          message: t("MarketEditTemplate.submitted"),
-        })
-      })
-      .catch((err) => issueAlert(err))
-  }, [template, contractor, t, props.org, updateOrg, updateProfile, issueAlert])
+    save(template, props.org ? contractor!.spectrum_id : undefined)
+  }, [save, template, contractor, props.org])
 
   return (
     <>
@@ -84,7 +51,7 @@ export function MarketEditTemplate(props: {
           </Grid>
           <Grid item xs={12}>
             <LoadingButton
-              loading={orgUpdateLoading || profileUpdateLoading}
+              loading={saving}
               onClick={callback}
               variant={"contained"}
               disabled={props.org && !contractor}

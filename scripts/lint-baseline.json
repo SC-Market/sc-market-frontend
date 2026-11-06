@@ -1,9 +1,9 @@
 {
-  "warnings": 184,
+  "warnings": 173,
   "errors": 0,
   "byRule": {
     "@typescript-eslint/no-restricted-imports": 37,
     "max-lines": 75,
-    "scm-style/render-layer": 72
+    "scm-style/render-layer": 61
   }
 }

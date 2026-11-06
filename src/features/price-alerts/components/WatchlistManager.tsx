@@ -24,12 +24,13 @@ import {
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink } from "react-router-dom"
 import {
-  useAddWatchlistItemMutation,
   useGetWatchlistQuery,
-  useRemoveWatchlistItemMutation,
-  useUpdateWatchlistItemMutation,
   type WatchlistItem,
 } from "../../../store/api/v2/market"
+import {
+  useAddWatchlistItem,
+  useWatchlistRowActions,
+} from "../hooks/useWatchlistActions"
 import {
   GameItemPicker,
   type GameItemChoice,
@@ -57,8 +58,8 @@ export function WatchlistManager() {
   const { t } = useTranslation()
   const { data, isLoading, isError } = useGetWatchlistQuery()
   usePageReady(isLoading)
-  const [remove, removeState] = useRemoveWatchlistItemMutation()
-  const [update, updateState] = useUpdateWatchlistItemMutation()
+  const { remove, removeState, setPaused, updateState } =
+    useWatchlistRowActions()
   const [editing, setEditing] = React.useState<WatchlistItem | null>(null)
 
   const items = data?.items ?? []
@@ -254,12 +255,7 @@ export function WatchlistManager() {
                     <IconButton
                       size="small"
                       disabled={updateState.isLoading}
-                      onClick={() =>
-                        update({
-                          watchlistId: item.id,
-                          updateWatchlistItemRequest: { paused: !item.paused },
-                        })
-                      }
+                      onClick={() => setPaused(item.id, !item.paused)}
                       aria-label={
                         item.paused
                           ? t(
@@ -308,7 +304,7 @@ export function WatchlistManager() {
                     <IconButton
                       size="small"
                       disabled={removeState.isLoading}
-                      onClick={() => remove({ watchlistId: item.id })}
+                      onClick={() => remove(item.id)}
                       aria-label={t(
                         "priceAlerts.manager.removeAria",
                         "Stop watching {{name}}",
@@ -415,20 +411,15 @@ function AddWatchlistItemForm({ disabled }: { disabled: boolean }) {
   const { t } = useTranslation()
   const [item, setItem] = React.useState<GameItemChoice | null>(null)
   const [price, setPrice] = React.useState("")
-  const [add, { isLoading, error, reset }] = useAddWatchlistItemMutation()
+  const { add, isLoading, error, reset } = useAddWatchlistItem()
   const parsed = parseTargetPrice(price)
   const invalid = price !== "" && parsed == null
 
   const submit = async () => {
     if (!item || parsed == null) return
-    try {
-      await add({
-        addWatchlistItemRequest: { game_item_id: item.id, max_price: parsed },
-      }).unwrap()
+    if (await add(item.id, parsed)) {
       setItem(null)
       setPrice("")
-    } catch {
-      // Shown below.
     }
   }
 

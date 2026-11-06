@@ -14,14 +14,9 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
-import {
-  useAddWatchlistItemMutation,
-  useRemoveWatchlistItemMutation,
-  useUpdateWatchlistItemMutation,
-  type WatchlistItem,
-} from "../../../store/api/v2/market"
+import type { WatchlistItem } from "../../../store/api/v2/market"
+import { useWatchPrice } from "../hooks/useWatchlistActions"
 import { getErrorMessage } from "../../../util/errorHandling"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { parseTargetPrice, QUALITY_TIERS } from "../domain/price"
 
 import { useFormatters } from "../../../util/format"
@@ -60,7 +55,6 @@ export function WatchPriceDialog({
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const fmt = useFormatters()
-  const issueAlert = useAlertHook()
   const initial =
     existing?.max_price ??
     (currentPrice && currentPrice > 1 ? currentPrice : null)
@@ -82,67 +76,19 @@ export function WatchPriceDialog({
     }
   }
 
-  const [add, addState] = useAddWatchlistItemMutation()
-  const [update, updateState] = useUpdateWatchlistItemMutation()
-  const [remove, removeState] = useRemoveWatchlistItemMutation()
-  const busy =
-    addState.isLoading || updateState.isLoading || removeState.isLoading
-  const failure = addState.error || updateState.error || removeState.error
+  const watch = useWatchPrice({ gameItemId, itemName, existing })
+  const { busy, failure } = watch
 
   const price = parseTargetPrice(value)
   const invalid = value !== "" && price == null
 
   const save = async () => {
     if (price == null) return
-    try {
-      if (existing) {
-        await update({
-          watchlistId: existing.id,
-          updateWatchlistItemRequest: {
-            max_price: price,
-            ...(showQuality ? { min_quality_tier: tier } : {}),
-          },
-        }).unwrap()
-      } else {
-        await add({
-          addWatchlistItemRequest: {
-            game_item_id: gameItemId,
-            max_price: price,
-            ...(tier != null ? { min_quality_tier: tier } : {}),
-          },
-        }).unwrap()
-      }
-      issueAlert({
-        message: t(
-          "priceAlerts.watch.saved",
-          "Watching {{name}} at ≤ {{price}}",
-          {
-            name: itemName,
-            price: fmt.auec(price),
-          },
-        ),
-        severity: "success",
-      })
-      onClose()
-    } catch {
-      // Shown in the dialog.
-    }
+    if (await watch.save(price, tier, showQuality)) onClose()
   }
 
   const stop = async () => {
-    if (!existing) return
-    try {
-      await remove({ watchlistId: existing.id }).unwrap()
-      issueAlert({
-        message: t("priceAlerts.watch.removed", "Stopped watching {{name}}", {
-          name: itemName,
-        }),
-        severity: "success",
-      })
-      onClose()
-    } catch {
-      // Shown in the dialog.
-    }
+    if (await watch.stop()) onClose()
   }
 
   return (
