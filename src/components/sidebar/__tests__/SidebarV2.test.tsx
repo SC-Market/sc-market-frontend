@@ -672,7 +672,7 @@ describe("SidebarV2 — search filtering", () => {
   it("filters visible nav items to matches when typing", async () => {
     const user = userEvent.setup()
     renderSidebar("/market")
-    const input = screen.getByPlaceholderText("Search navigation...")
+    const input = screen.getByPlaceholderText("Search navigation")
     await user.type(input, "Messages")
     expect(screen.getByText("Messages")).toBeInTheDocument()
     // Non-matching items are filtered out.
@@ -683,7 +683,7 @@ describe("SidebarV2 — search filtering", () => {
   it("shows a no-results message when nothing matches", async () => {
     const user = userEvent.setup()
     renderSidebar("/market")
-    const input = screen.getByPlaceholderText("Search navigation...")
+    const input = screen.getByPlaceholderText("Search navigation")
     await user.type(input, "zzznomatch")
     expect(screen.getByText("No matching pages")).toBeInTheDocument()
   })

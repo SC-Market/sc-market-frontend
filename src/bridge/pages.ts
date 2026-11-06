@@ -1460,7 +1460,7 @@ const HUB_PAGES: Record<
         ),
         {
           tag: "h2",
-          text: englishT("landing.faqTitle", "Your questions, answered"),
+          text: englishT("landing.faqTitle", "Common questions"),
         },
         ...faqs.flatMap((faq): SummaryBlock[] => [
           { tag: "h3", text: faq.question },

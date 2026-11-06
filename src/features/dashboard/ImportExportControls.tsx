@@ -161,10 +161,10 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
             const options = isOrg ? orgs : shops
             const widgetName = def ? widgetTitle(def, t) : remap.widgetType
             const label = isOrg
-              ? t("dashboard.remapOrgLabel", "{{name}} — organization", {
+              ? t("dashboard.remapOrgLabel", "{{name}} (organization)", {
                   name: widgetName,
                 })
-              : t("dashboard.remapShopLabel", "{{name}} — shop", {
+              : t("dashboard.remapShopLabel", "{{name}} (shop)", {
                   name: widgetName,
                 })
             return (
@@ -210,11 +210,11 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
                     {isOrg
                       ? t(
                           "dashboard.noOrgsWidgetDropped",
-                          "You have no organizations — this widget will be dropped.",
+                          "You have no organizations, so this widget will be dropped.",
                         )
                       : t(
                           "dashboard.noShopsWidgetDropped",
-                          "You have no shops — this widget will be dropped.",
+                          "You have no shops, so this widget will be dropped.",
                         )}
                   </Typography>
                 )}

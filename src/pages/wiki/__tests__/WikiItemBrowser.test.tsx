@@ -89,7 +89,7 @@ describe("WikiItemBrowser", () => {
 
     // Check that search bar exists with actual placeholder
     expect(
-      screen.getByPlaceholderText("Search items, types, manufacturers..."),
+      screen.getByPlaceholderText("Search items, types and manufacturers"),
     ).toBeInTheDocument()
   })
 

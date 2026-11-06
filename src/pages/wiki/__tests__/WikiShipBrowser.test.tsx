@@ -78,7 +78,7 @@ describe("WikiShipBrowser", () => {
     )
 
     expect(
-      screen.getByPlaceholderText("Search ships, vehicles, manufacturers..."),
+      screen.getByPlaceholderText("Search ships, vehicles and manufacturers"),
     ).toBeInTheDocument()
   })
 })

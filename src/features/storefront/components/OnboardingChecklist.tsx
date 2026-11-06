@@ -105,7 +105,7 @@ export function OnboardingChecklist(props: { spectrumId: string }) {
             )
           : t(
               "storefront.onboarding.intro",
-              "Each step takes a few minutes: aim for your first listing within 15.",
+              "Work through these steps to get your storefront ready.",
             )}
       </Typography>
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>

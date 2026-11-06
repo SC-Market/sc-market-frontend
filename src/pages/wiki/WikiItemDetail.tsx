@@ -380,7 +380,7 @@ export function WikiItemDetail() {
                     </>
                   ) : (
                     <Alert severity="warning">
-                      {t("wiki.itemDetail.noRecipeWarning", "No crafting recipe found for this item — disassembly components unknown.")}
+                      {t("wiki.itemDetail.noRecipeWarning", "No crafting recipe found for this item, so its disassembly components are unknown.")}
                     </Alert>
                   )}
                 </CardContent>

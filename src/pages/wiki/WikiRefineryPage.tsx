@@ -37,7 +37,7 @@ const qualityColor: Record<string, string> = {
 const speedDesc: Record<string, { key: string; en: string }> = {
   Fast: {
     key: "wiki.refinery.speedDesc.fast",
-    en: "Shortest processing time — get your refined materials quickly",
+    en: "Shortest processing time: get your refined materials quickly",
   },
   Normal: {
     key: "wiki.refinery.speedDesc.normal",
@@ -45,21 +45,21 @@ const speedDesc: Record<string, { key: string; en: string }> = {
   },
   Slow: {
     key: "wiki.refinery.speedDesc.slow",
-    en: "Longest processing time — but often paired with better yield",
+    en: "Longest processing time, but often paired with better yield",
   },
 }
 const qualityDesc: Record<string, { key: string; en: string }> = {
   Careful: {
     key: "wiki.refinery.qualityDesc.careful",
-    en: "Highest yield — minimal material loss during refining",
+    en: "Highest yield: minimal material loss during refining",
   },
   Normal: {
     key: "wiki.refinery.qualityDesc.normal",
-    en: "Balanced yield — moderate material loss",
+    en: "Balanced yield: moderate material loss",
   },
   Wasteful: {
     key: "wiki.refinery.qualityDesc.wasteful",
-    en: "Lowest yield — significant material loss, but cheaper",
+    en: "Lowest yield: significant material loss, but cheaper",
   },
 }
 
@@ -92,7 +92,7 @@ const bestForCopy: {
     speed: "Fast",
     quality: "Careful",
     key: "wiki.refinery.bestFor.fastCareful",
-    en: "Best overall — fast with high yield",
+    en: "Best overall: fast with high yield",
   },
   {
     speed: "Fast",
@@ -110,7 +110,7 @@ const bestForCopy: {
     speed: "Normal",
     quality: "Careful",
     key: "wiki.refinery.bestFor.normalCareful",
-    en: "Popular choice — good yield, reasonable time",
+    en: "Good yield in a reasonable time",
   },
   {
     speed: "Normal",
@@ -128,7 +128,7 @@ const bestForCopy: {
     speed: "Slow",
     quality: "Careful",
     key: "wiki.refinery.bestFor.slowCareful",
-    en: "Maximum yield — worth the wait for expensive ores",
+    en: "Maximum yield: worth the wait for expensive ores",
   },
   {
     speed: "Slow",
@@ -140,7 +140,7 @@ const bestForCopy: {
     speed: "Slow",
     quality: "Wasteful",
     key: "wiki.refinery.bestFor.slowWasteful",
-    en: "Slow AND wasteful — generally avoid",
+    en: "Slow and wasteful: usually avoid",
   },
 ]
 

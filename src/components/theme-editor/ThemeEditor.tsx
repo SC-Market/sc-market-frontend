@@ -73,7 +73,7 @@ const COLOR_FIELDS: ColorField[] = [
     path: ["palette", "primary", "dark"],
     usageNoteKey: "chromeUi.themeEditor.usagePrimaryDark",
     usageNoteFallback:
-      "MUI uses this for contained primary buttons on hover — not the “Menu & list hover” color.",
+      "MUI uses this for contained primary buttons on hover, not the “Menu & list hover” color.",
   },
   {
     key: "secondary",
@@ -133,7 +133,7 @@ const COLOR_FIELDS: ColorField[] = [
     path: ["palette", "action", "hover"],
     usageNoteKey: "chromeUi.themeEditor.usageActionHover",
     usageNoteFallback:
-      "Sidebar rows, menus, autocomplete — and Skeleton “wave”. Not filled primary buttons.",
+      "Sidebar rows, menus, autocomplete, and Skeleton “wave”. Not filled primary buttons.",
   },
 ]
 

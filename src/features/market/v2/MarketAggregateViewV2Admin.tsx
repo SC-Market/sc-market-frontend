@@ -481,7 +481,7 @@ function SellOrdersPanel({
           >
             {t(
               "quickList.empty.body",
-              "Have one? List it in about 15 seconds. Buyers watching this item get notified.",
+              "Have one? List it with Quick List. Buyers watching its price get an alert when it fits their target.",
             )}
           </Typography>
           <SellYoursButton variant="contained" />

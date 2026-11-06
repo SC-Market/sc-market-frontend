@@ -151,10 +151,7 @@ export function GameItemSearchAutocomplete({
           error={!!errorText}
           helperText={errorText}
           label={label || t("market.search_query")}
-          placeholder={t(
-            "market.searchItemPlaceholder",
-            "Start typing an item name...",
-          )}
+          placeholder={t("market.searchItemPlaceholder", "Search items")}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -181,12 +178,12 @@ export function GameItemSearchAutocomplete({
       )}
       noOptionsText={
         inputValue.trim().length < 1
-          ? t("market.typeToSearch", "Type to search...")
+          ? t("market.typeToSearch", "Type an item name")
           : isSearching
             ? t("market.searching", "Searching...")
             : t(
                 "market.noItemResults",
-                "No items found — try a shorter or different term",
+                "No items found. Try a shorter or different term.",
               )
       }
       loadingText={t("market.searching", "Searching...")}

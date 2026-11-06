@@ -319,7 +319,7 @@ describe("BulkStockManagementV2", () => {
 
     await waitFor(() => {
       expect(screen.getAllByText("Filters").length).toBeGreaterThan(0)
-      expect(screen.getByPlaceholderText("Search lots...")).toBeInTheDocument()
+      expect(screen.getByPlaceholderText("Search lots")).toBeInTheDocument()
     })
   })
 
@@ -636,14 +636,14 @@ describe("BulkStockManagementV2", () => {
     )
   }
 
-  // Regression: the "Search lots..." box did nothing.
+  // Regression: the "Search lots" box did nothing.
   it("filters lots by the search box", async () => {
     renderWithLots()
     await waitFor(() =>
       expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument(),
     )
     await userEvent.type(
-      screen.getAllByPlaceholderText("Search lots...")[0],
+      screen.getAllByPlaceholderText("Search lots")[0],
       "lorville",
     )
     await waitFor(() =>

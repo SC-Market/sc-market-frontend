@@ -1090,7 +1090,7 @@ export function WikiShipBrowser() {
               mode="ships"
               placeholder={t(
                 "wiki.shipBrowser.searchPlaceholder",
-                "Search ships, vehicles, manufacturers...",
+                "Search ships, vehicles and manufacturers",
               )}
             />
             {data && (

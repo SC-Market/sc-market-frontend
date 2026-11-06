@@ -414,7 +414,7 @@ export function AdminAlertsView() {
                     helperText={contractorError}
                     placeholder={t(
                       "admin.alerts.contractorPlaceholder",
-                      "Type to search for contractors...",
+                      "Search orgs",
                     )}
                   />
                 )}
@@ -605,7 +605,7 @@ export function AdminAlertsView() {
                     helperText={contractorError}
                     placeholder={t(
                       "admin.alerts.contractorPlaceholder",
-                      "Type to search for contractors...",
+                      "Search orgs",
                     )}
                   />
                 )}

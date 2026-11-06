@@ -67,7 +67,7 @@ export function ResourceBrowser() {
       <TextField
         fullWidth
         size="small"
-        placeholder={t("resources.search", "Search resources...")}
+        placeholder={t("resources.search", "Search resources")}
         value={searchText}
         onChange={(e) => {
           setSearchText(e.target.value)

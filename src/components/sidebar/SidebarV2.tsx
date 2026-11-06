@@ -1035,7 +1035,7 @@ export function SidebarV2() {
           fullWidth
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={t("nav.searchPlaceholder", "Search navigation...")}
+          placeholder={t("nav.searchPlaceholder", "Search navigation")}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

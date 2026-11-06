@@ -252,7 +252,7 @@ export default function InventoryPage() {
             <Stack direction="row" spacing={1}>
               <TextField
                 size="small"
-                placeholder={t("inventory.search", "Search...")}
+                placeholder={t("inventory.search", "Search inventory")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{

@@ -160,7 +160,7 @@ export function SellFormRedesign() {
       issueAlert({
         message: t(
           "SellFormRedesign.visualOnly",
-          "Custom items and bundles are previewed only in this phase — not yet saved.",
+          "Custom items and bundles are only a preview for now. They aren't saved yet.",
         ),
         severity: "info",
       })
@@ -211,7 +211,7 @@ export function SellFormRedesign() {
       <Typography variant="body2" sx={{ color: "text.primary", mb: 3 }}>
         {t(
           "SellFormRedesign.subheading",
-          "Pick what you're selling — the form shows only the fields it needs.",
+          "Pick what you're selling. The form shows only the fields it needs.",
         )}
       </Typography>
 
@@ -404,7 +404,7 @@ export function SellFormRedesign() {
                     onChange={(e) => setLocation(e.target.value)}
                     helperText={t(
                       "SellFormRedesign.locationHelp",
-                      "Where the buyer can collect — e.g. Area18, Everus Harbor.",
+                      "Where the buyer can collect, e.g. Area18 or Everus Harbor.",
                     )}
                   />
 

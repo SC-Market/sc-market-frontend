@@ -181,9 +181,7 @@ function MessageHeader(props: {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={
-                  t("CreateMessageGroupBody.usernames") || "Search users..."
-                }
+                label={t("CreateMessageGroupBody.usernames") || "Search users"}
                 placeholder={
                   t("CreateMessageGroupBody.searchPlaceholder") ||
                   "Type to search users"

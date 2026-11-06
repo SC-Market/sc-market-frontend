@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next"
 import { LandingSection, LandingSectionHeader } from "./LandingSection"
 import { SupportersSection } from "./SupportersSection"
 
-/** "Why SC Market": four trust points, then the supporters. Static. */
+/** "Free to use, with two-way reviews": four trust points, then the supporters. Static. */
 export function LandingTrust() {
   const { t } = useTranslation()
   const points = [

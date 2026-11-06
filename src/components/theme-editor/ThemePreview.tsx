@@ -266,7 +266,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               }}
             >
               <Typography variant="caption" color="text.primary">
-                {t("theme.previewNavRowHover", "Sidebar row — hover me")}
+                {t("theme.previewNavRowHover", "Sidebar row (hover me)")}
               </Typography>
             </ListItemButton>
             <Skeleton
@@ -283,7 +283,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             >
               {t(
                 "theme.previewSkeletonWaveHint",
-                "Skeleton “wave” shimmer uses this color — not filled button hover.",
+                "Skeleton “wave” shimmer uses this color, not filled button hover.",
               )}
             </Typography>
           </Box>

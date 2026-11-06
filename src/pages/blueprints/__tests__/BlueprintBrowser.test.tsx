@@ -165,7 +165,7 @@ describe("BlueprintBrowser", () => {
     renderWithProviders(<BlueprintBrowser />)
     expect(
       screen.getByPlaceholderText(
-        "Search blueprints, materials, categories...",
+        "Search blueprints, materials and categories",
       ),
     ).toBeInTheDocument()
   })

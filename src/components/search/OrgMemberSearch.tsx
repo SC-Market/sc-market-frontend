@@ -107,7 +107,7 @@ export function OrgMemberSearch({
           {...params}
           label={label || t("OrgMemberSearch.label", "Org Member")}
           placeholder={
-            placeholder || t("OrgMemberSearch.placeholder", "Search members...")
+            placeholder || t("OrgMemberSearch.placeholder", "Search members")
           }
           InputProps={{
             ...params.InputProps,

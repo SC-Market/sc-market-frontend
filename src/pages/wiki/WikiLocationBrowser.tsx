@@ -361,7 +361,7 @@ export function WikiLocationBrowser() {
           <TextField
             size="small"
             fullWidth
-            placeholder={t("wiki.locations.search", "Search locations...")}
+            placeholder={t("wiki.locations.search", "Search locations")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{ mb: 2, maxWidth: 400 }}

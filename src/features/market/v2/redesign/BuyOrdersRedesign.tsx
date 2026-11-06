@@ -646,7 +646,7 @@ function CreateBuyOrderForm({ onDone }: { onDone: () => void }) {
           <Alert severity="info" variant="outlined" sx={{ mt: 2 }}>
             {t(
               "BuyOrdersRedesign.targetedNote",
-              "Targeted orders need a specific supplier — pick one from the supplier roster (coming soon).",
+              "Targeted orders need a specific supplier. Pick one from the supplier roster (coming soon).",
             )}
           </Alert>
         )}

@@ -53,7 +53,7 @@ export function GameItemPicker({ value, onChange }: GameItemPickerProps) {
         <TextField
           {...params}
           label={t("dashboard.searchItem", "Search item")}
-          placeholder={t("dashboard.searchItemPlaceholder", "Type to search…")}
+          placeholder={t("dashboard.searchItemPlaceholder", "Search items")}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

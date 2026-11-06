@@ -144,7 +144,7 @@ export function useEditLot() {
             ? {
                 message: t(
                   "LotListItemV2.cannotReduceStock",
-                  "Cannot reduce stock — units are committed to active orders",
+                  "Can't reduce stock: those units are in active orders",
                 ),
                 severity: "warning",
               }

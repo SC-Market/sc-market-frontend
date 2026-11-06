@@ -290,7 +290,7 @@ function StockSearchAreaV2() {
       <TextField
         fullWidth
         size="small"
-        placeholder={t("stock.searchLots", "Search lots...")}
+        placeholder={t("stock.searchLots", "Search lots")}
         value={filters.search}
         onChange={(e) => setSearch(e.target.value)}
         InputProps={{

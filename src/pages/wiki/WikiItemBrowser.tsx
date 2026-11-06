@@ -317,7 +317,7 @@ export function WikiItemBrowser() {
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="wiki-items"
-              placeholder={t("wiki.itemBrowser.searchPlaceholder", "Search items, types, manufacturers...")}
+              placeholder={t("wiki.itemBrowser.searchPlaceholder", "Search items, types and manufacturers")}
             />
             {data && (
               <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>

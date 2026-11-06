@@ -749,8 +749,8 @@ describe("homepage", () => {
       "What do you want to do?",
       "Browse SC Market",
       "Start selling",
-      "Why SC Market",
-      "Your questions, answered",
+      "Free to use, with two-way reviews",
+      "Common questions",
     ])
     expect(linksOf(doc)[0]).toEqual({
       href: "/market",

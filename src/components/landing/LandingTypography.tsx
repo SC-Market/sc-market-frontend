@@ -15,7 +15,7 @@ function withSx(base: SxProps<Theme>, sx?: SxProps<Theme>): SxProps<Theme> {
   return [base, ...(Array.isArray(sx) ? sx : [sx])] as SxProps<Theme>
 }
 
-/** A homepage section title ("For Orgs", "Our Supporters", the FAQ, ...). */
+/** A homepage section title ("For Orgs", "Supporters", the FAQ, ...). */
 export function LandingSectionTitle(props: TextProps & { id?: string }) {
   return (
     <Typography

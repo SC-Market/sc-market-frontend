@@ -500,7 +500,7 @@ export function OnboardingPage() {
               title={t("onboarding.pushNotifs.title", "Push notifications")}
               description={t(
                 "onboarding.pushNotifs.description",
-                "Get instant alerts on this device for new messages, orders, and offers.",
+                "Get alerts on this device for new messages, orders, and offers.",
               )}
             >
               <Box sx={{ mt: 2 }}>

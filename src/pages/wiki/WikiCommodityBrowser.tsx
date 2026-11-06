@@ -233,7 +233,7 @@ export function WikiCommodityBrowser() {
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <TextField
               size="small"
-              placeholder={t("wiki.commodityBrowser.searchPlaceholder", "Search commodities...")}
+              placeholder={t("wiki.commodityBrowser.searchPlaceholder", "Search commodities")}
               value={text}
               onChange={(e) => updateParam("q", e.target.value)}
               sx={{ flex: 1, maxWidth: 360 }}

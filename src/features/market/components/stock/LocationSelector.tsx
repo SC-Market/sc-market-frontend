@@ -189,7 +189,7 @@ export function LocationSelector({
           label={label || t("LocationSelector.location", "Location")}
           placeholder={t(
             "LocationSelector.searchOrCreate",
-            "Search or create location...",
+            "Search or add a location",
           )}
           InputProps={{
             ...params.InputProps,

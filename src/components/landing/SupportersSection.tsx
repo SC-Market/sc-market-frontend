@@ -38,7 +38,7 @@ const SUPPORTERS = [
   },
 ]
 
-/** "Our Supporters": the supporting orgs' logos and the Patreon thanks. Static. */
+/** "Supporters": the supporting orgs' logos and the Patreon thanks. Static. */
 export function SupportersSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()

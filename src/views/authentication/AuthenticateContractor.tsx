@@ -93,7 +93,7 @@ export function AuthenticateContractor() {
             body={t("scOrgs.verifiedBody", {
               org: verifiedOrg,
               defaultValue:
-                "SC Orgs, our sister site for running orgs, gives {{org}} recruiting applications, events and member tools. Registering takes about two minutes.",
+                "SC Orgs, our sister site for running orgs, gives {{org}} recruiting applications, events and member tools.",
             })}
             href={`${SC_ORGS_ORIGIN}/communities/create`}
             action={t("scOrgs.verifiedAction", "Register on SC Orgs")}
