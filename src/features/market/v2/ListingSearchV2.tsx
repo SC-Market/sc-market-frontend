@@ -14,7 +14,6 @@ import {
   InputAdornment,
   IconButton,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Chip,
@@ -27,12 +26,7 @@ import {
 } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { isListingNew } from "../domain/listingBadges"
-import {
-  useNavigate,
-  useSearchParams,
-  Link as RouterLink,
-  useLocation,
-} from "react-router-dom"
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom"
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../../util/constants"
 import { Helmet } from "@unhead/react/helmet"
@@ -59,6 +53,7 @@ import { QualityBandSelect } from "../../../components/game-data/QualityBandSele
 import { getQualityMode } from "../../../util/qualityMode"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
+import { ListingCardActionArea } from "../components/listings/ListingCardActionArea"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
@@ -1104,210 +1099,201 @@ export function ListingCardV2({
         data-testid="listing-card"
         data-id={listing.listing_id}
       >
-        <RouterLink
-          to={formatMarketUrl(listing)}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <CardActionArea
-            sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
-          >
-            <Card sx={{ height: LISTING_CARD_HEIGHT, position: "relative" }}>
-              {/* Corner chip stacks. Each corner is a flex column so chips can
-                  never overlap regardless of which combination is present —
-                  previously quality and NEW were both pinned to top-left for
-                  out-of-stock listings, and internal/bulk shared bottom-right
-                  via hand-computed offsets. */}
-              <Box sx={cardChipStackSx("top-left")}>
-                {isNew && (
-                  <Chip
-                    label={t("market.new", "NEW")}
-                    color="secondary"
-                    size="small"
-                    sx={CARD_CHIP_SX}
-                  />
-                )}
-                {listing.has_bulk_discount && (
-                  <Chip
-                    label={t("market.bulkDiscount", "BULK DISCOUNT")}
-                    color="info"
-                    size="small"
-                    sx={CARD_CHIP_SX}
-                  />
-                )}
-              </Box>
-              <Box sx={cardChipStackSx("top-right")}>
-                {(() => {
-                  const qc = qualityRangeChip(listing)
-                  return (
-                    qc && (
-                      <Chip
-                        label={qc.label}
-                        size="small"
-                        sx={{
-                          ...CARD_CHIP_SX,
-                          textTransform: "none",
-                          ...qualityChipSx(qc.color),
-                        }}
-                      />
-                    )
+        <ListingCardActionArea to={formatMarketUrl(listing)}>
+          <Card sx={{ height: LISTING_CARD_HEIGHT, position: "relative" }}>
+            {/* Corner chip stacks. Each corner is a flex column so chips can
+                never overlap regardless of which combination is present —
+                previously quality and NEW were both pinned to top-left for
+                out-of-stock listings, and internal/bulk shared bottom-right
+                via hand-computed offsets. */}
+            <Box sx={cardChipStackSx("top-left")}>
+              {isNew && (
+                <Chip
+                  label={t("market.new", "NEW")}
+                  color="secondary"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+              {listing.has_bulk_discount && (
+                <Chip
+                  label={t("market.bulkDiscount", "BULK DISCOUNT")}
+                  color="info"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+            </Box>
+            <Box sx={cardChipStackSx("top-right")}>
+              {(() => {
+                const qc = qualityRangeChip(listing)
+                return (
+                  qc && (
+                    <Chip
+                      label={qc.label}
+                      size="small"
+                      sx={{
+                        ...CARD_CHIP_SX,
+                        textTransform: "none",
+                        ...qualityChipSx(qc.color),
+                      }}
+                    />
                   )
-                })()}
-                {listing.quantity_available === 0 && (
-                  <Chip
-                    label={t("market.outOfStock", "OUT OF STOCK")}
-                    color="error"
-                    size="small"
-                    sx={CARD_CHIP_SX}
-                  />
-                )}
-                {listing.visibility === "private" && (
-                  <Chip
-                    label={t("market.internalListing")}
-                    color="warning"
-                    size="small"
-                    sx={CARD_CHIP_SX}
-                  />
-                )}
-                {/* Only a site admin's search with includeUnlisted ever returns these. */}
-                {listing.visibility === "unlisted" && (
-                  <Chip
-                    label={t("market.unlistedListing", "Unlisted")}
-                    color="default"
-                    size="small"
-                    sx={CARD_CHIP_SX}
-                  />
-                )}
-              </Box>
-              <CardMedia
-                component="img"
-                loading="lazy"
-                // Intrinsic 16:9 size (CSS sets the displayed size).
-                width={320}
-                height={180}
-                fetchPriority={priority ? "high" : undefined}
-                image={listing.photo || FALLBACK_IMAGE_URL}
+                )
+              })()}
+              {listing.quantity_available === 0 && (
+                <Chip
+                  label={t("market.outOfStock", "OUT OF STOCK")}
+                  color="error"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+              {listing.visibility === "private" && (
+                <Chip
+                  label={t("market.internalListing")}
+                  color="warning"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+              {/* Only a site admin's search with includeUnlisted ever returns these. */}
+              {listing.visibility === "unlisted" && (
+                <Chip
+                  label={t("market.unlistedListing", "Unlisted")}
+                  color="default"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+            </Box>
+            <CardMedia
+              component="img"
+              loading="lazy"
+              // Intrinsic 16:9 size (CSS sets the displayed size).
+              width={320}
+              height={180}
+              fetchPriority={priority ? "high" : undefined}
+              image={listing.photo || FALLBACK_IMAGE_URL}
+              sx={{
+                width: "100%",
+                objectFit: "cover",
+                ...(theme.palette.mode === "dark"
+                  ? { height: "100%", aspectRatio: "16/9" }
+                  : { height: 180, aspectRatio: "16/9" }),
+                overflow: "hidden",
+              }}
+              alt={t("marketV2.imageOf", { name: listing.title })}
+            />
+            <Box
+              sx={{
+                ...(theme.palette.mode === "light" ? { display: "none" } : {}),
+                position: "absolute",
+                zIndex: 3,
+                top: 0,
+                left: 0,
+                height: "100%",
+                width: "100%",
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                background: cardFadeGradient(theme, 50, 60),
+              }}
+            />
+            <CardContent
+              sx={{
+                ...(theme.palette.mode === "dark"
+                  ? { position: "absolute", bottom: 0, zIndex: 4 }
+                  : {}),
+                maxWidth: "100%",
+                padding: "8px 12px !important",
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="p"
+                color="primary"
+                fontWeight="bold"
+                noWrap
+                sx={{ fontSize: "0.95rem", mb: 0.5 }}
+              >
+                {priceDisplay}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
                 sx={{
-                  width: "100%",
-                  objectFit: "cover",
-                  ...(theme.palette.mode === "dark"
-                    ? { height: "100%", aspectRatio: "16/9" }
-                    : { height: 180, aspectRatio: "16/9" }),
+                  fontSize: "0.75rem",
+                  lineHeight: 1.3,
+                  maxHeight: 36,
                   overflow: "hidden",
-                }}
-                alt={t("marketV2.imageOf", { name: listing.title })}
-              />
-              <Box
-                sx={{
-                  ...(theme.palette.mode === "light"
-                    ? { display: "none" }
-                    : {}),
-                  position: "absolute",
-                  zIndex: 3,
-                  top: 0,
-                  left: 0,
-                  height: "100%",
-                  width: "100%",
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                  background: cardFadeGradient(theme, 50, 60),
-                }}
-              />
-              <CardContent
-                sx={{
-                  ...(theme.palette.mode === "dark"
-                    ? { position: "absolute", bottom: 0, zIndex: 4 }
-                    : {}),
-                  maxWidth: "100%",
-                  padding: "8px 12px !important",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  mb: 0.5,
                 }}
               >
-                <Typography
-                  variant="h6"
-                  component="p"
-                  color="primary"
-                  fontWeight="bold"
-                  noWrap
-                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
-                >
-                  {priceDisplay}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
+                {listing.title}
+              </Typography>
+              <Box sx={{ mb: 0 }}>
+                <Box
                   sx={{
-                    fontSize: "0.75rem",
-                    lineHeight: 1.3,
-                    maxHeight: 36,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    mb: 0.5,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    mb: 0.25,
+                    flexWrap: "wrap",
                   }}
                 >
-                  {listing.title}
-                </Typography>
-                <Box sx={{ mb: 0 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      mb: 0.25,
-                      flexWrap: "wrap",
+                  <UnderlineLink
+                    component="span"
+                    display="inline"
+                    noWrap
+                    variant="caption"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      navigate(SHOP_PATHS.profile(listing.shop_slug))
                     }}
-                  >
-                    <UnderlineLink
-                      component="span"
-                      display="inline"
-                      noWrap
-                      variant="caption"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        navigate(SHOP_PATHS.profile(listing.shop_slug))
-                      }}
-                      sx={{
-                        overflowX: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        cursor: "pointer",
-                        fontSize: "0.7rem",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {listing.shop_name}
-                    </UnderlineLink>
-                  </Box>
-                  <Box
                     sx={{
+                      overflowX: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      cursor: "pointer",
                       fontSize: "0.7rem",
-                      lineHeight: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      mt: 0,
-                      mb: 0,
+                      lineHeight: 1.2,
                     }}
                   >
-                    <MarketListingRating
-                      avg_rating={listing.shop_rating}
-                      rating_count={listing.shop_rating_count ?? null}
-                      total_rating={0}
-                      rating_streak={null}
-                      total_orders={null}
-                      total_assignments={null}
-                      response_rate={null}
-                      badge_ids={listing.shop_badge_ids}
-                      display_limit={3}
-                      showBadges={true}
-                    />
-                  </Box>
-                  <SellerStatusBadge activity={listing.shop_activity} compact />
+                    {listing.shop_name}
+                  </UnderlineLink>
                 </Box>
-              </CardContent>
-            </Card>
-          </CardActionArea>
-        </RouterLink>
+                <Box
+                  sx={{
+                    fontSize: "0.7rem",
+                    lineHeight: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    mt: 0,
+                    mb: 0,
+                  }}
+                >
+                  <MarketListingRating
+                    avg_rating={listing.shop_rating}
+                    rating_count={listing.shop_rating_count ?? null}
+                    total_rating={0}
+                    rating_streak={null}
+                    total_orders={null}
+                    total_assignments={null}
+                    response_rate={null}
+                    badge_ids={listing.shop_badge_ids}
+                    display_limit={3}
+                    showBadges={true}
+                  />
+                </Box>
+                <SellerStatusBadge activity={listing.shop_activity} compact />
+              </Box>
+            </CardContent>
+          </Card>
+        </ListingCardActionArea>
         {listing.quantity_available > 0 && (
           <IconButton
             size="small"

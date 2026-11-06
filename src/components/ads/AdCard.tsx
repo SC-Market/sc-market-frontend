@@ -1,10 +1,9 @@
-import { Paper, Fade, Box, Typography } from "@mui/material"
+import { Card, Fade, Box, Typography } from "@mui/material"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { AdConfig, ImageAdConfig, PosterAdConfig } from "./types"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ListingCardActionArea } from "../../features/market/components/listings/ListingCardActionArea"
 import {
   AD_CARD_HEIGHT,
   POSTER_GAP,
@@ -249,17 +248,12 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
 }
 
 /**
- * AdCard component that displays an ad in a Paper component the size of a listing.
- * Opens the ad link in a new tab when clicked.
+ * An ad the size of a listing, opening its link in a new tab. It is a
+ * ListingCardActionArea like every listing card, so it hovers, focuses and
+ * presses exactly as the tiles around it do.
  */
 export function AdCard(props: AdCardProps) {
   const { ad, index, noGridWrapper = false } = props
-  const theme = useTheme<ExtendedTheme>()
-
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    window.open(ad.linkUrl, "_blank", "noopener,noreferrer")
-  }
 
   const content = (
     <Fade
@@ -269,29 +263,15 @@ export function AdCard(props: AdCardProps) {
         transitionDuration: "500ms",
       }}
     >
-      <a
-        href={ad.linkUrl}
-        onClick={handleClick}
-        style={{
-          textDecoration: "none",
-          color: "inherit",
-          display: "block",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <Paper
-          elevation={3}
+      <ListingCardActionArea href={ad.linkUrl}>
+        {/* overflow: hidden keeps the image backdrop's blur and scale, and the
+            poster's spine and corners, inside the card. */}
+        <Card
           sx={{
             height: AD_CARD_HEIGHT,
             position: "relative",
             overflow: "hidden",
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
-            cursor: "pointer",
             width: "100%",
-            "&:hover": {
-              elevation: 6,
-            },
           }}
         >
           {ad.kind === "image" ? (
@@ -299,8 +279,8 @@ export function AdCard(props: AdCardProps) {
           ) : (
             <PosterCreative ad={ad} />
           )}
-        </Paper>
-      </a>
+        </Card>
+      </ListingCardActionArea>
     </Fade>
   )
 
