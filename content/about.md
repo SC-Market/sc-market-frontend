@@ -4,7 +4,7 @@ description: SC Market is a free, unofficial marketplace for Star Citizen. Playe
 updated: 2026-10-26
 ---
 
-SC Market is a Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage, all in aUEC.
+SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage, all in aUEC.
 
 ## How it works
 

@@ -7,7 +7,6 @@
 
 import "./admin"
 import "./chats"
-import "./commodities"
 import "./comments"
 import "./contractors"
 import "./contracts"
