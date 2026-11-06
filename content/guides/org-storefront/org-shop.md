@@ -2,7 +2,7 @@
 title: Sell as an org with an org shop
 description: An org shop sells in your org's name. Members with Manage Market list items and edit shared stock; Manage Orders handles the orders.
 order: 10
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [org shop, org storefront, organization shop, team selling, shared stock, org orders, manage market, private listing, reviews]
 related: [selling/sell-items, selling/handle-orders-as-a-seller, orgs/roles-and-permissions]
 howto: true
@@ -35,7 +35,7 @@ Org roles decide what each member can do in the org's shops:
 
 - **Every member** sees the shop in the sidebar's context switcher, with its **Orders**, **Listings** and **Services**.
 - **Manage Market**: create and edit listings, change stock lots, and open the shop's **Settings** (including its blocked users and [webhooks](/guides/discord/webhooks)) and **Customers**.
-- **Manage Stock**: shows **Stock** in the shop's sidebar. Changing stock lots also needs **Manage Market**.
+- **Manage Stock**: shows **Stock** in the shop's sidebar, where they add, edit and remove the shop's stock lots without changing its listings or settings.
 - **Manage Orders**: accept offers, assign orders, and see every order of the org under **Org Orders** in the org's sidebar.
 - **Claim Orders**: claim open orders from [Discord alerts](/guides/discord/order-alerts-and-claiming).
 

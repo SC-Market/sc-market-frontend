@@ -12,8 +12,7 @@ export const GUIDE_LINKS = {
   howOrdersWork: "/guides/buying/how-orders-work",
   handleOrders: "/guides/selling/handle-orders-as-a-seller",
   sellItems: "/guides/selling/sell-items",
-  quickList:
-    "/guides/selling/sell-items#list-an-item-in-seconds-with-quick-list",
+  quickList: "/guides/selling/sell-items#list-an-item-with-quick-list",
   auctions: "/guides/selling/auctions",
   fillBuyOrder: "/guides/selling/fill-a-buy-order",
   stockLots: "/guides/selling/stock-lots-and-allocation",

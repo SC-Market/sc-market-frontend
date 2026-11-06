@@ -2,7 +2,7 @@
 title: Buy an item
 description: Add items to your cart, submit an offer to each seller, then meet in game to pay in aUEC. SC Market never handles the payment.
 order: 10
-updated: 2026-10-26
+updated: 2026-11-06
 keywords: [buy, purchase, cart, checkout, auction, bid, buy order, price, price alert, watchlist]
 related: [buying/how-orders-work, getting-started/create-an-account, buying/price-alerts-watchlist]
 howto: true
@@ -16,9 +16,9 @@ To buy an item, add it to your cart and submit an offer to the seller. When the 
 
 ## Steps
 
-1. Search the [market](/market). Narrow the results with **Item Type**, the price range and **Pickup Method**, and use **Sort By** to order them.
+1. Search the [market](/market). Narrow the results with **Item Type**, the price range and **Pickup Method**, and use **Sort By** to order them. Results come in numbered pages; **Per page** sets how many you see at once.
 2. Open a listing and click **Add** next to the variant you want (**Add to Cart** on mobile).
-3. Choose the **Quantity** and click **Add to Cart**. The quantity is limited by the seller's stock and order limits.
+3. In the **Add to Cart** panel (it slides up from the bottom on phones), choose the **Quantity** and click **Add to Cart**. The quantity is limited by the seller's stock and order limits.
 4. Open your [cart](/market/cart). Items are grouped by seller.
 5. Optionally write a **Note** to the seller, then click **Submit Offer** for that seller and **Confirm Order**.
 6. Your offer opens. Wait for the seller to accept it, or to send a counter offer.

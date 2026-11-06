@@ -2,7 +2,7 @@
 title: Recruit members for your org
 description: Recruit on SC Orgs, our sister site for running orgs. It has an org directory, applications you review, and member tools. SC Market posts still work.
 order: 20
-updated: 2026-10-26
+updated: 2026-11-06
 keywords: [recruiting, recruit, sc orgs, applications, apply to join, org directory, find org, join org, recruiting post, star citizen org]
 related: [orgs/invite-and-manage-members, orgs/register-an-org]
 howto: true
@@ -18,7 +18,7 @@ Recruit on [SC Orgs](https://sc-orgs.space), our sister site for running Star Ci
 
 ## Steps
 
-1. [Register your org on SC Orgs](https://sc-orgs.space/guides/register-your-org). You paste a short code on your RSI org page, which takes about two minutes.
+1. [Register your org on SC Orgs](https://sc-orgs.space/guides/register-your-org). You paste a short code on your RSI org page.
 2. Fill in your **Description**, **Languages**, **Playstyle** and **Focus Areas**. Players filter the directory by focus and playstyle.
 3. Share your org's SC Orgs page on Discord or Spectrum. Players apply from there.
 4. [Review applications](https://sc-orgs.space/guides/review-applications) on your org's **Recruitment** page: **Approve**, **Interview** or **Reject**.

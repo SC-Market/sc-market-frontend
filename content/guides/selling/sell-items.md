@@ -2,7 +2,7 @@
 title: "Sell items: open a shop, list items and manage stock"
 description: Every listing belongs to a shop. Create your shop, list an item with a price in aUEC and a quantity, then keep your stock lots up to date.
 order: 10
-updated: 2026-11-03
+updated: 2026-11-06
 keywords: [sell, listing, create listing, quick list, sell yours, shop, stock, inventory, auction, price, paused, renew, reactivate, wipe, relist]
 related: [selling/stock-lots-and-allocation, selling/auctions, buying/how-orders-work]
 howto: true
@@ -25,7 +25,7 @@ To sell on SC Market you list items from a shop: create the shop once, then crea
 > [!TIP]
 > Click **More options** for the **Sale Type** (**Fixed Price**, **Auction** or **Negotiable**), order limits, bulk discounts, the pickup method, and extra **Stock Lots** with their own quality, source and location. Choose **Inactive (Draft)** under **Listing Status** to save a listing without publishing it.
 
-## List an item in seconds with Quick List
+## List an item with Quick List
 
 On an item's market page or wiki page, click **Sell yours**. Quick List opens with the item already picked.
 

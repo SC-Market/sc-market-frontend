@@ -2,7 +2,7 @@
 title: Connect the SC Market Discord bot
 description: Add the bot from your shop's or org's Discord settings, then pick a channel there, so every new offer and order gets its own Discord thread.
 order: 10
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [discord, bot, setup, setup threads, thread, order thread, server, channel, forum, add bot]
 related: [discord/order-alerts-and-claiming, discord/webhooks, buying/how-orders-work]
 howto: true
@@ -49,8 +49,10 @@ Buyers are added to the thread only if their Discord account is linked to SC Mar
 
 You can also [add SC Market to your Discord account](/discord/install?type=user&src=guide) instead of a server: Discord asks you to authorize the app for your own account, with no server and no permissions. You can then use SC Market's commands anywhere in Discord. If you're signed in to SC Market, this also links your Discord account, unless that Discord account is already linked to another SC Market account.
 
+Adding the app to your account also lets the bot send you direct messages, such as reminders about offers waiting for your reply, even if you don't share a server with it.
+
 > [!NOTE]
-> Direct messages from the bot, such as reminders about offers waiting for your reply, still need you to share a server with the bot for now. Adding the app to your account doesn't replace that yet. Keep direct messages from server members allowed in Discord's privacy settings.
+> If Discord refuses the bot's direct messages, for example because your privacy settings block them, SC Market can't reach you there. Allow them again in Discord to get DMs.
 
 ## If adding the bot didn't work
 

@@ -2,7 +2,7 @@
 title: Manage stock lots
 description: Your stock is kept in lots. Change a listing's quantity on your shop's Listings page, or edit the lots on its Stock page. Sold stock comes out when you accept.
 order: 20
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [stock, stock lots, inventory, my stock, quantity, location, allocation, allocated, listed, personal, manage stock, stock subtraction timing, unlimited supply]
 related: [selling/sell-items, selling/handle-orders-as-a-seller, selling/import-from-uex]
 howto: true
@@ -33,7 +33,7 @@ The quick way, for a listing with one lot: change the listing's quantity.
 Use the **Stock** page when a listing has several lots, or to change a lot's location.
 
 1. Switch the sidebar to your shop and open **Stock**.
-2. Find the lot in **All Stock Lots**. Use **Search lots...** or the **Listing** filter to narrow the list.
+2. Find the lot in **All Stock Lots**. Use **Search lots** or the **Listing** filter to narrow the list.
 3. Edit the lot's **Quantity**, **Location (optional)** or **Status** in the grid: double-click it (or use the pencil), then press Enter to save.
 4. To add stock, click **Add Lot**, pick the **Listing**, enter the **Quantity** and the lot's quality, and click **Create Lot**.
 5. To remove a lot you no longer have, click its delete icon.

@@ -2,7 +2,7 @@
 title: Choose your notifications
 description: Pick where each kind of notification reaches you (in-app, push, email, Discord DM), per organization, and opt in to alerts for new public contracts.
 order: 30
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [notifications, push, email, discord, discord dm, settings, unsubscribe, reminders, offer reminder, unread messages, email bounced, public contracts, contract alerts, webhook, notification settings, mute organization, new member]
 related: [buying/price-alerts-watchlist, discord/order-alerts-and-claiming, discord/webhooks]
 howto: true
@@ -14,7 +14,7 @@ SC Market tells you about orders, offers, messages, reminders, bids, reviews, in
 
 - **Push:** at the bottom of the same page, **This device** shows whether push is set up here (**On for this device**, **Off on this device**, **Needs the app** or **Blocked**). Click **Enable Push Notifications** and allow notifications when your browser asks. **Install the app** adds SC Market to your computer or phone. On iPhone and iPad, push only works in the app on your Home Screen, with iOS 16.4 or later: in Safari, tap **Share**, then **Add to Home Screen**, open SC Market from there and come back to this page.
 - **Email:** add and verify an email address at the bottom of the same page. If you don't pick email types, the key ones are turned on: order status changes, new offers and counter-offers, and the unread message reminder. Invites, announcements and storefront enquiry replies are emailed by default too. The rest, and organization email, stay off until you turn them on.
-- **Discord DM:** link your Discord account under **Settings › Discord Integration**. DMs are on by default for price alerts, the unread message reminder and **Offer waiting for your reply**, and off for everything else. The bot can only DM you while you share a Discord server with it.
+- **Discord DM:** link your Discord account under **Settings › Discord Integration**. DMs are on by default for price alerts, the unread message reminder and **Offer waiting for your reply**, and off for everything else. The bot can DM you when you share a Discord server with it, or when you've added SC Market to your Discord account: click **Add SC Market to your Discord** on this page, which shows until you have.
 
 ## Steps
 
@@ -24,6 +24,7 @@ SC Market tells you about orders, offers, messages, reminders, bids, reviews, in
 4. A dashed pill means the events in that row are set differently. Click **Customise** under the row to set each one, for example push for fulfilled orders but not for cancelled ones.
 
 Some pills can't be changed:
+
 - **In-app** is always on, except for price alerts.
 - **Announcements** from the SC Market team are always delivered on the site, by push and by Discord DM. You can turn their emails off.
 - **Discord DM** is greyed out until you link Discord. For some order, offer and message notifications it isn't available yet.
@@ -39,7 +40,8 @@ The **Reminders** section on the **Messages** tab nudges you when something is w
 ## Organization notifications
 
 Orders, offers, messages, bids, reviews, new members and public contracts that you get as a member of an organization have their own settings for each organization. Pick the organization under **Settings for** to change them.
-- You only get an organization's notifications when your role allows the work: orders, offers and their messages need **Manage orders**, bids need **Manage market**, and **New member joined** needs **Manage invites**.
+
+- You only get an organization's notifications when your role allows the work: orders, offers and their messages need **Manage Orders**, bids need **Manage Market**, and **New member joined** needs **Manage Invites**.
 - Your personal settings don't apply to organization work, and the organization's settings don't apply to your personal orders. As a customer you always use your personal settings.
 - Discord DM can be set per organization. Without an organization setting, your personal one applies.
 - **Mute this org** (under **Settings for**, once you pick the organization) stops push, email and Discord DMs from that organization for 8 hours, a week, or until you turn it back on. Its notifications still appear on the site, and announcements still arrive.

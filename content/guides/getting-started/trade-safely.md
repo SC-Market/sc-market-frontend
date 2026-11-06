@@ -2,7 +2,7 @@
 title: Trade safely on SC Market
 description: SC Market never holds aUEC, so trades are between players. Check ratings and badges, keep the deal in the order chat, and block or report bad actors.
 order: 20
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [safe, safety, scam, trust, reviews, ratings, badges, seller activity, last active, reply time, block, report, real money]
 related: [buying/how-orders-work, buying/buy-an-item]
 ---
@@ -29,7 +29,7 @@ Agree on the price, quantity and meeting place in the order chat on SC Market, o
 
 ## Block a user
 
-Open the user's profile and use its actions menu to **Block** them personally, or for your org. Blocked users can't create orders or offers with you, and they aren't notified. Manage your list in [Settings](/settings) under **Blocked Users**.
+Open the user's profile and use its actions menu to block them as yourself, or for your org, then confirm with **Block User**. Blocked users can't create orders or offers with you, and they aren't notified. Manage your list in [Settings](/settings) under **Blocked Users**.
 
 ## Report content
 

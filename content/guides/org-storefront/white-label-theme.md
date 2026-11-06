@@ -2,7 +2,7 @@
 title: Customize your white-label theme
 description: On the Theme & White Label tab, load a preset or set each color, style and corner radius for dark and light mode, then click Save Theme.
 order: 40
-updated: 2026-11-02
+updated: 2026-11-06
 keywords: [white label, theme, theme editor, colors, palette, preset, favicon, border radius, branding, homepage]
 related: [org-storefront/white-label, orgs/manage-your-org]
 howto: true
@@ -36,7 +36,8 @@ Every setting applies to the mode you're editing.
 
 Each color has a picker and a text field for a hex value:
 
-- **Primary** and **Secondary**: the main accent colors, for example on buttons and links.
+- **Primary**: the accent color, for example on buttons and links.
+- **Secondary**: the buy side and premium: buy order prices, top bids, the bid side of the price chart, and premium and supporter badges.
 - **Button Text**: text on primary buttons.
 - **Primary hover (filled buttons)**: the color of filled primary buttons on hover.
 - **Background**, **Paper**, **Sidebar** and **Navbar**: the page, card and panel surfaces. In dark mode, listing thumbnails fade toward the **Sidebar** color.
@@ -63,7 +64,7 @@ Below the theme editor are two more sections, for members with **Manage Org Deta
 
 **Site Settings** (click **Save Settings**):
 
-- Access: **Public — anyone can browse**, or **Internal — login required**.
+- Access: **Public (anyone can browse)**, or **Internal (login required)**.
 - **Require org membership to access**: shows once you pick **Internal**. Only your org's members get in; others see a message with a link back to SC Market.
 - **Homepage path**: the page visitors land on, such as `/market`. It must start with `/`. Leave it blank for your org's page, or the **Assigned to Me** page in **Internal** mode.
 
