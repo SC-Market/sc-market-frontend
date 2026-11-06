@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   Box,
   Button,
@@ -8,14 +8,12 @@ import {
   Step,
   StepLabel,
   Stepper,
-  TextField,
   Typography,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { BACKEND_URL } from "../../util/constants"
 import {
   useGetOnboardingStatusQuery,
@@ -36,32 +34,19 @@ import type { PushPreference } from "../../features/push-notifications"
 import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import ScheduleIcon from "@mui/icons-material/ScheduleRounded"
-import EmailIcon from "@mui/icons-material/EmailRounded"
-import NotificationsIcon from "@mui/icons-material/NotificationsRounded"
-import GroupsIcon from "@mui/icons-material/GroupsRounded"
 import { PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
-import { lazyWithRetry } from "../../util/lazyWithRetry"
 import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
-import AddRounded from "@mui/icons-material/AddRounded"
 
-const AvailabilitySelector = lazyWithRetry(() =>
-  import("../../components/time/AvailabilitySelector").then((module) => ({
-    default: module.AvailabilitySelector,
-  })),
-)
-
-interface AvailabilitySpan {
-  start: number
-  finish: number
-}
-
-interface OnboardingStep {
-  key: string
-  label: string
-  icon: React.ReactNode
-}
+import {
+  AvailabilityStep,
+  availabilitySpans,
+  DiscordStep,
+  EmailStep,
+  OrgStep,
+  StepContent,
+  useOnboardingSteps,
+} from "./OnboardingSteps"
 
 export function OnboardingPage() {
   usePageReady(false)
@@ -107,48 +92,7 @@ export function OnboardingPage() {
   const [emailInput, setEmailInput] = useState("")
   const [emailSent, setEmailSent] = useState(false)
 
-  const steps = useMemo<OnboardingStep[]>(() => {
-    const s: OnboardingStep[] = []
-    if (!status?.steps.hasDiscord) {
-      s.push({
-        key: "discord",
-        label: t("onboarding.steps.discord", "Link Discord"),
-        icon: <DiscordIcon />,
-      })
-    }
-    if (!status?.steps.hasAvailability) {
-      s.push({
-        key: "availability",
-        label: t("onboarding.steps.availability", "Availability"),
-        icon: <ScheduleIcon />,
-      })
-    }
-    if (!status?.steps.hasEmail) {
-      s.push({
-        key: "email",
-        label: t("onboarding.steps.email", "Email"),
-        icon: <EmailIcon />,
-      })
-    }
-    s.push({
-      key: "org",
-      label: t("onboarding.steps.org", "Organization"),
-      icon: <GroupsIcon />,
-    })
-    s.push({
-      key: "email-notifs",
-      label: t("onboarding.steps.emailNotifs", "Email Alerts"),
-      icon: <EmailIcon />,
-    })
-    if (pushSupported && pushConfigured) {
-      s.push({
-        key: "push-notifs",
-        label: t("onboarding.steps.pushNotifs", "Push Alerts"),
-        icon: <NotificationsIcon />,
-      })
-    }
-    return s
-  }, [status, t, pushSupported, pushConfigured])
+  const steps = useOnboardingSteps(status, pushSupported, pushConfigured)
 
   const currentStepKey = steps[activeStep]?.key
   const isLastStep = activeStep === steps.length - 1
@@ -189,24 +133,7 @@ export function OnboardingPage() {
 
   const handleSaveAvailability = useCallback(
     async (selections: boolean[]) => {
-      const spans: AvailabilitySpan[] = []
-      let current: AvailabilitySpan | null = null
-
-      for (let i = 0; i < selections.length; i++) {
-        if (selections[i]) {
-          if (current) {
-            current.finish = i
-          } else {
-            current = { start: i, finish: i - 1 }
-          }
-        } else {
-          if (current) {
-            spans.push(current)
-            current = null
-          }
-        }
-      }
-      if (current) spans.push(current)
+      const spans = availabilitySpans(selections)
 
       try {
         await updateAvailability({
@@ -325,128 +252,31 @@ export function OnboardingPage() {
           }}
         >
           {currentStepKey === "discord" && (
-            <StepContent
-              title={t("onboarding.discord.title", "Link your Discord account")}
-              description={t(
-                "onboarding.discord.description",
-                "Connect Discord to receive trade notifications and communicate with buyers directly.",
-              )}
-            >
-              <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-                <Button
-                  variant="contained"
-                  color="discord"
-                  startIcon={<DiscordIcon />}
-                  onClick={handleLinkDiscord}
-                >
-                  {t("onboarding.discord.link", "Link Discord")}
-                </Button>
-                <Button variant="text" onClick={handleNext}>
-                  {t("onboarding.skip", "Skip")}
-                </Button>
-              </Stack>
-            </StepContent>
+            <DiscordStep
+              handleLinkDiscord={handleLinkDiscord}
+              handleNext={handleNext}
+            />
           )}
 
           {currentStepKey === "availability" && (
-            <StepContent
-              title={t(
-                "onboarding.availability.title",
-                "Set your availability",
-              )}
-              description={t(
-                "onboarding.availability.description",
-                "Let others know when you're online for trades. Drag to select time slots.",
-              )}
-            >
-              <Box sx={{ mt: 2 }}>
-                <React.Suspense fallback={null}>
-                  <AvailabilitySelector onSave={handleSaveAvailability} />
-                </React.Suspense>
-              </Box>
-              <Button variant="text" onClick={handleNext} sx={{ mt: 2 }}>
-                {t("onboarding.skip", "Skip")}
-              </Button>
-            </StepContent>
+            <AvailabilityStep
+              handleSaveAvailability={handleSaveAvailability}
+              handleNext={handleNext}
+            />
           )}
 
           {currentStepKey === "email" && (
-            <StepContent
-              title={t("onboarding.email.title", "Add your email")}
-              description={t(
-                "onboarding.email.description",
-                "Get notified about new messages and offers when you're away.",
-              )}
-            >
-              {emailSent ? (
-                <Stack spacing={2} sx={{ mt: 3 }}>
-                  <Typography color="success.main" variant="body2">
-                    {t(
-                      "onboarding.email.sent",
-                      "Verification email sent. You can verify it later.",
-                    )}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    endIcon={<ChevronRightRounded />}
-                  >
-                    {t("onboarding.continue", "Continue")}
-                  </Button>
-                </Stack>
-              ) : (
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={2}
-                  sx={{ mt: 3 }}
-                  alignItems="flex-start"
-                >
-                  <TextField
-                    size="small"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                    sx={{ minWidth: 280 }}
-                  />
-                  <LoadingButton
-                    variant="contained"
-                    loading={addingEmail}
-                    onClick={handleAddEmail}
-                    disabled={!emailInput.trim()}
-                  >
-                    {t("onboarding.email.verify", "Send verification")}
-                  </LoadingButton>
-                </Stack>
-              )}
-              <Button variant="text" onClick={handleNext} sx={{ mt: 2 }}>
-                {t("onboarding.skip", "Skip")}
-              </Button>
-            </StepContent>
+            <EmailStep
+              emailSent={emailSent}
+              emailInput={emailInput}
+              setEmailInput={setEmailInput}
+              addingEmail={addingEmail}
+              handleAddEmail={handleAddEmail}
+              handleNext={handleNext}
+            />
           )}
 
-          {currentStepKey === "org" && (
-            <StepContent
-              title={t("onboarding.org.title", "Register an organization")}
-              description={t(
-                "onboarding.org.description",
-                "If you run a Star Citizen org, you can register it to manage members, listings, and orders as a group.",
-              )}
-            >
-              <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-                <Button
-                  variant="contained"
-                  onClick={() => navigate(PATHS.orgRegister)}
-                  startIcon={<AddRounded />}
-                >
-                  {t("onboarding.org.register", "Register Organization")}
-                </Button>
-                <Button variant="text" onClick={handleNext}>
-                  {t("onboarding.skip", "Skip")}
-                </Button>
-              </Stack>
-            </StepContent>
-          )}
+          {currentStepKey === "org" && <OrgStep handleNext={handleNext} />}
 
           {currentStepKey === "email-notifs" && (
             <StepContent
@@ -560,28 +390,6 @@ export function OnboardingPage() {
           )}
         </Paper>
       </Container>
-    </Box>
-  )
-}
-
-function StepContent({
-  title,
-  description,
-  children,
-}: {
-  title: string
-  description: string
-  children: React.ReactNode
-}) {
-  return (
-    <Box>
-      <Typography variant="h6" fontWeight={600} gutterBottom>
-        {title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {description}
-      </Typography>
-      {children}
     </Box>
   )
 }

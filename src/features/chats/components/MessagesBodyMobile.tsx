@@ -3,20 +3,10 @@
  * Handles keyboard visibility, sticky input, and bottom nav hiding
  */
 
-import {
-  AvatarGroup,
-  Box,
-  TextField,
-  Typography,
-  useTheme,
-  Chip,
-  Stack,
-  Button,
-} from "@mui/material"
+import { Box, Typography, useTheme, Stack } from "@mui/material"
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
-import { HapticIconButton } from "../../../components/haptic"
-import React, {
+import {
   RefObject,
   useCallback,
   useEffect,
@@ -24,13 +14,9 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import BusinessIcon from "@mui/icons-material/BusinessRounded"
-import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
-import SendIcon from "@mui/icons-material/SendRounded"
-import { ChevronLeftRounded, AccessTimeRounded } from "@mui/icons-material"
-import type { UserParticipant, ContractorParticipant } from "../domain/types"
+import { AccessTimeRounded } from "@mui/icons-material"
 import type { Message } from "../domain/types"
 import {
   useGetUserByUsernameQuery,
@@ -43,21 +29,19 @@ import { useParams } from "react-router-dom"
 import { useChatSocket } from "../hooks/useChatSocket"
 import { useSendChatMessage } from "../hooks/useChatActions"
 import SCMarketLogo from "../../../assets/scmarket-logo.webp"
-import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { useTranslation } from "react-i18next"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { LongPressMenu } from "../../../components/gestures"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
-import { BottomSheet } from "../../../components/mobile"
 import { ContentCopyRounded } from "@mui/icons-material"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
-import {
-  PATHS,
-  USER_PATHS,
-  ORG_PATHS,
-  ORDER_PATHS,
-} from "../../../routes/paths"
+import { USER_PATHS } from "../../../routes/paths"
 import { useFormatters, useNow } from "../../../util/format"
+import { MessageHeaderMobile } from "./MessageHeaderMobile"
+import {
+  MessageSendAreaMobile,
+  DateTimePickerBottomSheetMobile,
+} from "./MessageSendAreaMobile"
 
 function MessageEntryMobile(props: { message: Message }) {
   const { message } = props
@@ -165,231 +149,6 @@ function MessageEntryMobile(props: { message: Message }) {
   return messageContent
 }
 
-function MessageHeaderMobile() {
-  const profile = useGetUserProfileQuery()
-  const theme = useTheme<ExtendedTheme>()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [chat] = useCurrentChat()
-  const { t } = useTranslation()
-
-  // Check if we're viewing from orders or offers page
-  const isViewingFromOrderOrOffer =
-    location.pathname.includes("/order/") ||
-    location.pathname.includes("/offer/")
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        padding: 1.5,
-        boxSizing: "border-box",
-        borderWidth: 0,
-        borderBottom: `solid 1px ${theme.palette.outline.main}`,
-        bgcolor: theme.palette.background.paper,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center", // Vertically center all content
-        gap: 1,
-        minHeight: 56,
-        height: 56, // Fixed height for consistent centering
-        flexShrink: 0,
-      }}
-    >
-      {chat?.participants?.length ? (
-        <Box
-          sx={{
-            display: "flex",
-            overflow: "hidden",
-            width: "100%",
-            maxWidth: "100%",
-          }}
-          alignItems={"center"}
-        >
-          <HapticIconButton
-            aria-label={t("MessagesBody.toggleSidebar")}
-            onClick={() => {
-              navigate(PATHS.messages)
-            }}
-            sx={{
-              marginRight: 1,
-              flexShrink: 0,
-            }}
-            size="small"
-          >
-            <ChevronLeftRounded />
-          </HapticIconButton>
-
-          {(() => {
-            const userParticipants = chat!.participants.filter(
-              (p): p is UserParticipant => p.type === "user",
-            )
-            const contractorParticipants = chat!.participants.filter(
-              (p): p is ContractorParticipant => p.type === "contractor",
-            )
-
-            const otherUsers = userParticipants.filter(
-              (part) =>
-                userParticipants.length === 1 ||
-                part.username !== profile.data?.username,
-            )
-
-            return (
-              <>
-                <AvatarGroup max={3} spacing={"small"} sx={{ flexShrink: 0 }}>
-                  {otherUsers.map((part) => (
-                    <ImageAvatar
-                      alt={part.username}
-                      src={part.avatar}
-                      key={part.username}
-                    />
-                  ))}
-                  {contractorParticipants.map((part) => (
-                    <ImageAvatar
-                      alt={part.name}
-                      src={part.avatar}
-                      key={part.spectrum_id}
-                      sx={{
-                        bgcolor: theme.palette.primary.main,
-                      }}
-                    >
-                      <BusinessIcon />
-                    </ImageAvatar>
-                  ))}
-                </AvatarGroup>
-
-                <Box
-                  sx={{
-                    marginLeft: 1,
-                    overflow: "hidden",
-                    flexGrow: 1,
-                    minWidth: 0,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {chat!.title ? (
-                      <Typography
-                        noWrap
-                        align={"left"}
-                        color={"text.secondary"}
-                        sx={{
-                          fontWeight: 500,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          minWidth: 0,
-                        }}
-                      >
-                        {chat!.title}
-                      </Typography>
-                    ) : (
-                      <>
-                        {otherUsers.length > 0 && (
-                          <Typography
-                            noWrap
-                            align={"left"}
-                            color={"text.secondary"}
-                            sx={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              minWidth: 0,
-                            }}
-                          >
-                            {otherUsers.map((x) => x.username).join(", ")}
-                          </Typography>
-                        )}
-                        {contractorParticipants.map((contractor) => (
-                          <Chip
-                            key={contractor.spectrum_id}
-                            icon={<BusinessIcon sx={{ fontSize: 16 }} />}
-                            label={contractor.name}
-                            size="small"
-                            component={Link}
-                            to={ORG_PATHS.profile(contractor.spectrum_id)}
-                            onClick={(e) => e.stopPropagation()}
-                            sx={{
-                              height: 20,
-                              fontSize: "0.75rem",
-                              "& .MuiChip-icon": {
-                                marginLeft: 0.5,
-                              },
-                            }}
-                          />
-                        ))}
-                      </>
-                    )}
-                    {isViewingFromOrderOrOffer && chat?.chat_id ? (
-                      <Chip
-                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
-                        label={t("messages.viewChat", "View Chat")}
-                        size="small"
-                        component={Link}
-                        to={`${PATHS.messages}/${chat.chat_id}`}
-                        onClick={(e) => e.stopPropagation()}
-                        clickable
-                        sx={{
-                          height: 20,
-                          fontSize: "0.75rem",
-                          "& .MuiChip-icon": {
-                            marginLeft: 0.5,
-                          },
-                        }}
-                      />
-                    ) : chat!.order_id ? (
-                      <Chip
-                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
-                        label={t("messagesUi.viewOrder")}
-                        size="small"
-                        component={Link}
-                        to={ORDER_PATHS.detail(chat!.order_id)}
-                        onClick={(e) => e.stopPropagation()}
-                        clickable
-                        sx={{
-                          height: 20,
-                          fontSize: "0.75rem",
-                          "& .MuiChip-icon": {
-                            marginLeft: 0.5,
-                          },
-                        }}
-                      />
-                    ) : chat!.session_id ? (
-                      <Chip
-                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
-                        label={t("messagesUi.viewOffer")}
-                        size="small"
-                        component={Link}
-                        to={ORDER_PATHS.offer(chat!.session_id)}
-                        onClick={(e) => e.stopPropagation()}
-                        clickable
-                        sx={{
-                          height: 20,
-                          fontSize: "0.75rem",
-                          "& .MuiChip-icon": {
-                            marginLeft: 0.5,
-                          },
-                        }}
-                      />
-                    ) : null}
-                  </Box>
-                </Box>
-              </>
-            )
-          })()}
-        </Box>
-      ) : null}
-    </Box>
-  )
-}
-
 function MessagesAreaMobile(props: {
   messages: Message[]
   messageBoxRef: RefObject<HTMLDivElement | null>
@@ -446,162 +205,6 @@ function MessagesAreaMobile(props: {
       </Stack>
       <div ref={props.messageBoxRef} />
     </Box>
-  )
-}
-
-function MessageSendAreaMobile(props: {
-  onSend: (content: string) => void
-  isKeyboardOpen: boolean
-  inputRef?: React.RefObject<HTMLDivElement | null>
-}) {
-  const theme = useTheme<ExtendedTheme>()
-  const [textEntry, setTextEntry] = useState("")
-  const { t } = useTranslation()
-  const localInputRef = useRef<HTMLDivElement>(null)
-  const inputRef = props.inputRef || localInputRef
-
-  const handleSend = () => {
-    if (textEntry.trim()) {
-      props.onSend(textEntry)
-      setTextEntry("")
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSend()
-    }
-  }
-
-  return (
-    <Box
-      ref={inputRef}
-      sx={{
-        width: "100%",
-        padding: 1.5,
-        borderTopColor: theme.palette.outline.main,
-        boxSizing: "border-box",
-        borderWidth: 0,
-        borderTop: `solid 1px ${theme.palette.outline.main}`,
-        display: "flex",
-        flexDirection: "row",
-        gap: 1,
-        bgcolor: theme.palette.background.paper,
-        alignItems: "flex-end",
-        paddingBottom: 2,
-      }}
-    >
-      <TextField
-        fullWidth
-        multiline
-        maxRows={3}
-        variant={"outlined"}
-        size={"small"}
-        value={textEntry}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setTextEntry(event.target.value)
-        }}
-        onKeyPress={handleKeyPress}
-        placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
-      />
-      <HapticIconButton
-        aria-label={t("MessagesBody.send", "Send message")}
-        color="primary"
-        onClick={handleSend}
-        sx={{
-          flexShrink: 0,
-          alignSelf: "flex-end",
-          marginBottom: 0.5,
-        }}
-      >
-        <SendIcon />
-      </HapticIconButton>
-    </Box>
-  )
-}
-
-function DateTimePickerBottomSheetMobile(props: {
-  open: boolean
-  onClose: () => void
-  dateTime: Date
-  setDateTime: (dateTime: Date) => void
-}) {
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-  const { dateTime, setDateTime, open, onClose } = props
-  const [pickerOpen, setPickerOpen] = useState(false)
-
-  // Track when picker opens
-  const handlePickerOpen = () => {
-    setPickerOpen(true)
-  }
-
-  // Track when picker closes
-  const handlePickerClose = () => {
-    setPickerOpen(false)
-  }
-
-  // Keep bottom sheet mounted and visible when picker opens
-  // The MUI DateTimePicker modal will appear on top with higher z-index
-  return (
-    <BottomSheet
-      open={open}
-      onClose={onClose}
-      title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
-      maxHeight="90vh"
-      disableBackdropClose={pickerOpen}
-    >
-      <Stack spacing={2}>
-        <DateTimePicker
-          value={dateTime}
-          onChange={(newValue) => {
-            if (newValue) {
-              setDateTime(newValue)
-            }
-          }}
-          onOpen={handlePickerOpen}
-          onClose={handlePickerClose}
-          slotProps={{
-            textField: {
-              size: "medium",
-              fullWidth: true,
-            },
-            // Ensure the picker modal appears above the bottom sheet
-            dialog: {
-              sx: {
-                zIndex: theme.zIndex.modal + 10,
-              },
-            },
-          }}
-        />
-
-        <Stack direction="row" spacing={1}>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.getTime() / 1000)}:D>`,
-              )
-            }}
-            variant="outlined"
-            fullWidth
-          >
-            {t("MessagesBody.copyDate")}
-          </Button>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.getTime() / 1000)}:t>`,
-              )
-            }}
-            variant="outlined"
-            fullWidth
-          >
-            {t("MessagesBody.copyTime")}
-          </Button>
-        </Stack>
-      </Stack>
-    </BottomSheet>
   )
 }
 
