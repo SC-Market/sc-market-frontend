@@ -44,7 +44,7 @@
       "activeFilter": "有効ステータス",
       "content": "内容",
       "contentPlaceholder": "アラートの内容をMarkdown形式で入力...",
-      "contractorPlaceholder": "入力してコントラクターを検索...",
+      "contractorPlaceholder": "組織を検索",
       "contractorRequired": "コントラクターを選択してください",
       "create": "作成",
       "createAlert": "アラートを作成",
@@ -104,7 +104,7 @@
     "alerts.activeFilter": "有効ステータス",
     "alerts.content": "内容",
     "alerts.contentPlaceholder": "アラートの内容をMarkdown形式で入力...",
-    "alerts.contractorPlaceholder": "入力してコントラクターを検索...",
+    "alerts.contractorPlaceholder": "組織を検索",
     "alerts.contractorRequired": "コントラクターを選択してください",
     "alerts.create": "作成",
     "alerts.createAlert": "アラートを作成",
@@ -221,7 +221,7 @@
       "result": "テスト結果",
       "selectedUser": "選択中：{{username}}",
       "selectUser": "テスト通知を受け取るユーザーを検索",
-      "success": "通知テストが正常に完了しました",
+      "success": "通知テストが完了しました",
       "targetUser": "対象ユーザー",
       "test": "通知をテスト",
       "testing": "テスト中...",
@@ -301,8 +301,8 @@
     "ownerUsername": "所有者のユーザー名*",
     "spectrumId": "組織のSpectrum ID*",
     "submit": "送信",
-    "success": "送信しました！",
-    "failure": "送信に失敗しました！{{reason}}"
+    "success": "組織を認証しました",
+    "failure": "組織を認証できませんでした：{{reason}}"
   },
   "ads": {
     "scOrgs": {
@@ -391,7 +391,7 @@
     "loginFailed": "ログインに失敗しました。もう一度お試しください。",
     "loginWithCitizenID": "Citizen iDでログイン",
     "oauthError": "認証中にエラーが発生しました。もう一度お試しください。",
-    "signInBlurb": "無料で参加できます — RSI アカウント（<citizenIdLink>Citizen iD</citizenIdLink>）または Discord アカウントでログインしてください。",
+    "signInBlurb": "無料で参加できます。RSI アカウント（<citizenIdLink>Citizen iD</citizenIdLink>）または Discord アカウントでログインしてください。",
     "signInTab": "ログインタブ",
     "signInTitle": "SC Marketにログイン",
     "signInWithCitizenID": "Citizen iDでログイン",
@@ -411,8 +411,8 @@
     "save": "保存",
     "availability_for": "対応可能時間：",
     "title": "対応可能時間",
-    "updated": "対応可能時間を更新しました！",
-    "failed": "更新に失敗しました！",
+    "updated": "対応可能時間を更新しました",
+    "failed": "対応可能時間を更新できませんでした。",
     "checking": "対応可能時間の要件を確認中...",
     "edit": "編集",
     "yourAvailability": "あなたの対応可能時間"
@@ -656,7 +656,7 @@
     "maxPrice": "最高価格",
     "minPrice": "最低価格",
     "minQuantity": "最小数量",
-    "noItemResults": "アイテムが見つかりません — より短いか別の語句をお試しください",
+    "noItemResults": "アイテムが見つかりません。より短いか別の語句をお試しください。",
     "noPriceData": "価格データがありません",
     "noPriceHistory": "価格履歴がありません",
     "noQualityDistribution": "品質分布データがありません",
@@ -679,7 +679,7 @@
     "salesVolume": "販売数量",
     "salesVolumeByQualityTier": "品質ティア別の販売数量",
     "searching": "検索中...",
-    "searchItemPlaceholder": "アイテム名を入力してください...",
+    "searchItemPlaceholder": "アイテムを検索",
     "selectAllVariants": "すべてのバリアントを選択",
     "selectVariant": "バリアントを選択してください",
     "selectVariantsPrompt": "各アイテムのバリアントを選択してください",
@@ -698,7 +698,7 @@
     "tierSilver": "シルバー",
     "timeToSaleByQualityTier": "品質ティア別の販売までの時間",
     "totalQuantity": "合計数量",
-    "typeToSearch": "入力して検索...",
+    "typeToSearch": "アイテム名を入力してください",
     "unspecified": "未指定",
     "variant": "バリアント",
     "verificationRequired": "マーケット出品を作成するにはアカウントの認証が必要です。続行するにはRSI/Citizen iDでアカウントを認証してください。",
@@ -730,7 +730,7 @@
     "counter_offer_received_from": "カウンターオファーの送信元：",
     "order_status_updated_to": "注文ステータスが {{status}} に更新されました。更新者：",
     "contractor_invite_from": "<contractorLink>{{spectrum_id}}</contractorLink> からのコントラクター招待",
-    "submitted": "送信しました！",
+    "submitted": "送信しました",
     "accept": "承認",
     "decline": "辞退",
     "new_bid_placed_by": "新しい入札の入札者：",
@@ -813,7 +813,7 @@
     "continue": "続ける",
     "complete": "セットアップ完了",
     "availabilitySaved": "対応可能時間を保存しました",
-    "emailVerificationSent": "確認メールを送信しました！受信トレイをご確認ください。",
+    "emailVerificationSent": "確認メールを送信しました。受信トレイをご確認ください。",
     "steps": {
       "discord": "Discord連携",
       "availability": "対応可能時間",
@@ -836,7 +836,7 @@
       "title": "メールを追加する",
       "description": "不在時に新しいメッセージやオファーの通知を受け取りましょう。",
       "verify": "確認メールを送信",
-      "sent": "確認メールを送信しました！後で確認できます。"
+      "sent": "確認メールを送信しました。後で確認できます。"
     },
     "notifications": {
       "title": "通知の設定",
@@ -855,7 +855,7 @@
       "title": "組織を登録"
     },
     "pushNotifs": {
-      "description": "新しいメッセージ、注文、オファーの即時アラートをこのデバイスで受け取ります。",
+      "description": "新しいメッセージ、注文、オファーのアラートをこのデバイスで受け取ります。",
       "prefsTitle": "プッシュ設定",
       "title": "プッシュ通知"
     },
@@ -1205,7 +1205,7 @@
       "reVerifyTitle": "プロフィールの再認証",
       "reVerifyDescription": "プロフィールのユーザー名を現在のSpectrumハンドルに合わせて更新してください。これによりユーザー名のみが更新されます。",
       "reVerifyButton": "プロフィールを再認証",
-      "reVerifySuccess": "プロフィールの再認証が成功しました！ユーザー名が更新されました。",
+      "reVerifySuccess": "プロフィールを再認証しました。ユーザー名は最新の状態です。",
       "reVerifyError": "プロフィールの再認証に失敗しました。後でもう一度お試しください。",
       "accountAlreadyCitizenId": "お使いのSC Marketアカウント（{{username}}）にはすでにCitizen iDが連携されています。新しいものを連携する前に、まず連携を解除してください。",
       "accountAlreadyDiscord": "お使いのSC MarketアカウントにはすでにDiscordが連携されています。まず連携を解除してください。",
@@ -1236,7 +1236,7 @@
       "unlinkError": "Star Citizenアカウントの連携解除に失敗しました。後でもう一度お試しください。",
       "unlinkProviderDescription": "このアカウントの連携を解除してもよろしいですか？この方法ではログインできなくなります。",
       "unlinkProviderTitle": "アカウントの連携を解除",
-      "unlinkSuccess": "Star Citizenアカウントの連携を解除しました！プロフィールが未認証状態にリセットされました。",
+      "unlinkSuccess": "Star Citizen アカウントの連携を解除しました。プロフィールは未認証に戻りました。",
       "unlinkTitle": "Star Citizenアカウントの連携を解除",
       "usernames": "ユーザー名：",
       "verifyAccount": "アカウントを認証",
@@ -1266,7 +1266,7 @@
         "title": "メールアドレスを追加"
       },
       "addError": "メールアドレスの追加に失敗しました",
-      "addSuccess": "メールを追加しました！",
+      "addSuccess": "メールを追加しました",
       "deleteEmailDialog": {
         "cancel": "キャンセル",
         "confirm": "メールを削除",
@@ -1274,7 +1274,7 @@
         "title": "メールアドレスを削除"
       },
       "deleteError": "メールアドレスの削除に失敗しました",
-      "deleteSuccess": "メールを削除しました！",
+      "deleteSuccess": "メールを削除しました",
       "editEmailDialog": {
         "newEmailLabel": "新しいメールアドレス",
         "title": "メールアドレスを更新",
@@ -1294,9 +1294,9 @@
       "title": "メール通知",
       "updateEmail": "メールを更新",
       "updateError": "メールアドレスの更新に失敗しました",
-      "updateSuccess": "メールを更新しました！",
+      "updateSuccess": "メールを更新しました",
       "verificationError": "認証メールの送信に失敗しました",
-      "verificationSent": "認証メールを送信しました！",
+      "verificationSent": "認証メールを送信しました",
       "verified": "認証済み",
       "bounce": {
         "title": "メールが届きませんでした。アドレスを更新してください。",
@@ -1372,12 +1372,12 @@
       "otherDevices_other": "他のデバイス{{count}}台",
       "permissionDeniedError": "権限が{{status}}です。ブラウザの設定で通知を有効にしてください。",
       "permissionDeniedMessage": "プッシュ通知を使用するには、ブラウザの設定で通知を有効にしてください。",
-      "permissionGrantedMessage": "権限が付与されました！これでプッシュ通知を購読できます。",
+      "permissionGrantedMessage": "権限が付与されました。プッシュ通知をオンにできます。",
       "permissionStatus": "権限ステータス",
       "removeDevice": "デバイスを削除",
       "requestPermission": "権限をリクエスト",
       "subscribe": "プッシュ通知を購読",
-      "subscribed": "プッシュ通知の購読に成功しました！",
+      "subscribed": "プッシュ通知オン",
       "subscribedOn": "{{date}}に購読",
       "subscribing": "購読中...",
       "title": "プッシュ通知",
@@ -1385,7 +1385,7 @@
       "totalDevices_other": "合計{{count}}台のデバイス",
       "unknownDevice": "不明なデバイス",
       "unsubscribe": "購読を解除",
-      "unsubscribed": "プッシュ通知の購読を解除しました",
+      "unsubscribed": "プッシュ通知オフ",
       "subscribeFailed": "プッシュ通知を有効にできませんでした: {{reason}}",
       "permissionDismissed": "ブラウザで通知が有効になりませんでした。もう一度試して「許可」を選んでください。",
       "unsubscribeFailed": "そのデバイスを削除できませんでした。もう一度お試しください。",
@@ -1559,7 +1559,7 @@
     "money": "資金",
     "invoices": "請求書",
     "fleet": "フリート",
-    "new_chip": "新着！",
+    "new_chip": "新着",
     "people": "ユーザー",
     "customers": "顧客",
     "members": "メンバー",
@@ -1864,8 +1864,8 @@
     "description_required": "説明*",
     "submit": "送信",
     "alert": {
-      "submitted": "送信しました！",
-      "failed": "送信に失敗しました！"
+      "submitted": "投稿を保存しました",
+      "failed": "投稿を保存できませんでした"
     },
     "markdown_info": "GitHub形式のMarkdownが有効です。YouTubeのURLは自動的に埋め込まれ、画像はImgurまたはRSIでホストされている場合に限り埋め込めます。",
     "markdown_link": "こちら",
@@ -1894,7 +1894,7 @@
     "orgCardBody": "{{name}} は姉妹サイト SC Orgs にコミュニティページがあります：メンバー、イベント、入団申請。",
     "orgCardAction": "SC Orgs で開く",
     "verifiedTitle": "SC Orgs にも組織を登録しましょう",
-    "verifiedBody": "組織運営のための姉妹サイト SC Orgs では、{{org}} の入団申請、イベント、メンバー管理ツールが使えます。登録は約2分で完了します。",
+    "verifiedBody": "組織運営のための姉妹サイト SC Orgs では、{{org}} の入団申請、イベント、メンバー管理ツールが使えます。",
     "verifiedAction": "SC Orgs に登録"
   },
   "contractor": {
@@ -1946,8 +1946,8 @@
     "logout": "ログアウト"
   },
   "viewProfile": {
-    "submitted": "送信しました！",
-    "failed": "送信に失敗しました！",
+    "submitted": "プロフィールを保存しました",
+    "failed": "プロフィールを保存できませんでした。",
     "image_url": "画像URL",
     "image_url_helper": "画像への直接URL（Imgur、RSI、または starcitizen.tools のもの）",
     "save": "保存",
@@ -2052,7 +2052,7 @@
   },
   "select_rows_per_page": "1ページあたりの行数を選択",
   "createPublicContract": {
-    "submitted": "送信しました！",
+    "submitted": "送信しました",
     "about": "概要",
     "title_required": "タイトル*",
     "type_required": "タイプ*",
@@ -2088,8 +2088,8 @@
     "leaveReviewButton": "レビューを残す",
     "notFinishedHint": "注文が完了またはキャンセルされるか、開始から14日が経過すると、レビューを残せます。",
     "alert": {
-      "success": "レビューを残しました！",
-      "error": "レビューの投稿に失敗しました！"
+      "success": "レビューを投稿しました",
+      "error": "レビューを投稿できませんでした。"
     }
   },
   "orderMetrics": {
@@ -2188,7 +2188,7 @@
     "actions": "操作"
   },
   "orderDetailsArea": {
-    "updated_status": "ステータスを更新しました！",
+    "updated_status": "ステータスを更新しました",
     "details_table": "詳細テーブル",
     "customer": "顧客",
     "seller": "販売者",
@@ -2222,10 +2222,10 @@
     "title": "マイ注文"
   },
   "memberAssignArea": {
-    "assigned": "割り当てました！",
-    "failed_assign": "割り当てに失敗しました！",
-    "unassigned": "割り当てを解除しました！",
-    "failed_unassign": "割り当ての解除に失敗しました！",
+    "assigned": "割り当てました",
+    "failed_assign": "割り当てできませんでした。",
+    "unassigned": "割り当てを解除しました",
+    "failed_unassign": "割り当てを解除できませんでした。",
     "assign": "割り当て",
     "reassign": "再割り当て",
     "unassign": "割り当て解除",
@@ -2238,7 +2238,7 @@
     "serviceActive": "サービスは有効です",
     "serviceInactive": "サービスは無効です",
     "serviceDescription": "サービスの説明",
-    "serviceDescriptionHelper": "例：拠点間での物資の輸送を提供します！",
+    "serviceDescriptionHelper": "例：Area18 と Lorville 間の貨物輸送",
     "orderServiceDetails": "注文サービスの詳細",
     "title": "タイトル",
     "typeOptional": "タイプ（任意）",
@@ -2254,8 +2254,8 @@
     "submit": "送信",
     "update": "更新",
     "alert": {
-      "submitted": "送信しました！",
-      "failed": "送信に失敗しました！"
+      "submitted": "サービスを保存しました",
+      "failed": "サービスを保存できませんでした"
     },
     "photoUploadNote": "写真アップロードに関する注意",
     "uploadingPhotos": "写真をアップロード中"
@@ -2278,7 +2278,7 @@
     "paymentType": "支払いタイプ",
     "submit": "送信",
     "alert": {
-      "submitted": "送信しました！"
+      "submitted": "送信しました"
     }
   },
   "OffersViewPaginated": {
@@ -2397,8 +2397,8 @@
   "Webhooks": {
     "title": "Webhook",
     "name": "名前",
-    "submitted": "送信しました！",
-    "failedToSubmit": "送信に失敗しました！ "
+    "submitted": "Webhook を削除しました",
+    "failedToSubmit": "Webhook を削除できませんでした："
   },
   "DashNotificationArea": {
     "notifications": "通知"
@@ -2427,7 +2427,7 @@
     "orderComment": "注文コメントの受信",
     "marketBid": "マーケット入札の受信",
     "submit": "送信",
-    "submitted": "送信しました！"
+    "submitted": "Webhook を追加しました"
   },
   "MessagingSidebar": {
     "messages": "メッセージ",
@@ -2458,7 +2458,7 @@
     "noUsersFound": "ユーザーが見つかりませんでした",
     "searchAndSelect": "ユーザーを検索・選択してグループチャットを作成します",
     "searchPlaceholder": "入力してユーザーを検索",
-    "searchUsers": "ユーザーを検索...",
+    "searchUsers": "ユーザーを検索",
     "selectedUsers": "選択したユーザー",
     "selectUsers": "ユーザーを選択してチャットを開始",
     "startNewChat": "新しいチャットを開始",
@@ -2562,17 +2562,17 @@
     "defaultListing": "デフォルトの出品",
     "includeListings": "含める出品",
     "update": "更新",
-    "submitted": "送信しました！",
-    "failedSubmit": "送信に失敗しました！{{error}}"
+    "submitted": "送信しました",
+    "failedSubmit": "送信できませんでした：{{error}}"
   },
   "MarketListingView": {
-    "addedToCart": "カートに追加しました！",
+    "addedToCart": "カートに追加しました",
     "price": "価格",
     "ofAvailable": "/ 在庫 {{count}} 個",
     "quantity": "数量",
     "addToCart": "カートに追加",
-    "bidSuccess": "入札に成功しました！",
-    "bidError": "入札中にエラーが発生しました！{{error}}",
+    "bidSuccess": "入札しました",
+    "bidError": "入札できませんでした：{{error}}",
     "currentBid": "現在の入札額：{{price}} aUEC",
     "bid": "入札",
     "placeBid": "入札する",
@@ -2620,9 +2620,9 @@
     "minBidIncrement": "最低入札単位",
     "endTime": "終了時刻（{{tz}}）",
     "submit": "送信",
-    "submitted": "送信しました！",
-    "failedSubmit": "送信に失敗しました！",
-    "photosUploaded": "写真が正常にアップロードされました！",
+    "submitted": "送信しました",
+    "failedSubmit": "送信できませんでした",
+    "photosUploaded": "写真をアップロードしました",
     "photoUploadFailed": "一部の写真のアップロードに失敗しました"
   },
   "SelectPhotosArea": {
@@ -2652,7 +2652,7 @@
     "submit": "報告を送信",
     "submitting": "送信中...",
     "pleaseSelectReason": "報告の理由を選択してください",
-    "reportSubmitted": "報告が正常に送信されました。コミュニティの安全を守るのを手伝っていただき、ありがとうございます。",
+    "reportSubmitted": "報告を送信しました。コミュニティの安全を守るのを手伝っていただき、ありがとうございます。",
     "reportFailed": "報告の送信に失敗しました。もう一度お試しください。",
     "reasons": {
       "inappropriateContent": "不適切なコンテンツ",
@@ -2674,8 +2674,8 @@
     "costs": "費用",
     "price": "価格",
     "submit": "送信",
-    "submitted": "送信しました！",
-    "failedSubmit": "送信に失敗しました！"
+    "submitted": "送信しました",
+    "failedSubmit": "送信できませんでした"
   },
   "MarketMultipleForm": {
     "about": "概要",
@@ -2686,8 +2686,8 @@
     "defaultListing": "デフォルトの出品",
     "listingsToInclude": "含める出品",
     "submit": "送信",
-    "submitted": "送信しました！",
-    "failedSubmit": "送信に失敗しました！"
+    "submitted": "送信しました",
+    "failedSubmit": "送信できませんでした"
   },
   "MarketListingEditView": {
     "deactivate": "出品を無効化",
@@ -2700,8 +2700,8 @@
     "price": "価格",
     "minBidIncrement": "最低入札単位",
     "description": "説明",
-    "updated": "更新しました！",
-    "updateError": "更新中にエラーが発生しました！",
+    "updated": "更新しました",
+    "updateError": "変更を保存できませんでした",
     "internalListing": "内部出品",
     "publicListing": "公開出品"
   },
@@ -2709,7 +2709,7 @@
     "title": "マーケットメッセージテンプレートを編集",
     "configure": "新しいマーケット注文に追加されるコメントテンプレートを設定します。ユーザーはこれに記入して、あなたに追加の詳細を提供できます。",
     "submit": "送信",
-    "submitted": "送信しました！"
+    "submitted": "テンプレートを保存しました"
   },
   "MarketAggregateView": {
     "market": "マーケット",
@@ -2723,14 +2723,14 @@
     "sellOrders": "売り注文",
     "buyOrders": "買い注文",
     "priceHistory": "価格履歴",
-    "addedToCart": "カートに追加しました！",
+    "addedToCart": "カートに追加しました",
     "quantityToBuy": "購入数量",
     "ofAvailable": "/ 在庫 {{count}} 個",
     "fulfill": "対応する",
     "cancel": "キャンセル",
-    "submitted": "送信しました！",
-    "failedSubmit": "送信に失敗しました！",
-    "cancelled": "キャンセルしました！",
+    "submitted": "送信しました",
+    "failedSubmit": "送信できませんでした",
+    "cancelled": "買い注文をキャンセルしました",
     "buyOrdersChart": "買い注文",
     "sellOrdersChart": "売り注文",
     "atPrice": "{{price}} aUEC {{direction}}の注文",
@@ -2743,8 +2743,8 @@
     "viewCount": "総閲覧数"
   },
   "MarketAggregateEditView": {
-    "updated": "更新しました！",
-    "errorWhileUpdating": "更新中にエラーが発生しました！",
+    "updated": "更新しました",
+    "errorWhileUpdating": "変更を保存できませんでした",
     "deactivate": "出品を無効化",
     "activate": "出品を有効化",
     "update": "更新",
@@ -2781,7 +2781,7 @@
     "addRow": "行を追加"
   },
   "ItemStock": {
-    "updated": "更新しました！",
+    "updated": "更新しました",
     "updateAmount": "数量を更新",
     "add": "追加",
     "zero": "0",
@@ -2790,7 +2790,7 @@
     "deactivate": "無効化",
     "addQuickListing": "クイック出品を追加",
     "selectItemError": "アイテムを選択してください",
-    "created": "出品を作成しました！",
+    "created": "出品を作成しました",
     "createError": "出品の作成に失敗しました",
     "title": "タイトル",
     "noItemSelected": "アイテムが選択されていません",
@@ -2815,7 +2815,7 @@
     "bulkArchivedSuccess": "{{count}}件の出品をアーカイブしました。",
     "bulkArchivedSuccess_other": "{{count}}件の出品をアーカイブしました。",
     "bulkArchiveTitle": "選択した出品をアーカイブしますか？",
-    "cannotReduceStock": "在庫を減らせません — 対象の在庫はアクティブな注文に確保されています",
+    "cannotReduceStock": "在庫を減らせません：その数量は進行中の注文に含まれています",
     "editingNewListing": "新しい出品を編集中...",
     "manageStock": "在庫を管理",
     "newListing": "新規出品",
@@ -2864,8 +2864,8 @@
     "total_price": "合計金額",
     "expiration": "注文の有効期限（{{tz}}）",
     "submit": "送信",
-    "submitted": "送信しました！",
-    "failed": "送信に失敗しました！{{error}}",
+    "submitted": "送信しました",
+    "failed": "買い注文を作成できませんでした：{{error}}",
     "unknown_error": "不明なエラー",
     "agreedPriceRequired": "合意した単価を入力してください（最低1 aUEC）。",
     "agreePriceDescription": "この買い注文は交渉可能です。履行する合意した単価をaUECで入力してください。",
@@ -2937,8 +2937,8 @@
       "title": "Hangar XPlorer ファイルからインポート",
       "upload": "ファイルをアップロード",
       "submit": "送信",
-      "submitted": "送信しました！",
-      "failed": "送信に失敗しました！{{error}}"
+      "submitted": "フリートをインポートしました",
+      "failed": "フリートをインポートできませんでした：{{error}}"
     }
   },
   "deliveries": {
@@ -3004,8 +3004,8 @@
     "create": "作成",
     "save": "保存",
     "delete": "削除",
-    "updated": "更新しました！",
-    "deleted": "削除しました！",
+    "updated": "保存しました",
+    "deleted": "ロールを削除しました",
     "role_name": "ロール名",
     "role_position": "ロールの順位",
     "position_helper": "数字が小さいほど、他のロールより優先度が高くなります。",
@@ -3051,10 +3051,10 @@
     "any": "指定なし",
     "kick": "除名",
     "username": "ユーザー名",
-    "updated": "更新しました！",
-    "update_failed": "更新に失敗しました！{{reason}}",
-    "member_kicked": "メンバーを除名しました！",
-    "kick_failed": "除名に失敗しました！{{reason}}",
+    "updated": "ロールを更新しました",
+    "update_failed": "メンバーを更新できませんでした：{{reason}}",
+    "member_kicked": "メンバーを除名しました",
+    "kick_failed": "メンバーを除名できませんでした：{{reason}}",
     "cannotRemoveOwnerRole": "オーナーのロールはメンバーから外せません。",
     "cannotRemoveProtectedSelfRole": "自分自身からこのロールを削除することはできません（最上位のロールを保持し、最上位のロールに「ロールの管理」が含まれない場合はその権限を持つロールを保持してください）。",
     "kicked": "追放しました",
@@ -3062,8 +3062,8 @@
     "rolesFor": "{{username}} のロール"
   },
   "orgDetailEdit": {
-    "submitted": "送信しました！",
-    "failed_submit": "送信に失敗しました！{{reason}}",
+    "submitted": "組織の詳細を保存しました",
+    "failed_submit": "組織の詳細を保存できませんでした：{{reason}}",
     "save": "保存",
     "image_url": "画像URL",
     "image_url_helper": "画像への直接URL（Imgur、RSI、または starcitizen.tools のもの）",
@@ -3086,7 +3086,7 @@
     "username": "ユーザー名",
     "note": "メモ",
     "submit": "送信",
-    "submitted": "送信しました！"
+    "submitted": "招待を送信しました"
   },
   "orgInfo": {
     "about": "概要",
@@ -3110,10 +3110,10 @@
     "max_uses": "招待の最大使用回数",
     "used_times": "{{used}}/{{max}} 回使用",
     "max_uses_helper": "この招待の最大使用回数。0に設定すると無制限になります。",
-    "copied": "コピーしました！",
+    "copied": "コピーしました",
     "submit": "送信",
-    "submitted": "送信しました！",
-    "failed_submit": "送信に失敗しました！{{reason}}",
+    "submitted": "送信しました",
+    "failed_submit": "招待コードを保存できませんでした：{{reason}}",
     "copy": "招待リンク {{code}} をコピー",
     "delete": "招待 {{code}} を削除"
   },
@@ -3171,16 +3171,16 @@
     "error_identifier": "識別子名を設定してください",
     "error_logo": "コントラクターのロゴを設定してください",
     "error_banner": "コントラクターのバナーを設定してください",
-    "failed_auth": "認証に失敗しました！{{reason}}",
+    "failed_auth": "組織を認証できませんでした：{{reason}}",
     "languages": "対応言語（任意）",
     "languagesHelper": "組織が対応できる言語を選択してください。後で設定から変更できます。",
-    "success": "コントラクターを作成しました"
+    "success": "組織を作成しました"
   },
   "authenticateRSI": {
     "handle": "RSIハンドル",
     "invalid_handle": "無効なハンドル",
     "enter_username": "ユーザー名を入力してください",
-    "authenticated": "認証しました！",
+    "authenticated": "アカウントを認証しました",
     "here": "こちら",
     "submit": "送信",
     "copy_and_open": "コードをコピーしてプロフィールを開く",
@@ -3194,7 +3194,7 @@
     "error_org_name": "組織名を設定してください",
     "copy_and_open": "コードをコピーして組織ページを開く",
     "submit": "送信",
-    "failed_auth": "認証に失敗しました！{{reason}}",
+    "failed_auth": "組織を認証できませんでした：{{reason}}",
     "instructions": "上記の組織がご自身のものであることを確認するため、次のコード <sentinelCode>あなたのコード</sentinelCode> をコピーし、組織の紹介、沿革、マニフェスト、または憲章のいずれかのセクションに追加してください。認証が完了したら、このコードは削除して構いません。コードが組織ページに表示されたら、送信をクリックしてください。"
   },
   "people": {
@@ -3229,9 +3229,9 @@
     "amount": "金額",
     "note": "メモ",
     "errors": {
-      "enterUser": "送金先のユーザーを入力してください！",
-      "invalidUser": "無効なユーザーです！",
-      "enterAmount": "金額を入力してください！"
+      "enterUser": "送金先を選択してください",
+      "invalidUser": "その名前のユーザーはいません",
+      "enterAmount": "金額を入力してください"
     }
   },
   "cart": {
@@ -3248,7 +3248,7 @@
     "offerOptional": "オファー（任意）",
     "submitOffer": "オファーを送信",
     "submitOrder": "注文を送信",
-    "purchaseSuccess": "購入に成功しました！",
+    "purchaseSuccess": "注文しました",
     "yourCart": "あなたのカート",
     "empty": "カートは空です",
     "aboveMaxQty": "最大数量：{{max}}（カートは {{total}} になります）",
@@ -3295,14 +3295,14 @@
     "submitOfferTo": "{{seller}} にオファーを送信"
   },
   "landing": {
-    "supportersTitle": "サポーターの皆さま",
+    "supportersTitle": "サポーター",
     "supportersThanks": "すべての",
     "supporters": "サポーターの皆さまに感謝します。",
     "faqTitle": "よくある質問",
     "faqSellItemsQ": "アイテムを売るにはどうすればよいですか？",
     "faqSellItemsA": "アイテムごとに出品を作成します。購入者はアイテムをカートに入れてあなたに注文し、その後あなたと購入者でゲーム内の待ち合わせ時間と場所を決めて、商品と aUEC を交換します。",
     "faqSafeQ": "SC Market は安全に使えますか？",
-    "faqSafeA": "取引はプレイヤー同士で行われるため、私たちが保証することはできません。ただし、注文のたびに購入者と販売者がお互いをレビューします。取引の前に、販売者の評価と注文履歴を確認してください。",
+    "faqSafeA": "取引はプレイヤー同士で行われるため、私たちが保証することはできません。ただし、注文ごとに購入者と販売者はお互いをレビューできます。取引の前に、販売者の評価と注文履歴を確認してください。",
     "faqListThingsQ": "SC Market にはどのようなものを出品できますか？",
     "faqListThingsA": "aUEC で取引する Star Citizen のアイテムやサービスなら何でも出品できます：武器、アーマー、コンポーネント、商品、艦船の積荷、さらに輸送・護衛・採掘・医療救助などのサービス。サービスはゲーム内でもゲーム外でも構いません。",
     "faqFeeQ": "SC Market は手数料を取りますか？",
@@ -3349,7 +3349,7 @@
     "wantedNowTitle": "いま求められているもの",
     "wantedNowError": "買い注文を読み込めませんでした。",
     "topShopsTitle": "高評価のショップ",
-    "topShopsText": "注文ごとに購入者が評価しています。",
+    "topShopsText": "購入者が注文後に評価しています。",
     "topShopsBrowse": "ショップを見る",
     "topShopsEmpty": "まだショップはありません。",
     "topShopsError": "ショップを読み込めませんでした。",
@@ -3384,14 +3384,14 @@
     "gameDataMiningText": "鉱石と採掘場所",
     "gameDataMissions": "ミッション",
     "gameDataMissionsText": "報酬と条件",
-    "whyTitle": "SC Market が選ばれる理由",
+    "whyTitle": "無料で使えて、双方向のレビューつき",
     "trustReviewsTitle": "相互レビュー",
-    "trustReviewsText": "注文のたびに、購入者と販売者がお互いを評価します。",
+    "trustReviewsText": "注文ごとに、購入者と販売者はお互いを評価できます。",
     "trustFeesTitle": "手数料なし",
     "trustFeesText": "aUEC が私たちを経由することはありません。購入者はゲーム内で販売者に直接支払います。",
     "trustAlertsTitle": "価格アラート",
     "trustAlertsText": "出品ページからアイテムの価格をウォッチできます。",
-    "trustOrgsTitle": "組織にも対応",
+    "trustOrgsTitle": "組織のストアフロント",
     "trustOrgsText": "共有ストアフロント、メンバーによる注文処理、ホワイトラベルにも対応。",
     "faqBuyQ": "Star Citizen のアイテムを他のプレイヤーから買うには？",
     "faqBuyA": "マーケットでアイテムを検索し、カートに入れて注文します。販売者に Discord で通知が届き、ゲーム内で会って aUEC で支払い、アイテムを受け取ります。",
@@ -3404,7 +3404,7 @@
     "wantedNowPrice": "支払額",
     "wantedNowQuantity": "×{{quantity}}",
     "wantedNowPost": "買い注文を作成：欲しいものを販売者に伝えましょう",
-    "latestListingsText": "プレイヤーのショップに届いたばかりの出品です。"
+    "latestListingsText": "プレイヤーのショップの新着出品です。"
   },
   "fleet": {
     "fleetTitle": "フリート",
@@ -3485,7 +3485,7 @@
       "acceptContractorInvite": "コントラクター招待を承認",
       "invitedMessage": "あなたは次の組織に招待されました：",
       "accept": "承認",
-      "accepted": "招待を承認しました！",
+      "accepted": "招待を承認しました",
       "acceptFailed": "参加に失敗しました",
       "joining": "参加中…",
       "joinOrg": "組織に参加",
@@ -3565,14 +3565,14 @@
     "noBuyOrders": "買い注文なし",
     "noBuyOrdersDescription": "有効な買い注文はここに表示されます。",
     "noOrgsToAggregate": "集計する組織がまだありません。",
-    "noOrgsWidgetDropped": "組織がありません — このウィジェットは削除されます。",
+    "noOrgsWidgetDropped": "組織がないため、このウィジェットは削除されます。",
     "noShopsToAggregate": "集計するショップがまだありません。",
-    "noShopsWidgetDropped": "ショップがありません — このウィジェットは削除されます。",
+    "noShopsWidgetDropped": "ショップがないため、このウィジェットは削除されます。",
     "orgTitle": "{{name}}のダッシュボード",
     "organization": "組織",
     "priceHistoryNoItem": "アイテムが選択されていません。このウィジェットを削除して再追加し、アイテムを選んでください。",
-    "remapOrgLabel": "{{name}} — 組織",
-    "remapShopLabel": "{{name}} — ショップ",
+    "remapOrgLabel": "{{name}}（組織）",
+    "remapShopLabel": "{{name}}（ショップ）",
     "removeWidget": "ウィジェットを削除",
     "reputationError": "評価を読み込めませんでした。",
     "reputationOrders": "注文",
@@ -3591,7 +3591,7 @@
     "searchItem": "アイテムを検索",
     "searchItemHint": "2文字以上入力してください",
     "searchItemNone": "アイテムが見つかりません",
-    "searchItemPlaceholder": "入力して検索…",
+    "searchItemPlaceholder": "アイテムを検索",
     "shop": "ショップ",
     "title": "ダッシュボード",
     "unavailableOrg": "このウィジェットの組織は利用できなくなりました。削除するか、新しい範囲を選択してください。",
@@ -4051,7 +4051,7 @@
     "bidder": "入札者",
     "bidFailed": "入札に失敗しました",
     "bidHistory": "入札履歴",
-    "bidPlaced": "入札しました！",
+    "bidPlaced": "入札しました",
     "concluded": "終了",
     "currentBid": "現在の入札額",
     "ended": "終了しました",
@@ -4082,7 +4082,7 @@
     "description": "あなたとの注文やオファーの作成をブロックしたユーザーを管理します",
     "empty": "まだブロックしたユーザーはいません",
     "error": "ブロックリストの読み込みに失敗しました",
-    "searchPlaceholder": "ブロックするユーザーを検索...",
+    "searchPlaceholder": "ブロックするユーザーを検索",
     "selectedUser": "選択したユーザー",
     "title": "ブロック済みユーザー"
   },
@@ -4144,7 +4144,7 @@
     "selected": "選択中：{{name}}",
     "subheading": "購入者が求めているものです。自分で投稿するか、公開中の要望に在庫から対応しましょう。",
     "targeted": "指定あり",
-    "targetedNote": "指定注文には特定のサプライヤーが必要です — サプライヤー名簿から選択してください（近日公開）。",
+    "targetedNote": "指定注文には特定のサプライヤーが必要です。サプライヤー名簿から選択してください（近日公開）。",
     "tierN": "ティア {{n}}",
     "tierRange": "T{{min}}〜T{{max}}",
     "title": "買い注文",
@@ -4331,7 +4331,7 @@
     "notesPlaceholder": "このロットに関するメモを追加...",
     "notesTooLong": "メモは 1000 文字以内でなければなりません",
     "owner": "所有者（任意）",
-    "ownerPlaceholder": "組織メンバーを検索...",
+    "ownerPlaceholder": "組織メンバーを検索",
     "quantity": "数量",
     "quantityHelp": "このロットの単位数を入力してください",
     "quantityRequired": "数量は 0 より大きくする必要があります",
@@ -4490,7 +4490,7 @@
     },
     "notifications": {
       "noNotifications": "通知はありません",
-      "noNotificationsDescription": "すべて確認済みです！新しい通知はここに表示されます"
+      "noNotificationsDescription": "すべて確認済みです。新しい通知はここに表示されます。"
     },
     "orders": {
       "browseMarket": "マーケットを見る",
@@ -4595,7 +4595,7 @@
     "qtyHelp": "このロットの個数",
     "qtyRequired": "0より大きい値を入力してください",
     "quantity": "数量",
-    "search": "検索...",
+    "search": "インベントリを検索",
     "status": "ステータス",
     "title": "マイ在庫",
     "unlink": "出品からリンクを解除",
@@ -4614,7 +4614,7 @@
     "noLocations": "場所が見つかりません",
     "preset": "プリセット",
     "pressEnterToCreate": "Enterキーを押して作成",
-    "searchOrCreate": "場所を検索または作成..."
+    "searchOrCreate": "場所を検索または追加"
   },
   "LotListItem": {
     "cancel": "キャンセル",
@@ -4644,7 +4644,7 @@
     "available": "在庫あり",
     "blueprint": "設計図",
     "cancel": "キャンセル",
-    "cannotReduceStock": "在庫を減らせません — 進行中の注文に割り当て済みの数量があります",
+    "cannotReduceStock": "在庫を減らせません：その数量は進行中の注文に含まれています",
     "craftedBy": "クラフト者",
     "created": "作成日",
     "edit": "編集",
@@ -4944,7 +4944,7 @@
     "orgSettings": "設定",
     "pinned": "ピン留め済み",
     "recruiting": "募集",
-    "searchPlaceholder": "ナビゲーションを検索...",
+    "searchPlaceholder": "ナビゲーションを検索",
     "services": "サービス",
     "settings": "設定",
     "shopPage": "ショップページ",
@@ -5002,7 +5002,7 @@
     "availabilityRequirement": "対応可能時間の要件",
     "confirmDelete": "この設定を削除してもよろしいですか？",
     "delete": "削除",
-    "deletedSuccessfully": "設定を削除しました！",
+    "deletedSuccessfully": "設定を削除しました",
     "deleteError": "設定の削除に失敗しました。もう一度お試しください。",
     "description": "オファーが作成されたとき、またはオファーが注文に変わったときに自動送信されるカスタムメッセージを設定します。",
     "enabled": "有効",
@@ -5037,7 +5037,7 @@
     "requirementsDescription": "注文を行う前に満たす必要がある要件を設定します。",
     "requirementsTitle": "注文の要件",
     "save": "設定を保存",
-    "savedSuccessfully": "設定を保存しました！",
+    "savedSuccessfully": "設定を保存しました",
     "saveError": "設定の保存に失敗しました。もう一度お試しください。",
     "saving": "保存中...",
     "stockDescription": "在庫を差し引くタイミングを設定します。",
@@ -5118,13 +5118,13 @@
     "description": "組織が注文やオファーの作成をブロックしたユーザーを管理します",
     "empty": "組織はまだユーザーをブロックしていません",
     "error": "組織のブロックリストの読み込みに失敗しました",
-    "searchPlaceholder": "ブロックするユーザーを検索...",
+    "searchPlaceholder": "ブロックするユーザーを検索",
     "selectedUser": "選択中のユーザー",
     "title": "ブロック済みユーザー"
   },
   "OrgMemberSearch": {
     "label": "組織メンバー",
-    "placeholder": "メンバーを検索..."
+    "placeholder": "メンバーを検索"
   },
   "page": "1",
   "pages": {
@@ -5310,7 +5310,7 @@
     "qualityTiers": "品質ティア",
     "qualityTiersDescription": "採掘品質は個別のティアに分類されます。範囲内の生の品質は固定値にマッピングされます。",
     "salvaged": "サルベージ",
-    "search": "リソースを検索...",
+    "search": "リソースを検索",
     "title": "リソース",
     "usedIn": "使用される設計図",
     "viewOnMarket": "マーケットで表示"
@@ -5383,7 +5383,7 @@
     "heading": "アイテムを販売",
     "listingTitle": "出品タイトル",
     "location": "場所（任意）",
-    "locationHelp": "購入者が受け取れる場所 — 例：Area18、Everus Harbor。",
+    "locationHelp": "購入者が受け取れる場所（例：Area18、Everus Harbor）。",
     "needShop": "販売するにはショップが必要です。まずプロフィールから作成してください。",
     "negotiableType": "交渉可能",
     "noShops": "利用可能なショップがありません",
@@ -5401,14 +5401,14 @@
     "sellThrough": "販売元",
     "sellThroughHelp": "あなたの個人ストアまたは管理を手伝っている組織ショップ。",
     "storefront": "ストアフロント",
-    "subheading": "販売するものを選択してください — フォームには必要な項目だけが表示されます。",
+    "subheading": "販売するものを選択してください。フォームには必要な項目だけが表示されます。",
     "tier": "ティア",
     "tierN": "ティア {{n}}",
     "title": "アイテムを販売",
     "unitScu": "cSCU",
     "unitType": "単位タイプ",
     "unitUnit": "個",
-    "visualOnly": "カスタムアイテムとバンドルはこのフェーズではプレビューのみで、まだ保存されません。",
+    "visualOnly": "カスタムアイテムとバンドルは現在プレビューのみです。まだ保存されません。",
     "whatSelling": "何を販売しますか？",
     "removeQualityRow": "品質行を削除",
     "removeBundleItem": "バンドル品目を削除"
@@ -5478,7 +5478,7 @@
     "noLotsDesc": "在庫ロットには、出品が販売する数量が入ります。ロットを追加して、このショップの在庫管理を始めましょう。",
     "order": "注文",
     "quantity": "数量",
-    "searchLots": "ロットを検索...",
+    "searchLots": "ロットを検索",
     "status": "ステータス",
     "user": "ユーザー"
   },
@@ -5521,7 +5521,7 @@
     "previewListingLabel": "マーケット出品（サンプル）",
     "previewListingLightNote": "ライトモード: 出品カードに画像のフェードはありません（実際のマーケットと同じ）。",
     "previewNavbar": "ナビゲーションバー",
-    "previewNavRowHover": "サイドバーの行 — ホバーしてください",
+    "previewNavRowHover": "サイドバーの行（ホバーしてください）",
     "previewOutlinedInput": "ボーダー / 入力",
     "previewOutlineHint": "ボーダーの色を使用します",
     "previewPaperSurface": "ペーパーサーフェス",
@@ -5529,7 +5529,7 @@
     "previewSecondaryBtn": "セカンダリ",
     "previewSecondaryText": "セカンダリテキスト",
     "previewSidebar": "サイドバー",
-    "previewSkeletonWaveHint": "スケルトンの「ウェーブ」シマーはこの色を使用します — 塗りつぶしボタンのホバーではありません。",
+    "previewSkeletonWaveHint": "スケルトンの「ウェーブ」シマーはこの色を使用します。塗りつぶしボタンのホバーではありません。",
     "reset": "デフォルトにリセット",
     "resetConfirmMessage": "これによりすべてのカスタムテーマ設定が削除され、デフォルトのテーマに戻ります。この操作は取り消せません。",
     "resetConfirmTitle": "テーマをリセットしますか？",
@@ -5646,7 +5646,7 @@
   },
   "userSearch": {
     "noResults": "ユーザーが見つかりませんでした",
-    "placeholder": "ユーザーを検索...",
+    "placeholder": "ユーザーを検索",
     "typeToSearch": "入力してユーザーを検索"
   },
   "whitelabel": {
@@ -5672,7 +5672,7 @@
       "headerTitle": "商品",
       "loadError": "商品の読み込みに失敗しました。",
       "noResults": "商品が見つかりませんでした。",
-      "searchPlaceholder": "商品を検索...",
+      "searchPlaceholder": "商品を検索",
       "acqFilter": {
         "all": "すべて",
         "mined": "採掘可能",
@@ -5738,7 +5738,7 @@
       "gradeLabel": "グレード",
       "loadError": "アイテムの読み込みに失敗しました。",
       "noResults": "結果が見つかりませんでした。検索条件を調整してください。",
-      "searchPlaceholder": "アイテム、種類、メーカーを検索...",
+      "searchPlaceholder": "アイテム、種類、メーカーを検索",
       "sizeLabel": "サイズ"
     },
     "itemDetail": {
@@ -5757,7 +5757,7 @@
       "itemAttributes": "アイテム属性",
       "loadError": "アイテムの詳細の読み込みに失敗しました。もう一度お試しください。",
       "markOwned": "所有済みにする",
-      "noRecipeWarning": "このアイテムのクラフトレシピが見つかりません — 分解コンポーネントは不明です。",
+      "noRecipeWarning": "このアイテムのクラフトレシピが見つからないため、分解コンポーネントは不明です。",
       "notSoldNpc": "どの NPC ショップでも販売されていません",
       "openInCalculator": "計算機で開く",
       "owned": "所有済み ✓",
@@ -5794,7 +5794,7 @@
     },
     "locations": {
       "noResults": "場所が見つかりませんでした",
-      "search": "場所を検索...",
+      "search": "場所を検索",
       "title": "スターマップと場所"
     },
     "manufacturerDetail": {
@@ -5828,25 +5828,25 @@
       "processingHeader": "処理速度：{{speed}}",
       "title": "精錬方法",
       "speedDesc": {
-        "fast": "処理時間が最短 — 精製済み素材をすばやく入手できます",
+        "fast": "処理時間が最短：精製済み素材をすばやく入手できます",
         "normal": "バランスの取れた処理時間",
-        "slow": "処理時間が最長 — ただし収率が良いことが多いです"
+        "slow": "処理時間が最長。ただし収率が良いことが多いです"
       },
       "qualityDesc": {
-        "careful": "収率が最高 — 精製時の素材ロスが最小限です",
-        "normal": "バランスの取れた収率 — 素材ロスは中程度です",
-        "wasteful": "収率が最低 — 素材ロスは大きいですが安価です"
+        "careful": "収率が最高：精製時の素材ロスが最小限です",
+        "normal": "バランスの取れた収率：素材ロスは中程度です",
+        "wasteful": "収率が最低：素材ロスは大きいですが安価です"
       },
       "bestFor": {
-        "fastCareful": "総合的に最適 — 高速かつ高収率",
+        "fastCareful": "総合的に最適：高速かつ高収率",
         "fastNormal": "短時間で完了、収率もまずまず",
         "fastWasteful": "最速、素材ロスは許容",
-        "normalCareful": "人気の選択肢 — 収率が良く、時間も妥当",
+        "normalCareful": "収率が良く、時間も妥当",
         "normalNormal": "全体的にバランス型",
         "normalWasteful": "やや速いが収率は低め",
-        "slowCareful": "収率が最大 — 高価な鉱石なら待つ価値あり",
+        "slowCareful": "収率が最大：高価な鉱石なら待つ価値あり",
         "slowNormal": "遅いが安定",
-        "slowWasteful": "遅くてロスも大きい — 基本的に避けましょう"
+        "slowWasteful": "遅くてロスも大きい：基本的に避けましょう"
       }
     },
     "shipBrowser": {
@@ -5871,7 +5871,7 @@
       "headerTitle": "艦船と車両",
       "hoverbike": "ホバーバイク",
       "noResults": "結果が見つかりませんでした。",
-      "searchPlaceholder": "艦船、車両、メーカーを検索...",
+      "searchPlaceholder": "艦船、車両、メーカーを検索",
       "sectionGround": "地上車両",
       "sectionHoverbikes": "ホバーバイク",
       "sectionShips": "艦船",
@@ -6090,7 +6090,7 @@
     "manageTitle": "SC Marketへのリンク",
     "line": "SC Marketのショップはこちら: {{url}}",
     "verifyHint": "完全に任意で、認証には不要です。よろしければ、訪問者がSC Marketであなたのショップを見つけられるよう、この行もRSIの組織ページに追加してください。確認されるのは上のコードだけです。",
-    "verifiedHint": "組織の認証が完了しました！RSIから認証コードを削除できます。よろしければ、訪問者がショップを見つけられるよう、この任意の行は組織ページに残しておいてください。削除できるのはコードだけで、この行は残して構いません。",
+    "verifiedHint": "組織の認証が完了しました。RSIから認証コードを削除できます。よろしければ、訪問者がショップを見つけられるよう、この任意の行は組織ページに残しておいてください。削除できるのはコードだけで、この行は残して構いません。",
     "manageHint": "任意：訪問者がSC Marketであなたのショップを見つけられるよう、この行をRSIの組織ページに追加できます。認証とは関係なく、必須ではありません。",
     "copy": "行をコピー",
     "copied": "コピーしました",
@@ -6224,7 +6224,7 @@
       "brandingAction": "足りないものを見る",
       "title": "ストアフロントを準備しましょう",
       "done": "準備完了です。ストアフロントのリンクを共有するか、下のウィジェットをサイトに設置しましょう。",
-      "intro": "各ステップは数分で終わります。15分以内の最初の出品を目指しましょう。",
+      "intro": "以下のステップを進めて、ストアフロントを準備しましょう。",
       "progress": "設定の進み具合"
     },
     "enquiry": {
@@ -6325,7 +6325,7 @@
     },
     "directory": {
       "empty": "ショップが見つかりません",
-      "search": "ショップを検索...",
+      "search": "ショップを検索",
       "sortLabel": "ショップの並べ替え",
       "sortMostSales": "販売数が多い順",
       "sortNameAZ": "名前順 (A-Z)",
@@ -6341,7 +6341,7 @@
       "created": "作成: {{date}}",
       "createFirst": "最初のショップを作成",
       "customOrders": "カスタム注文",
-      "emptyBody": "ショップを作成して SC Market で販売を始めましょう。数分でストアを開設できます。",
+      "emptyBody": "ショップを作成して SC Market で販売を始めましょう。",
       "emptyTitle": "まだショップがありません",
       "featureAnalytics": "販売・レビュー・分析を確認",
       "featureBranding": "バナーとロゴで独自のブランディング",
@@ -6373,7 +6373,7 @@
       "noReviewsBody": "注文が完了するとここにレビューが表示されます",
       "notFound": "ショップが見つかりません",
       "owner": "ショップのオーナー",
-      "searchListings": "出品を検索...",
+      "searchListings": "出品を検索",
       "since": "{{date}} から",
       "sortListings": "出品の並べ替え",
       "sortMostStock": "在庫が多い順",
@@ -6462,9 +6462,9 @@
     "remaining": "残り {{n}}",
     "removeItemFailed": "アイテムを削除できませんでした",
     "rosterOnly": "メンバーのみ",
-    "searchBuyOrders": "買い注文を検索...",
-    "searchItems": "アイテム・カテゴリを検索...",
-    "searchItemsSellers": "アイテム・カテゴリ・販売者を検索...",
+    "searchBuyOrders": "買い注文を検索",
+    "searchItems": "アイテム・カテゴリを検索",
+    "searchItemsSellers": "アイテム・カテゴリ・販売者を検索",
     "selectVariant": "バリエーションを選択",
     "settingsMoved": "マーケット設定はショップごとの管理になりました。ショップの設定ページを開いてください。",
     "standardVariant": "標準",
@@ -6589,7 +6589,7 @@
     "missionGiver": "依頼主",
     "missionGiverLower": "依頼主",
     "missionGiverPlaceholder": "例: Miles",
-    "missionNamePlaceholder": "ミッション名...",
+    "missionNamePlaceholder": "ミッション名",
     "nOfM": "{{m}} 中 {{n}}",
     "onceOnly": "1回限り",
     "partOfChain": "連続ミッションの一部",
@@ -6609,7 +6609,7 @@
     "satisfaction": "満足度",
     "scope": "範囲",
     "search": "検索",
-    "searchPlaceholder": "ミッション・星系・カテゴリを検索...",
+    "searchPlaceholder": "ミッション・星系・カテゴリを検索",
     "shareable": "共有可能",
     "shipCount_other": "艦船 {{count}} 隻",
     "showEventMissions": "イベントミッションを表示",
@@ -6641,7 +6641,7 @@
     "hostileRange_other": "敵対 {{range}}",
     "friendlyRange_other": "友好 {{range}}",
     "shipRange_other": "艦船 {{range}} 隻",
-    "shipPoolTypes_other": "艦船プール — {{count}} 種類",
+    "shipPoolTypes_other": "艦船プール：{{count}} 種類",
     "npcEncounters": "NPCとの遭遇",
     "targets": "ターゲット",
     "npcCount_other": "NPC {{count}} 体",
@@ -6711,7 +6711,7 @@
     "totalValue": "合計金額:",
     "version": "バージョン",
     "mostRecent": "最新",
-    "newBadge": "新着！",
+    "newBadge": "新着",
     "orderLimitViolation": "注文がサイズまたは金額の要件を満たしていません",
     "byName": "{{name}} 提供"
   },
@@ -6735,7 +6735,7 @@
       "collectionCount_other": "入手可能な設計図 {{count}} 件中 {{owned}} 件",
       "newThisWeek_other": "今週 {{count}} 件追加",
       "search": "検索",
-      "searchPlaceholder": "アイテム名または設計図名...",
+      "searchPlaceholder": "アイテム名または設計図名",
       "category": "カテゴリ",
       "subcategory": "サブカテゴリ",
       "tier": "ティア",
@@ -6751,7 +6751,7 @@
       "ingredientPlaceholder": "例: Hephaestanite",
       "resetFilters": "フィルターをリセット",
       "filters": "フィルター",
-      "searchBarPlaceholder": "設計図・素材・カテゴリを検索...",
+      "searchBarPlaceholder": "設計図・素材・カテゴリを検索",
       "loadError": "設計図を読み込めませんでした。もう一度お試しください。",
       "columnItem": "アイテム",
       "columnTags": "タグ",
@@ -6811,7 +6811,7 @@
     "importFromInventory": "インベントリから読み込む",
     "importFromInventoryOrg": "インベントリから読み込む（＋組織）",
     "addMaterial": "素材を追加",
-    "searchResources": "リソースを検索...",
+    "searchResources": "リソースを検索",
     "noMaterials": "上で素材を検索して追加してください",
     "removeMaterial": "素材を削除",
     "weight": "比重: {{percent}}%",
@@ -6898,7 +6898,7 @@
     },
     "requisitions": {
       "gameItem": "ゲームアイテム",
-      "searchByName": "名前で検索…",
+      "searchByName": "アイテム名で検索",
       "createTitle": "調達依頼を作成",
       "fieldTitle": "タイトル",
       "descriptionOptional": "説明（任意）",
@@ -7003,7 +7003,7 @@
       "activity": {
         "targetedBuyOrder": "<b>{{buyer}}</b> さんが <b>{{item}}</b> の指定買い注文を送信しました",
         "newRequisition": "<b>{{buyer}}</b> さんからの新しい調達依頼 <b>{{title}}</b>",
-        "orderCompleted": "注文 <b>{{title}}</b> が完了しました — <b>{{amount}} aUEC</b>"
+        "orderCompleted": "注文 <b>{{title}}</b> が完了しました：<b>{{amount}} aUEC</b>"
       },
       "noActivity": "最近のアクティビティはありません",
       "activityTitle": "アクティビティ",
@@ -7053,7 +7053,7 @@
       "organizationShop": "組織ショップ",
       "categoriesLanguages": "カテゴリーと言語",
       "selectOrgError": "組織を選択してください",
-      "created": "ショップを作成しました！"
+      "created": "ショップを作成しました"
     },
     "settings": {
       "title": "ショップ設定",
@@ -7280,7 +7280,7 @@
       "addFailed": "アイテムを追加できませんでした。",
       "title": "買い物リストにアイテムを追加",
       "searchItem": "アイテムを検索 *",
-      "searchPlaceholder": "入力して検索...",
+      "searchPlaceholder": "アイテムを検索",
       "minChars_other": "{{count}} 文字以上入力してください",
       "noItemsFound": "アイテムが見つかりません",
       "howToGet": "このアイテムをどのように入手しますか？",
@@ -7428,8 +7428,8 @@
       "siteSettings": "サイト設定",
       "siteAccessHint": "ホワイトラベルサイトにアクセスできるユーザーを設定します。",
       "siteAccess": "サイトへのアクセス",
-      "accessPublic": "公開 — 誰でも閲覧できます",
-      "accessInternal": "内部 — ログインが必要です",
+      "accessPublic": "公開（誰でも閲覧できます）",
+      "accessInternal": "内部（ログインが必要です）",
       "requireMembership": "アクセスに組織メンバーシップを必須にする",
       "homepagePath": "ホームページのパス",
       "homepagePathHelper": "カスタムのランディングページのパスです。既定のページを使う場合は空欄のままにしてください。",
@@ -7492,7 +7492,7 @@
     },
     "summary": {
       "wasQuantity": "（変更前：{{quantity}}）",
-      "newBadge": "新規！"
+      "newBadge": "新規"
     }
   },
   "adminUi": {
@@ -7529,7 +7529,7 @@
       "searchByUsername": "ユーザー名で検索",
       "enabledForUser": "このユーザーで有効",
       "add": "追加",
-      "searchFlags": "フラグを検索...",
+      "searchFlags": "フラグを検索",
       "retry": "再試行",
       "loadFailed": "機能フラグを読み込めませんでした。",
       "flagSummary_other": "デフォルト：{{version}} · ロールアウト：{{percent}}% · オーバーライド {{count}} 件",
@@ -7854,9 +7854,9 @@
     "create": {
       "title": "APIトークンを作成",
       "titleCreated": "トークンを作成しました",
-      "successAlert": "APIトークンを作成しました。再表示されないため、今すぐコピーしてください。",
+      "successAlert": "API トークンの準備ができました。今すぐコピーしてください。再表示されません。",
       "tokenLabel": "APIトークン",
-      "copied": "コピーしました！",
+      "copied": "コピーしました",
       "copyToken": "トークンをコピー",
       "howToAuth": "<strong>認証方法：</strong>APIリクエストの <code>Authorization</code> ヘッダーにトークンを含めてください：",
       "important": "<strong>重要：</strong>このトークンは安全に保管してください。付与した権限でアカウントにアクセスできます。トークンを紛失した場合は、新しく作成する必要があります。",
@@ -7983,9 +7983,9 @@
       "privateHelp": "この買い物リストを閲覧できるのはあなただけです",
       "shareLink": "共有リンク",
       "shareLinkHelp": "このリンクをコピーしてウィッシュリストを共有しましょう",
-      "copied": "コピーしました！",
+      "copied": "コピーしました",
       "copyToClipboard": "クリップボードにコピー",
-      "linkCopied": "リンクをクリップボードにコピーしました！",
+      "linkCopied": "リンクをコピーしました",
       "copyFailed": "リンクをコピーできませんでした。手動でコピーしてください。",
       "nowPublic": "買い物リストを公開しました。リンクを知っている人は誰でも閲覧できます。",
       "nowPrivate": "買い物リストを非公開にしました。閲覧できるのはあなただけです。",
@@ -8059,13 +8059,13 @@
     },
     "oreBrowser": {
       "expShort": "爆発: {{value}}",
-      "searchPlaceholder": "鉱石、星系、レア度で検索...",
+      "searchPlaceholder": "鉱石、星系、レア度で検索",
       "marketPrice": "市場価格",
       "locations": "場所",
       "unknownSystem": "不明"
     },
     "locationBrowser": {
-      "searchPlaceholder": "場所、星系、種類で検索...",
+      "searchPlaceholder": "場所、星系、種類で検索",
       "moreOres_other": "他 {{count}} 件",
       "oreCount_other": "鉱石 {{count}} 種"
     }
@@ -8115,7 +8115,7 @@
       "tierValue": "ティア {{tier}}"
     },
     "search": {
-      "placeholder": "検索...",
+      "placeholder": "ゲームデータを検索",
       "ariaLabel": "検索",
       "tags": {
         "illegal": "違法",
@@ -8163,7 +8163,7 @@
     "verification": {
       "pageTitle": "メール認証",
       "verifying": "メールアドレスを確認しています...",
-      "successTitle": "メールアドレスを認証しました！",
+      "successTitle": "メールアドレスを認証しました",
       "failedTitle": "認証に失敗しました",
       "invalidTitle": "無効なリクエスト",
       "goToSettings": "メール設定へ"
@@ -8202,7 +8202,7 @@
       "loadingPriceChart": "価格チャートを読み込み中..."
     },
     "commandPalette": {
-      "placeholder": "ページ、アクション、出品を検索...",
+      "placeholder": "ページ、アクション、出品を検索",
       "noResults": "「{{query}}」に一致する結果はありません",
       "hintNavigate": "移動",
       "hintSelect": "選択",
@@ -8233,7 +8233,7 @@
         "priceAlerts": "価格アラート",
         "priceAlertsDescription": "ウォッチリストと通知チャンネル",
         "myOrgs": "マイ組織",
-        "shopOrders": "{{shop}} — 注文",
+        "shopOrders": "{{shop}}：注文",
         "createListing": "出品の作成",
         "newMessage": "新規メッセージ",
         "toggleDarkMode": "ダークモードの切り替え"
@@ -8474,7 +8474,7 @@
   },
   "sharedUi": {
     "emailVerification": {
-      "verified": "メールアドレスの認証が完了しました！",
+      "verified": "メールアドレスの認証が完了しました。",
       "errorGeneric": "認証中にエラーが発生しました。",
       "invalidToken": "認証トークンが無効か、有効期限が切れています。",
       "failedTryAgain": "メール認証に失敗しました。もう一度お試しください。",
@@ -8809,7 +8809,7 @@
       "body": "目標価格を決めてアイテムをウォッチしましょう。公開出品がその価格以下になると、出品へのリンク付きでアラートが届きます。通知を止めたいだけなら、アラートを一時停止すれば設定は残ります。"
     },
     "quickList": {
-      "title": "数秒でアイテムを出品",
+      "title": "1 つのフォームでアイテムを出品",
       "body": "アイテムを選び、価格と数量を確認して出品します。在庫は数量だけで始められ、いつでも場所や品質ごとに分けられます。"
     }
   },
@@ -8996,7 +8996,7 @@
     "seeListings": "出品を見る",
     "empty": {
       "title": "現在、出品している人はいません",
-      "body": "お持ちですか？約15秒で出品できます。価格アラートを設定した購入者には、目標価格に合えば通知が届きます。"
+      "body": "お持ちですか？Quick List で出品できます。価格アラートを設定した購入者には、目標価格に合えば通知が届きます。"
     },
     "listingCount_other": "{{formatted}} 件",
     "listedSoFar_other": "これまでに {{formatted}} 件出品しました。"

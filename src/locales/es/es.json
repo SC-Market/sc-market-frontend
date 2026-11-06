@@ -35,7 +35,7 @@
     "moderation.notesHelperText": "Notas opcionales sobre la acción de moderación (máx. 2000 caracteres)",
     "moderation.updateReport": "Actualizar denuncia",
     "moderation.updating": "Actualizando...",
-    "moderation.reportUpdated": "Denuncia actualizada correctamente",
+    "moderation.reportUpdated": "Denuncia actualizada",
     "moderation.updateFailed": "No se pudo actualizar la denuncia",
     "moderation.actions": "Acciones",
     "alerts": {
@@ -44,17 +44,17 @@
       "activeFilter": "Estado activo",
       "content": "Contenido",
       "contentPlaceholder": "Introduce el contenido de la alerta en formato Markdown...",
-      "contractorPlaceholder": "Escribe para buscar contratistas...",
+      "contractorPlaceholder": "Buscar organizaciones",
       "contractorRequired": "Selecciona un contratista",
       "create": "Crear",
       "createAlert": "Crear alerta",
-      "created": "Alerta creada correctamente",
+      "created": "Alerta creada",
       "createdAt": "Creado",
       "creating": "Creando...",
       "delete": "Eliminar",
       "deleteAlert": "Eliminar alerta",
       "deleteConfirm": "¿Seguro que quieres eliminar esta alerta? Esta acción no se puede deshacer.",
-      "deleted": "Alerta eliminada correctamente",
+      "deleted": "Alerta eliminada",
       "deleting": "Eliminando...",
       "editAlert": "Editar alerta",
       "field": {
@@ -72,7 +72,7 @@
       "targetType": "Tipo de destino",
       "targetTypeFilter": "Tipo de destino",
       "update": "Actualizar",
-      "updated": "Alerta actualizada correctamente",
+      "updated": "Alerta actualizada",
       "updating": "Actualizando...",
       "validation": {
         "invalidUrl": "Introduce una URL válida (http:// o https://)"
@@ -104,17 +104,17 @@
     "alerts.activeFilter": "Estado activo",
     "alerts.content": "Contenido",
     "alerts.contentPlaceholder": "Introduce el contenido de la alerta en formato Markdown...",
-    "alerts.contractorPlaceholder": "Escribe para buscar contratistas...",
+    "alerts.contractorPlaceholder": "Buscar organizaciones",
     "alerts.contractorRequired": "Selecciona un contratista",
     "alerts.create": "Crear",
     "alerts.createAlert": "Crear alerta",
-    "alerts.created": "Alerta creada correctamente",
+    "alerts.created": "Alerta creada",
     "alerts.createdAt": "Creado",
     "alerts.creating": "Creando...",
     "alerts.delete": "Eliminar",
     "alerts.deleteAlert": "Eliminar alerta",
     "alerts.deleteConfirm": "¿Seguro que quieres eliminar esta alerta? Esta acción no se puede deshacer.",
-    "alerts.deleted": "Alerta eliminada correctamente",
+    "alerts.deleted": "Alerta eliminada",
     "alerts.deleting": "Eliminando...",
     "alerts.editAlert": "Editar alerta",
     "alerts.invalidUrl": "Introduce una URL válida (http:// o https://)",
@@ -130,7 +130,7 @@
     "alerts.targetTypeFilter": "Tipo de destino",
     "alerts.title": "Título",
     "alerts.update": "Actualizar",
-    "alerts.updated": "Alerta actualizada correctamente",
+    "alerts.updated": "Alerta actualizada",
     "alerts.updating": "Actualizando...",
     "attributes": {
       "actions": "Acciones",
@@ -148,13 +148,13 @@
       },
       "cascadeOption": "¿Eliminar también todos los atributos de artículos del juego con este nombre?",
       "create": "Crear",
-      "created": "Definición de atributo creada correctamente",
+      "created": "Definición de atributo creada",
       "createDefinition": "Crear definición de atributo",
       "creating": "Creando...",
       "delete": "Eliminar",
       "deleteAttributes": "Eliminar atributos",
       "deleteConfirm": "¿Seguro que quieres eliminar esta definición de atributo?",
-      "deleted": "Definición de atributo eliminada correctamente",
+      "deleted": "Definición de atributo eliminada",
       "deleteDefinition": "Eliminar definición de atributo",
       "deleting": "Eliminando...",
       "displayName": "Nombre visible",
@@ -172,7 +172,7 @@
       "showInFilters": "Mostrar en los filtros del mercado",
       "title": "Definiciones de atributos",
       "update": "Actualizar",
-      "updated": "Definición de atributo actualizada correctamente",
+      "updated": "Definición de atributo actualizada",
       "updating": "Actualizando..."
     },
     "auditLogs": "Registros de auditoría de administración",
@@ -187,7 +187,7 @@
       "delete": "Eliminar",
       "deleteAttribute": "Eliminar atributo",
       "deleteConfirm": "¿Seguro que quieres eliminar este atributo?",
-      "deleted": "Atributo eliminado correctamente",
+      "deleted": "Atributo eliminado",
       "deleting": "Eliminando...",
       "editAttribute": "Editar atributo",
       "freeFormValue": "Introduce cualquier valor",
@@ -198,7 +198,7 @@
       "importSuccess": "Importación correcta",
       "noSelection": "Introduce un ID de artículo del juego para empezar",
       "save": "Guardar",
-      "saved": "Atributo guardado correctamente",
+      "saved": "Atributo guardado",
       "saving": "Guardando...",
       "search": "Buscar",
       "searchHelp": "Introduce el UUID de un artículo del juego para ver y editar sus atributos",
@@ -221,7 +221,7 @@
       "result": "Resultado de la prueba",
       "selectedUser": "Seleccionado: {{username}}",
       "selectUser": "Busca un usuario para recibir la notificación de prueba",
-      "success": "Prueba de notificación completada correctamente",
+      "success": "Prueba de notificación completada",
       "targetUser": "Usuario de destino",
       "test": "Probar notificación",
       "testing": "Probando...",
@@ -303,8 +303,8 @@
     "ownerUsername": "Nombre de usuario del propietario*",
     "spectrumId": "ID de Spectrum de la org*",
     "submit": "Enviar",
-    "success": "¡Enviado!",
-    "failure": "¡No se pudo enviar! {{reason}}"
+    "success": "Organización verificada",
+    "failure": "No se pudo verificar la organización: {{reason}}"
   },
   "ads": {
     "scOrgs": {
@@ -393,7 +393,7 @@
     "loginFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
     "loginWithCitizenID": "Iniciar sesión con Citizen iD",
     "oauthError": "Ocurrió un error durante la autenticación. Inténtalo de nuevo.",
-    "signInBlurb": "Gratis — inicia sesión con tu cuenta de RSI (<citizenIdLink>Citizen iD</citizenIdLink>) o con tu cuenta de Discord.",
+    "signInBlurb": "Gratis. Inicia sesión con tu cuenta de RSI (<citizenIdLink>Citizen iD</citizenIdLink>) o con tu cuenta de Discord.",
     "signInTab": "Pestaña de inicio de sesión",
     "signInTitle": "Inicia sesión en SC Market",
     "signInWithCitizenID": "Iniciar sesión con Citizen iD",
@@ -413,8 +413,8 @@
     "save": "Guardar",
     "availability_for": "Disponibilidad para",
     "title": "Mi disponibilidad",
-    "updated": "¡Disponibilidad actualizada!",
-    "failed": "¡No se pudo actualizar!",
+    "updated": "Disponibilidad actualizada",
+    "failed": "No se pudo actualizar tu disponibilidad.",
     "checking": "Comprobando el requisito de disponibilidad...",
     "edit": "Editar",
     "yourAvailability": "Tu disponibilidad"
@@ -658,7 +658,7 @@
     "maxPrice": "Precio máx.",
     "minPrice": "Precio mín.",
     "minQuantity": "Cant. mín.",
-    "noItemResults": "No se encontraron artículos: prueba con un término más corto o diferente",
+    "noItemResults": "No se encontraron artículos. Prueba con un término más corto o diferente.",
     "noPriceData": "No hay datos de precios disponibles",
     "noPriceHistory": "No hay historial de precios disponible",
     "noQualityDistribution": "No hay datos de distribución de calidad disponibles",
@@ -681,7 +681,7 @@
     "salesVolume": "Volumen de ventas",
     "salesVolumeByQualityTier": "Volumen de ventas por nivel de calidad",
     "searching": "Buscando...",
-    "searchItemPlaceholder": "Empieza a escribir el nombre de un artículo...",
+    "searchItemPlaceholder": "Buscar artículos",
     "selectAllVariants": "Seleccionar todas las variantes",
     "selectVariant": "Selecciona una variante",
     "selectVariantsPrompt": "Selecciona una variante para cada artículo",
@@ -700,7 +700,7 @@
     "tierSilver": "Plata",
     "timeToSaleByQualityTier": "Tiempo hasta la venta por nivel de calidad",
     "totalQuantity": "Cant. total",
-    "typeToSearch": "Escribe para buscar...",
+    "typeToSearch": "Escribe el nombre de un artículo",
     "unspecified": "Sin especificar",
     "variant": "Variante",
     "verificationRequired": "Tu cuenta debe estar verificada para crear anuncios de mercado. Verifica tu cuenta con RSI/Citizen iD para continuar.",
@@ -732,7 +732,7 @@
     "counter_offer_received_from": "Contraoferta recibida de",
     "order_status_updated_to": "Estado del pedido actualizado a {{status}} por",
     "contractor_invite_from": "Invitación de contratista de <contractorLink>{{spectrum_id}}</contractorLink>",
-    "submitted": "¡Enviado!",
+    "submitted": "Enviado",
     "accept": "Aceptar",
     "decline": "Rechazar",
     "new_bid_placed_by": "Nueva puja realizada por",
@@ -819,7 +819,7 @@
     "continue": "Continuar",
     "complete": "Completar configuración",
     "availabilitySaved": "Disponibilidad guardada",
-    "emailVerificationSent": "¡Correo de verificación enviado! Revisa tu bandeja de entrada.",
+    "emailVerificationSent": "Correo de verificación enviado. Revisa tu bandeja de entrada.",
     "steps": {
       "discord": "Vincular Discord",
       "availability": "Disponibilidad",
@@ -842,7 +842,7 @@
       "title": "Añade tu correo electrónico",
       "description": "Recibe notificaciones de nuevos mensajes y ofertas cuando no estés.",
       "verify": "Enviar verificación",
-      "sent": "¡Correo de verificación enviado! Puedes verificarlo más tarde."
+      "sent": "Correo de verificación enviado. Puedes verificarlo más tarde."
     },
     "notifications": {
       "title": "Preferencias de notificación",
@@ -861,7 +861,7 @@
       "title": "Registra una organización"
     },
     "pushNotifs": {
-      "description": "Recibe alertas instantáneas en este dispositivo sobre nuevos mensajes, pedidos y ofertas.",
+      "description": "Recibe alertas en este dispositivo sobre nuevos mensajes, pedidos y ofertas.",
       "prefsTitle": "Preferencias de notificaciones push",
       "title": "Notificaciones push"
     },
@@ -1211,12 +1211,12 @@
       "reVerifyTitle": "Volver a verificar el perfil",
       "reVerifyDescription": "Actualiza el nombre de usuario de tu perfil para que coincida con tu handle actual de Spectrum. Solo se actualizará tu nombre de usuario.",
       "reVerifyButton": "Volver a verificar el perfil",
-      "reVerifySuccess": "¡Perfil verificado de nuevo! Tu nombre de usuario se ha actualizado.",
+      "reVerifySuccess": "Perfil verificado de nuevo. Tu nombre de usuario está actualizado.",
       "reVerifyError": "No se pudo volver a verificar el perfil. Inténtalo de nuevo más tarde.",
       "unlinkTitle": "Desvincular cuenta de Star Citizen",
       "unlinkDescription": "Desvincula tu cuenta de Star Citizen para volver al estado no verificado. Tu nombre de usuario se restablecerá al formato predeterminado basado en tu ID de Discord.",
       "unlinkButton": "Desvincular cuenta",
-      "unlinkSuccess": "¡Cuenta de Star Citizen desvinculada! Tu perfil ha vuelto al estado no verificado.",
+      "unlinkSuccess": "Cuenta de Star Citizen desvinculada. Tu perfil vuelve a estar sin verificar.",
       "unlinkError": "No se pudo desvincular la cuenta de Star Citizen. Inténtalo de nuevo más tarde.",
       "unlinkDialogTitle": "Confirmar desvinculación de cuenta",
       "unlinkDialogDescription": "¿Seguro que quieres desvincular tu cuenta de Star Citizen? Tu perfil volverá al estado no verificado y tu nombre de usuario recuperará el formato predeterminado. Puedes volver a vincular tu cuenta cuando quieras.",
@@ -1272,7 +1272,7 @@
         "title": "Añadir dirección de correo"
       },
       "addError": "No se pudo añadir la dirección de correo",
-      "addSuccess": "¡Correo añadido correctamente!",
+      "addSuccess": "Correo añadido",
       "deleteEmailDialog": {
         "cancel": "Cancelar",
         "confirm": "Eliminar correo",
@@ -1280,7 +1280,7 @@
         "title": "Eliminar dirección de correo"
       },
       "deleteError": "No se pudo eliminar la dirección de correo",
-      "deleteSuccess": "¡Correo eliminado correctamente!",
+      "deleteSuccess": "Correo eliminado",
       "editEmailDialog": {
         "newEmailLabel": "Nueva dirección de correo",
         "title": "Actualizar dirección de correo",
@@ -1300,9 +1300,9 @@
       "title": "Notificaciones por correo",
       "updateEmail": "Actualizar correo",
       "updateError": "No se pudo actualizar la dirección de correo",
-      "updateSuccess": "¡Correo actualizado correctamente!",
+      "updateSuccess": "Correo actualizado",
       "verificationError": "No se pudo enviar el correo de verificación",
-      "verificationSent": "¡Correo de verificación enviado!",
+      "verificationSent": "Correo de verificación enviado",
       "verified": "Verificado",
       "bounce": {
         "title": "Tu correo ha rebotado. Actualízalo, por favor.",
@@ -1337,7 +1337,7 @@
       "placeholder": "Selecciona idiomas...",
       "save": "Guardar idiomas",
       "saveError": "No se pudieron actualizar los idiomas",
-      "saveSuccess": "Idiomas actualizados correctamente",
+      "saveSuccess": "Idiomas actualizados",
       "section": {
         "description": "Selecciona los idiomas en los que puedes comunicarte. Esto ayuda a otros a saber qué idiomas admites."
       },
@@ -1351,7 +1351,7 @@
       "available": "Pestañas disponibles",
       "description": "Personaliza qué pestañas aparecen en tu barra de navegación inferior móvil. Selecciona hasta 5 pestañas y arrástralas para reordenarlas.",
       "error": "No se pudo guardar la configuración de navegación móvil",
-      "saved": "Configuración de navegación móvil guardada correctamente",
+      "saved": "Ajustes de navegación móvil guardados",
       "selected": "Pestañas seleccionadas",
       "title": "Navegación móvil"
     },
@@ -1380,12 +1380,12 @@
       "otherDevices_other": "{{count}} dispositivos más",
       "permissionDeniedError": "Permiso {{status}}. Activa las notificaciones en la configuración de tu navegador.",
       "permissionDeniedMessage": "Activa las notificaciones en la configuración de tu navegador para usar las notificaciones push.",
-      "permissionGrantedMessage": "¡Permiso concedido! Ahora puedes suscribirte a las notificaciones push.",
+      "permissionGrantedMessage": "Permiso concedido. Ya puedes activar las notificaciones push.",
       "permissionStatus": "Estado del permiso",
       "removeDevice": "Eliminar dispositivo",
       "requestPermission": "Solicitar permiso",
       "subscribe": "Suscribirse a notificaciones push",
-      "subscribed": "¡Suscripción a notificaciones push realizada correctamente!",
+      "subscribed": "Notificaciones push activadas",
       "subscribedOn": "Suscrito el {{date}}",
       "subscribing": "Suscribiendo...",
       "title": "Notificaciones push",
@@ -1395,7 +1395,7 @@
       "totalDevices_other": "{{count}} dispositivos en total",
       "unknownDevice": "Dispositivo desconocido",
       "unsubscribe": "Cancelar suscripción",
-      "unsubscribed": "Suscripción a notificaciones push cancelada correctamente",
+      "unsubscribed": "Notificaciones push desactivadas",
       "subscribeFailed": "No se pudieron activar las notificaciones push: {{reason}}",
       "permissionDismissed": "Tu navegador no activó las notificaciones. Inténtalo de nuevo y elige Permitir.",
       "unsubscribeFailed": "No se pudo quitar ese dispositivo. Inténtalo de nuevo.",
@@ -1569,7 +1569,7 @@
     "money": "Dinero",
     "invoices": "Facturas",
     "fleet": "Flota",
-    "new_chip": "¡Nuevo!",
+    "new_chip": "Nuevo",
     "people": "Personas",
     "customers": "Clientes",
     "members": "Miembros",
@@ -1779,7 +1779,7 @@
     "danger_zone": "Zona de peligro",
     "delete_account_button": "Eliminar cuenta",
     "delete_account_description": "Elimina permanentemente tu cuenta y todos los datos personales asociados. Esta acción no se puede deshacer una vez transcurrido el periodo de gracia de 30 días.",
-    "updated": "Configuración actualizada correctamente",
+    "updated": "Configuración actualizada",
     "cookie_title": "Preferencias de cookies",
     "cookie_description": "Las cookies de inicio de sesión y los informes de errores anónimos están siempre activos. La analítica (Google Analytics y medición de velocidad) solo funciona si la permites.",
     "cookie_status_all": "Elección actual: analítica permitida.",
@@ -1874,8 +1874,8 @@
     "description_required": "Descripción*",
     "submit": "Enviar",
     "alert": {
-      "submitted": "¡Enviado!",
-      "failed": "¡No se pudo enviar!"
+      "submitted": "Publicación guardada",
+      "failed": "No se pudo guardar la publicación"
     },
     "markdown_info": "El markdown estilo Github está habilitado, las URL de YouTube se insertarán automáticamente y las imágenes se pueden insertar siempre que estén alojadas en Imgur o RSI.",
     "markdown_link": "aquí",
@@ -1904,7 +1904,7 @@
     "orgCardBody": "{{name}} tiene una página de comunidad en SC Orgs, nuestro sitio hermano: miembros, eventos y solicitudes de reclutamiento.",
     "orgCardAction": "Abrir en SC Orgs",
     "verifiedTitle": "Registra también tu organización en SC Orgs",
-    "verifiedBody": "SC Orgs, nuestro sitio hermano para gestionar organizaciones, ofrece a {{org}} solicitudes de reclutamiento, eventos y herramientas para miembros. El registro tarda unos dos minutos.",
+    "verifiedBody": "SC Orgs, nuestro sitio hermano para gestionar organizaciones, ofrece a {{org}} solicitudes de reclutamiento, eventos y herramientas para miembros.",
     "verifiedAction": "Registrarse en SC Orgs"
   },
   "contractor": {
@@ -1956,8 +1956,8 @@
     "logout": "Cerrar sesión"
   },
   "viewProfile": {
-    "submitted": "¡Enviado!",
-    "failed": "¡No se pudo enviar!",
+    "submitted": "Perfil guardado",
+    "failed": "No se pudo guardar tu perfil.",
     "image_url": "URL de la imagen",
     "image_url_helper": "URL directa a la imagen, de Imgur, RSI o starcitizen.tools",
     "save": "Guardar",
@@ -1973,9 +1973,9 @@
     "store_market": "Mercado",
     "store_services": "Servicios",
     "avatar_too_large": "El avatar debe pesar menos de 1 MB",
-    "avatar_uploaded": "Avatar subido correctamente",
+    "avatar_uploaded": "Avatar subido",
     "banner_too_large": "El banner debe pesar menos de 2,5 MB",
-    "banner_uploaded": "Banner subido correctamente",
+    "banner_uploaded": "Banner subido",
     "editDescription": "Editar descripción",
     "loading": "Cargando"
   },
@@ -2062,7 +2062,7 @@
   },
   "select_rows_per_page": "Seleccionar filas por página",
   "createPublicContract": {
-    "submitted": "¡Enviado!",
+    "submitted": "Enviado",
     "about": "Acerca de",
     "title_required": "Título*",
     "type_required": "Tipo*",
@@ -2098,8 +2098,8 @@
     "leaveReviewButton": "Dejar reseña",
     "notFinishedHint": "Podrá dejar una reseña cuando el pedido esté completado o cancelado, o 14 días después de que haya comenzado.",
     "alert": {
-      "success": "¡Reseña dejada!",
-      "error": "¡No se pudo dejar la reseña!"
+      "success": "Reseña publicada",
+      "error": "No se pudo publicar tu reseña."
     }
   },
   "orderMetrics": {
@@ -2198,7 +2198,7 @@
     "actions": "Acciones"
   },
   "orderDetailsArea": {
-    "updated_status": "¡Estado actualizado!",
+    "updated_status": "Estado actualizado",
     "details_table": "tabla de detalles",
     "customer": "Cliente",
     "seller": "Vendedor",
@@ -2232,10 +2232,10 @@
     "title": "Mis pedidos"
   },
   "memberAssignArea": {
-    "assigned": "¡Asignado!",
-    "failed_assign": "¡No se pudo asignar!",
-    "unassigned": "¡Desasignado!",
-    "failed_unassign": "¡No se pudo desasignar!",
+    "assigned": "Asignado",
+    "failed_assign": "No se pudo asignar.",
+    "unassigned": "Asignación quitada",
+    "failed_unassign": "No se pudo quitar la asignación.",
     "assign": "Asignar",
     "reassign": "Reasignar",
     "unassign": "Desasignar",
@@ -2248,7 +2248,7 @@
     "serviceActive": "El servicio está activo",
     "serviceInactive": "El servicio está inactivo",
     "serviceDescription": "Descripción del servicio",
-    "serviceDescriptionHelper": "P. ej. ¡Ofrecemos transporte de mercancías entre ubicaciones!",
+    "serviceDescriptionHelper": "P. ej., transporte de carga entre Area18 y Lorville",
     "orderServiceDetails": "Detalles del servicio del pedido",
     "title": "Título",
     "typeOptional": "Tipo (opcional)",
@@ -2264,8 +2264,8 @@
     "submit": "Enviar",
     "update": "Actualizar",
     "alert": {
-      "submitted": "¡Enviado!",
-      "failed": "¡No se pudo enviar!"
+      "submitted": "Servicio guardado",
+      "failed": "No se pudo guardar el servicio"
     },
     "photoUploadNote": "Nota sobre la subida de fotos",
     "uploadingPhotos": "Subiendo fotos"
@@ -2288,7 +2288,7 @@
     "paymentType": "Tipo de pago",
     "submit": "Enviar",
     "alert": {
-      "submitted": "¡Enviado!"
+      "submitted": "Enviado"
     }
   },
   "OffersViewPaginated": {
@@ -2329,7 +2329,7 @@
     "merge_offers_selected_count_many": "Seleccionadas: {{count}} sesiones de oferta",
     "merge_offers_selected_count_other": "Seleccionadas: {{count}} sesiones de oferta",
     "merge_offers_warning": "Todas las sesiones de oferta seleccionadas se cerrarán y se reemplazarán por una única sesión de oferta fusionada.",
-    "merge_success": "Ofertas fusionadas correctamente",
+    "merge_success": "Ofertas combinadas",
     "seller": "Vendedor",
     "seller_username": "Nombre de usuario del vendedor",
     "seller_username_placeholder": "Introduce el nombre de usuario del vendedor o el ID de Spectrum",
@@ -2408,13 +2408,13 @@
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "Enviar contraoferta",
-    "counterOfferSubmitted": "Contraoferta enviada correctamente"
+    "counterOfferSubmitted": "Contraoferta enviada"
   },
   "Webhooks": {
     "title": "Webhooks",
     "name": "Nombre",
-    "submitted": "¡Enviado!",
-    "failedToSubmit": "¡No se pudo enviar! "
+    "submitted": "Webhook eliminado",
+    "failedToSubmit": "No se pudo eliminar el webhook: "
   },
   "DashNotificationArea": {
     "notifications": "Notificaciones"
@@ -2443,7 +2443,7 @@
     "orderComment": "Comentario de pedido recibido",
     "marketBid": "Puja de mercado recibida",
     "submit": "Enviar",
-    "submitted": "¡Enviado!"
+    "submitted": "Webhook añadido"
   },
   "MessagingSidebar": {
     "messages": "Mensajes",
@@ -2474,7 +2474,7 @@
     "noUsersFound": "No se encontraron usuarios",
     "searchAndSelect": "Busca y selecciona usuarios para crear un chat grupal",
     "searchPlaceholder": "Escribe para buscar usuarios",
-    "searchUsers": "Buscar usuarios...",
+    "searchUsers": "Buscar usuarios",
     "selectedUsers": "Usuarios seleccionados",
     "selectUsers": "Selecciona usuarios para iniciar un chat",
     "startNewChat": "Iniciar un nuevo chat",
@@ -2580,17 +2580,17 @@
     "defaultListing": "Anuncio predeterminado",
     "includeListings": "Anuncios a incluir",
     "update": "Actualizar",
-    "submitted": "¡Enviado!",
-    "failedSubmit": "¡No se pudo enviar! {{error}}"
+    "submitted": "Enviado",
+    "failedSubmit": "No se pudo enviar: {{error}}"
   },
   "MarketListingView": {
-    "addedToCart": "¡Añadido al carrito!",
+    "addedToCart": "Añadido al carrito",
     "price": "Precio",
     "ofAvailable": "de {{count}} disponibles",
     "quantity": "Cantidad",
     "addToCart": "Añadir al carrito",
-    "bidSuccess": "¡Puja realizada con éxito!",
-    "bidError": "¡Error al pujar! {{error}}",
+    "bidSuccess": "Puja realizada",
+    "bidError": "No se pudo realizar la puja: {{error}}",
     "currentBid": "Puja actual: {{price}} aUEC",
     "bid": "Puja",
     "placeBid": "Realizar puja",
@@ -2642,9 +2642,9 @@
     "minBidIncrement": "Incremento mínimo de puja",
     "endTime": "Hora de finalización ({{tz}})",
     "submit": "Enviar",
-    "submitted": "¡Enviado!",
-    "failedSubmit": "¡No se pudo enviar!",
-    "photosUploaded": "¡Fotos subidas correctamente!",
+    "submitted": "Enviado",
+    "failedSubmit": "No se pudo enviar",
+    "photosUploaded": "Fotos subidas",
     "photoUploadFailed": "No se pudieron subir algunas fotos"
   },
   "SelectPhotosArea": {
@@ -2696,8 +2696,8 @@
     "costs": "Costes",
     "price": "Precio",
     "submit": "Enviar",
-    "submitted": "¡Enviado!",
-    "failedSubmit": "¡No se pudo enviar!"
+    "submitted": "Enviado",
+    "failedSubmit": "No se pudo enviar"
   },
   "MarketMultipleForm": {
     "about": "Acerca de",
@@ -2708,8 +2708,8 @@
     "defaultListing": "Anuncio predeterminado",
     "listingsToInclude": "Anuncios a incluir",
     "submit": "Enviar",
-    "submitted": "¡Enviado!",
-    "failedSubmit": "¡No se pudo enviar!"
+    "submitted": "Enviado",
+    "failedSubmit": "No se pudo enviar"
   },
   "MarketListingEditView": {
     "deactivate": "Desactivar anuncio",
@@ -2724,14 +2724,14 @@
     "description": "Descripción",
     "internalListing": "Anuncio interno",
     "publicListing": "Anuncio público",
-    "updated": "¡Actualizado!",
-    "updateError": "¡Error al actualizar!"
+    "updated": "Actualizado",
+    "updateError": "No se pudieron guardar los cambios"
   },
   "MarketEditTemplate": {
     "title": "Editar plantilla de mensaje de mercado",
     "configure": "Configura la plantilla de comentario que se añadirá a los nuevos pedidos de mercado y que los usuarios pueden rellenar para darte detalles adicionales.",
     "submit": "Enviar",
-    "submitted": "¡Enviado!"
+    "submitted": "Plantilla guardada"
   },
   "MarketAggregateView": {
     "market": "Mercado",
@@ -2745,14 +2745,14 @@
     "sellOrders": "Órdenes de venta",
     "buyOrders": "Órdenes de compra",
     "priceHistory": "Historial de precios",
-    "addedToCart": "¡Añadido al carrito!",
+    "addedToCart": "Añadido al carrito",
     "quantityToBuy": "Cantidad a comprar",
     "ofAvailable": "de {{count}} disponibles",
     "fulfill": "Completar",
     "cancel": "Cancelar",
-    "submitted": "¡Enviado!",
-    "failedSubmit": "¡No se pudo enviar!",
-    "cancelled": "¡Cancelado!",
+    "submitted": "Enviado",
+    "failedSubmit": "No se pudo enviar",
+    "cancelled": "Orden de compra cancelada",
     "buyOrdersChart": "Órdenes de compra",
     "sellOrdersChart": "Órdenes de venta",
     "atPrice": "pedidos a {{price}} aUEC o {{direction}}",
@@ -2767,8 +2767,8 @@
     "viewCount": "Total de visualizaciones"
   },
   "MarketAggregateEditView": {
-    "updated": "¡Actualizado!",
-    "errorWhileUpdating": "¡Error al actualizar!",
+    "updated": "Actualizado",
+    "errorWhileUpdating": "No se pudieron guardar los cambios",
     "deactivate": "Desactivar anuncio",
     "activate": "Activar anuncio",
     "update": "Actualizar",
@@ -2805,7 +2805,7 @@
     "addRow": "Añadir fila"
   },
   "ItemStock": {
-    "updated": "¡Actualizado!",
+    "updated": "Actualizado",
     "updateAmount": "Actualizar cantidad",
     "add": "Sumar",
     "zero": "0",
@@ -2814,7 +2814,7 @@
     "deactivate": "Desactivar",
     "addQuickListing": "Añadir anuncio rápido",
     "selectItemError": "Selecciona un artículo",
-    "created": "¡Anuncio creado con éxito!",
+    "created": "Anuncio creado",
     "createError": "No se pudo crear el anuncio",
     "title": "Título",
     "noItemSelected": "Ningún artículo seleccionado",
@@ -2843,7 +2843,7 @@
     "bulkArchivedSuccess_many": "Se archivaron {{count}} anuncios.",
     "bulkArchivedSuccess_other": "Se archivaron {{count}} anuncios.",
     "bulkArchiveTitle": "¿Archivar los anuncios seleccionados?",
-    "cannotReduceStock": "No se puede reducir el stock: hay unidades comprometidas en pedidos activos",
+    "cannotReduceStock": "No se puede reducir el stock: esas unidades están en pedidos activos",
     "editingNewListing": "Editando nuevo anuncio...",
     "manageStock": "Gestionar stock",
     "newListing": "Nuevo anuncio",
@@ -2894,13 +2894,13 @@
     "total_price": "Precio total",
     "expiration": "Vencimiento del pedido ({{tz}})",
     "submit": "Enviar",
-    "submitted": "¡Enviado!",
-    "failed": "¡No se pudo enviar! {{error}}",
+    "submitted": "Enviado",
+    "failed": "No se pudo crear la orden de compra: {{error}}",
     "unknown_error": "Error desconocido",
     "agreedPriceRequired": "Introduce un precio acordado por unidad (al menos 1 aUEC).",
     "agreePriceDescription": "Esta orden de compra es negociable. Introduce el precio acordado por unidad en aUEC para completarla.",
     "agreePriceTitle": "Precio acordado por unidad",
-    "created": "Orden de compra creada correctamente",
+    "created": "Orden de compra creada",
     "fulfillQuantity": "Cantidad a entregar",
     "fulfillTitle": "Completar orden de compra",
     "imageHint": "Añade fotos de referencia (opcional, las imágenes grandes se optimizan automáticamente)",
@@ -2967,8 +2967,8 @@
       "title": "Importar desde archivo de Hangar XPlorer",
       "upload": "Subir archivo",
       "submit": "Enviar",
-      "submitted": "¡Enviado!",
-      "failed": "¡No se pudo enviar! {{error}}"
+      "submitted": "Flota importada",
+      "failed": "No se pudo importar tu flota: {{error}}"
     }
   },
   "deliveries": {
@@ -3034,8 +3034,8 @@
     "create": "Crear",
     "save": "Guardar",
     "delete": "Eliminar",
-    "updated": "¡Actualizado!",
-    "deleted": "¡Eliminado!",
+    "updated": "Guardado",
+    "deleted": "Rol eliminado",
     "role_name": "Nombre del rol",
     "role_position": "Posición del rol",
     "position_helper": "Los números más bajos tienen mayor prioridad sobre otros roles.",
@@ -3081,10 +3081,10 @@
     "any": "Cualquiera",
     "kick": "Expulsar",
     "username": "Nombre de usuario",
-    "updated": "¡Actualizado!",
-    "update_failed": "¡No se pudo actualizar! {{reason}}",
-    "member_kicked": "¡Miembro expulsado!",
-    "kick_failed": "¡No se pudo expulsar! {{reason}}",
+    "updated": "Roles actualizados",
+    "update_failed": "No se pudo actualizar al miembro: {{reason}}",
+    "member_kicked": "Miembro eliminado",
+    "kick_failed": "No se pudo quitar al miembro: {{reason}}",
     "cannotRemoveOwnerRole": "El rol de propietario no se puede quitar a un miembro.",
     "cannotRemoveProtectedSelfRole": "No puedes quitarte este rol a ti mismo (conserva tu rol principal y mantén un rol con “gestionar roles” cuando tu rol principal no lo incluya).",
     "kicked": "Expulsado",
@@ -3092,8 +3092,8 @@
     "rolesFor": "Roles de {{username}}"
   },
   "orgDetailEdit": {
-    "submitted": "¡Enviado!",
-    "failed_submit": "¡No se pudo enviar! {{reason}}",
+    "submitted": "Datos de la organización guardados",
+    "failed_submit": "No se pudieron guardar los datos de la organización: {{reason}}",
     "save": "Guardar",
     "image_url": "URL de la imagen",
     "image_url_helper": "URL directa a la imagen, de Imgur, RSI o starcitizen.tools",
@@ -3102,9 +3102,9 @@
     "no_tags": "Sin etiquetas",
     "set_banner": "Establecer nuevo banner",
     "avatar_too_large": "El avatar debe pesar menos de 1 MB",
-    "avatar_uploaded": "Avatar subido correctamente",
+    "avatar_uploaded": "Avatar subido",
     "banner_too_large": "El banner debe pesar menos de 2,5 MB",
-    "banner_uploaded": "Banner subido correctamente",
+    "banner_uploaded": "Banner subido",
     "descriptionEditor": "Descripción de la organización",
     "editName": "Editar nombre",
     "editTags": "Editar etiquetas",
@@ -3116,7 +3116,7 @@
     "username": "Nombre de usuario",
     "note": "Nota",
     "submit": "Enviar",
-    "submitted": "¡Enviado!"
+    "submitted": "Invitaciones enviadas"
   },
   "orgInfo": {
     "about": "Acerca de",
@@ -3140,10 +3140,10 @@
     "max_uses": "Usos máximos de la invitación",
     "used_times": "Usada {{used}}/{{max}} veces",
     "max_uses_helper": "El número máximo de usos de esta invitación. Establece 0 para hacerla ilimitada.",
-    "copied": "¡Copiado!",
+    "copied": "Copiado",
     "submit": "Enviar",
-    "submitted": "¡Enviado!",
-    "failed_submit": "¡No se pudo enviar! {{reason}}",
+    "submitted": "Enviado",
+    "failed_submit": "No se pudo guardar el código de invitación: {{reason}}",
     "copy": "Copiar enlace de invitación {{code}}",
     "delete": "Eliminar invitación {{code}}"
   },
@@ -3201,16 +3201,16 @@
     "error_identifier": "Establece tu nombre identificador",
     "error_logo": "Establece el logo de tu contratista",
     "error_banner": "Establece el banner de tu contratista",
-    "failed_auth": "¡No se pudo autenticar! {{reason}}",
+    "failed_auth": "No se pudo verificar la organización: {{reason}}",
     "languages": "Idiomas admitidos (opcional)",
     "languagesHelper": "Selecciona los idiomas en los que tu organización puede comunicarse. Puedes cambiarlo más tarde en la configuración.",
-    "success": "Contratista creado correctamente"
+    "success": "Organización creada"
   },
   "authenticateRSI": {
     "handle": "Handle de RSI",
     "invalid_handle": "Handle no válido",
     "enter_username": "Introduce tu nombre de usuario",
-    "authenticated": "¡Autenticado!",
+    "authenticated": "Cuenta verificada",
     "here": "aquí",
     "submit": "Enviar",
     "copy_and_open": "Copiar código y abrir perfil",
@@ -3224,7 +3224,7 @@
     "error_org_name": "Establece el nombre de tu org",
     "copy_and_open": "Copiar código y abrir la página de la org",
     "submit": "Enviar",
-    "failed_auth": "¡No se pudo autenticar! {{reason}}",
+    "failed_auth": "No se pudo verificar la organización: {{reason}}",
     "instructions": "Para verificar que eres el propietario de la organización de arriba, copia el siguiente código <sentinelCode>your code</sentinelCode> y añádelo a las secciones de introducción, historia, manifiesto o carta de tu org. Puedes eliminar este código una vez completada la verificación. Haz clic en enviar cuando el código sea visible en la página de la org."
   },
   "people": {
@@ -3259,9 +3259,9 @@
     "amount": "Importe",
     "note": "Nota",
     "errors": {
-      "enterUser": "¡Introduce un usuario al que enviar!",
-      "invalidUser": "¡Usuario no válido!",
-      "enterAmount": "¡Introduce un importe!"
+      "enterUser": "Elige a quién enviarlo",
+      "invalidUser": "No hay ningún usuario con ese nombre",
+      "enterAmount": "Introduce un importe"
     }
   },
   "cart": {
@@ -3278,7 +3278,7 @@
     "offerOptional": "Oferta (opcional)",
     "submitOffer": "Enviar oferta",
     "submitOrder": "Enviar pedido",
-    "purchaseSuccess": "¡Compra realizada con éxito!",
+    "purchaseSuccess": "Pedido realizado",
     "yourCart": "Tu carrito",
     "empty": "Tu carrito está vacío",
     "aboveMaxQty": "Cantidad máxima: {{max}} (el carrito tendría {{total}})",
@@ -3293,7 +3293,7 @@
     "belowMinQty": "Cantidad mínima: {{min}} (el carrito tiene {{total}})",
     "browseMarket": "Explorar el mercado",
     "checkout": "Finalizar compra",
-    "checkoutSuccess": "Oferta enviada correctamente",
+    "checkoutSuccess": "Oferta enviada",
     "confirmCheckout": "Confirmar compra",
     "confirmOrder": "Confirmar pedido",
     "confirmPriceChanges": "Algunos precios han cambiado. Al confirmar, aceptas los precios actualizados.",
@@ -3331,14 +3331,14 @@
     "submitOfferTo": "Enviar oferta a {{seller}}"
   },
   "landing": {
-    "supportersTitle": "Nuestros colaboradores",
+    "supportersTitle": "Colaboradores",
     "supportersThanks": "Gracias a todos nuestros ",
     "supporters": "colaboradores",
-    "faqTitle": "Tus preguntas, respondidas",
+    "faqTitle": "Preguntas frecuentes",
     "faqSellItemsQ": "¿Cómo vendo artículos?",
     "faqSellItemsA": "Crea un anuncio para cada artículo. Los compradores añaden artículos a su carrito y te hacen un pedido; después, tú y el comprador acordáis una hora y un lugar en el juego para intercambiar la mercancía y los aUEC.",
     "faqSafeQ": "¿Es seguro usar SC Market?",
-    "faqSafeA": "Las transacciones son entre jugadores, así que no podemos garantizarlas, pero compradores y vendedores se valoran mutuamente tras cada pedido. Consulta las valoraciones y el historial de pedidos de un vendedor antes de comerciar.",
+    "faqSafeA": "Las transacciones son entre jugadores, así que no podemos garantizarlas, pero compradores y vendedores pueden valorarse mutuamente tras cada pedido. Consulta las valoraciones y el historial de pedidos de un vendedor antes de comerciar.",
     "faqListThingsQ": "¿Qué tipo de cosas puedo publicar en SC Market?",
     "faqListThingsA": "Cualquier artículo o servicio de Star Citizen que intercambies por aUEC: armas, armaduras, componentes, materias primas, carga de naves y servicios como transporte, escolta, minería o rescate médico. Los servicios pueden prestarse dentro o fuera del juego.",
     "faqFeeQ": "¿SC Market cobra comisión?",
@@ -3385,7 +3385,7 @@
     "wantedNowTitle": "Se busca ahora",
     "wantedNowError": "No se pudieron cargar las órdenes de compra.",
     "topShopsTitle": "Tiendas mejor valoradas",
-    "topShopsText": "Valoradas por los compradores después de cada pedido.",
+    "topShopsText": "Valoradas por los compradores después de sus pedidos.",
     "topShopsBrowse": "Explorar tiendas",
     "topShopsEmpty": "Aún no hay tiendas.",
     "topShopsError": "No se pudieron cargar las tiendas.",
@@ -3420,14 +3420,14 @@
     "gameDataMiningText": "Minerales y ubicaciones",
     "gameDataMissions": "Misiones",
     "gameDataMissionsText": "Recompensas y requisitos",
-    "whyTitle": "Por qué SC Market",
+    "whyTitle": "Gratis y con reseñas en ambos sentidos",
     "trustReviewsTitle": "Valoraciones mutuas",
-    "trustReviewsText": "Compradores y vendedores se valoran después de cada pedido.",
+    "trustReviewsText": "Compradores y vendedores pueden valorarse después de cada pedido.",
     "trustFeesTitle": "Sin comisiones",
     "trustFeesText": "Ningún aUEC pasa por nosotros. Los compradores pagan a los vendedores directamente en el juego.",
     "trustAlertsTitle": "Alertas de precio",
     "trustAlertsText": "Sigue el precio de un artículo desde la página de su anuncio.",
-    "trustOrgsTitle": "Pensado para orgs",
+    "trustOrgsTitle": "Escaparates de organización",
     "trustOrgsText": "Escaparates compartidos, pedidos completados por los miembros y una opción de marca blanca.",
     "faqBuyQ": "¿Cómo compro artículos de Star Citizen a otros jugadores?",
     "faqBuyA": "Busca el artículo en el mercado, añádelo al carrito y realiza el pedido. El vendedor recibe un aviso en Discord y quedáis en el juego para pagar en aUEC y recoger el artículo.",
@@ -3440,7 +3440,7 @@
     "wantedNowPrice": "Paga",
     "wantedNowQuantity": "×{{quantity}}",
     "wantedNowPost": "Crea una orden de compra: di a los vendedores lo que necesitas",
-    "latestListingsText": "Novedades de las tiendas de jugadores, directamente de los vendedores."
+    "latestListingsText": "Novedades de las tiendas de jugadores."
   },
   "fleet": {
     "fleetTitle": "Flota",
@@ -3521,7 +3521,7 @@
       "acceptContractorInvite": "Aceptar invitación de contratista",
       "invitedMessage": "Has sido invitado a",
       "accept": "Aceptar",
-      "accepted": "¡Invitación aceptada!",
+      "accepted": "Invitación aceptada",
       "acceptFailed": "No se pudo unir",
       "joining": "Uniéndose…",
       "joinOrg": "Unirse a la organización",
@@ -3607,8 +3607,8 @@
     "orgTitle": "Panel de {{name}}",
     "organization": "Organización",
     "priceHistoryNoItem": "Ningún artículo seleccionado. Elimina este widget y vuelve a añadirlo para elegir un artículo.",
-    "remapOrgLabel": "{{name}} — organización",
-    "remapShopLabel": "{{name}} — tienda",
+    "remapOrgLabel": "{{name}} (organización)",
+    "remapShopLabel": "{{name}} (tienda)",
     "removeWidget": "Eliminar widget",
     "reputationError": "No se pudo cargar tu reputación.",
     "reputationOrders": "Pedidos",
@@ -3627,7 +3627,7 @@
     "searchItem": "Buscar artículo",
     "searchItemHint": "Escribe al menos 2 caracteres",
     "searchItemNone": "No se encontraron artículos",
-    "searchItemPlaceholder": "Escribe para buscar…",
+    "searchItemPlaceholder": "Buscar artículos",
     "shop": "Tienda",
     "title": "Panel",
     "unavailableOrg": "La organización de este widget ya no está disponible. Elimínalo o elige un nuevo alcance.",
@@ -4095,7 +4095,7 @@
     "bidder": "Pujador",
     "bidFailed": "No se pudo realizar la puja",
     "bidHistory": "Historial de pujas",
-    "bidPlaced": "¡Puja realizada correctamente!",
+    "bidPlaced": "Puja realizada",
     "concluded": "Concluida",
     "currentBid": "Puja actual",
     "ended": "Finalizada",
@@ -4128,7 +4128,7 @@
     "description": "Gestiona los usuarios que has bloqueado para que no creen pedidos ni ofertas contigo",
     "empty": "Todavía no has bloqueado a ningún usuario",
     "error": "No se pudo cargar la lista de bloqueo",
-    "searchPlaceholder": "Busca usuarios para bloquear...",
+    "searchPlaceholder": "Busca usuarios para bloquear",
     "selectedUser": "Usuario seleccionado",
     "title": "Usuarios bloqueados"
   },
@@ -4140,7 +4140,7 @@
     "error": "No se pudo bloquear al usuario",
     "reasonLabel": "Motivo (opcional)",
     "reasonPlaceholder": "Introduce un motivo para bloquear a este usuario...",
-    "success": "Se bloqueó correctamente a {{username}}"
+    "success": "Has bloqueado a {{username}}"
   },
   "blueprints": {
     "browser": {
@@ -4190,7 +4190,7 @@
     "selected": "Seleccionado: {{name}}",
     "subheading": "Lo que quieren los compradores. Publica la tuya o completa una solicitud abierta desde tu stock.",
     "targeted": "Dirigida",
-    "targetedNote": "Las órdenes dirigidas necesitan un proveedor específico — elige uno de la lista de proveedores (próximamente).",
+    "targetedNote": "Las órdenes dirigidas necesitan un proveedor específico. Elige uno de la lista de proveedores (próximamente).",
     "tierN": "Nivel {{n}}",
     "tierRange": "N{{min}}–N{{max}}",
     "title": "Órdenes de compra",
@@ -4339,7 +4339,7 @@
     "stockLotsSubtitle": "Añade stock con atributos de variante (calidad, origen, ubicación)",
     "store": "Tienda",
     "submit": "Crear anuncio",
-    "success": "Anuncio creado correctamente",
+    "success": "Anuncio creado",
     "tier": "Nivel",
     "title": "Título",
     "titleAriaLabel": "Introducir título del anuncio",
@@ -4369,7 +4369,7 @@
   "CreateLotDialog": {
     "create": "Crear lote",
     "createError": "No se pudo crear el lote",
-    "createSuccess": "Lote creado correctamente",
+    "createSuccess": "Lote creado",
     "listed": "Publicado",
     "listedHelp": "El stock publicado aparece en los anuncios públicos",
     "location": "Ubicación (opcional)",
@@ -4377,7 +4377,7 @@
     "notesPlaceholder": "Añade cualquier nota sobre este lote...",
     "notesTooLong": "Las notas deben tener 1000 caracteres o menos",
     "owner": "Propietario (opcional)",
-    "ownerPlaceholder": "Buscar miembros de la organización...",
+    "ownerPlaceholder": "Buscar miembros de la organización",
     "quantity": "Cantidad",
     "quantityHelp": "Introduce el número de unidades en este lote",
     "quantityRequired": "La cantidad debe ser mayor que 0",
@@ -4459,7 +4459,7 @@
     "quantity": "Cantidad",
     "quantityAriaLabel": "Introduce la cantidad",
     "submit": "Actualizar anuncio",
-    "success": "Anuncio actualizado correctamente",
+    "success": "Anuncio actualizado",
     "title": "Título",
     "titleAriaLabel": "Introduce el título del anuncio",
     "unifiedPricing": "Precio unificado",
@@ -4540,7 +4540,7 @@
     },
     "notifications": {
       "noNotifications": "No hay notificaciones",
-      "noNotificationsDescription": "¡Estás al día! Las nuevas notificaciones aparecerán aquí"
+      "noNotificationsDescription": "Estás al día. Las nuevas notificaciones aparecen aquí."
     },
     "orders": {
       "browseMarket": "Explorar el mercado",
@@ -4645,7 +4645,7 @@
     "qtyHelp": "Número de unidades en este lote",
     "qtyRequired": "Debe ser mayor que 0",
     "quantity": "Cantidad",
-    "search": "Buscar...",
+    "search": "Buscar en el inventario",
     "status": "Estado",
     "title": "Mi inventario",
     "unlink": "Desvincular del anuncio",
@@ -4664,7 +4664,7 @@
     "noLocations": "No se encontraron ubicaciones",
     "preset": "Preajuste",
     "pressEnterToCreate": "Pulsa Intro para crear",
-    "searchOrCreate": "Buscar o crear ubicación..."
+    "searchOrCreate": "Busca o añade una ubicación"
   },
   "LotListItem": {
     "cancel": "Cancelar",
@@ -4672,7 +4672,7 @@
     "created": "Creado",
     "delete": "Eliminar",
     "deleteError": "No se pudo eliminar el lote",
-    "deleteSuccess": "Lote eliminado correctamente",
+    "deleteSuccess": "Lote eliminado",
     "edit": "Editar",
     "invalidQuantity": "La cantidad no puede ser negativa",
     "listed": "Anunciado",
@@ -4688,13 +4688,13 @@
     "unlisted": "No anunciado",
     "unspecified": "Sin especificar",
     "updateError": "No se pudo actualizar el lote",
-    "updateSuccess": "Lote actualizado correctamente"
+    "updateSuccess": "Lote actualizado"
   },
   "LotListItemV2": {
     "available": "disponible",
     "blueprint": "Plano",
     "cancel": "Cancelar",
-    "cannotReduceStock": "No se puede reducir el stock — hay unidades comprometidas en pedidos activos",
+    "cannotReduceStock": "No se puede reducir el stock: esas unidades están en pedidos activos",
     "craftedBy": "Fabricado por",
     "created": "Creado",
     "edit": "Editar",
@@ -4713,7 +4713,7 @@
     "unlisted": "No publicado",
     "unspecified": "No especificado",
     "updateError": "No se pudo actualizar el lote",
-    "updateSuccess": "Lote actualizado correctamente",
+    "updateSuccess": "Lote actualizado",
     "variantInfo": "Información de la variante"
   },
   "ManageMarketRedesign": {
@@ -4832,7 +4832,7 @@
     "wantedBy_other": "Solicitado por {{count}} compradores"
   },
   "messages": {
-    "chatCreated": "Chat creado correctamente",
+    "chatCreated": "Chat creado",
     "copy": "Copiar",
     "title": "Mensajes",
     "viewChat": "Ver chat"
@@ -5016,7 +5016,7 @@
     "orgSettings": "Configuración",
     "pinned": "Fijados",
     "recruiting": "Reclutamiento",
-    "searchPlaceholder": "Buscar en la navegación...",
+    "searchPlaceholder": "Buscar en la navegación",
     "services": "Servicios",
     "settings": "Configuración",
     "shopPage": "Página de la tienda",
@@ -5074,7 +5074,7 @@
     "availabilityRequirement": "Requisitos de disponibilidad",
     "confirmDelete": "¿Seguro que quieres eliminar esta configuración?",
     "delete": "Eliminar",
-    "deletedSuccessfully": "¡Configuración eliminada correctamente!",
+    "deletedSuccessfully": "Ajuste eliminado",
     "deleteError": "No se pudo eliminar la configuración. Inténtalo de nuevo.",
     "description": "Configura mensajes personalizados que se enviarán automáticamente cuando se creen ofertas o cuando las ofertas se conviertan en pedidos.",
     "enabled": "Activado",
@@ -5109,7 +5109,7 @@
     "requirementsDescription": "Configura los requisitos que deben cumplirse antes de poder realizar pedidos.",
     "requirementsTitle": "Requisitos de pedido",
     "save": "Guardar configuración",
-    "savedSuccessfully": "¡Configuración guardada correctamente!",
+    "savedSuccessfully": "Configuración guardada",
     "saveError": "No se pudo guardar la configuración. Inténtalo de nuevo.",
     "saving": "Guardando...",
     "stockDescription": "Configura cuándo se resta el stock de tu inventario.",
@@ -5190,13 +5190,13 @@
     "description": "Gestiona los usuarios a los que tu organización ha bloqueado para crear pedidos u ofertas",
     "empty": "Tu organización aún no ha bloqueado a ningún usuario",
     "error": "No se pudo cargar la lista de bloqueo de la organización",
-    "searchPlaceholder": "Busca usuarios para bloquear...",
+    "searchPlaceholder": "Busca usuarios para bloquear",
     "selectedUser": "Usuario seleccionado",
     "title": "Usuarios bloqueados"
   },
   "OrgMemberSearch": {
     "label": "Miembro de la org.",
-    "placeholder": "Buscar miembros..."
+    "placeholder": "Buscar miembros"
   },
   "page": "1",
   "pages": {
@@ -5382,7 +5382,7 @@
     "qualityTiers": "Niveles de calidad",
     "qualityTiersDescription": "La calidad del material minado se agrupa en niveles discretos. La calidad bruta dentro de un rango se asigna a un valor fijo.",
     "salvaged": "Rescatado",
-    "search": "Buscar recursos...",
+    "search": "Buscar recursos",
     "title": "Recursos",
     "usedIn": "Usado en planos",
     "viewOnMarket": "Ver en el mercado"
@@ -5418,8 +5418,8 @@
       "revisionRequested": "Revisión solicitada"
     },
     "success": {
-      "requested": "Revisión de reseña solicitada correctamente",
-      "updated": "Reseña actualizada correctamente"
+      "requested": "Revisión solicitada",
+      "updated": "Reseña actualizada"
     },
     "title": {
       "editReview": "Editar reseña"
@@ -5455,7 +5455,7 @@
     "heading": "Vender un artículo",
     "listingTitle": "Título del anuncio",
     "location": "Ubicación (opcional)",
-    "locationHelp": "Dónde puede recogerlo el comprador, p. ej. Area18, Everus Harbor.",
+    "locationHelp": "Dónde puede recogerlo el comprador, p. ej., Area18 o Everus Harbor.",
     "needShop": "Necesitas una tienda antes de poder vender. Crea una desde tu perfil primero.",
     "negotiableType": "Negociable",
     "noShops": "No hay tiendas disponibles",
@@ -5473,14 +5473,14 @@
     "sellThrough": "Vender a través de",
     "sellThroughHelp": "Tu tienda personal o una tienda de organización que ayudas a gestionar.",
     "storefront": "Escaparate",
-    "subheading": "Elige lo que vendes: el formulario muestra solo los campos que necesita.",
+    "subheading": "Elige lo que vendes. El formulario muestra solo los campos que necesita.",
     "tier": "Nivel",
     "tierN": "Nivel {{n}}",
     "title": "Vender un artículo",
     "unitScu": "cSCU",
     "unitType": "Tipo de unidad",
     "unitUnit": "Unidades",
-    "visualOnly": "Los artículos personalizados y los paquetes solo se previsualizan en esta fase, aún no se guardan.",
+    "visualOnly": "Los artículos personalizados y los paquetes son solo una vista previa por ahora. Aún no se guardan.",
     "whatSelling": "¿Qué estás vendiendo?",
     "removeQualityRow": "Quitar fila de calidad",
     "removeBundleItem": "Quitar artículo del lote"
@@ -5552,7 +5552,7 @@
     "noLotsDesc": "Los lotes de stock guardan las cantidades que venden tus anuncios. Añade un lote para empezar a llevar el stock de esta tienda.",
     "order": "Pedido",
     "quantity": "Cantidad",
-    "searchLots": "Buscar lotes...",
+    "searchLots": "Buscar lotes",
     "status": "Estado",
     "user": "Usuario"
   },
@@ -5595,7 +5595,7 @@
     "previewListingLabel": "Anuncio del mercado (muestra)",
     "previewListingLightNote": "Modo claro: sin desvanecimiento de imagen en las tarjetas de anuncio (igual que el mercado en vivo).",
     "previewNavbar": "Barra de navegación",
-    "previewNavRowHover": "Fila de la barra lateral: pasa el cursor",
+    "previewNavRowHover": "Fila de la barra lateral (pasa el cursor)",
     "previewOutlinedInput": "Borde / entrada",
     "previewOutlineHint": "Usa el color del borde",
     "previewPaperSurface": "Superficie de papel",
@@ -5611,7 +5611,7 @@
     "resetSuccess": "Tema restablecido al predeterminado",
     "save": "Guardar tema",
     "saveError": "No se pudo guardar el tema",
-    "saveSuccess": "Tema guardado correctamente",
+    "saveSuccess": "Tema guardado",
     "saving": "Guardando...",
     "style": "Estilo",
     "unit": "Unidad"
@@ -5634,7 +5634,7 @@
     "to": "Hasta",
     "transfer": "Transferir",
     "transferError": "No se pudo transferir el stock",
-    "transferSuccess": "Stock transferido correctamente",
+    "transferSuccess": "Stock transferido",
     "unspecified": "Sin especificar"
   },
   "TransferLotDialogV2": {
@@ -5646,7 +5646,7 @@
     "title": "Transferir lote de stock",
     "transfer": "Transferir",
     "transferError": "No se pudo transferir el lote",
-    "transferSuccess": "Lote transferido correctamente",
+    "transferSuccess": "Lote transferido",
     "unspecified": "No especificado",
     "variant": "Variante"
   },
@@ -5709,7 +5709,7 @@
     "dialogDescription": "¿Seguro que quieres desbloquear a este usuario? Volverá a poder crear pedidos y ofertas contigo.",
     "dialogTitle": "Desbloquear a {{username}}",
     "error": "No se pudo desbloquear al usuario",
-    "success": "Se desbloqueó correctamente a {{username}}"
+    "success": "Has desbloqueado a {{username}}"
   },
   "userActions": {
     "adminOpenIdentity": "Abrir en Admin -> Identidad",
@@ -5720,7 +5720,7 @@
   },
   "userSearch": {
     "noResults": "No se encontraron usuarios",
-    "placeholder": "Buscar usuarios...",
+    "placeholder": "Buscar usuarios",
     "typeToSearch": "Escribe para buscar usuarios"
   },
   "whitelabel": {
@@ -5746,7 +5746,7 @@
       "headerTitle": "Materias primas",
       "loadError": "No se pudieron cargar las materias primas.",
       "noResults": "No se encontraron materias primas.",
-      "searchPlaceholder": "Buscar materias primas...",
+      "searchPlaceholder": "Buscar materias primas",
       "acqFilter": {
         "all": "Todos",
         "mined": "Minable",
@@ -5812,7 +5812,7 @@
       "gradeLabel": "Grado",
       "loadError": "No se pudieron cargar los artículos.",
       "noResults": "No se encontraron resultados. Intenta ajustar tu búsqueda.",
-      "searchPlaceholder": "Buscar artículos, tipos, fabricantes...",
+      "searchPlaceholder": "Buscar artículos, tipos y fabricantes",
       "sizeLabel": "Tamaño"
     },
     "itemDetail": {
@@ -5831,7 +5831,7 @@
       "itemAttributes": "Atributos del artículo",
       "loadError": "No se pudieron cargar los detalles del artículo. Inténtalo de nuevo.",
       "markOwned": "Marcar como en propiedad",
-      "noRecipeWarning": "No se encontró ninguna receta de fabricación para este artículo — componentes de desmontaje desconocidos.",
+      "noRecipeWarning": "No se encontró ninguna receta de fabricación para este artículo, así que sus componentes de desmontaje son desconocidos.",
       "notSoldNpc": "No se vende en ninguna tienda de NPC",
       "openInCalculator": "Abrir en la calculadora",
       "owned": "En propiedad ✓",
@@ -5868,7 +5868,7 @@
     },
     "locations": {
       "noResults": "No se encontraron ubicaciones",
-      "search": "Buscar ubicaciones...",
+      "search": "Buscar ubicaciones",
       "title": "Mapa estelar y ubicaciones"
     },
     "manufacturerDetail": {
@@ -5915,12 +5915,12 @@
         "fastCareful": "La mejor opción: rápida y con alto rendimiento",
         "fastNormal": "Rápido, con un rendimiento aceptable",
         "fastWasteful": "Lo más rápido posible, aceptando pérdida de material",
-        "normalCareful": "Opción popular: buen rendimiento en un tiempo razonable",
+        "normalCareful": "Buen rendimiento en un tiempo razonable",
         "normalNormal": "Equilibrado en todo",
         "normalWasteful": "Bastante rápido, con menor rendimiento",
         "slowCareful": "Rendimiento máximo: vale la pena esperar con minerales caros",
         "slowNormal": "Lento pero constante",
-        "slowWasteful": "Lento Y con pérdidas: mejor evitarlo"
+        "slowWasteful": "Lento y con pérdidas: mejor evitarlo"
       }
     },
     "shipBrowser": {
@@ -5945,7 +5945,7 @@
       "headerTitle": "Naves y vehículos",
       "hoverbike": "Moto flotante",
       "noResults": "No se encontraron resultados.",
-      "searchPlaceholder": "Buscar naves, vehículos, fabricantes...",
+      "searchPlaceholder": "Buscar naves, vehículos y fabricantes",
       "sectionGround": "Vehículos terrestres",
       "sectionHoverbikes": "Motos flotantes",
       "sectionShips": "Naves",
@@ -6164,7 +6164,7 @@
     "manageTitle": "Enlázanos",
     "line": "Encuentra nuestra tienda en SC Market: {{url}}",
     "verifyHint": "Totalmente opcional y no necesario para la verificación: si quieres, añade también esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. Solo se comprueba el código de arriba.",
-    "verifiedHint": "¡Tu organización está verificada! Ya puedes quitar el código de verificación de RSI. Si quieres, deja esta línea opcional en la página de tu organización para que los visitantes encuentren tu tienda. Solo se puede quitar el código; la línea puede quedarse.",
+    "verifiedHint": "Tu organización está verificada. Ya puedes quitar el código de verificación de RSI. Si quieres, deja esta línea opcional en la página de tu organización para que los visitantes encuentren tu tienda. Solo se puede quitar el código; la línea puede quedarse.",
     "manageHint": "Opcional: añade esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. No tiene nada que ver con la verificación y nunca es obligatoria.",
     "copy": "Copiar línea",
     "copied": "Copiado",
@@ -6298,7 +6298,7 @@
       "brandingAction": "Ver qué falta",
       "title": "Prepara tu escaparate",
       "done": "Todo listo. Comparte el enlace de tu escaparate o pon el widget de abajo en tu web.",
-      "intro": "Cada paso lleva unos minutos: intenta tener tu primer anuncio en menos de 15.",
+      "intro": "Completa estos pasos para dejar listo tu escaparate.",
       "progress": "Progreso de la configuración"
     },
     "enquiry": {
@@ -6405,7 +6405,7 @@
     },
     "directory": {
       "empty": "No se encontraron tiendas",
-      "search": "Buscar tiendas...",
+      "search": "Buscar tiendas",
       "sortLabel": "Ordenar tiendas",
       "sortMostSales": "Más ventas",
       "sortNameAZ": "Nombre A-Z",
@@ -6423,7 +6423,7 @@
       "created": "Creada en {{date}}",
       "createFirst": "Crea tu primera tienda",
       "customOrders": "Pedidos personalizados",
-      "emptyBody": "Crea una tienda para empezar a vender en SC Market. Configura tu escaparate en minutos.",
+      "emptyBody": "Crea una tienda para empezar a vender en SC Market.",
       "emptyTitle": "Aún no tienes ninguna tienda",
       "featureAnalytics": "Sigue ventas, reseñas y estadísticas",
       "featureBranding": "Imagen propia con banner y logotipo",
@@ -6455,7 +6455,7 @@
       "noReviewsBody": "Las reseñas aparecerán aquí a medida que se completen pedidos",
       "notFound": "Tienda no encontrada",
       "owner": "Propietario de la tienda",
-      "searchListings": "Buscar anuncios...",
+      "searchListings": "Buscar anuncios",
       "since": "Desde {{date}}",
       "sortListings": "Ordenar anuncios",
       "sortMostStock": "Más stock",
@@ -6550,9 +6550,9 @@
     "remaining": "{{n}} restantes",
     "removeItemFailed": "No se pudo quitar el artículo",
     "rosterOnly": "Solo miembros",
-    "searchBuyOrders": "Buscar órdenes de compra...",
-    "searchItems": "Buscar artículos, categorías...",
-    "searchItemsSellers": "Buscar artículos, categorías, vendedores...",
+    "searchBuyOrders": "Buscar órdenes de compra",
+    "searchItems": "Buscar artículos y categorías",
+    "searchItemsSellers": "Buscar artículos, categorías y vendedores",
     "selectVariant": "Seleccionar variante",
     "settingsMoved": "La configuración del mercado ahora se gestiona por tienda. Ve a la página de configuración de tu tienda.",
     "standardVariant": "Estándar",
@@ -6683,7 +6683,7 @@
     "missionGiver": "Contratista",
     "missionGiverLower": "Contratista",
     "missionGiverPlaceholder": "p. ej. Miles",
-    "missionNamePlaceholder": "Nombre de la misión...",
+    "missionNamePlaceholder": "Nombre de la misión",
     "nOfM": "{{n}} de {{m}}",
     "onceOnly": "Solo una vez",
     "partOfChain": "Parte de una cadena",
@@ -6705,7 +6705,7 @@
     "satisfaction": "Satisfacción",
     "scope": "Ámbito",
     "search": "Buscar",
-    "searchPlaceholder": "Buscar misiones, sistemas, categorías...",
+    "searchPlaceholder": "Buscar misiones, sistemas y categorías",
     "shareable": "Compartible",
     "shipCount_many": "{{count}} naves",
     "shipCount_one": "{{count}} nave",
@@ -6835,7 +6835,7 @@
     "totalValue": "Valor total:",
     "version": "Versión",
     "mostRecent": "Más reciente",
-    "newBadge": "¡NUEVO!",
+    "newBadge": "NUEVO",
     "orderLimitViolation": "El pedido no cumple los requisitos de tamaño o valor",
     "byName": "de {{name}}"
   },
@@ -6869,7 +6869,7 @@
       "newThisWeek_many": "{{count}} nuevos esta semana",
       "newThisWeek_other": "{{count}} nuevos esta semana",
       "search": "Buscar",
-      "searchPlaceholder": "Nombre del artículo o del plano...",
+      "searchPlaceholder": "Nombre del artículo o del plano",
       "category": "Categoría",
       "subcategory": "Subcategoría",
       "tier": "Nivel",
@@ -6885,7 +6885,7 @@
       "ingredientPlaceholder": "p. ej., Hephaestanite",
       "resetFilters": "Restablecer filtros",
       "filters": "Filtros",
-      "searchBarPlaceholder": "Busca planos, materiales, categorías...",
+      "searchBarPlaceholder": "Busca planos, materiales y categorías",
       "loadError": "No se pudieron cargar los planos. Inténtalo de nuevo.",
       "columnItem": "Artículo",
       "columnTags": "Etiquetas",
@@ -6947,7 +6947,7 @@
     "importFromInventory": "Importar del inventario",
     "importFromInventoryOrg": "Importar del inventario (+ org)",
     "addMaterial": "Añadir material",
-    "searchResources": "Buscar recursos...",
+    "searchResources": "Buscar recursos",
     "noMaterials": "Busca y añade materiales arriba",
     "removeMaterial": "Quitar material",
     "weight": "Peso: {{percent}} %",
@@ -7040,7 +7040,7 @@
     },
     "requisitions": {
       "gameItem": "Artículo del juego",
-      "searchByName": "Buscar por nombre…",
+      "searchByName": "Buscar por nombre de artículo",
       "createTitle": "Crear requisición",
       "fieldTitle": "Título",
       "descriptionOptional": "Descripción (opcional)",
@@ -7163,7 +7163,7 @@
       "activity": {
         "targetedBuyOrder": "<b>{{buyer}}</b> envió una orden de compra dirigida para <b>{{item}}</b>",
         "newRequisition": "Nueva requisición <b>{{title}}</b> de <b>{{buyer}}</b>",
-        "orderCompleted": "Pedido <b>{{title}}</b> completado — <b>{{amount}} aUEC</b>"
+        "orderCompleted": "Pedido <b>{{title}}</b> completado: <b>{{amount}} aUEC</b>"
       },
       "noActivity": "No hay actividad reciente",
       "activityTitle": "Actividad",
@@ -7221,7 +7221,7 @@
       "organizationShop": "Tienda de organización",
       "categoriesLanguages": "Categorías e idiomas",
       "selectOrgError": "Selecciona una organización",
-      "created": "¡Tienda creada correctamente!"
+      "created": "Tienda creada"
     },
     "settings": {
       "title": "Configuración de la tienda",
@@ -7460,7 +7460,7 @@
       "addFailed": "No se pudo añadir el artículo.",
       "title": "Añadir artículo a la lista de compra",
       "searchItem": "Buscar artículo *",
-      "searchPlaceholder": "Escribe para buscar...",
+      "searchPlaceholder": "Buscar artículos",
       "minChars_one": "Escribe al menos {{count}} carácter",
       "minChars_many": "Escribe al menos {{count}} caracteres",
       "minChars_other": "Escribe al menos {{count}} caracteres",
@@ -7468,7 +7468,7 @@
       "howToGet": "¿Cómo quieres conseguir este artículo?",
       "buyFromMarket": "Comprar en el mercado",
       "craftAddIngredients": "Fabricar (añadir ingredientes)",
-      "selectBlueprintHint": "Selecciona un plano: sus ingredientes se registrarán en tu lista de compra",
+      "selectBlueprintHint": "Selecciona un plano para registrar sus ingredientes en tu lista de compra",
       "blueprintRequired": "Plano *",
       "quantityRequired": "Cantidad *",
       "qualityTierOptional": "Nivel de calidad (opcional)",
@@ -7622,8 +7622,8 @@
       "siteSettings": "Configuración del sitio",
       "siteAccessHint": "Controla quién puede acceder a tu sitio de marca blanca.",
       "siteAccess": "Acceso al sitio",
-      "accessPublic": "Público: cualquiera puede navegar",
-      "accessInternal": "Interno: requiere iniciar sesión",
+      "accessPublic": "Público (cualquiera puede navegar)",
+      "accessInternal": "Interno (requiere iniciar sesión)",
       "requireMembership": "Exigir ser miembro de la organización para acceder",
       "homepagePath": "Ruta de la página de inicio",
       "homepagePathHelper": "Ruta personalizada de la página de inicio. Déjala en blanco para usar la predeterminada.",
@@ -7692,7 +7692,7 @@
     },
     "summary": {
       "wasQuantity": "(antes {{quantity}})",
-      "newBadge": "¡NUEVO!"
+      "newBadge": "NUEVO"
     }
   },
   "adminUi": {
@@ -7729,7 +7729,7 @@
       "searchByUsername": "Buscar por nombre de usuario",
       "enabledForUser": "Activado para este usuario",
       "add": "Añadir",
-      "searchFlags": "Buscar indicadores...",
+      "searchFlags": "Buscar indicadores",
       "retry": "Reintentar",
       "loadFailed": "No se pudieron cargar los indicadores de funciones.",
       "flagSummary_one": "Predeterminado: {{version}} · Despliegue: {{percent}} % · {{count}} anulación",
@@ -7777,7 +7777,7 @@
       "warnings_many": "{{count}} advertencias",
       "warnings_other": "{{count}} advertencias",
       "noDetails": "No hay detalles disponibles",
-      "importSuccess": "Datos del juego importados correctamente",
+      "importSuccess": "Datos del juego importados",
       "importFailed": "La importación falló",
       "importStarted": "Importación iniciada",
       "uploadFailed": "La subida falló",
@@ -7896,9 +7896,9 @@
       "typeLabel": "Tipo:",
       "applicableTo": "Aplicable a:",
       "noTypes": "Ningún tipo",
-      "importSuccess_one": "Se importó {{count}} atributo correctamente",
+      "importSuccess_one": "Se importó {{count}} atributo",
       "importSuccess_many": "Se importaron {{count}} atributos correctamente",
-      "importSuccess_other": "Se importaron {{count}} atributos correctamente",
+      "importSuccess_other": "Se importaron {{count}} atributos",
       "importPartial_one": "Importación completada con errores. Se importó {{count}} atributo",
       "importPartial_many": "Importación completada con errores. Se importaron {{count}} atributos",
       "importPartial_other": "Importación completada con errores. Se importaron {{count}} atributos",
@@ -8089,10 +8089,10 @@
     },
     "create": {
       "title": "Crear token de API",
-      "titleCreated": "Token creado correctamente",
-      "successAlert": "Tu token de API se ha creado correctamente. Cópialo ahora, porque no se volverá a mostrar.",
+      "titleCreated": "Token creado",
+      "successAlert": "Tu token de API está listo. Cópialo ahora: no se volverá a mostrar.",
       "tokenLabel": "Token de API",
-      "copied": "¡Copiado!",
+      "copied": "Copiado",
       "copyToken": "Copiar token",
       "howToAuth": "<strong>Cómo autenticarte:</strong> incluye el token en la cabecera <code>Authorization</code> de tus solicitudes a la API:",
       "important": "<strong>Importante:</strong> guarda este token en un lugar seguro. Da acceso a tu cuenta con los permisos que has concedido. Si lo pierdes, tendrás que crear uno nuevo.",
@@ -8103,7 +8103,7 @@
     },
     "edit": {
       "title": "Editar token de API",
-      "success": "Token actualizado correctamente",
+      "success": "Token actualizado",
       "error": "No se pudo actualizar el token",
       "contractorAccessTitle": "Acceso a contratistas",
       "contractorAccessHelp": "Restringe este token a contratistas concretos. Déjalo vacío para dar acceso a todos los contratistas.",
@@ -8229,9 +8229,9 @@
       "privateHelp": "Solo tú puedes ver esta lista de compra",
       "shareLink": "Enlace para compartir",
       "shareLinkHelp": "Copia este enlace para compartir tu lista de deseos con otras personas",
-      "copied": "¡Copiado!",
+      "copied": "Copiado",
       "copyToClipboard": "Copiar al portapapeles",
-      "linkCopied": "¡Enlace copiado al portapapeles!",
+      "linkCopied": "Enlace copiado",
       "copyFailed": "No se pudo copiar el enlace. Cópialo manualmente.",
       "nowPublic": "La lista de compra ahora es pública. Cualquiera con el enlace puede verla.",
       "nowPrivate": "La lista de compra ahora es privada. Solo tú puedes verla.",
@@ -8305,13 +8305,13 @@
     },
     "oreBrowser": {
       "expShort": "Expl.: {{value}}",
-      "searchPlaceholder": "Busca minerales, sistemas, rareza...",
+      "searchPlaceholder": "Busca minerales, sistemas y rareza",
       "marketPrice": "Precio de mercado",
       "locations": "Ubicaciones",
       "unknownSystem": "Desconocido"
     },
     "locationBrowser": {
-      "searchPlaceholder": "Busca ubicaciones, sistemas, tipos...",
+      "searchPlaceholder": "Busca ubicaciones, sistemas y tipos",
       "moreOres_one": "+{{count}} más",
       "moreOres_many": "+{{count}} más",
       "moreOres_other": "+{{count}} más",
@@ -8375,7 +8375,7 @@
       "tierValue": "Nivel {{tier}}"
     },
     "search": {
-      "placeholder": "Buscar...",
+      "placeholder": "Buscar datos del juego",
       "ariaLabel": "Buscar",
       "tags": {
         "illegal": "Ilegal",
@@ -8423,7 +8423,7 @@
     "verification": {
       "pageTitle": "Verificación de correo",
       "verifying": "Verificando tu dirección de correo...",
-      "successTitle": "¡Correo verificado!",
+      "successTitle": "Correo verificado",
       "failedTitle": "Error en la verificación",
       "invalidTitle": "Solicitud no válida",
       "goToSettings": "Ir a la configuración de correo"
@@ -8462,7 +8462,7 @@
       "loadingPriceChart": "Cargando gráfico de precios..."
     },
     "commandPalette": {
-      "placeholder": "Busca páginas, acciones, anuncios...",
+      "placeholder": "Busca páginas, acciones y anuncios",
       "noResults": "No hay resultados para \"{{query}}\"",
       "hintNavigate": "navegar",
       "hintSelect": "seleccionar",
@@ -8493,7 +8493,7 @@
         "priceAlerts": "Alertas de precio",
         "priceAlertsDescription": "Tu lista de seguimiento y canales de alerta",
         "myOrgs": "Mis organizaciones",
-        "shopOrders": "{{shop}} — Pedidos",
+        "shopOrders": "{{shop}}: Pedidos",
         "createListing": "Crear anuncio",
         "newMessage": "Nuevo mensaje",
         "toggleDarkMode": "Alternar modo oscuro"
@@ -8744,7 +8744,7 @@
   },
   "sharedUi": {
     "emailVerification": {
-      "verified": "¡Tu dirección de correo se ha verificado correctamente!",
+      "verified": "Tu dirección de correo está verificada.",
       "errorGeneric": "Se produjo un error durante la verificación.",
       "invalidToken": "Token de verificación no válido o caducado.",
       "failedTryAgain": "La verificación del correo falló. Inténtalo de nuevo.",
@@ -9083,7 +9083,7 @@
       "body": "Sigue un artículo con un precio objetivo. Cuando un anuncio público esté a ese precio o menos, recibirás una alerta con un enlace al anuncio. Pausa una alerta para conservarla sin recibir avisos."
     },
     "quickList": {
-      "title": "Anuncia un artículo en segundos",
+      "title": "Anuncia un artículo desde un solo formulario",
       "body": "Elige el artículo, revisa el precio y la cantidad, y publica. El stock empieza siendo un número; puedes dividirlo por ubicación o calidad cuando quieras."
     }
   },
@@ -9278,7 +9278,7 @@
     "seeListings": "Ver anuncios",
     "empty": {
       "title": "Ahora mismo nadie lo vende",
-      "body": "¿Tienes uno? Anúncialo en unos 15 segundos. Los compradores con una alerta de precio reciben un aviso si encaja con su objetivo."
+      "body": "¿Tienes uno? Anúncialo con Quick List. Los compradores con una alerta de precio reciben un aviso si encaja con su objetivo."
     },
     "listingCount_one": "{{formatted}} anuncio",
     "listingCount_many": "{{formatted}} anuncios",

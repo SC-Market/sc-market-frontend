@@ -35,7 +35,7 @@
     "moderation.notesHelperText": "關於審核行動的可選備註（最多2000字元）",
     "moderation.updateReport": "更新檢舉",
     "moderation.updating": "更新中…",
-    "moderation.reportUpdated": "檢舉更新成功",
+    "moderation.reportUpdated": "檢舉已更新",
     "moderation.updateFailed": "更新檢舉失敗",
     "moderation.actions": "操作",
     "alerts": {
@@ -44,17 +44,17 @@
       "activeFilter": "啟用狀態",
       "content": "內容",
       "contentPlaceholder": "以 Markdown 格式輸入警示內容...",
-      "contractorPlaceholder": "輸入以搜尋承包商...",
+      "contractorPlaceholder": "搜尋組織",
       "contractorRequired": "請選擇承包商",
       "create": "建立",
       "createAlert": "建立警示",
-      "created": "警示建立成功",
+      "created": "警示已建立",
       "createdAt": "建立時間",
       "creating": "建立中...",
       "delete": "刪除",
       "deleteAlert": "刪除警示",
       "deleteConfirm": "您確定要刪除這則警示嗎？此操作無法復原。",
-      "deleted": "警示刪除成功",
+      "deleted": "警示已刪除",
       "deleting": "刪除中...",
       "editAlert": "編輯警示",
       "field": {
@@ -72,7 +72,7 @@
       "targetType": "目標類型",
       "targetTypeFilter": "目標類型",
       "update": "更新",
-      "updated": "警示更新成功",
+      "updated": "警示已更新",
       "updating": "更新中...",
       "validation": {
         "invalidUrl": "請輸入有效的網址（http:// 或 https://）"
@@ -104,17 +104,17 @@
     "alerts.activeFilter": "啟用狀態",
     "alerts.content": "內容",
     "alerts.contentPlaceholder": "以 Markdown 格式輸入警示內容…",
-    "alerts.contractorPlaceholder": "輸入以搜尋承包商…",
+    "alerts.contractorPlaceholder": "搜尋組織",
     "alerts.contractorRequired": "請選擇承包商",
     "alerts.create": "建立",
     "alerts.createAlert": "建立警示",
-    "alerts.created": "警示建立成功",
+    "alerts.created": "警示已建立",
     "alerts.createdAt": "建立時間",
     "alerts.creating": "建立中…",
     "alerts.delete": "刪除",
     "alerts.deleteAlert": "刪除警示",
     "alerts.deleteConfirm": "你確定要刪除這則警示嗎？此操作無法復原。",
-    "alerts.deleted": "警示刪除成功",
+    "alerts.deleted": "警示已刪除",
     "alerts.deleting": "刪除中…",
     "alerts.editAlert": "編輯警示",
     "alerts.invalidUrl": "請輸入有效的網址（http:// 或 https://）",
@@ -130,7 +130,7 @@
     "alerts.targetTypeFilter": "目標類型",
     "alerts.title": "標題",
     "alerts.update": "更新",
-    "alerts.updated": "警示更新成功",
+    "alerts.updated": "警示已更新",
     "alerts.updating": "更新中…",
     "attributes": {
       "actions": "操作",
@@ -148,13 +148,13 @@
       },
       "cascadeOption": "是否同時刪除所有使用此名稱的遊戲物品屬性？",
       "create": "建立",
-      "created": "屬性定義建立成功",
+      "created": "屬性定義已建立",
       "createDefinition": "建立屬性定義",
       "creating": "建立中…",
       "delete": "刪除",
       "deleteAttributes": "刪除屬性",
       "deleteConfirm": "你確定要刪除這個屬性定義嗎？",
-      "deleted": "屬性定義刪除成功",
+      "deleted": "屬性定義已刪除",
       "deleteDefinition": "刪除屬性定義",
       "deleting": "刪除中…",
       "displayName": "顯示名稱",
@@ -172,7 +172,7 @@
       "showInFilters": "在市場篩選器中顯示",
       "title": "屬性定義",
       "update": "更新",
-      "updated": "屬性定義更新成功",
+      "updated": "屬性定義已更新",
       "updating": "更新中…"
     },
     "auditLogs": "管理員稽核記錄",
@@ -187,7 +187,7 @@
       "delete": "刪除",
       "deleteAttribute": "刪除屬性",
       "deleteConfirm": "你確定要刪除這個屬性嗎？",
-      "deleted": "屬性刪除成功",
+      "deleted": "屬性已刪除",
       "deleting": "刪除中…",
       "editAttribute": "編輯屬性",
       "freeFormValue": "輸入任意值",
@@ -198,7 +198,7 @@
       "importSuccess": "匯入成功",
       "noSelection": "輸入遊戲物品 ID 以開始",
       "save": "儲存",
-      "saved": "屬性儲存成功",
+      "saved": "屬性已儲存",
       "saving": "儲存中…",
       "search": "搜尋",
       "searchHelp": "輸入遊戲物品的 UUID 以檢視及編輯其屬性",
@@ -221,7 +221,7 @@
       "result": "測試結果",
       "selectedUser": "已選擇：{{username}}",
       "selectUser": "搜尋要接收測試通知的使用者",
-      "success": "通知測試完成成功",
+      "success": "通知測試已完成",
       "targetUser": "目標使用者",
       "test": "測試通知",
       "testing": "測試中…",
@@ -301,8 +301,8 @@
     "ownerUsername": "擁有者使用者名稱*",
     "spectrumId": "組織 Spectrum ID*",
     "submit": "提交",
-    "success": "已提交！",
-    "failure": "提交失敗！{{reason}}"
+    "success": "組織已驗證",
+    "failure": "無法驗證組織：{{reason}}"
   },
   "ads": {
     "scOrgs": {
@@ -391,7 +391,7 @@
     "loginFailed": "登入失敗。請再試一次。",
     "loginWithCitizenID": "使用 Citizen iD 登入",
     "oauthError": "驗證期間發生錯誤。請再試一次。",
-    "signInBlurb": "免費加入 — 使用你的 RSI 帳號（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 帳號登入。",
+    "signInBlurb": "免費加入。使用你的 RSI 帳號（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 帳號登入。",
     "signInTab": "登入分頁",
     "signInTitle": "登入 SC Market",
     "signInWithCitizenID": "使用 Citizen iD 登入",
@@ -411,8 +411,8 @@
     "save": "儲存",
     "availability_for": "可服務時段",
     "title": "我的可用時間段",
-    "updated": "可用時間段已更新！",
-    "failed": "更新失敗！",
+    "updated": "可用時間段已更新",
+    "failed": "無法更新你的可用時間段。",
     "checking": "正在檢查可用時段需求…",
     "edit": "編輯",
     "yourAvailability": "你的可用時段"
@@ -656,7 +656,7 @@
     "maxPrice": "最高價格",
     "minPrice": "最低價格",
     "minQuantity": "最低數量",
-    "noItemResults": "找不到物品 — 請嘗試較短或不同的字詞",
+    "noItemResults": "找不到物品。請嘗試較短或不同的字詞。",
     "noPriceData": "無可用價格資料",
     "noPriceHistory": "無可用價格歷史",
     "noQualityDistribution": "無可用品質分佈資料",
@@ -679,7 +679,7 @@
     "salesVolume": "銷售量",
     "salesVolumeByQualityTier": "各品質級距的銷售量",
     "searching": "搜尋中…",
-    "searchItemPlaceholder": "開始輸入物品名稱…",
+    "searchItemPlaceholder": "搜尋物品",
     "selectAllVariants": "選取所有規格",
     "selectVariant": "請選擇規格",
     "selectVariantsPrompt": "請為每個物品選擇規格",
@@ -698,7 +698,7 @@
     "tierSilver": "白銀",
     "timeToSaleByQualityTier": "各品質級距的售出時間",
     "totalQuantity": "總數量",
-    "typeToSearch": "輸入以搜尋…",
+    "typeToSearch": "輸入物品名稱",
     "unspecified": "未指定",
     "variant": "規格",
     "verificationRequired": "你的帳號必須通過驗證才能建立市場商品。請透過 RSI/Citizen iD 驗證你的帳號以繼續。",
@@ -730,7 +730,7 @@
     "counter_offer_received_from": "收到還價來自",
     "order_status_updated_to": "訂單狀態已更新為 {{status}}，更新者",
     "contractor_invite_from": "<contractorLink>{{spectrum_id}}</contractorLink>邀請你加入該承包商",
-    "submitted": "已提交！",
+    "submitted": "已送出",
     "accept": "同意",
     "decline": "拒絕",
     "new_bid_placed_by": "新出價來自",
@@ -1164,7 +1164,7 @@
       "reVerifyButton": "重新驗證個人檔案",
       "reVerifyDescription": "更新你的個人檔案使用者名稱以符合你目前的 Spectrum 帳號。這只會更新你的使用者名稱。",
       "reVerifyError": "重新驗證個人檔案失敗。請稍後再試。",
-      "reVerifySuccess": "個人檔案重新驗證成功！你的使用者名稱已更新。",
+      "reVerifySuccess": "個人檔案已重新驗證。你的使用者名稱已更新。",
       "reVerifyTitle": "重新驗證個人檔案",
       "setPrimary": "設為主要",
       "showAsInGame": "顯示為遊戲中",
@@ -1178,7 +1178,7 @@
       "unlinkError": "解除連結 Star Citizen 帳號失敗。請稍後再試。",
       "unlinkProviderDescription": "你確定要解除連結這個帳號嗎？你將無法再使用此方式登入。",
       "unlinkProviderTitle": "解除連結帳號",
-      "unlinkSuccess": "Star Citizen 帳號解除連結成功！你的個人檔案已重設為未驗證狀態。",
+      "unlinkSuccess": "Star Citizen 帳號已解除連結。你的個人檔案已恢復為未驗證。",
       "unlinkTitle": "解除連結 Star Citizen 帳號",
       "usernames": "使用者名稱：",
       "verifyAccount": "驗證你的帳號",
@@ -1208,7 +1208,7 @@
         "title": "新增電子郵件地址"
       },
       "addError": "新增電子郵件地址失敗",
-      "addSuccess": "電子郵件新增成功！",
+      "addSuccess": "電子郵件已新增",
       "deleteEmailDialog": {
         "cancel": "取消",
         "confirm": "移除電子郵件",
@@ -1216,7 +1216,7 @@
         "title": "移除電子郵件地址"
       },
       "deleteError": "移除電子郵件地址失敗",
-      "deleteSuccess": "電子郵件移除成功！",
+      "deleteSuccess": "電子郵件已移除",
       "editEmailDialog": {
         "newEmailLabel": "新的電子郵件地址",
         "title": "更新電子郵件地址",
@@ -1236,9 +1236,9 @@
       "title": "電子郵件通知",
       "updateEmail": "更新電子郵件",
       "updateError": "更新電子郵件地址失敗",
-      "updateSuccess": "電子郵件更新成功！",
+      "updateSuccess": "電子郵件已更新",
       "verificationError": "傳送驗證電子郵件失敗",
-      "verificationSent": "已傳送驗證電子郵件！",
+      "verificationSent": "驗證郵件已寄出",
       "verified": "已驗證",
       "bounce": {
         "title": "你的郵件被退回了，請更新電子郵件。",
@@ -1273,7 +1273,7 @@
       "placeholder": "選擇語言…",
       "save": "儲存語言",
       "saveError": "更新語言失敗",
-      "saveSuccess": "語言更新成功",
+      "saveSuccess": "語言已更新",
       "section": {
         "description": "選擇你能夠溝通的語言。這有助於他人瞭解你支援哪些語言。"
       },
@@ -1287,7 +1287,7 @@
       "available": "可用的分頁",
       "description": "自訂顯示在你行動裝置底部導覽列的分頁。最多選擇 5 個分頁並拖曳以重新排序。",
       "error": "儲存行動導覽設定失敗",
-      "saved": "行動導覽設定儲存成功",
+      "saved": "行動版導覽設定已儲存",
       "selected": "已選擇的分頁",
       "title": "行動導覽"
     },
@@ -1314,12 +1314,12 @@
       "otherDevices_other": "{{count}} 部其他裝置",
       "permissionDeniedError": "權限{{status}}。請在瀏覽器設定中啟用通知。",
       "permissionDeniedMessage": "請在瀏覽器設定中啟用通知，以使用推播通知。",
-      "permissionGrantedMessage": "已授予權限！你現在可以訂閱推播通知。",
+      "permissionGrantedMessage": "已授予權限。你現在可以開啟推播通知。",
       "permissionStatus": "權限狀態",
       "removeDevice": "移除裝置",
       "requestPermission": "要求權限",
       "subscribe": "訂閱推播通知",
-      "subscribed": "成功訂閱推播通知！",
+      "subscribed": "推播通知已開啟",
       "subscribedOn": "訂閱於 {{date}}",
       "subscribing": "訂閱中…",
       "title": "推播通知",
@@ -1327,7 +1327,7 @@
       "totalDevices_other": "共 {{count}} 部裝置",
       "unknownDevice": "未知裝置",
       "unsubscribe": "取消訂閱",
-      "unsubscribed": "已成功取消訂閱推播通知",
+      "unsubscribed": "推播通知已關閉",
       "subscribeFailed": "無法開啟推播通知：{{reason}}",
       "permissionDismissed": "瀏覽器未開啟通知。請重試並選擇「允許」。",
       "unsubscribeFailed": "無法移除該裝置，請重試。",
@@ -1501,7 +1501,7 @@
     "money": "資金",
     "invoices": "發票",
     "fleet": "艦隊",
-    "new_chip": "新！",
+    "new_chip": "新",
     "people": "人員",
     "customers": "客戶",
     "members": "成員",
@@ -1711,7 +1711,7 @@
     "danger_zone": "危險區域",
     "delete_account_button": "刪除帳號",
     "delete_account_description": "永久刪除你的帳號與所有相關的個人資料。在 30 天寬限期後，此操作將無法復原。",
-    "updated": "設定更新成功",
+    "updated": "設定已更新",
     "cookie_title": "Cookie 偏好",
     "cookie_description": "登入 Cookie 和匿名錯誤報告始終開啟。分析（Google Analytics 和頁面速度測量）僅在你允許時執行。",
     "cookie_status_all": "目前選擇：允許分析。",
@@ -1806,8 +1806,8 @@
     "description_required": "簡介*",
     "submit": "提交",
     "alert": {
-      "submitted": "已提交！",
-      "failed": "提交失敗！"
+      "submitted": "貼文已儲存",
+      "failed": "無法儲存貼文"
     },
     "markdown_info": "支援 GitHub 風格的 Markdown，YouTube 連結會自動嵌入，託管在 Imgur 或 RSI 上的圖片也可以嵌入。",
     "markdown_link": "點此查看",
@@ -1836,7 +1836,7 @@
     "orgCardBody": "{{name}} 在我們的姊妹網站 SC Orgs 上有社群頁面：成員、活動和入會申請。",
     "orgCardAction": "在 SC Orgs 上開啟",
     "verifiedTitle": "也把你的組織登記到 SC Orgs",
-    "verifiedBody": "SC Orgs 是我們用於管理組織的姊妹網站，為 {{org}} 提供入會申請、活動和成員管理工具。登記大約只需兩分鐘。",
+    "verifiedBody": "SC Orgs 是我們用於管理組織的姊妹網站，為 {{org}} 提供入會申請、活動和成員管理工具。",
     "verifiedAction": "在 SC Orgs 上登記"
   },
   "contractor": {
@@ -1888,8 +1888,8 @@
     "logout": "登出"
   },
   "viewProfile": {
-    "submitted": "已送出！",
-    "failed": "送出失敗！",
+    "submitted": "個人檔案已儲存",
+    "failed": "無法儲存你的個人檔案。",
     "image_url": "圖片網址",
     "image_url_helper": "圖片的直接網址，來自 Imgur、RSI 或 starcitizen.tools",
     "save": "儲存",
@@ -1905,9 +1905,9 @@
     "store_market": "市場",
     "store_services": "服務",
     "avatar_too_large": "頭像必須小於 1MB",
-    "avatar_uploaded": "頭像上傳成功",
+    "avatar_uploaded": "頭像已上傳",
     "banner_too_large": "橫幅必須小於 2.5MB",
-    "banner_uploaded": "橫幅上傳成功",
+    "banner_uploaded": "橫幅已上傳",
     "editDescription": "編輯描述",
     "loading": "載入中"
   },
@@ -1994,7 +1994,7 @@
   },
   "select_rows_per_page": "選擇每頁列數",
   "createPublicContract": {
-    "submitted": "已送出！",
+    "submitted": "已送出",
     "about": "關於",
     "title_required": "標題*",
     "type_required": "類型*",
@@ -2030,8 +2030,8 @@
     "leaveReviewButton": "留下評價",
     "notFinishedHint": "訂單完成或取消後，或開始 14 天後，即可評價。",
     "alert": {
-      "success": "已留下評價！",
-      "error": "留下評價失敗！"
+      "success": "評價已發布",
+      "error": "無法發布你的評價。"
     }
   },
   "orderMetrics": {
@@ -2130,7 +2130,7 @@
     "actions": "操作"
   },
   "orderDetailsArea": {
-    "updated_status": "狀態已更新！",
+    "updated_status": "狀態已更新",
     "details_table": "詳細資料表",
     "customer": "客戶",
     "seller": "賣家",
@@ -2164,10 +2164,10 @@
     "title": "我的訂單"
   },
   "memberAssignArea": {
-    "assigned": "已指派！",
-    "failed_assign": "指派失敗！",
-    "unassigned": "已取消指派！",
-    "failed_unassign": "取消指派失敗！",
+    "assigned": "已指派",
+    "failed_assign": "無法指派。",
+    "unassigned": "已取消指派",
+    "failed_unassign": "無法取消指派。",
     "assign": "指派",
     "reassign": "重新指派",
     "unassign": "取消指派",
@@ -2180,7 +2180,7 @@
     "serviceActive": "服務為啟用中",
     "serviceInactive": "服務為停用中",
     "serviceDescription": "服務說明",
-    "serviceDescriptionHelper": "例如：我們提供地點之間的貨物運輸服務！",
+    "serviceDescriptionHelper": "例如：Area18 與 Lorville 之間的貨物運輸",
     "orderServiceDetails": "訂單服務詳細資料",
     "title": "標題",
     "typeOptional": "類型（選填）",
@@ -2196,8 +2196,8 @@
     "submit": "送出",
     "update": "更新",
     "alert": {
-      "submitted": "已送出！",
-      "failed": "送出失敗！"
+      "submitted": "服務已儲存",
+      "failed": "無法儲存服務"
     },
     "photoUploadNote": "照片上傳說明",
     "uploadingPhotos": "正在上傳照片"
@@ -2220,7 +2220,7 @@
     "paymentType": "付款方式",
     "submit": "送出",
     "alert": {
-      "submitted": "已送出！"
+      "submitted": "已送出"
     }
   },
   "OffersViewPaginated": {
@@ -2255,7 +2255,7 @@
     "merge_offers_selected_count": "已選擇：{{count}} 個報價工作階段",
     "merge_offers_selected_count_other": "已選擇：{{count}} 個報價工作階段",
     "merge_offers_warning": "所有選取的報價工作階段將被關閉，並以單一合併報價工作階段取代。",
-    "merge_success": "報價合併成功",
+    "merge_success": "報價已合併",
     "seller": "賣家",
     "seller_username": "賣家使用者名稱",
     "seller_username_placeholder": "輸入賣家使用者名稱或 spectrum ID",
@@ -2334,13 +2334,13 @@
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "送出還價",
-    "counterOfferSubmitted": "還價已成功提交"
+    "counterOfferSubmitted": "還價已送出"
   },
   "Webhooks": {
     "title": "Webhook",
     "name": "名稱",
-    "submitted": "已送出！",
-    "failedToSubmit": "送出失敗！ "
+    "submitted": "Webhook 已刪除",
+    "failedToSubmit": "無法刪除 Webhook："
   },
   "DashNotificationArea": {
     "notifications": "通知"
@@ -2369,7 +2369,7 @@
     "orderComment": "收到訂單留言",
     "marketBid": "收到市場出價",
     "submit": "送出",
-    "submitted": "已送出！"
+    "submitted": "已新增 Webhook"
   },
   "MessagingSidebar": {
     "messages": "訊息",
@@ -2400,7 +2400,7 @@
     "noUsersFound": "找不到使用者",
     "searchAndSelect": "搜尋並選擇使用者以建立群組聊天",
     "searchPlaceholder": "輸入以搜尋使用者",
-    "searchUsers": "搜尋使用者…",
+    "searchUsers": "搜尋使用者",
     "selectedUsers": "已選擇的使用者",
     "selectUsers": "選擇使用者以開始聊天",
     "startNewChat": "開始新的聊天",
@@ -2504,17 +2504,17 @@
     "defaultListing": "預設商品",
     "includeListings": "要包含的商品",
     "update": "更新",
-    "submitted": "已送出！",
-    "failedSubmit": "送出失敗！{{error}}"
+    "submitted": "已送出",
+    "failedSubmit": "送出失敗：{{error}}"
   },
   "MarketListingView": {
-    "addedToCart": "已加入購物車！",
+    "addedToCart": "已加入購物車",
     "price": "價格",
     "ofAvailable": "／共 {{count}} 件可售",
     "quantity": "數量",
     "addToCart": "加入購物車",
-    "bidSuccess": "出價成功！",
-    "bidError": "出價時發生錯誤！{{error}}",
+    "bidSuccess": "已出價",
+    "bidError": "無法出價：{{error}}",
     "currentBid": "目前出價：{{price}} aUEC",
     "bid": "出價",
     "placeBid": "提交出價",
@@ -2562,9 +2562,9 @@
     "minBidIncrement": "最低出價增額",
     "endTime": "結束時間（{{tz}}）",
     "submit": "送出",
-    "submitted": "已送出！",
-    "failedSubmit": "送出失敗！",
-    "photosUploaded": "照片上傳成功！",
+    "submitted": "已送出",
+    "failedSubmit": "送出失敗",
+    "photosUploaded": "照片已上傳",
     "photoUploadFailed": "部分照片上傳失敗"
   },
   "SelectPhotosArea": {
@@ -2592,8 +2592,8 @@
     "costs": "費用",
     "price": "價格",
     "submit": "送出",
-    "submitted": "已送出！",
-    "failedSubmit": "送出失敗！"
+    "submitted": "已送出",
+    "failedSubmit": "送出失敗"
   },
   "MarketMultipleForm": {
     "about": "關於",
@@ -2604,8 +2604,8 @@
     "defaultListing": "預設商品",
     "listingsToInclude": "要納入的商品",
     "submit": "送出",
-    "submitted": "已送出！",
-    "failedSubmit": "送出失敗！"
+    "submitted": "已送出",
+    "failedSubmit": "送出失敗"
   },
   "MarketListingEditView": {
     "deactivate": "停用商品",
@@ -2618,8 +2618,8 @@
     "price": "價格",
     "minBidIncrement": "最低加價幅度",
     "description": "描述",
-    "updated": "已更新！",
-    "updateError": "更新時發生錯誤！",
+    "updated": "已更新",
+    "updateError": "無法儲存你的變更",
     "internalListing": "內部商品",
     "publicListing": "公開商品"
   },
@@ -2627,7 +2627,7 @@
     "title": "編輯市場訊息範本",
     "configure": "設定將加入新市場訂單的留言範本，讓使用者填寫以提供你更多細節。",
     "submit": "送出",
-    "submitted": "已送出！"
+    "submitted": "範本已儲存"
   },
   "MarketAggregateView": {
     "market": "市場",
@@ -2641,14 +2641,14 @@
     "sellOrders": "賣單",
     "buyOrders": "收購單",
     "priceHistory": "價格記錄",
-    "addedToCart": "已加入購物車！",
+    "addedToCart": "已加入購物車",
     "quantityToBuy": "購買數量",
     "ofAvailable": "，共 {{count}} 件可售",
     "fulfill": "履行",
     "cancel": "取消",
-    "submitted": "已送出！",
-    "failedSubmit": "送出失敗！",
-    "cancelled": "已取消！",
+    "submitted": "已送出",
+    "failedSubmit": "送出失敗",
+    "cancelled": "收購單已取消",
     "buyOrdersChart": "收購單",
     "sellOrdersChart": "賣單",
     "atPrice": "以 {{price}} aUEC 或更{{direction}}價格的訂單",
@@ -2661,8 +2661,8 @@
     "viewCount": "總瀏覽次數"
   },
   "MarketAggregateEditView": {
-    "updated": "已更新！",
-    "errorWhileUpdating": "更新時發生錯誤！",
+    "updated": "已更新",
+    "errorWhileUpdating": "無法儲存你的變更",
     "deactivate": "停用上架商品",
     "activate": "上架商品",
     "update": "更新",
@@ -2699,7 +2699,7 @@
     "addRow": "新增列"
   },
   "ItemStock": {
-    "updated": "已更新！",
+    "updated": "已更新",
     "updateAmount": "更新數量",
     "add": "增加",
     "zero": "0",
@@ -2708,7 +2708,7 @@
     "deactivate": "停用",
     "addQuickListing": "新增快速上架",
     "selectItemError": "請選擇一個物品",
-    "created": "商品建立成功！",
+    "created": "商品已建立",
     "createError": "建立商品失敗",
     "title": "標題",
     "noItemSelected": "未選擇物品",
@@ -2733,7 +2733,7 @@
     "bulkArchivedSuccess": "已封存 {{count}} 件商品。",
     "bulkArchivedSuccess_other": "已封存 {{count}} 件商品。",
     "bulkArchiveTitle": "要封存所選商品嗎？",
-    "cannotReduceStock": "無法減少庫存 — 有單位已配置給進行中的訂單",
+    "cannotReduceStock": "無法減少庫存：這些單位在進行中的訂單裡",
     "editingNewListing": "正在編輯新商品…",
     "manageStock": "管理庫存",
     "newListing": "新商品",
@@ -2782,13 +2782,13 @@
     "total_price": "總價",
     "expiration": "訂單到期時間（{{tz}}）",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failed": "提交失敗！{{error}}",
+    "submitted": "已提交",
+    "failed": "無法建立收購單：{{error}}",
     "unknown_error": "未知錯誤",
     "agreedPriceRequired": "請輸入每單位的議定價格（至少 1 aUEC）。",
     "agreePriceDescription": "此收購單可議價。請輸入每單位的議定價格（以 aUEC 計）以完成。",
     "agreePriceTitle": "每單位議定價格",
-    "created": "收購單建立成功",
+    "created": "收購單已建立",
     "fulfillQuantity": "要履行的數量",
     "fulfillTitle": "履行收購單",
     "imageHint": "新增參考照片（選填，大型圖片會自動最佳化）",
@@ -2855,8 +2855,8 @@
       "title": "從 Hangar XPlorer 檔案匯入",
       "upload": "上傳檔案",
       "submit": "提交",
-      "submitted": "已提交！",
-      "failed": "提交失敗！{{error}}"
+      "submitted": "艦隊已匯入",
+      "failed": "無法匯入你的艦隊：{{error}}"
     }
   },
   "deliveries": {
@@ -2922,8 +2922,8 @@
     "create": "建立",
     "save": "儲存",
     "delete": "刪除",
-    "updated": "已更新！",
-    "deleted": "已刪除！",
+    "updated": "已儲存",
+    "deleted": "角色已刪除",
     "role_name": "角色名稱",
     "role_position": "角色順位",
     "position_helper": "數字越小，優先權高於其他角色。",
@@ -2969,10 +2969,10 @@
     "any": "任何",
     "kick": "踢除",
     "username": "使用者名稱",
-    "updated": "已更新！",
-    "update_failed": "更新失敗！{{reason}}",
-    "member_kicked": "已踢除成員！",
-    "kick_failed": "踢除失敗！{{reason}}",
+    "updated": "角色已更新",
+    "update_failed": "無法更新成員：{{reason}}",
+    "member_kicked": "成員已移除",
+    "kick_failed": "無法移除成員：{{reason}}",
     "cannotRemoveOwnerRole": "無法從成員移除擁有者角色。",
     "cannotRemoveProtectedSelfRole": "你無法從自己身上移除此角色（請保留你的最高角色，並在最高角色不含「管理角色」時保留一個具備「管理角色」的角色）。",
     "kicked": "已踢除",
@@ -2980,8 +2980,8 @@
     "rolesFor": "{{username}} 的角色"
   },
   "orgDetailEdit": {
-    "submitted": "已提交！",
-    "failed_submit": "提交失敗！{{reason}}",
+    "submitted": "組織資訊已儲存",
+    "failed_submit": "無法儲存組織資訊：{{reason}}",
     "save": "儲存",
     "image_url": "圖片網址",
     "image_url_helper": "圖片的直接網址，來自 Imgur、RSI 或 starcitizen.tools",
@@ -2990,9 +2990,9 @@
     "no_tags": "無標籤",
     "set_banner": "設定新橫幅",
     "avatar_too_large": "頭像必須小於 1MB",
-    "avatar_uploaded": "頭像上傳成功",
+    "avatar_uploaded": "頭像已上傳",
     "banner_too_large": "橫幅必須小於 2.5MB",
-    "banner_uploaded": "橫幅上傳成功",
+    "banner_uploaded": "橫幅已上傳",
     "descriptionEditor": "組織簡介",
     "editName": "編輯名稱",
     "editTags": "編輯標籤",
@@ -3004,7 +3004,7 @@
     "username": "使用者名稱",
     "note": "備註",
     "submit": "提交",
-    "submitted": "已提交！"
+    "submitted": "邀請已送出"
   },
   "orgInfo": {
     "about": "關於",
@@ -3028,10 +3028,10 @@
     "max_uses": "最大邀請使用次數",
     "used_times": "已使用 {{used}}/{{max}} 次",
     "max_uses_helper": "此邀請的最大使用次數。設為 0 表示無限制。",
-    "copied": "已複製！",
+    "copied": "已複製",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failed_submit": "提交失敗！{{reason}}",
+    "submitted": "已送出",
+    "failed_submit": "無法儲存邀請碼：{{reason}}",
     "copy": "複製邀請連結 {{code}}",
     "delete": "刪除邀請 {{code}}"
   },
@@ -3089,16 +3089,16 @@
     "error_identifier": "請設定你的識別碼名稱",
     "error_logo": "請設定你的承包商標誌",
     "error_banner": "請設定你的承包商橫幅",
-    "failed_auth": "驗證失敗！{{reason}}",
+    "failed_auth": "無法驗證組織：{{reason}}",
     "languages": "支援的語言（選填）",
     "languagesHelper": "選擇你的組織可以溝通的語言。你稍後可以在設定中變更。",
-    "success": "承包商建立成功"
+    "success": "組織已建立"
   },
   "authenticateRSI": {
     "handle": "RSI 帳號名稱",
     "invalid_handle": "無效的帳號名稱",
     "enter_username": "請輸入你的使用者名稱",
-    "authenticated": "已驗證！",
+    "authenticated": "帳號已驗證",
     "here": "這裡",
     "submit": "送出",
     "copy_and_open": "複製驗證碼並開啟個人檔案",
@@ -3112,7 +3112,7 @@
     "error_org_name": "請設定你的組織名稱",
     "copy_and_open": "複製驗證碼並開啟組織頁面",
     "submit": "送出",
-    "failed_auth": "驗證失敗！{{reason}}",
+    "failed_auth": "無法驗證組織：{{reason}}",
     "instructions": "為了驗證你擁有上述組織，請複製以下驗證碼 <sentinelCode>your code</sentinelCode> 並將其加入你組織的簡介、歷史、宣言或章程區塊中。驗證完成後即可移除此驗證碼。當驗證碼顯示在組織頁面上後，請點擊送出。"
   },
   "people": {
@@ -3147,9 +3147,9 @@
     "amount": "金額",
     "note": "備註",
     "errors": {
-      "enterUser": "請輸入傳送對象的使用者！",
-      "invalidUser": "無效的使用者！",
-      "enterAmount": "請輸入金額！"
+      "enterUser": "選擇收款人",
+      "invalidUser": "沒有此名稱的使用者",
+      "enterAmount": "請輸入金額"
     }
   },
   "cart": {
@@ -3166,7 +3166,7 @@
     "offerOptional": "報價（選填）",
     "submitOffer": "送出報價",
     "submitOrder": "送出訂單",
-    "purchaseSuccess": "購買成功！",
+    "purchaseSuccess": "已下單",
     "yourCart": "你的購物車",
     "empty": "你的購物車是空的",
     "aboveMaxQty": "最大數量：{{max}}（購物車將有 {{total}}）",
@@ -3179,7 +3179,7 @@
     "belowMinQty": "最小數量：{{min}}（購物車有 {{total}}）",
     "browseMarket": "瀏覽市場",
     "checkout": "結帳",
-    "checkoutSuccess": "報價提交成功",
+    "checkoutSuccess": "報價已送出",
     "confirmCheckout": "確認結帳",
     "confirmOrder": "確認訂單",
     "confirmPriceChanges": "部分價格已變更。確認即表示你接受更新後的價格。",
@@ -3213,14 +3213,14 @@
     "submitOfferTo": "向 {{seller}} 提交報價"
   },
   "landing": {
-    "supportersTitle": "我們的支持者",
+    "supportersTitle": "支持者",
     "supportersThanks": "感謝我們所有的",
     "supporters": "支持者",
-    "faqTitle": "常見問題解答",
+    "faqTitle": "常見問題",
     "faqSellItemsQ": "我要如何出售物品？",
     "faqSellItemsA": "為每件物品建立一個商品。買家把物品加入購物車並向你下單，然後你和買家約定遊戲內的時間和地點，交換商品和 aUEC。",
     "faqSafeQ": "SC Market 使用起來安全嗎？",
-    "faqSafeA": "交易在玩家之間進行，所以我們無法保證，但每筆訂單完成後買賣雙方都會互相評價。交易前請先查看賣家的評分和訂單紀錄。",
+    "faqSafeA": "交易在玩家之間進行，所以我們無法保證，但每筆訂單完成後買賣雙方都可以互相評價。交易前請先查看賣家的評分和訂單紀錄。",
     "faqListThingsQ": "我可以在 SC Market 上架哪些東西？",
     "faqListThingsA": "任何你願意用 aUEC 交易的星際公民物品或服務：武器、護甲、元件、大宗商品、艦船貨物，以及運輸、護航、採礦或醫療救援等服務。服務可以在遊戲內或遊戲外進行。",
     "faqFeeQ": "SC Market 會收取費用嗎？",
@@ -3267,7 +3267,7 @@
     "wantedNowTitle": "正在收購",
     "wantedNowError": "無法載入收購單。",
     "topShopsTitle": "高評價商店",
-    "topShopsText": "每筆訂單後由買家評價。",
+    "topShopsText": "由買家在下單後評價。",
     "topShopsBrowse": "瀏覽商店",
     "topShopsEmpty": "尚無商店。",
     "topShopsError": "無法載入商店。",
@@ -3302,14 +3302,14 @@
     "gameDataMiningText": "礦石與地點",
     "gameDataMissions": "任務",
     "gameDataMissionsText": "獎勵與條件",
-    "whyTitle": "為什麼選擇 SC Market",
+    "whyTitle": "免費使用，買賣雙方互評",
     "trustReviewsTitle": "雙向評價",
-    "trustReviewsText": "每筆訂單後，買家與賣家互相評價。",
+    "trustReviewsText": "每筆訂單後，買家與賣家可以互相評價。",
     "trustFeesTitle": "零手續費",
     "trustFeesText": "aUEC 不經過我們。買家在遊戲內直接付款給賣家。",
     "trustAlertsTitle": "價格提醒",
     "trustAlertsText": "在商品面追蹤物品的價格。",
-    "trustOrgsTitle": "為組織打造",
+    "trustOrgsTitle": "組織店面",
     "trustOrgsText": "共用店面、成員協力完成訂單，並提供白標選項。",
     "faqBuyQ": "如何在星際公民中向其他玩家購買物品？",
     "faqBuyA": "在市場中搜尋物品，加入購物車並下單。賣家會收到 Discord 通知，然後你們在遊戲中碰面，以 aUEC 付款並取貨。",
@@ -3322,7 +3322,7 @@
     "wantedNowPrice": "出價",
     "wantedNowQuantity": "×{{quantity}}",
     "wantedNowPost": "建立收購單：告訴賣家你需要什麼",
-    "latestListingsText": "玩家商店的新品，直接來自賣家。"
+    "latestListingsText": "玩家商店的新品。"
   },
   "fleet": {
     "fleetTitle": "艦隊",
@@ -3403,7 +3403,7 @@
       "acceptContractorInvite": "接受承包商邀請",
       "invitedMessage": "你已受邀加入",
       "accept": "接受",
-      "accepted": "已接受邀請！",
+      "accepted": "已接受邀請",
       "acceptFailed": "加入失敗",
       "joining": "加入中…",
       "joinOrg": "加入組織",
@@ -3483,14 +3483,14 @@
     "noBuyOrders": "沒有收購單",
     "noBuyOrdersDescription": "你的有效收購單將顯示於此。",
     "noOrgsToAggregate": "你還沒有可彙整的組織。",
-    "noOrgsWidgetDropped": "你沒有組織——此小工具將被捨棄。",
+    "noOrgsWidgetDropped": "你沒有組織，因此此小工具將被捨棄。",
     "noShopsToAggregate": "你還沒有可彙整的商店。",
-    "noShopsWidgetDropped": "你沒有商店——此小工具將被捨棄。",
+    "noShopsWidgetDropped": "你沒有商店，因此此小工具將被捨棄。",
     "orgTitle": "{{name}} 儀表板",
     "organization": "組織",
     "priceHistoryNoItem": "未選擇物品。請刪除此小工具並重新新增以選擇物品。",
-    "remapOrgLabel": "{{name}} — 組織",
-    "remapShopLabel": "{{name}} — 商店",
+    "remapOrgLabel": "{{name}}（組織）",
+    "remapShopLabel": "{{name}}（商店）",
     "removeWidget": "移除小工具",
     "reputationError": "無法載入你的信譽。",
     "reputationOrders": "訂單",
@@ -3509,7 +3509,7 @@
     "searchItem": "搜尋物品",
     "searchItemHint": "至少輸入2個字元",
     "searchItemNone": "找不到物品",
-    "searchItemPlaceholder": "輸入以搜尋…",
+    "searchItemPlaceholder": "搜尋物品",
     "shop": "商店",
     "title": "儀表板",
     "unavailableOrg": "此小工具的組織已無法使用。請移除它或選擇新的範圍。",
@@ -3969,7 +3969,7 @@
     "bidder": "出價者",
     "bidFailed": "出價失敗",
     "bidHistory": "出價歷史",
-    "bidPlaced": "出價成功！",
+    "bidPlaced": "已出價",
     "concluded": "已結束",
     "currentBid": "目前出價",
     "ended": "已結束",
@@ -4000,7 +4000,7 @@
     "description": "管理你已封鎖、無法與你建立訂單或報價的使用者",
     "empty": "你尚未封鎖任何使用者",
     "error": "載入封鎖清單失敗",
-    "searchPlaceholder": "搜尋要封鎖的使用者…",
+    "searchPlaceholder": "搜尋要封鎖的使用者",
     "selectedUser": "已選擇的使用者",
     "title": "已封鎖的使用者"
   },
@@ -4012,7 +4012,7 @@
     "error": "封鎖使用者失敗",
     "reasonLabel": "原因（選填）",
     "reasonPlaceholder": "輸入封鎖此使用者的原因…",
-    "success": "已成功封鎖 {{username}}"
+    "success": "已封鎖 {{username}}"
   },
   "blueprints": {
     "browser": {
@@ -4062,7 +4062,7 @@
     "selected": "已選擇：{{name}}",
     "subheading": "買家想要的商品。張貼你自己的需求，或從你的庫存履行開放的需求。",
     "targeted": "指定對象",
-    "targetedNote": "指定訂單需要特定供應商 — 請從供應商名冊中選擇一位（即將推出）。",
+    "targetedNote": "指定訂單需要特定供應商。請從供應商名冊中選擇一位（即將推出）。",
     "tierN": "第 {{n}} 級",
     "tierRange": "T{{min}}–T{{max}}",
     "title": "收購單",
@@ -4211,7 +4211,7 @@
     "stockLotsSubtitle": "新增帶有規格屬性（品質、來源、地點）的庫存",
     "store": "商店",
     "submit": "建立商品",
-    "success": "商品建立成功",
+    "success": "商品已建立",
     "tier": "階級",
     "title": "標題",
     "titleAriaLabel": "輸入商品標題",
@@ -4241,7 +4241,7 @@
   "CreateLotDialog": {
     "create": "建立批次",
     "createError": "建立批次失敗",
-    "createSuccess": "批次建立成功",
+    "createSuccess": "批次已建立",
     "listed": "已上架",
     "listedHelp": "已上架的庫存會顯示在公開商品中",
     "location": "地點（選填）",
@@ -4249,7 +4249,7 @@
     "notesPlaceholder": "新增有關此批次的任何備註…",
     "notesTooLong": "備註必須為 1000 個字元以內",
     "owner": "擁有者（選填）",
-    "ownerPlaceholder": "搜尋組織成員…",
+    "ownerPlaceholder": "搜尋組織成員",
     "quantity": "數量",
     "quantityHelp": "輸入此批次的單位數量",
     "quantityRequired": "數量必須大於 0",
@@ -4327,7 +4327,7 @@
     "quantity": "數量",
     "quantityAriaLabel": "輸入數量",
     "submit": "更新商品",
-    "success": "商品更新成功",
+    "success": "商品已更新",
     "title": "標題",
     "titleAriaLabel": "輸入商品標題",
     "unifiedPricing": "統一價格",
@@ -4408,7 +4408,7 @@
     },
     "notifications": {
       "noNotifications": "無通知",
-      "noNotificationsDescription": "你已全部處理完畢！新通知將顯示於此"
+      "noNotificationsDescription": "你已全部處理完畢。新通知會顯示在這裡。"
     },
     "orders": {
       "browseMarket": "瀏覽市場",
@@ -4513,7 +4513,7 @@
     "qtyHelp": "此批次的單位數量",
     "qtyRequired": "必須大於 0",
     "quantity": "數量",
-    "search": "搜尋…",
+    "search": "搜尋庫存",
     "status": "狀態",
     "title": "我的庫存",
     "unlink": "從商品取消連結",
@@ -4532,7 +4532,7 @@
     "noLocations": "找不到地點",
     "preset": "預設",
     "pressEnterToCreate": "按 Enter 以建立",
-    "searchOrCreate": "搜尋或建立地點…"
+    "searchOrCreate": "搜尋或新增地點"
   },
   "LotListItem": {
     "cancel": "取消",
@@ -4540,7 +4540,7 @@
     "created": "建立時間",
     "delete": "刪除",
     "deleteError": "刪除批次失敗",
-    "deleteSuccess": "批次刪除成功",
+    "deleteSuccess": "批次已刪除",
     "edit": "編輯",
     "invalidQuantity": "數量不可為負數",
     "listed": "已刊登",
@@ -4556,13 +4556,13 @@
     "unlisted": "未刊登",
     "unspecified": "未指定",
     "updateError": "更新批次失敗",
-    "updateSuccess": "批次更新成功"
+    "updateSuccess": "批次已更新"
   },
   "LotListItemV2": {
     "available": "可用",
     "blueprint": "藍圖",
     "cancel": "取消",
-    "cannotReduceStock": "無法減少庫存 — 單位已投入使用中的訂單",
+    "cannotReduceStock": "無法減少庫存：這些單位在進行中的訂單裡",
     "craftedBy": "製作者",
     "created": "建立時間",
     "edit": "編輯",
@@ -4581,7 +4581,7 @@
     "unlisted": "未上架",
     "unspecified": "未指定",
     "updateError": "更新批次失敗",
-    "updateSuccess": "批次更新成功",
+    "updateSuccess": "批次已更新",
     "variantInfo": "規格資訊"
   },
   "ManageMarketRedesign": {
@@ -4680,7 +4680,7 @@
     "wantedBy_other": "{{count}} 位買家想要"
   },
   "messages": {
-    "chatCreated": "聊天建立成功",
+    "chatCreated": "聊天已建立",
     "copy": "複製",
     "title": "訊息",
     "viewChat": "檢視聊天"
@@ -4862,7 +4862,7 @@
     "orgSettings": "設定",
     "pinned": "已釘選",
     "recruiting": "招募",
-    "searchPlaceholder": "搜尋導覽…",
+    "searchPlaceholder": "搜尋導覽",
     "services": "服務",
     "settings": "設定",
     "shopPage": "商店頁面",
@@ -4908,7 +4908,7 @@
     },
     "email": {
       "description": "當你離線時，收到有關新訊息與報價的通知。",
-      "sent": "驗證電子郵件已寄出！你可以稍後再驗證。",
+      "sent": "驗證郵件已寄出。你可以稍後再驗證。",
       "title": "新增你的電子郵件",
       "verify": "傳送驗證"
     },
@@ -4918,7 +4918,7 @@
       "prefsTitle": "電子郵件偏好設定",
       "title": "電子郵件通知"
     },
-    "emailVerificationSent": "驗證電子郵件已寄出！請查看你的收件匣。",
+    "emailVerificationSent": "驗證郵件已寄出。請查看你的收件匣。",
     "notifications": {
       "description": "選擇你希望如何收到未讀訊息的提醒。",
       "dmReminders": "以電子郵件通知我未讀訊息",
@@ -4931,7 +4931,7 @@
       "title": "註冊組織"
     },
     "pushNotifs": {
-      "description": "在此裝置上即時收到新訊息、訂單與報價的提醒。",
+      "description": "在此裝置上收到新訊息、訂單與報價的提醒。",
       "prefsTitle": "推播偏好設定",
       "title": "推播通知"
     },
@@ -4978,7 +4978,7 @@
     "availabilityRequirement": "可用時段需求",
     "confirmDelete": "你確定要刪除這項設定嗎？",
     "delete": "刪除",
-    "deletedSuccessfully": "設定刪除成功！",
+    "deletedSuccessfully": "設定已刪除",
     "deleteError": "刪除設定失敗。請再試一次。",
     "description": "設定在建立報價或報價轉為訂單時會自動傳送的自訂訊息。",
     "enabled": "已啟用",
@@ -5013,7 +5013,7 @@
     "requirementsDescription": "設定下單前必須符合的條件。",
     "requirementsTitle": "訂單需求",
     "save": "儲存設定",
-    "savedSuccessfully": "設定儲存成功！",
+    "savedSuccessfully": "設定已儲存",
     "saveError": "儲存設定失敗。請再試一次。",
     "saving": "儲存中…",
     "stockDescription": "設定何時從你的庫存扣減。",
@@ -5094,13 +5094,13 @@
     "description": "管理你的組織已封鎖、禁止建立訂單或報價的使用者",
     "empty": "你的組織尚未封鎖任何使用者",
     "error": "載入組織封鎖清單失敗",
-    "searchPlaceholder": "搜尋要封鎖的使用者…",
+    "searchPlaceholder": "搜尋要封鎖的使用者",
     "selectedUser": "已選使用者",
     "title": "已封鎖使用者"
   },
   "OrgMemberSearch": {
     "label": "組織成員",
-    "placeholder": "搜尋成員…"
+    "placeholder": "搜尋成員"
   },
   "page": "1",
   "pages": {
@@ -5310,7 +5310,7 @@
     "qualityTiers": "品質階級",
     "qualityTiersDescription": "開採品質會分入不同的級距。範圍內的原始品質會對應至固定數值。",
     "salvaged": "打撈",
-    "search": "搜尋資源…",
+    "search": "搜尋資源",
     "title": "資源",
     "usedIn": "用於藍圖",
     "viewOnMarket": "在市場查看"
@@ -5346,8 +5346,8 @@
       "revisionRequested": "已請求修改"
     },
     "success": {
-      "requested": "已成功請求修改評價",
-      "updated": "評價更新成功"
+      "requested": "已要求修改",
+      "updated": "評價已更新"
     },
     "title": {
       "editReview": "編輯評價"
@@ -5383,7 +5383,7 @@
     "heading": "販售物品",
     "listingTitle": "商品標題",
     "location": "地點（選填）",
-    "locationHelp": "買家可取貨的地點 — 例如 Area18、Everus Harbor。",
+    "locationHelp": "買家可取貨的地點，例如 Area18 或 Everus Harbor。",
     "needShop": "你需要先有商店才能販售。請先從你的個人檔案建立一個。",
     "negotiableType": "可議價",
     "noShops": "沒有可用的商店",
@@ -5401,14 +5401,14 @@
     "sellThrough": "透過以下管道販售",
     "sellThroughHelp": "你的個人商店或你協助管理的組織商店。",
     "storefront": "店面",
-    "subheading": "選擇你要販售的物品 — 表單只會顯示所需的欄位。",
+    "subheading": "選擇你要販售的物品。表單只會顯示所需的欄位。",
     "tier": "等級",
     "tierN": "等級 {{n}}",
     "title": "販售物品",
     "unitScu": "cSCU",
     "unitType": "單位類型",
     "unitUnit": "件",
-    "visualOnly": "自訂物品與套裝組合在此階段僅供預覽 — 尚未儲存。",
+    "visualOnly": "自訂物品與套裝組合目前僅供預覽，尚未儲存。",
     "whatSelling": "你要販售什麼？",
     "removeQualityRow": "移除品質列",
     "removeBundleItem": "移除組合物品"
@@ -5478,7 +5478,7 @@
     "noLotsDesc": "庫存批次儲存你的商品可出售的數量。新增一個批次，開始追蹤本店的庫存。",
     "order": "訂單",
     "quantity": "數量",
-    "searchLots": "搜尋批次…",
+    "searchLots": "搜尋批次",
     "status": "狀態",
     "user": "使用者"
   },
@@ -5521,7 +5521,7 @@
     "previewListingLabel": "市場商品（範例）",
     "previewListingLightNote": "淺色模式：商品卡片沒有圖片淡出（與實際市場相同）。",
     "previewNavbar": "導覽列",
-    "previewNavRowHover": "側邊欄列 — 懸停於此",
+    "previewNavRowHover": "側邊欄列（懸停於此）",
     "previewOutlinedInput": "外框 / 輸入框",
     "previewOutlineHint": "使用外框顏色",
     "previewPaperSurface": "紙張表面",
@@ -5529,7 +5529,7 @@
     "previewSecondaryBtn": "次要",
     "previewSecondaryText": "次要文字",
     "previewSidebar": "側邊欄",
-    "previewSkeletonWaveHint": "骨架「波浪」微光使用此顏色 — 非填色按鈕懸停。",
+    "previewSkeletonWaveHint": "骨架「波浪」微光使用此顏色，非填色按鈕懸停。",
     "reset": "重設為預設",
     "resetConfirmMessage": "這將移除所有自訂主題設定並還原為預設主題。此動作無法復原。",
     "resetConfirmTitle": "重設主題？",
@@ -5537,7 +5537,7 @@
     "resetSuccess": "主題已重設為預設",
     "save": "儲存主題",
     "saveError": "儲存主題失敗",
-    "saveSuccess": "主題儲存成功",
+    "saveSuccess": "主題已儲存",
     "saving": "儲存中…",
     "style": "樣式",
     "unit": "單位"
@@ -5560,7 +5560,7 @@
     "to": "至",
     "transfer": "轉移",
     "transferError": "轉移庫存失敗",
-    "transferSuccess": "庫存轉移成功",
+    "transferSuccess": "庫存已轉移",
     "unspecified": "未指定"
   },
   "TransferLotDialogV2": {
@@ -5572,7 +5572,7 @@
     "title": "轉移庫存批次",
     "transfer": "轉移",
     "transferError": "轉移批次失敗",
-    "transferSuccess": "批次轉移成功",
+    "transferSuccess": "批次已轉移",
     "unspecified": "未指定",
     "variant": "變體"
   },
@@ -5635,7 +5635,7 @@
     "dialogDescription": "你確定要解除封鎖此使用者嗎？他們將能再次與你建立訂單與報價。",
     "dialogTitle": "解除封鎖 {{username}}",
     "error": "解除封鎖使用者失敗",
-    "success": "已成功解除封鎖 {{username}}"
+    "success": "已解除封鎖 {{username}}"
   },
   "userActions": {
     "adminOpenIdentity": "在 管理 -> 身分 中開啟",
@@ -5646,7 +5646,7 @@
   },
   "userSearch": {
     "noResults": "找不到使用者",
-    "placeholder": "搜尋使用者…",
+    "placeholder": "搜尋使用者",
     "typeToSearch": "輸入以搜尋使用者"
   },
   "whitelabel": {
@@ -5672,7 +5672,7 @@
       "headerTitle": "大宗商品",
       "loadError": "載入大宗商品失敗。",
       "noResults": "找不到大宗商品。",
-      "searchPlaceholder": "搜尋大宗商品…",
+      "searchPlaceholder": "搜尋大宗商品",
       "acqFilter": {
         "all": "全部",
         "mined": "可開採",
@@ -5738,7 +5738,7 @@
       "gradeLabel": "等級",
       "loadError": "載入物品失敗。",
       "noResults": "找不到結果。請嘗試調整搜尋條件。",
-      "searchPlaceholder": "搜尋物品、類型、製造商…",
+      "searchPlaceholder": "搜尋物品、類型和製造商",
       "sizeLabel": "尺寸"
     },
     "itemDetail": {
@@ -5757,7 +5757,7 @@
       "itemAttributes": "物品屬性",
       "loadError": "載入物品詳情失敗。請再試一次。",
       "markOwned": "標記為已擁有",
-      "noRecipeWarning": "找不到此物品的製作配方 — 拆解元件未知。",
+      "noRecipeWarning": "找不到此物品的製作配方，因此拆解元件未知。",
       "notSoldNpc": "任何 NPC 商店均未販售",
       "openInCalculator": "在計算機中開啟",
       "owned": "已擁有 ✓",
@@ -5794,7 +5794,7 @@
     },
     "locations": {
       "noResults": "找不到地點",
-      "search": "搜尋地點…",
+      "search": "搜尋地點",
       "title": "星圖與地點"
     },
     "manufacturerDetail": {
@@ -5828,25 +5828,25 @@
       "processingHeader": "處理速度：{{speed}}",
       "title": "精煉方式",
       "speedDesc": {
-        "fast": "處理時間最短 — 快速取得精煉材料",
+        "fast": "處理時間最短：快速取得精煉材料",
         "normal": "處理時間均衡",
-        "slow": "處理時間最長 — 但通常產出更高"
+        "slow": "處理時間最長，但通常產出更高"
       },
       "qualityDesc": {
-        "careful": "產出最高 — 精煉時材料損失最小",
-        "normal": "產出均衡 — 材料損失適中",
-        "wasteful": "產出最低 — 材料損失較大，但更便宜"
+        "careful": "產出最高：精煉時材料損失最小",
+        "normal": "產出均衡：材料損失適中",
+        "wasteful": "產出最低：材料損失較大，但更便宜"
       },
       "bestFor": {
-        "fastCareful": "綜合最佳 — 速度快且產出高",
+        "fastCareful": "綜合最佳：速度快且產出高",
         "fastNormal": "周轉快，產出尚可",
         "fastWasteful": "最快速度，接受材料損失",
-        "normalCareful": "熱門選擇 — 產出好，耗時合理",
+        "normalCareful": "產出好，耗時合理",
         "normalNormal": "各方面均衡",
         "normalWasteful": "較快，但產出較低",
-        "slowCareful": "產出最高 — 昂貴礦石值得等待",
+        "slowCareful": "產出最高：昂貴礦石值得等待",
         "slowNormal": "慢但穩定",
-        "slowWasteful": "又慢又浪費 — 一般應避免"
+        "slowWasteful": "又慢又浪費：一般應避免"
       }
     },
     "shipBrowser": {
@@ -5871,7 +5871,7 @@
       "headerTitle": "艦船與載具",
       "hoverbike": "懸浮車",
       "noResults": "找不到結果。",
-      "searchPlaceholder": "搜尋艦船、載具、製造商…",
+      "searchPlaceholder": "搜尋艦船、載具和製造商",
       "sectionGround": "地面載具",
       "sectionHoverbikes": "懸浮車",
       "sectionShips": "艦船",
@@ -6090,7 +6090,7 @@
     "manageTitle": "連結到我們",
     "line": "在 SC Market 上找到我們的商店：{{url}}",
     "verifyHint": "完全可選，驗證不需要它：如果願意，也可以把這一行加到你的 RSI 組織頁面，方便訪客在 SC Market 上找到你的商店。驗證只檢查上面的驗證碼。",
-    "verifiedHint": "你的組織已驗證！現在可以從 RSI 移除驗證碼。如果願意，可以在組織頁面保留這一行（選填），方便訪客找到你的商店。只有驗證碼可以移除；這一行可以保留。",
+    "verifiedHint": "你的組織已驗證。現在可以從 RSI 移除驗證碼。如果願意，可以在組織頁面保留這一行（選填），方便訪客找到你的商店。只有驗證碼可以移除；這一行可以保留。",
     "manageHint": "可選：把這一行加到你的 RSI 組織頁面，方便訪客在 SC Market 上找到你的商店。它與驗證無關，從不是必需的。",
     "copy": "複製此行",
     "copied": "已複製",
@@ -6224,7 +6224,7 @@
       "brandingAction": "查看缺少什麼",
       "title": "設定你的店面",
       "done": "全部完成。分享你的店面連結，或把下面的小工具放到你的網站上。",
-      "intro": "每一步只需幾分鐘：爭取在 15 分鐘內上架第一個商品。",
+      "intro": "完成以下步驟，準備好你的店面。",
       "progress": "設定進度"
     },
     "enquiry": {
@@ -6325,7 +6325,7 @@
     },
     "directory": {
       "empty": "找不到商店",
-      "search": "搜尋商店…",
+      "search": "搜尋商店",
       "sortLabel": "商店排序",
       "sortMostSales": "銷量最多",
       "sortNameAZ": "名稱 A-Z",
@@ -6341,7 +6341,7 @@
       "created": "建立於 {{date}}",
       "createFirst": "建立你的第一間商店",
       "customOrders": "客製訂單",
-      "emptyBody": "建立商店即可在 SC Market 開始販售，幾分鐘就能架好店面。",
+      "emptyBody": "建立商店即可在 SC Market 開始販售。",
       "emptyTitle": "你還沒有商店",
       "featureAnalytics": "追蹤銷量、評價和數據分析",
       "featureBranding": "自訂橫幅與標誌",
@@ -6373,7 +6373,7 @@
       "noReviewsBody": "訂單完成後，評價會顯示在這裡",
       "notFound": "找不到商店",
       "owner": "店主",
-      "searchListings": "搜尋商品…",
+      "searchListings": "搜尋商品",
       "since": "始於 {{date}}",
       "sortListings": "商品排序",
       "sortMostStock": "庫存最多",
@@ -6462,9 +6462,9 @@
     "remaining": "剩餘 {{n}}",
     "removeItemFailed": "移除商品失敗",
     "rosterOnly": "僅限成員",
-    "searchBuyOrders": "搜尋收購單…",
-    "searchItems": "搜尋物品、分類…",
-    "searchItemsSellers": "搜尋物品、分類、賣家…",
+    "searchBuyOrders": "搜尋收購單",
+    "searchItems": "搜尋物品和分類",
+    "searchItemsSellers": "搜尋物品、分類和賣家",
     "selectVariant": "選擇規格",
     "settingsMoved": "市場設定現已按商店管理，請前往商店設定頁面。",
     "standardVariant": "標準",
@@ -6589,7 +6589,7 @@
     "missionGiver": "任務發布者",
     "missionGiverLower": "任務發布者",
     "missionGiverPlaceholder": "例如 Miles",
-    "missionNamePlaceholder": "任務名稱…",
+    "missionNamePlaceholder": "任務名稱",
     "nOfM": "{{m}} 選 {{n}}",
     "onceOnly": "僅一次",
     "partOfChain": "任務鏈的一環",
@@ -6609,7 +6609,7 @@
     "satisfaction": "滿意度",
     "scope": "範圍",
     "search": "搜尋",
-    "searchPlaceholder": "搜尋任務、星系、類別…",
+    "searchPlaceholder": "搜尋任務、星系和類別",
     "shareable": "可共享",
     "shipCount_other": "{{count}} 艘艦船",
     "showEventMissions": "顯示活動任務",
@@ -6641,7 +6641,7 @@
     "hostileRange_other": "{{range}} 敵對",
     "friendlyRange_other": "{{range}} 友方",
     "shipRange_other": "{{range}} 艘艦船",
-    "shipPoolTypes_other": "艦船池 — {{count}} 種",
+    "shipPoolTypes_other": "艦船池：{{count}} 種",
     "npcEncounters": "NPC 遭遇",
     "targets": "目標",
     "npcCount_other": "{{count}} 個 NPC",
@@ -6711,7 +6711,7 @@
     "totalValue": "總價值：",
     "version": "版本",
     "mostRecent": "最新",
-    "newBadge": "新！",
+    "newBadge": "新",
     "orderLimitViolation": "訂單不符合規模或金額要求",
     "byName": "由 {{name}} 提供"
   },
@@ -6735,7 +6735,7 @@
       "collectionCount_other": "可取得的 {{count}} 個藍圖中已有 {{owned}} 個",
       "newThisWeek_other": "本週新增 {{count}} 個",
       "search": "搜尋",
-      "searchPlaceholder": "物品或藍圖名稱…",
+      "searchPlaceholder": "物品或藍圖名稱",
       "category": "類別",
       "subcategory": "子類別",
       "tier": "等級",
@@ -6751,7 +6751,7 @@
       "ingredientPlaceholder": "例如 Hephaestanite",
       "resetFilters": "重設篩選",
       "filters": "篩選",
-      "searchBarPlaceholder": "搜尋藍圖、材料、類別…",
+      "searchBarPlaceholder": "搜尋藍圖、材料和類別",
       "loadError": "載入藍圖失敗，請再試一次。",
       "columnItem": "物品",
       "columnTags": "標籤",
@@ -6811,7 +6811,7 @@
     "importFromInventory": "從庫存匯入",
     "importFromInventoryOrg": "從庫存匯入（+ 組織）",
     "addMaterial": "新增材料",
-    "searchResources": "搜尋資源…",
+    "searchResources": "搜尋資源",
     "noMaterials": "請在上方搜尋並新增材料",
     "removeMaterial": "移除材料",
     "weight": "權重：{{percent}}%",
@@ -6898,7 +6898,7 @@
     },
     "requisitions": {
       "gameItem": "遊戲物品",
-      "searchByName": "依名稱搜尋…",
+      "searchByName": "依物品名稱搜尋",
       "createTitle": "建立採購申請",
       "fieldTitle": "標題",
       "descriptionOptional": "說明（選填）",
@@ -7003,7 +7003,7 @@
       "activity": {
         "targetedBuyOrder": "<b>{{buyer}}</b> 傳送了 <b>{{item}}</b> 的指定收購單",
         "newRequisition": "來自 <b>{{buyer}}</b> 的新採購申請 <b>{{title}}</b>",
-        "orderCompleted": "訂單 <b>{{title}}</b> 已完成 — <b>{{amount}} aUEC</b>"
+        "orderCompleted": "訂單 <b>{{title}}</b> 已完成：<b>{{amount}} aUEC</b>"
       },
       "noActivity": "尚無近期動態",
       "activityTitle": "動態",
@@ -7053,7 +7053,7 @@
       "organizationShop": "組織商店",
       "categoriesLanguages": "分類與語言",
       "selectOrgError": "請選擇一個組織",
-      "created": "商店建立成功！"
+      "created": "商店已建立"
     },
     "settings": {
       "title": "商店設定",
@@ -7280,7 +7280,7 @@
       "addFailed": "無法新增物品。",
       "title": "新增物品至購物清單",
       "searchItem": "搜尋物品 *",
-      "searchPlaceholder": "輸入以搜尋…",
+      "searchPlaceholder": "搜尋物品",
       "minChars_other": "請至少輸入 {{count}} 個字元",
       "noItemsFound": "找不到物品",
       "howToGet": "你想如何取得此物品？",
@@ -7428,8 +7428,8 @@
       "siteSettings": "網站設定",
       "siteAccessHint": "控制誰可以存取你的白牌網站。",
       "siteAccess": "網站存取權限",
-      "accessPublic": "公開 — 任何人都能瀏覽",
-      "accessInternal": "內部 — 需要登入",
+      "accessPublic": "公開（任何人都能瀏覽）",
+      "accessInternal": "內部（需要登入）",
       "requireMembership": "存取時需要組織成員資格",
       "homepagePath": "首頁路徑",
       "homepagePathHelper": "自訂登陸頁面路徑。留空則使用預設頁面。",
@@ -7492,7 +7492,7 @@
     },
     "summary": {
       "wasQuantity": "（原為 {{quantity}}）",
-      "newBadge": "新！"
+      "newBadge": "新"
     }
   },
   "adminUi": {
@@ -7513,7 +7513,7 @@
       "v1Off": "V1（關）",
       "v2On": "V2（開）",
       "rollout": "推出比例：{{percent}}%",
-      "notInEffect": "未生效——「已啟用」為關閉狀態，因此無論此比例為何，所有使用者都會使用舊版體驗。",
+      "notInEffect": "未生效：「已啟用」為關閉狀態，因此無論此比例為何，所有使用者都會使用舊版體驗。",
       "turnOnEnabled": "開啟「已啟用」",
       "rolloutPercentage": "推出比例",
       "saving": "儲存中…",
@@ -7529,11 +7529,11 @@
       "searchByUsername": "依使用者名稱搜尋",
       "enabledForUser": "對此使用者啟用",
       "add": "新增",
-      "searchFlags": "搜尋旗標…",
+      "searchFlags": "搜尋旗標",
       "retry": "重試",
       "loadFailed": "無法載入功能旗標。",
       "flagSummary_other": "預設：{{version}} · 推出比例：{{percent}}% · {{count}} 個覆寫",
-      "rolloutNotInEffect": "推出比例未生效——「已啟用」為關閉狀態",
+      "rolloutNotInEffect": "推出比例未生效：「已啟用」為關閉狀態",
       "noMatch": "沒有符合搜尋條件的旗標",
       "noneConfigured": "尚未設定任何功能旗標"
     },
@@ -7561,7 +7561,7 @@
       "noChanges": "沒有變更",
       "warnings_other": "{{count}} 則警告",
       "noDetails": "沒有詳細資訊",
-      "importSuccess": "遊戲資料匯入成功",
+      "importSuccess": "遊戲資料已匯入",
       "importFailed": "匯入失敗",
       "importStarted": "已開始匯入",
       "uploadFailed": "上傳失敗",
@@ -7672,7 +7672,7 @@
       "typeLabel": "類型：",
       "applicableTo": "適用於：",
       "noTypes": "沒有類型",
-      "importSuccess_other": "成功匯入 {{count}} 個屬性",
+      "importSuccess_other": "已匯入 {{count}} 個屬性",
       "importPartial_other": "匯入完成但有錯誤。已匯入 {{count}} 個屬性",
       "uuidPlaceholder": "輸入遊戲物品 UUID"
     },
@@ -7853,10 +7853,10 @@
     },
     "create": {
       "title": "建立 API 權杖",
-      "titleCreated": "權杖建立成功",
-      "successAlert": "你的 API 權杖已成功建立。請立即複製，因為它不會再次顯示。",
+      "titleCreated": "權杖已建立",
+      "successAlert": "你的 API 權杖已就緒。請立即複製：它不會再次顯示。",
       "tokenLabel": "API 權杖",
-      "copied": "已複製！",
+      "copied": "已複製",
       "copyToken": "複製權杖",
       "howToAuth": "<strong>如何進行身分驗證：</strong>在 API 請求的 <code>Authorization</code> 標頭中加入該權杖：",
       "important": "<strong>重要：</strong>請妥善保管此權杖。它可依你授予的權限存取你的帳號。如果遺失此權杖，你需要重新建立一個。",
@@ -7867,7 +7867,7 @@
     },
     "edit": {
       "title": "編輯 API 權杖",
-      "success": "權杖更新成功",
+      "success": "權杖已更新",
       "error": "無法更新權杖",
       "contractorAccessTitle": "承包商存取權限",
       "contractorAccessHelp": "將此權杖限制為特定承包商。留空則可存取所有承包商。",
@@ -7983,9 +7983,9 @@
       "privateHelp": "只有你可以檢視此購物清單",
       "shareLink": "分享連結",
       "shareLinkHelp": "複製此連結，與他人分享你的願望清單",
-      "copied": "已複製！",
+      "copied": "已複製",
       "copyToClipboard": "複製到剪貼簿",
-      "linkCopied": "連結已複製到剪貼簿！",
+      "linkCopied": "連結已複製",
       "copyFailed": "無法複製連結，請手動複製。",
       "nowPublic": "購物清單現已公開。任何擁有連結的人都可以檢視。",
       "nowPrivate": "購物清單現已設為私人。只有你可以檢視。",
@@ -8059,13 +8059,13 @@
     },
     "oreBrowser": {
       "expShort": "爆炸：{{value}}",
-      "searchPlaceholder": "搜尋礦石、星系、稀有度…",
+      "searchPlaceholder": "搜尋礦石、星系和稀有度",
       "marketPrice": "市場價格",
       "locations": "地點",
       "unknownSystem": "未知"
     },
     "locationBrowser": {
-      "searchPlaceholder": "搜尋地點、星系、類型…",
+      "searchPlaceholder": "搜尋地點、星系和類型",
       "moreOres_other": "另外 {{count}} 種",
       "oreCount_other": "{{count}} 種礦石"
     }
@@ -8115,7 +8115,7 @@
       "tierValue": "等級 {{tier}}"
     },
     "search": {
-      "placeholder": "搜尋…",
+      "placeholder": "搜尋遊戲資料",
       "ariaLabel": "搜尋",
       "tags": {
         "illegal": "非法",
@@ -8163,7 +8163,7 @@
     "verification": {
       "pageTitle": "電子郵件驗證",
       "verifying": "正在驗證你的電子郵件地址…",
-      "successTitle": "電子郵件已驗證！",
+      "successTitle": "電子郵件已驗證",
       "failedTitle": "驗證失敗",
       "invalidTitle": "無效的請求",
       "goToSettings": "前往電子郵件設定"
@@ -8202,7 +8202,7 @@
       "loadingPriceChart": "正在載入價格圖表…"
     },
     "commandPalette": {
-      "placeholder": "搜尋頁面、操作、商品…",
+      "placeholder": "搜尋頁面、操作和商品",
       "noResults": "沒有符合「{{query}}」的結果",
       "hintNavigate": "導覽",
       "hintSelect": "選擇",
@@ -8233,7 +8233,7 @@
         "priceAlerts": "價格提醒",
         "priceAlertsDescription": "你的追蹤清單與提醒管道",
         "myOrgs": "我的組織",
-        "shopOrders": "{{shop}} — 訂單",
+        "shopOrders": "{{shop}}：訂單",
         "createListing": "建立商品",
         "newMessage": "新訊息",
         "toggleDarkMode": "切換深色模式"
@@ -8301,7 +8301,7 @@
     }
   },
   "uexImportUi": {
-    "success_other": "已從 UEX 成功匯入 {{count}} 個商品中的 <strong>{{imported}}</strong> 個。",
+    "success_other": "已從 UEX 匯入 {{count}} 個商品中的 <strong>{{imported}}</strong> 個。",
     "importMore": "繼續匯入",
     "intro": "從 UEXCorp 匯入你的有效出售商品。輸入你的 UEX 使用者名稱以預覽將要匯入的內容。",
     "username": "UEX 使用者名稱",
@@ -8474,7 +8474,7 @@
   },
   "sharedUi": {
     "emailVerification": {
-      "verified": "你的電子郵件地址已成功驗證！",
+      "verified": "你的電子郵件地址已驗證。",
       "errorGeneric": "驗證過程中發生錯誤。",
       "invalidToken": "驗證權杖無效或已過期。",
       "failedTryAgain": "電子郵件驗證失敗，請再試一次。",
@@ -8546,7 +8546,7 @@
       "primary": "主要",
       "primaryContrast": "按鈕文字",
       "primaryDark": "主要懸停（填色按鈕）",
-      "usagePrimaryDark": "MUI 在填色主要按鈕懸停時使用此顏色 — 不是「選單與清單懸停」顏色。",
+      "usagePrimaryDark": "MUI 在填色主要按鈕懸停時使用此顏色，不是「選單與清單懸停」顏色。",
       "secondary": "次要",
       "bgDefault": "背景",
       "bgPaper": "紙張",
@@ -8557,7 +8557,7 @@
       "textSecondary": "次要文字",
       "outline": "外框顏色",
       "actionHover": "選單與清單懸停",
-      "usageActionHover": "側邊欄列、選單、自動完成 — 以及骨架「波浪」。不用於填色主要按鈕。",
+      "usageActionHover": "側邊欄列、選單、自動完成以及骨架「波浪」。不用於填色主要按鈕。",
       "borderRadiusTopLevel": "卡片",
       "borderRadiusButton": "按鈕",
       "borderRadiusChip": "標籤",
@@ -8809,7 +8809,7 @@
       "body": "為物品設定目標價格並追蹤。當公開上架達到或低於該價格時，你會收到附帶上架連結的提醒。暫停提醒可保留設定而不接收通知。"
     },
     "quickList": {
-      "title": "幾秒鐘刊登物品",
+      "title": "透過一個表單刊登物品",
       "body": "選擇物品，確認價格和數量，然後發布。庫存先填一個數量，之後隨時可以按地點或品質拆分。"
     }
   },
@@ -8996,7 +8996,7 @@
     "seeListings": "查看商品",
     "empty": {
       "title": "目前沒有人出售",
-      "body": "有這件物品？大約 15 秒就能刊登。設定了價格提醒的買家會在價格符合目標時收到提醒。"
+      "body": "有這件物品？用 Quick List 刊登。設定了價格提醒的買家會在價格符合目標時收到提醒。"
     },
     "listingCount_other": "{{formatted}} 個商品",
     "listedSoFar_other": "目前已刊登 {{formatted}} 個。"

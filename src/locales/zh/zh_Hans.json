@@ -28,7 +28,7 @@
       "actions": "操作",
       "description": "此页面将包含审核工具和举报。",
       "handleReport": "处理举报",
-      "reportUpdated": "举报更新成功",
+      "reportUpdated": "举报已更新",
       "status": "状态",
       "updateFailed": "更新举报失败"
     },
@@ -41,7 +41,7 @@
     "moderation.notesHelperText": "关于此审核操作的可选备注（最多 2000 个字符）",
     "moderation.updateReport": "更新举报",
     "moderation.updating": "正在更新…",
-    "moderation.reportUpdated": "举报更新成功",
+    "moderation.reportUpdated": "举报已更新",
     "moderation.updateFailed": "更新举报失败",
     "moderation.actions": "操作",
     "alerts": {
@@ -50,17 +50,17 @@
       "activeFilter": "启用状态",
       "content": "内容",
       "contentPlaceholder": "以 Markdown 格式输入提醒内容...",
-      "contractorPlaceholder": "输入以搜索承包商...",
+      "contractorPlaceholder": "搜索组织",
       "contractorRequired": "请选择一个承包商",
       "create": "创建",
       "createAlert": "创建提醒",
-      "created": "提醒创建成功",
+      "created": "提醒已创建",
       "createdAt": "创建时间",
       "creating": "创建中...",
       "delete": "删除",
       "deleteAlert": "删除提醒",
       "deleteConfirm": "确定要删除此提醒吗？此操作无法撤销。",
-      "deleted": "提醒删除成功",
+      "deleted": "提醒已删除",
       "deleting": "删除中...",
       "editAlert": "编辑提醒",
       "field": {
@@ -78,7 +78,7 @@
       "targetType": "目标类型",
       "targetTypeFilter": "目标类型",
       "update": "更新",
-      "updated": "提醒更新成功",
+      "updated": "提醒已更新",
       "updating": "更新中...",
       "validation": {
         "invalidUrl": "请输入有效的 URL（http:// 或 https://）"
@@ -110,17 +110,17 @@
     "alerts.activeFilter": "启用状态",
     "alerts.content": "内容",
     "alerts.contentPlaceholder": "以 Markdown 格式输入提醒内容…",
-    "alerts.contractorPlaceholder": "输入以搜索承包商…",
+    "alerts.contractorPlaceholder": "搜索组织",
     "alerts.contractorRequired": "请选择一个承包商",
     "alerts.create": "创建",
     "alerts.createAlert": "创建提醒",
-    "alerts.created": "提醒创建成功",
+    "alerts.created": "提醒已创建",
     "alerts.createdAt": "创建时间",
     "alerts.creating": "创建中…",
     "alerts.delete": "删除",
     "alerts.deleteAlert": "删除提醒",
     "alerts.deleteConfirm": "确定要删除此提醒吗？此操作无法撤销。",
-    "alerts.deleted": "提醒删除成功",
+    "alerts.deleted": "提醒已删除",
     "alerts.deleting": "删除中…",
     "alerts.editAlert": "编辑提醒",
     "alerts.invalidUrl": "请输入有效的 URL（http:// 或 https://）",
@@ -136,7 +136,7 @@
     "alerts.targetTypeFilter": "目标类型",
     "alerts.title": "标题",
     "alerts.update": "更新",
-    "alerts.updated": "提醒更新成功",
+    "alerts.updated": "提醒已更新",
     "alerts.updating": "更新中…",
     "attributes": {
       "actions": "操作",
@@ -154,13 +154,13 @@
       },
       "cascadeOption": "同时删除所有使用此名称的游戏物品属性吗？",
       "create": "创建",
-      "created": "属性定义创建成功",
+      "created": "属性定义已创建",
       "createDefinition": "创建属性定义",
       "creating": "创建中…",
       "delete": "删除",
       "deleteAttributes": "删除属性",
       "deleteConfirm": "确定要删除此属性定义吗？",
-      "deleted": "属性定义删除成功",
+      "deleted": "属性定义已删除",
       "deleteDefinition": "删除属性定义",
       "deleting": "删除中…",
       "displayName": "显示名称",
@@ -178,7 +178,7 @@
       "showInFilters": "在市场筛选器中显示",
       "title": "属性定义",
       "update": "更新",
-      "updated": "属性定义更新成功",
+      "updated": "属性定义已更新",
       "updating": "更新中…"
     },
     "auditLogs": "管理员审计日志",
@@ -193,7 +193,7 @@
       "delete": "删除",
       "deleteAttribute": "删除属性",
       "deleteConfirm": "确定要删除此属性吗？",
-      "deleted": "属性删除成功",
+      "deleted": "属性已删除",
       "deleting": "删除中…",
       "editAttribute": "编辑属性",
       "freeFormValue": "输入任意值",
@@ -204,7 +204,7 @@
       "importSuccess": "导入成功",
       "noSelection": "输入游戏物品 ID 以开始",
       "save": "保存",
-      "saved": "属性保存成功",
+      "saved": "属性已保存",
       "saving": "保存中…",
       "search": "搜索",
       "searchHelp": "输入游戏物品的 UUID 以查看和编辑其属性",
@@ -227,7 +227,7 @@
       "result": "测试结果",
       "selectedUser": "已选择：{{username}}",
       "selectUser": "搜索一个用户以接收测试通知",
-      "success": "通知测试成功完成",
+      "success": "通知测试已完成",
       "targetUser": "目标用户",
       "test": "测试通知",
       "testing": "测试中…",
@@ -307,8 +307,8 @@
     "ownerUsername": "所有者用户名*",
     "spectrumId": "组织 Spectrum ID*",
     "submit": "提交",
-    "success": "已提交！",
-    "failure": "提交失败！{{reason}}"
+    "success": "组织已验证",
+    "failure": "无法验证组织：{{reason}}"
   },
   "ads": {
     "scOrgs": {
@@ -397,7 +397,7 @@
     "loginFailed": "登录失败。请重试。",
     "loginWithCitizenID": "使用 Citizen iD 登录",
     "oauthError": "身份验证过程中发生错误。请重试。",
-    "signInBlurb": "免费加入 — 使用你的 RSI 账户（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 账户登录。",
+    "signInBlurb": "免费加入。使用你的 RSI 账户（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 账户登录。",
     "signInTab": "登录选项卡",
     "signInTitle": "登录 SC Market",
     "signInWithCitizenID": "使用 Citizen iD 登录",
@@ -417,8 +417,8 @@
     "save": "保存",
     "availability_for": "可用时间：",
     "title": "我的可用时间段",
-    "updated": "可用时间段已更新！",
-    "failed": "更新失败！",
+    "updated": "可用时间段已更新",
+    "failed": "无法更新你的可用时间段。",
     "checking": "正在检查可用时间要求…",
     "edit": "编辑",
     "yourAvailability": "你的可用时间"
@@ -662,7 +662,7 @@
     "maxPrice": "最高价格",
     "minPrice": "最低价格",
     "minQuantity": "最小数量",
-    "noItemResults": "未找到物品 — 请尝试更简短或不同的搜索词",
+    "noItemResults": "未找到物品。请尝试更简短或不同的搜索词。",
     "noPriceData": "暂无价格数据",
     "noPriceHistory": "暂无价格历史",
     "noQualityDistribution": "暂无品质分布数据",
@@ -685,7 +685,7 @@
     "salesVolume": "销量",
     "salesVolumeByQualityTier": "按品质层级的销量",
     "searching": "搜索中…",
-    "searchItemPlaceholder": "开始输入物品名称…",
+    "searchItemPlaceholder": "搜索物品",
     "selectAllVariants": "选择所有变体",
     "selectVariant": "请选择一个变体",
     "selectVariantsPrompt": "请为每个物品选择一个变体",
@@ -704,7 +704,7 @@
     "tierSilver": "白银",
     "timeToSaleByQualityTier": "按品质层级的成交时长",
     "totalQuantity": "总数量",
-    "typeToSearch": "输入以搜索…",
+    "typeToSearch": "输入物品名称",
     "unspecified": "未指定",
     "variant": "变体",
     "verificationRequired": "你的账户必须经过验证才能创建市场商品。请使用 RSI/Citizen iD 验证你的账户以继续。",
@@ -736,7 +736,7 @@
     "counter_offer_received_from": "收到还价，来自",
     "order_status_updated_to": "订单状态已更新为 {{status}}，操作者",
     "contractor_invite_from": "<contractorLink>{{spectrum_id}}</contractorLink>邀请你加入该承包商",
-    "submitted": "已提交！",
+    "submitted": "已提交",
     "accept": "同意",
     "decline": "拒绝",
     "new_bid_placed_by": "新出价，来自",
@@ -819,7 +819,7 @@
     "continue": "继续",
     "complete": "完成设置",
     "availabilitySaved": "可用时间已保存",
-    "emailVerificationSent": "验证邮件已发送！请检查你的收件箱。",
+    "emailVerificationSent": "验证邮件已发送。请查看你的收件箱。",
     "steps": {
       "discord": "关联 Discord",
       "availability": "可用时间",
@@ -842,7 +842,7 @@
       "title": "添加你的邮箱",
       "description": "在你离开时接收新消息和报价的通知。",
       "verify": "发送验证",
-      "sent": "验证邮件已发送！你可以稍后验证。"
+      "sent": "验证邮件已发送。你可以稍后再验证。"
     },
     "notifications": {
       "title": "通知偏好设置",
@@ -861,7 +861,7 @@
       "title": "注册组织"
     },
     "pushNotifs": {
-      "description": "在此设备上即时接收新消息、订单和报价的提醒。",
+      "description": "在此设备上接收新消息、订单和报价的提醒。",
       "prefsTitle": "推送偏好设置",
       "title": "推送通知"
     },
@@ -1211,7 +1211,7 @@
       "reVerifyTitle": "重新验证资料",
       "reVerifyDescription": "更新你的资料用户名，使其与你当前的 Spectrum 名称一致。这只会更新你的用户名。",
       "reVerifyButton": "重新验证资料",
-      "reVerifySuccess": "资料重新验证成功！你的用户名已更新。",
+      "reVerifySuccess": "个人资料已重新验证。你的用户名已更新。",
       "reVerifyError": "重新验证资料失败。请稍后再试。",
       "accountAlreadyCitizenId": "你的 SC Market 账户（{{username}}）已关联了一个 Citizen iD。请先取消关联，再关联新的账户。",
       "accountAlreadyDiscord": "你的 SC Market 账户已关联 Discord。请先取消关联。",
@@ -1242,7 +1242,7 @@
       "unlinkError": "取消关联 Star Citizen 账户失败。请稍后重试。",
       "unlinkProviderDescription": "确定要取消关联此账户吗？你将无法再使用此方式登录。",
       "unlinkProviderTitle": "取消关联账户",
-      "unlinkSuccess": "Star Citizen 账户已成功取消关联！你的个人资料已重置为未验证状态。",
+      "unlinkSuccess": "Star Citizen 账户已解除关联。你的个人资料已恢复为未验证。",
       "unlinkTitle": "取消关联 Star Citizen 账户",
       "usernames": "用户名：",
       "verifyAccount": "验证你的账户",
@@ -1276,7 +1276,7 @@
         "title": "添加电子邮箱地址"
       },
       "addError": "添加电子邮箱地址失败",
-      "addSuccess": "邮箱添加成功！",
+      "addSuccess": "邮箱已添加",
       "deleteEmailDialog": {
         "cancel": "取消",
         "confirm": "移除邮箱",
@@ -1284,7 +1284,7 @@
         "title": "移除电子邮箱地址"
       },
       "deleteError": "移除电子邮箱地址失败",
-      "deleteSuccess": "邮箱移除成功！",
+      "deleteSuccess": "邮箱已移除",
       "editEmailDialog": {
         "newEmailLabel": "新的电子邮箱地址",
         "title": "更新电子邮箱地址",
@@ -1304,9 +1304,9 @@
       "title": "邮件通知",
       "updateEmail": "更新邮箱",
       "updateError": "更新电子邮箱地址失败",
-      "updateSuccess": "邮箱更新成功！",
+      "updateSuccess": "邮箱已更新",
       "verificationError": "发送验证邮件失败",
-      "verificationSent": "验证邮件已发送！",
+      "verificationSent": "验证邮件已发送",
       "verified": "已验证",
       "bounce": {
         "title": "你的邮件被退回了，请更新邮箱。",
@@ -1341,7 +1341,7 @@
       "placeholder": "选择语言…",
       "save": "保存语言",
       "saveError": "更新语言失败",
-      "saveSuccess": "语言更新成功",
+      "saveSuccess": "语言已更新",
       "section": {
         "description": "选择你可以使用的沟通语言。这有助于他人了解你支持哪些语言。"
       },
@@ -1351,7 +1351,7 @@
       "available": "可用标签页",
       "description": "自定义移动端底部导航栏中显示的标签页。最多可选择 5 个标签页，并可拖动重新排序。",
       "error": "保存移动端导航设置失败",
-      "saved": "移动端导航设置保存成功",
+      "saved": "移动端导航设置已保存",
       "selected": "已选择的标签页",
       "title": "移动端导航"
     },
@@ -1378,12 +1378,12 @@
       "otherDevices_other": "{{count}} 台其他设备",
       "permissionDeniedError": "权限{{status}}。请在浏览器设置中启用通知。",
       "permissionDeniedMessage": "请在浏览器设置中启用通知以使用推送通知。",
-      "permissionGrantedMessage": "权限已授予！你现在可以订阅推送通知。",
+      "permissionGrantedMessage": "已授予权限。你现在可以开启推送通知。",
       "permissionStatus": "权限状态",
       "removeDevice": "移除设备",
       "requestPermission": "请求权限",
       "subscribe": "订阅推送通知",
-      "subscribed": "已成功订阅推送通知！",
+      "subscribed": "推送通知已开启",
       "subscribedOn": "订阅于 {{date}}",
       "subscribing": "订阅中…",
       "title": "推送通知",
@@ -1391,7 +1391,7 @@
       "totalDevices_other": "共 {{count}} 台设备",
       "unknownDevice": "未知设备",
       "unsubscribe": "取消订阅",
-      "unsubscribed": "已成功取消订阅推送通知",
+      "unsubscribed": "推送通知已关闭",
       "subscribeFailed": "无法开启推送通知：{{reason}}",
       "permissionDismissed": "浏览器未开启通知。请重试并选择“允许”。",
       "unsubscribeFailed": "无法移除该设备，请重试。",
@@ -1565,7 +1565,7 @@
     "money": "资金",
     "invoices": "发票",
     "fleet": "舰队",
-    "new_chip": "新！",
+    "new_chip": "新",
     "people": "人员",
     "customers": "客户",
     "members": "成员",
@@ -1771,7 +1771,7 @@
     "danger_zone": "危险操作区",
     "delete_account_button": "删除账户",
     "delete_account_description": "永久删除你的账户及所有相关的个人数据。此操作在 30 天宽限期结束后将无法撤销。",
-    "updated": "设置更新成功",
+    "updated": "设置已更新",
     "cookie_title": "Cookie 偏好",
     "cookie_description": "登录 Cookie 和匿名错误报告始终开启。分析（Google Analytics 和页面速度测量）仅在你允许时运行。",
     "cookie_status_all": "当前选择：允许分析。",
@@ -1866,8 +1866,8 @@
     "description_required": "简介*",
     "submit": "提交",
     "alert": {
-      "submitted": "已提交！",
-      "failed": "提交失败！"
+      "submitted": "帖子已保存",
+      "failed": "无法保存帖子"
     },
     "markdown_info": "支持 GitHub 风格的 Markdown，YouTube 链接会自动嵌入，托管在 Imgur 或 RSI 上的图片也可以嵌入。",
     "markdown_link": "点此查看",
@@ -1896,7 +1896,7 @@
     "orgCardBody": "{{name}} 在我们的姊妹网站 SC Orgs 上有社区页面：成员、活动和入会申请。",
     "orgCardAction": "在 SC Orgs 上打开",
     "verifiedTitle": "也把你的组织登记到 SC Orgs",
-    "verifiedBody": "SC Orgs 是我们用于管理组织的姊妹网站，为 {{org}} 提供入会申请、活动和成员管理工具。登记大约只需两分钟。",
+    "verifiedBody": "SC Orgs 是我们用于管理组织的姊妹网站，为 {{org}} 提供入会申请、活动和成员管理工具。",
     "verifiedAction": "在 SC Orgs 上登记"
   },
   "contractor": {
@@ -1948,8 +1948,8 @@
     "logout": "退出登录"
   },
   "viewProfile": {
-    "submitted": "已提交！",
-    "failed": "提交失败！",
+    "submitted": "个人资料已保存",
+    "failed": "无法保存你的个人资料。",
     "image_url": "图片链接",
     "image_url_helper": "图片的直接链接，来自 Imgur、RSI 或 starcitizen.tools",
     "save": "保存",
@@ -1965,9 +1965,9 @@
     "store_market": "市场",
     "store_services": "服务",
     "avatar_too_large": "头像必须小于 1MB",
-    "avatar_uploaded": "头像上传成功",
+    "avatar_uploaded": "头像已上传",
     "banner_too_large": "横幅必须小于 2.5MB",
-    "banner_uploaded": "横幅上传成功",
+    "banner_uploaded": "横幅已上传",
     "editDescription": "编辑描述",
     "loading": "加载中"
   },
@@ -2054,7 +2054,7 @@
   },
   "select_rows_per_page": "选择每页行数",
   "createPublicContract": {
-    "submitted": "已提交！",
+    "submitted": "已提交",
     "about": "关于",
     "title_required": "标题*",
     "type_required": "类型*",
@@ -2090,8 +2090,8 @@
     "leaveReviewButton": "发表评价",
     "notFinishedHint": "订单完成或取消后，或开始 14 天后，即可评价。",
     "alert": {
-      "success": "已发表评价！",
-      "error": "发表评价失败！"
+      "success": "评价已发布",
+      "error": "无法发布你的评价。"
     }
   },
   "orderMetrics": {
@@ -2190,7 +2190,7 @@
     "actions": "操作"
   },
   "orderDetailsArea": {
-    "updated_status": "已更新状态！",
+    "updated_status": "状态已更新",
     "details_table": "详情表",
     "customer": "客户",
     "seller": "卖家",
@@ -2224,10 +2224,10 @@
     "title": "我的订单"
   },
   "memberAssignArea": {
-    "assigned": "已指派！",
-    "failed_assign": "指派失败！",
-    "unassigned": "已取消指派！",
-    "failed_unassign": "取消指派失败！",
+    "assigned": "已指派",
+    "failed_assign": "无法指派。",
+    "unassigned": "已取消指派",
+    "failed_unassign": "无法取消指派。",
     "assign": "指派",
     "reassign": "重新指派",
     "unassign": "取消指派",
@@ -2240,7 +2240,7 @@
     "serviceActive": "服务已生效",
     "serviceInactive": "服务未生效",
     "serviceDescription": "服务描述",
-    "serviceDescriptionHelper": "例如：我们提供地点之间的货物运输服务！",
+    "serviceDescriptionHelper": "例如：Area18 与 Lorville 之间的货物运输",
     "orderServiceDetails": "订购服务详情",
     "title": "标题",
     "typeOptional": "类型（可选）",
@@ -2256,8 +2256,8 @@
     "submit": "提交",
     "update": "更新",
     "alert": {
-      "submitted": "已提交！",
-      "failed": "提交失败！"
+      "submitted": "服务已保存",
+      "failed": "无法保存服务"
     },
     "photoUploadNote": "照片上传说明",
     "uploadingPhotos": "正在上传照片"
@@ -2280,7 +2280,7 @@
     "paymentType": "支付类型",
     "submit": "提交",
     "alert": {
-      "submitted": "已提交！"
+      "submitted": "已提交"
     }
   },
   "OffersViewPaginated": {
@@ -2303,7 +2303,7 @@
     "merge_offers_warning": "所有选中的报价会话将被关闭并替换为单个合并报价会话。",
     "merge_offers_confirm_cancel": "取消",
     "merge_offers_confirm_button": "合并报价",
-    "merge_success": "报价合并成功",
+    "merge_success": "报价已合并",
     "merge_error": "合并报价失败",
     "buyer": "买家",
     "buyer_username": "买家用户名",
@@ -2394,13 +2394,13 @@
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "提交还价",
-    "counterOfferSubmitted": "还价提交成功"
+    "counterOfferSubmitted": "还价已发送"
   },
   "Webhooks": {
     "title": "Webhook",
     "name": "名称",
-    "submitted": "已提交！",
-    "failedToSubmit": "提交失败！"
+    "submitted": "Webhook 已删除",
+    "failedToSubmit": "无法删除 Webhook："
   },
   "DashNotificationArea": {
     "notifications": "通知"
@@ -2429,7 +2429,7 @@
     "orderComment": "收到订单评论",
     "marketBid": "收到市场出价",
     "submit": "提交",
-    "submitted": "已提交！"
+    "submitted": "已添加 Webhook"
   },
   "MessagingSidebar": {
     "messages": "消息",
@@ -2460,7 +2460,7 @@
     "noUsersFound": "未找到用户",
     "searchAndSelect": "搜索并选择用户以创建群聊",
     "searchPlaceholder": "输入以搜索用户",
-    "searchUsers": "搜索用户…",
+    "searchUsers": "搜索用户",
     "selectedUsers": "已选用户",
     "selectUsers": "选择用户以开始聊天",
     "startNewChat": "开始新聊天",
@@ -2564,17 +2564,17 @@
     "defaultListing": "默认商品",
     "includeListings": "要包含的商品",
     "update": "更新",
-    "submitted": "已提交！",
-    "failedSubmit": "提交失败！{{error}}"
+    "submitted": "已提交",
+    "failedSubmit": "提交失败：{{error}}"
   },
   "MarketListingView": {
-    "addedToCart": "已加入购物车！",
+    "addedToCart": "已加入购物车",
     "price": "价格",
     "ofAvailable": "/ 共 {{count}} 件可售",
     "quantity": "数量",
     "addToCart": "加入购物车",
-    "bidSuccess": "出价成功！",
-    "bidError": "出价时出错！{{error}}",
+    "bidSuccess": "已出价",
+    "bidError": "无法出价：{{error}}",
     "currentBid": "当前出价：{{price}} aUEC",
     "bid": "出价",
     "placeBid": "出价",
@@ -2622,9 +2622,9 @@
     "minBidIncrement": "最小加价幅度",
     "endTime": "结束时间（{{tz}}）",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failedSubmit": "提交失败！",
-    "photosUploaded": "照片上传成功！",
+    "submitted": "已提交",
+    "failedSubmit": "提交失败",
+    "photosUploaded": "照片已上传",
     "photoUploadFailed": "部分照片上传失败"
   },
   "SelectPhotosArea": {
@@ -2676,8 +2676,8 @@
     "costs": "费用",
     "price": "价格",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failedSubmit": "提交失败！"
+    "submitted": "已提交",
+    "failedSubmit": "提交失败"
   },
   "MarketMultipleForm": {
     "about": "关于",
@@ -2688,8 +2688,8 @@
     "defaultListing": "默认商品",
     "listingsToInclude": "要包含的商品",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failedSubmit": "提交失败！"
+    "submitted": "已提交",
+    "failedSubmit": "提交失败"
   },
   "MarketListingEditView": {
     "deactivate": "停用商品",
@@ -2702,8 +2702,8 @@
     "price": "价格",
     "minBidIncrement": "最小加价幅度",
     "description": "描述",
-    "updated": "已更新！",
-    "updateError": "更新时出错！",
+    "updated": "已更新",
+    "updateError": "无法保存你的更改",
     "internalListing": "内部商品",
     "publicListing": "公开商品"
   },
@@ -2711,7 +2711,7 @@
     "title": "编辑市场消息模板",
     "configure": "配置将添加到新市场订单中的评论模板，用户可填写该模板以向你提供更多详情。",
     "submit": "提交",
-    "submitted": "已提交！"
+    "submitted": "模板已保存"
   },
   "MarketAggregateView": {
     "market": "市场",
@@ -2725,14 +2725,14 @@
     "sellOrders": "出售订单",
     "buyOrders": "求购单",
     "priceHistory": "价格历史",
-    "addedToCart": "已加入购物车！",
+    "addedToCart": "已加入购物车",
     "quantityToBuy": "购买数量",
     "ofAvailable": "，共 {{count}} 件可用",
     "fulfill": "履行",
     "cancel": "取消",
-    "submitted": "已提交！",
-    "failedSubmit": "提交失败！",
-    "cancelled": "已取消！",
+    "submitted": "已提交",
+    "failedSubmit": "提交失败",
+    "cancelled": "求购单已取消",
     "buyOrdersChart": "求购单",
     "sellOrdersChart": "出售订单",
     "atPrice": "价格为 {{price}} aUEC 或{{direction}}的订单",
@@ -2745,8 +2745,8 @@
     "viewCount": "总浏览量"
   },
   "MarketAggregateEditView": {
-    "updated": "已更新！",
-    "errorWhileUpdating": "更新时出错！",
+    "updated": "已更新",
+    "errorWhileUpdating": "无法保存你的更改",
     "deactivate": "停用商品",
     "activate": "上架商品",
     "update": "更新",
@@ -2783,7 +2783,7 @@
     "addRow": "添加行"
   },
   "ItemStock": {
-    "updated": "已更新！",
+    "updated": "已更新",
     "updateAmount": "更新数量",
     "add": "添加",
     "zero": "0",
@@ -2792,7 +2792,7 @@
     "deactivate": "停用",
     "addQuickListing": "添加快速商品",
     "selectItemError": "请选择一件物品",
-    "created": "商品创建成功！",
+    "created": "商品已创建",
     "createError": "创建商品失败",
     "title": "标题",
     "noItemSelected": "未选择物品",
@@ -2820,7 +2820,7 @@
     "bulkArchivedSuccess": "已归档 {{count}} 个商品。",
     "bulkArchivedSuccess_other": "已归档 {{count}} 个商品。",
     "bulkArchiveTitle": "归档所选商品？",
-    "cannotReduceStock": "无法减少库存 — 部分单位已被分配给活动订单",
+    "cannotReduceStock": "无法减少库存：这些单位在进行中的订单里",
     "editingNewListing": "正在编辑新商品…",
     "manageStock": "管理库存",
     "quality": "质量",
@@ -2877,13 +2877,13 @@
     "total_price": "总价",
     "expiration": "订单到期时间（{{tz}}）",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failed": "提交失败！{{error}}",
+    "submitted": "已提交",
+    "failed": "无法创建求购单：{{error}}",
     "unknown_error": "未知错误",
     "agreedPriceRequired": "请输入商定的每单位价格（至少 1 aUEC）。",
     "agreePriceDescription": "此求购单可议价。输入商定的每单位价格（aUEC）以完成履约。",
     "agreePriceTitle": "商定的每单位价格",
-    "created": "求购单创建成功",
+    "created": "求购单已创建",
     "fulfillQuantity": "履约数量",
     "fulfillTitle": "履约求购单",
     "imageHint": "添加参考照片（可选，大图片会自动优化）",
@@ -2950,8 +2950,8 @@
       "title": "从 Hangar XPlorer 文件导入",
       "upload": "上传文件",
       "submit": "提交",
-      "submitted": "已提交！",
-      "failed": "提交失败！{{error}}"
+      "submitted": "舰队已导入",
+      "failed": "无法导入你的舰队：{{error}}"
     }
   },
   "deliveries": {
@@ -3017,8 +3017,8 @@
     "create": "创建",
     "save": "保存",
     "delete": "删除",
-    "updated": "已更新！",
-    "deleted": "已删除！",
+    "updated": "已保存",
+    "deleted": "角色已删除",
     "role_name": "角色名称",
     "role_position": "角色位置",
     "position_helper": "数字越小，相对其他角色的优先级越高。",
@@ -3064,10 +3064,10 @@
     "any": "任意",
     "kick": "移除",
     "username": "用户名",
-    "updated": "已更新！",
-    "update_failed": "更新失败！{{reason}}",
-    "member_kicked": "已移除成员！",
-    "kick_failed": "移除失败！{{reason}}",
+    "updated": "角色已更新",
+    "update_failed": "无法更新成员：{{reason}}",
+    "member_kicked": "成员已移除",
+    "kick_failed": "无法移除成员：{{reason}}",
     "cannotRemoveOwnerRole": "无法从成员中移除所有者角色。",
     "cannotRemoveProtectedSelfRole": "你无法从自己身上移除此角色（保留你的最高角色，并在你的最高角色不包含“管理角色”权限时保留一个具有该权限的角色）。",
     "kicked": "已踢出",
@@ -3075,8 +3075,8 @@
     "rolesFor": "{{username}} 的角色"
   },
   "orgDetailEdit": {
-    "submitted": "已提交！",
-    "failed_submit": "提交失败！{{reason}}",
+    "submitted": "组织信息已保存",
+    "failed_submit": "无法保存组织信息：{{reason}}",
     "save": "保存",
     "image_url": "图片链接",
     "image_url_helper": "图片的直接链接，来自 Imgur、RSI 或 starcitizen.tools",
@@ -3085,9 +3085,9 @@
     "no_tags": "无标签",
     "set_banner": "设置新横幅",
     "avatar_too_large": "头像必须小于 1MB",
-    "avatar_uploaded": "头像上传成功",
+    "avatar_uploaded": "头像已上传",
     "banner_too_large": "横幅必须小于 2.5MB",
-    "banner_uploaded": "横幅上传成功",
+    "banner_uploaded": "横幅已上传",
     "descriptionEditor": "组织简介",
     "editName": "编辑名称",
     "editTags": "编辑标签",
@@ -3099,7 +3099,7 @@
     "username": "用户名",
     "note": "备注",
     "submit": "提交",
-    "submitted": "已提交！"
+    "submitted": "邀请已发送"
   },
   "orgInfo": {
     "about": "关于",
@@ -3123,10 +3123,10 @@
     "max_uses": "最大邀请使用次数",
     "used_times": "已使用 {{used}}/{{max}} 次",
     "max_uses_helper": "此邀请的最大使用次数。设为 0 表示无限制。",
-    "copied": "已复制！",
+    "copied": "已复制",
     "submit": "提交",
-    "submitted": "已提交！",
-    "failed_submit": "提交失败！{{reason}}",
+    "submitted": "已提交",
+    "failed_submit": "无法保存邀请码：{{reason}}",
     "copy": "复制邀请链接 {{code}}",
     "delete": "删除邀请 {{code}}"
   },
@@ -3184,16 +3184,16 @@
     "error_identifier": "请设置你的标识符名称",
     "error_logo": "请设置你的承包商标志",
     "error_banner": "请设置你的承包商横幅",
-    "failed_auth": "验证失败！{{reason}}",
+    "failed_auth": "无法验证组织：{{reason}}",
     "languages": "支持的语言（可选）",
     "languagesHelper": "选择你组织可以使用的语言。你之后可以在设置中更改。",
-    "success": "承包商创建成功"
+    "success": "组织已创建"
   },
   "authenticateRSI": {
     "handle": "RSI 用户名",
     "invalid_handle": "无效的用户名",
     "enter_username": "请输入你的用户名",
-    "authenticated": "已验证！",
+    "authenticated": "账户已验证",
     "here": "此处",
     "submit": "提交",
     "copy_and_open": "复制代码并打开个人资料",
@@ -3207,7 +3207,7 @@
     "error_org_name": "请设置你的组织名称",
     "copy_and_open": "复制代码并打开组织页面",
     "submit": "提交",
-    "failed_auth": "验证失败！{{reason}}",
+    "failed_auth": "无法验证组织：{{reason}}",
     "instructions": "为了验证你拥有上述组织，请复制以下代码 <sentinelCode>your code</sentinelCode> 并将其添加到组织的介绍、历史、宣言或章程部分。验证完成后即可移除该代码。当代码在组织页面上可见后，点击提交。"
   },
   "people": {
@@ -3242,9 +3242,9 @@
     "amount": "金额",
     "note": "备注",
     "errors": {
-      "enterUser": "请输入要转账的用户！",
-      "invalidUser": "无效的用户！",
-      "enterAmount": "请输入金额！"
+      "enterUser": "选择收款人",
+      "invalidUser": "没有该名称的用户",
+      "enterAmount": "请输入金额"
     }
   },
   "cart": {
@@ -3261,7 +3261,7 @@
     "offerOptional": "报价（可选）",
     "submitOffer": "提交报价",
     "submitOrder": "提交订单",
-    "purchaseSuccess": "购买成功！",
+    "purchaseSuccess": "已下单",
     "yourCart": "你的购物车",
     "empty": "你的购物车是空的",
     "aboveMaxQty": "最大数量：{{max}}（购物车将有 {{total}}）",
@@ -3274,7 +3274,7 @@
     "belowMinQty": "最小数量：{{min}}（购物车有 {{total}}）",
     "browseMarket": "浏览市场",
     "checkout": "结账",
-    "checkoutSuccess": "报价提交成功",
+    "checkoutSuccess": "报价已发送",
     "confirmCheckout": "确认结账",
     "confirmOrder": "确认订单",
     "confirmPriceChanges": "部分价格已变动。确认即表示你接受更新后的价格。",
@@ -3308,14 +3308,14 @@
     "submitOfferTo": "向 {{seller}} 提交报价"
   },
   "landing": {
-    "supportersTitle": "我们的支持者",
+    "supportersTitle": "支持者",
     "supportersThanks": "感谢我们所有的",
     "supporters": "位支持者",
-    "faqTitle": "为你答疑解惑",
+    "faqTitle": "常见问题",
     "faqSellItemsQ": "我该如何出售物品？",
     "faqSellItemsA": "为每件物品创建一个商品。买家把物品加入购物车并向你下单，然后你和买家约定游戏内的时间和地点，交换货物和 aUEC。",
     "faqSafeQ": "SC Market 使用起来安全吗？",
-    "faqSafeA": "交易在玩家之间进行，所以我们无法担保，但每笔订单完成后买卖双方都会互相评价。交易前请先查看卖家的评分和订单记录。",
+    "faqSafeA": "交易在玩家之间进行，所以我们无法担保，但每笔订单完成后买卖双方都可以互相评价。交易前请先查看卖家的评分和订单记录。",
     "faqListThingsQ": "我可以在 SC Market 上架哪些东西？",
     "faqListThingsA": "任何你愿意用 aUEC 交易的星际公民物品或服务：武器、护甲、组件、大宗商品、舰船货物，以及运输、护航、采矿或医疗救援等服务。服务可以在游戏内或游戏外进行。",
     "faqFeeQ": "SC Market 会收取费用吗？",
@@ -3362,7 +3362,7 @@
     "wantedNowTitle": "正在求购",
     "wantedNowError": "无法加载求购单。",
     "topShopsTitle": "高评分店铺",
-    "topShopsText": "每笔订单后由买家评分。",
+    "topShopsText": "由买家在下单后评分。",
     "topShopsBrowse": "浏览店铺",
     "topShopsEmpty": "暂无店铺。",
     "topShopsError": "无法加载店铺。",
@@ -3397,14 +3397,14 @@
     "gameDataMiningText": "矿石和地点",
     "gameDataMissions": "任务",
     "gameDataMissionsText": "奖励和要求",
-    "whyTitle": "为什么选择 SC Market",
+    "whyTitle": "免费使用，买卖双方互评",
     "trustReviewsTitle": "双向评价",
-    "trustReviewsText": "每笔订单后，买家和卖家互相评价。",
+    "trustReviewsText": "每笔订单后，买家和卖家可以互相评价。",
     "trustFeesTitle": "零手续费",
     "trustFeesText": "aUEC 不经过我们。买家在游戏内直接付款给卖家。",
     "trustAlertsTitle": "价格提醒",
     "trustAlertsText": "在商品面关注物品的价格。",
-    "trustOrgsTitle": "为组织打造",
+    "trustOrgsTitle": "组织店面",
     "trustOrgsText": "共享店面、成员协作完成订单，还支持白标。",
     "faqBuyQ": "如何在星际公民中向其他玩家购买物品？",
     "faqBuyA": "在市场中搜索物品，加入购物车并下单。卖家会收到 Discord 提醒，然后你们在游戏内见面，用 aUEC 付款并取货。",
@@ -3417,7 +3417,7 @@
     "wantedNowPrice": "出价",
     "wantedNowQuantity": "×{{quantity}}",
     "wantedNowPost": "发布求购单：告诉卖家你需要什么",
-    "latestListingsText": "玩家店铺的新品，直接来自卖家。"
+    "latestListingsText": "玩家店铺的新品。"
   },
   "fleet": {
     "fleetTitle": "舰队",
@@ -3498,7 +3498,7 @@
       "acceptContractorInvite": "接受承包商邀请",
       "invitedMessage": "你已被邀请加入",
       "accept": "接受",
-      "accepted": "已接受邀请！",
+      "accepted": "已接受邀请",
       "acceptFailed": "加入失败",
       "joining": "正在加入…",
       "joinOrg": "加入组织",
@@ -3578,14 +3578,14 @@
     "noBuyOrders": "没有求购单",
     "noBuyOrdersDescription": "你的有效求购单将显示在此处。",
     "noOrgsToAggregate": "你还没有可聚合的组织。",
-    "noOrgsWidgetDropped": "你没有组织——此小组件将被舍弃。",
+    "noOrgsWidgetDropped": "你没有组织，因此此小组件将被舍弃。",
     "noShopsToAggregate": "你还没有可聚合的店铺。",
-    "noShopsWidgetDropped": "你没有店铺——此小组件将被舍弃。",
+    "noShopsWidgetDropped": "你没有店铺，因此此小组件将被舍弃。",
     "orgTitle": "{{name}} 仪表盘",
     "organization": "组织",
     "priceHistoryNoItem": "未选择物品。请删除此小组件并重新添加以选择物品。",
-    "remapOrgLabel": "{{name}} — 组织",
-    "remapShopLabel": "{{name}} — 店铺",
+    "remapOrgLabel": "{{name}}（组织）",
+    "remapShopLabel": "{{name}}（店铺）",
     "removeWidget": "移除小组件",
     "reputationError": "无法加载你的信誉。",
     "reputationOrders": "订单",
@@ -3604,7 +3604,7 @@
     "searchItem": "搜索物品",
     "searchItemHint": "至少输入2个字符",
     "searchItemNone": "未找到物品",
-    "searchItemPlaceholder": "输入以搜索…",
+    "searchItemPlaceholder": "搜索物品",
     "shop": "店铺",
     "title": "仪表盘",
     "unavailableOrg": "此小组件的组织已不可用。请移除它或选择新的范围。",
@@ -4117,7 +4117,7 @@
     "bidder": "出价人",
     "bidFailed": "出价失败",
     "bidHistory": "出价历史",
-    "bidPlaced": "出价成功！",
+    "bidPlaced": "已出价",
     "concluded": "已结束",
     "currentBid": "当前出价",
     "ended": "已结束",
@@ -4148,7 +4148,7 @@
     "description": "管理你已屏蔽、无法与你创建订单或报价的用户",
     "empty": "你还没有屏蔽任何用户",
     "error": "加载屏蔽列表失败",
-    "searchPlaceholder": "搜索要屏蔽的用户…",
+    "searchPlaceholder": "搜索要屏蔽的用户",
     "selectedUser": "已选择的用户",
     "title": "已屏蔽用户"
   },
@@ -4160,7 +4160,7 @@
     "error": "屏蔽用户失败",
     "reasonLabel": "原因（可选）",
     "reasonPlaceholder": "输入屏蔽此用户的原因…",
-    "success": "已成功屏蔽 {{username}}"
+    "success": "已屏蔽 {{username}}"
   },
   "blueprints": {
     "browser": {
@@ -4210,7 +4210,7 @@
     "selected": "已选择：{{name}}",
     "subheading": "买家的需求。发布你自己的需求，或从库存中履行开放的需求。",
     "targeted": "定向",
-    "targetedNote": "定向订单需要指定供应商——请从供应商名单中选择一个（即将推出）。",
+    "targetedNote": "定向订单需要指定供应商。请从供应商名单中选择一个（即将推出）。",
     "tierN": "等级 {{n}}",
     "tierRange": "T{{min}}–T{{max}}",
     "title": "求购单",
@@ -4363,7 +4363,7 @@
     "stockLotsSubtitle": "添加带变体属性（品质、来源、地点）的库存",
     "store": "商店",
     "submit": "创建商品",
-    "success": "商品创建成功",
+    "success": "商品已创建",
     "tier": "等级",
     "title": "标题",
     "titleAriaLabel": "输入商品标题",
@@ -4393,7 +4393,7 @@
   "CreateLotDialog": {
     "create": "创建批次",
     "createError": "创建批次失败",
-    "createSuccess": "批次创建成功",
+    "createSuccess": "批次已创建",
     "listed": "已上架",
     "listedHelp": "已上架的库存会出现在公开商品中",
     "location": "位置（可选）",
@@ -4401,7 +4401,7 @@
     "notesPlaceholder": "添加关于此批次的任何备注…",
     "notesTooLong": "备注不得超过 1000 个字符",
     "owner": "所有者（可选）",
-    "ownerPlaceholder": "搜索组织成员…",
+    "ownerPlaceholder": "搜索组织成员",
     "quantity": "数量",
     "quantityHelp": "输入此批次中的单位数量",
     "quantityRequired": "数量必须大于 0",
@@ -4479,7 +4479,7 @@
     "quantity": "数量",
     "quantityAriaLabel": "输入数量",
     "submit": "更新商品",
-    "success": "商品更新成功",
+    "success": "商品已更新",
     "title": "标题",
     "titleAriaLabel": "输入商品标题",
     "unifiedPricing": "统一价格",
@@ -4560,7 +4560,7 @@
     },
     "notifications": {
       "noNotifications": "暂无通知",
-      "noNotificationsDescription": "你已查看全部通知！新通知将显示在此处"
+      "noNotificationsDescription": "你已查看全部通知。新通知会显示在这里。"
     },
     "orders": {
       "browseMarket": "浏览市场",
@@ -4665,7 +4665,7 @@
     "qtyHelp": "此批次中的单位数量",
     "qtyRequired": "必须大于 0",
     "quantity": "数量",
-    "search": "搜索…",
+    "search": "搜索库存",
     "status": "状态",
     "title": "我的库存",
     "unlink": "从商品取消关联",
@@ -4684,7 +4684,7 @@
     "noLocations": "未找到位置",
     "preset": "预设",
     "pressEnterToCreate": "按 Enter 键创建",
-    "searchOrCreate": "搜索或创建位置…"
+    "searchOrCreate": "搜索或添加位置"
   },
   "LotListItem": {
     "cancel": "取消",
@@ -4692,7 +4692,7 @@
     "created": "创建时间",
     "delete": "删除",
     "deleteError": "删除批次失败",
-    "deleteSuccess": "批次删除成功",
+    "deleteSuccess": "批次已删除",
     "edit": "编辑",
     "invalidQuantity": "数量不能为负",
     "listed": "已上架",
@@ -4708,13 +4708,13 @@
     "unlisted": "未上架",
     "unspecified": "未指定",
     "updateError": "更新批次失败",
-    "updateSuccess": "批次更新成功"
+    "updateSuccess": "批次已更新"
   },
   "LotListItemV2": {
     "available": "可用",
     "blueprint": "蓝图",
     "cancel": "取消",
-    "cannotReduceStock": "无法减少库存 — 部分单位已用于活跃订单",
+    "cannotReduceStock": "无法减少库存：这些单位在进行中的订单里",
     "craftedBy": "制作者",
     "created": "已创建",
     "edit": "编辑",
@@ -4733,7 +4733,7 @@
     "unlisted": "未上架",
     "unspecified": "未指定",
     "updateError": "更新批次失败",
-    "updateSuccess": "批次更新成功",
+    "updateSuccess": "批次已更新",
     "variantInfo": "变体信息"
   },
   "ManageMarketRedesign": {
@@ -4832,7 +4832,7 @@
     "wantedBy_other": "{{count}} 位买家想要"
   },
   "messages": {
-    "chatCreated": "聊天创建成功",
+    "chatCreated": "聊天已创建",
     "copy": "复制",
     "title": "消息",
     "viewChat": "查看聊天"
@@ -5014,7 +5014,7 @@
     "orgSettings": "设置",
     "pinned": "已固定",
     "recruiting": "招募",
-    "searchPlaceholder": "搜索导航…",
+    "searchPlaceholder": "搜索导航",
     "services": "服务",
     "settings": "设置",
     "shopPage": "店铺页面",
@@ -5072,7 +5072,7 @@
     "availabilityRequirement": "可用时间要求",
     "confirmDelete": "确定要删除此设置吗？",
     "delete": "删除",
-    "deletedSuccessfully": "设置删除成功！",
+    "deletedSuccessfully": "设置已删除",
     "deleteError": "删除设置失败。请重试。",
     "description": "配置在创建报价或报价转为订单时自动发送的自定义消息。",
     "enabled": "已启用",
@@ -5107,7 +5107,7 @@
     "requirementsDescription": "配置下单前必须满足的要求。",
     "requirementsTitle": "订单要求",
     "save": "保存设置",
-    "savedSuccessfully": "设置保存成功！",
+    "savedSuccessfully": "设置已保存",
     "saveError": "保存设置失败。请重试。",
     "saving": "保存中…",
     "stockDescription": "配置库存何时从你的库存中扣减。",
@@ -5188,13 +5188,13 @@
     "description": "管理你的组织已屏蔽其创建订单或报价的用户",
     "empty": "你的组织尚未屏蔽任何用户",
     "error": "加载组织屏蔽名单失败",
-    "searchPlaceholder": "搜索要屏蔽的用户…",
+    "searchPlaceholder": "搜索要屏蔽的用户",
     "selectedUser": "已选择用户",
     "title": "已屏蔽用户"
   },
   "OrgMemberSearch": {
     "label": "组织成员",
-    "placeholder": "搜索成员…"
+    "placeholder": "搜索成员"
   },
   "page": "1",
   "pages": {
@@ -5380,7 +5380,7 @@
     "qualityTiers": "品质层级",
     "qualityTiersDescription": "开采品质会被划分为离散的层级。范围内的原始品质映射为固定值。",
     "salvaged": "回收",
-    "search": "搜索资源…",
+    "search": "搜索资源",
     "title": "资源",
     "usedIn": "用于蓝图",
     "viewOnMarket": "在市场中查看"
@@ -5416,8 +5416,8 @@
       "revisionRequested": "已请求修改"
     },
     "success": {
-      "requested": "已成功请求修改评价",
-      "updated": "评价更新成功"
+      "requested": "已请求修改",
+      "updated": "评价已更新"
     },
     "title": {
       "editReview": "编辑评价"
@@ -5453,7 +5453,7 @@
     "heading": "出售物品",
     "listingTitle": "商品标题",
     "location": "位置（可选）",
-    "locationHelp": "买家可取货的地点 — 例如 Area18、Everus Harbor。",
+    "locationHelp": "买家可取货的地点，例如 Area18 或 Everus Harbor。",
     "needShop": "你需要先拥有店铺才能出售。请先从你的个人资料创建一个。",
     "negotiableType": "可议价",
     "noShops": "没有可用的店铺",
@@ -5471,14 +5471,14 @@
     "sellThrough": "通过…出售",
     "sellThroughHelp": "你的个人商店或你协助管理的组织店铺。",
     "storefront": "店面",
-    "subheading": "选择你要出售的物品 — 表单仅显示所需的字段。",
+    "subheading": "选择你要出售的物品。表单仅显示所需的字段。",
     "tier": "档位",
     "tierN": "档位 {{n}}",
     "title": "出售物品",
     "unitScu": "cSCU",
     "unitType": "单位类型",
     "unitUnit": "件",
-    "visualOnly": "在此阶段，自定义物品和套装仅供预览 — 尚不会被保存。",
+    "visualOnly": "自定义物品和套装目前仅供预览，尚不会被保存。",
     "whatSelling": "你要出售什么？",
     "removeQualityRow": "移除品质行",
     "removeBundleItem": "移除套装物品"
@@ -5537,7 +5537,7 @@
     "noLotsDesc": "库存批次保存你的商品可出售的数量。添加一个批次，开始跟踪本店的库存。",
     "order": "订单",
     "quantity": "数量",
-    "searchLots": "搜索批次…",
+    "searchLots": "搜索批次",
     "status": "状态",
     "user": "用户"
   },
@@ -5580,7 +5580,7 @@
     "previewListingLabel": "市场商品（示例）",
     "previewListingLightNote": "浅色模式：商品卡片无图片淡出（与实际市场一致）。",
     "previewNavbar": "导航栏",
-    "previewNavRowHover": "侧边栏行 — 悬停我",
+    "previewNavRowHover": "侧边栏行（悬停我）",
     "previewOutlinedInput": "边框 / 输入框",
     "previewOutlineHint": "使用边框颜色",
     "previewPaperSurface": "纸张表面",
@@ -5588,7 +5588,7 @@
     "previewSecondaryBtn": "次要",
     "previewSecondaryText": "次要文本",
     "previewSidebar": "侧边栏",
-    "previewSkeletonWaveHint": "骨架屏“波浪”微光使用此颜色 — 而非填充按钮悬停。",
+    "previewSkeletonWaveHint": "骨架屏“波浪”微光使用此颜色，而非填充按钮悬停。",
     "reset": "重置为默认",
     "resetConfirmMessage": "这将移除所有自定义主题设置并恢复默认主题。此操作无法撤销。",
     "resetConfirmTitle": "重置主题？",
@@ -5596,7 +5596,7 @@
     "resetSuccess": "主题已重置为默认",
     "save": "保存主题",
     "saveError": "保存主题失败",
-    "saveSuccess": "主题保存成功",
+    "saveSuccess": "主题已保存",
     "saving": "保存中…",
     "style": "样式",
     "unit": "单位"
@@ -5619,7 +5619,7 @@
     "to": "至",
     "transfer": "转移",
     "transferError": "转移库存失败",
-    "transferSuccess": "库存转移成功",
+    "transferSuccess": "库存已转移",
     "unspecified": "未指定"
   },
   "TransferLotDialogV2": {
@@ -5631,7 +5631,7 @@
     "title": "转移库存批次",
     "transfer": "转移",
     "transferError": "转移批次失败",
-    "transferSuccess": "批次转移成功",
+    "transferSuccess": "批次已转移",
     "unspecified": "未指定",
     "variant": "变体"
   },
@@ -5641,7 +5641,7 @@
     "dialogDescription": "确定要取消屏蔽此用户吗？他们将能够再次与你创建订单和报价。",
     "dialogTitle": "取消屏蔽 {{username}}",
     "error": "取消屏蔽用户失败",
-    "success": "已成功取消屏蔽 {{username}}"
+    "success": "已取消屏蔽 {{username}}"
   },
   "userActions": {
     "adminOpenIdentity": "在 管理 -> 身份 中打开",
@@ -5652,7 +5652,7 @@
   },
   "userSearch": {
     "noResults": "未找到用户",
-    "placeholder": "搜索用户…",
+    "placeholder": "搜索用户",
     "typeToSearch": "输入以搜索用户"
   },
   "whitelabel": {
@@ -5678,7 +5678,7 @@
       "headerTitle": "大宗商品",
       "loadError": "加载大宗商品失败。",
       "noResults": "未找到大宗商品。",
-      "searchPlaceholder": "搜索大宗商品…",
+      "searchPlaceholder": "搜索大宗商品",
       "acqFilter": {
         "all": "全部",
         "mined": "可开采",
@@ -5744,7 +5744,7 @@
       "gradeLabel": "等级",
       "loadError": "加载物品失败。",
       "noResults": "未找到结果。请尝试调整搜索条件。",
-      "searchPlaceholder": "搜索物品、类型、制造商…",
+      "searchPlaceholder": "搜索物品、类型和制造商",
       "sizeLabel": "尺寸"
     },
     "itemDetail": {
@@ -5763,7 +5763,7 @@
       "itemAttributes": "物品属性",
       "loadError": "加载物品详情失败。请重试。",
       "markOwned": "标记为已拥有",
-      "noRecipeWarning": "未找到此物品的制作配方——拆解组件未知。",
+      "noRecipeWarning": "未找到此物品的制作配方，因此拆解组件未知。",
       "notSoldNpc": "任何 NPC 商店均不出售",
       "openInCalculator": "在计算器中打开",
       "owned": "已拥有 ✓",
@@ -5800,7 +5800,7 @@
     },
     "locations": {
       "noResults": "未找到地点",
-      "search": "搜索地点…",
+      "search": "搜索地点",
       "title": "星图与地点"
     },
     "manufacturerDetail": {
@@ -5834,25 +5834,25 @@
       "processingHeader": "处理速度：{{speed}}",
       "title": "精炼方法",
       "speedDesc": {
-        "fast": "处理时间最短 — 快速获得精炼材料",
+        "fast": "处理时间最短：快速获得精炼材料",
         "normal": "处理时间均衡",
-        "slow": "处理时间最长 — 但通常产出更高"
+        "slow": "处理时间最长，但通常产出更高"
       },
       "qualityDesc": {
-        "careful": "产出最高 — 精炼时材料损失最小",
-        "normal": "产出均衡 — 材料损失适中",
-        "wasteful": "产出最低 — 材料损失较大，但更便宜"
+        "careful": "产出最高：精炼时材料损失最小",
+        "normal": "产出均衡：材料损失适中",
+        "wasteful": "产出最低：材料损失较大，但更便宜"
       },
       "bestFor": {
-        "fastCareful": "综合最佳 — 速度快且产出高",
+        "fastCareful": "综合最佳：速度快且产出高",
         "fastNormal": "周转快，产出尚可",
         "fastWasteful": "最快速度，接受材料损失",
-        "normalCareful": "热门选择 — 产出好，耗时合理",
+        "normalCareful": "产出好，耗时合理",
         "normalNormal": "各方面均衡",
         "normalWasteful": "较快，但产出较低",
-        "slowCareful": "产出最高 — 昂贵矿石值得等待",
+        "slowCareful": "产出最高：昂贵矿石值得等待",
         "slowNormal": "慢但稳定",
-        "slowWasteful": "又慢又浪费 — 一般应避免"
+        "slowWasteful": "又慢又浪费：一般应避免"
       }
     },
     "shipBrowser": {
@@ -5877,7 +5877,7 @@
       "headerTitle": "舰船与载具",
       "hoverbike": "悬浮摩托",
       "noResults": "未找到结果。",
-      "searchPlaceholder": "搜索舰船、载具、制造商…",
+      "searchPlaceholder": "搜索舰船、载具和制造商",
       "sectionGround": "地面载具",
       "sectionHoverbikes": "悬浮摩托",
       "sectionShips": "舰船",
@@ -6096,7 +6096,7 @@
     "manageTitle": "链接到我们",
     "line": "在 SC Market 上找到我们的店铺：{{url}}",
     "verifyHint": "完全可选，验证不需要它：如果愿意，也可以把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的店铺。验证只检查上面的代码。",
-    "verifiedHint": "你的组织已验证！现在可以从 RSI 移除验证代码。如果愿意，可以在组织页面保留这一可选行，方便访客找到你们的店铺。只有代码可以移除；这一行可以保留。",
+    "verifiedHint": "你的组织已验证。现在可以从 RSI 移除验证代码。如果愿意，可以在组织页面保留这一可选行，方便访客找到你们的店铺。只有代码可以移除；这一行可以保留。",
     "manageHint": "可选：把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的店铺。它与验证无关，从不是必需的。",
     "copy": "复制此行",
     "copied": "已复制",
@@ -6230,7 +6230,7 @@
       "brandingAction": "查看缺少什么",
       "title": "设置你的店面",
       "done": "全部完成。分享你的店面链接，或把下面的小部件放到你的网站上。",
-      "intro": "每一步只需几分钟：争取在 15 分钟内发布第一个商品。",
+      "intro": "完成以下步骤，准备好你的店面。",
       "progress": "设置进度"
     },
     "enquiry": {
@@ -6331,7 +6331,7 @@
     },
     "directory": {
       "empty": "未找到店铺",
-      "search": "搜索店铺…",
+      "search": "搜索店铺",
       "sortLabel": "店铺排序",
       "sortMostSales": "销量最多",
       "sortNameAZ": "名称 A-Z",
@@ -6347,7 +6347,7 @@
       "created": "创建于 {{date}}",
       "createFirst": "创建你的第一家店铺",
       "customOrders": "定制订单",
-      "emptyBody": "创建店铺即可在 SC Market 开始出售，几分钟就能搭好店面。",
+      "emptyBody": "创建店铺即可在 SC Market 开始出售。",
       "emptyTitle": "你还没有店铺",
       "featureAnalytics": "追踪销量、评价和数据分析",
       "featureBranding": "自定义横幅和标志",
@@ -6379,7 +6379,7 @@
       "noReviewsBody": "订单完成后，评价会显示在这里",
       "notFound": "未找到店铺",
       "owner": "店主",
-      "searchListings": "搜索商品…",
+      "searchListings": "搜索商品",
       "since": "始于 {{date}}",
       "sortListings": "商品排序",
       "sortMostStock": "库存最多",
@@ -6468,9 +6468,9 @@
     "remaining": "剩余 {{n}}",
     "removeItemFailed": "移除商品失败",
     "rosterOnly": "仅限成员",
-    "searchBuyOrders": "搜索求购单…",
-    "searchItems": "搜索物品、分类…",
-    "searchItemsSellers": "搜索物品、分类、卖家…",
+    "searchBuyOrders": "搜索求购单",
+    "searchItems": "搜索物品和分类",
+    "searchItemsSellers": "搜索物品、分类和卖家",
     "selectVariant": "选择款式",
     "settingsMoved": "市场设置现已按店铺管理，请前往店铺设置页面。",
     "standardVariant": "标准",
@@ -6595,7 +6595,7 @@
     "missionGiver": "任务发布者",
     "missionGiverLower": "任务发布者",
     "missionGiverPlaceholder": "例如 Miles",
-    "missionNamePlaceholder": "任务名称…",
+    "missionNamePlaceholder": "任务名称",
     "nOfM": "{{m}} 选 {{n}}",
     "onceOnly": "仅一次",
     "partOfChain": "任务链的一环",
@@ -6615,7 +6615,7 @@
     "satisfaction": "满意度",
     "scope": "范围",
     "search": "搜索",
-    "searchPlaceholder": "搜索任务、星系、类别…",
+    "searchPlaceholder": "搜索任务、星系和类别",
     "shareable": "可共享",
     "shipCount_other": "{{count}} 艘舰船",
     "showEventMissions": "显示活动任务",
@@ -6647,7 +6647,7 @@
     "hostileRange_other": "{{range}} 敌对",
     "friendlyRange_other": "{{range}} 友方",
     "shipRange_other": "{{range}} 艘舰船",
-    "shipPoolTypes_other": "舰船池 — {{count}} 种",
+    "shipPoolTypes_other": "舰船池：{{count}} 种",
     "npcEncounters": "NPC 遭遇",
     "targets": "目标",
     "npcCount_other": "{{count}} 个 NPC",
@@ -6717,7 +6717,7 @@
     "totalValue": "总价值：",
     "version": "版本",
     "mostRecent": "最新",
-    "newBadge": "新！",
+    "newBadge": "新",
     "orderLimitViolation": "订单不符合规模或金额要求",
     "byName": "由 {{name}} 提供"
   },
@@ -6741,7 +6741,7 @@
       "collectionCount_other": "可获得的 {{count}} 个蓝图中已有 {{owned}} 个",
       "newThisWeek_other": "本周新增 {{count}} 个",
       "search": "搜索",
-      "searchPlaceholder": "物品或蓝图名称…",
+      "searchPlaceholder": "物品或蓝图名称",
       "category": "类别",
       "subcategory": "子类别",
       "tier": "层级",
@@ -6757,7 +6757,7 @@
       "ingredientPlaceholder": "例如 Hephaestanite",
       "resetFilters": "重置筛选",
       "filters": "筛选",
-      "searchBarPlaceholder": "搜索蓝图、材料、类别…",
+      "searchBarPlaceholder": "搜索蓝图、材料和类别",
       "loadError": "加载蓝图失败，请重试。",
       "columnItem": "物品",
       "columnTags": "标签",
@@ -6817,7 +6817,7 @@
     "importFromInventory": "从库存导入",
     "importFromInventoryOrg": "从库存导入（+ 组织）",
     "addMaterial": "添加材料",
-    "searchResources": "搜索资源…",
+    "searchResources": "搜索资源",
     "noMaterials": "请在上方搜索并添加材料",
     "removeMaterial": "移除材料",
     "weight": "权重：{{percent}}%",
@@ -6904,7 +6904,7 @@
     },
     "requisitions": {
       "gameItem": "游戏物品",
-      "searchByName": "按名称搜索…",
+      "searchByName": "按物品名称搜索",
       "createTitle": "创建采购申请",
       "fieldTitle": "标题",
       "descriptionOptional": "描述（可选）",
@@ -7009,7 +7009,7 @@
       "activity": {
         "targetedBuyOrder": "<b>{{buyer}}</b> 发送了 <b>{{item}}</b> 的定向求购单",
         "newRequisition": "来自 <b>{{buyer}}</b> 的新采购申请 <b>{{title}}</b>",
-        "orderCompleted": "订单 <b>{{title}}</b> 已完成 — <b>{{amount}} aUEC</b>"
+        "orderCompleted": "订单 <b>{{title}}</b> 已完成：<b>{{amount}} aUEC</b>"
       },
       "noActivity": "暂无近期动态",
       "activityTitle": "动态",
@@ -7059,7 +7059,7 @@
       "organizationShop": "组织店铺",
       "categoriesLanguages": "分类与语言",
       "selectOrgError": "请选择一个组织",
-      "created": "店铺创建成功！"
+      "created": "店铺已创建"
     },
     "settings": {
       "title": "店铺设置",
@@ -7286,7 +7286,7 @@
       "addFailed": "无法添加物品。",
       "title": "添加物品到购物清单",
       "searchItem": "搜索物品 *",
-      "searchPlaceholder": "输入以搜索…",
+      "searchPlaceholder": "搜索物品",
       "minChars_other": "请至少输入 {{count}} 个字符",
       "noItemsFound": "未找到物品",
       "howToGet": "你想如何获取此物品？",
@@ -7434,8 +7434,8 @@
       "siteSettings": "站点设置",
       "siteAccessHint": "控制谁可以访问你的白标站点。",
       "siteAccess": "站点访问权限",
-      "accessPublic": "公开 — 任何人都可浏览",
-      "accessInternal": "内部 — 需要登录",
+      "accessPublic": "公开（任何人都可浏览）",
+      "accessInternal": "内部（需要登录）",
       "requireMembership": "访问需要组织成员身份",
       "homepagePath": "首页路径",
       "homepagePathHelper": "自定义落地页路径。留空则使用默认页面。",
@@ -7498,7 +7498,7 @@
     },
     "summary": {
       "wasQuantity": "（原为 {{quantity}}）",
-      "newBadge": "新！"
+      "newBadge": "新"
     }
   },
   "adminUi": {
@@ -7519,7 +7519,7 @@
       "v1Off": "V1（关）",
       "v2On": "V2（开）",
       "rollout": "发布比例：{{percent}}%",
-      "notInEffect": "未生效——“已启用”处于关闭状态，因此无论此比例如何，所有用户都使用旧版体验。",
+      "notInEffect": "未生效：“已启用”处于关闭状态，因此无论此比例如何，所有用户都使用旧版体验。",
       "turnOnEnabled": "打开“已启用”",
       "rolloutPercentage": "发布比例",
       "saving": "保存中…",
@@ -7535,11 +7535,11 @@
       "searchByUsername": "按用户名搜索",
       "enabledForUser": "对此用户启用",
       "add": "添加",
-      "searchFlags": "搜索开关…",
+      "searchFlags": "搜索开关",
       "retry": "重试",
       "loadFailed": "无法加载功能开关。",
       "flagSummary_other": "默认：{{version}} · 发布比例：{{percent}}% · {{count}} 个覆盖",
-      "rolloutNotInEffect": "发布比例未生效——“已启用”处于关闭状态",
+      "rolloutNotInEffect": "发布比例未生效：“已启用”处于关闭状态",
       "noMatch": "没有符合搜索条件的开关",
       "noneConfigured": "尚未配置功能开关"
     },
@@ -7567,7 +7567,7 @@
       "noChanges": "无变化",
       "warnings_other": "{{count}} 条警告",
       "noDetails": "暂无详细信息",
-      "importSuccess": "游戏数据导入成功",
+      "importSuccess": "游戏数据已导入",
       "importFailed": "导入失败",
       "importStarted": "已开始导入",
       "uploadFailed": "上传失败",
@@ -7678,7 +7678,7 @@
       "typeLabel": "类型：",
       "applicableTo": "适用于：",
       "noTypes": "无类型",
-      "importSuccess_other": "成功导入 {{count}} 个属性",
+      "importSuccess_other": "已导入 {{count}} 个属性",
       "importPartial_other": "导入完成但有错误。已导入 {{count}} 个属性",
       "uuidPlaceholder": "输入游戏物品 UUID"
     },
@@ -7859,10 +7859,10 @@
     },
     "create": {
       "title": "创建 API 令牌",
-      "titleCreated": "令牌创建成功",
-      "successAlert": "你的 API 令牌已成功创建。请立即复制，因为它不会再次显示。",
+      "titleCreated": "令牌已创建",
+      "successAlert": "你的 API 令牌已就绪。请立即复制：它不会再次显示。",
       "tokenLabel": "API 令牌",
-      "copied": "已复制！",
+      "copied": "已复制",
       "copyToken": "复制令牌",
       "howToAuth": "<strong>如何进行身份验证：</strong>在 API 请求的 <code>Authorization</code> 请求头中包含该令牌：",
       "important": "<strong>重要：</strong>请妥善保管此令牌。它可按你授予的权限访问你的账户。如果丢失此令牌，你需要重新创建一个。",
@@ -7873,7 +7873,7 @@
     },
     "edit": {
       "title": "编辑 API 令牌",
-      "success": "令牌更新成功",
+      "success": "令牌已更新",
       "error": "无法更新令牌",
       "contractorAccessTitle": "承包商访问权限",
       "contractorAccessHelp": "将此令牌限制为特定承包商。留空则可访问所有承包商。",
@@ -7989,9 +7989,9 @@
       "privateHelp": "只有你可以查看此购物清单",
       "shareLink": "分享链接",
       "shareLinkHelp": "复制此链接，与他人分享你的心愿单",
-      "copied": "已复制！",
+      "copied": "已复制",
       "copyToClipboard": "复制到剪贴板",
-      "linkCopied": "链接已复制到剪贴板！",
+      "linkCopied": "链接已复制",
       "copyFailed": "无法复制链接，请手动复制。",
       "nowPublic": "购物清单现已公开。任何拥有链接的人都可以查看。",
       "nowPrivate": "购物清单现已设为私密。只有你可以查看。",
@@ -8065,13 +8065,13 @@
     },
     "oreBrowser": {
       "expShort": "爆炸：{{value}}",
-      "searchPlaceholder": "搜索矿石、星系、稀有度…",
+      "searchPlaceholder": "搜索矿石、星系和稀有度",
       "marketPrice": "市场价格",
       "locations": "地点",
       "unknownSystem": "未知"
     },
     "locationBrowser": {
-      "searchPlaceholder": "搜索地点、星系、类型…",
+      "searchPlaceholder": "搜索地点、星系和类型",
       "moreOres_other": "另外 {{count}} 种",
       "oreCount_other": "{{count}} 种矿石"
     }
@@ -8121,7 +8121,7 @@
       "tierValue": "等级 {{tier}}"
     },
     "search": {
-      "placeholder": "搜索…",
+      "placeholder": "搜索游戏数据",
       "ariaLabel": "搜索",
       "tags": {
         "illegal": "非法",
@@ -8169,7 +8169,7 @@
     "verification": {
       "pageTitle": "邮箱验证",
       "verifying": "正在验证你的邮箱地址…",
-      "successTitle": "邮箱已验证！",
+      "successTitle": "邮箱已验证",
       "failedTitle": "验证失败",
       "invalidTitle": "无效请求",
       "goToSettings": "前往邮箱设置"
@@ -8208,7 +8208,7 @@
       "loadingPriceChart": "正在加载价格图表…"
     },
     "commandPalette": {
-      "placeholder": "搜索页面、操作、商品…",
+      "placeholder": "搜索页面、操作和商品",
       "noResults": "没有与“{{query}}”匹配的结果",
       "hintNavigate": "导航",
       "hintSelect": "选择",
@@ -8239,7 +8239,7 @@
         "priceAlerts": "价格提醒",
         "priceAlertsDescription": "你的关注列表和提醒渠道",
         "myOrgs": "我的组织",
-        "shopOrders": "{{shop}} — 订单",
+        "shopOrders": "{{shop}}：订单",
         "createListing": "创建商品",
         "newMessage": "新消息",
         "toggleDarkMode": "切换深色模式"
@@ -8307,7 +8307,7 @@
     }
   },
   "uexImportUi": {
-    "success_other": "已从 UEX 成功导入 {{count}} 个商品中的 <strong>{{imported}}</strong> 个。",
+    "success_other": "已从 UEX 导入 {{count}} 个商品中的 <strong>{{imported}}</strong> 个。",
     "importMore": "继续导入",
     "intro": "从 UEXCorp 导入你的有效出售商品。输入你的 UEX 用户名以预览将要导入的内容。",
     "username": "UEX 用户名",
@@ -8480,7 +8480,7 @@
   },
   "sharedUi": {
     "emailVerification": {
-      "verified": "你的邮箱地址已成功验证！",
+      "verified": "你的邮箱地址已验证。",
       "errorGeneric": "验证过程中出错。",
       "invalidToken": "验证令牌无效或已过期。",
       "failedTryAgain": "邮箱验证失败，请重试。",
@@ -8552,7 +8552,7 @@
       "primary": "主要",
       "primaryContrast": "按钮文本",
       "primaryDark": "主要悬停（填充按钮）",
-      "usagePrimaryDark": "MUI 在填充主要按钮悬停时使用此颜色 — 不是“菜单和列表悬停”颜色。",
+      "usagePrimaryDark": "MUI 在填充主要按钮悬停时使用此颜色，不是“菜单和列表悬停”颜色。",
       "secondary": "次要",
       "bgDefault": "背景",
       "bgPaper": "纸张",
@@ -8563,7 +8563,7 @@
       "textSecondary": "次要文本",
       "outline": "边框颜色",
       "actionHover": "菜单和列表悬停",
-      "usageActionHover": "侧边栏行、菜单、自动补全 — 以及骨架屏“波浪”。不用于填充主要按钮。",
+      "usageActionHover": "侧边栏行、菜单、自动补全以及骨架屏“波浪”。不用于填充主要按钮。",
       "borderRadiusTopLevel": "卡片",
       "borderRadiusButton": "按钮",
       "borderRadiusChip": "标签",
@@ -8815,7 +8815,7 @@
       "body": "为物品设置目标价格并关注。当公开上架达到或低于该价格时，你会收到附带上架链接的提醒。暂停提醒可保留设置而不接收通知。"
     },
     "quickList": {
-      "title": "几秒钟上架物品",
+      "title": "通过一个表单上架物品",
       "body": "选择物品，确认价格和数量，然后发布。库存先填一个数量，之后随时可以按地点或品质拆分。"
     }
   },
@@ -9002,7 +9002,7 @@
     "seeListings": "查看商品",
     "empty": {
       "title": "目前没有人出售",
-      "body": "有这件物品？大约 15 秒就能上架。设置了价格提醒的买家会在价格符合目标时收到提醒。"
+      "body": "有这件物品？用 Quick List 上架。设置了价格提醒的买家会在价格符合目标时收到提醒。"
     },
     "listingCount_other": "{{formatted}} 个商品",
     "listedSoFar_other": "目前已上架 {{formatted}} 个。"
