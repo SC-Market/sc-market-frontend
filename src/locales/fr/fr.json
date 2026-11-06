@@ -869,6 +869,12 @@
     "availabilityFailed": "Impossible d'enregistrer la disponibilité",
     "emailFailed": "Impossible d'ajouter l'e-mail"
   },
+  "pagination": {
+    "currentPage": "Page {{page}}, page actuelle",
+    "goToPage": "Aller à la page {{page}}",
+    "navLabel": "Pagination",
+    "perPage": "Par page"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Voter pour cette publication"
   },

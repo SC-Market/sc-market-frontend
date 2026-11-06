@@ -869,6 +869,12 @@
     "availabilityFailed": "保存可用时间失败",
     "emailFailed": "添加邮箱失败"
   },
+  "pagination": {
+    "currentPage": "第 {{page}} 页，当前页",
+    "goToPage": "转到第 {{page}} 页",
+    "navLabel": "分页",
+    "perPage": "每页"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "为此帖点赞"
   },

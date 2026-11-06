@@ -3,22 +3,55 @@ import { PaginationItem, type PaginationRenderItemParams } from "@mui/material"
 import { Link } from "react-router-dom"
 import { pagedPath } from "../../seo/queryIndexing"
 
+/** The query param linked pages are numbered by (1-based, like `pagedPath`). */
+const PAGE_PARAM = "page"
+
+/**
+ * The href of page `pageNumber` (1-based) of a hub at `path`, keeping every
+ * other query param (filters, page size). Page 1 drops `page`, the same as
+ * `pagedPath`, so the first page is the hub's own URL.
+ */
+export function linkedPageHref(
+  path: string,
+  searchParams: URLSearchParams,
+  pageNumber: number,
+): string {
+  const params = new URLSearchParams(searchParams)
+  params.delete(PAGE_PARAM)
+  if ([...params.keys()].length === 0) return pagedPath(path, pageNumber)
+  if (pageNumber > 1) params.set(PAGE_PARAM, String(pageNumber))
+  return `${path}?${params}`
+}
+
+function isPlainLeftClick(event: React.MouseEvent): boolean {
+  return (
+    event.button === 0 &&
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey
+  )
+}
+
 /**
  * `renderItem` for a hub's MUI <Pagination>: page buttons become real links
  * (`/wiki/items?page=3`) so crawlers can walk the pages from the HTML,
- * prerendered pages included. A click is still an in-app navigation (the
- * router Link) and the Pagination's onChange runs as before. Only the bare
- * `?page=N` form is linked: other query params (filters) are noindex
- * variants, so their pages stay plain buttons.
+ * prerendered pages included, and middle/ctrl-click opens a page in a new
+ * tab. A plain click stays an in-app page change: the Pagination's onChange
+ * updates the URL and the router Link does not navigate a second time, so a
+ * page change is one history entry.
+ *
+ * Links keep the other query params (filters, page size). Those filtered
+ * variants are noindex, so their links are `rel="nofollow"`: crawlers still
+ * walk only the bare `?page=N` pages.
  */
 export function linkedPaginationItem(
   path: string,
   searchParams: URLSearchParams,
 ) {
-  const linkable = [...searchParams.keys()].every((key) => key === "page")
+  const filtered = [...searchParams.keys()].some((key) => key !== PAGE_PARAM)
   function LinkedPaginationItem(item: PaginationRenderItemParams) {
     if (
-      !linkable ||
       item.page === null ||
       item.disabled ||
       item.type === "start-ellipsis" ||
@@ -26,11 +59,19 @@ export function linkedPaginationItem(
     ) {
       return <PaginationItem {...item} />
     }
+    const { onClick, ...rest } = item
     return (
       <PaginationItem
         component={Link}
-        to={pagedPath(path, item.page)}
-        {...item}
+        to={linkedPageHref(path, searchParams, item.page)}
+        rel={filtered ? "nofollow" : undefined}
+        {...rest}
+        onClick={(event: React.MouseEvent<HTMLElement>) => {
+          // A modified click opens the page in a new tab: leave this one be.
+          if (!isPlainLeftClick(event)) return
+          event.preventDefault()
+          onClick(event)
+        }}
       />
     )
   }

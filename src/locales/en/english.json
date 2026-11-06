@@ -4131,6 +4131,12 @@
     "selectItem": "Select Item",
     "wikiPage": "Wiki Page"
   },
+  "pagination": {
+    "currentPage": "Page {{page}}, current page",
+    "goToPage": "Go to page {{page}}",
+    "navLabel": "Pagination",
+    "perPage": "Per page"
+  },
   "paymentTypes": {
     "box": "Box",
     "cscu": "cSCU",

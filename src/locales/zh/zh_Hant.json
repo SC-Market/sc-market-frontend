@@ -805,6 +805,12 @@
     "buy_order_filled_by": "你的收購單已成交，賣家：",
     "listing_paused_by_wipe": "你的商品已因遊戲重置暫停。輕點一下即可重新刊登。"
   },
+  "pagination": {
+    "currentPage": "第 {{page}} 頁，目前頁面",
+    "goToPage": "前往第 {{page}} 頁",
+    "navLabel": "分頁",
+    "perPage": "每頁"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "為此貼文按讚"
   },

@@ -869,6 +869,12 @@
     "availabilityFailed": "No se pudo guardar la disponibilidad",
     "emailFailed": "No se pudo añadir el correo"
   },
+  "pagination": {
+    "currentPage": "Página {{page}}, página actual",
+    "goToPage": "Ir a la página {{page}}",
+    "navLabel": "Paginación",
+    "perPage": "Por página"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Votar positivamente esta publicación"
   },

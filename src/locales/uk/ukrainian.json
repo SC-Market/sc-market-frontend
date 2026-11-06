@@ -872,6 +872,12 @@
     "availabilityFailed": "Не вдалося зберегти доступність",
     "emailFailed": "Не вдалося додати ел. пошту"
   },
+  "pagination": {
+    "currentPage": "Сторінка {{page}}, поточна сторінка",
+    "goToPage": "Перейти на сторінку {{page}}",
+    "navLabel": "Навігація сторінками",
+    "perPage": "На сторінці"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Підтримати цю публікацію"
   },

@@ -863,6 +863,12 @@
     "availabilityFailed": "対応可能時間を保存できませんでした",
     "emailFailed": "メールアドレスを追加できませんでした"
   },
+  "pagination": {
+    "currentPage": "{{page}}ページ（現在のページ）",
+    "goToPage": "{{page}}ページへ移動",
+    "navLabel": "ページ送り",
+    "perPage": "表示件数"
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "この投稿を高く評価"
   },
