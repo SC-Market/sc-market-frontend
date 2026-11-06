@@ -838,11 +838,6 @@
     "min_rating": "最低評分",
     "filters": "篩選"
   },
-  "selectLocation": {
-    "title": "地點",
-    "inputLabel": "來源（非強制）",
-    "helperText": "比如說護送和運輸服務，該訂單的出發地和開始時間都是什麼？協助服務的話，合約工該去哪裡找你？"
-  },
   "selectMarketListing": {
     "label": "選擇市場商品"
   },
@@ -5097,10 +5092,6 @@
     "searchPlaceholder": "搜尋要封鎖的使用者",
     "selectedUser": "已選使用者",
     "title": "已封鎖使用者"
-  },
-  "OrgMemberSearch": {
-    "label": "組織成員",
-    "placeholder": "搜尋成員"
   },
   "page": "1",
   "pages": {

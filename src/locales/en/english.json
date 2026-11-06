@@ -3985,10 +3985,6 @@
     "submitted": "Invites sent",
     "username": "Username"
   },
-  "OrgMemberSearch": {
-    "label": "Org Member",
-    "placeholder": "Search members"
-  },
   "page": "1",
   "pages": {
     "admin": {
@@ -4389,11 +4385,6 @@
   "select_all": "select all",
   "select_all_items": "Select all items",
   "select_rows_per_page": "Select rows per page",
-  "selectLocation": {
-    "helperText": "For Escort and Transport, for example, from where to where will the order occur? For Support, where should the contractor find you?",
-    "inputLabel": "Source (Optional)",
-    "title": "Location"
-  },
   "selectMarketListing": {
     "label": "Select Market Listing"
   },

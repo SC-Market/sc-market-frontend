@@ -902,11 +902,6 @@
     "min_rating": "最低评分",
     "filters": "筛选"
   },
-  "selectLocation": {
-    "title": "地点",
-    "inputLabel": "来源（非强制）",
-    "helperText": "比如说护送和运输服务，该订单的出发地和开始时间都是什么？协助服务的话，合约工该去哪里找你？"
-  },
   "selectMarketListing": {
     "label": "选择市场商品"
   },
@@ -5191,10 +5186,6 @@
     "searchPlaceholder": "搜索要屏蔽的用户",
     "selectedUser": "已选择用户",
     "title": "已屏蔽用户"
-  },
-  "OrgMemberSearch": {
-    "label": "组织成员",
-    "placeholder": "搜索成员"
   },
   "page": "1",
   "pages": {

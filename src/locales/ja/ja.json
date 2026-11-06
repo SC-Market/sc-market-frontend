@@ -896,11 +896,6 @@
     "min_rating": "最低評価",
     "filters": "フィルター"
   },
-  "selectLocation": {
-    "title": "場所",
-    "inputLabel": "出発地（任意）",
-    "helperText": "例えば護衛や輸送の場合、注文はどこからどこまで行われますか？サポートの場合、コントラクターはどこであなたを見つければよいですか？"
-  },
   "selectMarketListing": {
     "label": "マーケット出品を選択"
   },
@@ -5121,10 +5116,6 @@
     "searchPlaceholder": "ブロックするユーザーを検索",
     "selectedUser": "選択中のユーザー",
     "title": "ブロック済みユーザー"
-  },
-  "OrgMemberSearch": {
-    "label": "組織メンバー",
-    "placeholder": "メンバーを検索"
   },
   "page": "1",
   "pages": {

@@ -902,11 +902,6 @@
     "min_rating": "Note minimale",
     "filters": "Filtres"
   },
-  "selectLocation": {
-    "title": "Lieu",
-    "inputLabel": "Source (facultatif)",
-    "helperText": "Pour l'escorte et le transport, par exemple, d'où à où la commande aura-t-elle lieu ? Pour le soutien, où le prestataire doit-il vous trouver ?"
-  },
   "selectMarketListing": {
     "label": "Sélectionner une annonce du marché"
   },
@@ -5193,10 +5188,6 @@
     "searchPlaceholder": "Rechercher des utilisateurs à bloquer",
     "selectedUser": "Utilisateur sélectionné",
     "title": "Utilisateurs bloqués"
-  },
-  "OrgMemberSearch": {
-    "label": "Membre de l'org",
-    "placeholder": "Rechercher des membres"
   },
   "page": "1",
   "pages": {

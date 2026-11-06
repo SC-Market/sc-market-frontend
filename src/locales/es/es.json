@@ -902,11 +902,6 @@
     "min_rating": "Valoración mínima",
     "filters": "Filtros"
   },
-  "selectLocation": {
-    "title": "Ubicación",
-    "inputLabel": "Origen (opcional)",
-    "helperText": "Para Escolta y Transporte, por ejemplo, ¿de dónde a dónde se realizará el pedido? Para Soporte, ¿dónde debe encontrarte el contratista?"
-  },
   "selectMarketListing": {
     "label": "Seleccionar anuncio de mercado"
   },
@@ -5193,10 +5188,6 @@
     "searchPlaceholder": "Busca usuarios para bloquear",
     "selectedUser": "Usuario seleccionado",
     "title": "Usuarios bloqueados"
-  },
-  "OrgMemberSearch": {
-    "label": "Miembro de la org.",
-    "placeholder": "Buscar miembros"
   },
   "page": "1",
   "pages": {

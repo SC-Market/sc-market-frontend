@@ -387,8 +387,7 @@ export function SellFormRedesign() {
                     </Grid>
                   </Collapse>
 
-                  {/* Location — freeform (SelectLocation is a fixed-shape section;
-                      here we use a simple freeform field per §6.3). */}
+                  {/* Location — a simple freeform field per §6.3. */}
                   <TextField
                     fullWidth
                     label={t(

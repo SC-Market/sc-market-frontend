@@ -899,11 +899,6 @@
     "min_rating": "Mindestbewertung",
     "filters": "Filter"
   },
-  "selectLocation": {
-    "title": "Standort",
-    "inputLabel": "Quelle (optional)",
-    "helperText": "Zum Beispiel bei Eskorte und Transport: Von wo nach wo soll der Auftrag ausgeführt werden? Bei Support: Wo soll der Auftragnehmer dich finden?"
-  },
   "selectMarketListing": {
     "label": "Marktinserat auswählen"
   },
@@ -5157,10 +5152,6 @@
     "searchPlaceholder": "Benutzer zum Blockieren suchen",
     "selectedUser": "Ausgewählter Benutzer",
     "title": "Blockierte Benutzer"
-  },
-  "OrgMemberSearch": {
-    "label": "Organisationsmitglied",
-    "placeholder": "Mitglieder suchen"
   },
   "page": "1",
   "pages": {

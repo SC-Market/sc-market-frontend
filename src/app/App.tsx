@@ -5,7 +5,6 @@
  */
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
-import { SharedIntersectionObserver } from "../hooks/prefetch/usePrefetchOnVisible"
 import { useAppDispatch } from "../store/hooks"
 import { notificationApi } from "../features/notifications/api/notificationApi"
 import { usePeriodicBackgroundSync } from "../hooks/pwa/usePeriodicBackgroundSync"
@@ -80,18 +79,9 @@ export function App() {
 
       navigator.serviceWorker.addEventListener("message", messageHandler)
 
-      // Cleanup function
       return () => {
         navigator.serviceWorker.removeEventListener("message", messageHandler)
-        // Cleanup shared intersection observer
-        SharedIntersectionObserver.getInstance().cleanup()
       }
-    }
-
-    // Cleanup function to prevent memory leaks
-    return () => {
-      // Cleanup shared intersection observer
-      SharedIntersectionObserver.getInstance().cleanup()
     }
   }, [periodicSyncSupported, registerPeriodicSync, dispatch])
 
