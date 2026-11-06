@@ -34,7 +34,7 @@ import { Tooltip } from "@mui/material"
 import { ShieldRounded, BuildRounded } from "@mui/icons-material"
 
 import { useFormatters } from "../../util/format"
-import { common } from "@mui/material/colors"
+import { TagChip } from "../tags/TagChip"
 
 export interface MissionCardProps {
   mission: {
@@ -192,10 +192,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           {/* Tags — right after header, full width */}
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px", mb: 0.5 }}>
             {mission.star_system && (
-              <Chip
+              <TagChip
+                tag="location"
                 label={mission.star_system}
-                size="small"
-                variant="outlined"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -206,10 +205,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               />
             )}
             {mission.category && (
-              <Chip
+              <TagChip
+                tag="category"
                 label={getMissionTypeLabel(mission.category, t)}
-                size="small"
-                color="primary"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -220,10 +218,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               />
             )}
             {(mission.is_illegal || mission.legal_status === "ILLEGAL") && (
-              <Chip
+              <TagChip
+                tag="illegal"
                 label={t("missionsUi.illegal")}
-                size="small"
-                color="error"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -234,18 +231,16 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               />
             )}
             {mission.is_unique_mission && (
-              <Chip
+              <TagChip
+                tag="trait"
                 label={t("missionsUi.unique")}
-                size="small"
-                color="warning"
                 sx={microChip}
               />
             )}
             {mission.is_chain_starter && (
-              <Chip
+              <TagChip
+                tag="trait"
                 label={t("missionsUi.starter")}
-                size="small"
-                variant="outlined"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -256,17 +251,16 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               />
             )}
             {mission.is_chain_mission && !mission.is_chain_starter && (
-              <Chip
+              <TagChip
+                tag="trait"
                 label={t("missionsUi.chain")}
-                size="small"
-                variant="outlined"
                 sx={microChip}
               />
             )}
             {mission.associated_event && (
-              <Chip
+              <TagChip
+                tag="event"
                 label={mission.associated_event}
-                size="small"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -275,7 +269,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                     `/missions?show_events=true&event=${mission.associated_event}`,
                   )
                 }}
-                sx={{ ...microChip, bgcolor: "info.main", color: common.white }}
+                sx={microChip}
               />
             )}
             {mission.ship_encounter_count > 0 && (
@@ -283,7 +277,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                 icon={<ShieldRounded sx={{ fontSize: 14 }} />}
                 label={mission.ship_encounter_count}
                 size="small"
-                color="info"
                 variant="outlined"
                 sx={microChip}
               />
@@ -298,11 +291,10 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                 }
                 arrow
               >
-                <Chip
+                <TagChip
+                  tag="reward"
                   icon={<BuildRounded sx={{ fontSize: 14 }} />}
                   label={`${mission.blueprint_reward_count} BP`}
-                  size="small"
-                  color="success"
                   clickable
                   onClick={(e) => {
                     e.stopPropagation()

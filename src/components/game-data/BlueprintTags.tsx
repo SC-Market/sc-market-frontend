@@ -8,8 +8,7 @@
  */
 
 import React from "react"
-import { Chip, Stack, Tooltip, Typography } from "@mui/material"
-import type { SxProps, Theme } from "@mui/material"
+import { Stack, Tooltip, Typography } from "@mui/material"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
@@ -20,7 +19,7 @@ import type {
   BlueprintDetailResponse,
   BlueprintSearchResult,
 } from "../../features/game-data/api/gameDataApi"
-import { common } from "@mui/material/colors"
+import { TagChip } from "../tags/TagChip"
 
 /** The blueprint fields the tags are built from. */
 export type BlueprintTagSource = Pick<
@@ -134,7 +133,7 @@ export function BlueprintTags({
   const { t } = useTranslation()
   const nav = useNavigate()
   const micro = size === "micro"
-  const base: SxProps<Theme> = micro ? microChip : {}
+  const base = micro ? microChip : {}
   const show = (kind: BlueprintTagKind) => !hide.includes(kind)
   const modTags = blueprintModifierTags(bp.modifier_properties, t)
   // Cards stay compact: the first few, then "+N" (all of them in a tooltip).
@@ -164,66 +163,63 @@ export function BlueprintTags({
     }
   }
 
+  // Colours come from the tag type (components/tags/tagColors).
   const chips = (
     <>
       {show("owned") && isBlueprintOwned(bp) && (
-        <Chip
+        <TagChip
+          tag="owned"
           data-tag="owned"
           label={t("blueprintsUi.owned")}
-          size="small"
-          color="success"
           {...filterLink({ owned: "true" })}
           sx={base}
         />
       )}
       {show("default") && bp.source === "default" && (
-        <Chip
+        <TagChip
+          tag="source"
           data-tag="default"
           label={t("blueprintsUi.default")}
-          size="small"
-          variant="outlined"
           {...filterLink({ source: "default" })}
           sx={base}
         />
       )}
       {show("rarity") && bp.rarity && (
-        <Chip
+        <TagChip
+          tag="rarity"
+          rarity={bp.rarity}
           data-tag="rarity"
           label={bp.rarity}
-          size="small"
-          variant="outlined"
           {...filterLink({ rarity: bp.rarity })}
           sx={base}
         />
       )}
       {show("tier") && bp.tier && (
-        <Chip
+        <TagChip
+          tag="tier"
           data-tag="tier"
           label={
             micro ? `T${bp.tier}` : t("blueprintsUi.tierN", { tier: bp.tier })
           }
-          size="small"
-          sx={{ ...base, bgcolor: "warning.main", color: common.white }}
+          sx={base}
         />
       )}
       {show("manufacturer") && bp.manufacturer && manufacturerLabel && (
-        <Chip
+        <TagChip
+          tag="manufacturer"
           data-tag="manufacturer"
           label={manufacturerLabel}
           title={manufacturerLabel}
-          size="small"
-          variant="outlined"
           // The filter takes the code; the chip shows the name.
           {...filterLink({ mfr: bp.manufacturer })}
           sx={{ ...base, maxWidth: micro ? 160 : undefined }}
         />
       )}
       {show("category") && bp.item_category && (
-        <Chip
+        <TagChip
+          tag="category"
           data-tag="category"
           label={formatCategoryName(bp.item_category, t)}
-          size="small"
-          color="primary"
           {...filterLink({ category: bp.item_category })}
           sx={base}
         />
@@ -245,22 +241,20 @@ export function BlueprintTags({
             </Typography>
           )}
           {shownMods.map((tag) => (
-            <Chip
+            <TagChip
               key={tag}
+              tag="modifier"
               data-tag="modifier"
               label={tag}
-              size="small"
-              variant="outlined"
               sx={base}
             />
           ))}
           {hiddenMods.length > 0 && (
             <Tooltip title={hiddenMods.join(", ")} arrow>
-              <Chip
+              <TagChip
+                tag="modifier"
                 data-tag="modifier-more"
                 label={`+${hiddenMods.length}`}
-                size="small"
-                variant="outlined"
                 sx={base}
               />
             </Tooltip>

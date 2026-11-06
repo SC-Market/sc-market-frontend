@@ -25,15 +25,7 @@ import { Section } from "../../components/paper/Section"
 import { EmptyState } from "../../components/empty-states/EmptyState"
 
 import { useFormatters } from "../../util/format"
-import { blue, common, green, grey, orange, purple } from "@mui/material/colors"
-
-const RARITY_COLORS: Record<string, string> = {
-  common: grey[500],
-  uncommon: green[500],
-  rare: blue[500],
-  epic: purple[500],
-  legendary: orange[500],
-}
+import { TagChip } from "../../components/tags/TagChip"
 
 function dangerColor(
   value: number,
@@ -67,13 +59,10 @@ export function OreDetailContent({ ore, onClose }: Props) {
         alignItems="center"
       >
         {ore.rarity && (
-          <Chip
+          <TagChip
+            tag="rarity"
+            rarity={ore.rarity}
             label={ore.rarity.charAt(0).toUpperCase() + ore.rarity.slice(1)}
-            size="small"
-            sx={{
-              bgcolor: RARITY_COLORS[ore.rarity.toLowerCase()] || grey[600],
-              color: common.white,
-            }}
           />
         )}
         {ore.marketPrice != null && (

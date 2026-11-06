@@ -42,6 +42,7 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 import { useFormatters } from "../../util/format"
+import { TagChip } from "../../components/tags/TagChip"
 const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
 const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
@@ -129,13 +130,13 @@ function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
         <Typography variant="subtitle2" noWrap fontWeight={600} title={item.name}>{item.name}</Typography>
         <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
           {item.type && (
-            <Chip label={item.display_type || item.type} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <TagChip tag="category" label={item.display_type || item.type} sx={{ height: 18, fontSize: "0.65rem" }} />
           )}
           {item.size != null && (
-            <Chip label={`S${item.size}`} size="small" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <TagChip tag="size" label={`S${item.size}`} sx={{ height: 18, fontSize: "0.65rem" }} />
           )}
           {item.grade && (
-            <Chip label={item.grade} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <TagChip tag="tier" label={item.grade} sx={{ height: 18, fontSize: "0.65rem" }} />
           )}
         </Stack>
         {item.manufacturer && (
@@ -173,7 +174,7 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
         </Typography>
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>
-        <Chip label={item.display_type || item.type || "—"} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />
+        <TagChip tag="category" label={item.display_type || item.type || "—"} sx={{ height: 18, fontSize: "0.65rem" }} />
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>{item.size != null ? `S${item.size}` : "—"}</TableCell>
       <TableCell sx={{ py: 0.5 }}>{item.grade || "—"}</TableCell>

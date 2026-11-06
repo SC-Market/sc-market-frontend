@@ -4,7 +4,6 @@
 import React from "react"
 import {
   Typography,
-  Chip,
   Stack,
   Box,
   Table,
@@ -28,15 +27,8 @@ import type {
 import { Section } from "../../components/paper/Section"
 
 import { useFormatters } from "../../util/format"
-import { blue, green, grey, orange, purple } from "@mui/material/colors"
-
-const RARITY_COLORS: Record<string, string> = {
-  common: grey[500],
-  uncommon: green[500],
-  rare: blue[500],
-  epic: purple[500],
-  legendary: orange[500],
-}
+import { blue, green, orange } from "@mui/material/colors"
+import { TagChip } from "../../components/tags/TagChip"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -70,14 +62,10 @@ export function LocationDetailContent({ location }: Props) {
         useFlexGap
         alignItems="center"
       >
-        <Chip label={location.system} size="small" color="primary" />
-        <Chip label={location.locationType} size="small" variant="outlined" />
+        <TagChip tag="location" label={location.system} />
+        <TagChip tag="category" label={location.locationType} />
         {location.hasRefinery && (
-          <Chip
-            label={t("miningUi.location.refinery")}
-            size="small"
-            color="success"
-          />
+          <TagChip tag="trait" label={t("miningUi.location.refinery")} />
         )}
       </Stack>
 
@@ -97,19 +85,7 @@ export function LocationDetailContent({ location }: Props) {
             sx={{ pt: 1 }}
           >
             {location.amenities.map((a) => (
-              <Chip
-                key={a}
-                label={a}
-                size="small"
-                color={
-                  a.toLowerCase().includes("refinery")
-                    ? "success"
-                    : a.toLowerCase().includes("hospital") ||
-                        a.toLowerCase().includes("clinic")
-                      ? "info"
-                      : "default"
-                }
-              />
+              <TagChip key={a} tag="trait" label={a} />
             ))}
           </Stack>
         </Section>
@@ -192,16 +168,11 @@ function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    <Chip
+                    <TagChip
+                      tag="rarity"
+                      rarity={rarity}
                       label={rarity.charAt(0).toUpperCase() + rarity.slice(1)}
-                      size="small"
-                      sx={{
-                        bgcolor: (RARITY_COLORS[rarity] || grey[500]) + "22",
-                        color: RARITY_COLORS[rarity] || grey[500],
-                        fontWeight: 600,
-                        height: 20,
-                        fontSize: "0.7rem",
-                      }}
+                      sx={{ fontWeight: 600, height: 20, fontSize: "0.7rem" }}
                     />
                   </TableCell>
                   <TableCell align="right">

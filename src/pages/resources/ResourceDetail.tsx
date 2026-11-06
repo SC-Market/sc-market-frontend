@@ -32,6 +32,9 @@ import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
 
 import { useFormatters } from "../../util/format"
+import { TagChip } from "../../components/tags/TagChip"
+import { qualityTagSx } from "../../components/tags/tagColors"
+import { qualityValueColor } from "../../util/qualityColor"
 export function ResourceDetail() {
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -132,7 +135,7 @@ export function ResourceDetail() {
               </Typography>
               <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
                 {acquisitionMethods.map((m) => (
-                  <Chip key={m} label={m} size="small" />
+                  <TagChip key={m} tag="source" label={m} />
                 ))}
               </Stack>
             </Box>
@@ -218,14 +221,7 @@ export function ResourceDetail() {
                         <Chip
                           label={band.mappedValue}
                           size="small"
-                          color={
-                            band.mappedValue >= 900
-                              ? "primary"
-                              : band.mappedValue >= 700
-                                ? "info"
-                                : "default"
-                          }
-                          variant="outlined"
+                          sx={qualityTagSx(qualityValueColor(band.mappedValue))}
                         />
                       </TableCell>
                     </TableRow>

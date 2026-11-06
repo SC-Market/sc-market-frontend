@@ -8,7 +8,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Chip,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { inAppClick } from "../../components/links/inAppClick"
@@ -52,7 +51,8 @@ import {
 } from "@mui/icons-material"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
-import { blue, cyan, green, grey, orange } from "@mui/material/colors"
+import { blue, green, orange } from "@mui/material/colors"
+import { TagChip } from "../../components/tags/TagChip"
 
 // The API sends English display names for mining groups and location types;
 // translate the known ones, show anything else as sent.
@@ -217,16 +217,6 @@ export function MiningLocationBrowser() {
   )
 }
 
-const SYSTEM_COLORS: Record<string, string> = {
-  Stanton: cyan[500],
-  Pyro: orange[500],
-  Nyx: green[500],
-}
-
-function systemChipColor(system: string): string {
-  return SYSTEM_COLORS[system] || grey[500]
-}
-
 function LocationCard({
   location,
   onClick,
@@ -274,30 +264,23 @@ function LocationCard({
             sx={{ my: 0.5 }}
           >
             {systemDisplay && (
-              <Chip
+              <TagChip
+                tag="location"
                 label={systemDisplay}
-                size="small"
-                sx={{
-                  ...microChip,
-                  bgcolor: systemChipColor(systemDisplay) + "22",
-                  color: systemChipColor(systemDisplay),
-                  fontWeight: 600,
-                }}
+                sx={{ ...microChip, fontWeight: 600 }}
               />
             )}
             {location.locationType && (
-              <Chip
+              <TagChip
+                tag="category"
                 label={apiLabel(LOCATION_TYPE_KEYS, location.locationType, t)}
-                size="small"
-                variant="outlined"
                 sx={microChip}
               />
             )}
             {location.hasRefinery && (
-              <Chip
+              <TagChip
+                tag="trait"
                 label={t("miningUi.location.refinery")}
-                size="small"
-                color="success"
                 sx={microChip}
               />
             )}

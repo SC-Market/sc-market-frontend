@@ -41,23 +41,9 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 import { useFormatters } from "../../util/format"
-import {
-  blue,
-  common,
-  cyan,
-  green,
-  grey,
-  orange,
-  purple,
-} from "@mui/material/colors"
-
-const RARITY_COLORS: Record<string, string> = {
-  common: grey[500],
-  uncommon: green[500],
-  rare: blue[500],
-  epic: purple[500],
-  legendary: orange[500],
-}
+import { grey } from "@mui/material/colors"
+import { rarityColor as rarityQualityColor } from "../../util/qualityColor"
+import { TagChip } from "../../components/tags/TagChip"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -210,8 +196,7 @@ function OreCard({
   ore: OreSearchResult
   onClick: () => void
 }) {
-  const rarityColor =
-    RARITY_COLORS[(ore.rarity || "").toLowerCase()] || grey[600]
+  const rarityColor = rarityQualityColor(ore.rarity || "")?.bg ?? grey[600]
   const displayName = ore.displayName || friendlyName(ore.name)
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -269,15 +254,11 @@ function OreCard({
               {displayName}
             </Typography>
             {ore.rarity && (
-              <Chip
+              <TagChip
+                tag="rarity"
+                rarity={ore.rarity}
                 label={ore.rarity.charAt(0).toUpperCase() + ore.rarity.slice(1)}
-                size="small"
-                sx={{
-                  ...microChip,
-                  bgcolor: rarityColor,
-                  color: common.white,
-                  ml: 0.5,
-                }}
+                sx={{ ...microChip, ml: 0.5 }}
               />
             )}
           </Box>
@@ -350,12 +331,6 @@ function OreCard({
   )
 }
 
-const SYSTEM_COLORS: Record<string, string> = {
-  Stanton: cyan[500],
-  Pyro: orange[500],
-  Nyx: green[500],
-}
-
 function OreLocationChips({
   locations,
 }: {
@@ -377,18 +352,15 @@ function OreLocationChips({
   return (
     <Box sx={{ mt: 0.5 }}>
       {Array.from(bySystem.entries()).map(([sys, locs]) => {
-        const color = SYSTEM_COLORS[sys] || grey[500]
         return (
           <Box key={sys} sx={{ mb: 0.25 }}>
-            <Chip
+            <TagChip
+              tag="location"
               label={sys}
-              size="small"
               sx={{
                 height: 16,
                 fontSize: "0.6rem",
                 fontWeight: 700,
-                bgcolor: color + "22",
-                color,
                 mr: 0.5,
                 mb: 0.25,
               }}

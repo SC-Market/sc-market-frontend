@@ -6,6 +6,7 @@ import {
 } from "@mui/material"
 import { deepmerge } from "@mui/utils"
 import { applyContrastFloors } from "./contrast"
+import { applyTagPalette } from "./tagPalette"
 
 /**
  * Build a theme from layered options (base, then main/light, then a theme's
@@ -24,7 +25,7 @@ export function createAppTheme(...layers: (ThemeOptions | undefined)[]): Theme {
     {},
   )
   return responsiveFontSizes(
-    applyFocusRing(applyContrastFloors(createTheme(options))),
+    applyTagPalette(applyFocusRing(applyContrastFloors(createTheme(options)))),
   )
 }
 

@@ -83,3 +83,21 @@ export function qualityRangeChip(
   }
   return null
 }
+
+/** Rarity names on the quality ladder: common is tier 1, legendary tier 5. */
+export const RARITY_TIERS = {
+  common: 1,
+  uncommon: 2,
+  rare: 3,
+  epic: 4,
+  legendary: 5,
+} as const
+
+/**
+ * Quality colour for a rarity name (any case), or null for a name that isn't
+ * on the ladder (it is shown as a neutral tag, not guessed into a tier).
+ */
+export function rarityColor(rarity: string): QualityColor | null {
+  const tier = RARITY_TIERS[rarity.toLowerCase() as keyof typeof RARITY_TIERS]
+  return tier ? QUALITY_TIER_COLORS[tier] : null
+}

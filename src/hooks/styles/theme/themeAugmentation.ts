@@ -1,4 +1,5 @@
 import type {} from "@mui/x-data-grid/themeAugmentation"
+import type { TagPalette } from "./tagPalette"
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
@@ -81,6 +82,11 @@ declare module "@mui/material/styles" {
     outline: OutlineColor
     /** Neutral controls: secondary-role buttons, outlined chips. */
     neutral: Palette["primary"]
+    /**
+     * Categorical tag colours, derived per theme (./tagPalette). Read them
+     * through components/tags/tagColors, never per call site.
+     */
+    tag: TagPalette
   }
 
   interface PaletteOptions {

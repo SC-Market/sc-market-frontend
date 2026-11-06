@@ -42,7 +42,7 @@ import { missionGiver, usableGiver } from "../../seo/missionText"
 import { missionHubText } from "../../seo/missionHubs"
 
 import { useFormatters } from "../../util/format"
-import { common } from "@mui/material/colors"
+import { TagChip } from "../tags/TagChip"
 
 // ============================================================================
 // Helpers
@@ -123,20 +123,20 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
   })
   const giver = missionGiver(m)
 
+  // Colours come from the tag type (components/tags/tagColors).
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
       {m.star_system && (
-        <Chip
+        <TagChip
+          tag="location"
           label={m.star_system}
-          size="small"
-          variant="outlined"
           {...go({ system: m.star_system! })}
         />
       )}
       {m.category && (
-        <Chip
+        <TagChip
+          tag="category"
           label={getMissionTypeLabel(m.category, t)}
-          size="small"
           {...go({ category: m.category })}
           icon={
             getMissionIcon(m.category) ? (
@@ -149,59 +149,43 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
           }
         />
       )}
-      {giver && (
-        <Chip
-          label={giver}
-          size="small"
-          variant="outlined"
-          {...go({ giver })}
-        />
-      )}
+      {giver && <TagChip tag="faction" label={giver} {...go({ giver })} />}
       {(m.is_illegal || m.legal_status === "ILLEGAL") && (
-        <Chip
+        <TagChip
+          tag="illegal"
           label={t("missionsUi.illegal")}
-          size="small"
-          color="error"
           {...go({ legal: "ILLEGAL" })}
         />
       )}
       {m.is_unique_mission && (
-        <Chip label={t("missionsUi.unique")} size="small" color="warning" />
+        <TagChip tag="trait" label={t("missionsUi.unique")} />
       )}
       {m.is_chain_starter && (
-        <Chip
+        <TagChip
+          tag="trait"
           label={t("missionsUi.starter")}
-          size="small"
-          variant="outlined"
           {...go({ chain: "true" })}
         />
       )}
       {m.is_chain_mission && !m.is_chain_starter && (
-        <Chip label={t("missionsUi.chain")} size="small" variant="outlined" />
+        <TagChip tag="trait" label={t("missionsUi.chain")} />
       )}
       {m.is_shareable && (
-        <Chip
+        <TagChip
+          tag="trait"
           label={t("missionsUi.shareable")}
-          size="small"
-          variant="outlined"
           {...go({ shareable: "true" })}
         />
       )}
       {m.associated_event && (
-        <Chip
+        <TagChip
+          tag="event"
           label={m.associated_event}
-          size="small"
           {...go({ show_events: "true", event: m.associated_event! })}
-          sx={{ bgcolor: "info.main", color: common.white }}
         />
       )}
       {m.difficulty_level && (
-        <Chip
-          label={`D${m.difficulty_level}`}
-          size="small"
-          color="warning"
-          variant="outlined"
-        />
+        <TagChip tag="tier" label={`D${m.difficulty_level}`} />
       )}
     </Stack>
   )
@@ -958,10 +942,9 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
                   />
                 </RouterLink>
                 {pm.category && (
-                  <Chip
+                  <TagChip
+                    tag="category"
                     label={getMissionTypeLabel(pm.category, t)}
-                    size="small"
-                    variant="outlined"
                   />
                 )}
               </Stack>

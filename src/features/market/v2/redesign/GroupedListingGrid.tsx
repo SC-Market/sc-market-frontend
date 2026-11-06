@@ -72,6 +72,7 @@ import { remainingQuantity } from "../../domain/buyOrders"
 
 import { useFormatters, useNow } from "../../../../util/format"
 import { useAddToCart } from "../../hooks/useCartActions"
+import { TagChip } from "../../../../components/tags/TagChip"
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
  *
@@ -163,10 +164,9 @@ function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
         />
       )}
       {listing.has_bulk_discount && (
-        <Chip
+        <TagChip
+          tag="discount"
           label={t("market.bulkDiscount", "BULK")}
-          color="info"
-          size="small"
           sx={chipSx}
         />
       )}
@@ -504,10 +504,9 @@ function GroupCard({
                 }}
               />
               {anyBulkDiscount && (
-                <Chip
+                <TagChip
+                  tag="discount"
                   label={t("market.bulkDiscount", "BULK DISCOUNT")}
-                  color="info"
-                  size="small"
                   sx={CARD_CHIP_SX}
                 />
               )}

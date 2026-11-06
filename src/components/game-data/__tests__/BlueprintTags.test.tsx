@@ -7,6 +7,8 @@ import "../../../util/i18n"
 import React from "react"
 import { render, screen, within } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
+import { ThemeProvider } from "@mui/material"
+import { mainTheme } from "../../../hooks/styles/theme/mainTheme"
 import { BlueprintCard } from "../BlueprintCard"
 import {
   BlueprintTags,
@@ -215,6 +217,30 @@ describe("BlueprintTags", () => {
       </MemoryRouter>,
     )
     expect(screen.getByText("volt")).toBeInTheDocument()
+  })
+
+  it("colours each tag by its type (components/tags/tagColors)", () => {
+    const root = render(
+      <ThemeProvider theme={mainTheme}>
+        <MemoryRouter>
+          <BlueprintTags
+            blueprint={{ ...blueprintTagsFromDetail(detail), user_owns: true }}
+            size="small"
+          />
+        </MemoryRouter>
+      </ThemeProvider>,
+    ).container
+    const typeOf = (kind: string) =>
+      root.querySelector(`[data-tag="${kind}"]`)!.getAttribute("data-tag-type")
+    expect(typeOf("owned")).toBe("owned")
+    expect(typeOf("default")).toBe("source")
+    expect(typeOf("rarity")).toBe("rarity")
+    expect(typeOf("tier")).toBe("tier")
+    expect(typeOf("manufacturer")).toBe("manufacturer")
+    expect(typeOf("category")).toBe("category")
+    expect(typeOf("modifier")).toBe("modifier")
+    const tier = getComputedStyle(root.querySelector('[data-tag="tier"]')!)
+    expect(tier.backgroundColor).toBe(mainTheme.palette.tag.amber.tint)
   })
 
   it("passes the detail's manufacturer name through", () => {

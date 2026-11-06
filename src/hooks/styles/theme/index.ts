@@ -27,3 +27,11 @@ export { getBaseComponentOverrides } from "./baseComponentOverrides"
 export { mainThemeOptions, mainTheme } from "./mainTheme"
 export { lightThemeOptions, lightTheme } from "./lightTheme"
 export { createAppTheme } from "./createAppTheme"
+export { TAG_HUES, TAG_MEANINGS, TAG_TONES, getTagPalette } from "./tagPalette"
+export type {
+  TagColor,
+  TagHue,
+  TagMeaning,
+  TagPalette,
+  TagTone,
+} from "./tagPalette"

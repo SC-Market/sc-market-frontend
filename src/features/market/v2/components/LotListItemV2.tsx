@@ -33,6 +33,9 @@ import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useFormatters, useNow } from "../../../../util/format"
 import { useEditLot } from "../../hooks/useStockLotActions"
+import { TagChip } from "../../../../components/tags/TagChip"
+import { qualityTagSx } from "../../../../components/tags/tagColors"
+import { qualityTierColor } from "../../../../util/qualityColor"
 
 export interface LotListItemV2Props {
   lot: StockLotDetail
@@ -282,14 +285,9 @@ export function LotListItemV2({
               <Chip
                 label={`${t("LotListItemV2.tier", "Tier")} ${lot.variant.attributes.quality_tier}`}
                 size="small"
-                color={
-                  lot.variant.attributes.quality_tier >= 4
-                    ? "success"
-                    : lot.variant.attributes.quality_tier >= 3
-                      ? "primary"
-                      : "default"
-                }
-                variant="outlined"
+                sx={qualityTagSx(
+                  qualityTierColor(lot.variant.attributes.quality_tier),
+                )}
               />
             )}
             {lot.variant.attributes.quality_value !== undefined && (
@@ -300,17 +298,15 @@ export function LotListItemV2({
               />
             )}
             {lot.variant.attributes.crafted_source && (
-              <Chip
+              <TagChip
+                tag="source"
                 label={lot.variant.attributes.crafted_source}
-                size="small"
-                variant="outlined"
               />
             )}
             {lot.variant.attributes.blueprint_tier && (
-              <Chip
+              <TagChip
+                tag="tier"
                 label={`${t("LotListItemV2.blueprint", "Blueprint")} T${lot.variant.attributes.blueprint_tier}`}
-                size="small"
-                variant="outlined"
               />
             )}
           </Stack>

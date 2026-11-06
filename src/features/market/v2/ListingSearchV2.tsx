@@ -106,6 +106,7 @@ import {
   firstScreenCards,
   useFirstScreenRender,
 } from "../../../components/grid/firstScreen"
+import { TagChip } from "../../../components/tags/TagChip"
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -1108,10 +1109,9 @@ export function ListingCardV2({
                 />
               )}
               {listing.has_bulk_discount && (
-                <Chip
+                <TagChip
+                  tag="discount"
                   label={t("market.bulkDiscount", "BULK DISCOUNT")}
-                  color="info"
-                  size="small"
                   sx={CARD_CHIP_SX}
                 />
               )}

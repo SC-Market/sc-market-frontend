@@ -51,6 +51,7 @@ import { WatchPriceButton } from "../../features/price-alerts/components/WatchPr
 import { QuickListProvider, SellYoursButton } from "../../features/market/quick-list/SellYours"
 
 import { useFormatters } from "../../util/format"
+import { TagChip } from "../../components/tags/TagChip"
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
 const TAB_DISASSEMBLY = 2
@@ -154,10 +155,10 @@ export function WikiItemDetail() {
                   )}
                   <Box sx={{ flex: 1 }}>
                     <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
-                      {item.type && <Chip label={item.type} color="primary" />}
-                      {item.size && <Chip label={`${t("wiki.itemDetail.size", "Size")} ${item.size}`} />}
-                      {item.grade && <Chip label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
-                      {item.manufacturer && <Chip label={item.manufacturer_name ?? item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
+                      {item.type && <TagChip tag="category" size="medium" label={item.type} />}
+                      {item.size && <TagChip tag="size" size="medium" label={`${t("wiki.itemDetail.size", "Size")} ${item.size}`} />}
+                      {item.grade && <TagChip tag="tier" size="medium" label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
+                      {item.manufacturer && <TagChip tag="manufacturer" size="medium" label={item.manufacturer_name ?? item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
                     </Stack>
 
                     <Stack direction="row" gap={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
@@ -269,8 +270,8 @@ export function WikiItemDetail() {
                         <Box>
                           <Typography variant="subtitle1" fontWeight="bold">{bp.blueprint_name}</Typography>
                           <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                            {bp.rarity && <Chip label={bp.rarity} size="small" />}
-                            {bp.tier && <Chip label={`${t("wiki.itemDetail.tier", "Tier")} ${bp.tier}`} size="small" />}
+                            {bp.rarity && <TagChip tag="rarity" rarity={bp.rarity} label={bp.rarity} />}
+                            {bp.tier && <TagChip tag="tier" label={`${t("wiki.itemDetail.tier", "Tier")} ${bp.tier}`} />}
                           </Stack>
                         </Box>
                         {bp.crafting_time_seconds && (

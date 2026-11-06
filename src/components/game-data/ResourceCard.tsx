@@ -20,6 +20,7 @@ import { type ResourceSearchResult } from "../../features/game-data/api/gameData
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 import { useFormatters } from "../../util/format"
+import { TagChip } from "../tags/TagChip"
 interface ResourceCardProps {
   resource: ResourceSearchResult
   to?: string
@@ -70,12 +71,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
             sx={{ mb: 1 }}
           >
             {acquisitionMethods.map((method) => (
-              <Chip
-                key={method}
-                label={method}
-                size="small"
-                variant="outlined"
-              />
+              <TagChip key={method} tag="source" label={method} />
             ))}
           </Stack>
           {resource.quality_bands && resource.quality_bands.length > 0 && (
@@ -127,7 +123,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
                   count: resource.blueprint_count,
                 })}
                 size="small"
-                color="info"
+                variant="outlined"
               />
             )}
           </Stack>
