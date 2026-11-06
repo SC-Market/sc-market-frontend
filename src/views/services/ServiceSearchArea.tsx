@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
+import SearchIcon from "@mui/icons-material/SearchRounded"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { orderIcons } from "../../features/orders/components/orderIcons"
 import { PAYMENT_TYPES } from "../../util/constants"

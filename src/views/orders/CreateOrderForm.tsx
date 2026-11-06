@@ -26,7 +26,7 @@ import type { Service, PaymentType } from "../../features/orders/domain/types"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
-import { CheckCircle, Warning } from "@mui/icons-material"
+import { CheckCircleRounded, WarningRounded } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
@@ -135,7 +135,9 @@ const CreateOrderFormComponent = React.forwardRef<
         <Grid item xs={12}>
           <Alert
             severity={hasAvailabilitySet ? "success" : "warning"}
-            icon={hasAvailabilitySet ? <CheckCircle /> : <Warning />}
+            icon={
+              hasAvailabilitySet ? <CheckCircleRounded /> : <WarningRounded />
+            }
             sx={{ mb: 2 }}
           >
             <AlertTitle>

@@ -20,11 +20,11 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  Add,
-  Delete,
-  OpenInNew,
-  Visibility,
-  VisibilityOff,
+  AddRounded,
+  DeleteRounded,
+  OpenInNewRounded,
+  VisibilityRounded,
+  VisibilityOffRounded,
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
 import {
@@ -215,9 +215,9 @@ export function WhiteLabelSettings() {
                 secondaryAction={
                   <IconButton edge="end" onClick={() => toggleTab(tab.key)}>
                     {disabledTabs.has(tab.key) ? (
-                      <VisibilityOff />
+                      <VisibilityOffRounded />
                     ) : (
-                      <Visibility color="primary" />
+                      <VisibilityRounded color="primary" />
                     )}
                   </IconButton>
                 }
@@ -256,7 +256,7 @@ export function WhiteLabelSettings() {
                       edge="end"
                       onClick={() => removeCustomTab(i)}
                     >
-                      <Delete />
+                      <DeleteRounded />
                     </IconButton>
                   }
                 >
@@ -278,7 +278,7 @@ export function WhiteLabelSettings() {
                         {ct.label}
                         {isExternal(ct.path) && (
                           <Chip
-                            icon={<OpenInNew sx={{ fontSize: 14 }} />}
+                            icon={<OpenInNewRounded sx={{ fontSize: 14 }} />}
                             label={t("orgAdminUi.whiteLabel.opensInNewTab")}
                             size="small"
                             variant="outlined"
@@ -327,7 +327,7 @@ export function WhiteLabelSettings() {
               variant="outlined"
               onClick={addCustomTab}
               disabled={!newLabel.trim() || !newPath.trim() || !!newPathError}
-              startIcon={<Add />}
+              startIcon={<AddRounded />}
               sx={{ whiteSpace: "nowrap", mt: "4px" }}
             >
               {t("orgAdminUi.whiteLabel.add")}

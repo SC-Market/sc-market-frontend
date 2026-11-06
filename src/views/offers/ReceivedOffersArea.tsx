@@ -34,13 +34,13 @@ import {
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link } from "react-router-dom"
 import {
-  Announcement,
-  Cancel,
-  CheckCircle,
-  ExpandLess,
-  ExpandMore,
-  HourglassTop,
-  Search,
+  AnnouncementRounded,
+  CancelRounded,
+  CheckCircleRounded,
+  ExpandLessRounded,
+  ExpandMoreRounded,
+  HourglassTopRounded,
+  SearchRounded,
 } from "@mui/icons-material"
 import { a11yProps } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
@@ -161,13 +161,19 @@ export function OfferRow(props: {
 
   const [statusColor, icon] = useMemo(() => {
     if (statusKey === "waitingSeller") {
-      return ["warning" as const, <Announcement key={"warning"} />] as const
+      return [
+        "warning" as const,
+        <AnnouncementRounded key={"warning"} />,
+      ] as const
     } else if (statusKey === "waitingCustomer") {
-      return ["info" as const, <HourglassTop key={"info"} />] as const
+      return ["info" as const, <HourglassTopRounded key={"info"} />] as const
     } else if (statusKey === "rejected") {
-      return ["error" as const, <Cancel key={"error"} />] as const
+      return ["error" as const, <CancelRounded key={"error"} />] as const
     } else {
-      return ["success" as const, <CheckCircle key={"success"} />] as const
+      return [
+        "success" as const,
+        <CheckCircleRounded key={"success"} />,
+      ] as const
     }
   }, [statusKey])
 
@@ -584,8 +590,10 @@ export function OffersViewPaginated(props: {
               : t("OffersViewPaginated.offers")}
           </Typography>
           <Button
-            startIcon={<Search />}
-            endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
+            startIcon={<SearchRounded />}
+            endIcon={
+              filtersOpen ? <ExpandLessRounded /> : <ExpandMoreRounded />
+            }
             onClick={() => setFiltersOpen(!filtersOpen)}
             sx={{
               ml: { xs: 0, sm: 2 },

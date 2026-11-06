@@ -7,7 +7,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material"
-import { Block, PersonRemove } from "@mui/icons-material"
+import { BlockRounded, PersonRemoveRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useProfileGetBlocklistQuery } from "../../features/profile/api/profileApi"
 import {
@@ -114,7 +114,7 @@ function BlockedUserList(props: {
               {props.unblocking ? (
                 <CircularProgress size={20} />
               ) : (
-                <PersonRemove />
+                <PersonRemoveRounded />
               )}
             </IconButton>
           </Box>
@@ -222,7 +222,7 @@ export function BlocklistSettings() {
               <Button
                 variant="contained"
                 color="error"
-                startIcon={<Block />}
+                startIcon={<BlockRounded />}
                 onClick={handleBlockUser}
                 disabled={blocking}
               >

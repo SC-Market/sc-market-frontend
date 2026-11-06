@@ -27,8 +27,8 @@ import {
   CloudUploadRounded,
   CheckCircleRounded,
   ErrorRounded,
-  ExpandMore,
-  ExpandLess,
+  ExpandMoreRounded,
+  ExpandLessRounded,
 } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
@@ -143,7 +143,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
               : "—"}
         </TableCell>
         <TableCell>
-          <IconButton size="small">{open ? <ExpandLess /> : <ExpandMore />}</IconButton>
+          <IconButton size="small">{open ? <ExpandLessRounded /> : <ExpandMoreRounded />}</IconButton>
         </TableCell>
       </TableRow>
       <TableRow>

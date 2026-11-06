@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback, useMemo, useState } from "react"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import OpenInNewIcon from "@mui/icons-material/OpenInNewRounded"
 import { useActivateAccountLink } from "../../features/profile/api/profileApi"
 import { useNavigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

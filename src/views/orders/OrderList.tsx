@@ -37,7 +37,11 @@ import {
   useOrderSearch,
   type OrderSearchResult,
 } from "../../features/orders/hooks/useOrderSearch"
-import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
+import {
+  ExpandLessRounded,
+  ExpandMoreRounded,
+  SearchRounded,
+} from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
@@ -532,8 +536,10 @@ export function OrdersTableView(props: {
             {title}
           </Typography>
           <Button
-            startIcon={<Search />}
-            endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
+            startIcon={<SearchRounded />}
+            endIcon={
+              filtersOpen ? <ExpandLessRounded /> : <ExpandMoreRounded />
+            }
             onClick={() => setFiltersOpen(!filtersOpen)}
             sx={{
               ml: { xs: 0, sm: 2 },

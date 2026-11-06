@@ -14,7 +14,7 @@ import {
   Collapse,
   Autocomplete,
 } from "@mui/material"
-import { ExpandMore, ExpandLess } from "@mui/icons-material"
+import { ExpandMoreRounded, ExpandLessRounded } from "@mui/icons-material"
 import {
   useGetContractorAuditLogsQuery,
   useSearchContractorMembersQuery,
@@ -362,7 +362,11 @@ export function OrgAuditLogs() {
                           onClick={() => toggleExpanded(entry.audit_log_id)}
                           disabled={!hasMetadata}
                         >
-                          {isExpanded ? <ExpandLess /> : <ExpandMore />}
+                          {isExpanded ? (
+                            <ExpandLessRounded />
+                          ) : (
+                            <ExpandMoreRounded />
+                          )}
                         </IconButton>
                       </TableCell>
                       <TableCell>

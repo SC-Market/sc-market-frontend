@@ -13,7 +13,7 @@ import {
   Collapse,
   Autocomplete,
 } from "@mui/material"
-import { ExpandMore, ExpandLess } from "@mui/icons-material"
+import { ExpandMoreRounded, ExpandLessRounded } from "@mui/icons-material"
 import { useGetAdminAuditLogsQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../features/contractor/domain/types"
@@ -344,7 +344,11 @@ export function AdminAuditLogsView() {
                           onClick={() => toggleExpanded(entry.audit_log_id)}
                           disabled={!hasMetadata}
                         >
-                          {isExpanded ? <ExpandLess /> : <ExpandMore />}
+                          {isExpanded ? (
+                            <ExpandLessRounded />
+                          ) : (
+                            <ExpandMoreRounded />
+                          )}
                         </IconButton>
                       </TableCell>
                       <TableCell>

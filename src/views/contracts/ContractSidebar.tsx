@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import SearchIcon from "@mui/icons-material/Search"
+import SearchIcon from "@mui/icons-material/SearchRounded"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"

@@ -24,11 +24,11 @@ import React, { useEffect, useMemo, useState } from "react"
 import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import {
-  Announcement,
-  Cancel,
-  CheckCircle,
-  HourglassTop,
-  Close,
+  AnnouncementRounded,
+  CancelRounded,
+  CheckCircleRounded,
+  HourglassTopRounded,
+  CloseRounded,
 } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
@@ -300,7 +300,9 @@ export function OfferDetailsArea(props: {
                     <Button
                       size="small"
                       variant="text"
-                      startIcon={isEditingAssigned ? <Close /> : undefined}
+                      startIcon={
+                        isEditingAssigned ? <CloseRounded /> : undefined
+                      }
                       onClick={() => setIsEditingAssigned(!isEditingAssigned)}
                       sx={{ textTransform: "none", fontSize: "0.75rem" }}
                     >
@@ -444,13 +446,13 @@ export function OfferDetailsArea(props: {
                     color={statusColor}
                     icon={
                       statusKey === "waitingSeller" ? (
-                        <Announcement />
+                        <AnnouncementRounded />
                       ) : statusKey === "waitingCustomer" ? (
-                        <HourglassTop />
+                        <HourglassTopRounded />
                       ) : statusKey === "rejected" ? (
-                        <Cancel />
+                        <CancelRounded />
                       ) : (
-                        <CheckCircle />
+                        <CheckCircleRounded />
                       )
                     }
                   />

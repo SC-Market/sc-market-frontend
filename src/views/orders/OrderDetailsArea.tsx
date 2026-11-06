@@ -39,7 +39,7 @@ import {
   CancelRounded,
   DoneRounded,
   PlayArrowRounded,
-  Close,
+  CloseRounded,
 } from "@mui/icons-material"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
@@ -207,7 +207,9 @@ export function OrderDetailsArea(props: { order: Order }) {
                       <Button
                         size="small"
                         variant="text"
-                        startIcon={isEditingAssigned ? <Close /> : undefined}
+                        startIcon={
+                          isEditingAssigned ? <CloseRounded /> : undefined
+                        }
                         onClick={() => setIsEditingAssigned(!isEditingAssigned)}
                         sx={{ textTransform: "none", fontSize: "0.75rem" }}
                       >

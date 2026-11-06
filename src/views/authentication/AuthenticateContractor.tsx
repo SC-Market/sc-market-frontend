@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback, useState } from "react"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import OpenInNewIcon from "@mui/icons-material/OpenInNewRounded"
 import { useGetAuthenticatorIdentifier } from "../../features/profile/api/profileApi"
 import { useNavigate } from "react-router-dom"
 import { useLinkRsiOrg } from "../../features/contractor/hooks/useOrgRegistration"

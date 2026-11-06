@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@mui/material"
 import React, { MouseEventHandler } from "react"
-import { LocalShipping } from "@mui/icons-material"
+import { LocalShippingRounded } from "@mui/icons-material"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import {
   ActiveDelivery,
@@ -58,7 +58,7 @@ export function ActiveDeliveryTableRow(props: {
       >
         <TableCell component="th" scope="row">
           <Avatar>
-            <LocalShipping />
+            <LocalShippingRounded />
           </Avatar>
         </TableCell>
         <TableCell>{row.location}</TableCell>

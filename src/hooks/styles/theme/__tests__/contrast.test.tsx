@@ -9,7 +9,7 @@ import {
   ThemeProvider,
   ToggleButton,
 } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Delete"
+import DeleteIcon from "@mui/icons-material/DeleteRounded"
 import type { Theme } from "@mui/material"
 import { mainTheme } from "../mainTheme"
 import { lightTheme } from "../lightTheme"
