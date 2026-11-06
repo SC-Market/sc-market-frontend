@@ -8,51 +8,21 @@
  */
 
 import React, { useMemo, useCallback, useState } from "react"
-import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Alert,
-  Chip,
-  Stack,
-  Divider,
-  Tooltip,
-  Link as MuiLink,
-} from "@mui/material"
+import { Box, Grid, Typography, Alert } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Helmet } from "@unhead/react/helmet"
-import type { SxProps } from "@mui/material"
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCarRounded"
-import TwoWheelerIcon from "@mui/icons-material/TwoWheelerRounded"
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunchRounded"
-import AppsIcon from "@mui/icons-material/AppsRounded"
-import GroupsIcon from "@mui/icons-material/GroupsRounded"
-import StraightenIcon from "@mui/icons-material/StraightenRounded"
 import SearchIcon from "@mui/icons-material/SearchRounded"
-import { useTheme, alpha } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import {
   useGetShipsQuery,
   type WikiShipSearchResult,
 } from "../../store/api/v2/market"
-import {
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { SHIP_CARD_GRID } from "../../components/game-data/cardGrids"
-import {
-  ShipSilhouette,
-  getShipColor,
-} from "../../components/wiki/ShipSilhouette"
 import { ShipDetailModal } from "../../components/game-data/ShipDetailModal"
 import {
   UnifiedSearchBar,
@@ -60,12 +30,7 @@ import {
   shipsTokensToParams,
   type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
-import {
-  formatShipRole,
-  formatShipCareer,
-  getShipRoleColor,
-} from "../../util/shipDisplay"
-import { inAppClick } from "../../components/links/inAppClick"
+import { formatShipRole, formatShipCareer } from "../../util/shipDisplay"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiShipsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
@@ -75,412 +40,28 @@ import {
   NumberedPagination,
   parsePageSize,
 } from "../../components/pagination/NumberedPagination"
-import {
-  blueGrey,
-  cyan,
-  indigo,
-  orange,
-  purple,
-  red,
-  teal,
-} from "@mui/material/colors"
 import { scrollPageToTop } from "../../components/layout/pageScroll"
+import {
+  VehicleCard,
+  SectionHeader,
+  getVehicleCategory,
+  VehicleCategory,
+} from "./WikiVehicleCard"
+import { AllShipsIndex } from "./WikiAllShipsIndex"
+import { ShipBrowserFilters } from "./WikiShipBrowserFilters"
+import {
+  ActiveFilterChips,
+  useFilteredVehicles,
+  useVehicleFacets,
+} from "./WikiShipBrowserFacets"
 
 const PAGE_SIZE = 24
 
-type VehicleCategory = "all" | "ships" | "ground" | "hoverbike"
-
-const GROUND_PREFIXES = ["grin_", "tmbl_", "rsi_ursa", "rsi_lynx"]
-const HOVERBIKE_PREFIXES = ["xian_nox", "orig_x1", "drak_dragonfly"]
-
-function getVehicleCategory(
-  ship: WikiShipSearchResult,
-): "ship" | "ground" | "hoverbike" {
-  const code = ship.ship_code?.toLowerCase() ?? ""
-  if (HOVERBIKE_PREFIXES.some((p) => code.startsWith(p))) return "hoverbike"
-  if (GROUND_PREFIXES.some((p) => code.startsWith(p))) return "ground"
-  return "ship"
-}
-
-// Maps career string → accent color hex
-const CAREER_PILL_COLORS: Record<string, string> = {
-  combat: red[400],
-  exploration: indigo[400],
-  industrial: orange[400],
-  support: teal[400],
-  transporter: purple[400],
-  transport: purple[400],
-  competition: cyan[400],
-  multirole: blueGrey[400],
-}
-
-function getCareerPillColor(career: string): string {
-  return CAREER_PILL_COLORS[career.toLowerCase()] ?? blueGrey[400]
-}
-
-// ─── Section divider with count badge ───────────────────────────────────────
-function SectionHeader({ label, count }: { label: string; count: number }) {
-  return (
-    <Stack direction="row" alignItems="center" spacing={1.5} sx={{ my: 1.5 }}>
-      <Typography
-        variant="overline"
-        sx={{
-          whiteSpace: "nowrap",
-          fontSize: "0.62rem",
-          letterSpacing: "0.12em",
-          color: "text.disabled",
-          fontWeight: 700,
-        }}
-      >
-        {label}
-      </Typography>
-      <Chip
-        label={count}
-        size="small"
-        sx={{
-          height: 16,
-          fontSize: "0.6rem",
-          bgcolor: (theme) => alpha(theme.palette.text.primary, 0.07),
-          color: "text.disabled",
-          "& .MuiChip-label": { px: 0.75 },
-        }}
-      />
-      <Divider sx={{ flex: 1 }} />
-    </Stack>
-  )
-}
-
-// ─── Vehicle card ────────────────────────────────────────────────────────────
-function VehicleCard({
-  ship,
-  onClick,
-}: {
-  ship: WikiShipSearchResult
-  onClick: () => void
-}) {
-  const href = WIKI_PATHS.ship(ship.id, ship.name)
-  const { t } = useTranslation()
-  const vehicleCategory = getVehicleCategory(ship)
-  const careerColor = getShipColor(ship.career, ship.role, ship.focus)
-  const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
-
-  return (
-    <Card
-      component={RouterLink}
-      to={href}
-      data-testid="ship-card"
-      data-id={ship.id}
-      sx={
-        {
-          cursor: "pointer",
-          textDecoration: "none",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          transition: "transform 0.15s, border-color 0.15s, box-shadow 0.15s",
-          "--career-color": careerColor,
-          "&:hover": {
-            transform: "translateY(-3px)",
-            borderColor: careerColor,
-            boxShadow: `0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px ${careerColor}`,
-          },
-        } as SxProps<ExtendedTheme>
-      }
-      onClick={inAppClick(onClick)}
-    >
-      {/* Career accent bar */}
-      <Box sx={{ height: 2, bgcolor: careerColor, flexShrink: 0 }} />
-
-      {/* Silhouette */}
-      <Box
-        sx={{
-          height: 150,
-          bgcolor: "background.default",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          overflow: "hidden",
-          flexShrink: 0,
-          // Radial glow at bottom
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            bottom: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "80%",
-            height: "55%",
-            background: `radial-gradient(ellipse at bottom, ${careerColor}, transparent 70%)`,
-            opacity: 0.2,
-            pointerEvents: "none",
-          },
-        }}
-      >
-        {/* Type badge for ground/hoverbike */}
-        {vehicleCategory !== "ship" && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 6,
-              left: 6,
-              zIndex: 1,
-              display: "flex",
-              alignItems: "center",
-              gap: 0.4,
-              px: 0.75,
-              py: 0.3,
-              borderRadius: 1,
-              fontSize: "0.58rem",
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              textTransform: "uppercase",
-              ...(vehicleCategory === "ground"
-                ? {
-                    bgcolor: "rgba(255,167,38,0.18)",
-                    color: orange[400],
-                    border: "1px solid rgba(255,167,38,0.35)",
-                  }
-                : {
-                    bgcolor: "rgba(171,71,188,0.18)",
-                    color: purple[200],
-                    border: "1px solid rgba(171,71,188,0.35)",
-                  }),
-            }}
-          >
-            {vehicleCategory === "ground" ? (
-              <DirectionsCarIcon sx={{ fontSize: 10 }} />
-            ) : (
-              <TwoWheelerIcon sx={{ fontSize: 10 }} />
-            )}
-            {vehicleCategory === "ground"
-              ? t("wiki.shipBrowser.ground", "Ground")
-              : t("wiki.shipBrowser.hoverbike", "Hoverbike")}
-          </Box>
-        )}
-
-        {/* Size badge */}
-        {ship.size && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 6,
-              right: 6,
-              zIndex: 1,
-              px: 0.6,
-              py: 0.2,
-              borderRadius: 0.75,
-              fontSize: "0.58rem",
-              bgcolor: "rgba(0,0,0,0.55)",
-              border: "1px solid rgba(255,255,255,0.10)",
-              color: "text.disabled",
-            }}
-          >
-            S{ship.size}
-          </Box>
-        )}
-
-        {ship.ship_code ? (
-          <ShipSilhouette
-            shipCode={ship.ship_code}
-            career={ship.career}
-            role={ship.role}
-            focus={ship.focus}
-            height={135}
-          />
-        ) : ship.image_url ? (
-          <Box
-            component="img"
-            src={ship.image_url}
-            alt={ship.name}
-            sx={{ width: "100%", height: "100%", objectFit: "contain", p: 1 }}
-          />
-        ) : null}
-      </Box>
-
-      {/* Card info */}
-      <CardContent sx={{ flex: 1, p: 1.25, "&:last-child": { pb: 1.25 } }}>
-        <Typography
-          variant="body2"
-          fontWeight={700}
-          noWrap
-          title={ship.name}
-          sx={{
-            color: "text.secondary",
-            fontSize: "0.78rem",
-            lineHeight: 1.2,
-            mb: 0.25,
-          }}
-        >
-          {ship.name}
-        </Typography>
-
-        {ship.manufacturer && (
-          <Typography
-            variant="caption"
-            sx={{
-              color: "text.disabled",
-              fontSize: "0.62rem",
-              display: "block",
-              mb: 0.5,
-              lineHeight: 1.2,
-            }}
-            noWrap
-          >
-            {ship.manufacturer}
-          </Typography>
-        )}
-
-        <Stack
-          direction="row"
-          spacing={0.4}
-          flexWrap="wrap"
-          useFlexGap
-          sx={{ mb: 0.5 }}
-        >
-          {ship.career && (
-            <Chip
-              label={formatShipCareer(ship.career, t)}
-              size="small"
-              color={chipColor}
-              variant="outlined"
-              sx={{
-                height: 16,
-                fontSize: "0.58rem",
-                "& .MuiChip-label": { px: 0.75 },
-              }}
-            />
-          )}
-          {ship.role && (
-            <Chip
-              label={formatShipRole(ship.role, t)}
-              size="small"
-              sx={{
-                height: 16,
-                fontSize: "0.58rem",
-                bgcolor: (theme) => alpha(theme.palette.text.primary, 0.04),
-                color: "text.disabled",
-                border: (theme) =>
-                  `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
-                "& .MuiChip-label": { px: 0.75 },
-              }}
-            />
-          )}
-          {ship.focus && !ship.career && !ship.role && (
-            <Chip
-              label={ship.focus}
-              size="small"
-              sx={{
-                height: 16,
-                fontSize: "0.58rem",
-                "& .MuiChip-label": { px: 0.75 },
-              }}
-            />
-          )}
-        </Stack>
-
-        {(ship.crew_size != null || ship.length_m != null) && (
-          <Stack direction="row" spacing={1} alignItems="center">
-            {ship.crew_size != null && (
-              <Tooltip title={t("wiki.shipBrowser.crew", "Crew")} arrow>
-                <Stack direction="row" spacing={0.3} alignItems="center">
-                  <GroupsIcon
-                    sx={{ fontSize: 11, color: "text.disabled", opacity: 0.6 }}
-                  />
-                  <Typography
-                    sx={{ fontSize: "0.62rem", color: "text.disabled" }}
-                  >
-                    {ship.crew_size}
-                  </Typography>
-                </Stack>
-              </Tooltip>
-            )}
-            {ship.length_m != null && (
-              <Tooltip
-                title={`${ship.length_m}m${ship.width_m ? ` × ${ship.width_m}m` : ""}${ship.height_m ? ` × ${ship.height_m}m` : ""}`}
-                arrow
-              >
-                <Stack direction="row" spacing={0.3} alignItems="center">
-                  <StraightenIcon
-                    sx={{ fontSize: 11, color: "text.disabled", opacity: 0.6 }}
-                  />
-                  <Typography
-                    sx={{ fontSize: "0.62rem", color: "text.disabled" }}
-                  >
-                    {ship.length_m}m
-                  </Typography>
-                </Stack>
-              </Tooltip>
-            )}
-          </Stack>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
-
-// ─── Main component ──────────────────────────────────────────────────────────
-/**
- * Every ship and vehicle as a plain A–Z link list under the grid: the grid
- * pages 24 at a time, so without this the page (prerendered for crawlers)
- * linked only the first page of ships.
- */
-function AllShipsIndex(props: { ships: { id: string; name: string }[] }) {
-  const { t } = useTranslation()
-  const sorted = useMemo(
-    () => [...props.ships].sort((a, b) => a.name.localeCompare(b.name, "en")),
-    [props.ships],
-  )
-  return (
-    <Box
-      component="nav"
-      aria-label={t("wiki.shipBrowser.allShips", "All ships and vehicles")}
-      sx={{ mt: 6 }}
-    >
-      <Typography
-        variant="h6"
-        component="h2"
-        color="text.secondary"
-        sx={{ mb: 1 }}
-      >
-        {t("wiki.shipBrowser.allShips", "All ships and vehicles")} (
-        {sorted.length})
-      </Typography>
-      <Box
-        component="ul"
-        sx={{ listStyle: "none", p: 0, m: 0, columnWidth: 220, columnGap: 3 }}
-      >
-        {sorted.map((ship) => (
-          <Box
-            component="li"
-            key={ship.id}
-            sx={{ breakInside: "avoid", py: 0.25 }}
-          >
-            <MuiLink
-              component={RouterLink}
-              to={WIKI_PATHS.ship(ship.id, ship.name)}
-              variant="body2"
-              color="text.primary"
-              underline="hover"
-            >
-              {ship.name}
-            </MuiLink>
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  )
-}
-
 export function WikiShipBrowser() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const isMobile = useBreakpointDown("lg")
 
-  // Theme-aware dropdown arrow (text color, URL-encoded for the data URI)
-  const selectArrow = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='${encodeURIComponent(theme.palette.text.disabled)}'/%3E%3C/svg%3E")`
   const [searchParams, setSearchParams] = useSearchParams()
   const urlParams = useParams<{ id?: string }>()
 
@@ -540,82 +121,16 @@ export function WikiShipBrowser() {
   )
   const allVehicles = useMemo(() => data?.ships ?? [], [data?.ships])
 
-  const manufacturers = useMemo(
-    () =>
-      [
-        ...new Set(allVehicles.map((s) => s.manufacturer).filter(Boolean)),
-      ].sort() as string[],
-    [allVehicles],
-  )
-  const careers = useMemo(
-    () =>
-      [
-        ...new Set(allVehicles.map((s) => s.career).filter(Boolean)),
-      ].sort() as string[],
-    [allVehicles],
-  )
-  const roles = useMemo(
-    () =>
-      [
-        ...new Set(allVehicles.map((s) => s.role).filter(Boolean)),
-      ].sort() as string[],
-    [allVehicles],
-  )
-  const sizes = useMemo(
-    () =>
-      [...new Set(allVehicles.map((s) => s.size).filter(Boolean))].sort(
-        (a, b) => Number(a) - Number(b),
-      ) as string[],
-    [allVehicles],
-  )
+  const { manufacturers, careers, roles, sizes, counts } =
+    useVehicleFacets(allVehicles)
 
-  const counts = useMemo(
-    () => ({
-      all: allVehicles.length,
-      ships: allVehicles.filter((s) => getVehicleCategory(s) === "ship").length,
-      ground: allVehicles.filter((s) => getVehicleCategory(s) === "ground")
-        .length,
-      hoverbike: allVehicles.filter(
-        (s) => getVehicleCategory(s) === "hoverbike",
-      ).length,
-    }),
-    [allVehicles],
-  )
-
-  const filtered = useMemo(() => {
-    let result = allVehicles
-    if (category !== "all") {
-      result = result.filter((s) => {
-        const cat = getVehicleCategory(s)
-        return category === "ships" ? cat === "ship" : cat === category
-      })
-    }
-    if (manufacturer)
-      result = result.filter((s) => s.manufacturer === manufacturer)
-    if (career)
-      result = result.filter(
-        (s) => s.career?.toLowerCase() === career.toLowerCase(),
-      )
-    if (role)
-      result = result.filter(
-        (s) =>
-          s.role?.toLowerCase().replace(/[^a-z]/g, "") ===
-          role.toLowerCase().replace(/[^a-z]/g, ""),
-      )
-    if (size) result = result.filter((s) => String(s.size) === size)
-    const textTokens = searchTokens.filter((tok) => tok.type === "query")
-    for (const tok of textTokens) {
-      const q = tok.value.toLowerCase()
-      result = result.filter(
-        (s) =>
-          s.name.toLowerCase().includes(q) ||
-          s.manufacturer?.toLowerCase().includes(q) ||
-          s.career?.toLowerCase().includes(q) ||
-          formatShipRole(s.role, t).toLowerCase().includes(q),
-      )
-    }
-    return result
-  }, [allVehicles, category, manufacturer, career, role, size, searchTokens, t])
+  const filtered = useFilteredVehicles(allVehicles, searchTokens, {
+    category,
+    manufacturer,
+    career,
+    role,
+    size,
+  })
 
   const pageSize = parsePageSize(
     searchParams.get("page_size"),
@@ -696,342 +211,22 @@ export function WikiShipBrowser() {
     [manufacturer, filtered.length],
   )
 
-  // ─── Sidebar filter content ───────────────────────────────────────────────
-  const CATEGORY_OPTIONS = [
-    {
-      value: "all",
-      label: t("wiki.shipBrowser.categoryAll", "All"),
-      icon: <AppsIcon sx={{ fontSize: 16 }} />,
-      count: counts.all,
-    },
-    {
-      value: "ships",
-      label: t("wiki.shipBrowser.categoryShips", "Ships"),
-      icon: <RocketLaunchIcon sx={{ fontSize: 16 }} />,
-      count: counts.ships,
-    },
-    {
-      value: "ground",
-      label: t("wiki.shipBrowser.categoryGround", "Ground Vehicles"),
-      icon: <DirectionsCarIcon sx={{ fontSize: 16 }} />,
-      count: counts.ground,
-    },
-    {
-      value: "hoverbike",
-      label: t("wiki.shipBrowser.categoryHoverbikes", "Hoverbikes"),
-      icon: <TwoWheelerIcon sx={{ fontSize: 16 }} />,
-      count: counts.hoverbike,
-    },
-  ]
-
   const filtersContent = (
-    <Stack spacing={2}>
-      {/* Category */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "text.disabled",
-            mb: 0.75,
-            display: "block",
-          }}
-        >
-          {t("wiki.shipBrowser.filterCategory", "Category")}
-        </Typography>
-        <Stack spacing={0.25}>
-          {CATEGORY_OPTIONS.map((opt) => {
-            const isActive = category === opt.value
-            return (
-              <Box
-                key={opt.value}
-                component="button"
-                onClick={() =>
-                  updateParam("category", opt.value === "all" ? "" : opt.value)
-                }
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  px: 1.25,
-                  py: 0.875,
-                  borderRadius: 1.5,
-                  border: "none",
-                  bgcolor: isActive
-                    ? alpha(theme.palette.primary.main, 0.12)
-                    : "transparent",
-                  color: isActive ? "primary.main" : "text.primary",
-                  cursor: "pointer",
-                  fontSize: "0.8rem",
-                  fontFamily: "inherit",
-                  width: "100%",
-                  textAlign: "left",
-                  transition: "background 0.12s, color 0.12s",
-                  "&:hover": {
-                    bgcolor: isActive
-                      ? alpha(theme.palette.primary.main, 0.15)
-                      : alpha(theme.palette.text.primary, 0.06),
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    opacity: isActive ? 1 : 0.6,
-                    display: "flex",
-                    color: "inherit",
-                  }}
-                >
-                  {opt.icon}
-                </Box>
-                <Box sx={{ flex: 1 }}>{opt.label}</Box>
-                <Typography
-                  component="span"
-                  sx={{
-                    fontSize: "0.68rem",
-                    color: isActive ? "primary.main" : "text.disabled",
-                    opacity: isActive ? 0.7 : 1,
-                    fontVariantNumeric: "tabular-nums",
-                  }}
-                >
-                  {opt.count}
-                </Typography>
-              </Box>
-            )
-          })}
-        </Stack>
-      </Box>
-
-      <Divider />
-
-      {/* Career — color-coded pill buttons */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "text.disabled",
-            mb: 0.75,
-            display: "block",
-          }}
-        >
-          {t("wiki.shipBrowser.filterCareer", "Career")}
-        </Typography>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.6 }}>
-          {careers.map((c) => {
-            const color = getCareerPillColor(c)
-            const isActive = career.toLowerCase() === c.toLowerCase()
-            return (
-              <Box
-                key={c}
-                component="button"
-                onClick={() => updateParam("career", isActive ? "" : c)}
-                sx={{
-                  px: 1,
-                  py: 0.4,
-                  borderRadius: 100,
-                  border: `1px solid ${color}`,
-                  bgcolor: isActive ? alpha(color, 0.15) : "transparent",
-                  color: color,
-                  cursor: "pointer",
-                  fontSize: "0.68rem",
-                  fontFamily: "inherit",
-                  fontWeight: isActive ? 700 : 400,
-                  transition: "background 0.12s, font-weight 0.12s",
-                  "&:hover": { bgcolor: alpha(color, 0.12) },
-                }}
-              >
-                {formatShipCareer(c, t)}
-              </Box>
-            )
-          })}
-        </Box>
-      </Box>
-
-      {/* Role select */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "text.disabled",
-            mb: 0.75,
-            display: "block",
-          }}
-        >
-          {t("wiki.shipBrowser.filterRole", "Role")}
-        </Typography>
-        <Box
-          component="select"
-          aria-label={t("wiki.shipBrowser.filterRole", "Role")}
-          value={role}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            updateParam("role", e.target.value)
-          }
-          sx={{
-            width: "100%",
-            bgcolor: "background.default",
-            border: "1px solid",
-            borderColor: role ? "primary.main" : "divider",
-            borderRadius: 1.25,
-            color: role ? "text.secondary" : "text.disabled",
-            fontFamily: "inherit",
-            fontSize: "0.78rem",
-            px: 1.25,
-            py: 0.875,
-            cursor: "pointer",
-            appearance: "none",
-            outline: "none",
-            backgroundImage: selectArrow,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "right 10px center",
-            pr: 3.5,
-          }}
-        >
-          <option value="">
-            {t("wiki.shipBrowser.allRoles", "All roles")}
-          </option>
-          {roles.map((r) => (
-            <option key={r} value={r}>
-              {formatShipRole(r, t)}
-            </option>
-          ))}
-        </Box>
-      </Box>
-
-      {/* Manufacturer select */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "text.disabled",
-            mb: 0.75,
-            display: "block",
-          }}
-        >
-          {t("wiki.shipBrowser.filterManufacturer", "Manufacturer")}
-        </Typography>
-        <Box
-          component="select"
-          aria-label={t("wiki.shipBrowser.filterManufacturer", "Manufacturer")}
-          value={manufacturer}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            updateParam("manufacturer", e.target.value)
-          }
-          sx={{
-            width: "100%",
-            bgcolor: "background.default",
-            border: "1px solid",
-            borderColor: manufacturer ? "primary.main" : "divider",
-            borderRadius: 1.25,
-            color: manufacturer ? "text.secondary" : "text.disabled",
-            fontFamily: "inherit",
-            fontSize: "0.78rem",
-            px: 1.25,
-            py: 0.875,
-            cursor: "pointer",
-            appearance: "none",
-            outline: "none",
-            backgroundImage: selectArrow,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "right 10px center",
-            pr: 3.5,
-          }}
-        >
-          <option value="">
-            {t("wiki.shipBrowser.allManufacturers", "All manufacturers")}
-          </option>
-          {manufacturers.map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </Box>
-      </Box>
-
-      {/* Size select */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "text.disabled",
-            mb: 0.75,
-            display: "block",
-          }}
-        >
-          {t("wiki.shipBrowser.filterSize", "Size")}
-        </Typography>
-        <Box
-          component="select"
-          aria-label={t("wiki.shipBrowser.filterSize", "Size")}
-          value={size}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            updateParam("size", e.target.value)
-          }
-          sx={{
-            width: "100%",
-            bgcolor: "background.default",
-            border: "1px solid",
-            borderColor: size ? "primary.main" : "divider",
-            borderRadius: 1.25,
-            color: size ? "text.secondary" : "text.disabled",
-            fontFamily: "inherit",
-            fontSize: "0.78rem",
-            px: 1.25,
-            py: 0.875,
-            cursor: "pointer",
-            appearance: "none",
-            outline: "none",
-            backgroundImage: selectArrow,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "right 10px center",
-            pr: 3.5,
-          }}
-        >
-          <option value="">{t("wiki.shipBrowser.anySize", "Any size")}</option>
-          {sizes.map((s) => (
-            <option key={s} value={s}>
-              {t("wiki.shipBrowser.sizeOption", "Size {{size}}", { size: s })}
-            </option>
-          ))}
-        </Box>
-      </Box>
-
-      {hasFilters && (
-        <Box
-          component="button"
-          onClick={() => setSearchParams({}, { replace: true })}
-          sx={{
-            border: "1px solid",
-            borderColor: "divider",
-            borderRadius: 1,
-            bgcolor: "transparent",
-            color: "text.disabled",
-            fontFamily: "inherit",
-            fontSize: "0.72rem",
-            py: 0.75,
-            px: 1.5,
-            cursor: "pointer",
-            width: "100%",
-            transition: "border-color 0.12s, color 0.12s",
-            "&:hover": { borderColor: "text.disabled", color: "text.primary" },
-          }}
-        >
-          {t("wiki.shipBrowser.clearAllFilters", "Clear all filters")}
-        </Box>
-      )}
-    </Stack>
+    <ShipBrowserFilters
+      category={category}
+      career={career}
+      role={role}
+      manufacturer={manufacturer}
+      size={size}
+      counts={counts}
+      careers={careers}
+      roles={roles}
+      manufacturers={manufacturers}
+      sizes={sizes}
+      hasFilters={hasFilters}
+      updateParam={updateParam}
+      onClearAll={() => setSearchParams({}, { replace: true })}
+    />
   )
 
   function renderGrid(items: WikiShipSearchResult[]) {
@@ -1109,31 +304,11 @@ export function WikiShipBrowser() {
             )}
           </Box>
 
-          {/* Active filter chips */}
           {activeFilterChips.length > 0 && (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mb: 2 }}>
-              {activeFilterChips.map((chip) => (
-                <Chip
-                  key={chip.key}
-                  label={chip.label}
-                  size="small"
-                  onDelete={() => updateParam(chip.key, "")}
-                  sx={{
-                    height: 22,
-                    fontSize: "0.68rem",
-                    bgcolor: alpha(theme.palette.primary.main, 0.12),
-                    color: "primary.main",
-                    border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
-                    "& .MuiChip-deleteIcon": {
-                      color: "primary.main",
-                      opacity: 0.7,
-                      fontSize: 14,
-                    },
-                    "& .MuiChip-label": { px: 1 },
-                  }}
-                />
-              ))}
-            </Box>
+            <ActiveFilterChips
+              chips={activeFilterChips}
+              onRemove={(key) => updateParam(key, "")}
+            />
           )}
 
           {isLoading && <CardGridSkeleton shape={SHIP_CARD_GRID} />}
