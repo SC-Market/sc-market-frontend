@@ -9,9 +9,8 @@ import {
   Stack,
   Switch,
 } from "@mui/material"
-import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import SettingsIcon from "@mui/icons-material/SettingsRounded"
+import BugReportIcon from "@mui/icons-material/BugReportRounded"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 import { useTranslation } from "react-i18next"
@@ -32,7 +31,6 @@ const RETIRED_FLAGS = new Set(["market_v2", "crafting", "nav_v2", "wiki"])
 export function DebugPanel() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const isMobile = useIsMobile()
   const { isDeveloper, hasOverride, flags, overriddenFlags, setFlag } =
     useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
@@ -58,40 +56,21 @@ export function DebugPanel() {
     return null
   }
 
-  // Stack above the preferences FAB: same horizontal inset as PreferencesButton,
-  // bottom = FAB inset + default Fab height (56px) + gap.
-  const fabInset = isMobile ? theme.spacing(10) : theme.spacing(2)
-  const debugBottom = `calc(${fabInset} + 56px + ${theme.spacing(1)})`
-
+  // Rendered inside FloatingActions (Root): the panel and its toggle are
+  // in-flow children of that column, so they stack above the page-settings
+  // FAB instead of carrying their own offsets.
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        right: theme.spacing(2),
-        bottom: debugBottom,
-        zIndex: theme.zIndex.drawer + 3,
-        display: "flex",
-        flexDirection: "column-reverse",
-        alignItems: "flex-end",
-        gap: theme.spacing(1),
-        pointerEvents: "none",
-      }}
-    >
-      {/* Debug panel (first in DOM: sits above the toggle when using column-reverse) */}
-      <Collapse
-        in={isOpen}
-        sx={{
-          pointerEvents: isOpen ? "auto" : "none",
-        }}
-      >
+    <>
+      {/* Unmounted when closed so the column's gap doesn't count it */}
+      <Collapse in={isOpen} unmountOnExit>
         <Paper
           elevation={8}
           sx={{
             width: 320,
+            maxWidth: "100%",
             p: 2,
             backgroundColor: theme.palette.background.paper,
             border: `2px solid ${theme.palette.primary.main}`,
-            pointerEvents: "auto",
           }}
         >
           {/* Header */}
@@ -102,7 +81,7 @@ export function DebugPanel() {
             mb={2}
           >
             <Box display="flex" alignItems="center" gap={1}>
-              <SettingsIcon color="primary" />
+              <BugReportIcon color="primary" />
               <Typography variant="h6" component="h2">
                 {t("marketUi.debugPanel.title")}
               </Typography>
@@ -195,12 +174,13 @@ export function DebugPanel() {
         </Paper>
       </Collapse>
 
-      {/* Toggle button — anchored just above the preferences FAB; only this captures clicks when closed */}
+      {/* Toggle button: a bug icon, so it doesn't read as a second settings gear */}
       {!isOpen && (
         <IconButton
           onClick={handleTogglePanel}
           sx={{
-            pointerEvents: "auto",
+            // Centred over the wider page-settings FAB below it
+            alignSelf: "center",
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
             "&:hover": {
@@ -210,9 +190,9 @@ export function DebugPanel() {
           }}
           aria-label={t("marketUi.debugPanel.open")}
         >
-          <SettingsIcon />
+          <BugReportIcon />
         </IconButton>
       )}
-    </Box>
+    </>
   )
 }

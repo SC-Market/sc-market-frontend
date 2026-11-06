@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Fab, Popover } from "@mui/material"
-import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { SettingsRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -10,7 +9,6 @@ import { PreferencesControls } from "../../components/settings/PreferencesContro
 
 export function PreferencesButton() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
   const hydrated = useHydrated()
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -29,12 +27,9 @@ export function PreferencesButton() {
     <>
       <Fab
         aria-label={t("preferences.page_settings")}
+        // Positioned by FloatingActions (Root), which stacks it with the
+        // other floating buttons.
         sx={{
-          position: "absolute",
-          right: theme.spacing(2),
-          // On mobile, position above bottom nav (64px height + 16px spacing)
-          bottom: isMobile ? theme.spacing(10) : theme.spacing(2),
-          zIndex: theme.zIndex.drawer + 2, // Above bottom nav
           // Root only renders this on desktop, but a prerendered page's
           // first render can't know the viewport: hide it on phones by CSS
           // until the app knows (see hooks/layout/useBreakpoint.ts).

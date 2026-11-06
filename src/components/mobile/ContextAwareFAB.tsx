@@ -2,6 +2,7 @@
  * ContextAwareFAB Component
  * Floating Action Button that changes based on current page
  * Long-press to show all available actions
+ * Positioned by FloatingActions (Root), above the bottom nav.
  */
 
 import React, { useState, useRef } from "react"
@@ -18,7 +19,6 @@ import {
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { haptic } from "../../util/haptics"
 import { PATHS, MARKET_PATHS } from "../../routes/paths"
 
@@ -34,7 +34,6 @@ export function ContextAwareFAB() {
   const location = useLocation()
   const navigate = useNavigate()
   const isMobile = useBreakpointDown("sm")
-  const bottomNavHeight = useBottomNavHeight()
   const [speedDialOpen, setSpeedDialOpen] = useState(false)
   const longPressTimer = useRef<number | undefined>(undefined)
 
@@ -137,9 +136,6 @@ export function ContextAwareFAB() {
         <SpeedDial
           ariaLabel={t("chromeUi.fab.quickActions")}
           sx={{
-            position: "fixed",
-            bottom: bottomNavHeight + 16,
-            right: 16,
             "& .MuiSpeedDial-fab": {
               backgroundColor: theme.palette.primary.main,
               "&:hover": {
@@ -168,11 +164,6 @@ export function ContextAwareFAB() {
         <Fab
           color="primary"
           aria-label={primaryAction?.name}
-          sx={{
-            position: "fixed",
-            bottom: bottomNavHeight + 16,
-            right: 16,
-          }}
           onClick={handleClick}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}

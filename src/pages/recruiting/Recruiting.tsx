@@ -28,6 +28,7 @@ import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageRecruiting } from "../../features/recruiting/hooks/usePageRecruiting"
 import { recruitingSeoText } from "../../seo/hubHeads"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { FloatingAction } from "../../components/layout/FloatingActions"
 
 export function Recruiting() {
   const { t } = useTranslation()
@@ -124,31 +125,30 @@ export function Recruiting() {
             value={[searchState, setSearchState]}
           >
             {isMobile && (
-              <Button
-                variant="outlined"
-                color="neutral"
-                startIcon={<FilterListIcon />}
-                aria-label={t("toggle_market_sidebar")}
-                onClick={() => {
-                  setSidebarOpen(true)
-                }}
-                sx={{
-                  position: "fixed",
-                  bottom: { xs: 80, sm: 24 },
-                  right: 24,
-                  zIndex: theme.zIndex.speedDial,
-                  borderRadius: 2,
-                  textTransform: "none",
-                  boxShadow: theme.shadows[4],
-                  backgroundColor: theme.palette.background.paper,
-                  "&:hover": {
+              // Stacked with the app's other floating buttons (FloatingActions)
+              <FloatingAction>
+                <Button
+                  variant="outlined"
+                  color="neutral"
+                  startIcon={<FilterListIcon />}
+                  aria-label={t("toggle_market_sidebar")}
+                  onClick={() => {
+                    setSidebarOpen(true)
+                  }}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    boxShadow: theme.shadows[4],
                     backgroundColor: theme.palette.background.paper,
-                    boxShadow: theme.shadows[8],
-                  },
-                }}
-              >
-                {t("recruiting_sidebar.filters", "Filters")}
-              </Button>
+                    "&:hover": {
+                      backgroundColor: theme.palette.background.paper,
+                      boxShadow: theme.shadows[8],
+                    },
+                  }}
+                >
+                  {t("recruiting_sidebar.filters", "Filters")}
+                </Button>
+              </FloatingAction>
             )}
             <RecruitingSidebar />
           </RecruitingSearchContext.Provider>

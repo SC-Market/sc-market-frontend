@@ -2,6 +2,7 @@ import { Fab } from "@mui/material"
 import { FilterListRounded } from "@mui/icons-material"
 import React from "react"
 import { haptic } from "../../util/haptics"
+import { FloatingAction } from "../layout/FloatingActions"
 
 interface FiltersFABProps {
   onClick: () => void
@@ -15,18 +16,11 @@ export function FiltersFAB({ onClick, label = "Filters" }: FiltersFABProps) {
   }
 
   return (
-    <Fab
-      color="primary"
-      aria-label={label}
-      onClick={handleClick}
-      sx={{
-        position: "fixed",
-        bottom: 80,
-        right: 16,
-        zIndex: 1000,
-      }}
-    >
-      <FilterListRounded />
-    </Fab>
+    // Stacked with the app's other floating buttons (FloatingActions)
+    <FloatingAction>
+      <Fab color="primary" aria-label={label} onClick={handleClick}>
+        <FilterListRounded />
+      </Fab>
+    </FloatingAction>
   )
 }

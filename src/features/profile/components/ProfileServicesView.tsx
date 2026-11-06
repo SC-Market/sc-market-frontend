@@ -9,40 +9,38 @@ import { ServiceSidebarContext } from "../../contracting/hooks/ServiceSidebar"
 import { ServiceSidebar } from "../../../views/contracts/ServiceSidebar"
 import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
 import { ServiceListings } from "../../../views/contracts/ServiceListings.lazy"
-import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
+import { FloatingAction } from "../../../components/layout/FloatingActions"
 
 export function ProfileServicesView(props: { user: string }) {
   const { user } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const xs = useIsMobile()
-  const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <ServiceSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <ServiceSidebar />}
       {xs && (
-        <Button
-          variant="outlined"
-          color="neutral"
-          startIcon={<FilterListIcon />}
-          aria-label={t("service_market.filters", "Filters")}
-          onClick={() => setSidebarOpen((prev) => !prev)}
-          sx={{
-            position: "fixed",
-            bottom: bottomNavHeight + 16,
-            right: 24,
-            zIndex: theme.zIndex.speedDial,
-            borderRadius: 2,
-            textTransform: "none",
-            boxShadow: theme.shadows[4],
-            backgroundColor: theme.palette.background.paper,
-            display: { xs: "inline-flex", md: "none" },
-          }}
-        >
-          {t("service_market.filters", "Filters")}
-        </Button>
+        // Stacked with the app's other floating buttons (FloatingActions)
+        <FloatingAction>
+          <Button
+            variant="outlined"
+            color="neutral"
+            startIcon={<FilterListIcon />}
+            aria-label={t("service_market.filters", "Filters")}
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              boxShadow: theme.shadows[4],
+              backgroundColor: theme.palette.background.paper,
+              display: { xs: "inline-flex", md: "none" },
+            }}
+          >
+            {t("service_market.filters", "Filters")}
+          </Button>
+        </FloatingAction>
       )}
       <Container maxWidth={"xl"}>
         <Grid
@@ -80,33 +78,31 @@ export function OrgServicesView(props: { org: string }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const xs = useIsMobile()
-  const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <ServiceSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <ServiceSidebar />}
       {xs && (
-        <Button
-          variant="outlined"
-          color="neutral"
-          startIcon={<FilterListIcon />}
-          aria-label={t("service_market.filters", "Filters")}
-          onClick={() => setSidebarOpen((prev) => !prev)}
-          sx={{
-            position: "fixed",
-            bottom: bottomNavHeight + 16,
-            right: 24,
-            zIndex: theme.zIndex.speedDial,
-            borderRadius: 2,
-            textTransform: "none",
-            boxShadow: theme.shadows[4],
-            backgroundColor: theme.palette.background.paper,
-            display: { xs: "inline-flex", md: "none" },
-          }}
-        >
-          {t("service_market.filters", "Filters")}
-        </Button>
+        // Stacked with the app's other floating buttons (FloatingActions)
+        <FloatingAction>
+          <Button
+            variant="outlined"
+            color="neutral"
+            startIcon={<FilterListIcon />}
+            aria-label={t("service_market.filters", "Filters")}
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              boxShadow: theme.shadows[4],
+              backgroundColor: theme.palette.background.paper,
+              display: { xs: "inline-flex", md: "none" },
+            }}
+          >
+            {t("service_market.filters", "Filters")}
+          </Button>
+        </FloatingAction>
       )}
       <Container maxWidth={"xl"}>
         <Grid
