@@ -9,11 +9,6 @@ import React, { useCallback, useState } from "react"
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Grid,
   Paper,
@@ -47,6 +42,7 @@ import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { lazyWithRetry } from "../../../util/lazyWithRetry"
 import { useListingStatusActions } from "../hooks/useListingMutations"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -117,7 +113,11 @@ const ArchivedListingsV2 = lazyWithRetry(() =>
 )
 function ListingsSkeleton() {
   const { t } = useTranslation()
-  return <Grid item xs={12}><div>{t("marketV2.loadingEllipsis")}</div></Grid>
+  return (
+    <Grid item xs={12}>
+      <div>{t("marketV2.loadingEllipsis")}</div>
+    </Grid>
+  )
 }
 
 // ── Mobile view ───────────────────────────────────────────────────────────
@@ -144,7 +144,8 @@ function MobileListingsView() {
     spectrumId,
   })
   const activeCount = activeData?.total ?? 0
-  const showCombined = !activeLoading && activeCount === 0 && selectedStatus === "active"
+  const showCombined =
+    !activeLoading && activeCount === 0 && selectedStatus === "active"
 
   const { data, isLoading } = useGetMyListingsQuery({
     status: showCombined ? undefined : selectedStatus,
@@ -170,19 +171,26 @@ function MobileListingsView() {
   }, [archiveTarget, archive])
 
   const statusTabs: { value: MobileStatus; label: string }[] = [
-    { value: "active",    label: t("myListings.active", "Active") },
-    { value: "inactive",  label: t("myListings.inactive", "Inactive") },
+    { value: "active", label: t("myListings.active", "Active") },
+    { value: "inactive", label: t("myListings.inactive", "Inactive") },
     { value: "cancelled", label: t("myListings.archived", "Archived") },
   ]
 
-  const currentLabel = statusTabs.find((s) => s.value === selectedStatus)?.label ?? ""
+  const currentLabel =
+    statusTabs.find((s) => s.value === selectedStatus)?.label ?? ""
 
   return (
     <Box sx={{ pb: 10 }}>
       {/* Status filter tabs */}
       <Paper
         variant="outlined"
-        sx={{ borderRadius: 0, borderLeft: 0, borderRight: 0, borderTop: 0, mb: 1 }}
+        sx={{
+          borderRadius: 0,
+          borderLeft: 0,
+          borderRight: 0,
+          borderTop: 0,
+          mb: 1,
+        }}
       >
         <Tabs
           value={selectedStatus}
@@ -219,33 +227,31 @@ function MobileListingsView() {
       )}
 
       <Paper
-          variant="outlined"
-          sx={{
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
-            overflow: "hidden",
-          }}
-        >
-          {isLoading ? (
-            Array.from({ length: 8 }).map((_, i) => (
-              <ListingSkeleton key={i} />
-            ))
-          ) : listings.length === 0 ? (
-            <EmptyListings
-              isSearchResult={false}
-              showCreateAction={selectedStatus === "active"}
+        variant="outlined"
+        sx={{
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          overflow: "hidden",
+        }}
+      >
+        {isLoading ? (
+          Array.from({ length: 8 }).map((_, i) => <ListingSkeleton key={i} />)
+        ) : listings.length === 0 ? (
+          <EmptyListings
+            isSearchResult={false}
+            showCreateAction={selectedStatus === "active"}
+          />
+        ) : (
+          listings.map((listing) => (
+            <MobileListingRow
+              key={listing.listing_id}
+              listing={listing}
+              onEdit={handleEdit}
+              onArchive={
+                selectedStatus !== "cancelled" ? setArchiveTarget : undefined
+              }
             />
-          ) : (
-            listings.map((listing) => (
-              <MobileListingRow
-                key={listing.listing_id}
-                listing={listing}
-                onEdit={handleEdit}
-                onArchive={
-                  selectedStatus !== "cancelled" ? setArchiveTarget : undefined
-                }
-              />
-            ))
-          )}
+          ))
+        )}
       </Paper>
 
       {/* Quick-edit sheet */}
@@ -256,35 +262,20 @@ function MobileListingsView() {
       />
 
       {/* Archive confirmation dialog */}
-      <Dialog
+      <ConfirmDialog
         open={archiveTarget !== null}
         onClose={() => setArchiveTarget(null)}
-      >
-        <DialogTitle>
-          {t("myListings.archiveTitle", "Archive listing?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t(
-              "myListings.archiveBody",
-              '"{{title}}" will be hidden and moved to Archived. You can restore it from the full editor.',
-              { title: archiveTarget?.title },
-            )}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setArchiveTarget(null)} color="inherit">
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <Button
-            onClick={handleArchiveConfirm}
-            color="error"
-            variant="contained"
-          >
-            {t("myListings.archiveConfirm", "Archive")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleArchiveConfirm}
+        title={t("myListings.archiveTitle", "Archive listing?")}
+        message={t(
+          "myListings.archiveBody",
+          '"{{title}}" will be hidden and moved to Archived. You can restore it from the full editor.',
+          { title: archiveTarget?.title },
+        )}
+        cancelLabel={t("common.cancel", "Cancel")}
+        confirmLabel={t("myListings.archiveConfirm", "Archive")}
+        destructive
+      />
 
       {/* FAB — create listing */}
       <Link to={MARKET_PATHS.create}>
@@ -311,7 +302,10 @@ export function MyListingsV2() {
       <StandardPageLayout
         title={t("sidebar.my_market_listings", "My Listings")}
         breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
+          {
+            label: t("sidebar.market_short", "Market"),
+            href: MARKET_PATHS.search,
+          },
           { label: t("sidebar.my_market_listings", "My Listings") },
         ]}
         headerTitle={
@@ -364,39 +358,61 @@ export function MyListingsV2() {
             component={ActiveListingsV2}
             skeleton={ListingsSkeleton}
             gridProps={{
-              item: true, container: true, xs: 12,
+              item: true,
+              container: true,
+              xs: 12,
               spacing: theme.layoutSpacing.component,
               sx: { transition: "0.3s" },
             }}
           />
 
-          <Grid item container justifyContent="space-between" spacing={theme.layoutSpacing.layout} xs={12}>
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            spacing={theme.layoutSpacing.layout}
+            xs={12}
+          >
             <HeaderTitle lg={12} xl={12}>
               {t("market.inactiveListings", "Inactive Listings")}
             </HeaderTitle>
           </Grid>
-          <Grid item xs={12}><Divider light /></Grid>
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
           <LazySection
             component={InactiveListingsV2}
             skeleton={ListingsSkeleton}
             gridProps={{
-              item: true, container: true, xs: 12,
+              item: true,
+              container: true,
+              xs: 12,
               spacing: theme.layoutSpacing.component,
               sx: { transition: "0.3s" },
             }}
           />
 
-          <Grid item container justifyContent="space-between" spacing={theme.layoutSpacing.layout} xs={12}>
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            spacing={theme.layoutSpacing.layout}
+            xs={12}
+          >
             <HeaderTitle lg={12} xl={12}>
               {t("market.archivedListings", "Archived Listings")}
             </HeaderTitle>
           </Grid>
-          <Grid item xs={12}><Divider light /></Grid>
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
           <LazySection
             component={ArchivedListingsV2}
             skeleton={ListingsSkeleton}
             gridProps={{
-              item: true, container: true, xs: 12,
+              item: true,
+              container: true,
+              xs: 12,
               spacing: theme.layoutSpacing.component,
               sx: { transition: "0.3s" },
             }}

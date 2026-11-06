@@ -4,7 +4,6 @@ import {
   Button,
   Chip,
   Divider,
-  Drawer,
   IconButton,
   MenuItem,
   Stack,
@@ -12,16 +11,11 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material"
-import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
-import {
-  CloseRounded,
-  ShoppingCartRounded,
-  DeleteOutlineRounded,
-} from "@mui/icons-material"
+import { ShoppingCartRounded, DeleteOutlineRounded } from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-import { BottomSheet } from "../../../../components/mobile/BottomSheet"
+import { MobileSidebarWrapper } from "../../../../components/mobile/MobileSidebarWrapper"
 import {
   useGetListingDetailQuery,
   useGetCartQuery,
@@ -43,7 +37,6 @@ export function AddToCartDrawer({
 }: AddToCartDrawerProps) {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const isMobile = useIsMobile()
 
   const { data: listingData, isLoading } = useGetListingDetailQuery(
     { id: listingId },
@@ -137,35 +130,13 @@ export function AddToCartDrawer({
   }
 
   const content = (
-    <Stack
-      spacing={2}
-      sx={{ p: isMobile ? 0 : 3, minWidth: isMobile ? undefined : 360 }}
-    >
+    <Stack spacing={2}>
       {isLoading ? (
         <Box display="flex" justifyContent="center" py={4}>
           <CircularProgress />
         </Box>
       ) : listingData ? (
         <>
-          {!isMobile && (
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h6" fontWeight="bold">
-                {t("cart.addToCart", "Add to Cart")}
-              </Typography>
-              <IconButton
-                onClick={onClose}
-                size="small"
-                aria-label={t("cart.closeDrawer", "Close")}
-              >
-                <CloseRounded />
-              </IconButton>
-            </Box>
-          )}
-
           <Typography variant="subtitle2" color="text.secondary">
             {listingData.listing.title}
           </Typography>
@@ -337,30 +308,17 @@ export function AddToCartDrawer({
     </Stack>
   )
 
-  if (isMobile) {
-    return (
-      <BottomSheet
-        open={open}
-        onClose={onClose}
-        title={t("cart.addToCart", "Add to Cart")}
-      >
-        {content}
-      </BottomSheet>
-    )
-  }
-
+  // Bottom sheet on phones, a right-hand drawer on desktop
   return (
-    <Drawer
-      anchor="right"
+    <MobileSidebarWrapper
       open={open}
       onClose={onClose}
-      PaperProps={{
-        role: "dialog",
-        "aria-label": t("cart.addToCart", "Add to Cart"),
-        sx: { width: 400, maxWidth: "90vw", p: 0 },
-      }}
+      title={t("cart.addToCart", "Add to Cart")}
+      anchor="right"
+      drawerWidth={400}
+      contentPadding={3}
     >
       {content}
-    </Drawer>
+    </MobileSidebarWrapper>
   )
 }

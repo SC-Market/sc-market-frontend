@@ -4,10 +4,6 @@ import {
   AlertTitle,
   Box,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Divider,
   Grid,
   InputAdornment,
@@ -51,6 +47,7 @@ import { MARKET_PATHS } from "../../../routes/paths"
 import { useCartActions, useCartItemActions } from "../hooks/useCartActions"
 import { HelpLink } from "../../help/components/HelpLink"
 import { useFormatters } from "../../../util/format"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
@@ -613,97 +610,95 @@ export function MarketCartV2() {
       </Grid>
 
       {/* Checkout Confirmation Dialog */}
-      <Dialog
+      <ResponsiveDialog
         open={checkoutDialogOpen}
         onClose={() => setCheckoutDialogOpen(false)}
         maxWidth="sm"
-        fullWidth
-        aria-labelledby="checkout-dialog-title"
+        dividers
+        title={t("cart.confirmCheckout", "Confirm Checkout")}
+        disableClose={isCheckingOut}
+        actions={
+          <>
+            <Button onClick={() => setCheckoutDialogOpen(false)}>
+              {t("accessibility.cancel", "Cancel")}
+            </Button>
+            <LoadingButton
+              variant="contained"
+              loading={isCheckingOut}
+              onClick={handleConfirmCheckout}
+            >
+              {t("cart.confirmOrder", "Confirm Order")}
+            </LoadingButton>
+          </>
+        }
       >
-        <DialogTitle id="checkout-dialog-title">
-          {t("cart.confirmCheckout", "Confirm Checkout")}
-        </DialogTitle>
-        <DialogContent dividers>
-          {cartData?.items
-            .filter((i) => i.listing.shop_id === checkoutSellerId)
-            .map((item) => (
-              <Box key={item.cart_item_id} sx={{ mb: 1 }}>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box>
-                    <Typography variant="body2" fontWeight="bold">
-                      {item.listing.title}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {item.variant.display_name} × {item.quantity}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2">
-                    {fmt.number(
-                      (item.price_changed
-                        ? item.current_price!
-                        : item.price_per_unit) * item.quantity,
-                    )}{" "}
-                    aUEC
+        {cartData?.items
+          .filter((i) => i.listing.shop_id === checkoutSellerId)
+          .map((item) => (
+            <Box key={item.cart_item_id} sx={{ mb: 1 }}>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography variant="body2" fontWeight="bold">
+                    {item.listing.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.variant.display_name} × {item.quantity}
                   </Typography>
                 </Box>
-                {item.price_changed && (
-                  <Alert
-                    severity="warning"
-                    sx={{ mt: 0.5, py: 0 }}
-                    icon={<WarningRounded fontSize="small" />}
-                  >
-                    <Typography variant="caption">
-                      {t(
-                        "cart.priceChangedFrom",
-                        "Price changed from {{old}} to {{new}} aUEC",
-                        {
-                          old: fmt.number(item.price_per_unit),
-                          new: fmt.number(item.current_price!),
-                        },
-                      )}
-                    </Typography>
-                  </Alert>
-                )}
+                <Typography variant="body2">
+                  {fmt.number(
+                    (item.price_changed
+                      ? item.current_price!
+                      : item.price_per_unit) * item.quantity,
+                  )}{" "}
+                  aUEC
+                </Typography>
               </Box>
-            ))}
-          <Divider sx={{ my: 1 }} />
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">{t("cart.total")}</Typography>
-            <Typography variant="h6">
-              {fmt.number(
-                cartData?.items
-                  .filter((i) => i.listing.shop_id === checkoutSellerId)
-                  .reduce((s, i) => s + i.subtotal, 0) ?? 0,
-              )}{" "}
-              aUEC
-            </Typography>
-          </Box>
-          {hasPriceChanges && (
-            <Alert severity="info" sx={{ mt: 1 }} icon={<WarningRounded />}>
-              {t(
-                "cart.confirmPriceChanges",
-                "Some prices have changed. By confirming, you accept the updated prices.",
+              {item.price_changed && (
+                <Alert
+                  severity="warning"
+                  sx={{ mt: 0.5, py: 0 }}
+                  icon={<WarningRounded fontSize="small" />}
+                >
+                  <Typography variant="caption">
+                    {t(
+                      "cart.priceChangedFrom",
+                      "Price changed from {{old}} to {{new}} aUEC",
+                      {
+                        old: fmt.number(item.price_per_unit),
+                        new: fmt.number(item.current_price!),
+                      },
+                    )}
+                  </Typography>
+                </Alert>
               )}
-            </Alert>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCheckoutDialogOpen(false)}>
-            {t("accessibility.cancel", "Cancel")}
-          </Button>
-          <LoadingButton
-            variant="contained"
-            loading={isCheckingOut}
-            onClick={handleConfirmCheckout}
-          >
-            {t("cart.confirmOrder", "Confirm Order")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+            </Box>
+          ))}
+        <Divider sx={{ my: 1 }} />
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h6">{t("cart.total")}</Typography>
+          <Typography variant="h6">
+            {fmt.number(
+              cartData?.items
+                .filter((i) => i.listing.shop_id === checkoutSellerId)
+                .reduce((s, i) => s + i.subtotal, 0) ?? 0,
+            )}{" "}
+            aUEC
+          </Typography>
+        </Box>
+        {hasPriceChanges && (
+          <Alert severity="info" sx={{ mt: 1 }} icon={<WarningRounded />}>
+            {t(
+              "cart.confirmPriceChanges",
+              "Some prices have changed. By confirming, you accept the updated prices.",
+            )}
+          </Alert>
+        )}
+      </ResponsiveDialog>
     </StandardPageLayout>
   )
 }

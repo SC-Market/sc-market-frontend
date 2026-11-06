@@ -2,10 +2,6 @@ import React from "react"
 import {
   Alert,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   InputAdornment,
   MenuItem,
   Stack,
@@ -20,6 +16,7 @@ import { getErrorMessage } from "../../../util/errorHandling"
 import { parseTargetPrice, QUALITY_TIERS } from "../domain/price"
 
 import { useFormatters } from "../../../util/format"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 export interface WatchPriceDialogProps {
   open: boolean
   onClose: () => void
@@ -92,126 +89,123 @@ export function WatchPriceDialog({
   }
 
   return (
-    <Dialog
+    <ResponsiveDialog
       open={open}
-      onClose={busy ? undefined : onClose}
+      onClose={onClose}
       maxWidth="xs"
-      fullWidth
-      aria-labelledby="watch-price-dialog-title"
-    >
-      <DialogTitle id="watch-price-dialog-title">
-        {existing
+      title={
+        existing
           ? t("priceAlerts.watch.editTitle", "Edit price alert")
-          : t("priceAlerts.watch.title", "Watch price")}
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ pt: 1 }}>
-          <Typography variant="body2" color="text.secondary">
-            {t(
-              "priceAlerts.watch.explainer",
-              "Get an alert when {{name}} is listed at or below your target price.",
-              { name: itemName },
-            )}
-          </Typography>
-          <TextField
-            inputRef={focusOnReveal}
-            label={t("priceAlerts.watch.targetPrice", "Target price")}
-            value={value}
-            onChange={(e) => setValue(e.target.value.replace(/[^\d]/g, ""))}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") void save()
-            }}
-            inputProps={{ inputMode: "numeric" }}
-            InputLabelProps={{ shrink: true }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">aUEC</InputAdornment>
-              ),
-            }}
-            error={invalid}
-            helperText={
-              invalid
-                ? t(
-                    "priceAlerts.watch.invalidPrice",
-                    "Enter a whole number above 1 aUEC.",
-                  )
-                : currentPrice
-                  ? t(
-                      "priceAlerts.watch.currentLowest",
-                      "Current lowest: {{price}}",
-                      {
-                        price: fmt.auec(currentPrice),
-                      },
-                    )
-                  : t(
-                      "priceAlerts.watch.noListings",
-                      "No public listings right now.",
-                    )
-            }
-          />
-          {showQuality && (
-            <TextField
-              select
-              label={t("priceAlerts.watch.quality", "Minimum quality")}
-              value={tier ?? ""}
-              onChange={(e) =>
-                setTier(e.target.value === "" ? null : Number(e.target.value))
-              }
-              SelectProps={{ displayEmpty: true }}
-              InputLabelProps={{ shrink: true }}
-              helperText={t(
-                "priceAlerts.watch.qualityHint",
-                "Only listings with stock of this quality or better alert, at their price.",
-              )}
+          : t("priceAlerts.watch.title", "Watch price")
+      }
+      disableClose={busy}
+      actions={
+        <>
+          {existing && (
+            <Button
+              color="error"
+              onClick={stop}
+              disabled={busy}
+              sx={{ mr: "auto" }}
             >
-              <MenuItem value="">
-                {t("priceAlerts.watch.anyQuality", "Any quality")}
-              </MenuItem>
-              {QUALITY_TIERS.map((q) => (
-                <MenuItem key={q} value={q}>
-                  {t(
-                    "priceAlerts.watch.tierOrBetter",
-                    "Tier {{tier}} or better",
-                    {
-                      tier: q,
-                    },
-                  )}
-                </MenuItem>
-              ))}
-            </TextField>
+              {t("priceAlerts.watch.stop", "Stop watching")}
+            </Button>
           )}
-          {failure && (
-            <Alert severity="error">
-              {getErrorMessage(failure) ??
-                t("priceAlerts.watch.error", "Couldn't save your price alert.")}
-            </Alert>
-          )}
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        {existing && (
-          <Button
-            color="error"
-            onClick={stop}
-            disabled={busy}
-            sx={{ mr: "auto" }}
-          >
-            {t("priceAlerts.watch.stop", "Stop watching")}
+          <Button onClick={onClose} disabled={busy}>
+            {t("ui.cancel", "Cancel")}
           </Button>
+          <Button
+            variant="contained"
+            onClick={save}
+            disabled={busy || price == null}
+          >
+            {existing
+              ? t("ui.save", "Save")
+              : t("priceAlerts.watch.add", "Watch price")}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2} sx={{ pt: 1 }}>
+        <Typography variant="body2" color="text.secondary">
+          {t(
+            "priceAlerts.watch.explainer",
+            "Get an alert when {{name}} is listed at or below your target price.",
+            { name: itemName },
+          )}
+        </Typography>
+        <TextField
+          inputRef={focusOnReveal}
+          label={t("priceAlerts.watch.targetPrice", "Target price")}
+          value={value}
+          onChange={(e) => setValue(e.target.value.replace(/[^\d]/g, ""))}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") void save()
+          }}
+          inputProps={{ inputMode: "numeric" }}
+          InputLabelProps={{ shrink: true }}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
+          }}
+          error={invalid}
+          helperText={
+            invalid
+              ? t(
+                  "priceAlerts.watch.invalidPrice",
+                  "Enter a whole number above 1 aUEC.",
+                )
+              : currentPrice
+                ? t(
+                    "priceAlerts.watch.currentLowest",
+                    "Current lowest: {{price}}",
+                    {
+                      price: fmt.auec(currentPrice),
+                    },
+                  )
+                : t(
+                    "priceAlerts.watch.noListings",
+                    "No public listings right now.",
+                  )
+          }
+        />
+        {showQuality && (
+          <TextField
+            select
+            label={t("priceAlerts.watch.quality", "Minimum quality")}
+            value={tier ?? ""}
+            onChange={(e) =>
+              setTier(e.target.value === "" ? null : Number(e.target.value))
+            }
+            SelectProps={{ displayEmpty: true }}
+            InputLabelProps={{ shrink: true }}
+            helperText={t(
+              "priceAlerts.watch.qualityHint",
+              "Only listings with stock of this quality or better alert, at their price.",
+            )}
+          >
+            <MenuItem value="">
+              {t("priceAlerts.watch.anyQuality", "Any quality")}
+            </MenuItem>
+            {QUALITY_TIERS.map((q) => (
+              <MenuItem key={q} value={q}>
+                {t(
+                  "priceAlerts.watch.tierOrBetter",
+                  "Tier {{tier}} or better",
+                  {
+                    tier: q,
+                  },
+                )}
+              </MenuItem>
+            ))}
+          </TextField>
         )}
-        <Button onClick={onClose} disabled={busy}>
-          {t("ui.cancel", "Cancel")}
-        </Button>
-        <Button
-          variant="contained"
-          onClick={save}
-          disabled={busy || price == null}
-        >
-          {existing
-            ? t("ui.save", "Save")
-            : t("priceAlerts.watch.add", "Watch price")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        {failure && (
+          <Alert severity="error">
+            {getErrorMessage(failure) ??
+              t("priceAlerts.watch.error", "Couldn't save your price alert.")}
+          </Alert>
+        )}
+      </Stack>
+    </ResponsiveDialog>
   )
 }

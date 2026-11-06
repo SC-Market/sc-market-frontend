@@ -15,10 +15,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -43,6 +39,7 @@ import {
 } from "../../domain/fulfilBuyOrder"
 import { useFormatters } from "../../../../util/format"
 import { useFulfillBuyOrder } from "../../hooks/useBuyOrderActions"
+import { ResponsiveDialog } from "../../../../components/dialog/ResponsiveDialog"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -117,135 +114,138 @@ export function FulfillBuyOrderDialog({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {t("buyorder.fulfillTitle", "Fulfill Buy Order")}
-      </DialogTitle>
-      <DialogContent>
-        {isLoading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
-            <CircularProgress />
-          </Box>
-        ) : isError ? (
-          <Alert severity="error">
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      title={t("buyorder.fulfillTitle", "Fulfill Buy Order")}
+      disableClose={submitting}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
+          <Button
+            variant="contained"
+            onClick={submit}
+            disabled={!selected || submitting}
+          >
+            {t("MarketAggregateView.fulfill", "Fulfill")}
+          </Button>
+        </>
+      }
+    >
+      {isLoading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : isError ? (
+        <Alert severity="error">
+          {t(
+            "buyorder.fulfillOptionsError",
+            "Couldn't load your listings. Try again.",
+          )}
+        </Alert>
+      ) : options.length === 0 ? (
+        <Stack spacing={2}>
+          <Alert severity="info">
             {t(
-              "buyorder.fulfillOptionsError",
-              "Couldn't load your listings. Try again.",
+              "buyorder.noFulfillOptions",
+              "None of your shops has an active listing of {{item}} with listed stock.",
+              { item: buyOrder.game_item_name },
             )}
           </Alert>
-        ) : options.length === 0 ? (
-          <Stack spacing={2}>
-            <Alert severity="info">
+          <Box>
+            <Button
+              component={RouterLink}
+              to={MARKET_PATHS.create}
+              variant="outlined"
+            >
+              {t("buyorder.createListingToFulfill", "Create a listing")}
+            </Button>
+          </Box>
+        </Stack>
+      ) : (
+        <Stack spacing={2}>
+          {usable.length === 0 && (
+            <Alert severity="warning">
               {t(
-                "buyorder.noFulfillOptions",
-                "None of your shops has an active listing of {{item}} with listed stock.",
-                { item: buyOrder.game_item_name },
+                "buyorder.noUsableFulfillOptions",
+                "None of your listings can fill this buy order. The reason is shown under each one.",
               )}
             </Alert>
-            <Box>
-              <Button
-                component={RouterLink}
-                to={MARKET_PATHS.create}
-                variant="outlined"
-              >
-                {t("buyorder.createListingToFulfill", "Create a listing")}
-              </Button>
-            </Box>
-          </Stack>
-        ) : (
-          <Stack spacing={2}>
-            {usable.length === 0 && (
-              <Alert severity="warning">
-                {t(
-                  "buyorder.noUsableFulfillOptions",
-                  "None of your listings can fill this buy order. The reason is shown under each one.",
-                )}
-              </Alert>
+          )}
+          <Typography variant="body2" color="text.secondary">
+            {t(
+              "buyorder.fulfillFromListing",
+              "Pick the listing to fill it from. The order uses that listing's price and comes out of its listed stock.",
             )}
-            <Typography variant="body2" color="text.secondary">
-              {t(
-                "buyorder.fulfillFromListing",
-                "Pick the listing to fill it from. The order uses that listing's price and comes out of its listed stock.",
-              )}
-            </Typography>
-            <RadioGroup
-              value={selectedKey}
-              onChange={(e) => setSelectedKey(e.target.value)}
-            >
-              {options.map((o) => (
-                <FormControlLabel
-                  key={optionKey(o)}
-                  value={optionKey(o)}
-                  disabled={o.problem != null}
-                  control={<Radio />}
-                  label={
-                    <Box>
-                      <Typography variant="body2" fontWeight="medium">
-                        {o.listing_title} · {o.variant_display_name}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {t(
-                          "buyorder.fulfillOptionDetail",
-                          "{{price}} aUEC each · {{available}} listed · {{shop}}",
-                          {
-                            price: fmt.number(o.price_per_unit),
-                            available: fmt.number(o.available),
-                            shop: o.shop_name,
-                          },
-                        )}
-                      </Typography>
-                      {o.problem != null && (
-                        <Typography
-                          variant="caption"
-                          color="error"
-                          display="block"
-                        >
-                          {o.problem}
-                        </Typography>
+          </Typography>
+          <RadioGroup
+            value={selectedKey}
+            onChange={(e) => setSelectedKey(e.target.value)}
+          >
+            {options.map((o) => (
+              <FormControlLabel
+                key={optionKey(o)}
+                value={optionKey(o)}
+                disabled={o.problem != null}
+                control={<Radio />}
+                label={
+                  <Box>
+                    <Typography variant="body2" fontWeight="medium">
+                      {o.listing_title} · {o.variant_display_name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {t(
+                        "buyorder.fulfillOptionDetail",
+                        "{{price}} aUEC each · {{available}} listed · {{shop}}",
+                        {
+                          price: fmt.number(o.price_per_unit),
+                          available: fmt.number(o.available),
+                          shop: o.shop_name,
+                        },
                       )}
-                    </Box>
-                  }
-                />
-              ))}
-            </RadioGroup>
-            <NumericFormat
-              decimalScale={0}
-              allowNegative={false}
-              customInput={TextField}
-              thousandSeparator
-              fullWidth
-              label={t("buyorder.fulfillQuantity", "Quantity to fulfill")}
-              value={quantity}
-              onValueChange={(values) => setQuantity(values.floatValue ?? 0)}
-              helperText={t(
-                "buyorder.fulfillQuantityHelper",
-                "Up to {{max}} ({{remaining}} still wanted)",
-                {
-                  max: fmt.number(maxQuantity),
-                  remaining: fmt.number(remaining),
-                },
-              )}
-            />
-            {selected && (
-              <Typography variant="subtitle2">
-                {t("buyorder.fulfillTotal", "Order total: {{total}} aUEC", {
-                  total: fmt.number(selected.price_per_unit * quantity),
-                })}
-              </Typography>
+                    </Typography>
+                    {o.problem != null && (
+                      <Typography
+                        variant="caption"
+                        color="error"
+                        display="block"
+                      >
+                        {o.problem}
+                      </Typography>
+                    )}
+                  </Box>
+                }
+              />
+            ))}
+          </RadioGroup>
+          <NumericFormat
+            decimalScale={0}
+            allowNegative={false}
+            customInput={TextField}
+            thousandSeparator
+            fullWidth
+            label={t("buyorder.fulfillQuantity", "Quantity to fulfill")}
+            value={quantity}
+            onValueChange={(values) => setQuantity(values.floatValue ?? 0)}
+            helperText={t(
+              "buyorder.fulfillQuantityHelper",
+              "Up to {{max}} ({{remaining}} still wanted)",
+              {
+                max: fmt.number(maxQuantity),
+                remaining: fmt.number(remaining),
+              },
             )}
-          </Stack>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
-        <Button
-          variant="contained"
-          onClick={submit}
-          disabled={!selected || submitting}
-        >
-          {t("MarketAggregateView.fulfill", "Fulfill")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          />
+          {selected && (
+            <Typography variant="subtitle2">
+              {t("buyorder.fulfillTotal", "Order total: {{total}} aUEC", {
+                total: fmt.number(selected.price_per_unit * quantity),
+              })}
+            </Typography>
+          )}
+        </Stack>
+      )}
+    </ResponsiveDialog>
   )
 }

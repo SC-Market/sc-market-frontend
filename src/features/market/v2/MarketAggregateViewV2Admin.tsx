@@ -20,10 +20,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   Grid,
   InputAdornment,
@@ -64,6 +60,7 @@ import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton
 import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
 import { useCancelBuyOrder } from "../hooks/useBuyOrderActions"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -349,58 +346,60 @@ function BuyDialog({
   if (!listing) return null
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700 }}>
-        {t("marketUi.aggregateAdmin.buyFrom", { shop: listing.shop_name })}
-      </DialogTitle>
-      <DialogContent sx={{ pt: "12px !important" }}>
-        <Typography variant="body2" color="text.secondary" mb={2}>
-          {t("marketUi.aggregateAdmin.priceAndAvailable", {
-            price: fmt.number(listing.price_min),
-            available: fmt.number(listing.quantity_available),
-          })}
-        </Typography>
-        <NumericFormat
-          decimalScale={0}
-          allowNegative={false}
-          customInput={TextField}
-          thousandSeparator
-          fullWidth
-          label={t("MarketAggregateView.quantityToBuy")}
-          value={quantity}
-          onValueChange={(v) => setQuantity(v.floatValue || 1)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                {t("marketUi.aggregateAdmin.ofMax", {
-                  max: fmt.number(listing.quantity_available),
-                })}
-              </InputAdornment>
-            ),
-          }}
-          isAllowed={({ floatValue }) =>
-            !floatValue ||
-            (floatValue >= 1 && floatValue <= listing.quantity_available)
-          }
-          sx={{ mb: 1.5 }}
-        />
-        <Typography
-          variant="body2"
-          color="primary"
-          sx={{ fontFamily: "monospace" }}
-        >
-          {t("marketUi.aggregateAdmin.totalAuec", {
-            total: fmt.number(listing.price_min * quantity),
-          })}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
-        <Button variant="contained" color="success" onClick={addToCart}>
-          {t("MarketAggregateView.addToCart", "Add to Cart")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
+      title={t("marketUi.aggregateAdmin.buyFrom", { shop: listing.shop_name })}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
+          <Button variant="contained" color="success" onClick={addToCart}>
+            {t("MarketAggregateView.addToCart", "Add to Cart")}
+          </Button>
+        </>
+      }
+    >
+      <Typography variant="body2" color="text.secondary" mt={1.5} mb={2}>
+        {t("marketUi.aggregateAdmin.priceAndAvailable", {
+          price: fmt.number(listing.price_min),
+          available: fmt.number(listing.quantity_available),
+        })}
+      </Typography>
+      <NumericFormat
+        decimalScale={0}
+        allowNegative={false}
+        customInput={TextField}
+        thousandSeparator
+        fullWidth
+        label={t("MarketAggregateView.quantityToBuy")}
+        value={quantity}
+        onValueChange={(v) => setQuantity(v.floatValue || 1)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              {t("marketUi.aggregateAdmin.ofMax", {
+                max: fmt.number(listing.quantity_available),
+              })}
+            </InputAdornment>
+          ),
+        }}
+        isAllowed={({ floatValue }) =>
+          !floatValue ||
+          (floatValue >= 1 && floatValue <= listing.quantity_available)
+        }
+        sx={{ mb: 1.5 }}
+      />
+      <Typography
+        variant="body2"
+        color="primary"
+        sx={{ fontFamily: "monospace" }}
+      >
+        {t("marketUi.aggregateAdmin.totalAuec", {
+          total: fmt.number(listing.price_min * quantity),
+        })}
+      </Typography>
+    </ResponsiveDialog>
   )
 }
 

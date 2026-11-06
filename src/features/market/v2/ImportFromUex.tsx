@@ -1,9 +1,6 @@
 import React, { useState } from "react"
 import {
   Box,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Button,
   TextField,
   Typography,
@@ -33,6 +30,7 @@ import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { HelpTip } from "../../help/components/HelpTip"
 import { useFormatters } from "../../../util/format"
 import { useImportFromUex } from "../hooks/useImportFromUex"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 
 type TFn = ReturnType<typeof useTranslation>["t"]
 
@@ -393,13 +391,14 @@ export function ImportFromUexDialog({
 }) {
   const { t } = useTranslation()
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>
-        {t("ItemStock.importFromUex", "Import from UEX")}
-      </DialogTitle>
-      <DialogContent>
-        <ImportFromUex shopId={shopId} />
-      </DialogContent>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      title={t("ItemStock.importFromUex", "Import from UEX")}
+      mobile="fullScreen"
+    >
+      <ImportFromUex shopId={shopId} />
+    </ResponsiveDialog>
   )
 }

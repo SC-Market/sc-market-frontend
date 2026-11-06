@@ -8,10 +8,6 @@
 
 import React, { useState, useCallback, useEffect } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
   Stack,
@@ -39,6 +35,7 @@ import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useCreateLot } from "../../hooks/useStockLotActions"
 import { useNow } from "../../../../util/format"
+import { ResponsiveDialog } from "../../../../components/dialog/ResponsiveDialog"
 
 export interface CreateLotDialogV2Props {
   open: boolean
@@ -241,263 +238,259 @@ export function CreateLotDialogV2({
   const variantPreview = `Tier ${qualityTier}${qualityValue !== undefined ? ` (${qualityValue.toFixed(1)}%)` : ""}${craftedSource ? ` - ${craftedSource}` : ""}`
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {t("CreateLotDialogV2.title", "Create Stock Lot")}
-      </DialogTitle>
-
-      <DialogContent>
-        <Stack spacing={2} mt={1}>
-          {/* Listing (and item, for bundles) the lot is added to */}
+    <ResponsiveDialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="sm"
+      title={t("CreateLotDialogV2.title", "Create Stock Lot")}
+      mobile="fullScreen"
+      disableClose={isLoading}
+      actions={
+        <>
+          <Button onClick={handleClose} disabled={isLoading}>
+            {t("CreateLotDialogV2.cancel", "Cancel")}
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            disabled={isLoading || !itemId}
+          >
+            {isLoading ? (
+              <CircularProgress size={20} />
+            ) : (
+              t("CreateLotDialogV2.create", "Create Lot")
+            )}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2} mt={1}>
+        {/* Listing (and item, for bundles) the lot is added to */}
+        <TextField
+          select
+          fullWidth
+          required
+          label={t("CreateLotDialogV2.listing", "Listing")}
+          value={
+            listings.some((l) => l.listing_id === listingId) ? listingId : ""
+          }
+          onChange={(e) => setListingId(e.target.value)}
+          helperText={
+            listingId && !listingLoading && listingItems.length === 0
+              ? t(
+                  "CreateLotDialogV2.noItems",
+                  "This listing has no item to add stock to",
+                )
+              : undefined
+          }
+        >
+          {listings.map((l) => (
+            <MenuItem key={l.listing_id} value={l.listing_id}>
+              {l.title}
+            </MenuItem>
+          ))}
+        </TextField>
+        {listingItems.length > 1 && (
           <TextField
             select
             fullWidth
             required
-            label={t("CreateLotDialogV2.listing", "Listing")}
-            value={
-              listings.some((l) => l.listing_id === listingId) ? listingId : ""
-            }
-            onChange={(e) => setListingId(e.target.value)}
-            helperText={
-              listingId && !listingLoading && listingItems.length === 0
-                ? t(
-                    "CreateLotDialogV2.noItems",
-                    "This listing has no item to add stock to",
-                  )
-                : undefined
-            }
+            label={t("CreateLotDialogV2.item", "Item")}
+            value={itemId}
+            onChange={(e) => setItemId(e.target.value)}
           >
-            {listings.map((l) => (
-              <MenuItem key={l.listing_id} value={l.listing_id}>
-                {l.title}
+            {listingItems.map((item) => (
+              <MenuItem key={item.item_id} value={item.item_id}>
+                {item.game_item.name}
               </MenuItem>
             ))}
           </TextField>
-          {listingItems.length > 1 && (
-            <TextField
-              select
-              fullWidth
-              required
-              label={t("CreateLotDialogV2.item", "Item")}
-              value={itemId}
-              onChange={(e) => setItemId(e.target.value)}
-            >
-              {listingItems.map((item) => (
-                <MenuItem key={item.item_id} value={item.item_id}>
-                  {item.game_item.name}
-                </MenuItem>
-              ))}
-            </TextField>
+        )}
+
+        {/* Quantity */}
+        <TextField
+          type="number"
+          value={quantity}
+          onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
+          fullWidth
+          required
+          inputRef={focusOnReveal}
+          label={t("CreateLotDialogV2.quantity", "Quantity")}
+          helperText={t(
+            "CreateLotDialogV2.quantityHelper",
+            "Enter the number of units in this lot",
           )}
+          inputProps={{ min: 1 }}
+        />
 
-          {/* Quantity */}
-          <TextField
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-            fullWidth
-            required
-            inputRef={focusOnReveal}
-            label={t("CreateLotDialogV2.quantity", "Quantity")}
-            helperText={t(
-              "CreateLotDialogV2.quantityHelper",
-              "Enter the number of units in this lot",
-            )}
-            inputProps={{ min: 1 }}
-          />
+        <Divider />
 
-          <Divider />
+        {/* Variant Attributes Section */}
+        <Typography variant="subtitle2" color="text.secondary">
+          {t("CreateLotDialogV2.variantAttributes", "Variant Attributes")}
+        </Typography>
 
-          {/* Variant Attributes Section */}
-          <Typography variant="subtitle2" color="text.secondary">
-            {t("CreateLotDialogV2.variantAttributes", "Variant Attributes")}
-          </Typography>
-
-          {/* Quality Tier */}
-          <FormControl fullWidth required>
-            <InputLabel id="create-lot-quality-tier-label">
-              {t("CreateLotDialogV2.qualityTier", "Quality Tier")}
-            </InputLabel>
-            <Select
-              labelId="create-lot-quality-tier-label"
-              value={qualityTier}
-              onChange={(e) => setQualityTier(Number(e.target.value))}
-              label={t("CreateLotDialogV2.qualityTier", "Quality Tier")}
-            >
-              {(() => {
-                const qualityTierType = variantTypesData?.variant_types.find(
-                  (vt) => vt.name === "quality_tier",
-                )
-                const min = qualityTierType?.min_value ?? 1
-                const max = qualityTierType?.max_value ?? 5
-                return Array.from(
-                  { length: max - min + 1 },
-                  (_, i) => min + i,
-                ).map((tier) => (
-                  <MenuItem key={tier} value={tier}>
-                    {t("CreateLotDialogV2.tier", "Tier")} {tier}
-                  </MenuItem>
-                ))
-              })()}
-            </Select>
-          </FormControl>
-
-          {/* Quality Value */}
-          <TextField
-            type="number"
-            value={qualityValue || ""}
-            onChange={(e) =>
-              setQualityValue(
-                e.target.value ? parseFloat(e.target.value) : undefined,
-              )
-            }
-            fullWidth
-            label={t("CreateLotDialogV2.qualityValue", "Quality Value (%)")}
-            helperText={t(
-              "CreateLotDialogV2.qualityValueHelper",
-              "Optional: Precise quality value (0-1000)",
-            )}
-            inputProps={{ min: 0, max: 1000, step: 1 }}
-          />
-
-          {/* Crafted Source */}
-          <FormControl fullWidth>
-            <InputLabel id="create-lot-source-label">
-              {t("CreateLotDialogV2.craftedSource", "Source")}
-            </InputLabel>
-            <Select
-              labelId="create-lot-source-label"
-              value={craftedSource || ""}
-              onChange={(e) => setCraftedSource(e.target.value || undefined)}
-              label={t("CreateLotDialogV2.craftedSource", "Source")}
-            >
-              <MenuItem value="">
-                {t("CreateLotDialogV2.none", "None")}
-              </MenuItem>
-              {(() => {
-                const sourceType = variantTypesData?.variant_types.find(
-                  (vt) => vt.name === "crafted_source",
-                )
-                const values = sourceType?.allowed_values ?? [
-                  "crafted",
-                  "store",
-                  "looted",
-                  "unknown",
-                ]
-                return values.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val.charAt(0).toUpperCase() + val.slice(1)}
-                  </MenuItem>
-                ))
-              })()}
-            </Select>
-          </FormControl>
-
-          {/* Blueprint Tier */}
-          <TextField
-            type="number"
-            value={blueprintTier || ""}
-            onChange={(e) =>
-              setBlueprintTier(
-                e.target.value ? parseInt(e.target.value) : undefined,
-              )
-            }
-            fullWidth
-            label={t("CreateLotDialogV2.blueprintTier", "Blueprint Tier")}
-            helperText={t(
-              "CreateLotDialogV2.blueprintTierHelper",
-              "Optional: Blueprint quality tier (1-5)",
-            )}
-            inputProps={{ min: 1, max: 5 }}
-          />
-
-          {/* Variant Preview */}
-          <Box
-            sx={{
-              p: 1.5,
-              bgcolor: "action.hover",
-              borderRadius: 1,
-              border: 1,
-              borderColor: "divider",
-            }}
+        {/* Quality Tier */}
+        <FormControl fullWidth required>
+          <InputLabel id="create-lot-quality-tier-label">
+            {t("CreateLotDialogV2.qualityTier", "Quality Tier")}
+          </InputLabel>
+          <Select
+            labelId="create-lot-quality-tier-label"
+            value={qualityTier}
+            onChange={(e) => setQualityTier(Number(e.target.value))}
+            label={t("CreateLotDialogV2.qualityTier", "Quality Tier")}
           >
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              display="block"
-            >
-              {t("CreateLotDialogV2.preview", "Variant Preview")}:
-            </Typography>
-            <Typography variant="body2" fontWeight="medium">
-              {variantPreview}
-            </Typography>
-          </Box>
+            {(() => {
+              const qualityTierType = variantTypesData?.variant_types.find(
+                (vt) => vt.name === "quality_tier",
+              )
+              const min = qualityTierType?.min_value ?? 1
+              const max = qualityTierType?.max_value ?? 5
+              return Array.from(
+                { length: max - min + 1 },
+                (_, i) => min + i,
+              ).map((tier) => (
+                <MenuItem key={tier} value={tier}>
+                  {t("CreateLotDialogV2.tier", "Tier")} {tier}
+                </MenuItem>
+              ))
+            })()}
+          </Select>
+        </FormControl>
 
-          <Divider />
-
-          {/* Location & Ownership Section */}
-          <Typography variant="subtitle2" color="text.secondary">
-            {t("CreateLotDialogV2.locationOwnership", "Location & Ownership")}
-          </Typography>
-
-          {/* Location */}
-          <LocationSelector
-            value={locationId}
-            onChange={setLocationId}
-            locations={locationsForSelector}
-            label={t("CreateLotDialogV2.location", "Location (Optional)")}
-          />
-
-          {/* Listed Toggle */}
-          <LabeledSwitch
-            checked={listed}
-            onChange={setListed}
-            size="small"
-            label={
-              <Typography variant="body2">
-                {t("CreateLotDialogV2.listed", "Listed")}
-              </Typography>
-            }
-            helperText={t(
-              "CreateLotDialogV2.listedHelper",
-              "Listed stock appears in public listings",
-            )}
-          />
-
-          {/* Notes */}
-          <TextField
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            multiline
-            rows={3}
-            fullWidth
-            label={t("CreateLotDialogV2.notes", "Notes (Optional)")}
-            placeholder={t(
-              "CreateLotDialogV2.notesPlaceholder",
-              "Add any notes about this lot...",
-            )}
-            inputProps={{ maxLength: 1000 }}
-            helperText={`${notes.length}/1000`}
-          />
-        </Stack>
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={handleClose} disabled={isLoading}>
-          {t("CreateLotDialogV2.cancel", "Cancel")}
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={isLoading || !itemId}
-        >
-          {isLoading ? (
-            <CircularProgress size={20} />
-          ) : (
-            t("CreateLotDialogV2.create", "Create Lot")
+        {/* Quality Value */}
+        <TextField
+          type="number"
+          value={qualityValue || ""}
+          onChange={(e) =>
+            setQualityValue(
+              e.target.value ? parseFloat(e.target.value) : undefined,
+            )
+          }
+          fullWidth
+          label={t("CreateLotDialogV2.qualityValue", "Quality Value (%)")}
+          helperText={t(
+            "CreateLotDialogV2.qualityValueHelper",
+            "Optional: Precise quality value (0-1000)",
           )}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          inputProps={{ min: 0, max: 1000, step: 1 }}
+        />
+
+        {/* Crafted Source */}
+        <FormControl fullWidth>
+          <InputLabel id="create-lot-source-label">
+            {t("CreateLotDialogV2.craftedSource", "Source")}
+          </InputLabel>
+          <Select
+            labelId="create-lot-source-label"
+            value={craftedSource || ""}
+            onChange={(e) => setCraftedSource(e.target.value || undefined)}
+            label={t("CreateLotDialogV2.craftedSource", "Source")}
+          >
+            <MenuItem value="">{t("CreateLotDialogV2.none", "None")}</MenuItem>
+            {(() => {
+              const sourceType = variantTypesData?.variant_types.find(
+                (vt) => vt.name === "crafted_source",
+              )
+              const values = sourceType?.allowed_values ?? [
+                "crafted",
+                "store",
+                "looted",
+                "unknown",
+              ]
+              return values.map((val) => (
+                <MenuItem key={val} value={val}>
+                  {val.charAt(0).toUpperCase() + val.slice(1)}
+                </MenuItem>
+              ))
+            })()}
+          </Select>
+        </FormControl>
+
+        {/* Blueprint Tier */}
+        <TextField
+          type="number"
+          value={blueprintTier || ""}
+          onChange={(e) =>
+            setBlueprintTier(
+              e.target.value ? parseInt(e.target.value) : undefined,
+            )
+          }
+          fullWidth
+          label={t("CreateLotDialogV2.blueprintTier", "Blueprint Tier")}
+          helperText={t(
+            "CreateLotDialogV2.blueprintTierHelper",
+            "Optional: Blueprint quality tier (1-5)",
+          )}
+          inputProps={{ min: 1, max: 5 }}
+        />
+
+        {/* Variant Preview */}
+        <Box
+          sx={{
+            p: 1.5,
+            bgcolor: "action.hover",
+            borderRadius: 1,
+            border: 1,
+            borderColor: "divider",
+          }}
+        >
+          <Typography variant="caption" color="text.secondary" display="block">
+            {t("CreateLotDialogV2.preview", "Variant Preview")}:
+          </Typography>
+          <Typography variant="body2" fontWeight="medium">
+            {variantPreview}
+          </Typography>
+        </Box>
+
+        <Divider />
+
+        {/* Location & Ownership Section */}
+        <Typography variant="subtitle2" color="text.secondary">
+          {t("CreateLotDialogV2.locationOwnership", "Location & Ownership")}
+        </Typography>
+
+        {/* Location */}
+        <LocationSelector
+          value={locationId}
+          onChange={setLocationId}
+          locations={locationsForSelector}
+          label={t("CreateLotDialogV2.location", "Location (Optional)")}
+        />
+
+        {/* Listed Toggle */}
+        <LabeledSwitch
+          checked={listed}
+          onChange={setListed}
+          size="small"
+          label={
+            <Typography variant="body2">
+              {t("CreateLotDialogV2.listed", "Listed")}
+            </Typography>
+          }
+          helperText={t(
+            "CreateLotDialogV2.listedHelper",
+            "Listed stock appears in public listings",
+          )}
+        />
+
+        {/* Notes */}
+        <TextField
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          multiline
+          rows={3}
+          fullWidth
+          label={t("CreateLotDialogV2.notes", "Notes (Optional)")}
+          placeholder={t(
+            "CreateLotDialogV2.notesPlaceholder",
+            "Add any notes about this lot...",
+          )}
+          inputProps={{ maxLength: 1000 }}
+          helperText={`${notes.length}/1000`}
+        />
+      </Stack>
+    </ResponsiveDialog>
   )
 }

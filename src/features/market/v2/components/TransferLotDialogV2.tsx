@@ -7,16 +7,7 @@
  */
 
 import React, { useState, useCallback } from "react"
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  CircularProgress,
-  Typography,
-  Stack,
-} from "@mui/material"
+import { Button, CircularProgress, Typography, Stack } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   type StockLotDetail,
@@ -25,6 +16,7 @@ import {
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useFormatters, useNow } from "../../../../util/format"
 import { useTransferLot } from "../../hooks/useStockLotActions"
+import { ResponsiveDialog } from "../../../../components/dialog/ResponsiveDialog"
 
 export interface TransferLotDialogV2Props {
   open: boolean
@@ -69,63 +61,64 @@ export function TransferLotDialogV2({
   }))
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {t("TransferLotDialogV2.title", "Transfer Stock Lot")}
-      </DialogTitle>
-
-      <DialogContent>
-        <Stack spacing={2} mt={1}>
-          <Typography variant="body2" color="text.secondary">
-            {t(
-              "TransferLotDialogV2.description",
-              "Transfer this lot to a different location:",
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      title={t("TransferLotDialogV2.title", "Transfer Stock Lot")}
+      disableClose={isLoading}
+      actions={
+        <>
+          <Button onClick={onClose} disabled={isLoading}>
+            {t("TransferLotDialogV2.cancel", "Cancel")}
+          </Button>
+          <Button
+            onClick={handleTransfer}
+            variant="contained"
+            disabled={isLoading || newLocationId === lot.location?.location_id}
+          >
+            {isLoading ? (
+              <CircularProgress size={20} />
+            ) : (
+              t("TransferLotDialogV2.transfer", "Transfer")
             )}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>{t("TransferLotDialogV2.quantity", "Quantity")}:</strong>{" "}
-            {fmt.number(lot.quantity_total)}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>{t("TransferLotDialogV2.variant", "Variant")}:</strong>{" "}
-            {lot.variant.display_name}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>
-              {t("TransferLotDialogV2.currentLocation", "Current Location")}:
-            </strong>{" "}
-            {lot.location?.name ||
-              t("TransferLotDialogV2.unspecified", "Unspecified")}
-          </Typography>
-
-          <LocationSelector
-            value={newLocationId}
-            onChange={setNewLocationId}
-            locations={locationsForSelector}
-            label={t("TransferLotDialogV2.newLocation", "New Location")}
-          />
-        </Stack>
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={onClose} disabled={isLoading}>
-          {t("TransferLotDialogV2.cancel", "Cancel")}
-        </Button>
-        <Button
-          onClick={handleTransfer}
-          variant="contained"
-          disabled={isLoading || newLocationId === lot.location?.location_id}
-        >
-          {isLoading ? (
-            <CircularProgress size={20} />
-          ) : (
-            t("TransferLotDialogV2.transfer", "Transfer")
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2} mt={1}>
+        <Typography variant="body2" color="text.secondary">
+          {t(
+            "TransferLotDialogV2.description",
+            "Transfer this lot to a different location:",
           )}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </Typography>
+
+        <Typography variant="body2">
+          <strong>{t("TransferLotDialogV2.quantity", "Quantity")}:</strong>{" "}
+          {fmt.number(lot.quantity_total)}
+        </Typography>
+
+        <Typography variant="body2">
+          <strong>{t("TransferLotDialogV2.variant", "Variant")}:</strong>{" "}
+          {lot.variant.display_name}
+        </Typography>
+
+        <Typography variant="body2">
+          <strong>
+            {t("TransferLotDialogV2.currentLocation", "Current Location")}:
+          </strong>{" "}
+          {lot.location?.name ||
+            t("TransferLotDialogV2.unspecified", "Unspecified")}
+        </Typography>
+
+        <LocationSelector
+          value={newLocationId}
+          onChange={setNewLocationId}
+          locations={locationsForSelector}
+          label={t("TransferLotDialogV2.newLocation", "New Location")}
+        />
+      </Stack>
+    </ResponsiveDialog>
   )
 }

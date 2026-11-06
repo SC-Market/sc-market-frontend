@@ -23,11 +23,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   IconButton,
   MenuItem,
@@ -83,6 +78,7 @@ import { canEditShopStockLots } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 import { useFormatters } from "../../../util/format"
 import { useStockLotActions } from "../hooks/useStockLotActions"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 /**
  * This page's shop: lots, listings and permissions are scoped to it (without
@@ -748,31 +744,19 @@ function AllStockLotsGridV2() {
           "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" },
         }}
       />
-      <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
-        <DialogTitle>
-          {t("AllStockLots.confirmDeleteTitle", "Delete lot?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t(
-              "AllStockLots.confirmDeleteBody",
-              "This lot will be permanently deleted and cannot be recovered.",
-            )}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPendingDelete(null)} color="inherit">
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <Button
-            onClick={() => pendingDelete && void handleDelete(pendingDelete)}
-            color="error"
-            variant="contained"
-          >
-            {t("common.delete", "Delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={!!pendingDelete}
+        onClose={() => setPendingDelete(null)}
+        onConfirm={() => pendingDelete && void handleDelete(pendingDelete)}
+        title={t("AllStockLots.confirmDeleteTitle", "Delete lot?")}
+        message={t(
+          "AllStockLots.confirmDeleteBody",
+          "This lot will be permanently deleted and cannot be recovered.",
+        )}
+        cancelLabel={t("common.cancel", "Cancel")}
+        confirmLabel={t("common.delete", "Delete")}
+        destructive
+      />
       {addLotListingId && (
         <CreateLotDialogV2
           listings={listings}

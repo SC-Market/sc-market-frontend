@@ -7,20 +7,10 @@
  * Requirements: 13.1, 13.2
  */
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Stack,
-  Typography,
-  Alert,
-  Box,
-  Divider,
-} from "@mui/material"
+import { Button, Stack, Typography, Alert, Box, Divider } from "@mui/material"
 import { WarningRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { ResponsiveDialog } from "../../../../components/dialog/ResponsiveDialog"
 
 interface InsufficientStockDialogProps {
   open: boolean
@@ -45,143 +35,149 @@ export function InsufficientStockDialog({
 }: InsufficientStockDialogProps) {
   const { t } = useTranslation()
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <WarningRounded color="warning" />
-          <Typography variant="h6">
-            {t("allocationUi.insufficient.title")}
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      title={
+        <>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <WarningRounded color="warning" />
+            <Typography variant="h6">
+              {t("allocationUi.insufficient.title")}
+            </Typography>
+          </Stack>
+        </>
+      }
+      actions={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+        </>
+      }
+    >
+      <Stack spacing={3}>
+        {/* Problem Summary */}
+        <Alert severity="warning">
+          <Typography variant="body2" gutterBottom>
+            <strong>{t("allocationUi.insufficient.cannotAllocate")}</strong>
           </Typography>
-        </Stack>
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={3}>
-          {/* Problem Summary */}
-          <Alert severity="warning">
-            <Typography variant="body2" gutterBottom>
-              <strong>{t("allocationUi.insufficient.cannotAllocate")}</strong>
-            </Typography>
-            <Typography variant="body2">
-              {t("allocationUi.insufficient.summary", {
-                count: orderQuantity,
-                availableText: t("allocationUi.insufficient.availableUnits", {
-                  count: availableQuantity,
-                }),
-              })}
-            </Typography>
-          </Alert>
+          <Typography variant="body2">
+            {t("allocationUi.insufficient.summary", {
+              count: orderQuantity,
+              availableText: t("allocationUi.insufficient.availableUnits", {
+                count: availableQuantity,
+              }),
+            })}
+          </Typography>
+        </Alert>
 
-          {/* Detailed Breakdown */}
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              {t("allocationUi.insufficient.breakdown")}
-            </Typography>
-            <Stack spacing={1}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">
-                  {t("allocationUi.insufficient.orderQuantity")}
-                </Typography>
-                <Typography variant="body2" fontWeight="medium">
-                  {orderQuantity}
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">
-                  {t("allocationUi.insufficient.availableStock")}
-                </Typography>
-                <Typography variant="body2" fontWeight="medium">
-                  {availableQuantity}
-                </Typography>
-              </Stack>
-              <Divider />
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="error" fontWeight="medium">
-                  {t("allocationUi.insufficient.shortfall")}
-                </Typography>
-                <Typography variant="body2" color="error" fontWeight="medium">
-                  {shortfall}
-                </Typography>
-              </Stack>
+        {/* Detailed Breakdown */}
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            {t("allocationUi.insufficient.breakdown")}
+          </Typography>
+          <Stack spacing={1}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                {t("allocationUi.insufficient.orderQuantity")}
+              </Typography>
+              <Typography variant="body2" fontWeight="medium">
+                {orderQuantity}
+              </Typography>
             </Stack>
-          </Box>
-
-          {/* Resolution Options */}
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              {t("allocationUi.insufficient.whatToDo")}
-            </Typography>
-            <Stack spacing={1.5} sx={{ mt: 1.5 }}>
-              {onAddStock && (
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => {
-                    onAddStock()
-                    onClose()
-                  }}
-                  sx={{ justifyContent: "flex-start", textAlign: "left" }}
-                >
-                  <Stack spacing={0.5} alignItems="flex-start">
-                    <Typography variant="body2" fontWeight="medium">
-                      {t("allocationUi.insufficient.addStock")}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("allocationUi.insufficient.addStockHint")}
-                    </Typography>
-                  </Stack>
-                </Button>
-              )}
-
-              {onAllocateUnlisted && (
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => {
-                    onAllocateUnlisted()
-                    onClose()
-                  }}
-                  sx={{ justifyContent: "flex-start", textAlign: "left" }}
-                >
-                  <Stack spacing={0.5} alignItems="flex-start">
-                    <Typography variant="body2" fontWeight="medium">
-                      {t("allocationUi.insufficient.useUnlisted")}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("allocationUi.insufficient.useUnlistedHint")}
-                    </Typography>
-                  </Stack>
-                </Button>
-              )}
-
-              {onReduceOrder && (
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => {
-                    onReduceOrder()
-                    onClose()
-                  }}
-                  sx={{ justifyContent: "flex-start", textAlign: "left" }}
-                >
-                  <Stack spacing={0.5} alignItems="flex-start">
-                    <Typography variant="body2" fontWeight="medium">
-                      {t("allocationUi.insufficient.reduceOrder")}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("allocationUi.insufficient.reduceOrderHint", {
-                        count: availableQuantity,
-                      })}
-                    </Typography>
-                  </Stack>
-                </Button>
-              )}
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                {t("allocationUi.insufficient.availableStock")}
+              </Typography>
+              <Typography variant="body2" fontWeight="medium">
+                {availableQuantity}
+              </Typography>
             </Stack>
-          </Box>
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("common.cancel")}</Button>
-      </DialogActions>
-    </Dialog>
+            <Divider />
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="error" fontWeight="medium">
+                {t("allocationUi.insufficient.shortfall")}
+              </Typography>
+              <Typography variant="body2" color="error" fontWeight="medium">
+                {shortfall}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Box>
+
+        {/* Resolution Options */}
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            {t("allocationUi.insufficient.whatToDo")}
+          </Typography>
+          <Stack spacing={1.5} sx={{ mt: 1.5 }}>
+            {onAddStock && (
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => {
+                  onAddStock()
+                  onClose()
+                }}
+                sx={{ justifyContent: "flex-start", textAlign: "left" }}
+              >
+                <Stack spacing={0.5} alignItems="flex-start">
+                  <Typography variant="body2" fontWeight="medium">
+                    {t("allocationUi.insufficient.addStock")}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {t("allocationUi.insufficient.addStockHint")}
+                  </Typography>
+                </Stack>
+              </Button>
+            )}
+
+            {onAllocateUnlisted && (
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => {
+                  onAllocateUnlisted()
+                  onClose()
+                }}
+                sx={{ justifyContent: "flex-start", textAlign: "left" }}
+              >
+                <Stack spacing={0.5} alignItems="flex-start">
+                  <Typography variant="body2" fontWeight="medium">
+                    {t("allocationUi.insufficient.useUnlisted")}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {t("allocationUi.insufficient.useUnlistedHint")}
+                  </Typography>
+                </Stack>
+              </Button>
+            )}
+
+            {onReduceOrder && (
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => {
+                  onReduceOrder()
+                  onClose()
+                }}
+                sx={{ justifyContent: "flex-start", textAlign: "left" }}
+              >
+                <Stack spacing={0.5} alignItems="flex-start">
+                  <Typography variant="body2" fontWeight="medium">
+                    {t("allocationUi.insufficient.reduceOrder")}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {t("allocationUi.insufficient.reduceOrderHint", {
+                      count: availableQuantity,
+                    })}
+                  </Typography>
+                </Stack>
+              </Button>
+            )}
+          </Stack>
+        </Box>
+      </Stack>
+    </ResponsiveDialog>
   )
 }

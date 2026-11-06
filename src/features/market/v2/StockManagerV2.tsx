@@ -29,11 +29,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   IconButton,
   Link as MaterialLink,
@@ -99,6 +94,7 @@ import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallC
 import { selectOnFocus } from "../../../util/selectOnFocus"
 import { useFormatters } from "../../../util/format"
 import { WipeRelistBanner } from "./components/WipeRelistBanner"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 const STOCK_PAGE_SIZE_OPTIONS: readonly number[] = [24, 48, 96]
 
@@ -212,34 +208,17 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
   }
 
   const archiveDialog = (
-    <Dialog
+    <ConfirmDialog
       open={archiveDialogOpen}
-      onClose={() => !archiving && setArchiveDialogOpen(false)}
-    >
-      <DialogTitle>{t("ItemStock.bulkArchiveTitle")}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          {t("ItemStock.bulkArchiveBody", { count: selectedCount })}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={() => setArchiveDialogOpen(false)}
-          disabled={archiving}
-          color="inherit"
-        >
-          {t("ItemStock.bulkArchiveCancel")}
-        </Button>
-        <LoadingButton
-          onClick={handleConfirmBulkArchive}
-          loading={archiving}
-          color="error"
-          variant="contained"
-        >
-          {t("ItemStock.bulkArchiveConfirm")}
-        </LoadingButton>
-      </DialogActions>
-    </Dialog>
+      onClose={() => setArchiveDialogOpen(false)}
+      onConfirm={handleConfirmBulkArchive}
+      title={t("ItemStock.bulkArchiveTitle")}
+      message={t("ItemStock.bulkArchiveBody", { count: selectedCount })}
+      cancelLabel={t("ItemStock.bulkArchiveCancel")}
+      confirmLabel={t("ItemStock.bulkArchiveConfirm")}
+      destructive
+      loading={archiving}
+    />
   )
 
   if (!canManage) return <></>
