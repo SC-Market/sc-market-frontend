@@ -164,7 +164,6 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           select
           fullWidth
           size="small"
-          color="secondary"
           label={compact ? undefined : t("wikiUi.versionSelector.label")}
           disabled
           value=""
@@ -192,7 +191,6 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
         select
         fullWidth
         size="small"
-        color="secondary"
         label={compact ? undefined : t("wikiUi.versionSelector.label")}
         value={selectedVersionId}
         onChange={(e) => handleVersionChange(e.target.value)}

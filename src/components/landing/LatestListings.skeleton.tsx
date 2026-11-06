@@ -36,7 +36,7 @@ export function LatestListingsLayout(props: { children: ReactNode }) {
             component={Link}
             to={MARKET_PATHS.search}
             variant="outlined"
-            color="secondary"
+            color="neutral"
           >
             {t("landing.seeAll")}
           </Button>

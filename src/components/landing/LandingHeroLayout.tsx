@@ -307,7 +307,7 @@ export function LandingHeroLayout(props: {
                 }}
               />
               <Typography
-                color="secondary"
+                color="text.secondary"
                 component="p"
                 sx={{
                   fontSize: { xs: "1.3rem", sm: "1.6rem" },

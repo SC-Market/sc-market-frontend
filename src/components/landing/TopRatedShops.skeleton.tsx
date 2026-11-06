@@ -47,7 +47,7 @@ export function TopRatedShopsLayout(props: { children: ReactNode }) {
             component={Link}
             to={MARKET_PATHS.shops}
             variant="outlined"
-            color="secondary"
+            color="neutral"
           >
             {t("landing.topShopsBrowse")}
           </Button>

@@ -271,9 +271,7 @@ export function MarkdownRender(props: {
               {/* A span: the link sits inside a paragraph, and a <p> in a
                   <p> splits it when the HTML is parsed (server-rendered
                   pages then fail to hydrate). */}
-              <UnderlineLink color={"secondary"} component="span">
-                {children}
-              </UnderlineLink>
+              <UnderlineLink component="span">{children}</UnderlineLink>
             </Link>
           )
         },

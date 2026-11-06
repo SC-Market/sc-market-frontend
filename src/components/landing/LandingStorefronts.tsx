@@ -36,7 +36,7 @@ export function LandingStorefronts() {
             component={Link}
             to={PATHS.storefronts}
             variant="outlined"
-            color="secondary"
+            color="neutral"
           >
             {t("landing.seeAll")}
           </Button>

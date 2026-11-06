@@ -1,6 +1,7 @@
 import { Theme, Typography, TypographyProps } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import React from "react"
+import { linkColor } from "../../hooks/styles/Theme"
 
 export function UnderlineLink(
   props: { to?: string; target?: string; href?: string } & TypographyProps,
@@ -26,10 +27,7 @@ export function UnderlineLink(
           height: "2px",
           bottom: 0,
           left: 0,
-          backgroundColor:
-            props.color === "primary"
-              ? theme.palette.primary.main
-              : theme.palette.secondary.main,
+          backgroundColor: linkColor(theme),
           transformOrigin: "bottom right",
           transition: "transform 0.25s ease-out",
         },

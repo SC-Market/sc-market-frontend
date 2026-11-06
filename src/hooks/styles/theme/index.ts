@@ -16,6 +16,7 @@ export { makeCut, makeReverseCut, getNavbarContrastText } from "./utils"
 export {
   cardFadeGradient,
   bannerFadeGradient,
+  linkColor,
   navbarShadow,
 } from "./themeUtils"
 

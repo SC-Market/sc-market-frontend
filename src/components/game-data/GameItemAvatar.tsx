@@ -80,7 +80,7 @@ export function GameItemAvatar({
         fontSize,
         fontWeight: 700,
         color: "#fff !important", // Force white text on colored bg
-        bgcolor: bgColor || "secondary.main",
+        bgcolor: bgColor || "grey.700",
         ...(resolvedIcon && isSvg
           ? { p: Math.max(2, size * 0.12) + "px" }
           : {}),

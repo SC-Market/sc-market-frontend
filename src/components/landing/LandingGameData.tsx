@@ -61,7 +61,7 @@ export function LandingGameData() {
             component={Link}
             to={WIKI_PATHS.hub}
             variant="outlined"
-            color="secondary"
+            color="neutral"
           >
             {t("landing.gameDataOpenWiki")}
           </Button>
@@ -99,7 +99,7 @@ export function LandingGameData() {
                 borderColor: alpha(theme.palette.text.secondary, 0.3),
                 bgcolor: "action.hover",
               },
-              "& > svg": { color: "secondary.main", flexShrink: 0 },
+              "& > svg": { color: "text.primary", flexShrink: 0 },
               // Phones: two columns, the odd last tile takes the row.
               ...(i === tiles.length - 1
                 ? { gridColumn: { xs: "span 2", sm: "auto" } }

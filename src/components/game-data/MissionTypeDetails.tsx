@@ -306,14 +306,7 @@ function SummaryChips({
 }: {
   chips: {
     label: string
-    color?:
-      | "default"
-      | "primary"
-      | "secondary"
-      | "error"
-      | "info"
-      | "success"
-      | "warning"
+    color?: "default" | "primary" | "error" | "info" | "success" | "warning"
     icon?: React.ReactElement
   }[]
 }) {
@@ -421,7 +414,7 @@ function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
       ? [
           {
             label: t("missionToolsUi.targetCount", { count: entityCount }),
-            color: "secondary" as const,
+            color: "default" as const,
           },
         ]
       : []),
@@ -552,7 +545,7 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
       ? [
           {
             label: t("missionToolsUi.wreckCount", { count: entityCount }),
-            color: "secondary" as const,
+            color: "default" as const,
             icon: <RecyclingRounded sx={{ fontSize: 14 }} />,
           },
         ]
@@ -603,7 +596,7 @@ function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
             label: t("missionToolsUi.destinationCount", {
               count: dests.length,
             }),
-            color: "secondary" as const,
+            color: "default" as const,
           },
         ]
       : []),
@@ -651,7 +644,7 @@ function HaulingDetails({ data }: { data: MissionDetailResponse }) {
       ? [
           {
             label: t("missionToolsUi.resourceCount", { count: hauling.length }),
-            color: "secondary" as const,
+            color: "default" as const,
           },
         ]
       : []),

@@ -395,7 +395,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <AutoAwesomeRounded
@@ -442,7 +442,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <WorkspacePremiumRounded
@@ -489,7 +489,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <WhatshotRounded
@@ -547,7 +547,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <BoltRounded
@@ -588,7 +588,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <CalendarTodayRounded
@@ -635,7 +635,7 @@ export function BadgeDisplay(props: {
                 gradientTransform="rotate(-15)"
               >
                 <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.secondary.main} />
+                <stop offset={1} stopColor={theme.palette.primary.light} />
               </linearGradient>
             </svg>
             <FavoriteRounded

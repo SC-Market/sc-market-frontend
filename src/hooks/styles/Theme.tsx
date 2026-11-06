@@ -16,6 +16,7 @@ export {
   MISSING_IMAGE_URL,
   cardFadeGradient,
   bannerFadeGradient,
+  linkColor,
   navbarShadow,
 } from "./theme/index"
 

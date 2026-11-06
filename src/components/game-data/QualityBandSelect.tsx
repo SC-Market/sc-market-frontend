@@ -31,7 +31,6 @@ export function QualityBandSelect({
       select
       fullWidth={fullWidth}
       size={size}
-      color="secondary"
       label={label ?? t("wikiUi.qualityBand.label")}
       value={value ?? ""}
       onChange={(e) => {

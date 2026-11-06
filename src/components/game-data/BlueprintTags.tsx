@@ -191,8 +191,9 @@ export function BlueprintTags({
           data-tag="rarity"
           label={bp.rarity}
           size="small"
+          variant="outlined"
           {...filterLink({ rarity: bp.rarity })}
-          sx={{ ...base, bgcolor: "secondary.main", color: common.white }}
+          sx={base}
         />
       )}
       {show("tier") && bp.tier && (
@@ -249,7 +250,6 @@ export function BlueprintTags({
               data-tag="modifier"
               label={tag}
               size="small"
-              color="secondary"
               variant="outlined"
               sx={base}
             />
@@ -260,7 +260,6 @@ export function BlueprintTags({
                 data-tag="modifier-more"
                 label={`+${hiddenMods.length}`}
                 size="small"
-                color="secondary"
                 variant="outlined"
                 sx={base}
               />

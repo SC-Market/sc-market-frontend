@@ -18,7 +18,7 @@ interface Intent {
   action: string
   href: string
   icon: React.ReactElement<{ sx?: object }>
-  color: "primary" | "secondary"
+  color: "primary" | "neutral"
   variant: "contained" | "outlined"
   /** The Sell card: outlined in primary. */
   highlight?: boolean
@@ -62,7 +62,7 @@ export function LandingIntents(props: { signedIn: boolean }) {
       action: t("landing.intentWantedAction"),
       href: MARKET_PATHS.buyOrderCreate,
       icon: <ShoppingCartRounded />,
-      color: "secondary",
+      color: "neutral",
       variant: "outlined",
     },
     {
@@ -72,7 +72,7 @@ export function LandingIntents(props: { signedIn: boolean }) {
       action: t("landing.intentSellAction"),
       href: landingSellHref(props.signedIn),
       icon: <EditRounded />,
-      color: "secondary",
+      color: "primary",
       variant: "contained",
       highlight: true,
     },
@@ -133,7 +133,11 @@ export function LandingIntents(props: { signedIn: boolean }) {
             }}
           >
             {React.cloneElement(intent.icon, {
-              sx: { fontSize: 20, color: `${intent.color}.main` },
+              sx: {
+                fontSize: 20,
+                color:
+                  intent.color === "primary" ? "primary.main" : "text.primary",
+              },
             })}
             {intent.title}
           </Typography>

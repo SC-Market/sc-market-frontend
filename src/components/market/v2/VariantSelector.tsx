@@ -93,7 +93,6 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
       select
       fullWidth
       size="small"
-      color="secondary"
       label={label}
       value={selectedVariantId ?? ""}
       onChange={(e) => onVariantChange(e.target.value)}

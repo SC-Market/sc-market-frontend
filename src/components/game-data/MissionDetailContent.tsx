@@ -170,17 +170,12 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
         <Chip
           label={t("missionsUi.starter")}
           size="small"
-          color="secondary"
+          variant="outlined"
           {...go({ chain: "true" })}
         />
       )}
       {m.is_chain_mission && !m.is_chain_starter && (
-        <Chip
-          label={t("missionsUi.chain")}
-          size="small"
-          color="secondary"
-          variant="outlined"
-        />
+        <Chip label={t("missionsUi.chain")} size="small" variant="outlined" />
       )}
       {m.is_shareable && (
         <Chip
@@ -921,7 +916,7 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
           <Chip
             label={t("missionsUi.chainStarter")}
             size="small"
-            color="secondary"
+            variant="outlined"
           />
         )}
         {m.is_chain_mission && !m.is_chain_starter && (

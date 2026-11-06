@@ -47,8 +47,9 @@ function OrderAlertIllustration() {
         <Box
           component="span"
           sx={{
-            bgcolor: "secondary.dark",
-            color: "common.white",
+            border: 1,
+            borderColor: "outline.strong",
+            color: "text.secondary",
             fontSize: 10,
             lineHeight: 1.5,
             px: 0.625,
@@ -197,7 +198,6 @@ export function StartSelling(props: { signedIn: boolean }) {
             component={Link}
             to={landingSellHref(props.signedIn)}
             variant="contained"
-            color="secondary"
             size="large"
             startIcon={<EditRounded />}
           >
@@ -207,7 +207,7 @@ export function StartSelling(props: { signedIn: boolean }) {
             component={Link}
             to={loginGatedHref(PATHS.orgRegister, props.signedIn)}
             variant="outlined"
-            color="secondary"
+            color="neutral"
             size="large"
           >
             {t("landing.sellRegisterOrg")}

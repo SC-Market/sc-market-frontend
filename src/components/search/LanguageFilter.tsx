@@ -77,7 +77,6 @@ export function LanguageFilter({
               : ""
           }
           size="small"
-          color="secondary"
         />
       )}
       renderTags={(value, getTagProps) => (

@@ -245,7 +245,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               <Chip
                 label={t("missionsUi.starter")}
                 size="small"
-                color="secondary"
+                variant="outlined"
                 clickable
                 onClick={(e) => {
                   e.stopPropagation()
@@ -259,7 +259,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               <Chip
                 label={t("missionsUi.chain")}
                 size="small"
-                color="secondary"
                 variant="outlined"
                 sx={microChip}
               />

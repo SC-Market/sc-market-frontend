@@ -5,9 +5,9 @@ import { missionTextParts } from "../../seo/missionText"
 
 /**
  * A placeholder the game fills in at runtime ("Location", "Target Name"):
- * readable words, set apart by colour and italics.
+ * readable words, set apart in the subtle text colour.
  */
-const placeholderSx = { color: "secondary.main", fontStyle: "italic" } as const
+const placeholderSx = { color: "text.subtle" } as const
 
 function Parts({
   text,

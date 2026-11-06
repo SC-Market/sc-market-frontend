@@ -130,7 +130,6 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
                   {ship.career && (
                     <Chip
                       label={formatShipCareer(ship.career, t)}
-                      color="secondary"
                       variant="outlined"
                     />
                   )}

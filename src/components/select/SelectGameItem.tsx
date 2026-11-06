@@ -53,7 +53,6 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
             }
           }}
           groupBy={(o) => o.category}
-          color={"secondary"}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -88,7 +87,6 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
           onChange={(event, value) => {
             props.onItemChange(value ? value.name : null)
           }}
-          color={"secondary"}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -159,7 +157,6 @@ export function SelectGameItemOnly(props: {
       onChange={(event, value) => {
         props.onItemChange(value ? value.name : null)
       }}
-      color={"secondary"}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -212,7 +209,6 @@ export function SelectGameItem(props: SelectGameItemProps) {
           }
         }}
         groupBy={(o) => o.category}
-        color={"secondary"}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -246,7 +242,6 @@ export function SelectGameItem(props: SelectGameItemProps) {
         onChange={(event, value) => {
           props.onItemChange(value ? value.name : null)
         }}
-        color={"secondary"}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -331,7 +326,6 @@ export function SelectGameCategory(props: {
         }
       }}
       groupBy={(o) => o.category}
-      color={"secondary"}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -378,7 +372,6 @@ export function SelectGameCategoryOption(props: {
             props.onTypeChange(value ? value.subcategory : null)
           }}
           groupBy={(o) => o.category}
-          color={"secondary"}
           renderInput={(params) => (
             <TextField
               {...params}

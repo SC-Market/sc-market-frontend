@@ -56,7 +56,6 @@ export function SupportersSection() {
       <Typography variant="body2" color="text.primary" sx={{ mb: 1.25 }}>
         {t("landing.supportersThanks")}
         <MaterialLink
-          color={"secondary"}
           target={"_blank"}
           rel="noopener noreferrer"
           underline={"hover"}

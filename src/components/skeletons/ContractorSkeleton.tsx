@@ -45,7 +45,7 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
                     "linear-gradient(135deg, " +
                     theme.palette.primary.main +
                     " 0%, " +
-                    theme.palette.secondary.main +
+                    theme.palette.background.paper +
                     " 100%)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",

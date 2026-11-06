@@ -98,8 +98,8 @@ export function NotificationsButton() {
         <Box
           sx={{
             padding: { xs: 1.5, sm: 2 }, // Reduced padding on mobile
-            bgcolor: "secondary.main",
-            color: "secondary.contrastText",
+            bgcolor: "background.paper",
+            color: "text.secondary",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",

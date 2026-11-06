@@ -122,17 +122,17 @@ const BP_TAGS: SearchToken[] = [
 
 const TYPE_COLORS: Record<
   string,
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  "default" | "primary" | "error" | "info" | "success" | "warning"
 > = {
   system: "info",
   category: "primary",
-  giver: "secondary",
+  giver: "default",
   faction: "success",
   tag: "warning",
   event: "error",
   query: "default",
   material: "info",
-  rarity: "secondary",
+  rarity: "default",
   manufacturer: "default",
 }
 

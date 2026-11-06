@@ -10,6 +10,7 @@
 import React from "react"
 import { Chip, useTheme } from "@mui/material"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
+import { QUALITY_TIER_COLORS } from "../../util/qualityColor"
 
 interface RarityBadgeProps {
   /** Rarity level */
@@ -44,7 +45,8 @@ export const RarityBadge: React.FC<RarityBadgeProps> = ({
       case "rare":
         return theme.palette.info.main
       case "epic":
-        return theme.palette.secondary.main
+        // The quality scale's purple (a data colour, not the accent)
+        return QUALITY_TIER_COLORS[4].bg
       case "legendary":
         return theme.palette.warning.main
       default:

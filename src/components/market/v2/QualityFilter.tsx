@@ -59,7 +59,6 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             select
             fullWidth
             size="small"
-            color="secondary"
             label={t("marketV2.minTier")}
             value={minTier ?? ""}
             onChange={(e) => {
@@ -82,7 +81,6 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             select
             fullWidth
             size="small"
-            color="secondary"
             label={t("marketV2.maxTier")}
             value={maxTier ?? ""}
             onChange={(e) => {

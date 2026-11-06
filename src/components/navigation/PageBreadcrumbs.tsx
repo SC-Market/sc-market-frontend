@@ -94,7 +94,6 @@ export function PageBreadcrumbs({
               key={index}
               component={RouterLink}
               to={item.href!}
-              color="secondary"
               underline="hover"
               sx={{
                 display: "flex",

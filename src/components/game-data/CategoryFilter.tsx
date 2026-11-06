@@ -91,7 +91,6 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                   checked={selectedCategories.includes(category.value)}
                   onChange={() => handleToggle(category.value)}
                   size="small"
-                  color="secondary"
                 />
               }
               label={

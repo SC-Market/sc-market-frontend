@@ -16,7 +16,7 @@ import AddRounded from "@mui/icons-material/AddRounded"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import type { StandingBuyOrder } from "../../features/market/api/marketV2Api"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../hooks/styles/Theme"
 import { MARKET_PATHS } from "../../routes/paths"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { LandingImg } from "./LandingImage"
@@ -116,7 +116,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
       <TableCell align="right" sx={CELL_SX}>
         <Typography
           component="span"
-          color="primary"
+          color="demand.main"
           sx={{ display: "block", fontSize: "0.875rem", lineHeight: 1.3 }}
         >
           {order.price_per_unit > 0
@@ -184,10 +184,10 @@ function PostBuyOrderRow() {
               flexShrink: 0,
               display: "grid",
               placeItems: "center",
-              color: "secondary.main",
+              color: "text.primary",
               border: 1,
               borderStyle: "dashed",
-              borderColor: "secondary.main",
+              borderColor: "outline.strong",
               borderRadius: 1,
             }}
           >
@@ -196,7 +196,7 @@ function PostBuyOrderRow() {
           <Box
             component={Link}
             to={MARKET_PATHS.buyOrderCreate}
-            sx={{ ...ROW_LINK_SX, color: "secondary.main" }}
+            sx={{ ...ROW_LINK_SX, color: linkColor }}
           >
             {t("landing.wantedNowPost")}
           </Box>
@@ -263,7 +263,7 @@ export function WantedNowTable(props: {
           component={Link}
           to={MARKET_PATHS.buyOrders}
           variant="outlined"
-          color="secondary"
+          color="neutral"
         >
           {t("landing.seeAll")}
         </Button>

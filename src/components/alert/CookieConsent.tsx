@@ -93,8 +93,9 @@ export function CookieConsent() {
         bottom: `calc(${bottomNavHeight}px + env(safe-area-inset-bottom))`,
         zIndex: theme.zIndex.drawer + 2,
         borderRadius: 0,
-        backgroundColor: theme.palette.secondary.dark,
-        color: theme.palette.secondary.contrastText,
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `1px solid ${theme.palette.divider}`,
+        color: theme.palette.text.secondary,
         px: { xs: 1.5, sm: 2 },
         py: 0.75,
         display: "flex",
@@ -128,7 +129,7 @@ export function CookieConsent() {
         <Button
           size="small"
           variant="outlined"
-          color="inherit"
+          color="neutral"
           onClick={() => choose("necessary")}
           sx={{ py: 0.25, whiteSpace: "nowrap" }}
         >

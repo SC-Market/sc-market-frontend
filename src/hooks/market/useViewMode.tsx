@@ -26,7 +26,6 @@ export function ViewModeToggle({
       exclusive
       onChange={(_, v) => v && onChange(v)}
       size="small"
-      color="secondary"
     >
       <ToggleButton value="grid" aria-label={t("marketV2.gridView")}>
         <GridViewRounded fontSize="small" />

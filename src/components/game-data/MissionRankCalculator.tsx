@@ -145,7 +145,7 @@ export function MissionRankCalculator({
           <Chip
             label={rewardFaction}
             size="small"
-            color="secondary"
+            variant="outlined"
             sx={{ height: 20, fontSize: "0.7rem", mr: 0.5 }}
           />
         )}
