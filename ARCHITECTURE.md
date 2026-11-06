@@ -12,6 +12,7 @@ The canonical example is `features/email/`. When in doubt, look there.
 - A form edits a draft. Create it from server data once, keyed by the entity id, and turn it into a request with a domain function. Never copy server data into `useState` with a `useEffect` (see `features/shops/domain/shopSettingsForm.ts`).
 - Numbers, prices and dates go through `util/format` (`useFormatters()` in components: the render language, and UTC until hydrated), never a bare `toLocale*()` (a lint error), and "now" comes from `useNow()` or is passed in, so server and browser agree.
 - If you are about to write the same `if` a second time, it belongs in `domain/`.
+- Colour has roles. Green (`primary`, the default) is the one accent: main actions, fields, selection controls, links and the focus ring. `secondary` is the buy side and premium (bid and buy-order prices, "Top bid", the bid curve, supporter and premium badges) and only colours text, chips, badges, chart series and `sx` colours. Secondary-role buttons and outlined chips use `color="neutral"`. Every theme keeps `secondary` and `neutral` at AA as text (`src/hooks/styles/theme/__tests__/accentRoles.test.tsx`).
 
 ---
 
@@ -105,6 +106,7 @@ Shared type definitions. New types go in `features/<name>/domain/types.ts`. Type
 | Hooks are called unconditionally, before any early return                                                                                                | ESLint `react-hooks/rules-of-hooks` (error)                                                                                                                                                              |
 | No hard-coded route strings in `to=` / `href=` / `navigate()` (helpers in `src/routes/paths.ts`); no `new Date()` in tsx (`useNow()` from `util/format`) | ESLint `no-restricted-syntax` (error)                                                                                                                                                                    |
 | Components and views don't call mutations or `has_permission` (mutations go in a named hook in `features/<f>/hooks/`)                                    | ESLint `scm-style/render-layer` (error)                                                                                                                                                                  |
+| `palette.secondary` (the buy side and premium) is not used on form controls, buttons, tabs, links, sliders, toggles, progress or focus styles            | ESLint `scm-style/no-secondary-accent` (error; the theme files and the theme editor are exempt); fixtures in `scripts/__tests__/secondaryAccentLint.test.ts`                                             |
 | tsx files stay under 400 lines                                                                                                                           | ESLint warning (`max-lines`), ratcheted: `npm run lint:ratchet` (CI) fails if the warning or error count rises above `scripts/lint-baseline.json`. Lower the baseline with `--update` when you fix some. |
 
 ---

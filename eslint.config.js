@@ -224,30 +224,150 @@ const scmStyle = {
         }
       },
     },
-    // Green is the one accent (2026-11). palette.secondary is the neutral
-    // now, and themes still carry their old second colour there; pages say
-    // what they mean: the accent (primary, the default), `neutral` for
-    // secondary-role controls, or `demand` for the buy side.
+    // Green is the one accent (2026-11). palette.secondary is the buy side
+    // and premium (bid prices, "Top bid", the bid curve, buy orders,
+    // supporter and premium badges), not a second accent. It may colour
+    // text, chips, badges, chart series and plain `sx` colours, but not
+    // controls, fields, navigation, buttons or focus styles: those take the
+    // accent (primary, the default) or `neutral`.
     "no-secondary-accent": {
       meta: {
         type: "problem",
         messages: {
-          secondary:
-            'palette.secondary is not an accent. Use the default (primary, green) for main actions, fields, controls and links; color="neutral" for secondary actions; "demand" for the buy side; text.* for text.',
+          control:
+            'palette.secondary is the buy side and premium, not an accent: not on {{name}}. Use the default (primary, green) for main actions, fields, controls and links, or color="neutral" for secondary actions.',
+          focus:
+            "palette.secondary is the buy side and premium, not an accent: focus styles use the accent (common.focus / primary).",
         },
         schema: [],
       },
       create(context) {
-        const report = (node) =>
-          context.report({ node, messageId: "secondary" })
+        // Form controls, buttons, navigation and progress: where a colour
+        // reads as "the accent". Matched on the MUI name, aliases included.
+        const CONTROLS = new Set([
+          "Autocomplete",
+          "BottomNavigation",
+          "BottomNavigationAction",
+          "Breadcrumbs",
+          "Button",
+          "ButtonBase",
+          "ButtonGroup",
+          "Checkbox",
+          "CircularProgress",
+          "Fab",
+          "FilledInput",
+          "FormControl",
+          "FormControlLabel",
+          "FormLabel",
+          "IconButton",
+          "Input",
+          "InputBase",
+          "InputLabel",
+          "LinearProgress",
+          "Link",
+          "LoadingButton",
+          "MenuItem",
+          "NativeSelect",
+          "OutlinedInput",
+          "Pagination",
+          "PaginationItem",
+          "Radio",
+          "RadioGroup",
+          "Select",
+          "Slider",
+          "SpeedDial",
+          "Stepper",
+          "StepIcon",
+          "StepLabel",
+          "Switch",
+          "Tab",
+          "Tabs",
+          "TextField",
+          "ToggleButton",
+          "ToggleButtonGroup",
+        ])
+        const FOCUS_KEY = /focus|^outline(Color)?$|^caretColor$/i
+        const aliases = new Map()
+        const controlName = (name) => {
+          const resolved = aliases.get(name) ?? name
+          return CONTROLS.has(resolved) ? resolved : null
+        }
+        const jsxName = (n) =>
+          n.type === "JSXIdentifier"
+            ? n.name
+            : n.type === "JSXMemberExpression"
+              ? n.property.name
+              : null
+        const keyName = (k) =>
+          k.type === "Identifier"
+            ? k.name
+            : k.type === "Literal" && typeof k.value === "string"
+              ? k.value
+              : null
+        // `styled(Button)(...)` / `styled(Button)\`...\``
+        const styledTarget = (callee) =>
+          callee.type === "CallExpression" &&
+          callee.callee.type === "Identifier" &&
+          callee.callee.name === "styled" &&
+          callee.arguments[0]?.type === "Identifier"
+            ? controlName(callee.arguments[0].name)
+            : null
+        const check = (node) => {
+          let attrChecked = false
+          for (let p = node.parent; p; p = p.parent) {
+            if (p.type === "Property" && !p.computed) {
+              const key = keyName(p.key)
+              if (key && FOCUS_KEY.test(key)) {
+                context.report({ node, messageId: "focus" })
+                return
+              }
+            }
+            if (p.type === "JSXAttribute" && !attrChecked) {
+              // The nearest attribute decides: a chip inside a button's
+              // icon slot is still a chip.
+              attrChecked = true
+              const name = controlName(jsxName(p.parent.name))
+              if (name) {
+                context.report({ node, messageId: "control", data: { name } })
+                return
+              }
+            }
+            if (
+              (p.type === "CallExpression" ||
+                p.type === "TaggedTemplateExpression") &&
+              styledTarget(p.type === "CallExpression" ? p.callee : p.tag)
+            ) {
+              const name = styledTarget(
+                p.type === "CallExpression" ? p.callee : p.tag,
+              )
+              context.report({ node, messageId: "control", data: { name } })
+              return
+            }
+          }
+        }
         return {
+          ImportDeclaration(node) {
+            if (!String(node.source.value).startsWith("@mui/")) return
+            for (const s of node.specifiers) {
+              if (
+                s.type === "ImportSpecifier" &&
+                s.imported.name !== s.local.name
+              )
+                aliases.set(s.local.name, s.imported.name)
+              if (s.type === "ImportDefaultSpecifier") {
+                const last = String(node.source.value).split("/").pop()
+                if (last && last !== s.local.name)
+                  aliases.set(s.local.name, last)
+              }
+            }
+          },
           Literal(node) {
             if (
               node.value === "secondary" ||
               (typeof node.value === "string" &&
                 /^secondary\.(main|light|dark|contrastText)$/.test(node.value))
             )
-              report(node)
+              check(node)
           },
           MemberExpression(node) {
             const { object, property } = node
@@ -260,7 +380,7 @@ const scmStyle = {
               object.property.type === "Identifier" &&
               object.property.name === "palette"
             )
-              report(node)
+              check(node)
           },
         }
       },
@@ -611,8 +731,8 @@ export default [
     },
   },
 
-  // ── Guard rails: palette.secondary is not an accent (error) ──
-  // The theme files define it (as the neutral); the theme editor edits it.
+  // ── Guard rails: palette.secondary is the buy side, not an accent (error) ──
+  // The theme files define it; the theme editor edits and previews it.
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: [
