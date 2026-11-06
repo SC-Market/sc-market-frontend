@@ -266,7 +266,7 @@ export function Footer() {
             <br />
             {t(
               "footer.unofficial",
-              "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
+              "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users is property of their respective owners",
             )}
             <br />
             {/* RSI's fansite rules: the notice plus a link to the official site. */}
