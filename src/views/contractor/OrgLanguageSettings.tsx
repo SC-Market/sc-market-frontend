@@ -51,10 +51,7 @@ export function OrgLanguageSettings() {
         language_codes: selectedLanguages,
       }).unwrap()
       issueAlert({
-        message: t(
-          "settings.languages.saveSuccess",
-          "Languages updated successfully",
-        ),
+        message: t("settings.languages.saveSuccess", "Languages updated"),
         severity: "success",
       })
     } catch (err: unknown) {

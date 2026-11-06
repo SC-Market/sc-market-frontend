@@ -78,7 +78,7 @@ describe("OrderSummarySectionV2", () => {
     expect(screen.getByText("Test Listing 2")).toBeInTheDocument()
   })
 
-  it("shows NEW! chip for added listings", () => {
+  it("shows NEW chip for added listings", () => {
     const offerChanges: OfferChanges = {
       costChanged: false,
       descriptionChanged: false,
@@ -92,8 +92,8 @@ describe("OrderSummarySectionV2", () => {
       <OrderSummarySectionV2 items={mockItems} offerChanges={offerChanges} />,
     )
 
-    // Should show NEW! chip for added listing
-    const newChips = screen.getAllByText("NEW!")
+    // Should show NEW chip for added listing
+    const newChips = screen.getAllByText("NEW")
     expect(newChips).toHaveLength(1)
   })
 
@@ -114,8 +114,8 @@ describe("OrderSummarySectionV2", () => {
     // Should show old quantity
     expect(screen.getByText(/\(was 1\)/)).toBeInTheDocument()
 
-    // Should show NEW! chip for quantity change
-    const newChips = screen.getAllByText("NEW!")
+    // Should show NEW chip for quantity change
+    const newChips = screen.getAllByText("NEW")
     expect(newChips).toHaveLength(1)
   })
 

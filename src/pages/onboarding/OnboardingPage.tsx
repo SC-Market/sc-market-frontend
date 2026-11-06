@@ -238,7 +238,7 @@ export function OnboardingPage() {
         severity: "success",
         message: t(
           "onboarding.emailVerificationSent",
-          "Verification email sent! Check your inbox.",
+          "Verification email sent. Check your inbox.",
         ),
       })
     } catch {
@@ -381,7 +381,7 @@ export function OnboardingPage() {
                   <Typography color="success.main" variant="body2">
                     {t(
                       "onboarding.email.sent",
-                      "Verification email sent! You can verify it later.",
+                      "Verification email sent. You can verify it later.",
                     )}
                   </Typography>
                   <Button variant="contained" onClick={handleNext}>

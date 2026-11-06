@@ -60,7 +60,7 @@ export function CreateNewContractor() {
       .then(() => {
         issueAlert({
           message: t("contractorCreate.success", {
-            defaultValue: "Contractor created successfully",
+            defaultValue: "Organization created",
           }),
           severity: "success",
         })

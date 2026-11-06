@@ -117,7 +117,7 @@ export function useAdminAttributeDefinitions() {
         issueAlert({
           message: t(
             "admin.attributes.created",
-            "Attribute definition created successfully",
+            "Attribute definition created",
           ),
           severity: "success",
         })
@@ -148,7 +148,7 @@ export function useAdminAttributeDefinitions() {
         issueAlert({
           message: t(
             "admin.attributes.updated",
-            "Attribute definition updated successfully",
+            "Attribute definition updated",
           ),
           severity: "success",
         })
@@ -176,7 +176,7 @@ export function useAdminAttributeDefinitions() {
         issueAlert({
           message: t(
             "admin.attributes.deleted",
-            "Attribute definition deleted successfully",
+            "Attribute definition deleted",
           ),
           severity: "success",
         })

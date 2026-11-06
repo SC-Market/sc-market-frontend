@@ -14,7 +14,7 @@ export function usePlaceBid(listingId: string) {
       try {
         await placeBid({ listingId, placeBidRequest: { amount } }).unwrap()
         issueAlert({
-          message: t("BidAreaV2.bidPlaced", "Bid placed successfully!"),
+          message: t("BidAreaV2.bidPlaced", "Bid placed"),
           severity: "success",
         })
         return true

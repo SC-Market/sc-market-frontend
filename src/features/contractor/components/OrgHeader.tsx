@@ -80,7 +80,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
     try {
       await acceptInvite({ contractor: contractor.spectrum_id }).unwrap()
       issueAlert({
-        message: t("org.invite.accepted", "Joined organization!"),
+        message: t("org.invite.accepted", "Invite accepted"),
         severity: "success",
       })
     } catch {

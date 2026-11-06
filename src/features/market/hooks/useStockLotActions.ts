@@ -134,7 +134,7 @@ export function useEditLot() {
           updateStockLotRequest: request,
         }).unwrap()
         issueAlert({
-          message: t("LotListItemV2.updateSuccess", "Lot updated successfully"),
+          message: t("LotListItemV2.updateSuccess", "Lot updated"),
           severity: "success",
         })
         return true
@@ -179,10 +179,7 @@ export function useTransferLot() {
           updateStockLotRequest: { location_id: locationId },
         }).unwrap()
         issueAlert({
-          message: t(
-            "TransferLotDialogV2.transferSuccess",
-            "Lot transferred successfully",
-          ),
+          message: t("TransferLotDialogV2.transferSuccess", "Lot transferred"),
           severity: "success",
         })
         return true

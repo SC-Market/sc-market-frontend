@@ -46,7 +46,7 @@ function BannerEditArea(props: {
       .then(() => {
         issueAlert({
           message: t("viewProfile.banner_uploaded", {
-            defaultValue: "Banner uploaded successfully",
+            defaultValue: "Banner uploaded",
           }),
           severity: "success",
         })

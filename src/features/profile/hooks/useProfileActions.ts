@@ -47,7 +47,7 @@ export function useProfileActions() {
       .then(() => {
         issueAlert({
           message: t("viewProfile.avatar_uploaded", {
-            defaultValue: "Avatar uploaded successfully",
+            defaultValue: "Avatar uploaded",
           }),
           severity: "success",
         })

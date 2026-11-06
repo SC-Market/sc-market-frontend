@@ -321,7 +321,7 @@ export function ThemeEditor({
       })
       issueAlert({
         severity: "success",
-        message: t("theme.saveSuccess", "Theme saved successfully"),
+        message: t("theme.saveSuccess", "Theme saved"),
       })
     } catch {
       issueAlert({

@@ -447,7 +447,7 @@ export function CreateMessageGroupBody() {
       .then(() => {
         issueAlert({
           message: t("messages.chatCreated", {
-            defaultValue: "Chat created successfully",
+            defaultValue: "Chat created",
           }),
           severity: "success",
         })

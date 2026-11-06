@@ -43,7 +43,7 @@ export function AdminExpressVerify() {
       }
       issueAlert({
         message: t("adminExpressVerify.failure", {
-          defaultValue: "Failed to submit! {{reason}}",
+          defaultValue: "Couldn't verify the org: {{reason}}",
           reason,
         }),
         severity: "error",

@@ -119,10 +119,7 @@ export function AdminGameItemAttributesView({
       .unwrap()
       .then(() => {
         issueAlert({
-          message: t(
-            "admin.gameItemAttributes.saved",
-            "Attribute saved successfully",
-          ),
+          message: t("admin.gameItemAttributes.saved", "Attribute saved"),
           severity: "success",
         })
         handleCloseModals()
@@ -142,10 +139,7 @@ export function AdminGameItemAttributesView({
       .unwrap()
       .then(() => {
         issueAlert({
-          message: t(
-            "admin.gameItemAttributes.deleted",
-            "Attribute deleted successfully",
-          ),
+          message: t("admin.gameItemAttributes.deleted", "Attribute deleted"),
           severity: "success",
         })
         handleCloseModals()

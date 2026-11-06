@@ -96,7 +96,7 @@ export function useCounterOfferSubmit(sessionId: string) {
         .then(() => {
           issueAlert({
             message: t("CounterOfferSubmitArea.counterOfferSubmitted", {
-              defaultValue: "Counter offer submitted successfully",
+              defaultValue: "Counter offer sent",
             }),
             severity: "success",
           })

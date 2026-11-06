@@ -108,7 +108,7 @@ export function useCartActions() {
           },
         }).unwrap()
         issueAlert({
-          message: t("cart.checkoutSuccess", "Offer submitted successfully"),
+          message: t("cart.checkoutSuccess", "Offer sent"),
           severity: "success",
         })
         if (result.discord_invite) {

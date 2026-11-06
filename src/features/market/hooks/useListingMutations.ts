@@ -37,8 +37,7 @@ export function useCreateListingSubmit(successMessage?: string) {
         }).unwrap()
         issueAlert({
           message:
-            successMessage ??
-            t("CreateListingV2.success", "Listing created successfully"),
+            successMessage ?? t("CreateListingV2.success", "Listing created"),
           severity: "success",
         })
         return { ok: true, listingId: result.listing_id }
@@ -71,7 +70,7 @@ export function useUpdateListingSubmit() {
       try {
         await updateListing({ id, updateListingRequest: request }).unwrap()
         issueAlert({
-          message: t("EditListingV2.success", "Listing updated successfully"),
+          message: t("EditListingV2.success", "Listing updated"),
           severity: "success",
         })
         return { ok: true, listingId: id }

@@ -289,9 +289,7 @@ describe("WishlistShare Component", () => {
       fireEvent.click(copyButton)
 
       await waitFor(() => {
-        expect(
-          screen.getByText("Link copied to clipboard!"),
-        ).toBeInTheDocument()
+        expect(screen.getByText("Link copied")).toBeInTheDocument()
       })
     })
 
@@ -317,7 +315,7 @@ describe("WishlistShare Component", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: /Copied!/i }),
+          screen.getByRole("button", { name: /Copied/i }),
         ).toBeInTheDocument()
       })
     })

@@ -36,7 +36,7 @@ export function PrivacySettings() {
         .then(() => {
           issueAlert({
             message: t("privacy_settings.updated", {
-              defaultValue: "Settings updated successfully",
+              defaultValue: "Settings updated",
             }),
             severity: "success",
           })

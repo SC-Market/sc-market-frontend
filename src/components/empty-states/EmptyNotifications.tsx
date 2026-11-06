@@ -36,7 +36,7 @@ export function EmptyNotifications({
   const defaultDescription = t(
     "emptyStates.notifications.noNotificationsDescription",
     {
-      defaultValue: "You're all caught up! New notifications will appear here",
+      defaultValue: "You're all caught up. New notifications show up here.",
     },
   )
 

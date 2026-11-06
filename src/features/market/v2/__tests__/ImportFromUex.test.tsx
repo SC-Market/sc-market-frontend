@@ -128,8 +128,8 @@ describe("ImportFromUex", () => {
     expect(within(box).getByText(/Helmet/)).toHaveTextContent(
       "Helmet — Couldn't be saved",
     )
-    expect(screen.getByText(/Successfully imported/)).toHaveTextContent(
-      "Successfully imported 1 of 2 listings from UEX.",
+    expect(screen.getByText(/Imported/)).toHaveTextContent(
+      "Imported 1 of 2 listings from UEX.",
     )
   })
 
@@ -162,7 +162,7 @@ describe("ImportFromUex", () => {
     await loadPreview()
     fireEvent.click(screen.getByRole("button", { name: "Import 2 Listings" }))
     await waitFor(() =>
-      expect(screen.getByText(/Successfully imported/)).toBeInTheDocument(),
+      expect(screen.getByText(/Imported/)).toBeInTheDocument(),
     )
     expect(screen.queryByText("Not imported")).toBeNull()
   })

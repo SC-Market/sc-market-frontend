@@ -255,7 +255,7 @@
     "orderStatusChange": "Order Status Change",
     "publicOrderCreated": "Public Contract Created",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Webhook added",
     "webhookName": "Webhook Name",
     "webhookUrl": "Webhook URL",
     "publicContractCreated": "New public contracts (site-wide)"
@@ -271,13 +271,13 @@
       "contractorRequired": "Please select a contractor",
       "create": "Create",
       "createAlert": "Create Alert",
-      "created": "Alert created successfully",
+      "created": "Alert created",
       "createdAt": "Created",
       "creating": "Creating...",
       "delete": "Delete",
       "deleteAlert": "Delete Alert",
       "deleteConfirm": "Are you sure you want to delete this alert? This action cannot be undone.",
-      "deleted": "Alert deleted successfully",
+      "deleted": "Alert deleted",
       "deleting": "Deleting...",
       "editAlert": "Edit Alert",
       "field": {
@@ -295,7 +295,7 @@
       "targetType": "Target Type",
       "targetTypeFilter": "Target Type",
       "update": "Update",
-      "updated": "Alert updated successfully",
+      "updated": "Alert updated",
       "updating": "Updating...",
       "validation": {
         "invalidUrl": "Please enter a valid URL (http:// or https://)"
@@ -331,13 +331,13 @@
     "alerts.contractorRequired": "Please select a contractor",
     "alerts.create": "Create",
     "alerts.createAlert": "Create Alert",
-    "alerts.created": "Alert created successfully",
+    "alerts.created": "Alert created",
     "alerts.createdAt": "Created",
     "alerts.creating": "Creating...",
     "alerts.delete": "Delete",
     "alerts.deleteAlert": "Delete Alert",
     "alerts.deleteConfirm": "Are you sure you want to delete this alert? This action cannot be undone.",
-    "alerts.deleted": "Alert deleted successfully",
+    "alerts.deleted": "Alert deleted",
     "alerts.deleting": "Deleting...",
     "alerts.editAlert": "Edit Alert",
     "alerts.invalidUrl": "Please enter a valid URL (http:// or https://)",
@@ -353,7 +353,7 @@
     "alerts.targetTypeFilter": "Target Type",
     "alerts.title": "Title",
     "alerts.update": "Update",
-    "alerts.updated": "Alert updated successfully",
+    "alerts.updated": "Alert updated",
     "alerts.updating": "Updating...",
     "attributes": {
       "actions": "Actions",
@@ -371,13 +371,13 @@
       },
       "cascadeOption": "Also delete all game item attributes with this name?",
       "create": "Create",
-      "created": "Attribute definition created successfully",
+      "created": "Attribute definition created",
       "createDefinition": "Create Attribute Definition",
       "creating": "Creating...",
       "delete": "Delete",
       "deleteAttributes": "Delete attributes",
       "deleteConfirm": "Are you sure you want to delete this attribute definition?",
-      "deleted": "Attribute definition deleted successfully",
+      "deleted": "Attribute definition deleted",
       "deleteDefinition": "Delete Attribute Definition",
       "deleting": "Deleting...",
       "displayName": "Display Name",
@@ -395,7 +395,7 @@
       "showInFilters": "Show in market filters",
       "title": "Attribute Definitions",
       "update": "Update",
-      "updated": "Attribute definition updated successfully",
+      "updated": "Attribute definition updated",
       "updating": "Updating..."
     },
     "auditLogs": "Admin Audit Logs",
@@ -410,7 +410,7 @@
       "delete": "Delete",
       "deleteAttribute": "Delete Attribute",
       "deleteConfirm": "Are you sure you want to delete this attribute?",
-      "deleted": "Attribute deleted successfully",
+      "deleted": "Attribute deleted",
       "deleting": "Deleting...",
       "editAttribute": "Edit Attribute",
       "freeFormValue": "Enter any value",
@@ -421,7 +421,7 @@
       "importSuccess": "Import Success",
       "noSelection": "Enter a game item ID to get started",
       "save": "Save",
-      "saved": "Attribute saved successfully",
+      "saved": "Attribute saved",
       "saving": "Saving...",
       "search": "Search",
       "searchHelp": "Enter the UUID of a game item to view and edit its attributes",
@@ -465,7 +465,7 @@
     "moderation.notesHelperText": "Optional notes about the moderation action (max 2000 characters)",
     "moderation.notesPlaceholder": "Enter moderation notes or action taken...",
     "moderation.pageTitle": "Admin Moderation",
-    "moderation.reportUpdated": "Report updated successfully",
+    "moderation.reportUpdated": "Report updated",
     "moderation.status": "Status",
     "moderation.title": "Moderation Dashboard",
     "moderation.updateFailed": "Failed to update report",
@@ -480,7 +480,7 @@
       "result": "Test Result",
       "selectedUser": "Selected: {{username}}",
       "selectUser": "Search for a user to receive the test notification",
-      "success": "Notification test completed successfully",
+      "success": "Notification test completed",
       "targetUser": "Target User",
       "test": "Test Notification",
       "testing": "Testing...",
@@ -598,12 +598,12 @@
     "title": "Admin Audit Logs"
   },
   "adminExpressVerify": {
-    "failure": "Failed to submit! {{reason}}",
+    "failure": "Couldn't verify the org: {{reason}}",
     "ownerDiscordId": "Owner Discord ID",
     "ownerUsername": "Owner Username*",
     "spectrumId": "Org Spectrum ID*",
     "submit": "Submit",
-    "success": "Submitted!",
+    "success": "Org verified",
     "title": "Express Verify User"
   },
   "adminUsers": {
@@ -690,12 +690,12 @@
     "availability": "Availability",
     "chooseNewItem": "Choose New Item",
     "costs": "Costs",
-    "failedSubmit": "Failed to submit!",
+    "failedSubmit": "Couldn't submit",
     "orgInternal": "Org Internal Listing",
     "price": "Price",
     "quantityAvailable": "Quantity Available",
     "submit": "Submit",
-    "submitted": "Submitted!"
+    "submitted": "Submitted"
   },
   "all": "All",
   "AllStockLots": {
@@ -795,13 +795,13 @@
   "authenticateContractor": {
     "copy_and_open": "Copy Code and Open Org Page",
     "error_org_name": "Please set your org name",
-    "failed_auth": "Failed to authenticate! {{reason}}",
+    "failed_auth": "Couldn't verify the org: {{reason}}",
     "instructions": "In order to verify you own the above organization, please copy the following code <sentinelCode>your code</sentinelCode> and add it to your org introduction, history, manifesto, or charter sections. You can remove this code once verification is complete. Click submit once the code is visible on the org page.",
     "org_spectrum_id": "Org Spectrum ID",
     "submit": "Submit"
   },
   "authenticateRSI": {
-    "authenticated": "Authenticated!",
+    "authenticated": "Account verified",
     "click_to_copy": "Click to copy",
     "copy_and_open": "Copy Code and Open Profile",
     "enter_username": "Please enter your username",
@@ -817,11 +817,11 @@
     "availability_for": "Availability for",
     "checking": "Checking availability requirement...",
     "edit": "Edit",
-    "failed": "Failed to update!",
+    "failed": "Couldn't update your availability.",
     "save": "Save",
     "select_availability": "Select Availability",
     "title": "My Availability",
-    "updated": "Updated availability!",
+    "updated": "Availability updated",
     "yourAvailability": "Your Availability"
   },
   "AvailabilityRequirement": {
@@ -839,7 +839,7 @@
     "bidder": "Bidder",
     "bidFailed": "Failed to place bid",
     "bidHistory": "Bid History",
-    "bidPlaced": "Bid placed successfully!",
+    "bidPlaced": "Bid placed",
     "concluded": "Concluded",
     "currentBid": "Current Bid",
     "ended": "Ended",
@@ -888,7 +888,7 @@
     "error": "Failed to block user",
     "reasonLabel": "Reason (optional)",
     "reasonPlaceholder": "Enter a reason for blocking this user...",
-    "success": "Successfully blocked {{username}}"
+    "success": "Blocked {{username}}"
   },
   "blueprints": {
     "browser": {
@@ -914,9 +914,9 @@
     "agreePriceDescription": "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill.",
     "agreePriceTitle": "Agreed price per unit",
     "create_buy_order": "Create Buy Order",
-    "created": "Buy order created successfully",
+    "created": "Buy order created",
     "expiration": "Order Expiration ({{tz}})",
-    "failed": "Failed to submit! {{error}}",
+    "failed": "Couldn't create the buy order: {{error}}",
     "fulfillQuantity": "Quantity to fulfill",
     "fulfillTitle": "Fulfill Buy Order",
     "imageHint": "Add reference photos (optional, large images are optimized automatically)",
@@ -940,7 +940,7 @@
       "negotiable": "Negotiable"
     },
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "suggested_price_optional": "Suggested price (optional)",
     "total_price": "Total Price",
     "totalPriceRange": "Total Price Range",
@@ -1016,7 +1016,7 @@
     "belowMinQty": "Minimum quantity: {{min}} (cart has {{total}})",
     "browseMarket": "Browse Market",
     "checkout": "Checkout",
-    "checkoutSuccess": "Offer submitted successfully",
+    "checkoutSuccess": "Offer sent",
     "confirmCheckout": "Confirm Checkout",
     "confirmOrder": "Confirm Order",
     "confirmPriceChanges": "Some prices have changed. By confirming, you accept the updated prices.",
@@ -1039,7 +1039,7 @@
     "priceIncreased": "Price Increased",
     "pricesChanged": "Prices Have Changed",
     "pricesChangedMessage": "Some item prices have changed since you added them to your cart. Please review before checkout.",
-    "purchaseSuccess": "Purchase successful!",
+    "purchaseSuccess": "Order placed",
     "quantity": "Quantity",
     "quantityUpdated": "Quantity updated",
     "remove": "Remove",
@@ -1144,14 +1144,14 @@
     "error_identifier": "Please set your identifier name",
     "error_logo": "Please set your contractor logo",
     "error_name": "Please set your contractor name",
-    "failed_auth": "Failed to authenticate! {{reason}}",
+    "failed_auth": "Couldn't verify the org: {{reason}}",
     "identifier": "Contractor Identifier",
     "languages": "Supported Languages (Optional)",
     "languagesHelper": "Select languages your organization can communicate in. You can change this later in settings.",
     "logo": "Logo",
     "name": "Contractor Name",
     "submit": "Submit",
-    "success": "Contractor created successfully"
+    "success": "Organization created"
   },
   "contractorList": {
     "fields": {
@@ -1248,7 +1248,7 @@
     "title": "Cookie Consent"
   },
   "CounterOfferSubmitArea": {
-    "counterOfferSubmitted": "Counter offer submitted successfully",
+    "counterOfferSubmitted": "Counter offer sent",
     "submitCounterOffer": "Submit Counter Offer"
   },
   "CraftableItemsView": {
@@ -1373,7 +1373,7 @@
     "stockLotsSubtitle": "Add stock with variant attributes (quality, source, location)",
     "store": "Store",
     "submit": "Create Listing",
-    "success": "Listing created successfully",
+    "success": "Listing created",
     "tier": "Tier",
     "title": "Title",
     "titleAriaLabel": "Enter listing title",
@@ -1403,7 +1403,7 @@
   "CreateLotDialog": {
     "create": "Create Lot",
     "createError": "Failed to create lot",
-    "createSuccess": "Lot created successfully",
+    "createSuccess": "Lot created",
     "listed": "Listed",
     "listedHelp": "Listed stock appears in public listings",
     "location": "Location (Optional)",
@@ -1472,7 +1472,7 @@
   "CreateOrderForm": {
     "about": "About",
     "alert": {
-      "submitted": "Submitted!"
+      "submitted": "Submitted"
     },
     "aUECOffer": "aUEC Offer",
     "aUECOfferHelper": "How much will you offer the contractor to fulfill this order?",
@@ -1501,14 +1501,14 @@
     "offer_helper": "How much will you offer the contractor to fulfill this order?",
     "payment_type": "Payment Type",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "title_required": "Title*",
     "type_required": "Type*"
   },
   "CreateServiceForm": {
     "alert": {
-      "failed": "Failed to submit!",
-      "submitted": "Submitted!"
+      "failed": "Couldn't save the service",
+      "submitted": "Service saved"
     },
     "collateralHelper": "If the contractor offers insurance, what is the lost value in the event the contractor fails to deliver? E.g. the value of the cargo being transported",
     "collateralOptional": "Collateral (Optional)",
@@ -1523,7 +1523,7 @@
     "rush": "Rush",
     "serviceActive": "Service is Active",
     "serviceDescription": "Service Description",
-    "serviceDescriptionHelper": "E.g. We offer transport of goods between locations!",
+    "serviceDescriptionHelper": "E.g. Cargo transport between Area18 and Lorville",
     "serviceDetails": "Service Details",
     "serviceInactive": "Service is Inactive",
     "serviceName": "Service Name",
@@ -1779,7 +1779,7 @@
     "quantity": "Quantity",
     "quantityAriaLabel": "Enter quantity",
     "submit": "Update Listing",
-    "success": "Listing updated successfully",
+    "success": "Listing updated",
     "title": "Title",
     "titleAriaLabel": "Enter listing title",
     "unifiedPricing": "Unified Price",
@@ -1860,7 +1860,7 @@
     },
     "notifications": {
       "noNotifications": "No notifications",
-      "noNotificationsDescription": "You're all caught up! New notifications will appear here"
+      "noNotificationsDescription": "You're all caught up. New notifications show up here."
     },
     "orders": {
       "browseMarket": "Browse Market",
@@ -2076,15 +2076,15 @@
     "emptyDescription": "My Stock tracks the items you own, in lots with a quantity and an optional location. Add a lot for anything you have, whether or not you sell it."
   },
   "inviteCodes": {
-    "copied": "Copied!",
+    "copied": "Copied",
     "create_new": "Create New Invite Code",
-    "failed_submit": "Failed to submit! {{reason}}",
+    "failed_submit": "Couldn't save the invite code: {{reason}}",
     "invite_code": "Invite Code",
     "invites": "Invites",
     "max_uses": "Max Invite Uses",
     "max_uses_helper": "The maximum number of uses of this invite. Set to 0 to make unlimited.",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "used_times": "Used {{used}}/{{max}} times",
     "copy": "Copy invite link {{code}}",
     "delete": "Delete invite {{code}}"
@@ -2156,7 +2156,7 @@
     "bulkArchivedSuccess_other": "Archived {{count}} listings.",
     "bulkArchiveTitle": "Archive selected listings?",
     "cannotReduceStock": "Cannot reduce stock — units are committed to active orders",
-    "created": "Listing created successfully!",
+    "created": "Listing created",
     "createError": "Failed to create listing",
     "deactivate": "Deactivate",
     "discard": "Discard",
@@ -2185,7 +2185,7 @@
     "sub": "Sub",
     "title": "Title",
     "updateAmount": "Update Amount",
-    "updated": "Updated!",
+    "updated": "Updated",
     "updateError": "Failed to update listing",
     "variants": "Variants",
     "views": "Views",
@@ -2433,7 +2433,7 @@
     "created": "Created",
     "delete": "Delete",
     "deleteError": "Failed to delete lot",
-    "deleteSuccess": "Lot deleted successfully",
+    "deleteSuccess": "Lot deleted",
     "edit": "Edit",
     "invalidQuantity": "Quantity must be non-negative",
     "listed": "Listed",
@@ -2449,7 +2449,7 @@
     "unlisted": "Unlisted",
     "unspecified": "Unspecified",
     "updateError": "Failed to update lot",
-    "updateSuccess": "Lot updated successfully"
+    "updateSuccess": "Lot updated"
   },
   "LotListItemV2": {
     "available": "available",
@@ -2474,7 +2474,7 @@
     "unlisted": "Unlisted",
     "unspecified": "Unspecified",
     "updateError": "Failed to update lot",
-    "updateSuccess": "Lot updated successfully",
+    "updateSuccess": "Lot updated",
     "variantInfo": "Variant Information"
   },
   "manageListingsActions": {
@@ -2526,15 +2526,15 @@
     "cannotRemoveProtectedSelfRole": "You cannot remove this role from yourself (keep your top role, and keep a role with “manage roles” when your top role does not include it).",
     "export": "Export",
     "kick": "Kick",
-    "kick_failed": "Failed to kick! {{reason}}",
+    "kick_failed": "Couldn't remove the member: {{reason}}",
     "kicked": "Kicked",
-    "member_kicked": "Member kicked!",
+    "member_kicked": "Member removed",
     "members": "Members",
     "role": "Role",
     "roles": "Roles",
     "search": "Search",
-    "update_failed": "Failed to update! {{reason}}",
-    "updated": "Updated!",
+    "update_failed": "Couldn't update the member: {{reason}}",
+    "updated": "Roles updated",
     "username": "Username",
     "kickMember": "Kick {{username}}",
     "rolesFor": "Roles for {{username}}"
@@ -2543,7 +2543,7 @@
     "add_role": "Add Role",
     "create": "Create",
     "delete": "Delete",
-    "deleted": "Deleted!",
+    "deleted": "Role deleted",
     "headCells": {
       "name": "Name",
       "position": "Position"
@@ -2581,7 +2581,7 @@
     "role_position": "Role Position",
     "save": "Save",
     "title": "Roles",
-    "updated": "Updated!"
+    "updated": "Saved"
   },
   "market": {
     "activeListings": "Active Listings",
@@ -2744,7 +2744,7 @@
     "bundle": "Bundle",
     "deactivate": "Deactivate Listing",
     "description": "Description",
-    "errorWhileUpdating": "Error while updating!",
+    "errorWhileUpdating": "Couldn't save your changes",
     "itemType": "Item Type",
     "minBidIncrement": "Minimum Bid Increment",
     "other": "Other",
@@ -2753,23 +2753,23 @@
     "quantityAvailable": "Quantity Available",
     "title": "Title",
     "update": "Update",
-    "updated": "Updated!",
+    "updated": "Updated",
     "weapon": "Weapon"
   },
   "marketAggregateView": {
     "productImage": "Product image for {{title}}"
   },
   "MarketAggregateView": {
-    "addedToCart": "Added to cart!",
+    "addedToCart": "Added to cart",
     "addToCart": "Add to Cart",
     "atPrice": "orders at {{price}} aUEC or {{direction}}",
     "buyer": "Seller",
     "buyOrders": "Buy Orders",
     "buyOrdersChart": "Buy Orders",
     "cancel": "Cancel",
-    "cancelled": "Cancelled!",
+    "cancelled": "Buy order cancelled",
     "description": "Description",
-    "failedSubmit": "Failed to submit!",
+    "failedSubmit": "Couldn't submit",
     "fulfill": "Fulfill",
     "market": "Market",
     "ofAvailable": "of {{count}} available",
@@ -2787,7 +2787,7 @@
     "sellOrders": "Sell Orders",
     "sellOrdersChart": "Sell Orders",
     "stockAvailable": "Supply (stock ≤ price)",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "total": "Total",
     "viewCount": "Total Views"
   },
@@ -2829,7 +2829,7 @@
   "MarketEditTemplate": {
     "configure": "Configure the comment template that will be added to new market orders that users can fill out to provide you additional details.",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Template saved",
     "title": "Edit Market Message Template"
   },
   "MarketListingEditView": {
@@ -2844,8 +2844,8 @@
     "quantityAvailable": "Quantity Available",
     "title": "Title",
     "updateBtn": "Update",
-    "updated": "Updated!",
-    "updateError": "Error while updating!",
+    "updated": "Updated",
+    "updateError": "Couldn't save your changes",
     "updating": "Updating..."
   },
   "MarketListingForm": {
@@ -2856,18 +2856,18 @@
     "description": "Description",
     "descriptionHelp": "E.g. Exclusive subscriber flare for August 2020",
     "endTime": "End Time ({{tz}})",
-    "failedSubmit": "Failed to submit!",
+    "failedSubmit": "Couldn't submit",
     "imageHint": "Search for images or upload your own",
     "minBidIncrement": "Minimum bid increment",
     "orgInternal": "Org Internal Listing",
-    "photosUploaded": "Photos uploaded successfully!",
+    "photosUploaded": "Photos uploaded",
     "photoUploadFailed": "Failed to upload some photos",
     "price": "Price",
     "quantityAvailable": "Quantity Available",
     "relatedListings": "Related Listings",
     "startingBid": "Starting Bid",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "title": "Title"
   },
   "marketListings": {
@@ -2880,12 +2880,12 @@
   },
   "MarketListingView": {
     "activeOrders": "Active Orders",
-    "addedToCart": "Added to cart!",
+    "addedToCart": "Added to cart",
     "addToCart": "Add to Cart",
     "anonymousReviewer": "Anonymous",
     "bid": "Bid",
-    "bidError": "Error while bidding! {{error}}",
-    "bidSuccess": "Bid successful!",
+    "bidError": "Couldn't place your bid: {{error}}",
+    "bidSuccess": "Bid placed",
     "currentBid": "Current Bid: {{price}} aUEC",
     "description": "Description",
     "ended": "Ended",
@@ -2922,11 +2922,11 @@
     "about": "About",
     "defaultListing": "Default Listing",
     "description": "Description",
-    "failedSubmit": "Failed to submit! {{error}}",
+    "failedSubmit": "Couldn't submit: {{error}}",
     "helperText": "E.g. Exclusive subscriber flare for August 2020",
     "includeListings": "Listings to Include",
     "listings": "Listings",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "title": "Title",
     "update": "Update"
   },
@@ -2934,12 +2934,12 @@
     "about": "About",
     "defaultListing": "Default Listing",
     "description": "Description",
-    "failedSubmit": "Failed to submit!",
+    "failedSubmit": "Couldn't submit",
     "helperText": "E.g. Exclusive subscriber flare for August 2020",
     "listings": "Listings",
     "listingsToInclude": "Listings to Include",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "title": "Title"
   },
   "marketMultipleView": {
@@ -3045,14 +3045,14 @@
   },
   "memberAssignArea": {
     "assign": "Assign",
-    "assigned": "Assigned!",
+    "assigned": "Assigned",
     "assignMember": "Assign Member",
-    "failed_assign": "Failed to assign!",
-    "failed_unassign": "Failed to unassign!",
+    "failed_assign": "Couldn't assign.",
+    "failed_unassign": "Couldn't unassign.",
     "handle": "Handle",
     "reassign": "Reassign",
     "unassign": "Unassign",
-    "unassigned": "Unassigned!"
+    "unassigned": "Unassigned"
   },
   "MemberAssignments": {
     "assignments": "Assignments"
@@ -3063,7 +3063,7 @@
     "withdraw": "Withdraw"
   },
   "messages": {
-    "chatCreated": "Chat created successfully",
+    "chatCreated": "Chat created",
     "copy": "Copy",
     "title": "Messages",
     "viewChat": "View Chat"
@@ -3349,7 +3349,7 @@
     "reviewRevisionRequested": "{{requester}} requested a revision for their review",
     "share": "Share",
     "shareNotification": "Check out this notification",
-    "submitted": "Submitted!",
+    "submitted": "Submitted",
     "view_all": "View All",
     "public_contract": "New public contract:",
     "someone": "Someone",
@@ -3510,7 +3510,7 @@
     "merge_offers_selected_count_one": "Selected: {{count}} offer session",
     "merge_offers_selected_count_other": "Selected: {{count}} offer sessions",
     "merge_offers_warning": "All selected offer sessions will be closed and replaced with a single merged offer session.",
-    "merge_success": "Offers merged successfully",
+    "merge_success": "Offers merged",
     "myOffers": "My Offers",
     "offer": "Offer",
     "offers": "Offers",
@@ -3554,7 +3554,7 @@
     },
     "email": {
       "description": "Get notified about new messages and offers when you're away.",
-      "sent": "Verification email sent! You can verify it later.",
+      "sent": "Verification email sent. You can verify it later.",
       "title": "Add your email",
       "verify": "Send verification"
     },
@@ -3564,7 +3564,7 @@
       "prefsTitle": "Email preferences",
       "title": "Email notifications"
     },
-    "emailVerificationSent": "Verification email sent! Check your inbox.",
+    "emailVerificationSent": "Verification email sent. Check your inbox.",
     "notifications": {
       "description": "Choose how you'd like to be reminded about unread messages.",
       "dmReminders": "Email me about unread messages",
@@ -3625,7 +3625,7 @@
     "status": "Status",
     "title": "Title",
     "update_status": "Update Status",
-    "updated_status": "Updated status!"
+    "updated_status": "Status updated"
   },
   "orderKinds": {
     "Construction": "Construction",
@@ -3664,8 +3664,8 @@
   },
   "orderReviewArea": {
     "alert": {
-      "error": "Failed to leave review!",
-      "success": "Left review!"
+      "error": "Couldn't post your review.",
+      "success": "Review posted"
     },
     "commentLabel": "Comment",
     "leaveFor": "Leave a review for",
@@ -3762,7 +3762,7 @@
     "availabilityRequirement": "Availability Requirements",
     "confirmDelete": "Are you sure you want to delete this setting?",
     "delete": "Delete",
-    "deletedSuccessfully": "Setting deleted successfully!",
+    "deletedSuccessfully": "Setting deleted",
     "deleteError": "Failed to delete setting. Please try again.",
     "description": "Configure custom messages that will be automatically sent when offers are created or when offers turn into orders.",
     "enabled": "Enabled",
@@ -3797,7 +3797,7 @@
     "requirementsDescription": "Configure requirements that must be met before orders can be placed.",
     "requirementsTitle": "Order Requirements",
     "save": "Save Settings",
-    "savedSuccessfully": "Settings saved successfully!",
+    "savedSuccessfully": "Settings saved",
     "saveError": "Failed to save settings. Please try again.",
     "saving": "Saving...",
     "stockDescription": "Configure when stock is subtracted from your inventory.",
@@ -3838,7 +3838,7 @@
     "invite": {
       "accept": "Accept",
       "acceptContractorInvite": "Accept Contractor Invite",
-      "accepted": "Accepted invite!",
+      "accepted": "Invite accepted",
       "acceptFailed": "Failed to join",
       "acceptInviteTitle": "Accept Invite",
       "invitedMessage": "You've been invited to",
@@ -3950,10 +3950,10 @@
   },
   "orgDetailEdit": {
     "avatar_too_large": "Avatar must be less than 1MB",
-    "avatar_uploaded": "Avatar uploaded successfully",
+    "avatar_uploaded": "Avatar uploaded",
     "banner_too_large": "Banner must be less than 2.5MB",
-    "banner_uploaded": "Banner uploaded successfully",
-    "failed_submit": "Failed to submit! {{reason}}",
+    "banner_uploaded": "Banner uploaded",
+    "failed_submit": "Couldn't save the org details: {{reason}}",
     "image_url": "Image URL",
     "image_url_helper": "Direct URL to the image, from Imgur, RSI, or starcitizen.tools",
     "mining": "mining",
@@ -3961,7 +3961,7 @@
     "org_tags": "Org Tags",
     "save": "Save",
     "set_banner": "Set new banner",
-    "submitted": "Submitted!",
+    "submitted": "Org details saved",
     "descriptionEditor": "Organization description",
     "editName": "Edit name",
     "editTags": "Edit tags",
@@ -3982,7 +3982,7 @@
     "invite_members": "Invite Members",
     "note": "Note",
     "submit": "Submit",
-    "submitted": "Submitted!",
+    "submitted": "Invites sent",
     "username": "Username"
   },
   "OrgMemberSearch": {
@@ -4172,7 +4172,7 @@
     "request_data_title": "Request my Data",
     "share_discord_with_sellers": "Share Discord Profile with Sellers",
     "title": "Privacy",
-    "updated": "Settings updated successfully",
+    "updated": "Settings updated",
     "cookie_title": "Cookie preferences",
     "cookie_description": "Sign-in cookies and anonymous error reports are always on. Analytics (Google Analytics and page-speed measurement) only run if you allow them.",
     "cookie_status_all": "Current choice: analytics allowed.",
@@ -4234,8 +4234,8 @@
     "about": "About",
     "posting_for": "Posting for {{org}}",
     "alert": {
-      "failed": "Failed to submit!",
-      "submitted": "Submitted!"
+      "failed": "Couldn't save the post",
+      "submitted": "Post saved"
     },
     "commentArea": {
       "post": "Post",
@@ -4300,7 +4300,7 @@
     "reportDescription": "Help us keep the community safe by reporting content that violates our guidelines.",
     "reportFailed": "Failed to submit report. Please try again.",
     "reportingUrl": "Reporting URL",
-    "reportSubmitted": "Report submitted successfully. Thank you for helping keep our community safe.",
+    "reportSubmitted": "Report submitted. Thank you for helping keep our community safe.",
     "submit": "Submit Report",
     "submitting": "Submitting..."
   },
@@ -4366,8 +4366,8 @@
       "revisionRequested": "Revision Requested"
     },
     "success": {
-      "requested": "Review revision requested successfully",
-      "updated": "Review updated successfully"
+      "requested": "Revision requested",
+      "updated": "Review updated"
     },
     "title": {
       "editReview": "Edit Review"
@@ -4465,9 +4465,9 @@
     "back": "Back",
     "contractor": "Contractor",
     "errors": {
-      "enterAmount": "Please enter an amount!",
-      "enterUser": "Please enter a user to send to!",
-      "invalidUser": "Invalid User!"
+      "enterAmount": "Enter an amount",
+      "enterUser": "Choose who to send to",
+      "invalidUser": "No user with that name"
     },
     "next": "Next",
     "note": "Note",
@@ -4596,7 +4596,7 @@
         "title": "Add Email Address"
       },
       "addError": "Failed to add email address",
-      "addSuccess": "Email added successfully!",
+      "addSuccess": "Email added",
       "deleteEmailDialog": {
         "cancel": "Cancel",
         "confirm": "Remove Email",
@@ -4604,7 +4604,7 @@
         "title": "Remove Email Address"
       },
       "deleteError": "Failed to remove email address",
-      "deleteSuccess": "Email removed successfully!",
+      "deleteSuccess": "Email removed",
       "editEmailDialog": {
         "newEmailLabel": "New Email Address",
         "title": "Update Email Address",
@@ -4624,9 +4624,9 @@
       "title": "Email Notifications",
       "updateEmail": "Update Email",
       "updateError": "Failed to update email address",
-      "updateSuccess": "Email updated successfully!",
+      "updateSuccess": "Email updated",
       "verificationError": "Failed to send verification email",
-      "verificationSent": "Verification email sent!",
+      "verificationSent": "Verification email sent",
       "verified": "Verified",
       "bounce": {
         "title": "Your email bounced. Please update it.",
@@ -4661,7 +4661,7 @@
       "placeholder": "Select languages...",
       "save": "Save Languages",
       "saveError": "Failed to update languages",
-      "saveSuccess": "Languages updated successfully",
+      "saveSuccess": "Languages updated",
       "section": {
         "description": "Select the languages you can communicate in. This helps others know which languages you support."
       },
@@ -4675,7 +4675,7 @@
       "available": "Available Tabs",
       "description": "Customize which tabs appear in your mobile bottom navigation bar. Select up to 5 tabs and drag to reorder them.",
       "error": "Failed to save mobile navigation settings",
-      "saved": "Mobile navigation settings saved successfully",
+      "saved": "Mobile navigation settings saved",
       "selected": "Selected Tabs",
       "title": "Mobile Navigation"
     },
@@ -4701,7 +4701,7 @@
       "reVerifyButton": "Re-verify Profile",
       "reVerifyDescription": "Update your profile username to match your current Spectrum handle. This will only update your username.",
       "reVerifyError": "Failed to re-verify profile. Please try again later.",
-      "reVerifySuccess": "Profile successfully re-verified! Your username has been updated.",
+      "reVerifySuccess": "Profile re-verified. Your username is updated.",
       "reVerifyTitle": "Re-verify Profile",
       "setPrimary": "Set as Primary",
       "showAsInGame": "Show as In Game",
@@ -4715,7 +4715,7 @@
       "unlinkError": "Failed to unlink Star Citizen account. Please try again later.",
       "unlinkProviderDescription": "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
       "unlinkProviderTitle": "Unlink Account",
-      "unlinkSuccess": "Star Citizen account successfully unlinked! Your profile has been reset to unverified status.",
+      "unlinkSuccess": "Star Citizen account unlinked. Your profile is back to unverified.",
       "unlinkTitle": "Unlink Star Citizen Account",
       "updateAndVerify": "Update Username and Re-Verify Account",
       "usernames": "Usernames:",
@@ -4762,12 +4762,12 @@
       "otherDevices_other": "{{count}} other devices",
       "permissionDeniedError": "Permission {{status}}. Please enable notifications in your browser settings.",
       "permissionDeniedMessage": "Please enable notifications in your browser settings to use push notifications.",
-      "permissionGrantedMessage": "Permission granted! You can now subscribe to push notifications.",
+      "permissionGrantedMessage": "Permission granted. You can now turn on push notifications.",
       "permissionStatus": "Permission Status",
       "removeDevice": "Remove Device",
       "requestPermission": "Request Permission",
       "subscribe": "Subscribe to Push Notifications",
-      "subscribed": "Successfully subscribed to push notifications!",
+      "subscribed": "Push notifications on",
       "subscribedOn": "Subscribed {{date}}",
       "subscribing": "Subscribing...",
       "title": "Push Notifications",
@@ -4776,7 +4776,7 @@
       "totalDevices_other": "{{count}} total devices",
       "unknownDevice": "Unknown Device",
       "unsubscribe": "Unsubscribe",
-      "unsubscribed": "Successfully unsubscribed from push notifications",
+      "unsubscribed": "Push notifications off",
       "subscribeFailed": "Couldn't turn on push notifications: {{reason}}",
       "permissionDismissed": "Your browser didn't turn notifications on. Try again and choose Allow.",
       "unsubscribeFailed": "Couldn't remove that device. Try again.",
@@ -5207,9 +5207,9 @@
       "in-repair": "In Repair"
     },
     "import": {
-      "failed": "Failed to submit! {{error}}",
+      "failed": "Couldn't import your fleet: {{error}}",
       "submit": "Submit",
-      "submitted": "Submitted!",
+      "submitted": "Fleet imported",
       "title": "Import from Hangar XPlorer File",
       "upload": "Upload File"
     },
@@ -5351,7 +5351,7 @@
     },
     "my_orgs": "My Organizations",
     "my_shops": "My Shops",
-    "new_chip": "New!",
+    "new_chip": "New",
     "notification_test": {
       "text": "Notification Test"
     },
@@ -5503,7 +5503,7 @@
     "resetSuccess": "Theme reset to default",
     "save": "Save Theme",
     "saveError": "Failed to save theme",
-    "saveSuccess": "Theme saved successfully",
+    "saveSuccess": "Theme saved",
     "saving": "Saving...",
     "style": "Style",
     "unit": "Unit"
@@ -5566,7 +5566,7 @@
     "to": "To",
     "transfer": "Transfer",
     "transferError": "Failed to transfer stock",
-    "transferSuccess": "Stock transferred successfully",
+    "transferSuccess": "Stock transferred",
     "unspecified": "Unspecified"
   },
   "TransferLotDialogV2": {
@@ -5578,7 +5578,7 @@
     "title": "Transfer Stock Lot",
     "transfer": "Transfer",
     "transferError": "Failed to transfer lot",
-    "transferSuccess": "Lot transferred successfully",
+    "transferSuccess": "Lot transferred",
     "unspecified": "Unspecified",
     "variant": "Variant"
   },
@@ -5641,7 +5641,7 @@
     "dialogDescription": "Are you sure you want to unblock this user? They will be able to create orders and offers with you again.",
     "dialogTitle": "Unblock {{username}}",
     "error": "Failed to unblock user",
-    "success": "Successfully unblocked {{username}}"
+    "success": "Unblocked {{username}}"
   },
   "update_post": "Update Post",
   "userActions": {
@@ -5659,11 +5659,11 @@
   "viewProfile": {
     "about_tab": "About",
     "avatar_too_large": "Avatar must be less than 1MB",
-    "avatar_uploaded": "Avatar uploaded successfully",
+    "avatar_uploaded": "Avatar uploaded",
     "banner_too_large": "Banner must be less than 2.5MB",
-    "banner_uploaded": "Banner uploaded successfully",
+    "banner_uploaded": "Banner uploaded",
     "editDescription": "Edit Description",
-    "failed": "Failed to submit!",
+    "failed": "Couldn't save your profile.",
     "image_url": "Image URL",
     "image_url_helper": "Direct URL to the image, from Imgur, RSI, or starcitizen.tools",
     "loading": "Loading",
@@ -5678,12 +5678,12 @@
     "store_market": "Market",
     "store_services": "Services",
     "store_tab": "Store",
-    "submitted": "Submitted!"
+    "submitted": "Profile saved"
   },
   "Webhooks": {
-    "failedToSubmit": "Failed to submit! ",
+    "failedToSubmit": "Couldn't delete the webhook: ",
     "name": "Name",
-    "submitted": "Submitted!",
+    "submitted": "Webhook deleted",
     "title": "Webhooks"
   },
   "whitelabel": {
@@ -6127,7 +6127,7 @@
     "manageTitle": "Link back to us",
     "line": "Find our shop on SC Market: {{url}}",
     "verifyHint": "Totally optional and not needed to verify: if you like, also add this line to your RSI org page so visitors can find your shop on SC Market. Only the code above is checked.",
-    "verifiedHint": "Your org is verified! You can now remove the verification code from RSI. If you like, keep this optional line on your org page so visitors can find your shop. Only the code can be removed; the line can stay.",
+    "verifiedHint": "Your org is verified. You can now remove the verification code from RSI. If you like, keep this optional line on your org page so visitors can find your shop. Only the code can be removed; the line can stay.",
     "manageHint": "Optional: add this line to your RSI org page so visitors can find your shop on SC Market. It has nothing to do with verification and is never required.",
     "copy": "Copy line",
     "copied": "Copied",
@@ -6773,7 +6773,7 @@
     "totalValue": "Total Value:",
     "version": "Version",
     "mostRecent": "Most Recent",
-    "newBadge": "NEW!",
+    "newBadge": "NEW",
     "orderLimitViolation": "Order does not meet size or value requirements",
     "byName": "by {{name}}"
   },
@@ -7137,7 +7137,7 @@
       "organizationShop": "Organization shop",
       "categoriesLanguages": "Categories & Languages",
       "selectOrgError": "Select an organization",
-      "created": "Shop created successfully!"
+      "created": "Shop created"
     },
     "settings": {
       "title": "Shop Settings",
@@ -7592,7 +7592,7 @@
     },
     "summary": {
       "wasQuantity": "(was {{quantity}})",
-      "newBadge": "NEW!"
+      "newBadge": "NEW"
     }
   },
   "adminUi": {
@@ -7669,7 +7669,7 @@
       "warnings_one": "{{count}} warning",
       "warnings_other": "{{count}} warnings",
       "noDetails": "No details available",
-      "importSuccess": "Game data imported successfully",
+      "importSuccess": "Game data imported",
       "importFailed": "Import failed",
       "importStarted": "Import started",
       "uploadFailed": "Upload failed",
@@ -7784,8 +7784,8 @@
       "typeLabel": "Type:",
       "applicableTo": "Applicable to:",
       "noTypes": "No types",
-      "importSuccess_one": "Successfully imported {{count}} attribute",
-      "importSuccess_other": "Successfully imported {{count}} attributes",
+      "importSuccess_one": "Imported {{count}} attribute",
+      "importSuccess_other": "Imported {{count}} attributes",
       "importPartial_one": "Import completed with errors. Imported {{count}} attribute",
       "importPartial_other": "Import completed with errors. Imported {{count}} attributes",
       "uuidPlaceholder": "Enter game item UUID"
@@ -7971,10 +7971,10 @@
     },
     "create": {
       "title": "Create API Token",
-      "titleCreated": "Token Created Successfully",
-      "successAlert": "Your API token has been created successfully. Make sure to copy it now as it won't be shown again.",
+      "titleCreated": "Token created",
+      "successAlert": "Your API token is ready. Copy it now: it won't be shown again.",
       "tokenLabel": "API Token",
-      "copied": "Copied!",
+      "copied": "Copied",
       "copyToken": "Copy Token",
       "howToAuth": "<strong>How to authenticate:</strong> Include the token in the <code>Authorization</code> header of your API requests:",
       "important": "<strong>Important:</strong> Store this token securely. It provides access to your account with the permissions you've granted. If you lose this token, you'll need to create a new one.",
@@ -7985,7 +7985,7 @@
     },
     "edit": {
       "title": "Edit API Token",
-      "success": "Token updated successfully",
+      "success": "Token updated",
       "error": "Failed to update token",
       "contractorAccessTitle": "Contractor Access",
       "contractorAccessHelp": "Restrict this token to specific contractors. Leave empty for access to all contractors.",
@@ -8106,9 +8106,9 @@
       "privateHelp": "Only you can view this shopping list",
       "shareLink": "Share Link",
       "shareLinkHelp": "Copy this link to share your wishlist with others",
-      "copied": "Copied!",
+      "copied": "Copied",
       "copyToClipboard": "Copy to clipboard",
-      "linkCopied": "Link copied to clipboard!",
+      "linkCopied": "Link copied",
       "copyFailed": "Failed to copy link. Please copy manually.",
       "nowPublic": "Shopping list is now public. Anyone with the link can view it.",
       "nowPrivate": "Shopping list is now private. Only you can view it.",
@@ -8293,7 +8293,7 @@
     "verification": {
       "pageTitle": "Email Verification",
       "verifying": "Verifying your email address...",
-      "successTitle": "Email Verified!",
+      "successTitle": "Email verified",
       "failedTitle": "Verification Failed",
       "invalidTitle": "Invalid Request",
       "goToSettings": "Go to Email Settings"
@@ -8431,8 +8431,8 @@
     }
   },
   "uexImportUi": {
-    "success_one": "Successfully imported <strong>{{imported}}</strong> of {{count}} listing from UEX.",
-    "success_other": "Successfully imported <strong>{{imported}}</strong> of {{count}} listings from UEX.",
+    "success_one": "Imported <strong>{{imported}}</strong> of {{count}} listing from UEX.",
+    "success_other": "Imported <strong>{{imported}}</strong> of {{count}} listings from UEX.",
     "importMore": "Import More",
     "intro": "Import your active sell listings from UEXCorp. Enter your UEX username to preview what will be imported.",
     "username": "UEX Username",
@@ -8609,7 +8609,7 @@
   },
   "sharedUi": {
     "emailVerification": {
-      "verified": "Your email address has been verified successfully!",
+      "verified": "Your email address is verified.",
       "errorGeneric": "An error occurred during verification.",
       "invalidToken": "Invalid or expired verification token.",
       "failedTryAgain": "Email verification failed. Please try again.",

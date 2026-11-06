@@ -210,7 +210,7 @@ export function useAdminAlerts() {
         .unwrap()
         .then(() => {
           issueAlert({
-            message: t("admin.alerts.created", "Alert created successfully"),
+            message: t("admin.alerts.created", "Alert created"),
             severity: "success",
           })
           handleCloseModals()
@@ -243,7 +243,7 @@ export function useAdminAlerts() {
       .unwrap()
       .then(() => {
         issueAlert({
-          message: t("admin.alerts.updated", "Alert updated successfully"),
+          message: t("admin.alerts.updated", "Alert updated"),
           severity: "success",
         })
         handleCloseModals()
@@ -265,7 +265,7 @@ export function useAdminAlerts() {
       .unwrap()
       .then(() => {
         issueAlert({
-          message: t("admin.alerts.deleted", "Alert deleted successfully"),
+          message: t("admin.alerts.deleted", "Alert deleted"),
           severity: "success",
         })
         handleCloseModals()

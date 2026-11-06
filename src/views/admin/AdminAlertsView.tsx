@@ -668,7 +668,7 @@ export function AdminAlertsView() {
                             issueAlert({
                               message: t(
                                 "admin.alerts.updated",
-                                "Alert updated successfully",
+                                "Alert updated",
                               ),
                               severity: "success",
                             })

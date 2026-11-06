@@ -44,7 +44,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
   const { create: createBuyOrder, isLoading: isSubmitting } = useCreateBuyOrder(
-    t("buyorder.created", "Buy order created successfully"),
+    t("buyorder.created", "Buy order created"),
     t("marketUi2.createBuyOrder.failed"),
   );
   const navigate = useNavigate();

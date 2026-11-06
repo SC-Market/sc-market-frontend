@@ -79,7 +79,7 @@ export function useOrgDetailEdit(contractor: Contractor) {
         .then(() =>
           issueAlert({
             message: t("orgDetailEdit.avatar_uploaded", {
-              defaultValue: "Avatar uploaded successfully",
+              defaultValue: "Avatar uploaded",
             }),
             severity: "success",
           }),
@@ -102,7 +102,7 @@ export function useOrgDetailEdit(contractor: Contractor) {
         .then(() =>
           issueAlert({
             message: t("orgDetailEdit.banner_uploaded", {
-              defaultValue: "Banner uploaded successfully",
+              defaultValue: "Banner uploaded",
             }),
             severity: "success",
           }),

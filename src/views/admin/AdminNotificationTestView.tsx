@@ -110,7 +110,7 @@ export function AdminNotificationTestView() {
       issueAlert({
         message: t(
           "admin.notificationTest.success",
-          "Notification test completed successfully",
+          "Notification test completed",
         ),
         severity: "success",
       })
