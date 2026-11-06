@@ -124,7 +124,7 @@ const scmStyle = {
   rules: {
     // Components and views render; mutations and permission checks live in
     // feature hooks and domain rules. Its own rule (not no-restricted-syntax)
-    // so it can ratchet at warn while route strings and new Date() are errors.
+    // so it doesn't replace the route-string and new Date() selectors.
     "render-layer": {
       meta: { type: "suggestion", schema: [] },
       create(context) {
@@ -375,8 +375,9 @@ export default [
     },
   },
 
-  // ── Ratchet (warn): components and views render; hooks call the API ──
-  // The warning count may only go down: scripts/lint-ratchet.mjs (CI).
+  // ── Components and views render; hooks call the API (error) ──
+  // A mutation goes in a named hook in features/<f>/hooks; a permission
+  // check in a named rule in features/<f>/domain.
   {
     files: [
       "src/features/*/components/**/*.tsx",
@@ -387,7 +388,7 @@ export default [
     ignores: LINT_TEST_AND_ROUTE_IGNORES,
     plugins: { "scm-style": scmStyle },
     rules: {
-      "scm-style/render-layer": "warn",
+      "scm-style/render-layer": "error",
     },
   },
 
