@@ -17,44 +17,22 @@ import { useTranslation } from "react-i18next"
 import {
   SearchRounded,
   StorefrontRounded,
-  LocalShippingRounded,
-  PeopleRounded,
-  SettingsRounded,
-  PriceChangeRounded,
   AddRounded,
-  DashboardRounded,
-  DescriptionRounded,
-  DesignServicesRounded,
-  ShoppingCartRounded,
   MessageRounded,
-  InventoryRounded,
-  ScienceRounded,
-  MenuBookRounded,
-  PersonAddRounded,
-  BusinessRounded,
   DarkModeRounded,
   LightModeRounded,
-  HelpOutlineRounded,
 } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useSearchListingsQuery } from "../../features/market/api/marketV2Api"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { HELP_PATHS, PATHS, SHOP_PATHS } from "../../routes/paths"
+import { SHOP_PATHS } from "../../routes/paths"
 import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 
 import { useFormatters } from "../../util/format"
-interface CommandItem {
-  id: string
-  label: string
-  description?: string
-  icon: React.ReactNode
-  action: () => void
-  category: "navigation" | "action" | "content"
-  keywords?: string[]
-}
+import { navCommandItems, type CommandItem } from "./commandPaletteItems"
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false)
@@ -109,40 +87,7 @@ export function CommandPalette() {
 
   // Static navigation items
   const navItems = useMemo<CommandItem[]>(() => {
-    const items: CommandItem[] = [
-      { id: "market", label: t("appUi.commandPalette.items.market"), icon: <SearchRounded />, action: () => go("/market"), category: "navigation", keywords: ["browse", "listings", "buy", "shop"] },
-      { id: "services", label: t("appUi.commandPalette.items.services"), icon: <DesignServicesRounded />, action: () => go("/market/services"), category: "navigation", keywords: ["hire", "contract"] },
-      { id: "contracts", label: t("appUi.commandPalette.items.contracts"), icon: <DescriptionRounded />, action: () => go("/contracts"), category: "navigation", keywords: ["jobs", "work"] },
-      { id: "buy-orders", label: t("appUi.commandPalette.items.buyOrders"), icon: <ShoppingCartRounded />, action: () => go("/buyorders"), category: "navigation", keywords: ["demand", "want"] },
-      { id: "shops", label: t("appUi.commandPalette.items.shops"), icon: <StorefrontRounded />, action: () => go("/shops"), category: "navigation" },
-      { id: "orgs", label: t("appUi.commandPalette.items.orgs"), icon: <BusinessRounded />, action: () => go("/contractors"), category: "navigation", keywords: ["contractor", "org"] },
-      { id: "recruiting", label: t("appUi.commandPalette.items.recruiting"), icon: <PersonAddRounded />, action: () => go("/recruiting"), category: "navigation" },
-      { id: "missions", label: t("appUi.commandPalette.items.missions"), icon: <DescriptionRounded />, action: () => go("/missions"), category: "navigation" },
-      { id: "blueprints", label: t("appUi.commandPalette.items.blueprints"), icon: <ScienceRounded />, action: () => go("/blueprints"), category: "navigation", keywords: ["crafting"] },
-      { id: "mining", label: t("appUi.commandPalette.items.mining"), icon: <InventoryRounded />, action: () => go("/mining"), category: "navigation", keywords: ["ore", "resource"] },
-      { id: "wiki", label: t("appUi.commandPalette.items.wiki"), icon: <MenuBookRounded />, action: () => go("/wiki"), category: "navigation", keywords: ["items", "ships", "database"] },
-      { id: "resources", label: t("appUi.commandPalette.items.resources"), icon: <InventoryRounded />, action: () => go("/resources"), category: "navigation" },
-      { id: "help", label: t("appUi.commandPalette.items.help"), icon: <HelpOutlineRounded />, action: () => go(HELP_PATHS.hub), category: "navigation", keywords: ["help", "guide", "how", "faq", "about", "support"] },
-    ]
-
-    if (profile) {
-      items.push(
-        { id: "orders", label: t("appUi.commandPalette.items.orders"), icon: <LocalShippingRounded />, action: () => go("/orders"), category: "navigation" },
-        { id: "messages", label: t("appUi.commandPalette.items.messages"), icon: <MessageRounded />, action: () => go("/messages"), category: "navigation", keywords: ["chat", "dm"] },
-        { id: "dashboard", label: t("appUi.commandPalette.items.dashboard"), icon: <DashboardRounded />, action: () => go("/dashboard"), category: "navigation" },
-        { id: "inventory", label: t("nav.inventory"), icon: <InventoryRounded />, action: () => go("/inventory"), category: "navigation" },
-        { id: "settings", label: t("appUi.commandPalette.items.settings"), icon: <SettingsRounded />, action: () => go("/settings"), category: "navigation" },
-        { id: "price-alerts", label: t("appUi.commandPalette.items.priceAlerts"), description: t("appUi.commandPalette.items.priceAlertsDescription"), icon: <PriceChangeRounded />, action: () => go(PATHS.priceAlerts), category: "navigation", keywords: ["watchlist", "watch price", "price alert", "notify", "target price"] },
-        { id: "my-orgs", label: t("appUi.commandPalette.items.myOrgs"), icon: <PeopleRounded />, action: () => go("/my-orgs"), category: "navigation" },
-      )
-      for (const shop of shops) {
-        items.push(
-          { id: `shop-${shop.slug}`, label: t("appUi.commandPalette.items.shopOrders", { shop: shop.name }), icon: <StorefrontRounded />, action: () => go(SHOP_PATHS.orders(shop.slug)), category: "navigation", keywords: [shop.slug] },
-        )
-      }
-    }
-
-    return items
+    return navCommandItems(t, go, Boolean(profile), shops)
   }, [profile, shops, go, t])
 
   // Action items
@@ -174,7 +119,12 @@ export function CommandPalette() {
     items.push({
       id: "toggle-theme",
       label: t("appUi.commandPalette.items.toggleDarkMode"),
-      icon: theme.palette.mode === "dark" ? <LightModeRounded /> : <DarkModeRounded />,
+      icon:
+        theme.palette.mode === "dark" ? (
+          <LightModeRounded />
+        ) : (
+          <DarkModeRounded />
+        ),
       action: () => {
         const event = new CustomEvent("toggle-theme")
         window.dispatchEvent(event)
@@ -244,24 +194,33 @@ export function CommandPalette() {
   // Scroll selected item into view
   useEffect(() => {
     if (listRef.current) {
-      const selected = listRef.current.querySelector(`[data-index="${selectedIndex}"]`)
+      const selected = listRef.current.querySelector(
+        `[data-index="${selectedIndex}"]`,
+      )
       selected?.scrollIntoView({ block: "nearest" })
     }
   }, [selectedIndex])
 
   const categoryLabel = (cat: string) => {
     switch (cat) {
-      case "navigation": return t("appUi.commandPalette.categories.navigation")
-      case "action": return t("appUi.commandPalette.categories.action")
-      case "content": return t("appUi.commandPalette.categories.content")
-      default: return cat
+      case "navigation":
+        return t("appUi.commandPalette.categories.navigation")
+      case "action":
+        return t("appUi.commandPalette.categories.action")
+      case "content":
+        return t("appUi.commandPalette.categories.content")
+      default:
+        return cat
     }
   }
 
   return (
     <Dialog
       open={open}
-      onClose={() => { setOpen(false); setQuery("") }}
+      onClose={() => {
+        setOpen(false)
+        setQuery("")
+      }}
       maxWidth="sm"
       fullWidth
       sx={{
@@ -279,7 +238,15 @@ export function CommandPalette() {
       }}
       TransitionProps={{ onEntered: () => inputRef.current?.focus() }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", px: 2, py: 1.5, borderBottom: `1px solid ${theme.palette.divider}` }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          px: 2,
+          py: 1.5,
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }}
+      >
         <SearchRounded sx={{ color: "text.secondary", mr: 1.5 }} />
         <InputBase
           inputRef={inputRef}
@@ -290,10 +257,19 @@ export function CommandPalette() {
           fullWidth
           sx={{ fontSize: "1rem" }}
         />
-        <Chip label="ESC" size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+        <Chip
+          label="ESC"
+          size="small"
+          variant="outlined"
+          sx={{ height: 22, fontSize: "0.7rem" }}
+        />
       </Box>
 
-      <List ref={listRef} dense sx={{ py: 0.5, maxHeight: 380, overflowY: "auto" }}>
+      <List
+        ref={listRef}
+        dense
+        sx={{ py: 0.5, maxHeight: 380, overflowY: "auto" }}
+      >
         {filteredItems.length === 0 && (
           <Box sx={{ py: 4, textAlign: "center" }}>
             <Typography color="text.secondary" variant="body2">
@@ -313,7 +289,16 @@ export function CommandPalette() {
                 {showHeader && (
                   <Typography
                     variant="caption"
-                    sx={{ px: 2, pt: 1, pb: 0.5, display: "block", color: "text.secondary", fontWeight: 600, textTransform: "uppercase", fontSize: "0.65rem" }}
+                    sx={{
+                      px: 2,
+                      pt: 1,
+                      pb: 0.5,
+                      display: "block",
+                      color: "text.secondary",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      fontSize: "0.65rem",
+                    }}
                   >
                     {categoryLabel(item.category)}
                   </Typography>
@@ -326,17 +311,33 @@ export function CommandPalette() {
                     mx: 1,
                     borderRadius: 1,
                     py: 0.75,
-                    "&.Mui-selected": { backgroundColor: theme.palette.action.selected },
+                    "&.Mui-selected": {
+                      backgroundColor: theme.palette.action.selected,
+                    },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 36, color: idx === selectedIndex ? "primary.main" : "text.secondary" }}>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 36,
+                      color:
+                        idx === selectedIndex
+                          ? "primary.main"
+                          : "text.secondary",
+                    }}
+                  >
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
                     primary={item.label}
                     secondary={item.description}
-                    primaryTypographyProps={{ variant: "body2", fontWeight: idx === selectedIndex ? 600 : 400 }}
-                    secondaryTypographyProps={{ variant: "caption", noWrap: true }}
+                    primaryTypographyProps={{
+                      variant: "body2",
+                      fontWeight: idx === selectedIndex ? 600 : 400,
+                    }}
+                    secondaryTypographyProps={{
+                      variant: "caption",
+                      noWrap: true,
+                    }}
                   />
                 </ListItemButton>
               </React.Fragment>
@@ -345,15 +346,54 @@ export function CommandPalette() {
         })()}
       </List>
 
-      <Box sx={{ px: 2, py: 1, borderTop: `1px solid ${theme.palette.divider}`, display: "flex", gap: 2, justifyContent: "center" }}>
+      <Box
+        sx={{
+          px: 2,
+          py: 1,
+          borderTop: `1px solid ${theme.palette.divider}`,
+          display: "flex",
+          gap: 2,
+          justifyContent: "center",
+        }}
+      >
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↑↓</kbd> {t("appUi.commandPalette.hintNavigate")}
+          <kbd
+            style={{
+              padding: "1px 4px",
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              fontSize: "0.7rem",
+            }}
+          >
+            ↑↓
+          </kbd>{" "}
+          {t("appUi.commandPalette.hintNavigate")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↵</kbd> {t("appUi.commandPalette.hintSelect")}
+          <kbd
+            style={{
+              padding: "1px 4px",
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              fontSize: "0.7rem",
+            }}
+          >
+            ↵
+          </kbd>{" "}
+          {t("appUi.commandPalette.hintSelect")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>ESC</kbd> {t("appUi.commandPalette.hintClose")}
+          <kbd
+            style={{
+              padding: "1px 4px",
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              fontSize: "0.7rem",
+            }}
+          >
+            ESC
+          </kbd>{" "}
+          {t("appUi.commandPalette.hintClose")}
         </Typography>
       </Box>
     </Dialog>

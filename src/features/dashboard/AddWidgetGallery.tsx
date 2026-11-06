@@ -8,10 +8,7 @@
 
 import { Fragment, useMemo, useState } from "react"
 import {
-  Box,
   Button,
-  Card,
-  CardActionArea,
   FormControl,
   Grid,
   InputLabel,
@@ -36,9 +33,7 @@ import {
   widgetDescription,
   ACTIVITY_FILTER_OPTIONS,
   type WidgetCategory,
-  type WidgetDefinition,
 } from "./widgets/registry"
-import { WidgetPreview } from "./widgets/WidgetPreview"
 import { addWidget } from "./widgets/addWidget"
 import { useDashboardOwner } from "./DashboardOwnerContext"
 import { GameItemPicker, type GameItemChoice } from "./GameItemPicker"
@@ -49,40 +44,13 @@ import type {
   WidgetScopeKind,
 } from "./types"
 import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
-
-const SCOPE_LABEL_KEYS: Record<
-  WidgetScopeKind,
-  { key: string; default: string }
-> = {
-  me: { key: "dashboard.scope.me", default: "You" },
-  current_context: {
-    key: "dashboard.scope.currentContext",
-    default: "Current context",
-  },
-  all_orgs: { key: "dashboard.scope.allOrgs", default: "All organizations" },
-  all_shops: { key: "dashboard.scope.allShops", default: "All shops" },
-  specific_org: {
-    key: "dashboard.scope.specificOrg",
-    default: "A specific organization",
-  },
-  specific_shop: {
-    key: "dashboard.scope.specificShop",
-    default: "A specific shop",
-  },
-}
-
-// On a shared org/shop dashboard, personal and aggregate bindings are meaningless
-// (the dashboard belongs to the owner, not the viewer). Only "current_context"
-// (which resolves to the owner) and explicit specific_* pins are allowed.
-const ORG_SHARED_SCOPES: WidgetScopeKind[] = [
-  "current_context",
-  "specific_org",
-  "specific_shop",
-]
-const SHOP_SHARED_SCOPES: WidgetScopeKind[] = [
-  "current_context",
-  "specific_shop",
-]
+import { WidgetCard } from "./AddWidgetCard"
+import {
+  SCOPE_LABEL_KEYS,
+  ORG_SHARED_SCOPES,
+  SHOP_SHARED_SCOPES,
+  filterScopes,
+} from "./addWidgetScopes"
 
 export interface AddWidgetButtonProps {
   config: DashboardConfig
@@ -116,14 +84,6 @@ export function AddWidgetButton({
       />
     </>
   )
-}
-
-/** The scopes in `allowed` that the owner allowlist permits (all if none). */
-function filterScopes(
-  allowed: WidgetScopeKind[],
-  allowlist: WidgetScopeKind[] | null,
-): WidgetScopeKind[] {
-  return allowlist ? allowed.filter((k) => allowlist.includes(k)) : allowed
 }
 
 interface AddWidgetDialogProps {
@@ -476,53 +436,5 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
         </Grid>
       </Section>
     </ResponsiveDialog>
-  )
-}
-
-interface WidgetCardProps {
-  def: WidgetDefinition
-  selected: boolean
-  onSelect: () => void
-  title: string
-  description: string
-}
-
-/** A single selectable widget in the gallery: schematic preview + title + blurb. */
-function WidgetCard({
-  def,
-  selected,
-  onSelect,
-  title,
-  description,
-}: WidgetCardProps) {
-  return (
-    <Grid item xs={12} sm={6} md={4}>
-      <Card
-        variant="outlined"
-        sx={{
-          height: "100%",
-          borderColor: selected ? "primary.main" : "divider",
-          borderWidth: (t) =>
-            selected ? t.borderWidth.emphasis : t.borderWidth.hairline,
-        }}
-      >
-        <CardActionArea
-          onClick={onSelect}
-          sx={{ height: "100%", p: 1.5, alignItems: "stretch" }}
-        >
-          <Stack spacing={1} sx={{ height: "100%" }}>
-            <WidgetPreview kind={def.preview} icon={def.icon} />
-            <Box>
-              <Typography variant="subtitle2" fontWeight="bold" noWrap>
-                {title}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {description}
-              </Typography>
-            </Box>
-          </Stack>
-        </CardActionArea>
-      </Card>
-    </Grid>
   )
 }
