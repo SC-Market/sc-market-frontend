@@ -5,12 +5,8 @@ import {
   Button,
   Chip,
   CircularProgress,
-  FormControl,
   Grid,
-  InputLabel,
   Link as MuiLink,
-  MenuItem,
-  Select,
   Tab,
   Tabs,
   Tooltip,
@@ -34,7 +30,10 @@ import {
 } from "../hooks/useNotificationPreferenceActions"
 import { HelpTip } from "../../help/components/HelpTip"
 import { NOTIFICATION_TABS, type NotificationRow } from "../domain/layout"
-import { useFormatters } from "../../../util/format"
+import {
+  NotificationScopeSelect,
+  OrgMuteControl,
+} from "./NotificationScopeControls"
 
 const CHANNELS: NotificationChannelId[] = [
   "in_app",
@@ -61,7 +60,6 @@ function rowState(cells: NotificationPreferenceCell[]): "on" | "off" | "mixed" {
  */
 export function NotificationPreferencesTabs() {
   const { t } = useTranslation()
-  const fmt = useFormatters()
   // ?group=<tab id> opens that tab (e.g. Price Alerts links to "market").
   const [searchParams] = useSearchParams()
   const [tab, setTab] = React.useState(() => {
@@ -323,115 +321,20 @@ export function NotificationPreferencesTabs() {
       </Tabs>
 
       {data && data.scopes.length > 1 && current.id !== "account" && (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            mb: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          <FormControl size="small" sx={{ minWidth: 220 }}>
-            {/* shrink + displayEmpty: Personal is the "" value, which MUI
-                otherwise treats as empty and renders as a blank field */}
-            <InputLabel id="notif-scope" shrink>
-              {t("settings.notifications.scope", "Settings for")}
-            </InputLabel>
-            <Select
-              labelId="notif-scope"
-              label={t("settings.notifications.scope", "Settings for")}
-              displayEmpty
-              notched
-              value={scope ?? ""}
-              onChange={(e) =>
-                setScope(e.target.value ? String(e.target.value) : null)
-              }
-              data-testid="notif-scope"
-            >
-              {data.scopes.map((s) => (
-                <MenuItem
-                  key={s.contractor_id ?? "personal"}
-                  value={s.contractor_id ?? ""}
-                >
-                  {s.contractor_id
-                    ? s.name
-                    : t("settings.notifications.personal", "Personal")}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Typography variant="caption" color="text.primary">
-            {t(
-              "settings.notifications.scopeHint",
-              "Org work has its own settings for each org.",
-            )}
-          </Typography>
-        </Box>
+        <NotificationScopeSelect
+          scopes={data.scopes}
+          scope={scope}
+          setScope={setScope}
+        />
       )}
 
       {scope && data?.mute && current.id !== "account" && (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            mb: 2,
-            flexWrap: "wrap",
-          }}
-          data-testid="notif-org-mute"
-        >
-          <FormControl size="small" sx={{ minWidth: 220 }}>
-            <InputLabel id="notif-mute">
-              {t("settings.notifications.mute.label", "Mute this org")}
-            </InputLabel>
-            <Select
-              labelId="notif-mute"
-              label={t("settings.notifications.mute.label", "Mute this org")}
-              value={
-                data.mute.muted ? (data.mute.until ? "timed" : "on") : "off"
-              }
-              disabled={busy}
-              onChange={(e) =>
-                setMute(e.target.value as "off" | "8h" | "1w" | "on")
-              }
-              data-testid="notif-mute"
-            >
-              <MenuItem value="off">
-                {t("settings.notifications.mute.off", "Not muted")}
-              </MenuItem>
-              <MenuItem value="8h">
-                {t("settings.notifications.mute.8h", "For 8 hours")}
-              </MenuItem>
-              <MenuItem value="1w">
-                {t("settings.notifications.mute.1w", "For 1 week")}
-              </MenuItem>
-              <MenuItem value="on">
-                {t("settings.notifications.mute.on", "Until I turn it back on")}
-              </MenuItem>
-              {data.mute.until && (
-                <MenuItem value="timed" disabled>
-                  {t("settings.notifications.mute.until", {
-                    defaultValue: "Muted until {{time}}",
-                    time: fmt.dateTime(data.mute.until),
-                  })}
-                </MenuItem>
-              )}
-            </Select>
-          </FormControl>
-          <Typography variant="caption" color="text.primary">
-            {data.mute.muted
-              ? t("settings.notifications.mute.active", {
-                  defaultValue:
-                    "No push, email or Discord DMs from {{org}}. It still shows in your notifications.",
-                  org: scopeName,
-                })
-              : t(
-                  "settings.notifications.mute.hint",
-                  "Stops push, email and Discord DMs from this org. In-app notifications and announcements still arrive.",
-                )}
-          </Typography>
-        </Box>
+        <OrgMuteControl
+          mute={data.mute}
+          scopeName={scopeName}
+          busy={busy}
+          setMute={setMute}
+        />
       )}
 
       {isLoading || !data

@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from "vitest"
 import en from "../../../locales/en/english.json"
-import { AUDIT_LOG_ACTIONS, auditActionKey } from "../OrgAuditLogs"
+import { AUDIT_LOG_ACTIONS, auditActionKey } from "../orgAuditLogConfig"
 
 function resolve(key: string): unknown {
   return key
