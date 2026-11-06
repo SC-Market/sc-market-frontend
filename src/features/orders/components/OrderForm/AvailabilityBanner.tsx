@@ -1,6 +1,6 @@
 import React from "react"
 import { Alert, AlertTitle, Box, Button, Grid } from "@mui/material"
-import { CheckCircle, Warning } from "@mui/icons-material"
+import { CheckCircleRounded, WarningRounded } from "@mui/icons-material"
 import { OrderLimitsDisplay } from "../../../../components/orders/OrderLimitsDisplay"
 import { useTranslation } from "react-i18next"
 import { useOrderFormContext } from "./OrderFormContext"
@@ -24,7 +24,9 @@ export function AvailabilityBanner() {
         <Grid item xs={12}>
           <Alert
             severity={hasAvailabilitySet ? "success" : "warning"}
-            icon={hasAvailabilitySet ? <CheckCircle /> : <Warning />}
+            icon={
+              hasAvailabilitySet ? <CheckCircleRounded /> : <WarningRounded />
+            }
             sx={{ mb: 2 }}
           >
             <AlertTitle>

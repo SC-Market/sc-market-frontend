@@ -9,7 +9,7 @@ import {
   SxProps,
   Theme,
 } from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
+import SearchIcon from "@mui/icons-material/SearchRounded"
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { marketV2Api } from "../../../store/api/v2/market"

@@ -16,10 +16,10 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import {
-  ContentCopy as CopyIcon,
-  Schedule as ScheduleIcon,
-  Security as SecurityIcon,
-  Business as BusinessIcon,
+  ContentCopyRounded as CopyIcon,
+  ScheduleRounded as ScheduleIcon,
+  SecurityRounded as SecurityIcon,
+  BusinessRounded as BusinessIcon,
 } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
 import { useGetTokenStatsQuery, ApiToken } from "../api/tokensApi"

@@ -15,13 +15,13 @@ import {
 } from "@mui/material"
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import {
-  Add,
-  Store,
-  Person,
-  Groups,
-  Visibility,
-  Settings,
-  CalendarToday,
+  AddRounded,
+  StoreRounded,
+  PersonRounded,
+  GroupsRounded,
+  VisibilityRounded,
+  SettingsRounded,
+  CalendarTodayRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetMyShopsQuery } from "../../../store/api/v2/market"
@@ -123,7 +123,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           </Box>
 
           <Chip
-            icon={isPersonal ? <Person /> : <Groups />}
+            icon={isPersonal ? <PersonRounded /> : <GroupsRounded />}
             label={
               isPersonal
                 ? t("shops.mine.personal")
@@ -210,7 +210,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           <Button
             variant="outlined"
             size="small"
-            startIcon={<Visibility />}
+            startIcon={<VisibilityRounded />}
             component={RouterLink}
             to={SHOP_PATHS.profile(shop.slug)}
           >
@@ -220,7 +220,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Button
               variant="contained"
               size="small"
-              startIcon={<Settings />}
+              startIcon={<SettingsRounded />}
               component={RouterLink}
               to={SHOP_PATHS.settings(shop.slug)}
             >
@@ -269,7 +269,9 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={0.5}>
-            <CalendarToday sx={{ fontSize: 14, color: "text.secondary" }} />
+            <CalendarTodayRounded
+              sx={{ fontSize: 14, color: "text.secondary" }}
+            />
             <Typography variant="caption" color="text.secondary">
               {t("shops.mine.created", {
                 date: fmt.date(shop.created_at, {
@@ -360,7 +362,7 @@ function EmptyState({
           justifyContent: "center",
         }}
       >
-        <Store sx={{ fontSize: 36, color: "text.secondary" }} />
+        <StoreRounded sx={{ fontSize: 36, color: "text.secondary" }} />
       </Box>
 
       <Typography variant="h5" fontWeight={600}>
@@ -400,7 +402,7 @@ function EmptyState({
       <Button
         variant="contained"
         size="large"
-        startIcon={<Add />}
+        startIcon={<AddRounded />}
         onClick={onCreateClick}
         disabled={isCreating}
         sx={{ mt: 1 }}
@@ -452,7 +454,7 @@ export function MyShops() {
         </Box>
         <Button
           variant="contained"
-          startIcon={<Add />}
+          startIcon={<AddRounded />}
           onClick={handleQuickCreate}
           disabled={isCreating}
         >

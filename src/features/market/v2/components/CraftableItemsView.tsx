@@ -29,11 +29,11 @@ import {
 } from "@mui/material"
 import { useBreakpointDown } from "../../../../hooks/layout/useBreakpoint"
 import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
-  Calculate as CalculateIcon,
-  CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
+  ExpandMoreRounded as ExpandMoreIcon,
+  ExpandLessRounded as ExpandLessIcon,
+  CalculateRounded as CalculateIcon,
+  CheckCircleRounded as CheckCircleIcon,
+  WarningRounded as WarningIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {

@@ -13,7 +13,11 @@ import {
   CircularProgress,
 } from "@mui/material"
 import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
-import { Close, ShoppingCartRounded, DeleteOutline } from "@mui/icons-material"
+import {
+  CloseRounded,
+  ShoppingCartRounded,
+  DeleteOutlineRounded,
+} from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -157,7 +161,7 @@ export function AddToCartDrawer({
                 size="small"
                 aria-label={t("cart.closeDrawer", "Close")}
               >
-                <Close />
+                <CloseRounded />
               </IconButton>
             </Box>
           )}
@@ -307,7 +311,7 @@ export function AddToCartDrawer({
                         },
                       )}
                     >
-                      <DeleteOutline fontSize="small" />
+                      <DeleteOutlineRounded fontSize="small" />
                     </IconButton>
                   </Box>
                 ))}

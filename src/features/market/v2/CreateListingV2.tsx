@@ -20,7 +20,7 @@ import { NumericFormat } from "react-number-format"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
   AddCircleOutlineRounded,
-  DeleteOutline,
+  DeleteOutlineRounded,
   ExpandMoreRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -1030,7 +1030,7 @@ export function CreateListingV2() {
                                   "Remove lot",
                                 )}
                               >
-                                <DeleteOutline />
+                                <DeleteOutlineRounded />
                               </IconButton>
                             )}
                           </Box>

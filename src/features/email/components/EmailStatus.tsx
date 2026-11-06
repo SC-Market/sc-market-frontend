@@ -6,11 +6,11 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material"
-import EmailIcon from "@mui/icons-material/Email"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import CancelIcon from "@mui/icons-material/Cancel"
-import EditIcon from "@mui/icons-material/Edit"
-import DeleteIcon from "@mui/icons-material/Delete"
+import EmailIcon from "@mui/icons-material/EmailRounded"
+import CheckCircleIcon from "@mui/icons-material/CheckCircleRounded"
+import CancelIcon from "@mui/icons-material/CancelRounded"
+import EditIcon from "@mui/icons-material/EditRounded"
+import DeleteIcon from "@mui/icons-material/DeleteRounded"
 import { useTranslation } from "react-i18next"
 
 interface EmailStatusProps {

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material"
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
-import { Block, PersonRemove } from "@mui/icons-material"
+import { BlockRounded, PersonRemoveRounded } from "@mui/icons-material"
 import { useGetShopBlocklistQuery } from "../../../store/api/v2/market"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { UserSearch } from "../../../components/search/UserSearch"
@@ -68,7 +68,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
             <Button
               variant="contained"
               color="error"
-              startIcon={<Block />}
+              startIcon={<BlockRounded />}
               onClick={handleBlock}
             >
               {t("shops.blocklist.block", { username: selectedUser.username })}
@@ -118,7 +118,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                     handleUnblock(entry.user_id, entry.username)
                   }}
                 >
-                  <PersonRemove fontSize="small" />
+                  <PersonRemoveRounded fontSize="small" />
                 </IconButton>
               </ListItemButton>
             ))}

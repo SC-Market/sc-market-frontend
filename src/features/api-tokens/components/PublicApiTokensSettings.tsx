@@ -28,9 +28,9 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  Add as AddIcon,
-  Block as BlockIcon,
-  ContentCopy as ContentCopyIcon,
+  AddRounded as AddIcon,
+  BlockRounded as BlockIcon,
+  ContentCopyRounded as ContentCopyIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {

@@ -49,15 +49,15 @@ import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
   AddRounded,
-  ArchiveOutlined,
+  ArchiveRounded,
   CreateRounded,
   DeleteRounded,
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
-  RefreshOutlined,
+  RefreshRounded,
   SaveRounded,
 } from "@mui/icons-material"
-import FilterListIcon from "@mui/icons-material/FilterList"
+import FilterListIcon from "@mui/icons-material/FilterListRounded"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Link, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -291,7 +291,7 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
             </LoadingButton>
             <LoadingButton
               color="warning"
-              startIcon={<ArchiveOutlined />}
+              startIcon={<ArchiveRounded />}
               variant="outlined"
               size="small"
               loading={bulkLoading}
@@ -345,7 +345,7 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
         </LoadingButton>
         <LoadingButton
           color="warning"
-          startIcon={<ArchiveOutlined />}
+          startIcon={<ArchiveRounded />}
           variant="outlined"
           size="small"
           loading={bulkLoading}
@@ -737,7 +737,7 @@ function ShopListingsGridV2({
                   handleRefresh(params.row.listing_id)
                 }}
               >
-                <RefreshOutlined />
+                <RefreshRounded />
               </IconButton>
             </Tooltip>
           )

@@ -7,7 +7,7 @@ import {
   type SxProps,
   type Theme,
 } from "@mui/material"
-import { CloseRounded, LightbulbOutlined } from "@mui/icons-material"
+import { CloseRounded, LightbulbRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { HelpLink } from "./HelpLink"
 import { HINTS, type HintId } from "../hints"
@@ -54,7 +54,7 @@ export function FirstUseHint(props: {
         ...(Array.isArray(props.sx) ? props.sx : props.sx ? [props.sx] : []),
       ]}
     >
-      <LightbulbOutlined
+      <LightbulbRounded
         color="primary"
         aria-hidden
         sx={{ mt: 0.25, flexShrink: 0 }}

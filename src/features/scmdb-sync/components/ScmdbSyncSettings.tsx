@@ -19,11 +19,11 @@ import {
   Skeleton,
 } from "@mui/material"
 import {
-  Sync as SyncIcon,
-  ContentCopy as CopyIcon,
-  Refresh as RefreshIcon,
-  LinkOff as DisconnectIcon,
-  Check as CheckIcon,
+  SyncRounded as SyncIcon,
+  ContentCopyRounded as CopyIcon,
+  RefreshRounded as RefreshIcon,
+  LinkOffRounded as DisconnectIcon,
+  CheckRounded as CheckIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetScmdbStatusQuery } from "../api/scmdbApi"

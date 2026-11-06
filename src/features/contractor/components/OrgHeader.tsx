@@ -11,7 +11,7 @@ import {
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
-import { GroupAdd, LinkRounded } from "@mui/icons-material"
+import { GroupAddRounded, LinkRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Contractor, ContractorInvite } from "../domain/types"
 import { contractorKindIcons } from "../../../views/contractor/ContractorList"
@@ -152,7 +152,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             <Button
               variant="contained"
               color="success"
-              startIcon={<GroupAdd />}
+              startIcon={<GroupAddRounded />}
               onClick={handleAccept}
               disabled={isAccepting || isDeclining}
               size="small"

@@ -35,8 +35,8 @@ import {
 import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import {
   InventoryRounded,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
 } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
@@ -407,7 +407,7 @@ function AvailableLots({
                     setQtys({ ...qtys, [lot.lot_id]: 0 })
                   }}
                 >
-                  <KeyboardArrowRight />
+                  <KeyboardArrowRightRounded />
                 </IconButton>
               </TableCell>
             </TableRow>
@@ -467,7 +467,7 @@ function AllocatedLots({
                     setQtys({ ...qtys, [alloc.allocation_id]: 0 })
                   }}
                 >
-                  <KeyboardArrowLeft />
+                  <KeyboardArrowLeftRounded />
                 </IconButton>
               </TableCell>
               <TableCell>

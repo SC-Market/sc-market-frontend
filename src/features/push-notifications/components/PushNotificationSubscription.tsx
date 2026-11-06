@@ -9,9 +9,9 @@ import {
   ListItemSecondaryAction,
   IconButton,
 } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Delete"
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
-import NotificationsOffIcon from "@mui/icons-material/NotificationsOff"
+import DeleteIcon from "@mui/icons-material/DeleteRounded"
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActiveRounded"
+import NotificationsOffIcon from "@mui/icons-material/NotificationsOffRounded"
 import { useCallback, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useGetPushSubscriptionsQuery } from "../api/pushApi"

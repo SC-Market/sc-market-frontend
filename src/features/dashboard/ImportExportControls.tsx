@@ -22,8 +22,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import DownloadIcon from "@mui/icons-material/Download"
-import UploadIcon from "@mui/icons-material/Upload"
+import DownloadIcon from "@mui/icons-material/DownloadRounded"
+import UploadIcon from "@mui/icons-material/UploadRounded"
 import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"

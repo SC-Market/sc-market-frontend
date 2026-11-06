@@ -36,7 +36,7 @@ import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
   ShoppingCartRounded,
-  Warning,
+  WarningRounded,
   PlaylistAddRounded,
 } from "@mui/icons-material"
 import { useGetCartQuery, CartItemDetail } from "../../../store/api/v2/market"
@@ -185,7 +185,7 @@ export function CartItemEntryV2(props: {
 
           {/* Price Change Warning */}
           {priceChanged && (
-            <Alert severity="info" icon={<Warning />} sx={{ mt: 1 }}>
+            <Alert severity="info" icon={<WarningRounded />} sx={{ mt: 1 }}>
               <AlertTitle>{t("cart.priceChanged", "Price Changed")}</AlertTitle>
               <Typography variant="body2">
                 {priceDifference > 0
@@ -569,7 +569,7 @@ export function MarketCartV2() {
           {/* Price Change Alert */}
           {hasPriceChanges && (
             <Grid item xs={12}>
-              <Alert severity="info" icon={<Warning />}>
+              <Alert severity="info" icon={<WarningRounded />}>
                 <AlertTitle>
                   {t("cart.pricesChanged", "Prices Have Changed")}
                 </AlertTitle>
@@ -654,7 +654,7 @@ export function MarketCartV2() {
                   <Alert
                     severity="warning"
                     sx={{ mt: 0.5, py: 0 }}
-                    icon={<Warning fontSize="small" />}
+                    icon={<WarningRounded fontSize="small" />}
                   >
                     <Typography variant="caption">
                       {t(
@@ -683,7 +683,7 @@ export function MarketCartV2() {
             </Typography>
           </Box>
           {hasPriceChanges && (
-            <Alert severity="info" sx={{ mt: 1 }} icon={<Warning />}>
+            <Alert severity="info" sx={{ mt: 1 }} icon={<WarningRounded />}>
               {t(
                 "cart.confirmPriceChanges",
                 "Some prices have changed. By confirming, you accept the updated prices.",

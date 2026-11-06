@@ -28,8 +28,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
-import CloseIcon from "@mui/icons-material/Close"
+import DragIndicatorIcon from "@mui/icons-material/DragIndicatorRounded"
+import CloseIcon from "@mui/icons-material/CloseRounded"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { useResolveScope } from "../useResolveScope"

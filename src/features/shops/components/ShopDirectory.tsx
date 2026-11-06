@@ -18,7 +18,7 @@ import {
   InputAdornment,
 } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
-import { Search, StorefrontRounded } from "@mui/icons-material"
+import { SearchRounded, StorefrontRounded } from "@mui/icons-material"
 import { useBrowseShopsQuery } from "../../../store/api/v2/market"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { ShopCard } from "./ShopCard"
@@ -150,7 +150,7 @@ export function ShopDirectory() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Search color="action" />
+                <SearchRounded color="action" />
               </InputAdornment>
             ),
           }}

@@ -41,12 +41,12 @@ import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
-  Delete as DeleteIcon,
-  Add as AddIcon,
-  EditOutlined as EditIcon,
+  DeleteRounded as DeleteIcon,
+  AddRounded as AddIcon,
+  EditRounded as EditIcon,
 } from "@mui/icons-material"
-import FilterListIcon from "@mui/icons-material/FilterList"
-import SearchIcon from "@mui/icons-material/Search"
+import FilterListIcon from "@mui/icons-material/FilterListRounded"
+import SearchIcon from "@mui/icons-material/SearchRounded"
 import { useTheme } from "@mui/material/styles"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"

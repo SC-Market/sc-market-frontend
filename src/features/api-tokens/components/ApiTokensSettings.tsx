@@ -17,12 +17,12 @@ import {
   Tooltip,
 } from "@mui/material"
 import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Visibility as VisibilityIcon,
-  Security as SecurityIcon,
-  Schedule as ScheduleIcon,
+  AddRounded as AddIcon,
+  EditRounded as EditIcon,
+  DeleteRounded as DeleteIcon,
+  VisibilityRounded as VisibilityIcon,
+  SecurityRounded as SecurityIcon,
+  ScheduleRounded as ScheduleIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetTokensQuery, ApiToken } from "../api/tokensApi"

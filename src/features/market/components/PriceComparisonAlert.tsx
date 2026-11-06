@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 import { Alert, Box, Chip } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import TrendingUpIcon from "@mui/icons-material/TrendingUp"
-import TrendingDownIcon from "@mui/icons-material/TrendingDown"
+import TrendingUpIcon from "@mui/icons-material/TrendingUpRounded"
+import TrendingDownIcon from "@mui/icons-material/TrendingDownRounded"
 import { useGetListingsQuery } from "../../../store/api/v2/market"
 import { useFormatters } from "../../../util/format"
 

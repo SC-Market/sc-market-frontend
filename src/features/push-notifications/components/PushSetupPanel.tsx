@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  AddBoxOutlined,
+  AddBoxRounded,
   DeleteRounded,
   GetAppRounded,
   IosShareRounded,
@@ -367,7 +367,7 @@ export function PushSetupPanel() {
                 "settings.pushNotifications.iosStep2",
                 "Scroll down and tap Add to Home Screen",
               )}
-              <AddBoxOutlined fontSize="small" aria-hidden />
+              <AddBoxRounded fontSize="small" aria-hidden />
             </Typography>
           </li>
           <li>

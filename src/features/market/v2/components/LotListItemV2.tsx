@@ -19,10 +19,10 @@ import {
 } from "@mui/material"
 import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
 import {
-  Edit as EditIcon,
-  Save as SaveIcon,
-  Cancel as CancelIcon,
-  SwapHoriz as TransferIcon,
+  EditRounded as EditIcon,
+  SaveRounded as SaveIcon,
+  CancelRounded as CancelIcon,
+  SwapHorizRounded as TransferIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {

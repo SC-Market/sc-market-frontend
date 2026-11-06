@@ -26,7 +26,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material"
-import AddIcon from "@mui/icons-material/Add"
+import AddIcon from "@mui/icons-material/AddRounded"
 import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
