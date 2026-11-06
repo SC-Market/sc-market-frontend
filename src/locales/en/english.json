@@ -8674,6 +8674,7 @@
       "primaryDark": "Primary hover (filled buttons)",
       "usagePrimaryDark": "MUI uses this for contained primary buttons on hover, not the “Menu & list hover” color.",
       "secondary": "Secondary",
+      "usageSecondary": "The buy side and premium: buy order prices, top bids, the bid side of the price chart, and premium and supporter badges.",
       "bgDefault": "Background",
       "bgPaper": "Paper",
       "bgSidebar": "Sidebar",

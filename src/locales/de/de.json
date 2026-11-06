@@ -8674,6 +8674,7 @@
       "primaryDark": "Primär-Hover (gefüllte Schaltflächen)",
       "usagePrimaryDark": "MUI verwendet dies beim Hover über gefüllte primäre Schaltflächen, nicht die Farbe „Menü- & Listen-Hover“.",
       "secondary": "Sekundär",
+      "usageSecondary": "Kaufseite und Premium: Preise von Kaufaufträgen, Höchstgebote, die Gebotsseite des Preisdiagramms sowie Premium- und Unterstützer-Abzeichen.",
       "bgDefault": "Hintergrund",
       "bgPaper": "Papier",
       "bgSidebar": "Seitenleiste",

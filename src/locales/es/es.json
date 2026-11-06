@@ -8809,6 +8809,7 @@
       "primaryDark": "Hover principal (botones rellenos)",
       "usagePrimaryDark": "MUI lo usa al pasar el cursor sobre los botones principales rellenos; no es el color de “Hover de menús y listas”.",
       "secondary": "Secundario",
+      "usageSecondary": "El lado de compra y premium: precios de órdenes de compra, pujas más altas, el lado de pujas del gráfico de precios y las insignias de premium y de colaborador.",
       "bgDefault": "Fondo",
       "bgPaper": "Papel",
       "bgSidebar": "Barra lateral",

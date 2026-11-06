@@ -80,6 +80,9 @@ const COLOR_FIELDS: ColorField[] = [
     labelKey: "chromeUi.themeEditor.secondary",
     fallback: "Secondary",
     path: ["palette", "secondary", "main"],
+    usageNoteKey: "chromeUi.themeEditor.usageSecondary",
+    usageNoteFallback:
+      "The buy side and premium: buy order prices, top bids, the bid side of the price chart, and premium and supporter badges.",
   },
   {
     key: "bgDefault",

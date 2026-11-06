@@ -8545,6 +8545,7 @@
       "primaryDark": "主要悬停（填充按钮）",
       "usagePrimaryDark": "MUI 在填充主要按钮悬停时使用此颜色，不是“菜单和列表悬停”颜色。",
       "secondary": "次要",
+      "usageSecondary": "买方与高级会员：求购单价格、最高出价、价格图表的买方一侧，以及高级会员与支持者徽章。",
       "bgDefault": "背景",
       "bgPaper": "纸张",
       "bgSidebar": "侧边栏",

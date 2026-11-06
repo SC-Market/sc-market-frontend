@@ -8539,6 +8539,7 @@
       "primaryDark": "主要懸停（填色按鈕）",
       "usagePrimaryDark": "MUI 在填色主要按鈕懸停時使用此顏色，不是「選單與清單懸停」顏色。",
       "secondary": "次要",
+      "usageSecondary": "買方與進階會員：收購單價格、最高出價、價格圖表的買方一側，以及進階會員與支持者徽章。",
       "bgDefault": "背景",
       "bgPaper": "紙張",
       "bgSidebar": "側邊欄",

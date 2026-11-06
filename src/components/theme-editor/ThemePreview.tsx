@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   ListItemButton,
   Paper,
   Skeleton,
@@ -199,7 +200,14 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             </CardContent>
           </Card>
 
-          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 0.5,
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
             <Button
               variant="contained"
               size="small"
@@ -213,20 +221,14 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             >
               {t("theme.previewPrimaryBtn", "Primary")}
             </Button>
-            <Button
-              variant="outlined"
+            {/* Secondary is the buy side and premium: shown as a chip, the
+                way bids and premium badges use it */}
+            <Chip
               size="small"
               color="secondary"
-              sx={{
-                fontSize: 10,
-                py: 0.25,
-                px: 1,
-                minWidth: 0,
-                borderRadius: theme.spacing(br.button),
-              }}
-            >
-              {t("theme.previewSecondaryBtn", "Secondary")}
-            </Button>
+              label={t("theme.previewSecondaryBtn", "Secondary")}
+              sx={{ fontSize: 10, height: 22 }}
+            />
           </Box>
 
           {/* Outline / border — matches Border color in editor */}

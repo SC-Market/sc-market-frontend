@@ -8809,6 +8809,7 @@
       "primaryDark": "Survol principal (boutons remplis)",
       "usagePrimaryDark": "MUI l'utilise au survol des boutons principaux remplis. Ce n'est pas la couleur « Survol des menus et listes ».",
       "secondary": "Secondaire",
+      "usageSecondary": "Le côté achat et le premium : prix des ordres d'achat, meilleures enchères, côté enchères du graphique des prix, et badges premium et de soutien.",
       "bgDefault": "Arrière-plan",
       "bgPaper": "Papier",
       "bgSidebar": "Barre latérale",
