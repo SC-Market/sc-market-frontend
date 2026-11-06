@@ -6,6 +6,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { EmailVerificationPageData } from "../hooks/usePageEmailVerification"
 import { PageCard, PageCardActions } from "../../../components/paper/PageCard"
+import { PATHS } from "../../../routes/paths"
 
 interface EmailVerificationContentProps {
   data: EmailVerificationPageData
@@ -34,7 +35,7 @@ export function EmailVerificationContent({
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate("/settings?tab=email")}
+        onClick={() => navigate(PATHS.emailSettings)}
       >
         {t("emailUi.verification.goToSettings")}
       </Button>

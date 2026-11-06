@@ -22,6 +22,10 @@ export const PATHS = {
   priceAlerts: "/settings?tab=price-alerts",
   /** Settings -> Notifications, on its Market & watchlist tab (price alert channels). */
   notificationSettingsMarket: "/settings?tab=notifications&group=market",
+  /** Settings -> Email (address, verification, email preferences). */
+  emailSettings: "/settings?tab=email",
+  /** Settings -> Discord (linked account, DM notifications). */
+  discordSettings: "/settings?tab=discord",
   notifications: "/notifications",
   dashboard: "/dashboard",
   dashboardOverview: "/dashboard/overview",
@@ -35,6 +39,7 @@ export const PATHS = {
   contractsCreate: "/contracts/create",
   contractors: "/contractors",
   recruiting: "/recruiting",
+  recruitingPostCreate: "/recruiting/post/create",
   myOrgs: "/my-orgs",
   orgRegister: "/org/register",
   myFleet: "/myfleet",

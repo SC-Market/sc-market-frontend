@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { WorkOutlineOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { PATHS } from "../../routes/paths"
 
 export interface EmptyRecruitingProps extends Omit<
   EmptyStateProps,
@@ -67,7 +68,7 @@ export function EmptyRecruiting({
         label: t("emptyStates.recruiting.createPost", {
           defaultValue: "Create Post",
         }),
-        onClick: () => navigate("/recruiting/post/create"),
+        onClick: () => navigate(PATHS.recruitingPostCreate),
         variant: "contained" as const,
       }
     : undefined

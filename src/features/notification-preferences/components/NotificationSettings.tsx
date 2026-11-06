@@ -10,6 +10,7 @@ import { EmailSettings, useEmailSettings } from "../../email"
 import { NotificationPreferencesTabs } from "./NotificationPreferencesTabs"
 import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 import { HelpLink } from "../../help/components/HelpLink"
+import { PATHS } from "../../../routes/paths"
 
 /**
  * Settings -> Notifications (replaces the Push and Email tabs): a status strip
@@ -86,7 +87,7 @@ export function NotificationSettings() {
           />
           <MuiLink
             component={Link}
-            to="/settings?tab=discord"
+            to={PATHS.discordSettings}
             variant="body2"
             sx={{ alignSelf: "center" }}
           >
