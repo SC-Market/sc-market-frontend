@@ -20,7 +20,7 @@ import { useSearchBuyOrdersQuery } from "../../../../store/api/v2/market"
 import type { StandingBuyOrder } from "../../../../store/api/v2/market"
 import { useDrawerOpen } from "../../../../hooks/layout/Drawer"
 import { HideOnScroll, MarketNavArea } from "../../components/MarketNavArea"
-import { MarketSearchAreaV2, MarketSidebarV2 } from "../ListingSearchV2"
+import { MarketSearchAreaV2, MarketSidebarV2 } from "../MarketSearchAreaV2"
 import { buyOrderSortArgs } from "../buyOrderSort"
 import {
   CARD_GRID_PAGE_SIZE_OPTIONS,

@@ -45,7 +45,7 @@ vi.mock("../../../../store/api/v2/market", () => ({
   },
 }))
 
-vi.mock("../../../market/v2/ListingSearchV2", () => ({
+vi.mock("../../../market/v2/ListingCardV2", () => ({
   ListingCardV2: () => null,
 }))
 vi.mock("../../../services/components/ServiceListings", () => ({

@@ -12,7 +12,7 @@ import {
   useGetPriceHistoryQuery,
   type ListingSearchResult,
 } from "../../../../store/api/v2/market"
-import { ListingCardV2 } from "../ListingSearchV2"
+import { ListingCardV2 } from "../ListingCardV2"
 import { Section } from "../../../../components/paper/Section"
 import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
 

@@ -13,7 +13,7 @@
 import { Box, Skeleton, Stack, Typography } from "@mui/material"
 import type { TFunction } from "i18next"
 import { useSearchListingsQuery } from "../../../store/api/v2/market"
-import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
+import { ListingCardV2 } from "../../market/v2/ListingCardV2"
 import { ListingWrapper } from "../../market/components/listings/ListingWrapper"
 import type { DashboardWidget } from "../types"
 

@@ -12,7 +12,7 @@ import {
 } from "./BuyOrderAggregateCard"
 import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
-import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
+import { MarketSearchAreaV2, MarketSidebarV2 } from "./MarketSearchAreaV2"
 import { buyOrderSortArgs } from "./buyOrderSort"
 import {
   CARD_GRID_PAGE_SIZE_OPTIONS,

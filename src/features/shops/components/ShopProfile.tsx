@@ -42,7 +42,7 @@ import {
   LightBannerContainer,
 } from "../../profile/components/BannerContainers"
 import type { User } from "../../../datatypes/User"
-import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
+import { ListingCardV2 } from "../../market/v2/ListingCardV2"
 import { LISTING_CARD_HEIGHT } from "../../market/v2/marketSearchLayout"
 import {
   CardStub,

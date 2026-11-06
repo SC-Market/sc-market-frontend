@@ -4,7 +4,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { MarketSearchAreaV2 } from "../ListingSearchV2"
+import { MarketSearchAreaV2 } from "../MarketSearchAreaV2"
 import { buyOrderSortArgs } from "../buyOrderSort"
 import {
   useGetCategoriesQuery,

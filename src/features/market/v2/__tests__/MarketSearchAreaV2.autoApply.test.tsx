@@ -4,7 +4,7 @@ import { act, fireEvent, render, screen, within } from "@testing-library/react"
 import { MemoryRouter, useLocation, useNavigationType } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { MarketSearchAreaV2 } from "../ListingSearchV2"
+import { MarketSearchAreaV2 } from "../MarketSearchAreaV2"
 import { FILTER_DEBOUNCE_MS } from "../../hooks/useAutoApplySearchParams"
 import {
   useGetCategoriesQuery,

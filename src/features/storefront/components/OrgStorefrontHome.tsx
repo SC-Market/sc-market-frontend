@@ -21,7 +21,7 @@ import {
   type StorefrontTrust,
 } from "../../../store/api/v2/market"
 import { useGetContractorReviewsQuery } from "../../contractor/api/contractorApi"
-import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
+import { ListingCardV2 } from "../../market/v2/ListingCardV2"
 import { LISTING_CARD_HEIGHT } from "../../market/v2/marketSearchLayout"
 import { MARKET_PATHS, ORDER_PATHS, ORG_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"

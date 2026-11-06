@@ -87,7 +87,7 @@ vi.mock("../../../../components/grid/ThemedDataGrid", () => ({
 }))
 
 // Mock the heavy sidebar search area.
-vi.mock("../ListingSearchV2", () => ({
+vi.mock("../MarketSearchAreaV2", () => ({
   MarketSearchAreaV2: () => <div data-testid="market-search-area" />,
 }))
 

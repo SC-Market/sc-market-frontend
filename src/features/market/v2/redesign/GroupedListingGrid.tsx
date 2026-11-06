@@ -10,7 +10,8 @@ import { useFlip } from "./useFlip"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { insertAds } from "../../../../components/ads/adConfig"
 import type { AdConfig } from "../../../../components/ads/types"
-import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
+import { type ListingGridProps } from "../ListingSearchV2"
+import { ListingCardV2 } from "../ListingCardV2"
 import {
   LISTING_CARD_HEIGHT,
   LISTING_CARD_ROW_HEIGHT,
