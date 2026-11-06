@@ -22,6 +22,7 @@ const blueprint = {
   ingredient_count: 1,
   ingredients: [{ name: "Agricium", quantity_required: 1 }],
   mission_count: 0,
+  manufacturer_name: null,
 }
 
 const mission = {

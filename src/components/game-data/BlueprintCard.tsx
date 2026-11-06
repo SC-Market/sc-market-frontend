@@ -49,6 +49,7 @@ export interface BlueprintCardProps {
     item_category?: string
     item_subcategory?: string
     manufacturer?: string
+    manufacturer_name: string | null
     source?: string
     rarity?: string
     tier?: number

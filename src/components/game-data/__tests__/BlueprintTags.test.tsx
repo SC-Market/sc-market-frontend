@@ -35,7 +35,8 @@ const searchResult: BlueprintSearchResult = {
   item_category: "Weapons",
   rarity: "Rare",
   tier: 3,
-  manufacturer: "Gemini",
+  manufacturer: "gmni",
+  manufacturer_name: "Gemini",
   source: "default",
   ingredient_count: 0,
   ingredients: [],
@@ -73,7 +74,8 @@ const detail: BlueprintDetailResponse = {
     updated_at: "2026-01-01T00:00:00.000Z",
   },
   output_item: { game_item_id: "gi-1", name: "FS-9 LMG", type: "weapon" },
-  manufacturer: "Gemini",
+  manufacturer: "gmni",
+  manufacturer_name: "Gemini",
   ingredients: [],
   missions_rewarding: [],
   // Two slots share a property: the tags list each property once.
@@ -167,7 +169,10 @@ describe("BlueprintTags", () => {
     render(
       <MemoryRouter>
         <BlueprintTags
-          blueprint={{ modifier_properties: ["gpp_weapon_heat_buildup"] }}
+          blueprint={{
+            modifier_properties: ["gpp_weapon_heat_buildup"],
+            manufacturer_name: null,
+          }}
           size="small"
         />
       </MemoryRouter>,
@@ -178,10 +183,44 @@ describe("BlueprintTags", () => {
   it("counts default blueprints as owned", () => {
     render(
       <MemoryRouter>
-        <BlueprintTags blueprint={{ source: "default" }} />
+        <BlueprintTags
+          blueprint={{ source: "default", manufacturer_name: null }}
+        />
       </MemoryRouter>,
     )
     expect(screen.getByText("Owned")).toBeInTheDocument()
     expect(screen.getByText("Default")).toBeInTheDocument()
+  })
+
+  it("shows the manufacturer name, not the code, and filters by the code", () => {
+    const card = renderCard()
+    const detailTags = renderDetailTags()
+    for (const root of [card, detailTags]) {
+      const chip = root.querySelector('[data-tag="manufacturer"]')!
+      expect(chip.textContent).toBe("Gemini")
+      expect(chip.textContent).not.toMatch(/gmni/i)
+    }
+    // The detail chip is a link to the list filtered by the code.
+    const link = detailTags.querySelector('[data-tag="manufacturer"]')!
+    expect(link.getAttribute("href")).toBe("/blueprints?mfr=gmni")
+  })
+
+  it("shows the code when the API has no name for it", () => {
+    render(
+      <MemoryRouter>
+        <BlueprintTags
+          blueprint={{ manufacturer: "volt", manufacturer_name: null }}
+          size="small"
+        />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText("volt")).toBeInTheDocument()
+  })
+
+  it("passes the detail's manufacturer name through", () => {
+    expect(blueprintTagsFromDetail(detail)).toMatchObject({
+      manufacturer: "gmni",
+      manufacturer_name: "Gemini",
+    })
   })
 })

@@ -157,7 +157,7 @@ export function WikiItemDetail() {
                       {item.type && <Chip label={item.type} color="primary" />}
                       {item.size && <Chip label={`${t("wiki.itemDetail.size", "Size")} ${item.size}`} />}
                       {item.grade && <Chip label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
-                      {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
+                      {item.manufacturer && <Chip label={item.manufacturer_name ?? item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
                     </Stack>
 
                     <Stack direction="row" gap={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>

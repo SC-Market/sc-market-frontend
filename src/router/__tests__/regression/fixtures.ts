@@ -207,6 +207,7 @@ export const fixtureBlueprintSearch: SearchBlueprintsResponse = {
       ingredient_count: 1,
       ingredients: [{ name: "Agricium", quantity_required: 1 }],
       mission_count: 1,
+      manufacturer_name: null,
     },
   ],
   total: 1,

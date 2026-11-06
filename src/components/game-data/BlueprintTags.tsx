@@ -27,6 +27,7 @@ export type BlueprintTagSource = Pick<
   BlueprintSearchResult,
   | "source"
   | "manufacturer"
+  | "manufacturer_name"
   | "rarity"
   | "tier"
   | "item_category"
@@ -36,7 +37,8 @@ export type BlueprintTagSource = Pick<
 
 /**
  * Tag data from the blueprint detail response: the same fields the search
- * result has (`source` on the blueprint, `manufacturer` of the output item),
+ * result has (`source` on the blueprint, `manufacturer` / `manufacturer_name`
+ * of the output item),
  * so the detail shows the same tags as the card.
  */
 export function blueprintTagsFromDetail(
@@ -46,6 +48,7 @@ export function blueprintTagsFromDetail(
   return {
     source: bp.source,
     manufacturer: data.manufacturer,
+    manufacturer_name: data.manufacturer_name,
     rarity: bp.rarity,
     tier: bp.tier,
     item_category: bp.item_category,
@@ -76,6 +79,16 @@ export function blueprintModifierTags(
 
 /** Modifier tags shown on a card before collapsing the rest into "+N". */
 export const CARD_MODIFIER_LIMIT = 3
+
+/**
+ * Label for the manufacturer tag: the display name ("Behring"); the code
+ * ("behr") only when the API has no name for it.
+ */
+export function blueprintManufacturerLabel(
+  bp: Pick<BlueprintTagSource, "manufacturer" | "manufacturer_name">,
+): string | undefined {
+  return bp.manufacturer_name ?? bp.manufacturer
+}
 
 export type BlueprintTagKind =
   | "owned"
@@ -127,6 +140,7 @@ export function BlueprintTags({
   // Cards stay compact: the first few, then "+N" (all of them in a tooltip).
   const shownMods = micro ? modTags.slice(0, CARD_MODIFIER_LIMIT) : modTags
   const hiddenMods = micro ? modTags.slice(CARD_MODIFIER_LIMIT) : []
+  const manufacturerLabel = blueprintManufacturerLabel(bp)
 
   // The blueprint list filtered by the chip.
   const filterLink = (params: Record<string, string>) => {
@@ -191,17 +205,16 @@ export function BlueprintTags({
           sx={{ ...base, bgcolor: "warning.main", color: common.white }}
         />
       )}
-      {show("manufacturer") && bp.manufacturer && (
+      {show("manufacturer") && bp.manufacturer && manufacturerLabel && (
         <Chip
           data-tag="manufacturer"
-          label={
-            micro ? bp.manufacturer.slice(0, 4).toUpperCase() : bp.manufacturer
-          }
-          title={bp.manufacturer}
+          label={manufacturerLabel}
+          title={manufacturerLabel}
           size="small"
           variant="outlined"
+          // The filter takes the code; the chip shows the name.
           {...filterLink({ mfr: bp.manufacturer })}
-          sx={{ ...base, fontFamily: micro ? "monospace" : undefined }}
+          sx={{ ...base, maxWidth: micro ? 160 : undefined }}
         />
       )}
       {show("category") && bp.item_category && (

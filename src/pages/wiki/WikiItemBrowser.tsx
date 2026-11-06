@@ -16,6 +16,7 @@ import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
   useSearchItemsQuery,
+  useGetManufacturersQuery,
   type WikiItemSearchResult,
 } from "../../store/api/v2/market"
 import {
@@ -29,7 +30,7 @@ import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"
 import {
-  UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, type SearchToken,
+  UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, manufacturerSearchTokens, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
@@ -207,6 +208,10 @@ export function WikiItemBrowser() {
   })
 
   const searchTokens = useMemo(() => wikiItemsParamsToTokens(searchParams), [searchParams])
+  // Manufacturer suggestions: the name as the label, the code (what the
+  // `manufacturer` filter takes) as the value.
+  const { data: manufacturers } = useGetManufacturersQuery()
+  const manufacturerOptions = useMemo(() => manufacturerSearchTokens(manufacturers), [manufacturers])
   const queryParams = useMemo(() => wikiItemsTokensToParams(searchTokens), [searchTokens])
 
   const updateParam = useCallback((key: string, value: string) => {
@@ -319,6 +324,7 @@ export function WikiItemBrowser() {
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="wiki-items"
+              extraOptions={manufacturerOptions}
               placeholder={t("wiki.itemBrowser.searchPlaceholder", "Search items, types and manufacturers")}
             />
             {data && (

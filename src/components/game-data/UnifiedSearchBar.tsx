@@ -214,6 +214,24 @@ const SHIP_MANUFACTURERS: SearchToken[] = [
   "Tumbril",
 ].map((m) => ({ type: "manufacturer" as const, label: m, value: m }))
 
+/**
+ * Manufacturer suggestions from GET /game-data/wiki/manufacturers: the
+ * display name as the label, the code (what the blueprint and wiki item
+ * `manufacturer` filters take) as the value. A code with no display name is
+ * labelled with the code.
+ */
+export function manufacturerSearchTokens(
+  manufacturers:
+    | readonly { manufacturer: string; display_name?: string | null }[]
+    | undefined,
+): SearchToken[] {
+  return (manufacturers ?? []).map((m) => ({
+    type: "manufacturer" as const,
+    label: m.display_name ?? m.manufacturer,
+    value: m.manufacturer,
+  }))
+}
+
 // === Wiki Items suggestions ===
 const WIKI_ITEM_TYPES: SearchToken[] = [
   "Helmet",
@@ -314,6 +332,35 @@ export function UnifiedSearchBar({
   // Category tokens are mining methods / location types in mining/location
   // modes, mission types for missions, careers for ships and item types
   // elsewhere. Game-data values (systems, givers, materials, ...) are shown as-is.
+  const baseOptions = useMemo(() => {
+    if (mode === "blueprints")
+      return [...BP_CATEGORIES, ...BP_MATERIALS, ...BP_RARITIES, ...BP_TAGS]
+    if (mode === "market") return [...MARKET_CATEGORIES, ...MARKET_TAGS]
+    if (mode === "mining")
+      return [...SYSTEMS, ...MINING_RARITIES, ...MINING_METHODS]
+    if (mode === "locations")
+      return [...SYSTEMS, ...LOCATION_TYPES, ...LOCATION_TAGS]
+    if (mode === "wiki-items") return WIKI_ITEM_TYPES
+    if (mode === "ships")
+      return [...SHIP_CAREERS, ...SHIP_MANUFACTURERS, ...SHIP_SIZES]
+    return [
+      ...SYSTEMS,
+      ...MISSION_CATEGORIES,
+      ...MISSION_TAGS,
+      ...MISSION_GIVERS,
+      ...MISSION_FACTIONS,
+    ]
+  }, [mode])
+
+  // Labels of the suggestions, so a token rebuilt from the URL (label = the
+  // raw value, e.g. a manufacturer code) shows the suggestion's label.
+  const optionLabels = useMemo(() => {
+    const labels = new Map<string, string>()
+    for (const o of [...baseOptions, ...extraOptions])
+      labels.set(`${o.type}:${o.value}`, o.label)
+    return labels
+  }, [baseOptions, extraOptions])
+
   const tokenLabel = useCallback(
     (o: SearchToken): string => {
       if (o.type === "query") return o.label
@@ -332,30 +379,12 @@ export function UnifiedSearchBar({
       if (key) return t(key)
       if (mode === "ships" && o.type === "tag")
         return t("gameTaxonomyUi.sizeN", { size: o.value })
+      if (o.type === "manufacturer")
+        return optionLabels.get(`${o.type}:${o.value}`) ?? o.label
       return o.label
     },
-    [t, mode],
+    [t, mode, optionLabels],
   )
-
-  const baseOptions = useMemo(() => {
-    if (mode === "blueprints")
-      return [...BP_CATEGORIES, ...BP_MATERIALS, ...BP_RARITIES, ...BP_TAGS]
-    if (mode === "market") return [...MARKET_CATEGORIES, ...MARKET_TAGS]
-    if (mode === "mining")
-      return [...SYSTEMS, ...MINING_RARITIES, ...MINING_METHODS]
-    if (mode === "locations")
-      return [...SYSTEMS, ...LOCATION_TYPES, ...LOCATION_TAGS]
-    if (mode === "wiki-items") return [...WIKI_ITEM_TYPES, ...SYSTEMS]
-    if (mode === "ships")
-      return [...SHIP_CAREERS, ...SHIP_MANUFACTURERS, ...SHIP_SIZES]
-    return [
-      ...SYSTEMS,
-      ...MISSION_CATEGORIES,
-      ...MISSION_TAGS,
-      ...MISSION_GIVERS,
-      ...MISSION_FACTIONS,
-    ]
-  }, [mode])
 
   const allOptions = useMemo(() => {
     const opts = [...baseOptions, ...extraOptions]
@@ -752,7 +781,7 @@ export function wikiItemsTokensToParams(
       case "category":
         params.type = t.value
         break
-      case "system":
+      case "manufacturer":
         params.manufacturer = t.value
         break
     }
@@ -768,7 +797,7 @@ export function wikiItemsParamsToTokens(sp: URLSearchParams): SearchToken[] {
   const type = sp.get("type")
   if (type) tokens.push({ type: "category", label: type, value: type })
   const mfr = sp.get("manufacturer")
-  if (mfr) tokens.push({ type: "system", label: mfr, value: mfr })
+  if (mfr) tokens.push({ type: "manufacturer", label: mfr, value: mfr })
   return tokens
 }
 

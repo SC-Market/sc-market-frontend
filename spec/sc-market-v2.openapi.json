@@ -4949,7 +4949,7 @@
 					},
 					"dm_reachable": {
 						"type": "boolean",
-						"description": "Reachable by Discord DM by the one rule (linked, last DM not refused with 50007 / 50278, shares a server with the bot)."
+						"description": "Reachable by Discord DM by the one rule (linked, last DM not refused with 50007 / 50278, shares a server with the bot or installed the app on their own account while user_install_counts_as_dm)."
 					},
 					"shares_server": {
 						"type": "boolean",
@@ -4961,7 +4961,7 @@
 					},
 					"user_install_counts_as_dm": {
 						"type": "boolean",
-						"description": "Whether a recorded user install counts towards dm_reachable yet (false until confirmed the bot can DM such users)."
+						"description": "Whether a recorded user install counts towards dm_reachable yet (true since 2026-11-05: confirmed the bot can DM such users without a shared server)."
 					},
 					"user_install_available": {
 						"type": "boolean",
@@ -12685,7 +12685,12 @@
 					},
 					"manufacturer": {
 						"type": "string",
-						"description": "Manufacturer name"
+						"description": "Output item manufacturer code (e.g. \"behr\"), the value the `manufacturer`\nsearch filter takes"
+					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (e.g. \"Behring\") resolved from\nwiki_manufacturers, like the wiki item/ship `manufacturer_name`. Null when\nthe code has no name or the item has no manufacturer."
 					},
 					"source": {
 						"type": "string",
@@ -12758,6 +12763,7 @@
 					"blueprint_code",
 					"blueprint_name",
 					"output_item_name",
+					"manufacturer_name",
 					"ingredient_count",
 					"ingredients",
 					"mission_count"
@@ -13170,7 +13176,12 @@
 					},
 					"manufacturer": {
 						"type": "string",
-						"description": "Output item manufacturer name (same value as the search result's `manufacturer`)"
+						"description": "Output item manufacturer code (same value as the search result's `manufacturer`)"
+					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (same value as the search result's\n`manufacturer_name`). Null when the code has no name."
 					},
 					"ingredients": {
 						"items": {
@@ -13238,6 +13249,7 @@
 				"required": [
 					"blueprint",
 					"output_item",
+					"manufacturer_name",
 					"ingredients",
 					"missions_rewarding",
 					"slot_modifiers",
@@ -16863,7 +16875,7 @@
 					},
 					"discord_dm": {
 						"$ref": "#/components/schemas/ReachabilityCount",
-						"description": "Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm)."
+						"description": "Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot or installed the app on their own Discord account (while signals.discord_user_install_counts_as_dm)."
 					},
 					"discord_dm_confirmed": {
 						"$ref": "#/components/schemas/ReachabilityCount",
@@ -16931,7 +16943,7 @@
 					},
 					"discord_dm": {
 						"$ref": "#/components/schemas/ReachabilityCount",
-						"description": "Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm)."
+						"description": "Discord linked, the last Discord DM attempt (if any, last 90 days) was not refused (Discord error 50007 or 50278), and they share a server with the bot or installed the app on their own Discord account (while signals.discord_user_install_counts_as_dm)."
 					},
 					"discord_dm_confirmed": {
 						"$ref": "#/components/schemas/ReachabilityCount",
@@ -17063,7 +17075,7 @@
 							},
 							"discord_user_install_counts_as_dm": {
 								"type": "boolean",
-								"description": "Whether installing the app on one's own Discord account counts as reachable by Discord DM (false until confirmed that the bot can DM such users without a shared server)."
+								"description": "Whether installing the app on one's own Discord account counts as reachable by Discord DM (true since 2026-11-05: confirmed the bot can DM such users without a shared server)."
 							},
 							"discord_shared_server_fresh_days": {
 								"type": "number",
@@ -17074,11 +17086,6 @@
 								"type": "string",
 								"nullable": true,
 								"description": "When the bot's server membership was last checked (ISO time), or null if never."
-							},
-							"discord_dm_closed_code": {
-								"type": "number",
-								"format": "double",
-								"deprecated": true
 							},
 							"discord_dm_refusal_codes": {
 								"items": {
@@ -17105,7 +17112,6 @@
 							"discord_user_install_counts_as_dm",
 							"discord_shared_server_fresh_days",
 							"discord_shared_server_checked_at",
-							"discord_dm_closed_code",
 							"discord_dm_refusal_codes",
 							"discord_dm_result_retention_days",
 							"discord_dm_delivery_results"
@@ -26532,7 +26538,7 @@
 						}
 					},
 					{
-						"description": "Filter by manufacturer name",
+						"description": "Filter by manufacturer code (e.g. \"behr\")",
 						"in": "query",
 						"name": "manufacturer",
 						"required": false,

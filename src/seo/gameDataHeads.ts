@@ -155,7 +155,12 @@ export function buildItemHead(
   acquisition?: ItemAcquisitionDocument | null,
 ): PageHead {
   const title = itemSeoTitle(item.name)
-  const description = itemSeoDescription(item, acquisition)
+  // item.manufacturer is the code ("behr"); say the name ("Behring").
+  const maker = item.manufacturer_name ?? item.manufacturer
+  const description = itemSeoDescription(
+    { name: item.name, type: item.type, manufacturer: maker },
+    acquisition,
+  )
   // Built from the resolved item, not the raw path param (UUID vs short slug).
   const canonical = `${origin}${WIKI_PATHS.item(item.id, item.name)}`
   const image = item.image_url || `${origin}/logo512.png`
@@ -183,8 +188,8 @@ export function buildItemHead(
         ...(item.image_url && { image: item.image_url }),
         url: canonical,
         ...(item.type && { category: item.type }),
-        ...(item.manufacturer && {
-          manufacturer: { "@type": "Organization", name: item.manufacturer },
+        ...(maker && {
+          manufacturer: { "@type": "Organization", name: maker },
         }),
       },
       breadcrumbJsonLd([

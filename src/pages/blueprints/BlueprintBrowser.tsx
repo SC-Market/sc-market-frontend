@@ -42,6 +42,7 @@ import {
   Card,
   CardContent,
   LinearProgress,
+  Autocomplete,
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
@@ -52,6 +53,7 @@ import {
   useAddBlueprintToInventoryMutation,
   useRemoveBlueprintFromInventoryMutation,
   useGetUserBlueprintInventoryQuery,
+  useGetManufacturersQuery,
   type BlueprintSearchResult,
 } from "../../store/api/v2/market"
 import {
@@ -72,6 +74,7 @@ import {
   UnifiedSearchBar,
   blueprintParamsToTokens,
   blueprintTokensToParams,
+  manufacturerSearchTokens,
   type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { formatCategoryName } from "../../util/categoryDisplay"
@@ -195,6 +198,21 @@ export function BlueprintBrowser() {
     updateParam("hide_unsourceable", v ? "" : "false")
   const manufacturer = searchParams.get("mfr") || ""
   const setManufacturer = (v: string) => updateParam("mfr", v)
+  // The filter takes the code ("behr"); users pick and see the name ("Behring").
+  const { data: manufacturers } = useGetManufacturersQuery()
+  const manufacturerOptions = useMemo(() => {
+    const options = manufacturerSearchTokens(manufacturers).sort((a, b) =>
+      a.label.localeCompare(b.label),
+    )
+    // A code from the URL that the list doesn't name stays selectable.
+    if (manufacturer && !options.some((o) => o.value === manufacturer))
+      options.unshift({
+        type: "manufacturer",
+        label: manufacturer,
+        value: manufacturer,
+      })
+    return options
+  }, [manufacturers, manufacturer])
   const ingredientName = searchParams.get("ingredient") || ""
   const setIngredientName = (v: string) => updateParam("ingredient", v)
   const isMobile = useBreakpointDown("lg")
@@ -510,13 +528,23 @@ export function BlueprintBrowser() {
           </MenuItem>
         </Select>
       </FormControl>
-      <TextField
+      <Autocomplete
         fullWidth
         size="small"
-        label={t("blueprintsUi.browser.manufacturer")}
-        value={manufacturer}
-        onChange={(e) => setManufacturer(e.target.value)}
-        placeholder={t("blueprintsUi.browser.manufacturerPlaceholder")}
+        options={manufacturerOptions}
+        value={
+          manufacturerOptions.find((o) => o.value === manufacturer) ?? null
+        }
+        onChange={(_, option) => setManufacturer(option?.value ?? "")}
+        getOptionLabel={(o) => o.label}
+        isOptionEqualToValue={(o, v) => o.value === v.value}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={t("blueprintsUi.browser.manufacturer")}
+            placeholder={t("blueprintsUi.browser.manufacturerPlaceholder")}
+          />
+        )}
       />
       <TextField
         fullWidth
@@ -560,6 +588,7 @@ export function BlueprintBrowser() {
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="blueprints"
+              extraOptions={manufacturerOptions}
               placeholder={t("blueprintsUi.browser.searchBarPlaceholder")}
             />
             <Typography

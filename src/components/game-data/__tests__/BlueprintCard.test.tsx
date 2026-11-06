@@ -35,6 +35,7 @@ describe("BlueprintCard", () => {
     mission_count: 3,
     crafting_time_seconds: 180,
     user_owns: false,
+    manufacturer_name: null,
   }
 
   describe("Grid View", () => {
