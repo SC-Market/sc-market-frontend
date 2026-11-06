@@ -73,7 +73,6 @@ function RolePermissionCheck(props: {
               onChange={(event: React.ChangeEvent<{ checked: boolean }>) => {
                 setRole({ ...role, [permission_name]: event.target.checked })
               }}
-              color={"secondary"}
               name={permission_name}
               inputProps={{
                 "aria-label": t("orgAdminUi.roles.permissionForRole", {

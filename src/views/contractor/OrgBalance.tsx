@@ -51,7 +51,7 @@ export function OrgBalance() {
             {t("orgBalance.send")}
           </Button>
         </Link>
-        <Button color={"secondary"} variant={"outlined"}>
+        <Button color="neutral" variant={"outlined"}>
           {t("orgBalance.withdraw")}
         </Button>
       </Grid>

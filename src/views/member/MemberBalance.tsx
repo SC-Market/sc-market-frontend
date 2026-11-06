@@ -50,7 +50,7 @@ export function MemberBalance() {
             {t("MemberBalance.sendAUEC")}
           </Button>
         </Link>
-        <Button color={"secondary"} variant={"outlined"}>
+        <Button color="neutral" variant={"outlined"}>
           {t("MemberBalance.withdraw")}
         </Button>
       </Grid>

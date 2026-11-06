@@ -17,7 +17,6 @@ export function ServiceActions() {
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >
           <Button
-            color={"secondary"}
             startIcon={<CreateRounded />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}

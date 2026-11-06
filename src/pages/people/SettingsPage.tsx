@@ -246,8 +246,6 @@ export function SettingsPage() {
               onChange={handleChange}
               aria-label={t("settings.sectionsNav", "Settings sections")}
               variant="scrollable"
-              textColor="secondary"
-              indicatorColor="secondary"
             >
               <Tab
                 label={t("settings.tabs.profile")}

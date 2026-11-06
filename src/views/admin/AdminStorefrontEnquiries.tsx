@@ -164,7 +164,6 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
           />
           <LoadingButton
             variant="contained"
-            color="secondary"
             disabled={!dirty}
             loading={state.isLoading}
             onClick={() => save(status, note)}

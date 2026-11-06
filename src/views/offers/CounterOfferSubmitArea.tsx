@@ -32,7 +32,6 @@ export function CounterOfferSubmitArea(props: {
         spacing={theme.layoutSpacing.compact}
       >
         <LoadingButton
-          color={"secondary"}
           variant={"contained"}
           loading={counterOfferLoading}
           onClick={counterOfferCallback}

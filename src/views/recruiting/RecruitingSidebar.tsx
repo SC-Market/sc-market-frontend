@@ -102,7 +102,6 @@ export function RecruitingSidebar() {
             }}
             value={query}
             onChange={handleQueryChange}
-            color={"secondary"}
           />
         </Grid>
         <Grid item xs={12}>
@@ -117,7 +116,6 @@ export function RecruitingSidebar() {
             value={sorting}
             label={t("recruiting_sidebar.sort_attribute")}
             onChange={handleSortChange}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}

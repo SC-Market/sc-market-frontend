@@ -40,7 +40,6 @@ function NotificationActionCheck(props: {
                 setActions(actions.filter((item) => item !== action_name))
               }
             }}
-            color={"secondary"}
             name={label}
           />
         }
@@ -84,7 +83,6 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
         <TextField
           fullWidth
           id="name"
-          color={"secondary"}
           label={t("AddNotificationWebhook.webhookName")}
           value={name}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +95,6 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
         <TextField
           fullWidth
           id="url"
-          color={"secondary"}
           label={t("AddNotificationWebhook.webhookUrl")}
           value={url}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

@@ -15,7 +15,7 @@ export function ContractApp() {
       <Grid item xs={12}>
         <Typography variant={"subtitle1"}>
           {t("contractApp.applying_as")}{" "}
-          <Typography color={"secondary"} display={"inline"}>
+          <Typography color={"text.secondary"} display={"inline"}>
             {orgName || profile?.username}
           </Typography>
         </Typography>

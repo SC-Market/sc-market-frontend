@@ -72,7 +72,6 @@ export function OfferServiceEditArea(props: {
                 })
               }
             }}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}

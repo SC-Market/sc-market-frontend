@@ -94,14 +94,7 @@ export function getShipRoleColor(
   career?: string,
   role?: string,
   focus?: string,
-):
-  | "default"
-  | "primary"
-  | "secondary"
-  | "error"
-  | "info"
-  | "success"
-  | "warning" {
+): "default" | "primary" | "error" | "info" | "success" | "warning" {
   const r = role?.toLowerCase().replace(/[^a-z]/g, "") || ""
   const c = career?.toLowerCase() || ""
   const f = focus?.toLowerCase() || ""
@@ -112,7 +105,7 @@ export function getShipRoleColor(
   if (c === "industrial" || c.includes("industrial")) return "warning"
   if (c === "support") return "success"
   if (c === "transporter" || c === "transport" || c.includes("transport"))
-    return "secondary"
+    return "default"
   if (c === "competition") return "primary"
 
   // Then check role for ships that might not have a career set
@@ -148,7 +141,7 @@ export function getShipRoleColor(
   )
     return "warning"
   if (r === "medical" || r === "repair" || r === "refueling") return "success"
-  if (r.includes("freight")) return "secondary"
+  if (r.includes("freight")) return "default"
   if (r === "racer" || r === "racing") return "primary"
 
   // Fallback to focus field
@@ -159,7 +152,7 @@ export function getShipRoleColor(
   if (f.includes("medical") || f.includes("repair") || f.includes("support"))
     return "success"
   if (f.includes("transport") || f.includes("freight") || f.includes("cargo"))
-    return "secondary"
+    return "default"
 
   return "default"
 }

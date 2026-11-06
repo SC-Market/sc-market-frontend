@@ -93,7 +93,7 @@ function BlockedUserList(props: {
                 <Typography>{user.display_name || user.username}</Typography>
                 <Typography
                   alignItems={"center"}
-                  color={"secondary"}
+                  color={"text.primary"}
                   display={"flex"}
                 >
                   {user.discord_profile ? (

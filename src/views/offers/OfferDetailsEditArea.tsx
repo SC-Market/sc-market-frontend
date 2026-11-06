@@ -130,7 +130,6 @@ export function OfferDetailsEditArea(props: {
                   onChange={(event) => {
                     setBody({ ...body, kind: event.target.value })
                   }}
-                  color={"secondary"}
                   SelectProps={{
                     IconComponent: KeyboardArrowDownRoundedIcon,
                   }}
@@ -201,7 +200,6 @@ export function OfferDetailsEditArea(props: {
                       size="small"
                       label={t("OfferDetailsEditArea.offerAmount")}
                       value={body.cost}
-                      color={"secondary"}
                     />
                     <TextField
                       select

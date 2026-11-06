@@ -56,7 +56,7 @@ export function ImportFleet() {
                 <Typography variant="h6" align="right" sx={{ marginRight: 2 }}>
                   {selectedFile?.name}
                 </Typography>
-                <Button variant="outlined" component="label" color="secondary">
+                <Button variant="outlined" component="label" color="neutral">
                   {t("ships.import.upload")}
                   <input
                     type="file"

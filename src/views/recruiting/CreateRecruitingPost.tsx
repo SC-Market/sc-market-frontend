@@ -114,7 +114,6 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
               onChange={(event: React.ChangeEvent<{ value: string }>) =>
                 setState({ ...state, title: event.target.value })
               }
-              color={"secondary"}
             />
           </Grid>
 
@@ -154,7 +153,6 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
         <Button
           size={"large"}
           variant="contained"
-          color={"secondary"}
           type="submit"
           onClick={submitPost}
           disabled={!contractor}

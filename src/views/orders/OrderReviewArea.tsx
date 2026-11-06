@@ -62,7 +62,6 @@ export function OrderReviewArea(props: {
             onChange={(event: React.ChangeEvent<{ value: string }>) => {
               setContent(event.target.value)
             }}
-            color={"secondary"}
             label={t("orderReviewArea.commentLabel")}
             disabled={!finished}
           />
@@ -112,7 +111,6 @@ export function OrderReviewArea(props: {
             )}
             <Grid item>
               <Button
-                color={"secondary"}
                 startIcon={<AddRounded />}
                 onClick={submitReview}
                 variant={"contained"}

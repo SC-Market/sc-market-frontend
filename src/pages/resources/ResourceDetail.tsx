@@ -220,9 +220,9 @@ export function ResourceDetail() {
                           size="small"
                           color={
                             band.mappedValue >= 900
-                              ? "secondary"
+                              ? "primary"
                               : band.mappedValue >= 700
-                                ? "primary"
+                                ? "info"
                                 : "default"
                           }
                           variant="outlined"

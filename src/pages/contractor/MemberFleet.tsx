@@ -21,7 +21,7 @@ export function MemberFleet() {
       >
         <Button
           startIcon={<AddRounded />}
-          color={"secondary"}
+          color="neutral"
           variant={"outlined"}
           sx={{
             marginRight: 2,

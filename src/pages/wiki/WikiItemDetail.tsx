@@ -185,7 +185,7 @@ export function WikiItemDetail() {
                       component={RouterLink}
                       to={MARKET_PATHS.aggregate(item.id, item.name)}
                       variant="outlined"
-                      color="secondary"
+                      color="neutral"
                       size="small"
                     >
                       {t("quickList.seeListings", "See listings")}

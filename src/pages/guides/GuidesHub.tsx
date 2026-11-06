@@ -44,7 +44,6 @@ export function GuidesHub() {
             <Link
               component={RouterLink}
               to={HELP_PATHS.guide(start.category, start.slug)}
-              color="secondary"
             >
               {start.title}
             </Link>
@@ -102,7 +101,6 @@ export function GuidesHub() {
                         <Link
                           component={RouterLink}
                           to={HELP_PATHS.guide(guide.category, guide.slug)}
-                          color="secondary"
                         >
                           {guide.title}
                         </Link>
@@ -120,12 +118,7 @@ export function GuidesHub() {
           <Typography variant="body2" color="text.secondary">
             {t("help.aboutPrompt", "What is SC Market?")}
           </Typography>
-          <Link
-            component={RouterLink}
-            to={HELP_PATHS.about}
-            variant="body2"
-            color="secondary"
-          >
+          <Link component={RouterLink} to={HELP_PATHS.about} variant="body2">
             {t("help.aboutLink", "About SC Market")}
           </Link>
         </Stack>

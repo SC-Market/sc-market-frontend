@@ -99,7 +99,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               onChange={(event: React.ChangeEvent<{ value: string }>) => {
                 setTitle(event.target.value)
               }}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="order-title-help"
               inputProps={{
@@ -128,7 +127,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               onChange={(event: React.ChangeEvent<{ value: string }>) => {
                 setKind(event.target.value as OrderKind)
               }}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="order-type-help"
               SelectProps={{
@@ -166,7 +164,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               value={description}
               minRows={4}
               maxRows={4}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="description-help"
               inputProps={{
@@ -216,7 +213,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               fullWidth={true}
               label={t("createPublicContract.collateral_optional")}
               id="collateral"
-              color={"secondary"}
               value={collateral}
               type={"tel"}
               helperText={t("createPublicContract.collateral_helper")}
@@ -256,7 +252,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               fullWidth={true}
               label={t("createPublicContract.offer")}
               id="offer"
-              color={"secondary"}
               value={cost}
               type={"tel"}
               helperText={t("createPublicContract.offer_helper")}
@@ -335,7 +330,6 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
           loading={isLoading}
           size={"large"}
           variant="contained"
-          color={"secondary"}
           type="submit"
           onClick={submitContractOffer}
           aria-label={t(

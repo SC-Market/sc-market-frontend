@@ -114,7 +114,6 @@ export function ContractSidebar() {
             }}
             value={query}
             onChange={handleQueryChange}
-            color={"secondary"}
           />
         </Grid>
         <Grid item xs={12}>
@@ -136,7 +135,6 @@ export function ContractSidebar() {
             value={kind}
             label={t("service_search.contract_type")}
             onChange={handleKindChange}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
@@ -164,7 +162,6 @@ export function ContractSidebar() {
             label={t("recruiting_sidebar.sort_attribute")}
             value={sort || ""}
             onChange={handleSortChange}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
@@ -198,7 +195,6 @@ export function ContractSidebar() {
             value={minOffer}
             label={t("service_search.min_cost")}
             onChange={handleMinCostChange}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -218,7 +214,6 @@ export function ContractSidebar() {
             value={maxOffer == null ? "" : maxOffer}
             label={t("service_search.max_cost")}
             onChange={handleMaxCostChange}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",

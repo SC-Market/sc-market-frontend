@@ -236,7 +236,6 @@ const CreateOrderFormComponent = React.forwardRef<
                     )
                   }
                 }}
-                color={"secondary"}
                 SelectProps={{
                   IconComponent: KeyboardArrowDownRoundedIcon,
                   "aria-label": t(
@@ -296,7 +295,6 @@ const CreateOrderFormComponent = React.forwardRef<
               onChange={(event: React.ChangeEvent<{ value: string }>) => {
                 setState({ ...state, title: event.target.value })
               }}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="order-title-help"
               inputProps={{
@@ -325,7 +323,6 @@ const CreateOrderFormComponent = React.forwardRef<
               onChange={(event: React.ChangeEvent<{ value: string }>) => {
                 setState({ ...state, type: event.target.value })
               }}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="order-type-help"
               SelectProps={{
@@ -366,7 +363,6 @@ const CreateOrderFormComponent = React.forwardRef<
                   ) => {
                     setState({ ...state, rush: event.target.checked })
                   }}
-                  color={"secondary"}
                   name="Rush"
                   aria-label={t(
                     "accessibility.rushOrderToggle",
@@ -398,7 +394,6 @@ const CreateOrderFormComponent = React.forwardRef<
               value={state.description}
               minRows={4}
               maxRows={4}
-              color={"secondary"}
               aria-required="true"
               aria-describedby="description-help"
               inputProps={{
@@ -452,7 +447,6 @@ const CreateOrderFormComponent = React.forwardRef<
               fullWidth={true}
               label={t("CreateOrderForm.collateralOptional")}
               id="collateral"
-              color={"secondary"}
               value={state.collateral}
               type={"tel"}
               helperText={t("CreateOrderForm.collateralHelper")}
@@ -495,7 +489,6 @@ const CreateOrderFormComponent = React.forwardRef<
               fullWidth={true}
               label={t("CreateOrderForm.aUECOffer")}
               id="offer"
-              color={"secondary"}
               value={state.offer}
               type={"tel"}
               helperText={t("CreateOrderForm.aUECOfferHelper")}
@@ -571,7 +564,6 @@ const CreateOrderFormComponent = React.forwardRef<
           loading={isLoading}
           size={"large"}
           variant="contained"
-          color={"secondary"}
           type="submit"
           onClick={submitOrder}
           disabled={formDisabled}

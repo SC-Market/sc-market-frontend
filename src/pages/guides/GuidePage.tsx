@@ -49,7 +49,6 @@ function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
             <Link
               component={RouterLink}
               to={HELP_PATHS.guide(guide.category, guide.slug)}
-              color="secondary"
             >
               {guide.title}
             </Link>

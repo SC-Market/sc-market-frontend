@@ -88,7 +88,6 @@ export function ServiceSearchArea() {
             }}
             value={query}
             onChange={handleQueryChange}
-            color={"secondary"}
             size={"small"}
           />
         </Grid>
@@ -111,7 +110,6 @@ export function ServiceSearchArea() {
             label={t("service_search.contract_type")}
             onChange={handleKindChange}
             size={"small"}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
@@ -137,7 +135,6 @@ export function ServiceSearchArea() {
             label={t("service_search.min_cost")}
             onChange={handleMinCostChange}
             size={"small"}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -157,7 +154,6 @@ export function ServiceSearchArea() {
             label={t("service_search.max_cost")}
             onChange={handleMaxCostChange}
             size={"small"}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",

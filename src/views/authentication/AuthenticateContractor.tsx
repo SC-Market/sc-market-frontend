@@ -177,7 +177,7 @@ export function AuthenticateContractor() {
         <Box display={"flex"} justifyContent={"space-between"}>
           <Button
             variant={"outlined"}
-            color={"secondary"}
+            color="neutral"
             endIcon={<OpenInNewIcon />}
             onClick={async () => {
               await navigator.clipboard.writeText(identifierCode)

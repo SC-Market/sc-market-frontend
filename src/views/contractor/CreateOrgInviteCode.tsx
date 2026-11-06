@@ -36,7 +36,6 @@ export function CreateOrgInviteCode() {
         <TextField
           fullWidth
           id="max-uses"
-          color={"secondary"}
           label={t("inviteCodes.max_uses")}
           helperText={t("inviteCodes.max_uses_helper")}
           value={maxUses}

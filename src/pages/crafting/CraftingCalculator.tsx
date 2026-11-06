@@ -36,17 +36,7 @@ import { useSearchParams, useNavigate } from "react-router-dom"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
-
-const TIER_COLORS: Record<
-  number,
-  "default" | "success" | "info" | "secondary" | "warning"
-> = {
-  1: "default",
-  2: "success",
-  3: "info",
-  4: "secondary",
-  5: "warning",
-}
+import { qualityChipSx, qualityTierColor } from "../../util/qualityColor"
 
 interface MaterialInput {
   id: number
@@ -565,7 +555,9 @@ export function CraftingCalculator() {
                     label={t("craftingUi.tierN", {
                       tier: result.output_quality_tier,
                     })}
-                    color={TIER_COLORS[result.output_quality_tier] || "default"}
+                    sx={qualityChipSx(
+                      qualityTierColor(result.output_quality_tier),
+                    )}
                   />
                   <Typography>
                     <Trans

@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next" // Added for translations
 
 const statusColors = new Map<
   string,
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  "default" | "primary" | "error" | "info" | "success" | "warning"
 >()
 statusColors.set("flight-ready", "success")
 statusColors.set("in-repair", "warning")

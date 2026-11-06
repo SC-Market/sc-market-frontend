@@ -55,14 +55,7 @@ function formatAction(action: string): string {
 
 function getActionColor(
   action: string,
-):
-  | "default"
-  | "primary"
-  | "secondary"
-  | "error"
-  | "info"
-  | "success"
-  | "warning" {
+): "default" | "primary" | "error" | "info" | "success" | "warning" {
   if (action.includes("archive") || action.includes("delete")) {
     return "error"
   }

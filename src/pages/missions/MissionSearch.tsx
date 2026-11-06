@@ -632,7 +632,7 @@ export function MissionSearch() {
                                       <Chip
                                         label={t("missionsUi.starter")}
                                         size="small"
-                                        color="secondary"
+                                        variant="outlined"
                                         sx={microChip}
                                       />
                                     </Tooltip>
@@ -645,7 +645,6 @@ export function MissionSearch() {
                                         <Chip
                                           label={t("missionsUi.chain")}
                                           size="small"
-                                          color="secondary"
                                           variant="outlined"
                                           sx={microChip}
                                         />

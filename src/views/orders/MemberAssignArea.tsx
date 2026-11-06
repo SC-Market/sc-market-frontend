@@ -99,7 +99,6 @@ export function MemberAssignArea(props: { order: Order }) {
         >
           <Button
             variant={"contained"}
-            color={"secondary"}
             onClick={updateAssignment}
             startIcon={<PersonRounded />}
           >

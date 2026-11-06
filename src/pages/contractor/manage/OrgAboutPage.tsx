@@ -223,7 +223,7 @@ function OrgAboutForm(props: { contractor: Contractor }) {
               htmlFor="org-avatar-upload-input"
               variant="outlined"
               size="small"
-              color="secondary"
+              color="neutral"
               disabled={isUploadingAvatar}
               startIcon={
                 isUploadingAvatar ? <SaveRounded /> : <AddAPhotoRounded />
@@ -277,7 +277,7 @@ function OrgAboutForm(props: { contractor: Contractor }) {
               htmlFor="org-banner-upload-input"
               variant="outlined"
               size="small"
-              color="secondary"
+              color="neutral"
               disabled={isUploadingBanner}
               startIcon={
                 isUploadingBanner ? <SaveRounded /> : <AddAPhotoRounded />
@@ -299,7 +299,6 @@ function OrgAboutForm(props: { contractor: Contractor }) {
       <Grid item xs={12} container justifyContent="flex-end">
         <LoadingButton
           variant="contained"
-          color="secondary"
           loading={saving}
           startIcon={<SaveRounded />}
           onClick={handleSave}

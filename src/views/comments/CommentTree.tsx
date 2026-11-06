@@ -89,7 +89,6 @@ export function CommentTree(props: {
         </Box>
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <IconButton
-            color={"secondary"}
             onClick={() => setReplyOpen((o) => !o)}
             aria-label={t("comments.reply", "Reply")}
             aria-expanded={replyOpen}

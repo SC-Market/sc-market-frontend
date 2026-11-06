@@ -11,7 +11,7 @@ import { useFormatters, useNow } from "../../util/format"
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  "default" | "primary" | "error" | "info" | "success" | "warning"
 >()
 statusColors.set("Completed", "success")
 statusColors.set("Pending", "warning")
@@ -120,7 +120,7 @@ export function TransactionTableRow(props: {
           </Typography>
         </TableCell>
         <TableCell>
-          <Typography color={"secondary"}>
+          <Typography color={"text.secondary"}>
             {t(`transactions.kind.${row.kind}`, row.kind)}{" "}
             {receiving ? t("transactions.from") : t("transactions.to")}{" "}
             {receiving

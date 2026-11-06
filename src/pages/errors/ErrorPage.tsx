@@ -65,7 +65,7 @@ export function ErrorPageBody() {
           </Grid>
           <Grid item xs={12} sm="auto">
             <Button
-              color={"secondary"}
+              color="neutral"
               variant={"outlined"}
               size={"large"}
               fullWidth

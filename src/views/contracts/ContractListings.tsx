@@ -183,7 +183,7 @@ export function ContractListing(props: {
                       new Date(contract.timestamp),
                     ) <= 1 && (
                       <Chip
-                        color={"secondary"}
+                        variant="outlined"
                         label={t("contractListings.new")}
                         sx={{
                           marginRight: 1,
@@ -245,7 +245,7 @@ export function ContractListing(props: {
                     }
                   />
 
-                  <Button color={"secondary"} variant={"contained"}>
+                  <Button variant={"contained"}>
                     {t("contractListings.see_more")}
                   </Button>
                 </Grid>

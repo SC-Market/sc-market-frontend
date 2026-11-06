@@ -197,9 +197,9 @@ function LocationTreeItem({ node, level }: { node: WikiLocationNode; level: numb
   const typeLower = node.type?.toLowerCase() || ""
   const systemColor = node.jurisdiction ? SYSTEM_COLORS[node.jurisdiction] : undefined
 
-  const typeColor = ((): "primary" | "secondary" | "warning" | "default" => {
+  const typeColor = ((): "primary" | "info" | "warning" | "default" => {
     switch (typeLower) {
-      case "planet": return "secondary"
+      case "planet": return "info"
       case "moon": return "default"
       case "station": return "primary"
       case "outpost": return "warning"

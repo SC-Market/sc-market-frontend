@@ -17,18 +17,8 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
+import { qualityChipSx, qualityTierColor } from "../../util/qualityColor"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
-
-const TIER_COLORS: Record<
-  number,
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
-> = {
-  1: "default",
-  2: "success",
-  3: "info",
-  4: "secondary",
-  5: "warning",
-}
 
 export function CraftingHistory() {
   const fmt = useFormatters()
@@ -89,7 +79,9 @@ export function CraftingHistory() {
                           <Chip
                             label={`T${row.output_quality_tier}`}
                             size="small"
-                            color={TIER_COLORS[row.output_quality_tier]}
+                            sx={qualityChipSx(
+                              qualityTierColor(row.output_quality_tier),
+                            )}
                           />
                           {row.output_quality_value}
                         </Box>

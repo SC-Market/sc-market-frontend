@@ -37,7 +37,7 @@ export function PageBody404() {
           to={"/dashboard"}
           style={{ color: "inherit", textDecoration: "none" }}
         >
-          <Button color={"secondary"} variant={"outlined"}>
+          <Button color="neutral" variant={"outlined"}>
             {t("error404.returnToDashboard")}
           </Button>
         </Link>

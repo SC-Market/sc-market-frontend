@@ -58,7 +58,7 @@ export function ViewContract(props: { listing: Order }) {
               {dateDiffInDays(new Date(now), new Date(listing.timestamp)) <=
                 1 && (
                 <Chip
-                  color={"secondary"}
+                  variant="outlined"
                   label={t("contracts.new")}
                   sx={{
                     marginRight: 1,
@@ -119,11 +119,7 @@ export function ViewContract(props: { listing: Order }) {
                 (event) => event.stopPropagation() // Don't highlight cell if button clicked
               }
             />
-            <Button
-              color={"secondary"}
-              variant={"contained"}
-              onClick={() => setAppOpen(true)}
-            >
+            <Button variant={"contained"} onClick={() => setAppOpen(true)}>
               {t("contracts.apply")}
             </Button>
           </Grid>

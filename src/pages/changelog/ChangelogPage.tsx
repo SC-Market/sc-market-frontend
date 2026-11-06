@@ -79,7 +79,7 @@ function EntryStamp({ entry }: { entry: ChangelogMeta }) {
 function FeedLink() {
   const { t } = useTranslation()
   return (
-    <Link href={CHANGELOG_PATHS.feed} variant="body2" color="secondary">
+    <Link href={CHANGELOG_PATHS.feed} variant="body2">
       {t("changelog.feed", "Atom feed")}
     </Link>
   )
@@ -206,7 +206,6 @@ function ChangelogEntryPage({ slug }: { slug: string }) {
               component={RouterLink}
               to={CHANGELOG_PATHS.index}
               variant="body2"
-              color="secondary"
             >
               {t("changelog.allUpdates", "All updates")}
             </Link>

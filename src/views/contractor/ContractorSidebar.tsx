@@ -83,7 +83,6 @@ export function ContractorSidebar() {
       }}
       value={query}
       onChange={handleQueryChange}
-      color={"secondary"}
     />
   )
 
@@ -116,7 +115,6 @@ export function ContractorSidebar() {
             value={sorting}
             label={t("contractorSidebar.sort_attribute")}
             onChange={handleSortChange}
-            color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}

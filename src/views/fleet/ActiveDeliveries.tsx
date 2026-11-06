@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next" // Added for localization
 
 const statusColors = new Map<
   string,
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  "default" | "primary" | "error" | "info" | "success" | "warning"
 >()
 statusColors.set("OK", "success")
 statusColors.set("Damaged", "warning")

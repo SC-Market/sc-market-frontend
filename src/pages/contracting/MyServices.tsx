@@ -36,7 +36,6 @@ export function MyServicesPage() {
               style={{ color: "inherit", textDecoration: "none" }}
             >
               <Button
-                color={"secondary"}
                 startIcon={<CreateRounded />}
                 variant={"contained"}
                 size={"large"}

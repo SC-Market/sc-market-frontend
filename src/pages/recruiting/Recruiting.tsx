@@ -126,7 +126,7 @@ export function Recruiting() {
             {isMobile && (
               <Button
                 variant="outlined"
-                color="secondary"
+                color="neutral"
                 startIcon={<FilterListIcon />}
                 aria-label={t("toggle_market_sidebar")}
                 onClick={() => {

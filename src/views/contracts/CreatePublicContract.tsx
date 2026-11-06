@@ -89,7 +89,6 @@ export function CreatePublicContract() {
                   onChange={(event: React.ChangeEvent<{ value: string }>) => {
                     setTitle(event.target.value)
                   }}
-                  color={"secondary"}
                 />
               </Grid>
 
@@ -103,7 +102,6 @@ export function CreatePublicContract() {
                   onChange={(event: React.ChangeEvent<{ value: string }>) => {
                     setKind(event.target.value as OrderKind)
                   }}
-                  color={"secondary"}
                   SelectProps={{
                     IconComponent: KeyboardArrowDownRoundedIcon,
                   }}
@@ -129,7 +127,6 @@ export function CreatePublicContract() {
                   value={description}
                   minRows={4}
                   maxRows={4}
-                  color={"secondary"}
                 />
               </Grid>
             </Grid>
@@ -165,7 +162,6 @@ export function CreatePublicContract() {
                   fullWidth={true}
                   label={t("createPublicContract.collateral_optional")}
                   id="collateral"
-                  color={"secondary"}
                   value={collateral}
                   type={"tel"}
                   helperText={t("createPublicContract.collateral_helper")}
@@ -190,7 +186,6 @@ export function CreatePublicContract() {
                   fullWidth={true}
                   label={t("createPublicContract.offer")}
                   id="offer"
-                  color={"secondary"}
                   value={cost}
                   type={"tel"}
                   helperText={t("createPublicContract.offer_helper")}
@@ -231,7 +226,6 @@ export function CreatePublicContract() {
               loading={isLoading}
               size={"large"}
               variant="contained"
-              color={"secondary"}
               type="submit"
               onClick={submitOrder}
             >

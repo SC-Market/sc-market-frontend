@@ -149,7 +149,6 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
         >
           <Button
             variant={"contained"}
-            color={"secondary"}
             onClick={updateAssignment}
             startIcon={<PersonRounded />}
           >

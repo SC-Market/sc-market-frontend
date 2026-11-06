@@ -24,7 +24,7 @@ export function Services() {
       {isMobile ? (
         <Button
           variant="outlined"
-          color="secondary"
+          color="neutral"
           startIcon={<FilterListIcon />}
           aria-label={t("services.toggleSidebar")}
           onClick={() => {
@@ -39,7 +39,6 @@ export function Services() {
         </Button>
       ) : (
         <IconButton
-          color="secondary"
           aria-label={t("services.toggleSidebar")}
           onClick={() => {
             setOpen((prev) => !prev)
@@ -67,7 +66,6 @@ export function Services() {
       style={{ color: "inherit", textDecoration: "none" }}
     >
       <Button
-        color={"secondary"}
         startIcon={<CreateRounded />}
         variant={"contained"}
         size={"large"}

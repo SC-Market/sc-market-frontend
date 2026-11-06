@@ -79,7 +79,6 @@ export function OrgInvite() {
               variant="outlined"
               label={t("orgInvite.username")}
               fullWidth
-              color={"secondary"}
               SelectProps={{
                 IconComponent: KeyboardArrowDownRoundedIcon,
               }}
@@ -91,7 +90,6 @@ export function OrgInvite() {
           ) =>
             (value || []).map((option, index) => (
               <Chip
-                color={"secondary"}
                 label={option.username}
                 sx={{ marginRight: 1 }}
                 variant={"outlined"}
@@ -120,7 +118,6 @@ export function OrgInvite() {
           multiline
           maxRows={5}
           minRows={5}
-          color={"secondary"}
           label={t("orgInvite.note")}
           value={message}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {

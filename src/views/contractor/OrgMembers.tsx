@@ -164,7 +164,6 @@ function PeopleRow(props: {
                     variant="filled"
                     label={option.name}
                     {...getTagProps({ index })}
-                    color={"secondary"}
                   />
                 ))
               }

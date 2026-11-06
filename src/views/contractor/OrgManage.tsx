@@ -277,7 +277,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               </Box>
             }
             // action={
-            //     <Button color={'secondary'} variant={'outlined'}>
+            //     <Button color="neutral" variant={'outlined'}>
             //         Contact
             //     </Button>
             // }
@@ -485,7 +485,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   <Fab
                     component="span"
                     disabled={isUploadingBanner}
-                    color="secondary"
+                    color="primary"
                     aria-label={t("orgDetailEdit.set_banner")}
                     sx={{
                       transition: "0.3s",

@@ -217,7 +217,7 @@ export function FrontendErrorBody() {
               }}
             >
               <Button
-                color={"secondary"}
+                color="neutral"
                 variant={"outlined"}
                 size={"large"}
                 fullWidth
