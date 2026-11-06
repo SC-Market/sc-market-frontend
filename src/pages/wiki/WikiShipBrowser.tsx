@@ -14,7 +14,6 @@ import {
   CardContent,
   Grid,
   Typography,
-  Pagination,
   Alert,
   Chip,
   Stack,
@@ -70,7 +69,11 @@ import { WIKI_PATHS } from "../../routes/paths"
 import { wikiShipsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
-import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../components/pagination/NumberedPagination"
 
 const PAGE_SIZE = 24
 
@@ -603,11 +606,16 @@ export function WikiShipBrowser() {
     return result
   }, [allVehicles, category, manufacturer, career, role, size, searchTokens, t])
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
+  const pageSize = parsePageSize(
+    searchParams.get("page_size"),
+    CARD_GRID_PAGE_SIZE_OPTIONS,
+    PAGE_SIZE,
+  )
+  const totalPages = Math.ceil(filtered.length / pageSize)
   const currentPage = Math.min(page, Math.max(1, totalPages))
   const pageItems = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
   )
 
   // Section groupings (only in "all" category view)
@@ -1184,22 +1192,25 @@ export function WikiShipBrowser() {
                 </Box>
               )}
 
-              {totalPages > 1 && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={(_, p) => {
-                      updateParam("page", String(p))
-                      window.scrollTo({ top: 0, behavior: "smooth" })
-                    }}
-                    color="primary"
-                    renderItem={linkedPaginationItem(
-                      WIKI_PATHS.ships,
-                      searchParams,
-                    )}
-                  />
-                </Box>
+              {filtered.length > 0 && (
+                <NumberedPagination
+                  count={filtered.length}
+                  page={currentPage - 1}
+                  rowsPerPage={pageSize}
+                  onPageChange={(newPage) => {
+                    updateParam("page", newPage > 0 ? String(newPage + 1) : "")
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                  rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+                  onRowsPerPageChange={(size) =>
+                    updateParam(
+                      "page_size",
+                      size === PAGE_SIZE ? "" : String(size),
+                    )
+                  }
+                  link={{ path: WIKI_PATHS.ships, searchParams }}
+                  sx={{ mt: 3 }}
+                />
               )}
 
               {allVehicles.length > 0 && <AllShipsIndex ships={allVehicles} />}

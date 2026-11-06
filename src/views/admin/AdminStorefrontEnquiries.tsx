@@ -7,7 +7,6 @@ import {
   InputLabel,
   Link as MuiLink,
   MenuItem,
-  Pagination,
   Paper,
   Select,
   Skeleton,
@@ -29,6 +28,7 @@ import { getErrorMessage } from "../../util/errorHandling"
 import { useEnquiryStatusLabel } from "../../features/storefront/components/StorefrontEnquiryCard"
 import { enquiryStatusColor } from "../../features/storefront/enquiry"
 import { useFormatters } from "../../util/format"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 
 const STATUSES: EnquiryStatus[] = [
   "open",
@@ -204,10 +204,11 @@ export function AdminStorefrontEnquiries() {
   const statusLabel = useEnquiryStatusLabel()
   const [filter, setFilter] = useState<EnquiryStatus | "all">("all")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(PAGE_SIZE)
   const { data, isLoading, isError } = useListStorefrontEnquiriesQuery({
     status: filter === "all" ? undefined : filter,
     page,
-    pageSize: PAGE_SIZE,
+    pageSize,
   })
 
   return (
@@ -269,13 +270,18 @@ export function AdminStorefrontEnquiries() {
           {data.enquiries.map((e) => (
             <EnquiryRow key={`${e.enquiry_id}-${e.updated_at}`} enquiry={e} />
           ))}
-          {data.total > PAGE_SIZE && (
-            <Pagination
-              count={Math.ceil(data.total / PAGE_SIZE)}
-              page={page}
-              onChange={(_, p) => setPage(p)}
-            />
-          )}
+          <NumberedPagination
+            count={data.total}
+            page={page - 1}
+            rowsPerPage={pageSize}
+            onPageChange={(newPage) => setPage(newPage + 1)}
+            rowsPerPageOptions={[10, 20, 50]}
+            onRowsPerPageChange={(size) => {
+              setPageSize(size)
+              setPage(1)
+            }}
+            sx={{ px: 0 }}
+          />
         </Stack>
       )}
     </Box>

@@ -9,7 +9,6 @@ import React, { useMemo } from "react"
 import {
   Alert,
   Box,
-  Button,
   Chip,
   Grid,
   Link,
@@ -25,6 +24,7 @@ import {
 } from "@mui/material"
 import {
   Link as RouterLink,
+  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom"
@@ -51,11 +51,14 @@ import {
   MISSION_HUB_PAGE_SIZE,
   missionHubIntro,
   missionHubKindLabel,
-  missionHubPageCount,
   missionHubText,
 } from "../../seo/missionHubs"
 import { FRONTEND_URL } from "../../util/constants"
 import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+
+/** Hub pages are bare `?page=N` URLs: the links carry no other params. */
+const NO_PARAMS = new URLSearchParams()
 
 /** Page N's head: self-canonical, "— Page N" in the title (like the bridge's paginate). */
 function pagedHead(head: PageHead, path: string, page: number): PageHead {
@@ -162,7 +165,7 @@ function HubBody({
   lang: string
 }) {
   const { t } = useTranslation()
-  const pages = missionHubPageCount(hub)
+  const navigate = useNavigate()
   const path = GAME_DATA_PATHS.missionHub(hub.kind, hub.slug)
   const related = MISSION_HUB_KINDS.filter(
     (k) => k !== hub.kind && hub[k].length > 0,
@@ -284,48 +287,17 @@ function HubBody({
         </Table>
       </Paper>
 
-      {pages > 1 && (
-        <Stack
-          component="nav"
-          direction="row"
-          spacing={1}
-          alignItems="center"
-          sx={{ mt: 1.5 }}
-          aria-label={t("missionHubs.pageOf", {
-            defaultValue: "Page {{page}} of {{pages}}",
-            page,
-            pages,
-          })}
-        >
-          {page > 1 && (
-            <Button
-              component={RouterLink}
-              to={pagedPath(path, page - 1)}
-              size="small"
-              rel="prev"
-            >
-              {t("missionHubs.previous", "Previous page")}
-            </Button>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            {t("missionHubs.pageOf", {
-              defaultValue: "Page {{page}} of {{pages}}",
-              page,
-              pages,
-            })}
-          </Typography>
-          {page < pages && (
-            <Button
-              component={RouterLink}
-              to={pagedPath(path, page + 1)}
-              size="small"
-              rel="next"
-            >
-              {t("missionHubs.next", "Next page")}
-            </Button>
-          )}
-        </Stack>
-      )}
+      <NumberedPagination
+        count={hub.mission_count}
+        page={page - 1}
+        rowsPerPage={MISSION_HUB_PAGE_SIZE}
+        onPageChange={(newPage) => {
+          navigate(pagedPath(path, newPage + 1))
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        }}
+        link={{ path, searchParams: NO_PARAMS }}
+        sx={{ mt: 1.5, px: 0 }}
+      />
 
       {related.length > 0 && (
         <Box

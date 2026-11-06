@@ -6,9 +6,25 @@
 
 import React, { useMemo, useCallback } from "react"
 import {
-  Box, Card, CardContent, CardMedia, Grid, Typography, Pagination, Alert, Chip, Stack,
-  ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow,
-  Paper, Avatar, Divider,
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+  Alert,
+  Chip,
+  Stack,
+  ToggleButtonGroup,
+  ToggleButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Divider,
 } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
@@ -28,31 +44,54 @@ import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"
 import {
-  UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, type SearchToken,
+  UnifiedSearchBar,
+  wikiItemsTokensToParams,
+  wikiItemsParamsToTokens,
+  type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { translateCategoryLabel } from "../../util/categoryDisplay"
 import { wikiItemsSeoText } from "../../seo/hubHeads"
-import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 import { useFormatters } from "../../util/format"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../components/pagination/NumberedPagination"
+
+/** Page sizes: the grid view shows 24 cards, the list view 30 rows. */
+const GRID_PAGE_SIZE = 24
+const LIST_PAGE_SIZE = 30
+const LIST_PAGE_SIZE_OPTIONS: readonly number[] = [15, 30, 60, 120]
 const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
 const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
 // Common item types for the sidebar filter
 const ITEM_TYPES = [
-  "Weapon", "Armor", "Ship Weapon", "Shield", "Quantum Drive",
-  "Power Plant", "Cooler", "Missile", "Mining Head", "Tool",
+  "Weapon",
+  "Armor",
+  "Ship Weapon",
+  "Shield",
+  "Quantum Drive",
+  "Power Plant",
+  "Cooler",
+  "Missile",
+  "Mining Head",
+  "Tool",
 ]
 const SIZES = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const GRADES = ["A", "B", "C", "D"]
 
 function FilterSection({
-  label, options, selected, onChange,
+  label,
+  options,
+  selected,
+  onChange,
 }: {
   label: string
   options: { value: string; label?: string; count?: number }[]
@@ -65,27 +104,48 @@ function FilterSection({
       <Typography
         variant="caption"
         color="text.secondary"
-        sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}
+        sx={{
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          fontWeight: 700,
+          mb: 0.5,
+          display: "block",
+        }}
       >
         {label}
       </Typography>
       <Stack spacing={0.25}>
-        {[{ value: "", label: t("wiki.itemBrowser.all", "All") }, ...options].map((opt) => (
+        {[
+          { value: "", label: t("wiki.itemBrowser.all", "All") },
+          ...options,
+        ].map((opt) => (
           <Box
             key={opt.value}
             onClick={() => onChange(opt.value)}
             sx={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              px: 1.5, py: 0.5, borderRadius: 1, cursor: "pointer", transition: "background 0.12s",
-              bgcolor: selected === opt.value ? "action.selected" : "transparent",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              px: 1.5,
+              py: 0.5,
+              borderRadius: 1,
+              cursor: "pointer",
+              transition: "background 0.12s",
+              bgcolor:
+                selected === opt.value ? "action.selected" : "transparent",
               "&:hover": { bgcolor: "action.hover" },
             }}
           >
-            <Typography variant="body2" fontWeight={selected === opt.value ? 700 : 400}>
+            <Typography
+              variant="body2"
+              fontWeight={selected === opt.value ? 700 : 400}
+            >
               {opt.label ?? opt.value}
             </Typography>
             {opt.count != null && (
-              <Typography variant="caption" color="text.secondary">{opt.count}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {opt.count}
+              </Typography>
             )}
           </Box>
         ))}
@@ -115,28 +175,76 @@ function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
       <CardMedia
         component="img"
         height="160"
-        image={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
+        image={
+          item.image_url ||
+          item.thumbnail_path ||
+          getFactionIcon(item.manufacturer) ||
+          FALLBACK_IMAGE_URL
+        }
         alt={item.name}
         // Lazy: no server-render preload (Early Hint) per card.
         loading="lazy"
         sx={{ objectFit: "contain", bgcolor: "background.default", p: 1 }}
-        onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = FALLBACK_IMAGE_URL }}
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null
+          currentTarget.src = FALLBACK_IMAGE_URL
+        }}
       />
-      <CardContent sx={{ p: 1.5, pt: 1, flex: 1, overflow: "hidden", "&:last-child": { pb: 1.5 } }}>
-        <Typography variant="subtitle2" noWrap fontWeight={600} title={item.name}>{item.name}</Typography>
-        <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
+      <CardContent
+        sx={{
+          p: 1.5,
+          pt: 1,
+          flex: 1,
+          overflow: "hidden",
+          "&:last-child": { pb: 1.5 },
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          noWrap
+          fontWeight={600}
+          title={item.name}
+        >
+          {item.name}
+        </Typography>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{ mt: 0.5 }}
+          flexWrap="wrap"
+          useFlexGap
+        >
           {item.type && (
-            <Chip label={item.display_type || item.type} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <Chip
+              label={item.display_type || item.type}
+              size="small"
+              color="primary"
+              sx={{ height: 18, fontSize: "0.65rem" }}
+            />
           )}
           {item.size != null && (
-            <Chip label={`S${item.size}`} size="small" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <Chip
+              label={`S${item.size}`}
+              size="small"
+              sx={{ height: 18, fontSize: "0.65rem" }}
+            />
           )}
           {item.grade && (
-            <Chip label={item.grade} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+            <Chip
+              label={item.grade}
+              size="small"
+              variant="outlined"
+              sx={{ height: 18, fontSize: "0.65rem" }}
+            />
           )}
         </Stack>
         {item.manufacturer && (
-          <Typography variant="caption" color="text.secondary" noWrap sx={{ mt: 0.5, display: "block" }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            noWrap
+            sx={{ mt: 0.5, display: "block" }}
+          >
             {item.manufacturer}
           </Typography>
         )}
@@ -145,12 +253,23 @@ function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
   )
 }
 
-function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: () => void }) {
+function ItemListRow({
+  item,
+  onClick,
+}: {
+  item: WikiItemSearchResult
+  onClick: () => void
+}) {
   return (
     <TableRow hover sx={{ cursor: "pointer" }} onClick={onClick}>
       <TableCell sx={{ py: 0.5, width: 40 }}>
         <Avatar
-          src={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
+          src={
+            item.image_url ||
+            item.thumbnail_path ||
+            getFactionIcon(item.manufacturer) ||
+            FALLBACK_IMAGE_URL
+          }
           variant="rounded"
           sx={{ width: 32, height: 32, bgcolor: "background.default" }}
           imgProps={{ loading: "lazy", style: { objectFit: "contain" } }}
@@ -169,12 +288,21 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
         </Typography>
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>
-        <Chip label={item.display_type || item.type || "—"} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />
+        <Chip
+          label={item.display_type || item.type || "—"}
+          size="small"
+          color="primary"
+          sx={{ height: 18, fontSize: "0.65rem" }}
+        />
       </TableCell>
-      <TableCell sx={{ py: 0.5 }}>{item.size != null ? `S${item.size}` : "—"}</TableCell>
+      <TableCell sx={{ py: 0.5 }}>
+        {item.size != null ? `S${item.size}` : "—"}
+      </TableCell>
       <TableCell sx={{ py: 0.5 }}>{item.grade || "—"}</TableCell>
       <TableCell sx={{ py: 0.5 }}>
-        <Typography variant="caption" color="text.secondary">{item.manufacturer || "—"}</Typography>
+        <Typography variant="caption" color="text.secondary">
+          {item.manufacturer || "—"}
+        </Typography>
       </TableCell>
     </TableRow>
   )
@@ -197,15 +325,25 @@ export function WikiItemBrowser() {
     VIEW_MODES,
   )
 
-  const searchTokens = useMemo(() => wikiItemsParamsToTokens(searchParams), [searchParams])
-  const queryParams = useMemo(() => wikiItemsTokensToParams(searchTokens), [searchTokens])
+  const searchTokens = useMemo(
+    () => wikiItemsParamsToTokens(searchParams),
+    [searchParams],
+  )
+  const queryParams = useMemo(
+    () => wikiItemsTokensToParams(searchTokens),
+    [searchTokens],
+  )
 
-  const updateParam = useCallback((key: string, value: string) => {
-    const p = new URLSearchParams(searchParams)
-    if (value) p.set(key, value); else p.delete(key)
-    p.delete("page")
-    setSearchParams(p, { replace: true })
-  }, [searchParams, setSearchParams])
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      const p = new URLSearchParams(searchParams)
+      if (value) p.set(key, value)
+      else p.delete(key)
+      p.delete("page")
+      setSearchParams(p, { replace: true })
+    },
+    [searchParams, setSearchParams],
+  )
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(wikiItemsTokensToParams(tokens))
@@ -215,26 +353,52 @@ export function WikiItemBrowser() {
     setSearchParams(params, { replace: true })
   }
 
-  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchItemsQuery({
+  const pageSizeOptions =
+    viewMode === "list" ? LIST_PAGE_SIZE_OPTIONS : CARD_GRID_PAGE_SIZE_OPTIONS
+  const defaultPageSize = viewMode === "list" ? LIST_PAGE_SIZE : GRID_PAGE_SIZE
+  const pageSize = parsePageSize(
+    searchParams.get("page_size"),
+    pageSizeOptions,
+    defaultPageSize,
+  )
+  const {
+    data,
+    isLoading,
+    error,
+    isFetching: pageIsFetching,
+    currentData: pageCurrentData,
+  } = useSearchItemsQuery({
     text: queryParams.q || undefined,
     type: queryParams.type || typeFilter || undefined,
     size: sizeFilter || undefined,
     grade: gradeFilter || undefined,
     manufacturer: queryParams.manufacturer || undefined,
     page,
-    pageSize: viewMode === "list" ? 30 : 24,
+    pageSize,
   })
   // Primary content: drives main[data-ready].
   usePageReady(
-    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+    isPrimaryLoading({
+      isLoading,
+      isFetching: pageIsFetching,
+      currentData: pageCurrentData,
+    }),
   )
 
   const handleItemClick = (itemId: string) => navigate(WIKI_PATHS.item(itemId))
-  const handlePageChange = (_: unknown, value: number) => {
+  const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams)
-    params.set("page", String(value))
+    if (newPage > 0) params.set("page", String(newPage + 1))
+    else params.delete("page")
     setSearchParams(params, { replace: true })
     window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+  const handlePageSizeChange = (size: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.delete("page")
+    if (size === defaultPageSize) params.delete("page_size")
+    else params.set("page_size", String(size))
+    setSearchParams(params, { replace: true })
   }
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
@@ -249,7 +413,10 @@ export function WikiItemBrowser() {
     <Stack spacing={2}>
       <FilterSection
         label={t("wiki.itemBrowser.filterType", "Type")}
-        options={ITEM_TYPES.map((it) => ({ value: it, label: translateCategoryLabel(it, t) }))}
+        options={ITEM_TYPES.map((it) => ({
+          value: it,
+          label: translateCategoryLabel(it, t),
+        }))}
         selected={typeFilter}
         onChange={(v) => updateParam("type", v)}
       />
@@ -258,7 +425,10 @@ export function WikiItemBrowser() {
 
       <FilterSection
         label={t("wiki.itemBrowser.filterSize", "Size")}
-        options={SIZES.map((s) => ({ value: s, label: t("gameTaxonomyUi.sizeN", { size: s }) }))}
+        options={SIZES.map((s) => ({
+          value: s,
+          label: t("gameTaxonomyUi.sizeN", { size: s }),
+        }))}
         selected={sizeFilter}
         onChange={(v) => updateParam("size", v)}
       />
@@ -267,7 +437,10 @@ export function WikiItemBrowser() {
 
       <FilterSection
         label={t("wiki.itemBrowser.filterGrade", "Grade")}
-        options={GRADES.map((g) => ({ value: g, label: t("gameTaxonomyUi.gradeN", { grade: g }) }))}
+        options={GRADES.map((g) => ({
+          value: g,
+          label: t("gameTaxonomyUi.gradeN", { grade: g }),
+        }))}
         selected={gradeFilter}
         onChange={(v) => updateParam("grade", v)}
       />
@@ -279,12 +452,18 @@ export function WikiItemBrowser() {
           variant="outlined"
           onClick={() => {
             const p = new URLSearchParams(searchParams)
-            p.delete("type"); p.delete("size"); p.delete("grade"); p.delete("page")
+            p.delete("type")
+            p.delete("size")
+            p.delete("grade")
+            p.delete("page")
             setSearchParams(p, { replace: true })
           }}
           onDelete={() => {
             const p = new URLSearchParams(searchParams)
-            p.delete("type"); p.delete("size"); p.delete("grade"); p.delete("page")
+            p.delete("type")
+            p.delete("size")
+            p.delete("grade")
+            p.delete("page")
             setSearchParams(p, { replace: true })
           }}
           sx={{ alignSelf: "flex-start" }}
@@ -303,23 +482,40 @@ export function WikiItemBrowser() {
     >
       <Helmet>
         {page > 1 && (
-          <link rel="prev" href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`} />
+          <link
+            rel="prev"
+            href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`}
+          />
         )}
         {page < totalPages && (
-          <link rel="next" href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`} />
+          <link
+            rel="next"
+            href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`}
+          />
         )}
       </Helmet>
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.itemBrowser.filters", "Filters")} sidebarWidth={190}>
+        <FilterSidebarLayout
+          filters={filtersContent}
+          filterTitle={t("wiki.itemBrowser.filters", "Filters")}
+          sidebarWidth={190}
+        >
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <UnifiedSearchBar
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="wiki-items"
-              placeholder={t("wiki.itemBrowser.searchPlaceholder", "Search items, types, manufacturers...")}
+              placeholder={t(
+                "wiki.itemBrowser.searchPlaceholder",
+                "Search items, types, manufacturers...",
+              )}
             />
             {data && (
-              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ whiteSpace: "nowrap" }}
+              >
                 {fmt.number(data.total)}
               </Typography>
             )}
@@ -327,15 +523,31 @@ export function WikiItemBrowser() {
               size="small"
               value={viewMode}
               exclusive
-              onChange={(_, v) => { if (v) setViewMode(v) }}
+              onChange={(_, v) => {
+                if (v) setViewMode(v)
+              }}
             >
-              <ToggleButton value="grid" aria-label={t("ui.viewMode.grid", "Grid view")}><GridViewRounded fontSize="small" /></ToggleButton>
-              <ToggleButton value="list" aria-label={t("ui.viewMode.list", "List view")}><ViewListRounded fontSize="small" /></ToggleButton>
+              <ToggleButton
+                value="grid"
+                aria-label={t("ui.viewMode.grid", "Grid view")}
+              >
+                <GridViewRounded fontSize="small" />
+              </ToggleButton>
+              <ToggleButton
+                value="list"
+                aria-label={t("ui.viewMode.list", "List view")}
+              >
+                <ViewListRounded fontSize="small" />
+              </ToggleButton>
             </ToggleButtonGroup>
           </Box>
 
           {isLoading && <CardGridSkeleton />}
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.itemBrowser.loadError", "Failed to load items.")}</Alert>}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {t("wiki.itemBrowser.loadError", "Failed to load items.")}
+            </Alert>
+          )}
 
           {data && (
             <>
@@ -353,16 +565,33 @@ export function WikiItemBrowser() {
                     <TableHead>
                       <TableRow>
                         <TableCell sx={{ width: 40 }} />
-                        <TableCell>{t("wiki.itemBrowser.columnName", "Name")}</TableCell>
-                        <TableCell>{t("wiki.itemBrowser.columnType", "Type")}</TableCell>
-                        <TableCell>{t("wiki.itemBrowser.columnSize", "Size")}</TableCell>
-                        <TableCell>{t("wiki.itemBrowser.columnGrade", "Grade")}</TableCell>
-                        <TableCell>{t("wiki.itemBrowser.columnManufacturer", "Manufacturer")}</TableCell>
+                        <TableCell>
+                          {t("wiki.itemBrowser.columnName", "Name")}
+                        </TableCell>
+                        <TableCell>
+                          {t("wiki.itemBrowser.columnType", "Type")}
+                        </TableCell>
+                        <TableCell>
+                          {t("wiki.itemBrowser.columnSize", "Size")}
+                        </TableCell>
+                        <TableCell>
+                          {t("wiki.itemBrowser.columnGrade", "Grade")}
+                        </TableCell>
+                        <TableCell>
+                          {t(
+                            "wiki.itemBrowser.columnManufacturer",
+                            "Manufacturer",
+                          )}
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {data.items.map((item) => (
-                        <ItemListRow key={item.id} item={item} onClick={() => handleItemClick(item.id)} />
+                        <ItemListRow
+                          key={item.id}
+                          item={item}
+                          onClick={() => handleItemClick(item.id)}
+                        />
                       ))}
                     </TableBody>
                   </Table>
@@ -371,14 +600,26 @@ export function WikiItemBrowser() {
 
               {data.items.length === 0 && (
                 <Box sx={{ textAlign: "center", py: 6 }}>
-                  <Typography color="text.secondary">{t("wiki.itemBrowser.noResults", "No results found. Try adjusting your search.")}</Typography>
+                  <Typography color="text.secondary">
+                    {t(
+                      "wiki.itemBrowser.noResults",
+                      "No results found. Try adjusting your search.",
+                    )}
+                  </Typography>
                 </Box>
               )}
 
-              {totalPages > 1 && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" renderItem={linkedPaginationItem("/wiki/items", searchParams)} />
-                </Box>
+              {data && data.total > 0 && (
+                <NumberedPagination
+                  count={data.total}
+                  page={page - 1}
+                  rowsPerPage={pageSize}
+                  onPageChange={handlePageChange}
+                  rowsPerPageOptions={pageSizeOptions}
+                  onRowsPerPageChange={handlePageSizeChange}
+                  link={{ path: "/wiki/items", searchParams }}
+                  sx={{ mt: 3 }}
+                />
               )}
             </>
           )}

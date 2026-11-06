@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import {
   Grid,
-  Pagination,
   Alert,
   Box,
   Typography,
@@ -51,6 +50,11 @@ import {
 } from "@mui/icons-material"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+  parsePageSize,
+} from "../../components/pagination/NumberedPagination"
 
 // The API sends English display names for mining groups and location types;
 // translate the known ones, show anything else as sent.
@@ -92,6 +96,11 @@ export function MiningLocationBrowser() {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const page = parseInt(searchParams.get("page") || "1") || 1
+  const pageSize = parsePageSize(
+    searchParams.get("page_size"),
+    CARD_GRID_PAGE_SIZE_OPTIONS,
+    PAGE_SIZE,
+  )
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
   const searchTokens = useMemo(
@@ -108,9 +117,18 @@ export function MiningLocationBrowser() {
     setSearchParams(params, { replace: true })
   }
 
-  const handlePageChange = (_: unknown, p: number) => {
+  const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams)
-    params.set("page", String(p))
+    if (newPage > 0) params.set("page", String(newPage + 1))
+    else params.delete("page")
+    setSearchParams(params, { replace: true })
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+  const handlePageSizeChange = (size: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.delete("page")
+    if (size === PAGE_SIZE) params.delete("page_size")
+    else params.set("page_size", String(size))
     setSearchParams(params, { replace: true })
   }
 
@@ -145,7 +163,7 @@ export function MiningLocationBrowser() {
       (queryParams.location_type as "surface" | "asteroidfield" | undefined) ||
       undefined,
     page,
-    pageSize: PAGE_SIZE,
+    pageSize,
   })
   // Primary content: drives main[data-ready].
   usePageReady(
@@ -201,15 +219,17 @@ export function MiningLocationBrowser() {
               </Typography>
             </Box>
           )}
-          {data.total > PAGE_SIZE && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <Pagination
-                count={Math.ceil(data.total / PAGE_SIZE)}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
-            </Box>
+          {data.total > 0 && (
+            <NumberedPagination
+              count={data.total}
+              page={page - 1}
+              rowsPerPage={pageSize}
+              onPageChange={handlePageChange}
+              rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+              onRowsPerPageChange={handlePageSizeChange}
+              link={{ path: GAME_DATA_PATHS.miningLocations, searchParams }}
+              sx={{ mt: 2 }}
+            />
           )}
         </>
       )}

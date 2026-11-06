@@ -8,7 +8,6 @@ import {
   Grid,
   TextField,
   MenuItem,
-  Pagination,
   CircularProgress,
   Alert,
   Box,
@@ -30,6 +29,10 @@ import { ResourceCard } from "../../components/game-data/ResourceCard"
 import { useDebounce } from "../../hooks/useDebounce"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { resourcesSeoText } from "../../seo/hubHeads"
+import {
+  CARD_GRID_PAGE_SIZE_OPTIONS,
+  NumberedPagination,
+} from "../../components/pagination/NumberedPagination"
 
 export function ResourceBrowser() {
   const { t } = useTranslation()
@@ -41,6 +44,7 @@ export function ResourceBrowser() {
     "" | "mined" | "purchased" | "salvaged" | "looted"
   >("")
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(24)
 
   const debouncedSearch = useDebounce(searchText, 300)
 
@@ -49,7 +53,7 @@ export function ResourceBrowser() {
     resourceCategory: category || undefined,
     acquisitionMethod: acquisition || undefined,
     page,
-    pageSize: 24,
+    pageSize,
   })
 
   const { data: categories } = useGetResourceCategoriesQuery({})
@@ -184,15 +188,22 @@ export function ResourceBrowser() {
                 </Box>
               )}
 
-              {data.total > 24 && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                  <Pagination
-                    count={Math.ceil(data.total / 24)}
-                    page={page}
-                    onChange={(_, p) => setPage(p)}
-                    color="primary"
-                  />
-                </Box>
+              {data.total > 0 && (
+                <NumberedPagination
+                  count={data.total}
+                  page={page - 1}
+                  rowsPerPage={pageSize}
+                  onPageChange={(newPage) => {
+                    setPage(newPage + 1)
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                  rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+                  onRowsPerPageChange={(size) => {
+                    setPageSize(size)
+                    setPage(1)
+                  }}
+                  sx={{ mt: 2 }}
+                />
               )}
             </>
           )}
