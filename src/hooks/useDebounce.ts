@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useMemo } from "react"
 import debounce from "lodash/debounce"
 
 /**
@@ -15,21 +15,17 @@ import debounce from "lodash/debounce"
  */
 export function useDebounce<T>(value: T, delay: number = 400): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
-  const debouncedUpdate = useRef(
-    debounce((newValue: T) => {
-      setDebouncedValue(newValue)
-    }, delay),
+  const debouncedUpdate = useMemo(
+    () => debounce((newValue: T) => setDebouncedValue(newValue), delay),
+    [delay],
   )
 
   useEffect(() => {
-    debouncedUpdate.current(value)
-  }, [value])
+    debouncedUpdate(value)
+  }, [value, debouncedUpdate])
 
-  useEffect(() => {
-    return () => {
-      debouncedUpdate.current.cancel()
-    }
-  }, [])
+  // Cancel a pending update on unmount (and when the delay changes).
+  useEffect(() => () => debouncedUpdate.cancel(), [debouncedUpdate])
 
   return debouncedValue
 }

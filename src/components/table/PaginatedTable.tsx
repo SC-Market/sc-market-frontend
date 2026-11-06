@@ -469,7 +469,7 @@ export function ControlledTable<T>(props: {
         })
       }
     },
-    [ref],
+    [isVisible, onPageChange],
   )
 
   const handleChangeRowsPerPage = (rowsPerPage: number) => {

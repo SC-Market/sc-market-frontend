@@ -150,10 +150,10 @@ export function PreferencesControls() {
 
   const [selectedFont, setSelectedFont] = useState(getStoredFont)
 
-  // Apply stored font on mount
+  // Apply the chosen font (the stored one on mount; "" restores the default)
   useEffect(() => {
-    if (selectedFont) applyFont(selectedFont)
-  }, [])
+    applyFont(selectedFont)
+  }, [selectedFont])
 
   const handleFontChange = useCallback((value: string) => {
     setSelectedFont(value)
@@ -162,7 +162,6 @@ export function PreferencesControls() {
     } catch {
       /* Storage unavailable: the font still applies for this visit. */
     }
-    applyFont(value)
   }, [])
 
   const themeNames = useMemo(() => Array.from(CUSTOM_THEMES.keys()), [])

@@ -47,6 +47,18 @@ export function ImagePreviewModal(props: {
     }
   }, [open])
 
+  const handlePrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
+  }, [images.length])
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
+  }, [images.length])
+
+  const handleThumbnailClick = useCallback((index: number) => {
+    setCurrentIndex(index)
+  }, [])
+
   // Keyboard navigation
   useEffect(() => {
     if (!open) return
@@ -63,19 +75,7 @@ export function ImagePreviewModal(props: {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [open, currentIndex, images.length])
-
-  const handlePrevious = useCallback(() => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
-  }, [images.length])
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
-  }, [images.length])
-
-  const handleThumbnailClick = useCallback((index: number) => {
-    setCurrentIndex(index)
-  }, [])
+  }, [open, handlePrevious, handleNext, onClose])
 
   // Use BottomSheet on mobile, Modal on desktop
   if (isMobile) {

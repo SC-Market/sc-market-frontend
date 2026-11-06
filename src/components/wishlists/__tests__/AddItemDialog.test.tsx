@@ -36,9 +36,10 @@ vi.mock("../../../store/api/v2/market", () => ({
   })),
 }))
 
-// Mock lodash debounce
+// Mock lodash debounce: calls straight through (and can be cancelled)
 vi.mock("lodash", () => ({
-  debounce: <F,>(fn: F) => fn,
+  debounce: <A extends unknown[]>(fn: (...args: A) => void) =>
+    Object.assign((...args: A) => fn(...args), { cancel: () => {} }),
 }))
 
 describe("AddItemDialog", () => {

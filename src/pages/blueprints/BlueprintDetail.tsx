@@ -146,7 +146,7 @@ export function BlueprintDetail() {
     if (ingredients.length && qualities.length !== ingredients.length) {
       setQualities(qualityRanges.map((r) => Math.round((r.min + r.max) / 2)))
     }
-  }, [ingredients.length])
+  }, [ingredients.length, qualities.length, qualityRanges])
 
   const setQuality = (idx: number, v: number) =>
     setQualities((prev) =>

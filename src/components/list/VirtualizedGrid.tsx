@@ -61,7 +61,6 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
 
   const theme = useTheme<ExtendedTheme>()
   const isXs = useBreakpointDown("sm")
-  const isSm = useBreakpointBetween("sm", "md")
   const isMd = useBreakpointBetween("md", "lg")
   const isLg = useBreakpointBetween("lg", "xl")
   const isXl = useBreakpointBetween("xl", "xxl")
@@ -78,7 +77,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     if (isXl) return columns.xl || 4
     if (isXxl) return columns.xxl || 5
     return columns.xs || 1
-  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, columns])
+  }, [isXs, isMd, isLg, isXl, isXxl, isBelowMd, columns])
 
   // Determine gap value based on breakpoint
   const gapValue = useMemo(() => {
@@ -99,7 +98,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
       return gap.xs ?? 2
     }
     return 2 // Default
-  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, gap])
+  }, [isXs, isMd, isLg, isXl, isXxl, isBelowMd, gap])
 
   // Determine item height based on breakpoint
   const heightValue = useMemo(() => {
@@ -168,7 +167,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
       return itemHeight.xs ?? 400
     }
     return 400 // Default
-  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, itemHeight])
+  }, [isXs, isMd, isLg, isXl, isXxl, isBelowMd, itemHeight])
 
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)

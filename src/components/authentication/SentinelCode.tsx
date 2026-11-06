@@ -12,7 +12,8 @@ export function SentinelCode({ code }: SentinelCodeProps) {
 
   return (
     <Tooltip title={t("authenticateRSI.click_to_copy", "Click to copy")}>
-      <span
+      <button
+        type="button"
         onClick={async () => {
           try {
             await navigator.clipboard.writeText(code)
@@ -21,6 +22,8 @@ export function SentinelCode({ code }: SentinelCodeProps) {
           }
         }}
         style={{
+          font: "inherit",
+          border: "none",
           color: theme.palette.primary.main,
           backgroundColor: theme.palette.action.hover,
           padding: "2px 6px",
@@ -31,7 +34,7 @@ export function SentinelCode({ code }: SentinelCodeProps) {
         }}
       >
         {code}
-      </span>
+      </button>
     </Tooltip>
   )
 }

@@ -41,7 +41,7 @@ import {
   cacheOrgTheme,
   buildOrgTheme,
 } from "./styles/themeCache"
-import { useLocation, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../features/profile/api/profileApi"
 import { startProactiveRefresh } from "../store/proactiveRefresh"
@@ -72,7 +72,6 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     useHydratedInitialState<ThemeChoice>(
       hydrated ? cookies.theme || "system" : renderedTheme,
     )
-  const location = useLocation()
   const { i18n } = useTranslation()
   const dispatch = useAppDispatch()
   const { isCustomDomain, customOrg } = useCustomDomain()
@@ -135,7 +134,6 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     return actualTheme === "light" ? CLEAN_theme : mainTheme
   }, [
     actualTheme,
-    location.pathname,
     isDev,
     isAdmin,
     useLightTheme,
@@ -365,7 +363,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
       searchParams.delete("error_description")
       setSearchParams(searchParams, { replace: true })
     }
-  }, [searchParams, setSearchParams, issueAlert, t, isCitizenIdEnabled])
+  }, [searchParams, setSearchParams, issueAlert, t])
 
   // The white-label domain: resolved from the request on a server render
   // (the SSR Function's `host` variant), from the page and its cache in the

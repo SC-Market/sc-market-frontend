@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useMemo } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import {
   Typography,
@@ -204,7 +204,7 @@ export function AdminGameDataImportView() {
 
   // Fetch all jobs — poll fast if any are running
   const { data: jobsData, refetch } = useListGameDataImportJobsQuery()
-  const jobs = jobsData?.jobs ?? []
+  const jobs = useMemo(() => jobsData?.jobs ?? [], [jobsData?.jobs])
   const hasRunning = jobs.some((j) => j.status !== "completed" && j.status !== "failed")
 
   // Poll faster when jobs are running

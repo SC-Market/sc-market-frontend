@@ -117,7 +117,13 @@ export function OrderRow(props: {
   hasSelectedItems?: boolean
 }) {
   const fmt = useFormatters()
-  const { row, index, isItemSelected, hasSelectedItems = false } = props // TODO: Add `assigned_to` column
+  const {
+    row,
+    index,
+    isItemSelected,
+    hasSelectedItems = false,
+    onClick,
+  } = props // TODO: Add `assigned_to` column
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
@@ -152,14 +158,14 @@ export function OrderRow(props: {
   // Long-press handler - on mobile, directly toggles selection
   const handleLongPressForSelection = useCallback(
     (event: React.MouseEvent | React.TouchEvent) => {
-      if (isMobile && props.onClick) {
+      if (isMobile && onClick) {
         // On mobile, long-press directly toggles selection
         event.preventDefault()
         event.stopPropagation()
-        props.onClick(event as React.MouseEvent)
+        onClick(event as React.MouseEvent)
       }
     },
-    [isMobile, props.onClick],
+    [isMobile, onClick],
   )
 
   const longPressHandlers = useLongPress({
@@ -210,9 +216,7 @@ export function OrderRow(props: {
       data-testid="order-row"
       data-id={row.order_id}
       hover
-      onClick={
-        isInSelectionMode ? props.onClick : isMobile ? undefined : props.onClick
-      }
+      onClick={isInSelectionMode ? onClick : isMobile ? undefined : onClick}
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
@@ -255,9 +259,9 @@ export function OrderRow(props: {
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             e.stopPropagation()
-            if (props.onClick) {
+            if (onClick) {
               // Leverage the table's selection handler
-              props.onClick(e as unknown as React.MouseEvent<Element>)
+              onClick(e as unknown as React.MouseEvent<Element>)
             }
           }}
         />
@@ -265,7 +269,7 @@ export function OrderRow(props: {
       <TableCell
         onClick={
           isInSelectionMode
-            ? props.onClick
+            ? onClick
             : isMobile
               ? () => navigate(ORDER_PATHS.contract(row.order_id))
               : undefined
@@ -517,23 +521,26 @@ export function OrdersTableView(props: {
   // Order lists are primary content on the orders and dashboard pages.
   usePageReady(awaitingData)
 
-  const tabs: [string, string][] = [
-    ["all", t("orders.tabs.all")],
-    ...(unassigned !== undefined
-      ? [
-          ["unassigned", t("orders.tabs.unclaimed", "Unclaimed")] as [
-            string,
-            string,
-          ],
-        ]
-      : []),
-    ["active", t("orders.tabs.active")],
-    ["past", t("orders.tabs.past")],
-    ["fulfilled", t("orders.tabs.fulfilled")],
-    ["in-progress", t("orders.tabs.inProgress")],
-    ["not-started", t("orders.tabs.notStarted")],
-    ["cancelled", t("orders.tabs.cancelled")],
-  ]
+  const tabs = useMemo(
+    (): [string, string][] => [
+      ["all", t("orders.tabs.all")],
+      ...(unassigned !== undefined
+        ? [
+            ["unassigned", t("orders.tabs.unclaimed", "Unclaimed")] as [
+              string,
+              string,
+            ],
+          ]
+        : []),
+      ["active", t("orders.tabs.active")],
+      ["past", t("orders.tabs.past")],
+      ["fulfilled", t("orders.tabs.fulfilled")],
+      ["in-progress", t("orders.tabs.inProgress")],
+      ["not-started", t("orders.tabs.notStarted")],
+      ["cancelled", t("orders.tabs.cancelled")],
+    ],
+    [t, unassigned],
+  )
 
   const tab = useMemo(
     () => tabs.findIndex(([id]) => id === statusFilter),

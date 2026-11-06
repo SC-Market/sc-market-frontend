@@ -62,7 +62,7 @@ export function Messages() {
       // On desktop, always show sidebar
       setMessageSidebar(true)
     }
-  }, [isMobile, chat_id])
+  }, [isMobile, chat_id, setMessageSidebar])
 
   return (
     <Page

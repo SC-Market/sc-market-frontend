@@ -249,19 +249,18 @@ const GroupedListingGridInner = React.forwardRef<
 
   // Reactively track which breakpoints are active (largest → smallest). Hooks
   // must run unconditionally, so query every key regardless of gridBreakpoints.
-  const up: Record<string, boolean> = {
-    xs: useBreakpointUp("xs"),
-    sm: useBreakpointUp("sm"),
-    md: useBreakpointUp("md"),
-    lg: useBreakpointUp("lg"),
-    xl: useBreakpointUp("xl"),
-    xxl: useBreakpointUp("xxl"),
-    xxxl: useBreakpointUp("xxxl"),
-  }
+  const xs = useBreakpointUp("xs")
+  const sm = useBreakpointUp("sm")
+  const md = useBreakpointUp("md")
+  const lg = useBreakpointUp("lg")
+  const xl = useBreakpointUp("xl")
+  const xxl = useBreakpointUp("xxl")
+  const xxxl = useBreakpointUp("xxxl")
 
   // Columns per row = 12 / (active span). Walk largest → smallest to find the
   // biggest breakpoint that is both active AND defined in gridBreakpoints.
   const columns = useMemo(() => {
+    const up: Record<string, boolean> = { xs, sm, md, lg, xl, xxl, xxxl }
     for (const bp of BP_ORDER) {
       if (up[bp] && gridBreakpoints[bp] != null) {
         const span = gridBreakpoints[bp]
@@ -271,7 +270,7 @@ const GroupedListingGridInner = React.forwardRef<
     // Fall back to md-equivalent if nothing matched.
     const span = gridBreakpoints.md ?? 4
     return span > 0 ? Math.max(1, Math.round(12 / span)) : 1
-  }, [up, gridBreakpoints])
+  }, [xs, sm, md, lg, xl, xxl, xxxl, gridBreakpoints])
 
   // When a card is expanded, hoist it to the start of its own row so the earlier
   // cards in that row flow AFTER the full-width panel (bumped down, no gap).

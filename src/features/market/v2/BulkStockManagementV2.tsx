@@ -354,6 +354,48 @@ function QuantityEditCell(params: GridRenderEditCellParams) {
   )
 }
 
+// Location edit cell: picks one of the locations the lots are at
+function LocationEditCell(
+  props: GridRenderEditCellParams & { locations: LocationInfo[] },
+) {
+  const { t } = useTranslation()
+  const { id, value, field, locations } = props
+  const apiRef = useGridApiContext()
+  const [inputValue, setInputValue] = useState("")
+  const filtered = locations.filter((l) =>
+    l.name.toLowerCase().includes(inputValue.toLowerCase()),
+  )
+  const selected = locations.find((l) => l.location_id === value) ?? null
+
+  return (
+    <Autocomplete
+      value={selected}
+      onChange={(_, v) =>
+        apiRef.current.setEditCellValue({
+          id,
+          field,
+          value: v?.location_id ?? null,
+        })
+      }
+      inputValue={inputValue}
+      onInputChange={(_, v) => setInputValue(v)}
+      options={filtered}
+      getOptionLabel={(o) => o.name}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          size="medium"
+          placeholder={t("AllStockLots.selectLocation", "Select location...")}
+        />
+      )}
+      fullWidth
+      size="medium"
+      disablePortal={false}
+      sx={{ height: "100%" }}
+    />
+  )
+}
+
 function AllStockLotsGridV2() {
   const { t } = useTranslation()
   const { filters } = useStockFilter()
@@ -405,48 +447,11 @@ function AllStockLotsGridV2() {
     return Array.from(map.values())
   }, [lots])
 
-  // Location edit cell
-  function LocationEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = useState("")
-    const filtered = locations.filter((l) =>
-      l.name.toLowerCase().includes(inputValue.toLowerCase()),
-    )
-    const selected = locations.find((l) => l.location_id === value) ?? null
-
-    return (
-      <Autocomplete
-        value={selected}
-        onChange={(_, v) =>
-          apiRef.current.setEditCellValue({
-            id,
-            field,
-            value: v?.location_id ?? null,
-          })
-        }
-        inputValue={inputValue}
-        onInputChange={(_, v) => setInputValue(v)}
-        options={filtered}
-        getOptionLabel={(o) => o.name}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            size="medium"
-            placeholder={t("AllStockLots.selectLocation", "Select location...")}
-          />
-        )}
-        fullWidth
-        size="medium"
-        disablePortal={false}
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
   const renderLocationEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
-    [locations, t],
+    (props: GridRenderEditCellParams) => (
+      <LocationEditCell {...props} locations={locations} />
+    ),
+    [locations],
   )
 
   // Quality edit cell for tiered mode

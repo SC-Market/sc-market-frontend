@@ -604,7 +604,6 @@ export function SidebarV2() {
     selectedOrgId,
     selectedContractor,
     profile,
-    shops,
     t,
     pendingOrderCount,
     unreadChatCount,

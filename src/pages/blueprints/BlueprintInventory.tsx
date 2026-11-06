@@ -17,7 +17,7 @@ export function BlueprintInventory() {
     navigate(`${GAME_DATA_PATHS.blueprints}?${params.toString()}`, {
       replace: true,
     })
-  }, [])
+  }, [navigate, searchParams])
 
   return null
 }

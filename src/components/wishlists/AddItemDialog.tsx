@@ -5,7 +5,7 @@
  * priority, notes, and buy/craft acquisition mode.
  */
 
-import React, { useState, useCallback } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
   Dialog,
   DialogTitle,
@@ -91,10 +91,8 @@ export function AddItemDialog({
   )
   const hasCraftingOption = itemBlueprints.length > 0
 
-  const debouncedSetSearchQuery = useCallback(
-    debounce((value: string) => setSearchQuery(value), 300),
-    [],
-  )
+  const debouncedSearch = useMemo(() => debounce(setSearchQuery, 300), [])
+  useEffect(() => () => debouncedSearch.cancel(), [debouncedSearch])
 
   const resetForm = () => {
     setSelectedItem(null)
@@ -193,7 +191,7 @@ export function AddItemDialog({
             size="small"
             value={selectedItem}
             onChange={handleItemChange}
-            onInputChange={(_, v) => debouncedSetSearchQuery(v)}
+            onInputChange={(_, v) => debouncedSearch(v)}
             options={searchResults}
             getOptionLabel={(o) => o.name}
             loading={isSearching}

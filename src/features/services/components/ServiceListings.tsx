@@ -98,7 +98,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     if (!servicesResponse?.data) return []
     // Scoped by the query on a white-label domain (contractor above).
     return servicesResponse.data
-  }, [servicesResponse?.data, contractor, user, customOrg])
+  }, [servicesResponse?.data])
 
   // Only the first screen of cards in the commit that shows the services;
   // the rest right after (components/grid/firstScreen.tsx). The row gap is

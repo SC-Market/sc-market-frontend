@@ -455,27 +455,30 @@ function ShopListingsGridV2({
     [newRows],
   )
 
-  const handleSaveClick = (id: GridRowId) => async () => {
-    const editing = editingRows[id as string]
-    if (!editing) return
+  const handleSaveClick = useCallback(
+    (id: GridRowId) => async () => {
+      const editing = editingRows[id as string]
+      if (!editing) return
 
-    const nr = newRows.find((r) => r.id === id)
-    const existing = listings.find((l) => l.listing_id === id.toString())
+      const nr = newRows.find((r) => r.id === id)
+      const existing = listings.find((l) => l.listing_id === id.toString())
 
-    if (nr?.isNew) {
-      if (!(await createRow(editing))) return
-      setNewRows((prev) => prev.filter((r) => r.id !== id))
-    } else if (existing) {
-      if (!(await saveRow(existing, editing))) return
-    }
+      if (nr?.isNew) {
+        if (!(await createRow(editing))) return
+        setNewRows((prev) => prev.filter((r) => r.id !== id))
+      } else if (existing) {
+        if (!(await saveRow(existing, editing))) return
+      }
 
-    setEditingRows((prev) => {
-      const copy = { ...prev }
-      delete copy[id as string]
-      return copy
-    })
-    setRowModesModel((old) => ({ ...old, [id]: { mode: GridRowModes.View } }))
-  }
+      setEditingRows((prev) => {
+        const copy = { ...prev }
+        delete copy[id as string]
+        return copy
+      })
+      setRowModesModel((old) => ({ ...old, [id]: { mode: GridRowModes.View } }))
+    },
+    [editingRows, newRows, listings, createRow, saveRow],
+  )
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -1029,7 +1032,7 @@ export function StockManagerV2() {
     shopId: shop.shop_id,
   })
 
-  const listings = data?.listings ?? []
+  const listings = useMemo(() => data?.listings ?? [], [data?.listings])
   const canManage = canEditShopListings(shop)
   const [importOpen, setImportOpen] = useState(false)
 

@@ -1,17 +1,12 @@
 {
-  "warnings": 786,
+  "warnings": 752,
   "errors": 0,
   "byRule": {
-    "@typescript-eslint/ban-ts-comment": 3,
     "@typescript-eslint/no-restricted-imports": 96,
-    "@typescript-eslint/no-unused-vars": 271,
-    "jsx-a11y/anchor-is-valid": 1,
-    "jsx-a11y/click-events-have-key-events": 1,
-    "jsx-a11y/no-static-element-interactions": 1,
+    "@typescript-eslint/no-unused-vars": 270,
     "max-lines": 75,
     "no-restricted-imports": 48,
     "no-restricted-syntax": 142,
-    "react-hooks/exhaustive-deps": 27,
     "scm-style/no-hex-colors": 121
   }
 }

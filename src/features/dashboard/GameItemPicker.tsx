@@ -5,7 +5,7 @@
  * useSearchGameItemsQuery with a debounced query, option `.id` = game_item_id.
  */
 
-import { useCallback, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Autocomplete,
   Box,
@@ -35,10 +35,8 @@ export function GameItemPicker({ value, onChange }: GameItemPickerProps) {
     { skip: query.length < 2 },
   )
 
-  const debouncedSetQuery = useCallback(
-    debounce((value: string) => setQuery(value), 300),
-    [],
-  )
+  const debouncedSetQuery = useMemo(() => debounce(setQuery, 300), [])
+  useEffect(() => () => debouncedSetQuery.cancel(), [debouncedSetQuery])
 
   return (
     <Autocomplete

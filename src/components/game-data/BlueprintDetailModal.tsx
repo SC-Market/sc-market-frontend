@@ -157,7 +157,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   React.useEffect(() => {
     if (ingredients.length && qualities.length !== ingredients.length)
       setQualities(qualityRanges.map((r) => Math.round((r.min + r.max) / 2)))
-  }, [ingredients.length])
+  }, [ingredients.length, qualities.length, qualityRanges])
 
   const setQuality = (idx: number, v: number) => {
     const r = qualityRanges[idx] || { min: 0, max: 1000 }

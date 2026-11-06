@@ -207,29 +207,30 @@ export function ReportButton({
 
   return (
     <>
-      <a
-        href={"#"}
-        style={{ textDecoration: "none", color: "inherit" }}
+      <Box
+        component="button"
+        type="button"
+        sx={{
+          all: "unset",
+          cursor: "pointer",
+          color: "inherit",
+          "&:focus-visible": {
+            outline: "2px solid",
+            outlineOffset: 2,
+          },
+        }}
         onClick={handleOpen}
-        role="button"
-        tabIndex={0}
         aria-label={t("accessibility.reportContent", "Report this content")}
         aria-describedby="report-button-description"
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault()
-            handleOpen()
-          }
-        }}
       >
-        <UnderlineLink>{children}</UnderlineLink>
+        <UnderlineLink component="span">{children}</UnderlineLink>
         <span id="report-button-description" className="sr-only">
           {t(
             "accessibility.reportContentDescription",
             "Open report dialog to report inappropriate content",
           )}
         </span>
-      </a>
+      </Box>
 
       {/* On mobile, use BottomSheet */}
       {isMobile ? (

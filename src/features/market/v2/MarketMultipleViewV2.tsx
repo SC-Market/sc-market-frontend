@@ -267,7 +267,7 @@ export function MarketMultipleViewV2() {
       }
     }
     return total
-  }, [complete?.items, selectedVariants])
+  }, [complete, selectedVariants])
 
   // Check if all items have variants selected
   const allVariantsSelected = useMemo(() => {
@@ -275,7 +275,7 @@ export function MarketMultipleViewV2() {
     return complete.items.every((item) => {
       return selectedVariants[item.item_id] || item.variants.length === 1
     })
-  }, [complete?.items, selectedVariants])
+  }, [complete, selectedVariants])
 
   // Handle variant selection
   const handleVariantChange = (itemId: string, variantId: string | null) => {

@@ -111,11 +111,12 @@ export function useCreateServiceForm(service?: Service) {
     }
   }, [service])
 
+  const servicePhotos = service?.photos
   useEffect(() => {
-    if (service?.photos) {
-      setState((prev) => ({ ...prev, photos: service!.photos }))
+    if (servicePhotos) {
+      setState((prev) => ({ ...prev, photos: servicePhotos }))
     }
-  }, [service?.photos])
+  }, [servicePhotos])
 
   // Starmap suggestions
   const getSuggestions = useCallback(
