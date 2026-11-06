@@ -372,7 +372,6 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
             photos={photos}
             onFileUpload={handleFileUpload}
             onAlert={(severity, message) => issueAlert({ severity, message })}
-            onImageUploaded={() => {}}
             uploadedImages={uploadedImages}
             onRemoveUploadedImage={handleRemoveUploadedImage}
           />

@@ -260,7 +260,6 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
               series={timeToSaleData}
               height={400}
               xAxisType="category"
-              smooth={true}
             />
           </Grid>
         </Section>
@@ -300,7 +299,6 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
               series={pricePremiumData}
               height={400}
               xAxisType="category"
-              smooth={true}
             />
           </Grid>
         </Section>

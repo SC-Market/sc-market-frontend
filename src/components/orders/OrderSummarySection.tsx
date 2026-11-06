@@ -7,7 +7,6 @@ import { useFormatters } from "../../util/format"
 
 interface OrderSummarySectionProps {
   market_listings?: OfferMarketListing[]
-  total_cost: number
   offerChanges?: OfferChanges | null
 }
 

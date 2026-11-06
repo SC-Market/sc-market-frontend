@@ -48,7 +48,7 @@ describe("OrderSummarySectionV2", () => {
   ]
 
   it("renders order summary with item details", () => {
-    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
+    render(<OrderSummarySectionV2 items={mockItems} />)
 
     // Check title
     expect(screen.getByText("Order Summary")).toBeInTheDocument()
@@ -71,7 +71,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("displays listing titles", () => {
-    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
+    render(<OrderSummarySectionV2 items={mockItems} />)
 
     // Listing titles should be rendered
     expect(screen.getByText("Test Listing 1")).toBeInTheDocument()
@@ -89,11 +89,7 @@ describe("OrderSummarySectionV2", () => {
     }
 
     render(
-      <OrderSummarySectionV2
-        items={mockItems}
-        total_cost={2500}
-        offerChanges={offerChanges}
-      />,
+      <OrderSummarySectionV2 items={mockItems} offerChanges={offerChanges} />,
     )
 
     // Should show NEW! chip for added listing
@@ -112,11 +108,7 @@ describe("OrderSummarySectionV2", () => {
     }
 
     render(
-      <OrderSummarySectionV2
-        items={mockItems}
-        total_cost={2500}
-        offerChanges={offerChanges}
-      />,
+      <OrderSummarySectionV2 items={mockItems} offerChanges={offerChanges} />,
     )
 
     // Should show old quantity
@@ -128,24 +120,20 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("calculates total from item subtotals", () => {
-    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
+    render(<OrderSummarySectionV2 items={mockItems} />)
 
     // Total should be sum of subtotals (2000 + 500 = 2500)
     expect(screen.getByText(/2,500/)).toBeInTheDocument()
   })
 
   it("returns null when no items provided", () => {
-    const { container } = render(
-      <OrderSummarySectionV2 items={[]} total_cost={0} />,
-    )
+    const { container } = render(<OrderSummarySectionV2 items={[]} />)
 
     expect(container.firstChild).toBeNull()
   })
 
   it("returns null when items is undefined", () => {
-    const { container } = render(
-      <OrderSummarySectionV2 items={undefined} total_cost={0} />,
-    )
+    const { container } = render(<OrderSummarySectionV2 items={undefined} />)
 
     expect(container.firstChild).toBeNull()
   })
@@ -171,9 +159,7 @@ describe("OrderSummarySectionV2", () => {
       },
     ]
 
-    render(
-      <OrderSummarySectionV2 items={itemsWithoutQuality} total_cost={100} />,
-    )
+    render(<OrderSummarySectionV2 items={itemsWithoutQuality} />)
 
     // Should render listing title
     expect(screen.getByText("Looted Item Listing")).toBeInTheDocument()
@@ -200,9 +186,7 @@ describe("OrderSummarySectionV2", () => {
       },
     ]
 
-    render(
-      <OrderSummarySectionV2 items={expensiveItems} total_cost={10000000} />,
-    )
+    render(<OrderSummarySectionV2 items={expensiveItems} />)
 
     // Should format with commas
     expect(screen.getByText(/1,000,000 aUEC × 10/)).toBeInTheDocument()
@@ -210,9 +194,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("maintains visual parity with V1 structure", () => {
-    const { container } = render(
-      <OrderSummarySectionV2 items={mockItems} total_cost={2500} />,
-    )
+    const { container } = render(<OrderSummarySectionV2 items={mockItems} />)
 
     // Check for key structural elements matching V1
     const box = container.querySelector('[class*="MuiBox"]')
@@ -226,7 +208,7 @@ describe("OrderSummarySectionV2", () => {
   })
 
   it("displays links to listing pages", () => {
-    render(<OrderSummarySectionV2 items={mockItems} total_cost={2500} />)
+    render(<OrderSummarySectionV2 items={mockItems} />)
 
     // Check for listing links — uses formatMarketUrl which produces slug-based URLs
     const links = screen.getAllByRole("link")

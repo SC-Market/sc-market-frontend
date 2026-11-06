@@ -421,14 +421,10 @@ export function OrderDetailsArea(props: { order: Order }) {
                   {!hasV2Items && (
                     <OrderSummarySection
                       market_listings={order.market_listings}
-                      total_cost={+order.cost}
                     />
                   )}
                   {hasV2Items && (
-                    <OrderSummarySectionV2
-                      items={orderDetailV2!.items}
-                      total_cost={orderDetailV2!.total_price}
-                    />
+                    <OrderSummarySectionV2 items={orderDetailV2!.items} />
                   )}
                 </Stack>
               </TableCell>

@@ -53,12 +53,7 @@ import { OrderItemDetail } from "../../store/api/v2/market"
 function OrderDetailsPage() {
   const { data: orderDetail } = useGetOrderDetailQuery(orderId)
 
-  return (
-    <OrderSummarySectionV2
-      items={orderDetail.items}
-      total_cost={orderDetail.total_price}
-    />
-  )
+  return <OrderSummarySectionV2 items={orderDetail.items} />
 }
 ```
 
@@ -77,7 +72,6 @@ function CounterOfferView() {
   return (
     <OrderSummarySectionV2
       items={currentOffer.items}
-      total_cost={currentOffer.total_price}
       offerChanges={offerChanges}
     />
   )
@@ -90,10 +84,10 @@ The component automatically returns `null` when no items are provided:
 
 ```tsx
 // Returns null - no rendering
-<OrderSummarySectionV2 items={[]} total_cost={0} />
+<OrderSummarySectionV2 items={[]} />
 
 // Returns null - no rendering
-<OrderSummarySectionV2 items={undefined} total_cost={0} />
+<OrderSummarySectionV2 items={undefined} />
 ```
 
 ## Props
@@ -103,7 +97,6 @@ The component automatically returns `null` when no items are provided:
 | Prop           | Type                   | Required | Description                                 |
 | -------------- | ---------------------- | -------- | ------------------------------------------- |
 | `items`        | `OrderItemDetail[]`    | No       | Array of order items with variant details   |
-| `total_cost`   | `number`               | Yes      | Total order cost in aUEC (atomic units)     |
 | `offerChanges` | `OfferChanges \| null` | No       | Optional change tracking for counter-offers |
 
 ### OrderItemDetail Structure
@@ -214,7 +207,6 @@ Replace V1 `OrderSummarySection` with `OrderSummarySectionV2` in:
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 ;<OrderSummarySection
   market_listings={offer.market_listings} // V1 format
-  total_cost={offer.cost}
   offerChanges={changes}
 />
 
@@ -222,7 +214,6 @@ import { OrderSummarySection } from "../../components/orders/OrderSummarySection
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 ;<OrderSummarySectionV2
   items={orderDetail.items} // V2 format with variants
-  total_cost={orderDetail.total_price}
   offerChanges={changes}
 />
 ```

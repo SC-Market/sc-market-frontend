@@ -28,7 +28,6 @@ interface OrgMemberSearchProps {
   label?: string
   fullWidth?: boolean
   size?: "small" | "medium"
-  includeSelf?: boolean
   sx?: SxProps<Theme>
 }
 

@@ -172,7 +172,6 @@ export function PriceHistoryChartV2({
           height={height}
           width={width}
           xAxisType="time"
-          smooth={true}
         />
       </Box>
     </Stack>

@@ -530,7 +530,6 @@ export function OfferDetailsArea(props: {
                   {v2SummaryItems.length > 0 && (
                     <OrderSummarySectionV2
                       items={v2SummaryItems}
-                      total_cost={currentOffer.cost}
                       offerChanges={offerChanges}
                     />
                   )}

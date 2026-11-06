@@ -19,8 +19,8 @@ interface MuiLineChartProps {
   height?: number
   width?: string | number
   xAxisType?: "time" | "category"
+  /** Label on the (left) y axis, e.g. the unit */
   yAxisLabel?: string
-  smooth?: boolean
   yScaleType?: "linear" | "log"
 }
 
@@ -29,6 +29,7 @@ export function MuiLineChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
+  yAxisLabel,
   yScaleType = "linear",
 }: MuiLineChartProps) {
   const fmt = useFormatters()
@@ -58,6 +59,7 @@ export function MuiLineChart({
       yAxis={[
         {
           scaleType: yScaleType,
+          label: yAxisLabel,
           valueFormatter: (value: number) => fmt.integer(value),
         },
       ]}
@@ -86,6 +88,7 @@ export function MuiAreaChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
+  yAxisLabel,
   gradient = true,
   rightYAxis = false,
   colors,
@@ -110,6 +113,7 @@ export function MuiAreaChart({
     ? [
         {
           id: "leftAxis",
+          label: yAxisLabel,
           valueFormatter: (value: number) => fmt.integer(value),
         },
         {
@@ -119,6 +123,7 @@ export function MuiAreaChart({
       ]
     : [
         {
+          label: yAxisLabel,
           valueFormatter: (value: number) => fmt.integer(value),
         },
       ]
@@ -165,6 +170,7 @@ interface MuiBarChartProps {
   height?: number
   width?: string | number
   xAxisType?: "time" | "category"
+  /** Label on the y axis, e.g. the unit */
   yAxisLabel?: string
   colors?: string[]
   xValueFormatter?: (value: Date | number | string) => string
@@ -175,6 +181,7 @@ export function MuiBarChart({
   height = 400,
   width = "100%",
   xAxisType = "time",
+  yAxisLabel,
   colors,
   xValueFormatter,
 }: MuiBarChartProps) {
@@ -207,6 +214,7 @@ export function MuiBarChart({
       ]}
       yAxis={[
         {
+          label: yAxisLabel,
           valueFormatter: (value: number) => fmt.integer(value),
         },
       ]}

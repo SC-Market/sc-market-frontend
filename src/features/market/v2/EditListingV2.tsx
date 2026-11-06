@@ -694,9 +694,6 @@ export function EditListingV2() {
                   onAlert={(severity: "warning" | "error", message: string) =>
                     issueAlert({ severity, message })
                   }
-                  onImageUploaded={() => {
-                    // Already handled in handleFileUpload
-                  }}
                   uploadedImages={uploadedImages}
                   onRemoveUploadedImage={handleRemoveUploadedImage}
                 />

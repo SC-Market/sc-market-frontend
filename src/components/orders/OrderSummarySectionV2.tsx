@@ -13,8 +13,6 @@ import { useFormatters } from "../../util/format"
 interface OrderSummarySectionV2Props {
   /** Array of order items with variant details */
   items?: OrderItemDetail[]
-  /** Total order cost in aUEC */
-  total_cost: number
   /** Optional change tracking for counter-offers */
   offerChanges?: OfferChanges | null
 }
@@ -49,7 +47,6 @@ interface OrderSummarySectionV2Props {
  * ```tsx
  * <OrderSummarySectionV2
  *   items={orderDetail.items}
- *   total_cost={orderDetail.total_price}
  *   offerChanges={changes}
  * />
  * ```

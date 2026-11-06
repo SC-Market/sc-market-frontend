@@ -426,9 +426,6 @@ export function CreateListingV2() {
                   onAlert={(severity, message) =>
                     issueAlert({ severity, message })
                   }
-                  onImageUploaded={() => {
-                    // Already handled in handleFileUpload
-                  }}
                   uploadedImages={uploadedImages}
                   onRemoveUploadedImage={handleRemoveUploadedImage}
                 />

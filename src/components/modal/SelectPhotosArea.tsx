@@ -274,8 +274,6 @@ export function SelectPhotosArea(props: {
   pendingFiles?: File[]
   onRemovePendingFile?: (file: File) => void
   onAlert?: (severity: "warning" | "error", message: string) => void
-  /** Called when an image finishes uploading successfully (two-phase upload mode) */
-  onImageUploaded?: (resourceId: string, url: string) => void
   /** Tracked uploaded images with per-image status (two-phase upload mode) */
   uploadedImages?: UploadedImageStatus[]
   /** Called to remove an uploaded image from the tracked list */

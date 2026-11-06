@@ -79,7 +79,6 @@ interface UsePrefetchOnVisibleOptions {
   prefetchKey: string
   threshold?: number
   rootMargin?: string
-  triggerOnce?: boolean
   // Performance options
   debounceMs?: number
   maxConcurrent?: number
