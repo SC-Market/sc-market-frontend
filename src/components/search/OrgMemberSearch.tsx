@@ -10,9 +10,6 @@ import {
 } from "@mui/material"
 import type { SxProps } from "@mui/system"
 import { useTranslation } from "react-i18next"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { contractorsApi } from "../../features/contractor/api/contractorApi"
-import { useAppDispatch } from "../../store/hooks"
 import throttle from "lodash/throttle"
 
 interface OrgMember {
@@ -22,6 +19,8 @@ interface OrgMember {
 }
 
 interface OrgMemberSearchProps {
+  /** Finds members of the current org; the caller owns the data source. */
+  searchMembers: (query: string) => Promise<OrgMember[]>
   onMemberSelect: (member: OrgMember | null) => void
   placeholder?: string
   disabled?: boolean
@@ -32,6 +31,7 @@ interface OrgMemberSearchProps {
 }
 
 export function OrgMemberSearch({
+  searchMembers: findMembers,
   onMemberSelect,
   placeholder,
   disabled,
@@ -41,8 +41,6 @@ export function OrgMemberSearch({
   sx,
 }: OrgMemberSearchProps) {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const [currentOrg] = useCurrentOrg()
   const [query, setQuery] = useState("")
   const [options, setOptions] = useState<OrgMember[]>([])
   const [loading, setLoading] = useState(false)
@@ -50,21 +48,10 @@ export function OrgMemberSearch({
 
   const searchMembers = useCallback(
     async (searchQuery: string) => {
-      if (!currentOrg?.spectrum_id) {
-        setOptions([])
-        return
-      }
-
       // Show options even with empty search
       setLoading(true)
       try {
-        const { data } = await dispatch(
-          contractorsApi.endpoints.searchContractorMembers.initiate({
-            spectrum_id: currentOrg.spectrum_id,
-            query: searchQuery || "",
-          }),
-        )
-        setOptions(data || [])
+        setOptions(await findMembers(searchQuery || ""))
       } catch (error) {
         console.error("Error searching org members:", error)
         setOptions([])
@@ -72,7 +59,7 @@ export function OrgMemberSearch({
         setLoading(false)
       }
     },
-    [currentOrg?.spectrum_id, dispatch],
+    [findMembers],
   )
 
   const throttledSearch = React.useMemo(

@@ -6,8 +6,6 @@ import { Section } from "../paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useAppDispatch } from "../../store/hooks"
-import { starmapApi } from "../../store/api/starmap"
 
 export function romanize(num: number) {
   if (isNaN(num)) return NaN
@@ -70,10 +68,14 @@ export interface StarmapObject {
   }
 }
 
-export function SelectLocation() {
+export function SelectLocation({
+  searchStarmap,
+}: {
+  /** Starmap objects matching a query; the caller owns the data source. */
+  searchStarmap: (query: string) => Promise<StarmapObject[]>
+}) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
 
   const [locationSuggest, setLocationSuggest] = useState<StarmapObject[]>([])
   const [locationTarget, setLocationTarget] = useState("")
@@ -86,36 +88,27 @@ export function SelectLocation() {
         return []
       }
 
-      const result = await dispatch(
-        starmapApi.endpoints.searchStarmap.initiate({ query }),
-      )
-      if (!result.data) return []
-      const data = result.data as {
-        objects?: { resultset?: StarmapObject[] }
-        results?: StarmapObject[]
-      }
+      const results = await searchStarmap(query)
 
       const extended: StarmapObject[] = []
 
       await Promise.all(
-        (data.objects?.resultset || data.results || []).map(
-          async (obj: StarmapObject) => {
-            if (obj.type === "SATELLITE") {
-              const planetNum = obj.designation.replace(/\D/g, "")
-              const planetDes = `${obj.star_system.name} ${romanize(
-                parseInt(planetNum),
-              )}`
+        results.map(async (obj: StarmapObject) => {
+          if (obj.type === "SATELLITE") {
+            const planetNum = obj.designation.replace(/\D/g, "")
+            const planetDes = `${obj.star_system.name} ${romanize(
+              parseInt(planetNum),
+            )}`
 
-              extended.push(...(await getSuggestions(planetDes)))
-            }
-          },
-        ),
+            extended.push(...(await getSuggestions(planetDes)))
+          }
+        }),
       )
-      extended.push(...(data.objects?.resultset || data.results || []))
+      extended.push(...results)
 
       return extended
     },
-    [dispatch],
+    [searchStarmap],
   )
 
   const retrieveLocation = React.useMemo(
