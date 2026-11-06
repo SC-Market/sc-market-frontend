@@ -1,8 +1,7 @@
 {
-  "warnings": 111,
+  "warnings": 74,
   "errors": 0,
   "byRule": {
-    "@typescript-eslint/no-restricted-imports": 37,
     "max-lines": 74
   }
 }

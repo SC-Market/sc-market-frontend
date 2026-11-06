@@ -75,10 +75,12 @@ const localPlugin = {
 // See drafts/component-standard-audit.md §1.5. Start at warn with a baseline;
 // switch a folder to error once it is clean.
 const RAW_MUI = {
-  Dialog: "use BottomSheet (components/mobile) or a shared dialog component",
+  Dialog:
+    "use ResponsiveDialog or ConfirmDialog (components/dialog), or BottomSheet (components/mobile)",
   Avatar:
     "use UserAvatar / ContractorAvatar (components/avatar), which set alt",
-  Drawer: "use BottomSheet (components/mobile) or the shared nav drawers",
+  Drawer:
+    "use BottomSheet / MobileSidebarWrapper (components/mobile) or DockedSidePanel (components/sidebar)",
   Switch: "use a labelled FormControlLabel + Switch from a shared component",
 }
 const LEGACY_STORE_SLICES = [
@@ -818,15 +820,16 @@ export default [
     },
   },
 
-  // ── Guard rails: no raw MUI Dialog/Avatar/Drawer/Switch in page code (warn) ──
+  // ── Guard rails: no raw MUI Dialog/Avatar/Drawer/Switch in page code (error) ──
   // Uses the @typescript-eslint variant so it doesn't replace the
-  // no-restricted-imports boundaries configured above.
+  // no-restricted-imports boundaries configured above. Type imports
+  // (DialogProps etc.) stay allowed.
   {
     files: ["src/pages/**/*.{ts,tsx}", "src/features/**/*.{ts,tsx}"],
     ignores: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
     rules: {
       "@typescript-eslint/no-restricted-imports": [
-        "warn",
+        "error",
         {
           paths: RAW_MUI_PATHS,
         },
