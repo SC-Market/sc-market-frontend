@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
   FormGroup,
@@ -16,7 +12,6 @@ import {
   Grid,
   Chip,
 } from "@mui/material"
-import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 import { ApiToken } from "../api/tokensApi"
 import { useUpdateToken } from "../hooks/useTokenActions"
@@ -24,7 +19,7 @@ import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { isSiteAdmin } from "../../../util/siteRole"
 
 /** Catalog key for a scope's label: "market:read" -> "...labels.marketRead". */
@@ -148,7 +143,6 @@ export function EditTokenDialog({
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
 
   if (!token) return null
 
@@ -316,31 +310,17 @@ export function EditTokenDialog({
     </>
   )
 
-  // On mobile, use BottomSheet
-  if (isMobile) {
-    return (
-      <BottomSheet
-        open={open}
-        onClose={handleClose}
-        title={t("apiTokensUi.edit.title")}
-        maxHeight="90vh"
-      >
-        {dialogContent}
-        <Box
-          sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
-        >
-          {dialogActions}
-        </Box>
-      </BottomSheet>
-    )
-  }
-
-  // On desktop, use Dialog
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>{t("apiTokensUi.edit.title")}</DialogTitle>
-      <DialogContent>{dialogContent}</DialogContent>
-      <DialogActions>{dialogActions}</DialogActions>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={handleClose}
+      disableClose={isLoading}
+      maxWidth="md"
+      mobile="fullScreen"
+      title={t("apiTokensUi.edit.title")}
+      actions={dialogActions}
+    >
+      {dialogContent}
+    </ResponsiveDialog>
   )
 }

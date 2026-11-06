@@ -1,9 +1,5 @@
 import React from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   Typography,
   Box,
@@ -14,7 +10,6 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material"
-import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import {
   ContentCopyRounded as CopyIcon,
   ScheduleRounded as ScheduleIcon,
@@ -26,7 +21,7 @@ import { useGetTokenStatsQuery, ApiToken } from "../api/tokensApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { useFormatters, useNow } from "../../../util/format"
 
 interface TokenDetailsDialogProps {
@@ -44,7 +39,6 @@ export function TokenDetailsDialog({
   const fmt = useFormatters()
   const now = useNow()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
     skip: !token?.id,
   })
@@ -107,7 +101,7 @@ export function TokenDetailsDialog({
 
   const expiryStatus = getExpiryStatus(token.expires_at)
 
-  // Content to reuse in both Dialog and BottomSheet
+  // Dialog content
   const dialogContent = (
     <Grid container spacing={theme.layoutSpacing.layout}>
       <Grid item xs={12}>
@@ -329,39 +323,19 @@ export function TokenDetailsDialog({
     </Grid>
   )
 
-  // On mobile, use BottomSheet
-  if (isMobile) {
-    return (
-      <BottomSheet
-        open={open}
-        onClose={onClose}
-        title={t("apiTokensUi.details.title")}
-        maxHeight="90vh"
-      >
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
-          <SecurityIcon />
-        </Box>
-        {dialogContent}
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={onClose}>{t("apiTokensUi.close")}</Button>
-        </Box>
-      </BottomSheet>
-    )
-  }
-
-  // On desktop, use Dialog
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Box display="flex" alignItems="center" gap={1}>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      title={
+        <Box component="span" display="flex" alignItems="center" gap={1}>
           <SecurityIcon />
           {t("apiTokensUi.details.title")}
         </Box>
-      </DialogTitle>
-      <DialogContent>{dialogContent}</DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("apiTokensUi.close")}</Button>
-      </DialogActions>
-    </Dialog>
+      }
+      actions={<Button onClick={onClose}>{t("apiTokensUi.close")}</Button>}
+    >
+      {dialogContent}
+    </ResponsiveDialog>
   )
 }

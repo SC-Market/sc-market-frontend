@@ -11,11 +11,6 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Skeleton,
 } from "@mui/material"
 import {
@@ -29,6 +24,7 @@ import { useTranslation } from "react-i18next"
 import { useGetScmdbStatusQuery } from "../api/scmdbApi"
 import { useScmdbSyncActions } from "../hooks/useScmdbSyncActions"
 import { useFormatters } from "../../../util/format"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 export function ScmdbSyncSettings() {
   const { t } = useTranslation()
@@ -245,64 +241,35 @@ export function ScmdbSyncSettings() {
       </Grid>
 
       {/* Regenerate confirmation dialog */}
-      <Dialog
+      <ConfirmDialog
         open={regenerateDialogOpen}
         onClose={() => setRegenerateDialogOpen(false)}
-      >
-        <DialogTitle>
-          {t("settings.scmdb.regenerateTitle", "Regenerate Token?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t(
-              "settings.scmdb.regenerateWarning",
-              "This will invalidate your current URL. You'll need to update it in SCMDB.",
-            )}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setRegenerateDialogOpen(false)}>
-            {t("ui.cancel", "Cancel")}
-          </Button>
-          <Button
-            onClick={handleRegenerate}
-            color="primary"
-            disabled={isRegenerating}
-          >
-            {t("settings.scmdb.regenerate", "Regenerate Token")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleRegenerate}
+        title={t("settings.scmdb.regenerateTitle", "Regenerate Token?")}
+        message={t(
+          "settings.scmdb.regenerateWarning",
+          "This will invalidate your current URL. You'll need to update it in SCMDB.",
+        )}
+        cancelLabel={t("ui.cancel", "Cancel")}
+        confirmLabel={t("settings.scmdb.regenerate", "Regenerate Token")}
+        loading={isRegenerating}
+      />
 
       {/* Disconnect confirmation dialog */}
-      <Dialog
+      <ConfirmDialog
         open={disconnectDialogOpen}
         onClose={() => setDisconnectDialogOpen(false)}
-      >
-        <DialogTitle>
-          {t("settings.scmdb.disconnectTitle", "Disconnect SCMDB?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t(
-              "settings.scmdb.disconnectWarning",
-              "SCMDB will no longer be able to sync blueprints to SC Market. Your current blueprint inventory will not be affected.",
-            )}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDisconnectDialogOpen(false)}>
-            {t("ui.cancel", "Cancel")}
-          </Button>
-          <Button
-            onClick={handleDisconnect}
-            color="error"
-            disabled={isDisconnecting}
-          >
-            {t("settings.scmdb.disconnect", "Disconnect")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleDisconnect}
+        title={t("settings.scmdb.disconnectTitle", "Disconnect SCMDB?")}
+        message={t(
+          "settings.scmdb.disconnectWarning",
+          "SCMDB will no longer be able to sync blueprints to SC Market. Your current blueprint inventory will not be affected.",
+        )}
+        cancelLabel={t("ui.cancel", "Cancel")}
+        confirmLabel={t("settings.scmdb.disconnect", "Disconnect")}
+        destructive
+        loading={isDisconnecting}
+      />
     </Grid>
   )
 }

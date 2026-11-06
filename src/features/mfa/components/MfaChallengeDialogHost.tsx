@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Dialog, DialogContent, DialogTitle } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   setMfaChallengeHandler,
   type MfaChallengeKind,
 } from "../challengeBroker"
 import { MfaCodeForm } from "./MfaCodeForm"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 
 /**
  * Answers MFA challenges raised by the base query (see challengeBroker):
@@ -36,31 +36,28 @@ export function MfaChallengeDialogHost() {
   }
 
   return (
-    <Dialog
+    // stackAbove: the challenge interrupts whatever dialog made the request
+    <ResponsiveDialog
       open={kind !== null}
       onClose={() => finish(false)}
       maxWidth="xs"
-      fullWidth
-    >
-      <DialogTitle>
-        {kind === "step_up"
+      stackAbove
+      title={
+        kind === "step_up"
           ? t("mfa.stepUp.title", "Confirm it's you")
-          : t("mfa.challenge.title", "Two-factor verification")}
-      </DialogTitle>
-      <DialogContent>
-        {kind !== null && (
-          <MfaCodeForm
-            focusOnOpen
-            onVerified={() => finish(true)}
-            onCancel={() => finish(false)}
-            submitLabel={
-              kind === "step_up"
-                ? t("mfa.stepUp.confirm", "Confirm")
-                : undefined
-            }
-          />
-        )}
-      </DialogContent>
-    </Dialog>
+          : t("mfa.challenge.title", "Two-factor verification")
+      }
+    >
+      {kind !== null && (
+        <MfaCodeForm
+          focusOnOpen
+          onVerified={() => finish(true)}
+          onCancel={() => finish(false)}
+          submitLabel={
+            kind === "step_up" ? t("mfa.stepUp.confirm", "Confirm") : undefined
+          }
+        />
+      )}
+    </ResponsiveDialog>
   )
 }

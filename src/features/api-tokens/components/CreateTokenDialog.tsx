@@ -1,9 +1,5 @@
 import React, { useState } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
   FormGroup,
@@ -16,14 +12,13 @@ import {
   Divider,
   Grid,
 } from "@mui/material"
-import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { Trans, useTranslation } from "react-i18next"
 import { useCreateToken } from "../hooks/useTokenActions"
 import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { isSiteAdmin } from "../../../util/siteRole"
 
 /** Catalog key for a scope's label: "market:read" -> "...labels.marketRead". */
@@ -133,7 +128,6 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
 
   // Content to reuse
   const dialogContent = (
@@ -375,39 +369,21 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
     </>
   )
 
-  // On mobile, use BottomSheet
-  if (isMobile) {
-    return (
-      <BottomSheet
-        open={open}
-        onClose={handleClose}
-        title={
-          showToken
-            ? t("apiTokensUi.create.titleCreated")
-            : t("apiTokensUi.create.title")
-        }
-        maxHeight="90vh"
-      >
-        {dialogContent}
-        <Box
-          sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
-        >
-          {dialogActions}
-        </Box>
-      </BottomSheet>
-    )
-  }
-
-  // On desktop, use Dialog
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        {showToken
+    <ResponsiveDialog
+      open={open}
+      onClose={handleClose}
+      disableClose={isLoading}
+      maxWidth="md"
+      mobile="fullScreen"
+      title={
+        showToken
           ? t("apiTokensUi.create.titleCreated")
-          : t("apiTokensUi.create.title")}
-      </DialogTitle>
-      <DialogContent>{dialogContent}</DialogContent>
-      <DialogActions>{dialogActions}</DialogActions>
-    </Dialog>
+          : t("apiTokensUi.create.title")
+      }
+      actions={dialogActions}
+    >
+      {dialogContent}
+    </ResponsiveDialog>
   )
 }

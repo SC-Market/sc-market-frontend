@@ -1,12 +1,5 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-} from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 interface DeleteEmailDialogProps {
   open: boolean
@@ -21,21 +14,16 @@ export function DeleteEmailDialog({
 }: DeleteEmailDialogProps) {
   const { t } = useTranslation()
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("settings.email.deleteEmailDialog.title")}</DialogTitle>
-      <DialogContent>
-        <Typography variant="body2">
-          {t("settings.email.deleteEmailDialog.description")}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>
-          {t("settings.email.deleteEmailDialog.cancel")}
-        </Button>
-        <Button onClick={onConfirm} variant="contained" color="error">
-          {t("settings.email.deleteEmailDialog.confirm")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ConfirmDialog
+      open={open}
+      onClose={onClose}
+      onConfirm={onConfirm}
+      maxWidth="sm"
+      title={t("settings.email.deleteEmailDialog.title")}
+      message={t("settings.email.deleteEmailDialog.description")}
+      cancelLabel={t("settings.email.deleteEmailDialog.cancel")}
+      confirmLabel={t("settings.email.deleteEmailDialog.confirm")}
+      destructive
+    />
   )
 }

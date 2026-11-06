@@ -1,8 +1,4 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
   Typography,
@@ -11,6 +7,7 @@ import {
   Checkbox,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 
 interface AddEmailDialogProps {
@@ -41,44 +38,47 @@ export function AddEmailDialog({
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("settings.email.addEmailDialog.title")}</DialogTitle>
-      <DialogContent>
-        <TextField
-          inputRef={focusOnReveal}
-          margin="dense"
-          label={t("settings.email.emailAddress")}
-          type="email"
-          fullWidth
-          variant="outlined"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-        <Typography variant="body2" color="text.secondary" gutterBottom>
-          {t("settings.email.addEmailDialog.selectNotificationTypes")}
-        </Typography>
-        <FormGroup>
-          {availableNotificationTypes.map((type) => (
-            <FormControlLabel
-              key={type.id}
-              control={
-                <Checkbox
-                  checked={selectedNotificationTypes.includes(type.id)}
-                  onChange={() => onNotificationTypeToggle(type.id)}
-                />
-              }
-              label={type.name}
-            />
-          ))}
-        </FormGroup>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("accessibility.cancel")}</Button>
-        <Button onClick={onSubmit} variant="contained" color="primary">
-          {t("settings.email.addEmailDialog.add")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      title={t("settings.email.addEmailDialog.title")}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("accessibility.cancel")}</Button>
+          <Button onClick={onSubmit} variant="contained" color="primary">
+            {t("settings.email.addEmailDialog.add")}
+          </Button>
+        </>
+      }
+    >
+      <TextField
+        inputRef={focusOnReveal}
+        margin="dense"
+        label={t("settings.email.emailAddress")}
+        type="email"
+        fullWidth
+        variant="outlined"
+        value={email}
+        onChange={(e) => onEmailChange(e.target.value)}
+        sx={{ mb: 2 }}
+      />
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        {t("settings.email.addEmailDialog.selectNotificationTypes")}
+      </Typography>
+      <FormGroup>
+        {availableNotificationTypes.map((type) => (
+          <FormControlLabel
+            key={type.id}
+            control={
+              <Checkbox
+                checked={selectedNotificationTypes.includes(type.id)}
+                onChange={() => onNotificationTypeToggle(type.id)}
+              />
+            }
+            label={type.name}
+          />
+        ))}
+      </FormGroup>
+    </ResponsiveDialog>
   )
 }

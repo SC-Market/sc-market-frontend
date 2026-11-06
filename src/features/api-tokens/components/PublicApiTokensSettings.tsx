@@ -7,10 +7,6 @@ import {
   CardContent,
   Checkbox,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -33,6 +29,8 @@ import {
   ContentCopyRounded as ContentCopyIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 import {
   useGetPublicApiTokenOptionsQuery,
   useListPublicApiTokensQuery,
@@ -234,168 +232,174 @@ function CreatePublicTokenDialog({
 
   if (created) {
     return (
-      <Dialog open={open} onClose={close} fullWidth maxWidth="sm">
-        <DialogTitle>{t("settings.publicApi.created.title")}</DialogTitle>
-        <DialogContent>
-          <Alert severity="warning" sx={{ mb: 2 }}>
-            {t("settings.publicApi.created.warning")}
-          </Alert>
-          <TextField
-            value={created}
-            fullWidth
-            InputProps={{ readOnly: true, sx: { fontFamily: "monospace" } }}
-            onFocus={(e) => e.target.select()}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button startIcon={<ContentCopyIcon />} onClick={copy}>
-            {copied
-              ? t("settings.publicApi.created.copied")
-              : t("settings.publicApi.created.copy")}
-          </Button>
-          <Button variant="contained" onClick={close}>
-            {t("settings.publicApi.created.done")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ResponsiveDialog
+        open={open}
+        onClose={close}
+        title={t("settings.publicApi.created.title")}
+        actions={
+          <>
+            <Button startIcon={<ContentCopyIcon />} onClick={copy}>
+              {copied
+                ? t("settings.publicApi.created.copied")
+                : t("settings.publicApi.created.copy")}
+            </Button>
+            <Button variant="contained" onClick={close}>
+              {t("settings.publicApi.created.done")}
+            </Button>
+          </>
+        }
+      >
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          {t("settings.publicApi.created.warning")}
+        </Alert>
+        <TextField
+          value={created}
+          fullWidth
+          InputProps={{ readOnly: true, sx: { fontFamily: "monospace" } }}
+          onFocus={(e) => e.target.select()}
+        />
+      </ResponsiveDialog>
     )
   }
 
   const valid = name.trim().length > 0 && name.trim().length <= 100 && !!preset
 
   return (
-    <Dialog open={open} onClose={close} fullWidth maxWidth="sm">
-      <DialogTitle>{t("settings.publicApi.dialog.title")}</DialogTitle>
-      <DialogContent>
-        <Stack spacing={3} sx={{ mt: 1 }}>
-          {error && <Alert severity="error">{error}</Alert>}
-          <TextField
-            label={t("settings.publicApi.dialog.name")}
-            helperText={t("settings.publicApi.dialog.nameHelp")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            inputProps={{ maxLength: 100 }}
-            required
-            fullWidth
-          />
-          <TextField
-            label={t("settings.publicApi.dialog.description")}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            inputProps={{ maxLength: 500 }}
-            multiline
-            minRows={2}
-            fullWidth
-          />
+    <ResponsiveDialog
+      open={open}
+      onClose={close}
+      disableClose={isLoading}
+      mobile="fullScreen"
+      title={t("settings.publicApi.dialog.title")}
+      actions={
+        <>
+          <Button onClick={close}>{t("settings.publicApi.cancel")}</Button>
+          <Button
+            variant="contained"
+            onClick={submit}
+            disabled={!valid || isLoading}
+          >
+            {isLoading
+              ? t("settings.publicApi.dialog.creating")
+              : t("settings.publicApi.dialog.create")}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={3} sx={{ mt: 1 }}>
+        {error && <Alert severity="error">{error}</Alert>}
+        <TextField
+          label={t("settings.publicApi.dialog.name")}
+          helperText={t("settings.publicApi.dialog.nameHelp")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          inputProps={{ maxLength: 100 }}
+          required
+          fullWidth
+        />
+        <TextField
+          label={t("settings.publicApi.dialog.description")}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          inputProps={{ maxLength: 500 }}
+          multiline
+          minRows={2}
+          fullWidth
+        />
 
-          <FormControl>
-            <FormLabel>{t("settings.publicApi.dialog.preset")}</FormLabel>
-            <RadioGroup
-              value={preset}
-              onChange={(e) => {
-                const next = options.presets.find(
-                  (p) => p.id === e.target.value,
-                )
-                if (next) setPreset(next.id)
-              }}
-            >
-              {options.presets.map((p) => (
-                <FormControlLabel
-                  key={p.id}
-                  value={p.id}
-                  control={<Radio />}
-                  label={
-                    <Box py={0.5}>
-                      <Typography color="text.secondary">
-                        {t(`settings.publicApi.presets.${p.id}.name`)}
-                      </Typography>
-                      <Typography variant="body2" color="text.primary">
-                        {t(`settings.publicApi.presets.${p.id}.description`)}
-                      </Typography>
-                      <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
-                        {p.scopes.map((scope) => (
-                          <Chip
-                            key={scope}
-                            size="small"
-                            variant="outlined"
-                            label={t(
-                              `settings.publicApi.scopes.${scopeKey(scope)}`,
-                            )}
-                          />
-                        ))}
-                      </Box>
+        <FormControl>
+          <FormLabel>{t("settings.publicApi.dialog.preset")}</FormLabel>
+          <RadioGroup
+            value={preset}
+            onChange={(e) => {
+              const next = options.presets.find((p) => p.id === e.target.value)
+              if (next) setPreset(next.id)
+            }}
+          >
+            {options.presets.map((p) => (
+              <FormControlLabel
+                key={p.id}
+                value={p.id}
+                control={<Radio />}
+                label={
+                  <Box py={0.5}>
+                    <Typography color="text.secondary">
+                      {t(`settings.publicApi.presets.${p.id}.name`)}
+                    </Typography>
+                    <Typography variant="body2" color="text.primary">
+                      {t(`settings.publicApi.presets.${p.id}.description`)}
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+                      {p.scopes.map((scope) => (
+                        <Chip
+                          key={scope}
+                          size="small"
+                          variant="outlined"
+                          label={t(
+                            `settings.publicApi.scopes.${scopeKey(scope)}`,
+                          )}
+                        />
+                      ))}
                     </Box>
+                  </Box>
+                }
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>{t("settings.publicApi.dialog.orgs")}</FormLabel>
+          <Typography variant="body2" color="text.primary" mb={1}>
+            {t("settings.publicApi.dialog.orgsHelp")}
+          </Typography>
+          {options.orgs.length === 0 ? (
+            <Typography variant="body2" color="text.primary">
+              {t("settings.publicApi.dialog.noOrgs")}
+            </Typography>
+          ) : (
+            <FormGroup>
+              {options.orgs.map((org) => (
+                <FormControlLabel
+                  key={org.contractor_id}
+                  control={
+                    <Checkbox
+                      checked={orgs.includes(org.spectrum_id)}
+                      onChange={(e) =>
+                        setOrgs((prev) =>
+                          e.target.checked
+                            ? [...prev, org.spectrum_id]
+                            : prev.filter((id) => id !== org.spectrum_id),
+                        )
+                      }
+                    />
                   }
+                  label={org.name}
                 />
               ))}
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
+          )}
+        </FormControl>
 
-          <FormControl>
-            <FormLabel>{t("settings.publicApi.dialog.orgs")}</FormLabel>
-            <Typography variant="body2" color="text.primary" mb={1}>
-              {t("settings.publicApi.dialog.orgsHelp")}
-            </Typography>
-            {options.orgs.length === 0 ? (
-              <Typography variant="body2" color="text.primary">
-                {t("settings.publicApi.dialog.noOrgs")}
-              </Typography>
-            ) : (
-              <FormGroup>
-                {options.orgs.map((org) => (
-                  <FormControlLabel
-                    key={org.contractor_id}
-                    control={
-                      <Checkbox
-                        checked={orgs.includes(org.spectrum_id)}
-                        onChange={(e) =>
-                          setOrgs((prev) =>
-                            e.target.checked
-                              ? [...prev, org.spectrum_id]
-                              : prev.filter((id) => id !== org.spectrum_id),
-                          )
-                        }
-                      />
-                    }
-                    label={org.name}
-                  />
-                ))}
-              </FormGroup>
-            )}
-          </FormControl>
-
-          <FormControl fullWidth>
-            <InputLabel id="public-token-expiry">
-              {t("settings.publicApi.dialog.expiry")}
-            </InputLabel>
-            <Select
-              labelId="public-token-expiry"
-              label={t("settings.publicApi.dialog.expiry")}
-              value={days}
-              onChange={(e) => setDays(Number(e.target.value))}
-            >
-              {choices.map((d) => (
-                <MenuItem key={d} value={d}>
-                  {t("settings.publicApi.dialog.daysOption", { days: d })}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={close}>{t("settings.publicApi.cancel")}</Button>
-        <Button
-          variant="contained"
-          onClick={submit}
-          disabled={!valid || isLoading}
-        >
-          {isLoading
-            ? t("settings.publicApi.dialog.creating")
-            : t("settings.publicApi.dialog.create")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <FormControl fullWidth>
+          <InputLabel id="public-token-expiry">
+            {t("settings.publicApi.dialog.expiry")}
+          </InputLabel>
+          <Select
+            labelId="public-token-expiry"
+            label={t("settings.publicApi.dialog.expiry")}
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+          >
+            {choices.map((d) => (
+              <MenuItem key={d} value={d}>
+                {t("settings.publicApi.dialog.daysOption", { days: d })}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
+    </ResponsiveDialog>
   )
 }
 
@@ -485,32 +489,21 @@ export function PublicApiTokensSettings() {
         />
       )}
 
-      <Dialog open={!!toRevoke} onClose={() => setToRevoke(null)}>
-        <DialogTitle>{t("settings.publicApi.revokeTitle")}</DialogTitle>
-        <DialogContent>
-          {revokeError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {revokeError}
-            </Alert>
-          )}
-          <Typography>
-            {t("settings.publicApi.revokeBody", { name: toRevoke?.name ?? "" })}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setToRevoke(null)}>
-            {t("settings.publicApi.cancel")}
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={confirmRevoke}
-            disabled={revoking}
-          >
-            {t("settings.publicApi.revoke")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={!!toRevoke}
+        onClose={() => setToRevoke(null)}
+        onConfirm={confirmRevoke}
+        title={t("settings.publicApi.revokeTitle")}
+        message={t("settings.publicApi.revokeBody", {
+          name: toRevoke?.name ?? "",
+        })}
+        cancelLabel={t("settings.publicApi.cancel")}
+        confirmLabel={t("settings.publicApi.revoke")}
+        destructive
+        loading={revoking}
+      >
+        {revokeError && <Alert severity="error">{revokeError}</Alert>}
+      </ConfirmDialog>
     </Grid>
   )
 }

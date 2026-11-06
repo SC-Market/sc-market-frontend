@@ -5,9 +5,6 @@ import {
   Card,
   CardContent,
   Chip,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Stack,
   TextField,
   Typography,
@@ -22,6 +19,7 @@ import {
 import { safeRedirectPath } from "../../../util/safeRedirect"
 import { describeMfaError } from "../errors"
 import { MfaEnrollDialog } from "./MfaEnrollDialog"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
 import { useFormatters } from "../../../util/format"
 
@@ -179,19 +177,22 @@ export function MfaSettings() {
 
       <MfaEnrollDialog open={enrollOpen} onClose={closeEnroll} />
 
-      <Dialog open={!!regenState.data} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {t("mfa.recovery.title", "Your new recovery codes")}
-        </DialogTitle>
-        <DialogContent>
-          {regenState.data && (
-            <RecoveryCodesPanel
-              codes={regenState.data.recovery_codes}
-              onDone={dismissRecoveryCodes}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* The codes must be saved: only Done (in the panel) closes it */}
+      <ResponsiveDialog
+        open={!!regenState.data}
+        onClose={dismissRecoveryCodes}
+        disableClose
+        hideCloseButton
+        mobile="fullScreen"
+        title={t("mfa.recovery.title", "Your new recovery codes")}
+      >
+        {regenState.data && (
+          <RecoveryCodesPanel
+            codes={regenState.data.recovery_codes}
+            onDone={dismissRecoveryCodes}
+          />
+        )}
+      </ResponsiveDialog>
 
       {factor && (
         <RemoveFactorDialog
@@ -213,49 +214,50 @@ function RemoveFactorDialog(props: {
   const [code, setCode] = useState("")
   const { remove, state } = useRemoveMfaFactor(props.factorId)
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>
-        {t("mfa.remove.title", "Turn off two-factor authentication")}
-      </DialogTitle>
-      <DialogContent>
-        <Stack
-          spacing={2}
-          component="form"
-          onSubmit={async (e: React.FormEvent) => {
-            e.preventDefault()
-            if (await remove(code)) props.onClose()
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            {t("mfa.remove.explain", "Enter a current code to confirm.")}
-          </Typography>
-          <TextField
-            label={t("mfa.challenge.codeLabel", "Authentication code")}
-            value={code}
-            onChange={(e) =>
-              setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
-            }
-            autoComplete="one-time-code"
-            inputProps={{ inputMode: "numeric" }}
-          />
-          {state.error && (
-            <Alert severity="error">{describeMfaError(state.error, t)}</Alert>
-          )}
-          <Stack direction="row" spacing={1} justifyContent="flex-end">
-            <Button color="inherit" onClick={props.onClose}>
-              {t("mfa.common.cancel", "Cancel")}
-            </Button>
-            <Button
-              type="submit"
-              color="error"
-              variant="contained"
-              disabled={code.length !== 6 || state.isLoading}
-            >
-              {t("mfa.remove.confirm", "Turn off")}
-            </Button>
-          </Stack>
+    <ResponsiveDialog
+      open={props.open}
+      onClose={props.onClose}
+      disableClose={state.isLoading}
+      maxWidth="xs"
+      title={t("mfa.remove.title", "Turn off two-factor authentication")}
+    >
+      <Stack
+        spacing={2}
+        component="form"
+        onSubmit={async (e: React.FormEvent) => {
+          e.preventDefault()
+          if (await remove(code)) props.onClose()
+        }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          {t("mfa.remove.explain", "Enter a current code to confirm.")}
+        </Typography>
+        <TextField
+          label={t("mfa.challenge.codeLabel", "Authentication code")}
+          value={code}
+          onChange={(e) =>
+            setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+          }
+          autoComplete="one-time-code"
+          inputProps={{ inputMode: "numeric" }}
+        />
+        {state.error && (
+          <Alert severity="error">{describeMfaError(state.error, t)}</Alert>
+        )}
+        <Stack direction="row" spacing={1} justifyContent="flex-end">
+          <Button color="inherit" onClick={props.onClose}>
+            {t("mfa.common.cancel", "Cancel")}
+          </Button>
+          <Button
+            type="submit"
+            color="error"
+            variant="contained"
+            disabled={code.length !== 6 || state.isLoading}
+          >
+            {t("mfa.remove.confirm", "Turn off")}
+          </Button>
         </Stack>
-      </DialogContent>
-    </Dialog>
+      </Stack>
+    </ResponsiveDialog>
   )
 }

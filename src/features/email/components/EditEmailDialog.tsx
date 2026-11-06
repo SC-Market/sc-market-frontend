@@ -1,13 +1,6 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Button, TextField, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { ResponsiveDialog } from "../../../components/dialog/ResponsiveDialog"
 import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 
 interface EditEmailDialogProps {
@@ -28,29 +21,32 @@ export function EditEmailDialog({
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("settings.email.editEmailDialog.title")}</DialogTitle>
-      <DialogContent>
-        <TextField
-          inputRef={focusOnReveal}
-          margin="dense"
-          label={t("settings.email.editEmailDialog.newEmailLabel")}
-          type="email"
-          fullWidth
-          variant="outlined"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-        />
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          {t("settings.email.editEmailDialog.verificationNote")}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("accessibility.cancel")}</Button>
-        <Button onClick={onSubmit} variant="contained" color="primary">
-          {t("settings.email.editEmailDialog.update")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      title={t("settings.email.editEmailDialog.title")}
+      actions={
+        <>
+          <Button onClick={onClose}>{t("accessibility.cancel")}</Button>
+          <Button onClick={onSubmit} variant="contained" color="primary">
+            {t("settings.email.editEmailDialog.update")}
+          </Button>
+        </>
+      }
+    >
+      <TextField
+        inputRef={focusOnReveal}
+        margin="dense"
+        label={t("settings.email.editEmailDialog.newEmailLabel")}
+        type="email"
+        fullWidth
+        variant="outlined"
+        value={email}
+        onChange={(e) => onEmailChange(e.target.value)}
+      />
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+        {t("settings.email.editEmailDialog.verificationNote")}
+      </Typography>
+    </ResponsiveDialog>
   )
 }

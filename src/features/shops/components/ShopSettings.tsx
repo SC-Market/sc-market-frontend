@@ -9,11 +9,7 @@ import {
   Checkbox,
   Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
-  DialogTitle,
   Divider,
   FormControl,
   FormControlLabel,
@@ -80,6 +76,7 @@ import { ShopSlugField } from "./ShopSlugField"
 import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { shopDiscordChannelError } from "../utils/discordChannel"
 import { LinkedDiscordServers } from "../../discord-install/LinkedDiscordServers"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -785,34 +782,27 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
         </Button>
       </Grid>
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>{t("shopsUi.transfer.confirmTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Trans
-              i18nKey={confirmKey}
-              values={{ shop: shop.name, org: targetOrgName }}
-              components={{ strong: <strong /> }}
-            />
-          </DialogContentText>
-          <DialogContentText sx={{ mt: 2 }}>
-            {t("shopsUi.transfer.confirmWarning")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} disabled={isLoading}>
-            {t("common.cancel")}
-          </Button>
-          <LoadingButton
-            variant="contained"
-            color="warning"
-            loading={isLoading}
-            onClick={handleConfirm}
-          >
-            {t("shopsUi.transfer.confirm")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleConfirm}
+        title={t("shopsUi.transfer.confirmTitle")}
+        message={
+          <Trans
+            i18nKey={confirmKey}
+            values={{ shop: shop.name, org: targetOrgName }}
+            components={{ strong: <strong /> }}
+          />
+        }
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("shopsUi.transfer.confirm")}
+        confirmColor="warning"
+        loading={isLoading}
+      >
+        <DialogContentText>
+          {t("shopsUi.transfer.confirmWarning")}
+        </DialogContentText>
+      </ConfirmDialog>
     </FormPaper>
   )
 }

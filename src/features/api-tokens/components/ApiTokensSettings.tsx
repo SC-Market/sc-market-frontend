@@ -9,10 +9,6 @@ import {
   Alert,
   Chip,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Divider,
   Tooltip,
 } from "@mui/material"
@@ -28,6 +24,7 @@ import { useTranslation } from "react-i18next"
 import { useGetTokensQuery, ApiToken } from "../api/tokensApi"
 import { useDeleteToken } from "../hooks/useTokenActions"
 import { CreateTokenDialog } from "./CreateTokenDialog"
+import { ConfirmDialog } from "../../../components/dialog/ConfirmDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
 import {
@@ -345,31 +342,18 @@ export function ApiTokensSettings() {
       />
 
       {/* Delete Confirmation Dialog */}
-      <Dialog
+      <ConfirmDialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
-      >
-        <DialogTitle>{t("apiTokensUi.list.deleteTitle")}</DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t("apiTokensUi.list.deleteBody", {
-              name: tokenToDelete?.name ?? "",
-            })}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>
-            {t("common.cancel")}
-          </Button>
-          <Button
-            onClick={confirmDeleteToken}
-            color="error"
-            variant="contained"
-          >
-            {t("common.delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={confirmDeleteToken}
+        title={t("apiTokensUi.list.deleteTitle")}
+        message={t("apiTokensUi.list.deleteBody", {
+          name: tokenToDelete?.name ?? "",
+        })}
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("common.delete")}
+        destructive
+      />
     </Grid>
   )
 }
