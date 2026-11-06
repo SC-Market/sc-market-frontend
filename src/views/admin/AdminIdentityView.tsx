@@ -35,18 +35,17 @@ import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { useSearchParams } from "react-router-dom"
 import {
-  useDeactivateIdentityUserMutation,
-  useFixIdentitySpectrumMutation,
   useGetIdentityUserQuery,
-  useReactivateIdentityUserMutation,
-  useReleaseIdentityUsernameMutation,
   useSearchIdentityUsersQuery,
-  useUnlinkIdentityDiscordMutation,
   type IdentityActionKind,
   type IdentityDetail,
   type IdentitySearchRow,
 } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
+import {
+  useIdentityAction,
+  type IdentityActionId,
+} from "../../features/admin/hooks/useIdentityAction"
 import { isSiteAdmin } from "../../util/siteRole"
 import { useFormatters, type Formatters } from "../../util/format"
 
@@ -54,12 +53,7 @@ export const REASON_MIN = 5
 export const REASON_MAX = 500
 const SPECTRUM_ID_RE = /^[0-9]{1,20}$/
 
-type ActionId =
-  | "release"
-  | "unlinkDiscord"
-  | "spectrum"
-  | "deactivate"
-  | "reactivate"
+type ActionId = IdentityActionId
 
 function formatDate(value: string | null | undefined, fmt: Formatters): string {
   return value ? fmt.dateTime(value) : "-"
@@ -171,20 +165,7 @@ function ActionDialog(props: {
   const [allowNoLogin, setAllowNoLogin] = useState(false)
   const [spectrumMode, setSpectrumMode] = useState<"clear" | "set">("clear")
   const [spectrumId, setSpectrumId] = useState("")
-  const [release, releaseState] = useReleaseIdentityUsernameMutation()
-  const [unlink, unlinkState] = useUnlinkIdentityDiscordMutation()
-  const [spectrum, spectrumState] = useFixIdentitySpectrumMutation()
-  const [deactivate, deactivateState] = useDeactivateIdentityUserMutation()
-  const [reactivate, reactivateState] = useReactivateIdentityUserMutation()
-
-  const states = {
-    release: releaseState,
-    unlinkDiscord: unlinkState,
-    spectrum: spectrumState,
-    deactivate: deactivateState,
-    reactivate: reactivateState,
-  }
-  const state = action ? states[action] : null
+  const identityAction = useIdentityAction(action)
   const trimmed = reason.trim()
   const reasonOk = trimmed.length >= REASON_MIN && trimmed.length <= REASON_MAX
   const spectrumOk =
@@ -197,7 +178,7 @@ function ActionDialog(props: {
   const canSubmit =
     reasonOk &&
     spectrumOk &&
-    !state?.isLoading &&
+    !identityAction.isLoading &&
     (action !== "unlinkDiscord" || !discordOnlyLogin || allowNoLogin)
 
   const close = () => {
@@ -205,39 +186,22 @@ function ActionDialog(props: {
     setAllowNoLogin(false)
     setSpectrumMode("clear")
     setSpectrumId("")
-    for (const s of Object.values(states)) s.reset()
+    identityAction.reset()
     onClose()
   }
 
   const submit = async () => {
     if (!action || !canSubmit) return
-    const userId = user.user_id
-    const body = { reason: trimmed }
-    const result =
-      action === "release"
-        ? await release({ userId, identityActionRequest: body })
-        : action === "unlinkDiscord"
-          ? await unlink({
-              userId,
-              unlinkDiscordRequest: { ...body, allow_no_login: allowNoLogin },
-            })
-          : action === "spectrum"
-            ? await spectrum({
-                userId,
-                spectrumFixRequest:
-                  spectrumMode === "set"
-                    ? {
-                        ...body,
-                        mode: "set",
-                        spectrum_user_id: spectrumId.trim(),
-                      }
-                    : { ...body, mode: "clear" },
-              })
-            : action === "deactivate"
-              ? await deactivate({ userId, identityActionRequest: body })
-              : await reactivate({ userId, identityActionRequest: body })
-    if ("data" in result && result.data) {
-      onDone(result.data.kind)
+    const kind = await identityAction.run(user.user_id, {
+      reason: trimmed,
+      allowNoLogin,
+      spectrum:
+        spectrumMode === "set"
+          ? { mode: "set", spectrumUserId: spectrumId.trim() }
+          : { mode: "clear" },
+    })
+    if (kind) {
+      onDone(kind)
       close()
     }
   }
@@ -368,9 +332,9 @@ function ActionDialog(props: {
                   "You will be asked for a two-factor code if you haven't entered one in the last 10 minutes.",
                 )}
               </Typography>
-              {state?.error && (
+              {identityAction.error && (
                 <Alert severity="error">
-                  {describeMfaError(state.error, t)}
+                  {describeMfaError(identityAction.error, t)}
                 </Alert>
               )}
             </Stack>

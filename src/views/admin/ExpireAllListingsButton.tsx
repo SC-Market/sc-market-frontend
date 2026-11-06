@@ -11,11 +11,8 @@ import {
   CircularProgress,
 } from "@mui/material"
 import { WarningRounded } from "@mui/icons-material"
-import {
-  useExpireAllListingsMutation,
-  useGetActiveListingCountQuery,
-} from "../../store/api/v2/market"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useGetActiveListingCountQuery } from "../../store/api/v2/market"
+import { useExpireAllListings } from "../../features/admin/hooks/useExpireAllListings"
 
 export function ExpireAllListingsButton() {
   const { t } = useTranslation()
@@ -24,24 +21,10 @@ export function ExpireAllListingsButton() {
     undefined,
     { skip: !open },
   )
-  const [expireAll, { isLoading }] = useExpireAllListingsMutation()
-  const issueAlert = useAlertHook()
+  const { expireAll, isLoading } = useExpireAllListings()
 
   const handleConfirm = async () => {
-    try {
-      const result = await expireAll().unwrap()
-      issueAlert({
-        message: t("adminUi.expireListings.expired", {
-          count: result.affected,
-        }),
-        severity: "success",
-      })
-      setOpen(false)
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : t("adminUi.expireListings.failed")
-      issueAlert({ message, severity: "error" })
-    }
+    if (await expireAll()) setOpen(false)
   }
 
   return (

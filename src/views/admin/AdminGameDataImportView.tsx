@@ -32,12 +32,12 @@ import {
 } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
-  useImportGameDataMutation,
   useListGameDataImportJobsQuery,
   GameDataImportJob,
 } from "../../store/api/admin"
 import { useGetPagesDeployHookStatusQuery } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useImportGameData } from "../../features/admin/hooks/useImportGameData"
 import { useFormatters } from "../../util/format"
 
 function statusColor(s: GameDataImportJob["status"]): "success" | "error" | "info" | "warning" {
@@ -199,7 +199,7 @@ export function AdminGameDataImportView() {
   const [gameVersion, setGameVersion] = useState("")
   const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
 
-  const [importGameData, { isLoading: uploading }] = useImportGameDataMutation()
+  const { start: startImport, uploading } = useImportGameData()
   const issueAlert = useAlertHook()
 
   // Fetch all jobs — poll fast if any are running
@@ -253,14 +253,7 @@ export function AdminGameDataImportView() {
 
   const handleUpload = async () => {
     if (!file) return
-    try {
-      await importGameData({ file, gameChannel, gameVersion: gameVersion || undefined }).unwrap()
-      issueAlert({ message: t("adminUi.gameDataImport.importStarted"), severity: "info" })
-      refetch()
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : t("adminUi.gameDataImport.uploadFailed")
-      issueAlert({ message, severity: "error" })
-    }
+    if (await startImport(file, gameChannel, gameVersion)) refetch()
   }
 
   return (

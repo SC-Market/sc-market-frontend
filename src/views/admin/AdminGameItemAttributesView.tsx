@@ -21,9 +21,6 @@ import {
 } from "@mui/material"
 import {
   useGetGameItemAttributesQuery,
-  useUpsertGameItemAttributeMutation,
-  useDeleteGameItemAttributeMutation,
-  useImportGameItemAttributesMutation,
   useGetAttributeDefinitionsQuery,
   GameItemAttribute,
   UpsertGameItemAttributePayload,
@@ -31,7 +28,7 @@ import {
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useGameItemAttributeActions } from "../../features/admin/hooks/useGameItemAttributeActions"
 import { AdminIcons } from "../../components/icons"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -63,14 +60,14 @@ export function AdminGameItemAttributesView({
 
   const { data: definitionsData } = useGetAttributeDefinitionsQuery()
 
-  const [upsertAttribute, { isLoading: isUpserting }] =
-    useUpsertGameItemAttributeMutation()
-  const [deleteAttribute, { isLoading: isDeleting }] =
-    useDeleteGameItemAttributeMutation()
-  const [importAttributes, { isLoading: isImporting }] =
-    useImportGameItemAttributesMutation()
-
-  const issueAlert = useAlertHook()
+  const {
+    upsert,
+    remove,
+    importFromGameData,
+    isUpserting,
+    isDeleting,
+    isImporting,
+  } = useGameItemAttributeActions(gameItemId)
 
   // Form state
   const [formData, setFormData] = useState<UpsertGameItemAttributePayload>({
@@ -111,68 +108,16 @@ export function AdminGameItemAttributesView({
     })
   }
 
-  const handleUpsertAttribute = () => {
-    upsertAttribute({
-      gameItemId,
-      data: formData,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("admin.gameItemAttributes.saved", "Attribute saved"),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
+  const handleUpsertAttribute = async () => {
+    if (await upsert(formData)) handleCloseModals()
   }
 
-  const handleDeleteAttribute = () => {
+  const handleDeleteAttribute = async () => {
     if (!selectedAttribute) return
-
-    deleteAttribute({
-      gameItemId,
-      attributeName: selectedAttribute.attribute_name,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("admin.gameItemAttributes.deleted", "Attribute deleted"),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
+    if (await remove(selectedAttribute.attribute_name)) handleCloseModals()
   }
 
-  const handleImportAttributes = () => {
-    importAttributes(gameItemId)
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          issueAlert({
-            message: t("adminUi.gameItemAttributes.importSuccess", {
-              count: result.attributesImported,
-            }),
-            severity: "success",
-          })
-        } else {
-          issueAlert({
-            message: t("adminUi.gameItemAttributes.importPartial", {
-              count: result.attributesImported,
-            }),
-            severity: "warning",
-          })
-        }
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
+  const handleImportAttributes = importFromGameData
 
   const getSelectedDefinition = () => {
     if (!definitionsData?.definitions || !formData.attribute_name) return null

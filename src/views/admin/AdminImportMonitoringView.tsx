@@ -13,12 +13,11 @@ import {
 } from "@mui/material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
-  useStartImportMutation,
   useListJobsQuery,
   type ImportJob,
   type ImportSource,
 } from "../../store/api/v2/market"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useStartImport } from "../../features/admin/hooks/useStartImport"
 import { AdminIcons } from "../../components/icons"
 import { useFormatters } from "../../util/format"
 
@@ -88,8 +87,7 @@ function JobCard({ job }: { job: ImportJob }) {
 
 export function AdminImportMonitoringView() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
-  const [startImport, { isLoading: starting }] = useStartImportMutation()
+  const { start: handleStart, starting } = useStartImport()
 
   const [fastPoll, setFastPoll] = useState(false)
 
@@ -109,25 +107,6 @@ export function AdminImportMonitoringView() {
   }, [hasRunning])
 
   // Adjust polling: slow down when idle
-
-  const handleStart = async (source: ImportSource) => {
-    try {
-      await startImport({ source }).unwrap()
-      issueAlert({
-        message: t("adminUi.importMonitoring.started", { source }),
-        severity: "info",
-      })
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : t("adminUi.importMonitoring.startFailed")
-      issueAlert({
-        message,
-        severity: "error",
-      })
-    }
-  }
 
   return (
     <>

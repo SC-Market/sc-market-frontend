@@ -18,14 +18,10 @@ import {
 } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
-import {
-  useGetPremiumOrgsQuery,
-  useSetOrgPremiumMutation,
-  useRevokeOrgPremiumMutation,
-  PremiumTier,
-} from "../../store/api/premium"
+import { useGetPremiumOrgsQuery, PremiumTier } from "../../store/api/premium"
 import { useSearchContractorsQuery } from "../../store/api/contractors"
 import { useTranslation } from "react-i18next"
+import { useOrgPremiumAdmin } from "../../features/admin/hooks/useOrgPremiumAdmin"
 import type { MinimalContractor } from "../../store/api/contractors"
 import { useFormatters } from "../../util/format"
 
@@ -44,28 +40,21 @@ export function AdminPremiumManagementView() {
     { query: searchQuery },
     { skip: searchQuery.length < 2 },
   )
-  const [setOrgPremium, { isLoading: isSetting }] = useSetOrgPremiumMutation()
-  const [revokeOrgPremium, { isLoading: isRevoking }] =
-    useRevokeOrgPremiumMutation()
+  const premium = useOrgPremiumAdmin()
+  const { isSetting, isRevoking } = premium
 
   const searchOrgs = searchResults?.data ?? []
 
   const handleGrant = async () => {
     if (!selectedOrg) return
-    await setOrgPremium({
-      spectrum_id: selectedOrg.spectrum_id,
-      tier: selectedTier,
-      custom_domain: selectedDomain || null,
-    })
+    await premium.grant(selectedOrg.spectrum_id, selectedTier, selectedDomain)
     setGrantDialogOpen(false)
     setSelectedOrg(null)
     setSearchQuery("")
     setSelectedDomain("")
   }
 
-  const handleRevoke = async (spectrumId: string) => {
-    await revokeOrgPremium(spectrumId)
-  }
+  const handleRevoke = premium.revoke
 
   const columns: GridColDef[] = [
     {

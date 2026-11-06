@@ -14,9 +14,8 @@ import {
   CircularProgress,
   MenuProps,
 } from "@mui/material"
-import { useTestNotificationMutation } from "../../features/admin/api/adminApi"
+import { useTestNotification } from "../../features/admin/hooks/useTestNotification"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { UserSearch } from "../../components/search/UserSearch"
 import { User } from "../../datatypes/User"
 import { useGetUserOrganizationsQuery } from "../../features/contractor/api/organizationsApi"
@@ -46,22 +45,13 @@ export function AdminNotificationTestView() {
   const [notificationType, setNotificationType] = useState<string>("")
   const [targetUser, setTargetUser] = useState<User | null>(null)
   const [contractorId, setContractorId] = useState<string>("")
-  const [testResult, setTestResult] = useState<{
-    message: string
-    data?: {
-      order_id?: string
-      contractor_id?: string | null
-      chat_id?: string
-      listing_id?: string
-    }
-  } | null>(null)
-  const [testError, setTestError] = useState<string>("")
-
-  const [testNotification, { isLoading: isTesting }] =
-    useTestNotificationMutation()
+  const {
+    run: runTest,
+    isTesting,
+    testResult,
+    testError,
+  } = useTestNotification()
   const { data: organizationsData } = useGetUserOrganizationsQuery()
-
-  const issueAlert = useAlertHook()
 
   const handleUserSelect = (user: User) => {
     setTargetUser(user)
@@ -84,65 +74,8 @@ export function AdminNotificationTestView() {
     },
   }
 
-  const handleTest = async () => {
-    if (!notificationType || !targetUser || !targetUser.username) {
-      issueAlert({
-        message: t(
-          "admin.notificationTest.validation.fillAllFields",
-          "Please fill all fields",
-        ),
-        severity: "error",
-      })
-      return
-    }
-
-    setTestResult(null)
-    setTestError("")
-
-    try {
-      const result = await testNotification({
-        notification_type: notificationType,
-        target_username: targetUser.username,
-        contractor_id: contractorId || null,
-      }).unwrap()
-
-      setTestResult(result)
-      issueAlert({
-        message: t(
-          "admin.notificationTest.success",
-          "Notification test completed",
-        ),
-        severity: "success",
-      })
-    } catch (error: unknown) {
-      // Handle error response structure: { error: { code, message } }
-      let errorMessage: string
-      const errData = error as
-        | { data?: { error?: string | { message?: string } }; message?: string }
-        | undefined
-      if (errData?.data?.error) {
-        if (typeof errData.data.error === "string") {
-          errorMessage = errData.data.error
-        } else if (errData.data.error?.message) {
-          errorMessage = errData.data.error.message
-        } else {
-          errorMessage = JSON.stringify(errData.data.error)
-        }
-      } else if (errData?.message) {
-        errorMessage = errData.message
-      } else {
-        errorMessage = t(
-          "admin.notificationTest.error",
-          "Failed to test notification",
-        )
-      }
-      setTestError(errorMessage)
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
-  }
+  const handleTest = () =>
+    runTest(notificationType, targetUser?.username, contractorId)
 
   return (
     <Box>

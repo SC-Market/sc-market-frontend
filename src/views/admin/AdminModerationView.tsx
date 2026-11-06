@@ -16,10 +16,8 @@ import {
   TextField,
   Box,
 } from "@mui/material"
-import {
-  useGetAdminReportsQuery,
-  useUpdateReportMutation,
-} from "../../features/admin/api/moderationApi"
+import { useGetAdminReportsQuery } from "../../features/admin/api/moderationApi"
+import { useUpdateReport } from "../../features/admin/hooks/useModerationActions"
 import { ContentReport } from "../../features/admin/api/moderationApi"
 import { UserDetails } from "../../components/list/UserDetails"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
@@ -53,7 +51,7 @@ export function AdminModerationView() {
     status: statusFilter || undefined,
   })
 
-  const [updateReport, { isLoading: isUpdating }] = useUpdateReportMutation()
+  const { update: updateReport, isUpdating } = useUpdateReport()
 
   const handleOpenModal = (report: ContentReport) => {
     setSelectedReport(report)
@@ -69,27 +67,18 @@ export function AdminModerationView() {
     setUpdateNotes("")
   }
 
-  const handleUpdateReport = () => {
+  const handleUpdateReport = async () => {
     if (!selectedReport) return
 
-    updateReport({
-      reportId: selectedReport.report_id,
-      data: {
-        status: updateStatus as
-          | "pending"
-          | "in_progress"
-          | "resolved"
-          | "dismissed",
-        notes: updateNotes || undefined,
-      },
+    const updated = await updateReport(selectedReport.report_id, {
+      status: updateStatus as
+        | "pending"
+        | "in_progress"
+        | "resolved"
+        | "dismissed",
+      notes: updateNotes || undefined,
     })
-      .unwrap()
-      .then(() => {
-        handleCloseModal()
-      })
-      .catch((error) => {
-        console.error("Failed to update report:", error)
-      })
+    if (updated) handleCloseModal()
   }
 
   const columns: GridColDef[] = [

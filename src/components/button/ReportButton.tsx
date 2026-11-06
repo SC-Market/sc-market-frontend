@@ -16,8 +16,8 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Report as ReportIcon } from "@mui/icons-material"
-import { useReportContentMutation } from "../../features/admin/api/moderationApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import type { CreateReportRequest } from "../../features/admin/api/moderationApi"
+import { useReportContent } from "../../features/admin/hooks/useModerationActions"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { UnderlineLink } from "../typography/UnderlineLink"
@@ -35,10 +35,7 @@ export function ReportButton({
   const [open, setOpen] = useState(false)
   const [reason, setReason] = useState<string>("")
   const [details, setDetails] = useState<string>("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const [reportContent] = useReportContentMutation()
-  const issueAlert = useAlertHook()
+  const { submit, isSubmitting } = useReportContent()
   const { t } = useTranslation()
   const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
@@ -67,43 +64,13 @@ export function ReportButton({
     setDetails("")
   }
 
-  const handleSubmit = () => {
-    if (!reason) {
-      issueAlert({
-        message: t("ReportButton.pleaseSelectReason"),
-        severity: "warning",
-      })
-      return
-    }
-
-    setIsSubmitting(true)
-    reportContent({
-      reported_url: getCurrentUrl(),
-      report_reason: reason as
-        | "inappropriate_content"
-        | "spam"
-        | "harassment"
-        | "fake_listing"
-        | "scam"
-        | "copyright_violation"
-        | "other",
-      report_details: details || undefined,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("ReportButton.reportSubmitted"),
-          severity: "success",
-        })
-        handleClose()
-      })
-      .catch((error) => {
-        console.error("Failed to submit report:", error)
-        issueAlert(error)
-      })
-      .finally(() => {
-        setIsSubmitting(false)
-      })
+  const handleSubmit = async () => {
+    const sent = await submit(
+      getCurrentUrl(),
+      reason as CreateReportRequest["report_reason"] | "",
+      details,
+    )
+    if (sent) handleClose()
   }
 
   const reportReasons = [

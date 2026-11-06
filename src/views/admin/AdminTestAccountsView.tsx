@@ -21,12 +21,11 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
-  useCreateTestAccountMutation,
-  useDeleteTestAccountMutation,
   useListTestAccountsQuery,
   type CreateTestAccountResponse,
 } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
+import { useTestAccountActions } from "../../features/admin/hooks/useTestAccountActions"
 import {
   credentialsJson,
   downloadJson,
@@ -152,8 +151,7 @@ export function AdminTestAccountsView() {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const { data, error, isLoading } = useListTestAccountsQuery()
-  const [create, createState] = useCreateTestAccountMutation()
-  const [remove, removeState] = useDeleteTestAccountMutation()
+  const { create, createState, remove, removeState } = useTestAccountActions()
   const [username, setUsername] = useState("")
   const [displayName, setDisplayName] = useState("")
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
@@ -167,11 +165,8 @@ export function AdminTestAccountsView() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!canCreate) return
-    const result = await create({
-      createTestAccountRequest: { username: username.trim(), display_name: displayName.trim() },
-    })
-    if ("data" in result && result.data) {
-      const c = result.data
+    const c = await create(username, displayName)
+    if (c) {
       setSession((prev) => [
         ...prev.filter((p) => p.username !== c.username),
         { username: c.username, secret: c.secret, otpauth_uri: c.otpauth_uri },
@@ -310,7 +305,7 @@ export function AdminTestAccountsView() {
             onClick={async () => {
               const name = confirmDelete!
               setConfirmDelete(null)
-              await remove({ username: name })
+              await remove(name)
             }}
           >
             {t("admin.testAccounts.delete", "Delete")}

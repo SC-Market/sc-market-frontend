@@ -28,14 +28,12 @@ import {
 import { useTranslation } from "react-i18next"
 import {
   useGetStillSellingCampaignQuery,
-  useSendStillSellingCampaignMutation,
-  useStopStillSellingCampaignMutation,
-  useSendStillSellingTestDmMutation,
   type StillSellingFeedbackGroup,
   type StillSellingFeedbackSummary,
   type StillSellingLocale,
 } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
+import { useStillSellingCampaignActions } from "../../features/admin/hooks/useStillSellingCampaign"
 
 const LOCALES: StillSellingLocale[] = [
   "en",
@@ -168,14 +166,13 @@ export function StillSellingCampaignCard() {
       { locale },
       { pollingInterval: running ? RUNNING_POLL_MS : 0 },
     )
-  const [send, sendState] = useSendStillSellingCampaignMutation()
-  const [stop, stopState] = useStopStillSellingCampaignMutation()
-  const [sendTest, testState] = useSendStillSellingTestDmMutation()
+  const { send, sendState, stop, stopState, sendTest, testState } =
+    useStillSellingCampaignActions()
   const [testConfirmOpen, setTestConfirmOpen] = useState(false)
 
   const onSendTest = () => {
     setTestConfirmOpen(false)
-    void sendTest({ stillSellingTestRequest: { locale } })
+    sendTest(locale)
   }
 
   const testError = testState.isError
@@ -193,13 +190,7 @@ export function StillSellingCampaignCard() {
   const onSend = async () => {
     if (!data) return
     setConfirmOpen(false)
-    try {
-      await send({
-        stillSellingSendRequest: { expected_recipients: data.recipients },
-      }).unwrap()
-    } catch {
-      // Shown from sendState.error below.
-    }
+    await send(data.recipients)
     void refetch()
   }
 

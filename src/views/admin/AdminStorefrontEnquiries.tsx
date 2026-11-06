@@ -19,12 +19,12 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   useListStorefrontEnquiriesQuery,
-  useUpdateStorefrontEnquiryMutation,
   type AdminStorefrontEnquiry,
   type EnquiryStatus,
 } from "../../store/api/v2/market"
 import { ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 import { getErrorMessage } from "../../util/errorHandling"
+import { useUpdateStorefrontEnquiry } from "../../features/storefront/hooks/useStorefrontEnquiryActions"
 import { useEnquiryStatusLabel } from "../../features/storefront/components/StorefrontEnquiryCard"
 import { enquiryStatusColor } from "../../features/storefront/enquiry"
 import { useFormatters } from "../../util/format"
@@ -45,7 +45,7 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
   const statusLabel = useEnquiryStatusLabel()
   const [status, setStatus] = useState<EnquiryStatus>(e.status)
   const [note, setNote] = useState(e.staff_note ?? "")
-  const [update, state] = useUpdateStorefrontEnquiryMutation()
+  const { save, state } = useUpdateStorefrontEnquiry(e.enquiry_id)
   const dirty = status !== e.status || note !== (e.staff_note ?? "")
   const targetPath =
     e.target_type === "org"
@@ -167,12 +167,7 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
             color="secondary"
             disabled={!dirty}
             loading={state.isLoading}
-            onClick={() =>
-              void update({
-                enquiryId: e.enquiry_id,
-                updateStorefrontEnquiryRequest: { status, staff_note: note },
-              })
-            }
+            onClick={() => save(status, note)}
           >
             {t("admin.storefrontEnquiries.save", "Save")}
           </LoadingButton>

@@ -19,12 +19,12 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import {
-  useCreateStorefrontEnquiryMutation,
   useGetStorefrontEnquiryQuery,
   type EnquiryContactMethod,
   type EnquiryStatus,
   type EnquiryTargetType,
 } from "../../../store/api/v2/market"
+import { useCreateStorefrontEnquiry } from "../hooks/useStorefrontEnquiryActions"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { getErrorMessage } from "../../../util/errorHandling"
 import {
@@ -71,7 +71,7 @@ export function StorefrontEnquiryCard(props: {
     targetId: props.targetId,
   })
   const { data: profile } = useGetUserProfileQuery()
-  const [create, createState] = useCreateStorefrontEnquiryMutation()
+  const { send, state: createState } = useCreateStorefrontEnquiry()
 
   const [subdomain, setSubdomain] = useState(() =>
     suggestedSubdomain(props.handle),
@@ -115,20 +115,16 @@ export function StorefrontEnquiryCard(props: {
   const submit = async () => {
     setTouched(true)
     if (problem) return
-    try {
-      await create({
-        createStorefrontEnquiryRequest: {
-          target_type: props.targetType,
-          target_id: props.targetId,
-          requested_subdomain: subdomain.trim().toLowerCase(),
-          message: message.trim(),
-          contact_method: contact,
-        },
-      }).unwrap()
+    const sent = await send({
+      target_type: props.targetType,
+      target_id: props.targetId,
+      requested_subdomain: subdomain.trim().toLowerCase(),
+      message: message.trim(),
+      contact_method: contact,
+    })
+    if (sent) {
       setMessage("")
       setTouched(false)
-    } catch {
-      // Shown below from createState.error.
     }
   }
 

@@ -31,16 +31,15 @@ import {
 import DeleteRounded from "@mui/icons-material/DeleteRounded"
 import PersonAddRounded from "@mui/icons-material/PersonAddRounded"
 import SaveRounded from "@mui/icons-material/SaveRounded"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   useGetStatsQuery,
-  useUpdateConfigMutation,
   useGetUserOverridesQuery,
-  useSetUserOverrideMutation,
-  useRemoveUserOverrideMutation,
-  type UpdateConfigRequest,
   type MarketVersion,
 } from "../../store/api/v2/market"
+import {
+  useFlagUserOverride,
+  useSaveFlagConfig,
+} from "../../features/admin/hooks/useFeatureFlagAdmin"
 import { UserSearch } from "../../components/search/UserSearch"
 import { useFormatters } from "../../util/format"
 
@@ -51,18 +50,16 @@ interface Props {
 export function AdminFeatureFlagDetailView({ flagName }: Props) {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
 
   // Config
   const { data: stats } = useGetStatsQuery()
   const flagConfig = stats?.find((s) => s.flag_name === flagName)
 
-  const [updateConfig] = useUpdateConfigMutation()
+  const { save, saving } = useSaveFlagConfig(flagName)
   const [localEnabled, setLocalEnabled] = useState<boolean | null>(null)
   const [localDefault, setLocalDefault] = useState<MarketVersion | null>(null)
   const [localRollout, setLocalRollout] = useState<number | null>(null)
-  const [saving, setSaving] = useState(false)
 
   const enabled = localEnabled ?? flagConfig?.enabled ?? false
   const defaultVersion = localDefault ?? flagConfig?.default_version ?? "V1"
@@ -71,26 +68,15 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
     localEnabled !== null || localDefault !== null || localRollout !== null
 
   const handleSave = async () => {
-    setSaving(true)
-    try {
-      const updates: UpdateConfigRequest = { flag_name: flagName }
-      if (localEnabled !== null) updates.enabled = localEnabled
-      if (localDefault !== null) updates.default_version = localDefault
-      if (localRollout !== null) updates.rollout_percentage = localRollout
-      await updateConfig({ updateConfigRequest: updates }).unwrap()
-      issueAlert({
-        message: t("adminUi.featureFlags.configSaved"),
-        severity: "success",
-      })
+    const saved = await save({
+      enabled: localEnabled,
+      default_version: localDefault,
+      rollout_percentage: localRollout,
+    })
+    if (saved) {
       setLocalEnabled(null)
       setLocalDefault(null)
       setLocalRollout(null)
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : t("adminUi.featureFlags.failed")
-      issueAlert({ message, severity: "error" })
-    } finally {
-      setSaving(false)
     }
   }
 
@@ -102,52 +88,20 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
   })
   const overrides = overridesData?.overrides || []
 
-  const [setUserOverride] = useSetUserOverrideMutation()
-  const [removeUserOverride] = useRemoveUserOverrideMutation()
+  const userOverride = useFlagUserOverride(flagName)
   const [addOpen, setAddOpen] = useState(false)
   const [newUsername, setNewUsername] = useState("")
   const [newEnabled, setNewEnabled] = useState(true)
 
   const handleAdd = async () => {
     if (!newUsername.trim()) return
-    try {
-      await setUserOverride({
-        setUserOverrideRequest: {
-          username: newUsername.trim(),
-          flag_name: flagName,
-          enabled: newEnabled,
-        },
-      }).unwrap()
-      issueAlert({
-        message: t("adminUi.featureFlags.overrideSet", {
-          username: newUsername,
-        }),
-        severity: "success",
-      })
+    if (await userOverride.set(newUsername, newEnabled)) {
       setAddOpen(false)
       setNewUsername("")
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : t("adminUi.featureFlags.userNotFound")
-      issueAlert({ message, severity: "error" })
     }
   }
 
-  const handleRemove = async (username: string) => {
-    try {
-      await removeUserOverride({ username, flagName }).unwrap()
-      issueAlert({
-        message: t("adminUi.featureFlags.overrideRemoved"),
-        severity: "success",
-      })
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : t("adminUi.featureFlags.failed")
-      issueAlert({ message, severity: "error" })
-    }
-  }
+  const handleRemove = (username: string) => userOverride.remove(username)
 
   return (
     <Box>
