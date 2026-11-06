@@ -21,7 +21,7 @@ import {
 } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { Speed, HighQuality } from "@mui/icons-material"
+import { SpeedRounded, HighQualityRounded } from "@mui/icons-material"
 import { green, orange, red } from "@mui/material/colors"
 
 const speedColor: Record<string, string> = {
@@ -160,7 +160,7 @@ function MethodCard({ method }: { method: RefiningMethod }) {
         </Typography>
         <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
           <Chip
-            icon={<Speed sx={{ fontSize: 14 }} />}
+            icon={<SpeedRounded sx={{ fontSize: 14 }} />}
             label={codeLabel(SPEED_KEYS, method.speed, t)}
             size="small"
             sx={{
@@ -171,7 +171,7 @@ function MethodCard({ method }: { method: RefiningMethod }) {
             }}
           />
           <Chip
-            icon={<HighQuality sx={{ fontSize: 14 }} />}
+            icon={<HighQualityRounded sx={{ fontSize: 14 }} />}
             label={codeLabel(QUALITY_KEYS, method.quality, t)}
             size="small"
             sx={{

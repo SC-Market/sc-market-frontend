@@ -8,7 +8,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { CloseRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetLocationDetailQuery } from "../../store/api/v2/market"
 import { LocationDetailContent } from "./LocationDetailContent"
@@ -53,7 +53,7 @@ export function MiningLocationDetailModal({
           size="small"
           aria-label={t("accessibility.close")}
         >
-          <Close />
+          <CloseRounded />
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>

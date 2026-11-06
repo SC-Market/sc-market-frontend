@@ -35,18 +35,18 @@ import {
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
-  Add,
-  MoreVert,
-  Edit,
-  Delete,
-  CheckCircle,
-  RadioButtonUnchecked,
-  Star,
-  StarBorder,
-  ArrowBack,
-  Sort,
-  Build,
-  ShoppingCart,
+  AddRounded,
+  MoreVertRounded,
+  EditRounded,
+  DeleteRounded,
+  CheckCircleRounded,
+  RadioButtonUncheckedRounded,
+  StarRounded,
+  StarBorderRounded,
+  ArrowBackRounded,
+  SortRounded,
+  BuildRounded,
+  ShoppingCartRounded,
 } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
@@ -221,7 +221,11 @@ export function WishlistDetail() {
             "Failed to load shopping list. It may not exist or you don't have permission to view it.",
           )}
         </Alert>
-        <Button startIcon={<ArrowBack />} onClick={handleBack} sx={{ ml: 3 }}>
+        <Button
+          startIcon={<ArrowBackRounded />}
+          onClick={handleBack}
+          sx={{ ml: 3 }}
+        >
           {t("wishlists.backToList", "Back to Shopping Lists")}
         </Button>
       </StandardPageLayout>
@@ -247,7 +251,7 @@ export function WishlistDetail() {
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
-            startIcon={<ShoppingCart />}
+            startIcon={<ShoppingCartRounded />}
             onClick={handleViewShoppingList}
             disabled={items.length === 0}
           >
@@ -255,7 +259,7 @@ export function WishlistDetail() {
           </Button>
           <Button
             variant="contained"
-            startIcon={<Add />}
+            startIcon={<AddRounded />}
             onClick={handleAddItem}
           >
             {t("wishlists.addItem", "Add Item")}
@@ -376,7 +380,9 @@ export function WishlistDetail() {
                 value={sortBy}
                 label={t("wishlists.sortBy", "Sort By")}
                 onChange={handleSortChange}
-                startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
+                startAdornment={
+                  <SortRounded fontSize="small" sx={{ mr: 1, ml: 1 }} />
+                }
               >
                 <MenuItem value="priority">
                   {t("wishlists.sortPriority", "Priority")}
@@ -413,7 +419,7 @@ export function WishlistDetail() {
                 </Typography>
                 <Button
                   variant="contained"
-                  startIcon={<Add />}
+                  startIcon={<AddRounded />}
                   onClick={handleAddItem}
                 >
                   {t("wishlists.addFirstItem", "Add Your First Item")}
@@ -468,7 +474,7 @@ export function WishlistDetail() {
                               {item.game_item_name}
                               {item.is_acquired && (
                                 <Chip
-                                  icon={<CheckCircle />}
+                                  icon={<CheckCircleRounded />}
                                   label={t("wishlistsUi.detail.acquired")}
                                   size="small"
                                   color="success"
@@ -493,7 +499,7 @@ export function WishlistDetail() {
                             })}
                             aria-haspopup="menu"
                           >
-                            <MoreVert />
+                            <MoreVertRounded />
                           </IconButton>
                         </Box>
 
@@ -540,9 +546,12 @@ export function WishlistDetail() {
                                 {[1, 2, 3, 4, 5].map((tier) => (
                                   <Box key={tier}>
                                     {tier <= item.desired_quality_tier! ? (
-                                      <Star fontSize="small" color="primary" />
+                                      <StarRounded
+                                        fontSize="small"
+                                        color="primary"
+                                      />
                                     ) : (
-                                      <StarBorder
+                                      <StarBorderRounded
                                         fontSize="small"
                                         color="disabled"
                                       />
@@ -590,7 +599,7 @@ export function WishlistDetail() {
                           {item.acquisition_mode === "craft" &&
                           item.blueprint_name ? (
                             <Chip
-                              icon={<Build />}
+                              icon={<BuildRounded />}
                               label={t("wishlistsUi.detail.craft", {
                                 name: item.blueprint_name,
                               })}
@@ -603,7 +612,7 @@ export function WishlistDetail() {
                             />
                           ) : item.crafting_available ? (
                             <Chip
-                              icon={<ShoppingCart />}
+                              icon={<ShoppingCartRounded />}
                               label={t("wishlistsUi.detail.buyFromMarket")}
                               size="small"
                               color="primary"
@@ -654,9 +663,9 @@ export function WishlistDetail() {
                             }
                             startIcon={
                               item.is_acquired ? (
-                                <RadioButtonUnchecked />
+                                <RadioButtonUncheckedRounded />
                               ) : (
-                                <CheckCircle />
+                                <CheckCircleRounded />
                               )
                             }
                             onClick={() => handleToggleAcquired(item)}
@@ -687,7 +696,7 @@ export function WishlistDetail() {
             }
           >
             <ListItemIcon>
-              <Edit fontSize="small" />
+              <EditRounded fontSize="small" />
             </ListItemIcon>
             <ListItemText>{t("wishlists.editItem", "Edit Item")}</ListItemText>
           </MenuItem>
@@ -698,7 +707,7 @@ export function WishlistDetail() {
             sx={{ color: "error.main" }}
           >
             <ListItemIcon>
-              <Delete fontSize="small" color="error" />
+              <DeleteRounded fontSize="small" color="error" />
             </ListItemIcon>
             <ListItemText>
               {t("wishlists.removeItem", "Remove Item")}

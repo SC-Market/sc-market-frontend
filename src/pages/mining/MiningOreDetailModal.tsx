@@ -8,7 +8,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { CloseRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { OreDetailContent } from "./OreDetailContent"
@@ -49,7 +49,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
           size="small"
           aria-label={t("accessibility.close")}
         >
-          <Close />
+          <CloseRounded />
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>

@@ -25,8 +25,8 @@ import { useTranslation } from "react-i18next"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { useGetManufacturersQuery } from "../../store/api/v2/market"
 import {
-  GridViewRounded, ViewListRounded, RocketLaunch, DirectionsCar,
-  Security, Build, Memory, ShoppingBag,
+  GridViewRounded, ViewListRounded, RocketLaunchRounded, DirectionsCarRounded,
+  SecurityRounded, BuildRounded, MemoryRounded, ShoppingBagRounded,
 } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -96,12 +96,12 @@ const SPECIALTY_KEYS: Record<string, string> = {
 }
 
 function getSpecialtyIcon(specialty: string) {
-  if (specialty === "Ships") return <RocketLaunch sx={{ fontSize: 11 }} />
-  if (specialty === "Vehicles" || specialty === "Hoverbikes") return <DirectionsCar sx={{ fontSize: 11 }} />
-  if (specialty === "Armor") return <Security sx={{ fontSize: 11 }} />
-  if (specialty === "Weapons" || specialty.includes("Weapons")) return <Build sx={{ fontSize: 11 }} />
-  if (specialty === "Components") return <Memory sx={{ fontSize: 11 }} />
-  if (specialty === "Consumer" || specialty === "Tools" || specialty === "Equipment") return <ShoppingBag sx={{ fontSize: 11 }} />
+  if (specialty === "Ships") return <RocketLaunchRounded sx={{ fontSize: 11 }} />
+  if (specialty === "Vehicles" || specialty === "Hoverbikes") return <DirectionsCarRounded sx={{ fontSize: 11 }} />
+  if (specialty === "Armor") return <SecurityRounded sx={{ fontSize: 11 }} />
+  if (specialty === "Weapons" || specialty.includes("Weapons")) return <BuildRounded sx={{ fontSize: 11 }} />
+  if (specialty === "Components") return <MemoryRounded sx={{ fontSize: 11 }} />
+  if (specialty === "Consumer" || specialty === "Tools" || specialty === "Equipment") return <ShoppingBagRounded sx={{ fontSize: 11 }} />
   return null
 }
 

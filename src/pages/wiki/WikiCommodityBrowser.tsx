@@ -21,9 +21,9 @@ import {
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { Helmet } from "@unhead/react/helmet"
 import HardwareRoundedIcon from "@mui/icons-material/HardwareRounded"
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
-import ConstructionIcon from "@mui/icons-material/Construction"
-import InventoryIcon from "@mui/icons-material/Inventory"
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCartRounded"
+import ConstructionIcon from "@mui/icons-material/ConstructionRounded"
+import InventoryIcon from "@mui/icons-material/InventoryRounded"
 import { useTranslation } from "react-i18next"
 import {
   useGetCommoditiesQuery, useGetResourceCategoriesQuery,

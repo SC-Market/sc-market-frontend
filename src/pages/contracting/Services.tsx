@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import FilterListIcon from "@mui/icons-material/FilterList"
+import FilterListIcon from "@mui/icons-material/FilterListRounded"
 import { Button, IconButton, Box, Typography } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"

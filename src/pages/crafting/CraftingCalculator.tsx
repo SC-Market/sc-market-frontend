@@ -17,7 +17,7 @@ import {
   Stack,
   Divider,
 } from "@mui/material"
-import { Delete } from "@mui/icons-material"
+import { DeleteRounded } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
@@ -430,7 +430,7 @@ export function CraftingCalculator() {
                             onClick={() => removeMaterial(mat.id)}
                             aria-label={t("craftingUi.removeMaterial")}
                           >
-                            <Delete fontSize="small" />
+                            <DeleteRounded fontSize="small" />
                           </IconButton>
                         </Stack>
                       </Stack>

@@ -12,7 +12,7 @@ import {
   Chip,
   Box,
 } from "@mui/material"
-import { Check } from "@mui/icons-material"
+import { CheckRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
@@ -88,7 +88,9 @@ export function CraftingHistory() {
                       </TableCell>
                       <TableCell align="right">{row.output_quantity}</TableCell>
                       <TableCell align="center">
-                        {row.was_critical_success && <Check color="success" />}
+                        {row.was_critical_success && (
+                          <CheckRounded color="success" />
+                        )}
                       </TableCell>
                       <TableCell align="right">
                         {row.total_material_cost != null

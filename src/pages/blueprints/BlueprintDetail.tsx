@@ -41,8 +41,8 @@ import {
   TrackChangesRounded,
   BuildRounded,
   TimerRounded,
-  Bookmark,
-  BookmarkBorder,
+  BookmarkRounded,
+  BookmarkBorderRounded,
 } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import { useTranslation } from "react-i18next"
@@ -252,7 +252,7 @@ export function BlueprintDetail() {
                   : t("blueprintsUi.detail.markAsOwned")
               }
             >
-              {data.user_owns ? <Bookmark /> : <BookmarkBorder />}
+              {data.user_owns ? <BookmarkRounded /> : <BookmarkBorderRounded />}
             </IconButton>
           </Stack>
 

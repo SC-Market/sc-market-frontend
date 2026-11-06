@@ -24,15 +24,15 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  ExpandLess,
-  ExpandMore,
+  ExpandLessRounded,
+  ExpandMoreRounded,
   HardwareRounded,
-  Hotel,
-  LocalHospital,
-  Storefront,
-  FlightLand,
-  Build,
-  ShoppingBag,
+  HotelRounded,
+  LocalHospitalRounded,
+  StorefrontRounded,
+  FlightLandRounded,
+  BuildRounded,
+  ShoppingBagRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
@@ -65,11 +65,11 @@ const TYPE_FILTER_KEYS: Record<Exclude<(typeof TYPE_FILTERS)[number], "All">, st
 function getAmenityIcon(amenity: string) {
   const a = amenity.toLowerCase()
   if (a.includes("refin")) return <HardwareRounded sx={{ fontSize: 12 }} />
-  if (a.includes("hospital") || a.includes("clinic") || a.includes("medical")) return <LocalHospital sx={{ fontSize: 12 }} />
-  if (a.includes("trading") || a.includes("commodity")) return <Storefront sx={{ fontSize: 12 }} />
-  if (a.includes("hangar") || a.includes("landing")) return <FlightLand sx={{ fontSize: 12 }} />
-  if (a.includes("repair")) return <Build sx={{ fontSize: 12 }} />
-  if (a.includes("buy") || a.includes("shop") || a.includes("store")) return <ShoppingBag sx={{ fontSize: 12 }} />
+  if (a.includes("hospital") || a.includes("clinic") || a.includes("medical")) return <LocalHospitalRounded sx={{ fontSize: 12 }} />
+  if (a.includes("trading") || a.includes("commodity")) return <StorefrontRounded sx={{ fontSize: 12 }} />
+  if (a.includes("hangar") || a.includes("landing")) return <FlightLandRounded sx={{ fontSize: 12 }} />
+  if (a.includes("repair")) return <BuildRounded sx={{ fontSize: 12 }} />
+  if (a.includes("buy") || a.includes("shop") || a.includes("store")) return <ShoppingBagRounded sx={{ fontSize: 12 }} />
   return null
 }
 
@@ -152,7 +152,7 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
         )}
         {node.respawnType && node.respawnType !== "None" && (
           <Chip
-            icon={<Hotel sx={{ fontSize: 14 }} />}
+            icon={<HotelRounded sx={{ fontSize: 14 }} />}
             label={`${t("wiki.locationBrowser.respawn", "Respawn")}: ${node.respawnType}`}
             size="small"
             color="info"
@@ -231,7 +231,7 @@ function LocationTreeItem({ node, level }: { node: WikiLocationNode; level: numb
               sx={{ mr: 0.5, height: 18, fontSize: "0.6rem", display: { xs: "none", md: "flex" } }}
             />
           ))}
-          {open ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+          {open ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
         </ListItemButton>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

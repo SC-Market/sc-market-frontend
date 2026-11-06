@@ -15,7 +15,7 @@ import {
   Typography,
   Stack,
 } from "@mui/material"
-import { Search } from "@mui/icons-material"
+import { SearchRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -76,7 +76,7 @@ export function ResourceBrowser() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <Search />
+              <SearchRounded />
             </InputAdornment>
           ),
         }}

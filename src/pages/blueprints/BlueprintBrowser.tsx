@@ -46,7 +46,11 @@ import {
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import { ViewModule, ViewList, RestartAltRounded } from "@mui/icons-material"
+import {
+  ViewModuleRounded,
+  ViewListRounded,
+  RestartAltRounded,
+} from "@mui/icons-material"
 import {
   useSearchBlueprintsQuery,
   useGetBlueprintCategoriesQuery,
@@ -608,13 +612,13 @@ export function BlueprintBrowser() {
                 value="grid"
                 aria-label={t("ui.viewMode.grid", "Grid view")}
               >
-                <ViewModule />
+                <ViewModuleRounded />
               </ToggleButton>
               <ToggleButton
                 value="list"
                 aria-label={t("ui.viewMode.list", "List view")}
               >
-                <ViewList />
+                <ViewListRounded />
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>

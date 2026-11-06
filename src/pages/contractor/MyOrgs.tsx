@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
-import { Groups, Settings } from "@mui/icons-material"
+import { GroupsRounded, SettingsRounded } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ORG_PATHS, PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
@@ -31,7 +31,9 @@ export function MyOrgs() {
 
       {orgs.length === 0 ? (
         <Card sx={{ textAlign: "center", py: 6 }}>
-          <Groups sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
+          <GroupsRounded
+            sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
+          />
           <Typography variant="h6" color="text.secondary">
             {t("orgsUi.noOrgs")}
           </Typography>
@@ -89,7 +91,7 @@ export function MyOrgs() {
                   <Button
                     size="small"
                     variant="contained"
-                    startIcon={<Settings />}
+                    startIcon={<SettingsRounded />}
                     component={RouterLink}
                     to={ORG_PATHS.manage(org.spectrum_id)}
                   >

@@ -30,13 +30,13 @@ import {
 } from "@mui/material"
 import { LabeledSwitch } from "../../components/buttons/LabeledSwitch"
 import {
-  Add,
-  PlaylistAdd,
-  Delete,
-  Share,
-  Lock,
-  Public,
-  CheckCircle,
+  AddRounded,
+  PlaylistAddRounded,
+  DeleteRounded,
+  ShareRounded,
+  LockRounded,
+  PublicRounded,
+  CheckCircleRounded,
 } from "@mui/icons-material"
 import {
   useGetWishlistsQuery,
@@ -234,7 +234,7 @@ export function WishlistManager() {
           {/* Create Wishlist Button (Requirement 8.4) */}
           <Button
             variant="contained"
-            startIcon={<Add />}
+            startIcon={<AddRounded />}
             onClick={handleCreateDialogOpen}
             size="large"
           >
@@ -246,7 +246,7 @@ export function WishlistManager() {
         {wishlists.length === 0 ? (
           <Card sx={{ textAlign: "center", py: 8 }}>
             <CardContent>
-              <PlaylistAdd
+              <PlaylistAddRounded
                 sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
               />
               <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -257,7 +257,7 @@ export function WishlistManager() {
               </Typography>
               <Button
                 variant="contained"
-                startIcon={<Add />}
+                startIcon={<AddRounded />}
                 onClick={handleCreateDialogOpen}
               >
                 {t("wishlistsUi.manager.createFirst")}
@@ -300,20 +300,20 @@ export function WishlistManager() {
                     </Typography>
                     <Stack direction="row" spacing={0.5}>
                       {wishlist.is_public ? (
-                        <Public
+                        <PublicRounded
                           fontSize="small"
                           color="action"
                           titleAccess={t("wishlistsUi.public")}
                         />
                       ) : (
-                        <Lock
+                        <LockRounded
                           fontSize="small"
                           color="action"
                           titleAccess={t("wishlistsUi.private")}
                         />
                       )}
                       {wishlist.is_collaborative && (
-                        <Share
+                        <ShareRounded
                           fontSize="small"
                           color="action"
                           titleAccess={t("wishlistsUi.collaborative")}
@@ -360,7 +360,7 @@ export function WishlistManager() {
                           •
                         </Typography>
                         <Chip
-                          icon={<CheckCircle />}
+                          icon={<CheckCircleRounded />}
                           label={t("wishlistsUi.manager.acquiredCount", {
                             count: wishlist.completed_items,
                           })}
@@ -421,7 +421,7 @@ export function WishlistManager() {
                       name: wishlist.wishlist_name,
                     })}
                   >
-                    <Delete fontSize="small" />
+                    <DeleteRounded fontSize="small" />
                   </IconButton>
                 </CardActions>
               </Card>

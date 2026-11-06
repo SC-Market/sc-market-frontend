@@ -721,7 +721,7 @@ describe("WishlistDetail", () => {
         name: /^Actions for /,
       })
       const moreButton = moreButtons.find((btn) =>
-        btn.querySelector('[data-testid="MoreVertIcon"]'),
+        btn.querySelector('[data-testid="MoreVertRoundedIcon"]'),
       )
 
       if (moreButton) {
@@ -758,7 +758,7 @@ describe("WishlistDetail", () => {
         name: /^Actions for /,
       })
       const moreButton = moreButtons.find((btn) =>
-        btn.querySelector('[data-testid="MoreVertIcon"]'),
+        btn.querySelector('[data-testid="MoreVertRoundedIcon"]'),
       )
 
       if (moreButton) {

@@ -26,7 +26,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
-import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCart } from "@mui/icons-material"
+import { CheckCircleRounded, CancelRounded, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCartRounded } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS, MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
@@ -40,7 +40,7 @@ import { useFormatters } from "../../util/format"
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
     <Chip
-      icon={value ? <CheckCircle sx={{ fontSize: 14 }} /> : <Cancel sx={{ fontSize: 14 }} />}
+      icon={value ? <CheckCircleRounded sx={{ fontSize: 14 }} /> : <CancelRounded sx={{ fontSize: 14 }} />}
       label={label}
       size="small"
       color={value ? "success" : "default"}
@@ -137,7 +137,7 @@ export function WikiCommodityDetail() {
                   <Button
                     size="small"
                     variant="outlined"
-                    startIcon={<ShoppingCart />}
+                    startIcon={<ShoppingCartRounded />}
                     onClick={() => navigate(`${MARKET_PATHS.search}?item=${encodeURIComponent(r.resource_name)}`)}
                   >
                     {t("wiki.commodityDetail.viewOnMarket", "View on Market")}

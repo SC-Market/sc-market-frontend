@@ -10,14 +10,14 @@ import {
   Typography,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import InfoIcon from "@mui/icons-material/Info"
+import InfoIcon from "@mui/icons-material/InfoRounded"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import React from "react"
 import {
   PeopleAltRounded,
   PrivacyTipRounded,
   StoreRounded,
-  Block,
+  BlockRounded,
   SecurityRounded,
   NotificationsActiveRounded,
   PhoneAndroidRounded,
@@ -179,7 +179,11 @@ export function SettingsPage() {
           label: t("settings.tabs.contractors"),
           icon: <PeopleAltRounded />,
         },
-        { index: 5, label: t("settings.tabs.blocklist"), icon: <Block /> },
+        {
+          index: 5,
+          label: t("settings.tabs.blocklist"),
+          icon: <BlockRounded />,
+        },
       ],
     },
   ]
@@ -287,7 +291,7 @@ export function SettingsPage() {
               />
               <Tab
                 label={t("settings.tabs.blocklist")}
-                icon={<Block />}
+                icon={<BlockRounded />}
                 {...a11yProps(5)}
                 value={5}
               />

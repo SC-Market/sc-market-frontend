@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useRef, useState } from "react"
 import { Button, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import FilterListIcon from "@mui/icons-material/FilterList"
+import FilterListIcon from "@mui/icons-material/FilterListRounded"
 import { NoteAddRounded } from "@mui/icons-material"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
 import { RecruitingSidebarContext } from "../../features/recruiting/hooks/RecruitingSidebar"

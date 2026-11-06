@@ -36,8 +36,8 @@ import {
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import {
-  ViewList,
-  ViewModule,
+  ViewListRounded,
+  ViewModuleRounded,
   ShieldRounded,
   BuildRounded,
 } from "@mui/icons-material"
@@ -425,13 +425,13 @@ export function MissionSearch() {
                 value="list"
                 aria-label={t("ui.viewMode.list", "List view")}
               >
-                <ViewList />
+                <ViewListRounded />
               </ToggleButton>
               <ToggleButton
                 value="grid"
                 aria-label={t("ui.viewMode.grid", "Grid view")}
               >
-                <ViewModule />
+                <ViewModuleRounded />
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>

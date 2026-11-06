@@ -34,13 +34,13 @@ import {
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
-  ArrowBack,
-  Download,
-  ShoppingCart,
-  CheckCircle,
-  Warning,
-  Cancel,
-  Info,
+  ArrowBackRounded,
+  DownloadRounded,
+  ShoppingCartRounded,
+  CheckCircleRounded,
+  WarningRounded,
+  CancelRounded,
+  InfoRounded,
 } from "@mui/icons-material"
 import { useGenerateShoppingListQuery } from "../../store/api/v2/market"
 import { useNavigate, useParams } from "react-router-dom"
@@ -189,19 +189,19 @@ export function ShoppingList() {
   const getStockStatus = (material: (typeof sortedMaterials)[0]) => {
     if (material.user_inventory_quantity >= material.total_quantity_needed) {
       return {
-        icon: <CheckCircle />,
+        icon: <CheckCircleRounded />,
         color: "success",
         label: t("shoppingListUi.fullyStocked"),
       }
     } else if (material.user_inventory_quantity > 0) {
       return {
-        icon: <Warning />,
+        icon: <WarningRounded />,
         color: "warning",
         label: t("shoppingListUi.partiallyStocked"),
       }
     } else {
       return {
-        icon: <Cancel />,
+        icon: <CancelRounded />,
         color: "error",
         label: t("shoppingListUi.notStocked"),
       }
@@ -245,7 +245,7 @@ export function ShoppingList() {
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"
-              startIcon={<ArrowBack />}
+              startIcon={<ArrowBackRounded />}
               onClick={handleBackToWishlist}
             >
               {t("shoppingListUi.backToWishlist")}
@@ -279,7 +279,7 @@ export function ShoppingList() {
         >
           <Button
             variant="outlined"
-            startIcon={<ArrowBack />}
+            startIcon={<ArrowBackRounded />}
             onClick={handleBackToWishlist}
           >
             {t("shoppingListUi.backToWishlist")}
@@ -287,7 +287,7 @@ export function ShoppingList() {
 
           <Button
             variant="contained"
-            startIcon={<Download />}
+            startIcon={<DownloadRounded />}
             onClick={handleExportCSV}
             disabled={sortedMaterials.length === 0}
           >
@@ -305,7 +305,7 @@ export function ShoppingList() {
                     alt=""
                     sx={{ bgcolor: theme.palette.primary.main }}
                   >
-                    <ShoppingCart />
+                    <ShoppingCartRounded />
                   </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
@@ -328,7 +328,7 @@ export function ShoppingList() {
                     alt=""
                     sx={{ bgcolor: theme.palette.success.main }}
                   >
-                    <CheckCircle />
+                    <CheckCircleRounded />
                   </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
@@ -351,7 +351,7 @@ export function ShoppingList() {
                     alt=""
                     sx={{ bgcolor: theme.palette.warning.main }}
                   >
-                    <Warning />
+                    <WarningRounded />
                   </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
@@ -374,7 +374,7 @@ export function ShoppingList() {
                     alt=""
                     sx={{ bgcolor: theme.palette.error.main }}
                   >
-                    <Cancel />
+                    <CancelRounded />
                   </ImageAvatar>
                   <Box>
                     <Typography variant="h4">
@@ -422,7 +422,7 @@ export function ShoppingList() {
         {sortedMaterials.length === 0 ? (
           <Card>
             <CardContent sx={{ textAlign: "center", py: 8 }}>
-              <ShoppingCart
+              <ShoppingCartRounded
                 sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
               />
               <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -644,7 +644,7 @@ export function ShoppingList() {
                             }
                           >
                             <IconButton size="small">
-                              <Info fontSize="small" />
+                              <InfoRounded fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
