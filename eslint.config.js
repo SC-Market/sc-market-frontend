@@ -81,6 +81,42 @@ const RAW_MUI = {
   Drawer: "use BottomSheet (components/mobile) or the shared nav drawers",
   Switch: "use a labelled FormControlLabel + Switch from a shared component",
 }
+const LEGACY_STORE_SLICES = [
+  "**/store/profile",
+  "**/store/contractor",
+  "**/store/offer",
+  "**/store/orders",
+  "**/store/services",
+  "**/store/recruiting",
+  "**/store/notification",
+  "**/store/moderation",
+  "**/store/public_contracts",
+  "**/store/admin",
+  "**/store/ships",
+  "**/store/orderSettings",
+  "**/store/comments",
+  "**/store/transactions",
+  "**/store/commodities",
+  "**/store/organizations",
+]
+const LEGACY_SLICE_PATTERN = {
+  group: LEGACY_STORE_SLICES,
+  message:
+    "Use feature-owned API slices (features/*/api/) instead of legacy store slices (see DECOUPLING_PLAN.md)",
+}
+const RAW_MUI_PATHS = Object.entries(RAW_MUI).flatMap(([name, instead]) => [
+  {
+    name: "@mui/material",
+    importNames: [name],
+    message: `Raw MUI ${name} in page code: ${instead}.`,
+    allowTypeImports: true,
+  },
+  {
+    name: `@mui/material/${name}`,
+    message: `Raw MUI ${name} in page code: ${instead}.`,
+    allowTypeImports: true,
+  },
+])
 const HEX = "#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})"
 const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
@@ -239,33 +275,6 @@ export default [
   eslintPluginPrettierRecommended,
   ...tseslint.configs.recommended,
 
-  // ── Architecture boundary: features/*/domain/ must be pure ──
-  // No React, MUI, or store imports in domain files
-  {
-    files: ["src/features/*/domain/**/*.ts"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              group: ["react", "react-dom"],
-              message: "domain/ must be pure — no React imports",
-            },
-            {
-              group: ["@mui/*"],
-              message: "domain/ must be pure — no MUI imports",
-            },
-            {
-              group: ["**/store", "**/store/**"],
-              message: "domain/ must be pure — no store imports",
-            },
-          ],
-        },
-      ],
-    },
-  },
-
   // ── Architecture boundary: components/ must not access the store ──
   {
     files: ["src/components/**/*.tsx", "src/components/**/*.ts"],
@@ -292,30 +301,7 @@ export default [
       "no-restricted-imports": [
         "error",
         {
-          patterns: [
-            {
-              group: [
-                "**/store/profile",
-                "**/store/contractor",
-                "**/store/offer",
-                "**/store/orders",
-                "**/store/services",
-                "**/store/recruiting",
-                "**/store/notification",
-                "**/store/moderation",
-                "**/store/public_contracts",
-                "**/store/admin",
-                "**/store/ships",
-                "**/store/orderSettings",
-                "**/store/comments",
-                "**/store/transactions",
-                "**/store/commodities",
-                "**/store/organizations",
-              ],
-              message:
-                "Use feature-owned API slices (features/*/api/) instead of legacy store slices (see DECOUPLING_PLAN.md)",
-            },
-          ],
+          patterns: [LEGACY_SLICE_PATTERN],
         },
       ],
     },
@@ -414,19 +400,50 @@ export default [
       "@typescript-eslint/no-restricted-imports": [
         "warn",
         {
-          paths: Object.entries(RAW_MUI).flatMap(([name, instead]) => [
+          paths: RAW_MUI_PATHS,
+        },
+      ],
+    },
+  },
+
+  // ── Architecture boundary: features/*/domain/ must be pure (error) ──
+  // No React, MUI, or store value imports. Flat config replaces a rule per
+  // matching block, so this block sits after the features/ and raw-MUI blocks
+  // and repeats their settings: the legacy-slice patterns and RAW_MUI_PATHS.
+  // Generated API types are plain data shapes, so `import type` from the
+  // store is allowed (allowTypeImports, which only the @typescript-eslint
+  // variant has); React and MUI are not allowed even as types.
+  {
+    files: ["src/features/*/domain/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            LEGACY_SLICE_PATTERN,
             {
-              name: "@mui/material",
-              importNames: [name],
-              message: `Raw MUI ${name} in page code: ${instead}.`,
-              allowTypeImports: true,
+              group: ["react", "react-dom", "react/*", "react-dom/*"],
+              message: "domain/ must be pure — no React imports",
             },
             {
-              name: `@mui/material/${name}`,
-              message: `Raw MUI ${name} in page code: ${instead}.`,
+              group: ["@mui/*"],
+              message: "domain/ must be pure — no MUI imports",
+            },
+          ],
+        },
+      ],
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          paths: RAW_MUI_PATHS,
+          patterns: [
+            {
+              group: ["**/store", "**/store/**"],
+              message:
+                "domain/ must be pure — no store imports (`import type` of generated API types is fine)",
               allowTypeImports: true,
             },
-          ]),
+          ],
         },
       ],
     },
