@@ -7,7 +7,12 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react"
 import { Box, IconButton, useTheme } from "@mui/material"
-import { ZoomIn, ZoomOut, FitScreen, Close } from "@mui/icons-material"
+import {
+  ZoomInRounded,
+  ZoomOutRounded,
+  FitScreenRounded,
+  CloseRounded,
+} from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -232,7 +237,7 @@ export function ImageZoomPan({
           sx={{ color: theme.palette.common.white }}
           aria-label={t("appUi.imageZoom.zoomIn")}
         >
-          <ZoomIn />
+          <ZoomInRounded />
         </IconButton>
         <IconButton
           size="small"
@@ -241,7 +246,7 @@ export function ImageZoomPan({
           sx={{ color: theme.palette.common.white }}
           aria-label={t("appUi.imageZoom.zoomOut")}
         >
-          <ZoomOut />
+          <ZoomOutRounded />
         </IconButton>
         <IconButton
           size="small"
@@ -250,7 +255,7 @@ export function ImageZoomPan({
           sx={{ color: theme.palette.common.white }}
           aria-label={t("appUi.imageZoom.resetZoom")}
         >
-          <FitScreen />
+          <FitScreenRounded />
         </IconButton>
         {onClose && (
           <IconButton
@@ -259,7 +264,7 @@ export function ImageZoomPan({
             sx={{ color: theme.palette.common.white }}
             aria-label={t("accessibility.close")}
           >
-            <Close />
+            <CloseRounded />
           </IconButton>
         )}
       </Box>

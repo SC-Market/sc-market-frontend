@@ -9,7 +9,7 @@
 
 import React from "react"
 import { Avatar, Skeleton } from "@mui/material"
-import ImageIcon from "@mui/icons-material/Image"
+import ImageIcon from "@mui/icons-material/ImageRounded"
 
 interface GameItemIconProps {
   /** Item name for alt text */

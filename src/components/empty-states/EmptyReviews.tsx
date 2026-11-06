@@ -1,5 +1,5 @@
 import React from "react"
-import { StarBorderOutlined } from "@mui/icons-material"
+import { StarBorderRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
@@ -62,7 +62,7 @@ export function EmptyReviews({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<StarBorderOutlined />}
+      icon={<StarBorderRounded />}
       action={showAction ? action : undefined}
       {...props}
     />

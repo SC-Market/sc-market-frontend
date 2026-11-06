@@ -2,9 +2,9 @@ import React, { useEffect, useState, useCallback } from "react"
 import { Box, Modal, IconButton, Typography, Paper } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
-  Close as CloseIcon,
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
+  CloseRounded as CloseIcon,
 } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
@@ -165,7 +165,7 @@ export function ImagePreviewModal(props: {
                     "Previous image",
                   )}
                 >
-                  <KeyboardArrowLeft />
+                  <KeyboardArrowLeftRounded />
                 </IconButton>
                 <IconButton
                   onClick={handleNext}
@@ -182,7 +182,7 @@ export function ImagePreviewModal(props: {
                   }}
                   aria-label={t("accessibility.nextImage", "Next image")}
                 >
-                  <KeyboardArrowRight />
+                  <KeyboardArrowRightRounded />
                 </IconButton>
               </>
             )}
@@ -385,7 +385,7 @@ export function ImagePreviewModal(props: {
                 }}
                 aria-label={t("accessibility.previousImage", "Previous image")}
               >
-                <KeyboardArrowLeft />
+                <KeyboardArrowLeftRounded />
               </IconButton>
               <IconButton
                 onClick={handleNext}
@@ -400,7 +400,7 @@ export function ImagePreviewModal(props: {
                 }}
                 aria-label={t("accessibility.nextImage", "Next image")}
               >
-                <KeyboardArrowRight />
+                <KeyboardArrowRightRounded />
               </IconButton>
             </>
           )}

@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { ChatBubbleOutlineOutlined, InboxOutlined } from "@mui/icons-material"
+import { ChatBubbleOutlineRounded, InboxRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../routes/paths"
@@ -87,7 +87,7 @@ export function EmptyMessages({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={isChatList ? <InboxOutlined /> : <ChatBubbleOutlineOutlined />}
+      icon={isChatList ? <InboxRounded /> : <ChatBubbleOutlineRounded />}
       action={action || defaultAction}
       {...props}
     />

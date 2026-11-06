@@ -9,7 +9,10 @@ import {
   ListItemText,
   Box,
 } from "@mui/material"
-import { ArrowDropDown, Link as LinkIcon } from "@mui/icons-material"
+import {
+  ArrowDropDownRounded,
+  LinkRounded as LinkIcon,
+} from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -64,7 +67,7 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
         }}
         aria-label={t("userActions.menu")}
       >
-        <ArrowDropDown />
+        <ArrowDropDownRounded />
       </IconButton>
       <Popover
         open={open}

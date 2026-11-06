@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { WorkOutlineOutlined } from "@mui/icons-material"
+import { WorkOutlineRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../routes/paths"
@@ -77,7 +77,7 @@ export function EmptyRecruiting({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<WorkOutlineOutlined />}
+      icon={<WorkOutlineRounded />}
       action={action || defaultAction}
       {...props}
     />

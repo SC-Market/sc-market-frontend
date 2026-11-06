@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import React, { ReactElement, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { IconButton } from "@mui/material"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowBackIcon from "@mui/icons-material/ArrowBackRounded"
 import {
   StandardPageLayout,
   StandardPageLayoutProps,

@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import SettingsIcon from "@mui/icons-material/Settings"
-import CloseIcon from "@mui/icons-material/Close"
+import SettingsIcon from "@mui/icons-material/SettingsRounded"
+import CloseIcon from "@mui/icons-material/CloseRounded"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 import { useTranslation } from "react-i18next"
 

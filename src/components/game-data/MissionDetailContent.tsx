@@ -20,8 +20,8 @@ import {
   LinearProgress,
 } from "@mui/material"
 import {
-  CheckCircleOutline,
-  CancelOutlined,
+  CheckCircleOutlineRounded,
+  HighlightOffRounded,
   TimerRounded,
   BuildRounded,
 } from "@mui/icons-material"
@@ -93,9 +93,11 @@ function BoolChip({
   return (
     <Stack direction="row" spacing={0.5} alignItems="center">
       {value ? (
-        <CheckCircleOutline sx={{ fontSize: 16, color: "success.main" }} />
+        <CheckCircleOutlineRounded
+          sx={{ fontSize: 16, color: "success.main" }}
+        />
       ) : (
-        <CancelOutlined sx={{ fontSize: 16, color: "text.disabled" }} />
+        <HighlightOffRounded sx={{ fontSize: 16, color: "text.disabled" }} />
       )}
       <Typography
         variant="body2"
@@ -590,7 +592,7 @@ function OverviewTab({
                                 </Typography>
                               )}
                               {bp.user_owns && (
-                                <CheckCircleOutline
+                                <CheckCircleOutlineRounded
                                   sx={{ fontSize: 14, color: "success.main" }}
                                 />
                               )}

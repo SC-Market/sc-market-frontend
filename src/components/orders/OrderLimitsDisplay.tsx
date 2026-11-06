@@ -1,10 +1,10 @@
 import React from "react"
 import { Alert, Box, Typography } from "@mui/material"
 import {
-  Info,
-  Warning,
-  CheckCircle,
-  Error as ErrorIcon,
+  InfoRounded,
+  WarningRounded,
+  CheckCircleRounded,
+  ErrorRounded as ErrorIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import type { OrderLimits } from "../../features/orders/domain/types"
@@ -123,7 +123,7 @@ export function OrderLimitsDisplay({
   }
 
   return (
-    <Alert severity={severity} icon={<Info />}>
+    <Alert severity={severity} icon={<InfoRounded />}>
       <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
         {t("OrderSettings.requirementsTitle")}
       </Typography>
@@ -178,7 +178,7 @@ export function OrderLimitsDisplay({
                     color="warning.main"
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
-                    <Warning fontSize="small" />
+                    <WarningRounded fontSize="small" />
                     {t("ordersUi.limits.sizeNearLimit", {
                       current: currentSize,
                     })}
@@ -190,7 +190,7 @@ export function OrderLimitsDisplay({
                     color="success.main"
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
-                    <CheckCircle fontSize="small" />
+                    <CheckCircleRounded fontSize="small" />
                     {t("ordersUi.limits.sizeOk")}
                   </Typography>
                 )}
@@ -247,7 +247,7 @@ export function OrderLimitsDisplay({
                     color="warning.main"
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
-                    <Warning fontSize="small" />
+                    <WarningRounded fontSize="small" />
                     {t("ordersUi.limits.valueNearLimit", {
                       current: fmt.integer(currentValue),
                     })}
@@ -259,7 +259,7 @@ export function OrderLimitsDisplay({
                     color="success.main"
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
-                    <CheckCircle fontSize="small" />
+                    <CheckCircleRounded fontSize="small" />
                     {t("ordersUi.limits.valueOk")}
                   </Typography>
                 )}

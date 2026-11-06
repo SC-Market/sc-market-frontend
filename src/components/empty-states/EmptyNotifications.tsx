@@ -1,5 +1,5 @@
 import React from "react"
-import { NotificationsNoneOutlined } from "@mui/icons-material"
+import { NotificationsNoneRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
@@ -44,7 +44,7 @@ export function EmptyNotifications({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<NotificationsNoneOutlined />}
+      icon={<NotificationsNoneRounded />}
       {...props}
     />
   )

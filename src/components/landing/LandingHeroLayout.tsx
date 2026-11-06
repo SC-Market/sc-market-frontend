@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
+import SearchIcon from "@mui/icons-material/SearchRounded"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { Link, useNavigate } from "react-router-dom"

@@ -15,9 +15,9 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  Bookmark,
-  BookmarkBorder,
-  Circle,
+  BookmarkRounded,
+  BookmarkBorderRounded,
+  CircleRounded,
   PlaylistAddRounded,
 } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
@@ -126,9 +126,9 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               }}
             >
               {effectiveOwned ? (
-                <Bookmark fontSize="small" />
+                <BookmarkRounded fontSize="small" />
               ) : (
-                <BookmarkBorder fontSize="small" />
+                <BookmarkBorderRounded fontSize="small" />
               )}
             </IconButton>
           </Tooltip>
@@ -229,7 +229,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               </Box>
             ) : null}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <Circle
+              <CircleRounded
                 sx={{
                   fontSize: 8,
                   color: bp.mission_count > 0 ? "success.main" : "error.main",
@@ -337,7 +337,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               gap: 0.75,
             }}
           >
-            <Circle
+            <CircleRounded
               sx={{
                 fontSize: 8,
                 color: bp.mission_count > 0 ? "success.main" : "error.main",
@@ -391,9 +391,9 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 }}
               >
                 {effectiveOwned ? (
-                  <Bookmark fontSize="small" />
+                  <BookmarkRounded fontSize="small" />
                 ) : (
-                  <BookmarkBorder fontSize="small" />
+                  <BookmarkBorderRounded fontSize="small" />
                 )}
               </IconButton>
             </Tooltip>

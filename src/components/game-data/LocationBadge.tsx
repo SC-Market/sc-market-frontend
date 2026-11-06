@@ -9,9 +9,9 @@
 
 import React from "react"
 import { Chip, Tooltip } from "@mui/material"
-import LocationOnIcon from "@mui/icons-material/LocationOn"
-import PublicIcon from "@mui/icons-material/Public"
-import PlaceIcon from "@mui/icons-material/Place"
+import LocationOnIcon from "@mui/icons-material/LocationOnRounded"
+import PublicIcon from "@mui/icons-material/PublicRounded"
+import PlaceIcon from "@mui/icons-material/PlaceRounded"
 
 interface LocationBadgeProps {
   /** Location name */

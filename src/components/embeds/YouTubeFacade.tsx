@@ -11,7 +11,7 @@
 import React, { useState } from "react"
 import { Box, IconButton, styled } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { PlayArrow } from "@mui/icons-material"
+import { PlayArrowRounded } from "@mui/icons-material"
 
 interface YouTubeFacadeProps {
   /**
@@ -167,7 +167,7 @@ export function YouTubeFacade({
           className="play-button"
           aria-label={t("appUi.youtube.playVideo")}
         >
-          <PlayArrow />
+          <PlayArrowRounded />
         </PlayButton>
       </PlayButtonOverlay>
     </FacadeContainer>

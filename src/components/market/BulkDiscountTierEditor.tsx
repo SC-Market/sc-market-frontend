@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { Add, Delete } from "@mui/icons-material"
+import { AddRounded, DeleteRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 
 export interface BulkDiscountTier {
@@ -100,12 +100,17 @@ export function BulkDiscountTierEditor({
                 n: index + 1,
               })}
             >
-              <Delete fontSize="small" />
+              <DeleteRounded fontSize="small" />
             </IconButton>
           </Stack>
         ))}
       </Stack>
-      <Button size="small" startIcon={<Add />} onClick={addTier} sx={{ mt: 1 }}>
+      <Button
+        size="small"
+        startIcon={<AddRounded />}
+        onClick={addTier}
+        sx={{ mt: 1 }}
+      >
         {t("market.addDiscountTier", "Add Tier")}
       </Button>
     </Box>

@@ -19,7 +19,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import UpdateIcon from "@mui/icons-material/Update"
+import UpdateIcon from "@mui/icons-material/UpdateRounded"
 import {
   useGetActiveVersionsQuery,
   type GameVersion,

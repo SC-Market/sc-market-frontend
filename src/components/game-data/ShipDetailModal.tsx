@@ -17,7 +17,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { CloseRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetShipDetailQuery } from "../../features/game-data/api/gameDataApi"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
@@ -59,7 +59,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
           size="small"
           aria-label={t("accessibility.close")}
         >
-          <Close />
+          <CloseRounded />
         </IconButton>
       </DialogTitle>
 

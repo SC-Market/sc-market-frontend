@@ -28,7 +28,12 @@ import {
   ToggleButton,
   Chip,
 } from "@mui/material"
-import { Star, StarBorder, ShoppingCart, Build } from "@mui/icons-material"
+import {
+  StarRounded,
+  StarBorderRounded,
+  ShoppingCartRounded,
+  BuildRounded,
+} from "@mui/icons-material"
 import {
   useSearchGameItemsQuery,
   useSearchBlueprintsQuery,
@@ -234,11 +239,11 @@ export function AddItemDialog({
                 size="small"
               >
                 <ToggleButton value="buy">
-                  <ShoppingCart sx={{ mr: 1 }} fontSize="small" />
+                  <ShoppingCartRounded sx={{ mr: 1 }} fontSize="small" />
                   {t("marketUi.addItemDialog.buyFromMarket")}
                 </ToggleButton>
                 <ToggleButton value="craft">
-                  <Build sx={{ mr: 1 }} fontSize="small" />
+                  <BuildRounded sx={{ mr: 1 }} fontSize="small" />
                   {t("marketUi.addItemDialog.craftAddIngredients")}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -336,9 +341,9 @@ export function AddItemDialog({
                   }}
                 >
                   {qualityTier && tier <= qualityTier ? (
-                    <Star fontSize="large" color="primary" />
+                    <StarRounded fontSize="large" color="primary" />
                   ) : (
-                    <StarBorder fontSize="large" color="action" />
+                    <StarBorderRounded fontSize="large" color="action" />
                   )}
                 </Box>
               ))}

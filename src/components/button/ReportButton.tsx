@@ -15,7 +15,7 @@ import {
   Button,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import { Report as ReportIcon } from "@mui/icons-material"
+import { ReportRounded as ReportIcon } from "@mui/icons-material"
 import type { CreateReportRequest } from "../../features/admin/api/moderationApi"
 import { useReportContent } from "../../features/admin/hooks/useModerationActions"
 import { useTranslation } from "react-i18next"

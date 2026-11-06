@@ -6,7 +6,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material"
-import { PersonAdd } from "@mui/icons-material"
+import { PersonAddRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
@@ -43,7 +43,7 @@ export function UnblockUserButton({
           color: theme.palette.primary.main,
         }}
       >
-        {unblocking ? <CircularProgress size={16} /> : <PersonAdd />}
+        {unblocking ? <CircularProgress size={16} /> : <PersonAddRounded />}
       </ListItemIcon>
       <ListItemText>
         <Box color={"text.secondary"} fontSize="0.9em">
@@ -88,7 +88,11 @@ export function UnblockUserForOrgButton({
           color: theme.palette.primary.main,
         }}
       >
-        {unblockingForOrg ? <CircularProgress size={16} /> : <PersonAdd />}
+        {unblockingForOrg ? (
+          <CircularProgress size={16} />
+        ) : (
+          <PersonAddRounded />
+        )}
       </ListItemIcon>
       <ListItemText>
         <Box color={"text.secondary"} fontSize="0.9em">

@@ -1,8 +1,8 @@
 import { ImagePreviewModal } from "../modal/ImagePreviewModal"
 import { Box, IconButton, Paper, useTheme } from "@mui/material"
 import {
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
   ZoomInRounded,
 } from "@mui/icons-material"
 import React, { useState } from "react"
@@ -74,7 +74,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             onClick={handlePreviousImage}
             aria-label={t("accessibility.previousImage", "Previous image")}
           >
-            <KeyboardArrowRight
+            <KeyboardArrowRightRounded
               sx={{ color: theme.palette.background.light }}
             />
           </IconButton>
@@ -86,7 +86,9 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             onClick={handleNextImage}
             aria-label={t("accessibility.nextImage", "Next image")}
           >
-            <KeyboardArrowLeft sx={{ color: theme.palette.background.light }} />
+            <KeyboardArrowLeftRounded
+              sx={{ color: theme.palette.background.light }}
+            />
           </IconButton>
         )}
 

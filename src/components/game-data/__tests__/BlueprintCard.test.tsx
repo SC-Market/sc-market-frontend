@@ -188,7 +188,7 @@ describe("BlueprintCard", () => {
       )
 
       // Find the bookmark icon button
-      const bookmarkIcon = screen.getByTestId("BookmarkBorderIcon")
+      const bookmarkIcon = screen.getByTestId("BookmarkBorderRoundedIcon")
       const bookmarkButton = bookmarkIcon.closest("button")
       fireEvent.click(bookmarkButton!)
 
@@ -202,7 +202,9 @@ describe("BlueprintCard", () => {
         <BlueprintCard blueprint={mockBlueprint} onBookmarkToggle={vi.fn()} />,
       )
 
-      expect(screen.getByTestId("BookmarkBorderIcon")).toBeInTheDocument()
+      expect(
+        screen.getByTestId("BookmarkBorderRoundedIcon"),
+      ).toBeInTheDocument()
     })
 
     it("should display filled bookmark when owned", () => {
@@ -211,7 +213,7 @@ describe("BlueprintCard", () => {
         <BlueprintCard blueprint={ownedBlueprint} onBookmarkToggle={vi.fn()} />,
       )
 
-      expect(screen.getByTestId("BookmarkIcon")).toBeInTheDocument()
+      expect(screen.getByTestId("BookmarkRoundedIcon")).toBeInTheDocument()
     })
 
     it("should call onBookmarkToggle with correct parameters", () => {
@@ -223,7 +225,7 @@ describe("BlueprintCard", () => {
         />,
       )
 
-      const bookmarkIcon = screen.getByTestId("BookmarkBorderIcon")
+      const bookmarkIcon = screen.getByTestId("BookmarkBorderRoundedIcon")
       const bookmarkButton = bookmarkIcon.closest("button")
       fireEvent.click(bookmarkButton!)
 
@@ -240,7 +242,7 @@ describe("BlueprintCard", () => {
         />,
       )
 
-      const bookmarkIcon = screen.getByTestId("BookmarkIcon")
+      const bookmarkIcon = screen.getByTestId("BookmarkRoundedIcon")
       const bookmarkButton = bookmarkIcon.closest("button")
       fireEvent.click(bookmarkButton!)
 
@@ -250,9 +252,11 @@ describe("BlueprintCard", () => {
     it("should not display bookmark if onBookmarkToggle is not provided", () => {
       renderWithRouter(<BlueprintCard blueprint={mockBlueprint} />)
 
-      expect(screen.queryByTestId("icon-Bookmark")).not.toBeInTheDocument()
       expect(
-        screen.queryByTestId("icon-BookmarkBorder"),
+        screen.queryByTestId("BookmarkRoundedIcon"),
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId("BookmarkBorderRoundedIcon"),
       ).not.toBeInTheDocument()
     })
   })

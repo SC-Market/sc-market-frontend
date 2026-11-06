@@ -1,7 +1,7 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import { Button, Grid, Stack } from "@mui/material"
-import { BusinessOutlined } from "@mui/icons-material"
+import { BusinessRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "../empty-states"
 import { ContainerGrid } from "../layout/ContainerGrid"
@@ -23,7 +23,7 @@ export function NoCurrentOrg() {
         <EmptyState
           title={t("emptyStates.noOrg.title")}
           description={t("emptyStates.noOrg.description")}
-          icon={<BusinessOutlined />}
+          icon={<BusinessRounded />}
         >
           <Stack
             direction={{ xs: "column", sm: "row" }}

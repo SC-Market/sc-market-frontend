@@ -1,5 +1,5 @@
 import React from "react"
-import { SearchOffOutlined } from "@mui/icons-material"
+import { SearchOffRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
@@ -71,7 +71,7 @@ export function EmptySearchResults({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<SearchOffOutlined />}
+      icon={<SearchOffRounded />}
       action={action || defaultAction}
       {...props}
     />

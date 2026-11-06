@@ -1,5 +1,5 @@
 import React from "react"
-import { BusinessOutlined } from "@mui/icons-material"
+import { BusinessRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
@@ -58,7 +58,7 @@ export function EmptyContractors({
               "We encountered an error while loading contractors. Please try again.",
           })
         }
-        icon={<BusinessOutlined />}
+        icon={<BusinessRounded />}
         action={
           onRetry
             ? {
@@ -96,7 +96,7 @@ export function EmptyContractors({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<BusinessOutlined />}
+      icon={<BusinessRounded />}
       {...props}
     />
   )

@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Inventory2Outlined } from "@mui/icons-material"
+import { Inventory2Rounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { MARKET_PATHS } from "../../routes/paths"
@@ -76,7 +76,7 @@ export function EmptyListings({
               "We encountered an error while loading listings. Please try again.",
           })
         }
-        icon={<Inventory2Outlined />}
+        icon={<Inventory2Rounded />}
         action={
           onRetry
             ? {
@@ -123,7 +123,7 @@ export function EmptyListings({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<Inventory2Outlined />}
+      icon={<Inventory2Rounded />}
       action={action || defaultAction}
       {...props}
     />

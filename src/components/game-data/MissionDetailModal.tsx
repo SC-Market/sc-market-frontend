@@ -13,7 +13,7 @@ import {
   Box,
   Alert,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { CloseRounded } from "@mui/icons-material"
 import { useGetMissionDetailQuery } from "../../features/game-data/api/gameDataApi"
 import { MissionName } from "./MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "./MissionDetailContent"
@@ -57,7 +57,7 @@ export function MissionDetailModal({
           size="small"
           aria-label={t("missionsUi.close")}
         >
-          <Close />
+          <CloseRounded />
         </IconButton>
       </DialogTitle>
 

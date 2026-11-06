@@ -1,5 +1,5 @@
 import { Fab } from "@mui/material"
-import { FilterList } from "@mui/icons-material"
+import { FilterListRounded } from "@mui/icons-material"
 import React from "react"
 import { haptic } from "../../util/haptics"
 
@@ -26,7 +26,7 @@ export function FiltersFAB({ onClick, label = "Filters" }: FiltersFABProps) {
         zIndex: 1000,
       }}
     >
-      <FilterList />
+      <FilterListRounded />
     </Fab>
   )
 }

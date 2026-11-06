@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { DescriptionOutlined } from "@mui/icons-material"
+import { DescriptionRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../routes/paths"
@@ -73,7 +73,7 @@ export function EmptyContracts({
               "We encountered an error while loading contracts. Please try again.",
           })
         }
-        icon={<DescriptionOutlined />}
+        icon={<DescriptionRounded />}
         action={
           onRetry
             ? {
@@ -120,7 +120,7 @@ export function EmptyContracts({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<DescriptionOutlined />}
+      icon={<DescriptionRounded />}
       action={action || defaultAction}
       {...props}
     />

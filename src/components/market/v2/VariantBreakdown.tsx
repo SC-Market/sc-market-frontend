@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCartRounded"
 import { LocationOnRounded } from "@mui/icons-material"
 import type { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { QualityBadge } from "./QualityBadge"

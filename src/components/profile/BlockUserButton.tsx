@@ -6,7 +6,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material"
-import { Person, Business } from "@mui/icons-material"
+import { PersonRounded, BusinessRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
@@ -45,7 +45,7 @@ export function BlockUserButton({
           color: theme.palette.primary.main,
         }}
       >
-        {blocking ? <CircularProgress size={16} /> : <Person />}
+        {blocking ? <CircularProgress size={16} /> : <PersonRounded />}
       </ListItemIcon>
       <ListItemText>
         <Box color={"text.secondary"} fontSize="0.9em">
@@ -91,7 +91,7 @@ export function BlockUserForOrgButton({
           color: theme.palette.primary.main,
         }}
       >
-        {blockingForOrg ? <CircularProgress size={16} /> : <Business />}
+        {blockingForOrg ? <CircularProgress size={16} /> : <BusinessRounded />}
       </ListItemIcon>
       <ListItemText>
         <Box color={"text.secondary"} fontSize="0.9em">

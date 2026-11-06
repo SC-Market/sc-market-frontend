@@ -1,7 +1,7 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import { Button, Grid } from "@mui/material"
-import { LockOutlined } from "@mui/icons-material"
+import { LockRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "../empty-states"
 import { ContainerGrid } from "../layout/ContainerGrid"
@@ -31,7 +31,7 @@ export function NoOrgPermission(props: {
         <EmptyState
           title={t(`emptyStates.noOrgPermission.titles.${area}`)}
           description={t("emptyStates.noOrgPermission.description")}
-          icon={<LockOutlined />}
+          icon={<LockRounded />}
         >
           <Button
             component={RouterLink}

@@ -2,8 +2,8 @@ import React, { Suspense, useState } from "react"
 import { Box, Collapse, Divider, ListItem, ListItemButton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
+import ExpandLessRounded from "@mui/icons-material/ExpandLessRounded"
+import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import { MarkdownRender } from "../markdown/Markdown.lazy"
 import { LandingBlockTitle, LandingBodyText } from "./LandingTypography"
 
@@ -76,7 +76,7 @@ export function FAQQuestion(props: {
           <Box component={"span"} sx={{ flex: "1 1 auto", marginY: 0.75 }}>
             {question}
           </Box>
-          {open ? <ExpandLess /> : <ExpandMore />}
+          {open ? <ExpandLessRounded /> : <ExpandMoreRounded />}
         </ListItemButton>
       </LandingBlockTitle>
       <Collapse in={open} timeout="auto" unmountOnExit={!keepMounted}>

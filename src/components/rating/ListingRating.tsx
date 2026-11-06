@@ -3,7 +3,7 @@ import { MinimalContractor } from "../../features/contractor/domain/types"
 import {
   AccessTimeRounded,
   AutoAwesomeRounded,
-  AutoGraphOutlined,
+  AutoGraphRounded,
   WhatshotRounded,
   WorkspacePremiumRounded,
   TrendingUpRounded,
@@ -422,9 +422,7 @@ export function BadgeDisplay(props: {
       )}
       {badges.includes(BADGE_RATING_90) && (
         <Tooltip title={t("listing.90PercentRating25PlusTransactions")}>
-          <AutoGraphOutlined
-            sx={{ color: theme.palette.common.badge.bronze }}
-          />
+          <AutoGraphRounded sx={{ color: theme.palette.common.badge.bronze }} />
         </Tooltip>
       )}
 

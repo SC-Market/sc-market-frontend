@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
-  Close,
+  CloseRounded,
   DeleteOutlineRounded,
   ShoppingCartCheckoutRounded,
 } from "@mui/icons-material"
@@ -84,7 +84,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             size="small"
             aria-label={t("cart.closeDrawer", "Close")}
           >
-            <Close />
+            <CloseRounded />
           </IconButton>
         </Box>
       )}

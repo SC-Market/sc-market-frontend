@@ -23,12 +23,12 @@ import {
   Avatar,
 } from "@mui/material"
 import {
-  Close,
+  CloseRounded,
   BuildRounded,
   TimerRounded,
   TrackChangesRounded,
-  Bookmark,
-  BookmarkBorder,
+  BookmarkRounded,
+  BookmarkBorderRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink, useNavigate } from "react-router-dom"
@@ -259,9 +259,9 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             }
           >
             {userOwns ? (
-              <Bookmark fontSize="small" />
+              <BookmarkRounded fontSize="small" />
             ) : (
-              <BookmarkBorder fontSize="small" />
+              <BookmarkBorderRounded fontSize="small" />
             )}
           </IconButton>
           <IconButton
@@ -269,7 +269,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             size="small"
             aria-label={t("common.close", "Close")}
           >
-            <Close />
+            <CloseRounded />
           </IconButton>
         </Stack>
       </DialogTitle>

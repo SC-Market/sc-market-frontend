@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { AssignmentOutlined } from "@mui/icons-material"
+import { AssignmentRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { MARKET_PATHS, ORDER_PATHS } from "../../routes/paths"
@@ -159,7 +159,7 @@ export function EmptyOrders({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<AssignmentOutlined />}
+      icon={<AssignmentRounded />}
       action={action || defaultAction}
       secondaryAction={secondaryAction || defaultSecondaryAction}
       {...props}

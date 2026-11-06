@@ -46,6 +46,6 @@ export const AdminIcons = {
   CheckCircle: lazyIcon(() => import("@mui/icons-material/CheckCircleRounded")),
   Error: lazyIcon(() => import("@mui/icons-material/ErrorRounded")),
   Warning: lazyIcon(() => import("@mui/icons-material/WarningRounded")),
-  ExpandMore: lazyIcon(() => import("@mui/icons-material/ExpandMore")),
-  ExpandLess: lazyIcon(() => import("@mui/icons-material/ExpandLess")),
+  ExpandMore: lazyIcon(() => import("@mui/icons-material/ExpandMoreRounded")),
+  ExpandLess: lazyIcon(() => import("@mui/icons-material/ExpandLessRounded")),
 }

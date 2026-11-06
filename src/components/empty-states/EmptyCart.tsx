@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { ShoppingCartOutlined } from "@mui/icons-material"
+import { ShoppingCartRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 import { MARKET_PATHS } from "../../routes/paths"
@@ -61,7 +61,7 @@ export function EmptyCart({
               "We encountered an error while loading your cart. Please try again.",
           })
         }
-        icon={<ShoppingCartOutlined />}
+        icon={<ShoppingCartRounded />}
         action={
           onRetry
             ? {
@@ -96,7 +96,7 @@ export function EmptyCart({
     <EmptyState
       title={title || defaultTitle}
       description={description || defaultDescription}
-      icon={<ShoppingCartOutlined />}
+      icon={<ShoppingCartRounded />}
       action={action || defaultAction}
       {...props}
     />

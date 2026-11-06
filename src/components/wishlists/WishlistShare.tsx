@@ -39,13 +39,13 @@ import {
   CircularProgress,
 } from "@mui/material"
 import {
-  ContentCopy,
-  Check,
-  Share,
-  Lock,
-  Public,
-  Group,
-  Info,
+  ContentCopyRounded,
+  CheckRounded,
+  ShareRounded,
+  LockRounded,
+  PublicRounded,
+  GroupRounded,
+  InfoRounded,
 } from "@mui/icons-material"
 import { Trans, useTranslation } from "react-i18next"
 import { useWishlistSharing } from "../../features/wishlists/hooks/useWishlistActions"
@@ -159,7 +159,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Box display="flex" alignItems="center" gap={1}>
-          <Share />
+          <ShareRounded />
           {t("wishlistsUi.share.title")}
         </Box>
       </DialogTitle>
@@ -207,9 +207,9 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
               label={
                 <Box display="flex" alignItems="center" gap={1}>
                   {isPublic ? (
-                    <Public fontSize="small" />
+                    <PublicRounded fontSize="small" />
                   ) : (
-                    <Lock fontSize="small" />
+                    <LockRounded fontSize="small" />
                   )}
                   <Typography>
                     {isPublic
@@ -272,7 +272,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                     color={copied ? "success" : "primary"}
                     size="small"
                   >
-                    {copied ? <Check /> : <ContentCopy />}
+                    {copied ? <CheckRounded /> : <ContentCopyRounded />}
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -281,7 +281,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
           {/* Private Wishlist Info */}
           {!isPublic && (
-            <Alert severity="info" icon={<Info />}>
+            <Alert severity="info" icon={<InfoRounded />}>
               {t("wishlistsUi.share.enablePublicHint")}
             </Alert>
           )}
@@ -307,7 +307,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                 }
                 label={
                   <Box display="flex" alignItems="center" gap={1}>
-                    <Group fontSize="small" />
+                    <GroupRounded fontSize="small" />
                     <Typography>
                       {t("wishlistsUi.share.collaborativeMode")}
                     </Typography>
@@ -326,7 +326,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                   : t("wishlistsUi.share.collabOffHelp")}
               </Typography>
 
-              <Alert severity="info" icon={<Info />} sx={{ mt: 2 }}>
+              <Alert severity="info" icon={<InfoRounded />} sx={{ mt: 2 }}>
                 {t("wishlistsUi.share.orgAssociated")}
               </Alert>
             </Box>
@@ -334,7 +334,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
           {/* No Organization Info */}
           {!wishlist.organization_id && (
-            <Alert severity="info" icon={<Info />}>
+            <Alert severity="info" icon={<InfoRounded />}>
               {t("wishlistsUi.share.noOrg")}
             </Alert>
           )}
@@ -350,9 +350,9 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
             <Stack spacing={1}>
               <Box display="flex" alignItems="center" gap={1}>
                 {isPublic ? (
-                  <Public fontSize="small" color="success" />
+                  <PublicRounded fontSize="small" color="success" />
                 ) : (
-                  <Lock fontSize="small" color="action" />
+                  <LockRounded fontSize="small" color="action" />
                 )}
                 <Typography variant="body2">
                   <Trans
@@ -366,7 +366,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
-                <Group
+                <GroupRounded
                   fontSize="small"
                   color={isCollaborative ? "success" : "action"}
                 />
@@ -382,7 +382,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
-                <Share
+                <ShareRounded
                   fontSize="small"
                   color={shareUrl ? "success" : "action"}
                 />

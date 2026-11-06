@@ -24,7 +24,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
-import { ShoppingCart } from "@mui/icons-material"
+import { ShoppingCartRounded } from "@mui/icons-material"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type {
@@ -172,7 +172,7 @@ export function ItemAcquisitionSection({
                               onClick={() => onAddToCart(listing.listing_id)}
                               disabled={listing.quantity_available === 0}
                             >
-                              <ShoppingCart fontSize="small" />
+                              <ShoppingCartRounded fontSize="small" />
                             </Button>
                           </TableCell>
                         )}
@@ -186,7 +186,7 @@ export function ItemAcquisitionSection({
                 to={MARKET_PATHS.aggregate(doc.item.id, doc.item.name)}
                 size="small"
                 variant="contained"
-                startIcon={<ShoppingCart />}
+                startIcon={<ShoppingCartRounded />}
                 sx={{ mt: 1.5 }}
               >
                 {t("itemAcquisition.compareAll", { defaultValue: "Compare all {{name}} listings", name: itemName })}
