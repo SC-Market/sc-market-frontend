@@ -485,7 +485,7 @@ export function MarketMultipleViewV2() {
                                     new Date(complete.created_at),
                                   ) <= 1 && (
                                     <Chip
-                                      color={"secondary"}
+                                      variant="outlined"
                                       label={t("MarketMultipleView.new")}
                                       sx={{
                                         marginRight: 1,

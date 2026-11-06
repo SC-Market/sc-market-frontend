@@ -4,6 +4,17 @@
  * pulling in the whole market search page.
  */
 
+import { alpha, type Theme } from "@mui/material/styles"
+
+/**
+ * A neutral overlay chip ("NEW", "N sellers"): use with variant="outlined".
+ * The outline and bright text come from the theme; this adds the paper
+ * backing so the chip reads over the card photo.
+ */
+export const NEUTRAL_CARD_CHIP_SX = {
+  bgcolor: (theme: Theme) => alpha(theme.palette.background.paper, 0.9),
+} as const
+
 /** Shared visual style for the small overlay chips on a listing card. */
 export const CARD_CHIP_SX = {
   textTransform: "uppercase" as const,

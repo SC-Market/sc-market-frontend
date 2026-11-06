@@ -197,7 +197,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
         {/* Quality — conditional based on item type */}
         {qualityMode === "tier" && (<>
           <Grid item xs={12} sm={6}>
-            <TextField select fullWidth color="secondary" size="small"
+            <TextField select fullWidth size="small"
               label={t("market.qualityTierMin", "Min Quality Tier")}
               value={qualityTierMin ?? ""}
               onChange={(e) => setQualityTierMin(e.target.value === "" ? null : Number(e.target.value))}
@@ -207,7 +207,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
             </TextField>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField select fullWidth color="secondary" size="small"
+            <TextField select fullWidth size="small"
               label={t("market.qualityTierMax", "Max Quality Tier")}
               value={qualityTierMax ?? ""}
               onChange={(e) => setQualityTierMax(e.target.value === "" ? null : Number(e.target.value))}
@@ -229,7 +229,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               />
             ) : (
               <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
-                size="small" fullWidth color="secondary"
+                size="small" fullWidth
                 isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
                 label={t("marketV2.minQualityRange")}
                 value={qualityValueMin ?? ""}
@@ -246,7 +246,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               />
             ) : (
               <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
-                size="small" fullWidth color="secondary"
+                size="small" fullWidth
                 isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
                 label={t("marketV2.maxQualityRange")}
                 value={qualityValueMax ?? ""}
@@ -260,7 +260,6 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
           <FormControlLabel
             control={
               <Checkbox
-                color="secondary"
                 checked={negotiable}
                 onChange={(e) => setNegotiable(e.target.checked)}
               />
@@ -290,7 +289,6 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
             InputProps={{
               endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
             }}
-            color="secondary"
             disabled={negotiable}
             placeholder={negotiable ? t("common.optional", "Optional") : ""}
           />
@@ -313,7 +311,6 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
             InputProps={{
               endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
             }}
-            color="secondary"
             disabled={negotiable}
             placeholder={negotiable ? t("common.optional", "Optional") : ""}
           />
@@ -334,7 +331,6 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               inputMode: "numeric",
               pattern: "[0-9]*",
             }}
-            color="secondary"
           />
         </Grid>
 
@@ -388,8 +384,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as "public" | "roster_only")}
             >
-              <FormControlLabel value="public" control={<Radio color="secondary" size="small" />} label={t("marketV2.public")} />
-              <FormControlLabel value="roster_only" control={<Radio color="secondary" size="small" />} label={t("marketV2.rosterOnly")} />
+              <FormControlLabel value="public" control={<Radio size="small" />} label={t("marketV2.public")} />
+              <FormControlLabel value="roster_only" control={<Radio size="small" />} label={t("marketV2.rosterOnly")} />
             </RadioGroup>
           </Grid>
         )}

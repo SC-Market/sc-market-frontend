@@ -65,7 +65,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           left: 0,
           right: 0,
           height: "3px",
-          background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+          background: theme.palette.primary.main,
           opacity: 0,
           transition: "opacity 0.25s ease",
           borderRadius: "4px 4px 0 0",

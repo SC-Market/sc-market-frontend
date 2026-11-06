@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
@@ -60,7 +60,7 @@ export function NotificationBidV2(props: { notif: Notification }) {
       {t("notifications.new_bid_placed_by")}{" "}
       <Link
         to={bidderLink}
-        style={{ textDecoration: "none", color: theme.palette.secondary.main }}
+        style={{ textDecoration: "none", color: linkColor(theme) }}
       >
         <UnderlineLink>{bidderName}</UnderlineLink>
       </Link>{" "}
@@ -74,7 +74,7 @@ export function NotificationBidV2(props: { notif: Notification }) {
               })
             : `/market/${bid.listing_id}`
         }
-        style={{ textDecoration: "none", color: theme.palette.secondary.main }}
+        style={{ textDecoration: "none", color: linkColor(theme) }}
       >
         <UnderlineLink>{listing?.listing.title || "..."}</UnderlineLink>
       </Link>

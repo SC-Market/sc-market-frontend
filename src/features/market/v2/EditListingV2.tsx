@@ -604,7 +604,6 @@ export function EditListingV2() {
                   size="small"
                   label={t("EditListingV2.gameItem", "Game Item")}
                   value={listingData.items[0]?.game_item.name || ""}
-                  color="secondary"
                   disabled
                   helperText={t(
                     "EditListingV2.gameItemHelp",
@@ -625,7 +624,6 @@ export function EditListingV2() {
                     clearError("title")
                     setTitle(e.target.value)
                   }}
-                  color="secondary"
                   required
                   error={!!fieldError("title")}
                   disabled={!canEdit}
@@ -795,12 +793,12 @@ export function EditListingV2() {
                   <RadioGroup row value={pricingMode}>
                     <FormControlLabel
                       value="unified"
-                      control={<Radio color="secondary" />}
+                      control={<Radio />}
                       label={t("EditListingV2.unifiedPricing", "Unified Price")}
                     />
                     <FormControlLabel
                       value="per_variant"
-                      control={<Radio color="secondary" />}
+                      control={<Radio />}
                       label={t(
                         "EditListingV2.perVariantPricing",
                         "Per-Variant Pricing",
@@ -833,7 +831,6 @@ export function EditListingV2() {
                     id={LISTING_FIELD_IDS.base_price}
                     label={t("EditListingV2.basePrice", "Base Price")}
                     value={basePrice}
-                    color="secondary"
                     disabled={!canEdit}
                     InputProps={{
                       endAdornment: <Typography>aUEC</Typography>,
@@ -935,7 +932,6 @@ export function EditListingV2() {
                             }}
                             label={t("EditListingV2.quantity", "Quantity")}
                             value={v.quantity}
-                            color="secondary"
                             disabled={!canEdit}
                             required
                             inputProps={{
@@ -959,7 +955,6 @@ export function EditListingV2() {
                                 "Quality Tier",
                               )}
                               value={`Tier ${v.quality_tier}`}
-                              color="secondary"
                               disabled
                             />
                           </Grid>
@@ -976,7 +971,6 @@ export function EditListingV2() {
                                 "Quality Value",
                               )}
                               value={v.quality_value.toFixed(2)}
-                              color="secondary"
                               disabled
                             />
                           </Grid>
@@ -990,7 +984,6 @@ export function EditListingV2() {
                               size="small"
                               label={t("EditListingV2.craftedSource", "Source")}
                               value={v.crafted_source}
-                              color="secondary"
                               disabled
                             />
                           </Grid>
@@ -1015,7 +1008,6 @@ export function EditListingV2() {
                               }}
                               label={t("EditListingV2.price", "Price")}
                               value={v.price ?? ""}
-                              color="secondary"
                               disabled={!canEdit}
                               required
                               InputProps={{
@@ -1051,7 +1043,7 @@ export function EditListingV2() {
               <Button
                 size="large"
                 variant="outlined"
-                color="secondary"
+                color="neutral"
                 onClick={() =>
                   navigate(
                     MARKET_PATHS.listing(id!, listingData?.listing.title),
@@ -1065,7 +1057,6 @@ export function EditListingV2() {
               <LoadingButton
                 size="large"
                 variant="contained"
-                color="secondary"
                 type="submit"
                 loading={isUpdating}
                 disabled={!canEdit || isUploading}

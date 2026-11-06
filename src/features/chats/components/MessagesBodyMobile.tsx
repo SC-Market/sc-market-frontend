@@ -208,7 +208,6 @@ function MessageHeaderMobile() {
           alignItems={"center"}
         >
           <HapticIconButton
-            color="secondary"
             aria-label={t("MessagesBody.toggleSidebar")}
             onClick={() => {
               navigate(PATHS.messages)

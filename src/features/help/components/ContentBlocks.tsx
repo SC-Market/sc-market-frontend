@@ -88,19 +88,13 @@ function InlineNodes({ nodes }: { nodes: readonly Inline[] }) {
             return <br key={i} />
           case "link":
             return isInternal(node.href) && !node.href.startsWith("#") ? (
-              <Link
-                key={i}
-                component={RouterLink}
-                to={node.href}
-                color="secondary"
-              >
+              <Link key={i} component={RouterLink} to={node.href}>
                 <InlineNodes nodes={node.c} />
               </Link>
             ) : (
               <Link
                 key={i}
                 href={node.href}
-                color="secondary"
                 {...(node.href.startsWith("#")
                   ? {}
                   : { target: "_blank", rel: "noopener noreferrer" })}

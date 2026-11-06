@@ -79,7 +79,7 @@ export function MobileListingRow({
       ? theme.palette.success.main
       : listing.status === "inactive" || listing.status === "expired"
         ? theme.palette.warning.main
-        : theme.palette.secondary.main
+        : theme.palette.text.primary
 
   return (
     <SwipeableItem
@@ -92,7 +92,7 @@ export function MobileListingRow({
               display: "flex",
               alignItems: "center",
               gap: 0.5,
-              color: "secondary.main",
+              color: "text.primary",
             }}
           >
             <EditRounded fontSize="small" />

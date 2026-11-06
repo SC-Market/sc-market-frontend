@@ -7,7 +7,7 @@ export const statusColors = new Map<
   | "in-progress"
   | "not-started"
   | "cancelled",
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  "default" | "primary" | "error" | "info" | "success" | "warning"
 >([
   ["fulfilled", "success"],
   ["in-progress", "info"],

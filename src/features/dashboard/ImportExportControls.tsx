@@ -225,11 +225,7 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t("dashboard.cancel", "Cancel")}</Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => onConfirm(resolutions)}
-        >
+        <Button variant="contained" onClick={() => onConfirm(resolutions)}>
           {t("dashboard.import", "Import")}
         </Button>
       </DialogActions>

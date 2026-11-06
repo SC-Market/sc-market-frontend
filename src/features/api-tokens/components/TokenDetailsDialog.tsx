@@ -94,7 +94,6 @@ export function TokenDetailsDialog({
   const getScopeColor = (scope: string) => {
     if (scope === "full") return "primary"
     if (scope === "readonly") return "info"
-    if (scope.startsWith("contractors:")) return "secondary"
     return "default"
   }
 

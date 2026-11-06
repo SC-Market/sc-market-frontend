@@ -231,7 +231,6 @@ export function CartItemEntryV2(props: {
               size="small"
               label={t("cart.quantity")}
               value={item.quantity}
-              color={"secondary"}
               disabled={isUpdating || !item.available}
             />
           </Box>
@@ -535,7 +534,6 @@ export function MarketCartV2() {
                       size="small"
                       label={t("cart.offerOptional", "Offer (optional)")}
                       value={group.total}
-                      color="secondary"
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">aUEC</InputAdornment>
@@ -546,7 +544,7 @@ export function MarketCartV2() {
                   </Grid>
                   <Grid item>
                     <LoadingButton
-                      color="secondary"
+                      color="neutral"
                       variant="outlined"
                       startIcon={<ShoppingCartRounded />}
                       loading={isCheckingOut}
@@ -699,7 +697,6 @@ export function MarketCartV2() {
           </Button>
           <LoadingButton
             variant="contained"
-            color="secondary"
             loading={isCheckingOut}
             onClick={handleConfirmCheckout}
           >

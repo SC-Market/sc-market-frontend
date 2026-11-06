@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded"
 import { Box, Button, Collapse, ListItem } from "@mui/material"
 import { Notification } from "../../../hooks/login/UserProfile"
@@ -68,7 +68,7 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
                 to={ORG_PATHS.profile(invite.spectrum_id)}
                 style={{
                   textDecoration: "none",
-                  color: theme.palette.secondary.main,
+                  color: linkColor(theme),
                 }}
               >
                 <UnderlineLink />

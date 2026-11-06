@@ -2,7 +2,7 @@ import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { Chip, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
@@ -98,7 +98,7 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
         to={USER_PATHS.profile(offer.customer.username)}
         style={{
           textDecoration: "none",
-          color: theme.palette.secondary.main,
+          color: linkColor(theme),
         }}
       >
         <UnderlineLink>{offer.customer.display_name}</UnderlineLink>

@@ -95,7 +95,11 @@ import { listingSearchArgs } from "./listingSearchArgs"
 import { orgScopedListingArgs } from "../../storefront/domain"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useStartupGateOpen } from "../../../util/startupDeferral"
-import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
+import {
+  CARD_CHIP_SX,
+  NEUTRAL_CARD_CHIP_SX,
+  cardChipStackSx,
+} from "./cardChips"
 import { qualityChipSx, qualityRangeChip } from "../../../util/qualityColor"
 import {
   CardStub,
@@ -510,7 +514,6 @@ export function MarketSearchAreaV2({
               label={t("MarketSearchArea.status", "Status")}
               value={filters.applied("status")}
               onChange={(e) => filters.setNow({ status: e.target.value })}
-              color="secondary"
             >
               <MenuItem value="">
                 {t("MarketSearchArea.allStatuses", "All")}
@@ -538,7 +541,6 @@ export function MarketSearchAreaV2({
               }}
               fullWidth
               size="small"
-              color="secondary"
             >
               <ToggleButton value="market">
                 {t("market.listings", "Listings")}
@@ -568,7 +570,6 @@ export function MarketSearchAreaV2({
                 fullWidth
                 size="small"
                 label={t("MarketSearchArea.search", "Search")}
-                color="secondary"
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: (
@@ -611,7 +612,6 @@ export function MarketSearchAreaV2({
                 : []
               filters.setNow({ sort_by: field, sort_order: order })
             }}
-            color="secondary"
           >
             <MenuItem value="">
               {t("MarketSearchArea.sortNone", "None")}
@@ -646,7 +646,6 @@ export function MarketSearchAreaV2({
             size="small"
             label={t("MarketSearchArea.quantityMin", "Min Quantity")}
             {...filters.bindText("quantity_min")}
-            color="secondary"
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -660,7 +659,6 @@ export function MarketSearchAreaV2({
             label={t("MarketSearchArea.minCost", "Min Price")}
             {...filters.bindText("price_min")}
             size={"small"}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -680,7 +678,6 @@ export function MarketSearchAreaV2({
             label={t("MarketSearchArea.maxCost", "Max Price")}
             {...filters.bindText("price_max")}
             size={"small"}
-            color={"secondary"}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -788,7 +785,6 @@ export function ItemTypeFilter({
           fullWidth
           size="small"
           label={t("MarketSearchArea.itemType", "Item Type")}
-          color="secondary"
         />
       )}
     />
@@ -913,7 +909,6 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
               <TextField
                 fullWidth
                 size="small"
-                color="secondary"
                 label={t("marketV2.minValue")}
                 {...filters.bindText("quality_value_min")}
                 inputProps={{
@@ -928,7 +923,6 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
               <TextField
                 fullWidth
                 size="small"
-                color="secondary"
                 label={t("marketV2.maxValue")}
                 {...filters.bindText("quality_value_max")}
                 inputProps={{
@@ -1108,9 +1102,9 @@ export function ListingCardV2({
               {isNew && (
                 <Chip
                   label={t("market.new", "NEW")}
-                  color="secondary"
+                  variant="outlined"
                   size="small"
-                  sx={CARD_CHIP_SX}
+                  sx={{ ...CARD_CHIP_SX, ...NEUTRAL_CARD_CHIP_SX }}
                 />
               )}
               {listing.has_bulk_discount && (

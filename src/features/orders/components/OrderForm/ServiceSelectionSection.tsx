@@ -43,7 +43,6 @@ export function ServiceSelectionSection() {
                   )!,
                 )
             }}
-            color="secondary"
             SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
           >
             <MenuItem value="">{t("CreateOrderForm.noService")}</MenuItem>

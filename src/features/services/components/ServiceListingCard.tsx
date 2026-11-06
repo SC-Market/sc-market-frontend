@@ -80,7 +80,7 @@ export const ServiceListingBase = React.memo(
                   {dateDiffInDays(new Date(now), new Date(service.timestamp)) <=
                     1 && (
                     <Chip
-                      color={"secondary"}
+                      variant="outlined"
                       label={t("serviceListings.new")}
                       sx={{
                         marginRight: 1,

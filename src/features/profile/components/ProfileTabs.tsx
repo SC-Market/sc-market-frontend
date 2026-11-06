@@ -26,8 +26,6 @@ export function ProfileTabs({ username, currentTab }: ProfileTabsProps) {
         value={currentTab}
         aria-label={t("ui.aria.orgInfoArea")}
         variant="scrollable"
-        textColor="secondary"
-        indicatorColor="secondary"
       >
         <HapticTab
           component={Link}

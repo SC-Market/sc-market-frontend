@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { NotificationBase } from "../components/NotificationBase"
@@ -22,10 +22,7 @@ export function NotificationPublicContract(props: { notif: Notification }) {
   return (
     <NotificationBase icon={<AssignmentRoundedIcon />} to={to} notif={notif}>
       {t("notifications.public_contract", "New public contract:")}{" "}
-      <Link
-        to={to}
-        style={{ textDecoration: "none", color: theme.palette.secondary.main }}
-      >
+      <Link to={to} style={{ textDecoration: "none", color: linkColor(theme) }}>
         <UnderlineLink>{contract?.title || "..."}</UnderlineLink>
       </Link>
       {contract?.kind

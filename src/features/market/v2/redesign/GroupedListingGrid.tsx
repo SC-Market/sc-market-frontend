@@ -23,7 +23,11 @@ import GroupsRounded from "@mui/icons-material/GroupsRounded"
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { isListingNew } from "../../domain/listingBadges"
-import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
+import {
+  ExtendedTheme,
+  cardFadeGradient,
+  linkColor,
+} from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl, formatShortSlug } from "../../domain/urls"
 import type {
@@ -52,7 +56,11 @@ import {
   firstScreenCards,
   useFirstScreenRender,
 } from "../../../../components/grid/firstScreen"
-import { CARD_CHIP_SX, cardChipStackSx } from "../cardChips"
+import {
+  CARD_CHIP_SX,
+  NEUTRAL_CARD_CHIP_SX,
+  cardChipStackSx,
+} from "../cardChips"
 import {
   type QualityColor,
   qualityChipSx,
@@ -141,7 +149,7 @@ function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
       {isNew && (
         <Chip
           label={t("market.new", "NEW")}
-          color="secondary"
+          variant="outlined"
           size="small"
           sx={chipSx}
         />
@@ -451,14 +459,14 @@ function GroupCard({
         sx={{
           position: "relative",
           height: open ? "auto" : 300,
-          borderColor: open ? "secondary.main" : undefined,
+          borderColor: open ? "outline.strong" : undefined,
           boxShadow: open ? 6 : 0,
           transition: theme.transitions.create(["box-shadow", "border-color"], {
             duration: theme.transitions.duration.shorter,
           }),
           // Read as interactive/expandable when collapsed, matching how the
           // normal listing tiles respond to hover.
-          "&:hover": open ? undefined : { borderColor: "secondary.main" },
+          "&:hover": open ? undefined : { borderColor: "outline.strong" },
         }}
       >
         {/* Collapsed header region mirrors a ListingCardV2 tile */}
@@ -487,9 +495,13 @@ function GroupCard({
                 label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
                   count: sellerCount,
                 })}
-                color="secondary"
+                variant="outlined"
                 size="small"
-                sx={{ ...CARD_CHIP_SX, textTransform: "none" }}
+                sx={{
+                  ...CARD_CHIP_SX,
+                  ...NEUTRAL_CARD_CHIP_SX,
+                  textTransform: "none",
+                }}
               />
               {anyBulkDiscount && (
                 <Chip
@@ -626,8 +638,8 @@ function GroupCard({
                     px: 0.75,
                     py: 0.25,
                     borderRadius: 999,
-                    bgcolor: open ? "secondary.main" : "action.hover",
-                    color: open ? "secondary.contrastText" : "text.primary",
+                    bgcolor: open ? "action.selected" : "action.hover",
+                    color: open ? "text.secondary" : "text.primary",
                     transition: "background-color .2s, color .2s",
                     fontSize: "0.68rem",
                     fontWeight: 700,
@@ -760,7 +772,7 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
                 <Chip
                   label={t("MarketRedesign.topBid", "Top bid")}
                   size="small"
-                  color="secondary"
+                  color="demand"
                   sx={{ height: 20 }}
                 />
               )}
@@ -781,7 +793,8 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "secondary.main",
+                  // A bid price: the buy side's colour
+                  color: "demand.main",
                   fontWeight: 700,
                   width: 120,
                   textAlign: "right",
@@ -1037,7 +1050,7 @@ function VariantHighlightCard({
   return (
     <Card
       variant="outlined"
-      sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}
+      sx={{ height: "100%", "&:hover": { borderColor: "outline.strong" } }}
     >
       <CardContent>
         {/* Superlative tags (Lowest price / Highest quality / Top rated) */}
@@ -1080,7 +1093,7 @@ function VariantHighlightCard({
               variant="body2"
               sx={{
                 color: "text.secondary",
-                "&:hover": { color: "secondary.main" },
+                "&:hover": { color: linkColor },
               }}
               noWrap
             >
@@ -1175,7 +1188,7 @@ function GroupSellersFallback({
               py: 1,
               textDecoration: "none",
               color: "inherit",
-              "&:hover": { color: "secondary.main" },
+              "&:hover": { color: linkColor },
             }}
           >
             <Typography

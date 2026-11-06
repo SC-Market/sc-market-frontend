@@ -1093,7 +1093,7 @@ export function StockManagerV2() {
                 {isMobile && (
                   <Button
                     variant="outlined"
-                    color="secondary"
+                    color="neutral"
                     startIcon={<FilterListIcon />}
                     onClick={() => setSidebarOpen((p) => !p)}
                     sx={{ borderRadius: 2, textTransform: "none" }}
@@ -1108,7 +1108,7 @@ export function StockManagerV2() {
                       <Stack direction="row" spacing={1}>
                         <Button
                           variant="outlined"
-                          color="secondary"
+                          color="neutral"
                           onClick={() => setImportOpen(true)}
                         >
                           {t("ItemStock.importFromUex", "Import from UEX")}
@@ -1119,7 +1119,6 @@ export function StockManagerV2() {
                         >
                           <Button
                             variant="contained"
-                            color="secondary"
                             startIcon={<AddRounded />}
                             size="large"
                           >

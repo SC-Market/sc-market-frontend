@@ -55,7 +55,6 @@ export function CostsSection({ isEditing }: { isEditing: boolean }) {
               fullWidth
               label={t("CreateServiceForm.collateralOptional")}
               id="collateral"
-              color="secondary"
               value={state.collateral}
               type="tel"
               helperText={t("CreateServiceForm.collateralHelper")}
@@ -79,7 +78,6 @@ export function CostsSection({ isEditing }: { isEditing: boolean }) {
               fullWidth
               label={t("CreateServiceForm.cost")}
               id="offer"
-              color="secondary"
               value={state.offer}
               type="tel"
               helperText={t("CreateServiceForm.costHelper")}
@@ -120,7 +118,6 @@ export function CostsSection({ isEditing }: { isEditing: boolean }) {
         <Button
           size="large"
           variant="contained"
-          color="secondary"
           type="submit"
           disabled={isUploadingPhotos}
           onClick={submitService}

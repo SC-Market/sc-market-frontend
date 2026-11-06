@@ -318,7 +318,6 @@ export function StorefrontEnquiryCard(props: {
             <LoadingButton
               type="submit"
               variant="contained"
-              color="secondary"
               loading={createState.isLoading}
               data-testid="enquiry-submit"
             >

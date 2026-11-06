@@ -74,7 +74,6 @@ export function MessageHeader(props: {
         >
           {messageSidebarOpen !== undefined && (
             <HapticIconButton
-              color="secondary"
               aria-label={t("MessagesBody.toggleSidebar")}
               onClick={() => {
                 if (isMobile) {

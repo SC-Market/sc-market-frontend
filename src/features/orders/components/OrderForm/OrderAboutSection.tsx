@@ -47,7 +47,6 @@ export function OrderAboutSection({
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, title: e.target.value })
             }
-            color="secondary"
             aria-required="true"
             inputProps={{ maxLength: 100 }}
           />
@@ -63,7 +62,6 @@ export function OrderAboutSection({
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, type: e.target.value })
             }
-            color="secondary"
             aria-required="true"
             SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
           >
@@ -81,7 +79,6 @@ export function OrderAboutSection({
                 onChange={(e: React.ChangeEvent<{ checked: boolean }>) =>
                   setState({ ...state, rush: e.target.checked })
                 }
-                color="secondary"
                 name="Rush"
                 disabled={!!formDisabled}
               />
@@ -102,7 +99,6 @@ export function OrderAboutSection({
             value={state.description}
             minRows={4}
             maxRows={4}
-            color="secondary"
             aria-required="true"
             disabled={!!formDisabled}
             inputProps={{ maxLength: 1000 }}

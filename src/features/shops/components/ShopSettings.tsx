@@ -200,7 +200,6 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
           label={t("AddNotificationWebhook.webhookName")}
           value={name}
           onChange={(e) => setName(e.target.value)}
-          color="secondary"
         />
       </Grid>
       <Grid item xs={12}>
@@ -210,7 +209,6 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
           label={t("AddNotificationWebhook.webhookUrl")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          color="secondary"
           error={!!url && !url.match(URL_REGEX)}
           helperText={
             !!url && !url.match(URL_REGEX)
@@ -234,7 +232,6 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
                     onChange={(e) =>
                       toggleAction(action_name, e.target.checked)
                     }
-                    color="secondary"
                     size="small"
                   />
                 }
@@ -263,7 +260,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
       <Grid item xs={12}>
         <Button
           variant="outlined"
-          color="secondary"
+          color="neutral"
           disabled={
             !name.trim() ||
             !url.trim() ||
@@ -664,7 +661,6 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         <Grid item xs={12}>
           <LoadingButton
             variant="contained"
-            color="secondary"
             loading={saving}
             startIcon={<SaveRounded />}
             onClick={handleSave}
@@ -748,7 +744,6 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
             setTargetType(e.target.value as "user" | "contractor")
             setContractorSpectrumId("")
           }}
-          color="secondary"
         >
           <MenuItem value="user">{t("shopsUi.transfer.myAccount")}</MenuItem>
           <MenuItem value="contractor" disabled={orgs.length === 0}>
@@ -766,7 +761,6 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
             label={t("shops.mine.organization")}
             value={contractorSpectrumId}
             onChange={(e) => setContractorSpectrumId(e.target.value)}
-            color="secondary"
             helperText={t("shopsUi.transfer.orgHelper")}
           >
             <MenuItem value="">{t("shopsUi.form.selectOrganization")}</MenuItem>
@@ -1231,7 +1225,6 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
           <Grid item xs={12} container justifyContent="flex-end">
             <LoadingButton
               variant="contained"
-              color="secondary"
               loading={isLoading}
               startIcon={<SaveRounded />}
               onClick={handleSave}

@@ -66,7 +66,6 @@ export function HelpLayout(props: {
                   key={crumb.label}
                   component={RouterLink}
                   to={crumb.href}
-                  color="secondary"
                   underline="hover"
                 >
                   {crumb.label}

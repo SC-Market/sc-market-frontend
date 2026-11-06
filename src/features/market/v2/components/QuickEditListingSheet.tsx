@@ -227,7 +227,6 @@ export function QuickEditListingSheet({
           onFocus={selectOnFocus}
           value={price}
           onValueChange={(v) => setPrice(v.floatValue ?? 0)}
-          color="secondary"
           InputProps={{
             endAdornment: (
               <Typography variant="caption" color="text.secondary">
@@ -308,7 +307,6 @@ export function QuickEditListingSheet({
 
         <LoadingButton
           variant="contained"
-          color="secondary"
           fullWidth
           loading={isLoading}
           disabled={isUploading}

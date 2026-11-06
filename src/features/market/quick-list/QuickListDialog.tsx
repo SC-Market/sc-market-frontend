@@ -891,7 +891,7 @@ export function QuickListDialog({
                 >
                   <Button
                     size="small"
-                    color="secondary"
+                    color="neutral"
                     startIcon={<AddRounded />}
                     onClick={() =>
                       update({ batches: [...form.batches, newBatch()] })
@@ -909,7 +909,6 @@ export function QuickListDialog({
                 <FormControlLabel
                   control={
                     <Checkbox
-                      color="secondary"
                       checked={form.pricePerBatch}
                       onChange={(e) =>
                         update({ pricePerBatch: e.target.checked })

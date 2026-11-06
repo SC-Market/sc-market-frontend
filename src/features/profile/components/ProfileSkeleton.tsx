@@ -100,8 +100,6 @@ export function ProfileSkeleton() {
                 value={0}
                 aria-label={t("accountUi.profileTabs")}
                 variant="scrollable"
-                textColor="secondary"
-                indicatorColor="secondary"
               >
                 <HapticTab
                   label={<Skeleton width={60} />}

@@ -4,7 +4,7 @@ import {
   Link as MaterialLink,
   Typography,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { alpha, useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -31,9 +31,10 @@ export function MsgPaper(
       <Paper
         {...paperProps}
         sx={{
+          // Your own messages: a green-tinted surface (the accent at 16%)
           bgcolor: other
             ? theme.palette.background.paper
-            : theme.palette.secondary.main,
+            : alpha(theme.palette.primary.main, 0.16),
           padding: 1,
           paddingRight: 2,
           paddingLeft: 2,
@@ -47,9 +48,7 @@ export function MsgPaper(
         <MaterialLink
           component={Link}
           to={USER_PATHS.profile(author.username)}
-          color={
-            other ? "text.secondary" : theme.palette.secondary.contrastText
-          }
+          color="text.secondary"
         >
           <Typography variant={"subtitle2"}>{author?.username}</Typography>
         </MaterialLink>
@@ -62,9 +61,10 @@ export function MsgPaper(
       <Paper
         {...paperProps}
         sx={{
+          // Your own messages: a green-tinted surface (the accent at 16%)
           bgcolor: other
             ? theme.palette.background.paper
-            : theme.palette.secondary.main,
+            : alpha(theme.palette.primary.main, 0.16),
           padding: 1,
           paddingRight: 2,
           paddingLeft: 2,

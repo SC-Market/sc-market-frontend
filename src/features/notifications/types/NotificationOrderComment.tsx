@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Notification } from "../../../hooks/login/UserProfile"
 import type { OrderComment } from "../../orders/domain/types"
@@ -27,7 +27,7 @@ export function NotificationOrderComment(props: { notif: Notification }) {
         to={USER_PATHS.profile(comment?.author?.username)}
         style={{
           textDecoration: "none",
-          color: theme.palette.secondary.main,
+          color: linkColor(theme),
         }}
       >
         <UnderlineLink>{comment?.author?.username}</UnderlineLink>

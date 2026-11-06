@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import ShoppingCartCheckoutRoundedIcon from "@mui/icons-material/ShoppingCartCheckoutRounded"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { NotificationBase } from "../components/NotificationBase"
@@ -29,10 +29,7 @@ export function NotificationBuyOrderMatch(props: { notif: Notification }) {
       notif={notif}
     >
       {t("notifications.buy_order_match", "Buy-order match:")}{" "}
-      <Link
-        to={to}
-        style={{ textDecoration: "none", color: theme.palette.secondary.main }}
-      >
+      <Link to={to} style={{ textDecoration: "none", color: linkColor(theme) }}>
         <UnderlineLink>{entity?.title || "..."}</UnderlineLink>
       </Link>{" "}
       {t(

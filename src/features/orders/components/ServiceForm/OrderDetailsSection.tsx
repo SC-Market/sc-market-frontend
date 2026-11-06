@@ -42,7 +42,6 @@ export function OrderDetailsSection() {
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, title: e.target.value })
             }
-            color="secondary"
             aria-required="true"
             inputProps={{ maxLength: 100 }}
           />
@@ -57,7 +56,6 @@ export function OrderDetailsSection() {
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, type: e.target.value })
             }
-            color="secondary"
             SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
           >
             {Object.keys(orderIcons).map((k) => (
@@ -74,7 +72,6 @@ export function OrderDetailsSection() {
                 onChange={(e: React.ChangeEvent<{ checked: boolean }>) =>
                   setState({ ...state, rush: e.target.checked })
                 }
-                color="secondary"
                 name="Rush"
               />
             }
@@ -94,7 +91,6 @@ export function OrderDetailsSection() {
             value={state.description}
             minRows={4}
             maxRows={4}
-            color="secondary"
             inputProps={{ maxLength: 1000 }}
           />
         </Grid>

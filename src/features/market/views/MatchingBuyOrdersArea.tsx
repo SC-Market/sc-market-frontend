@@ -123,7 +123,7 @@ export function MatchingBuyOrdersArea({
             component={RouterLink}
             to={MARKET_PATHS.buyOrders}
             size="small"
-            color="secondary"
+            color="neutral"
           >
             {t("dashboard.viewAll", "View All")} ({data?.total})
           </Button>

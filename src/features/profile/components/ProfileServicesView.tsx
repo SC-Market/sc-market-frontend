@@ -25,7 +25,7 @@ export function ProfileServicesView(props: { user: string }) {
       {xs && (
         <Button
           variant="outlined"
-          color="secondary"
+          color="neutral"
           startIcon={<FilterListIcon />}
           aria-label={t("service_market.filters", "Filters")}
           onClick={() => setSidebarOpen((prev) => !prev)}
@@ -89,7 +89,7 @@ export function OrgServicesView(props: { org: string }) {
       {xs && (
         <Button
           variant="outlined"
-          color="secondary"
+          color="neutral"
           startIcon={<FilterListIcon />}
           aria-label={t("service_market.filters", "Filters")}
           onClick={() => setSidebarOpen((prev) => !prev)}

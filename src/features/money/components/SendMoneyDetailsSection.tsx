@@ -106,7 +106,6 @@ export function SendMoneyDetailsSection(props: SendMoneyDetailsSectionProps) {
       <Grid item xs={6}>
         <Button
           variant={"contained"}
-          color={"secondary"}
           onClick={props.onBack}
           disabled={props.isSubmitting}
           aria-label={t(

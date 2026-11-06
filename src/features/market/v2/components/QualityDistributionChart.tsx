@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import { BarChart } from "@mui/x-charts/BarChart"
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { ExtendedTheme } from "../../../../hooks/styles/Theme"
+import { QUALITY_TIER_COLORS } from "../../../../util/qualityColor"
 
 import { useFormatters } from "../../../../util/format"
 interface QualityDistributionChartProps {
@@ -70,7 +71,7 @@ export function QualityDistributionChart({
       case 4:
         return theme.palette.primary.main // Platinum
       case 5:
-        return theme.palette.secondary.main // Diamond
+        return QUALITY_TIER_COLORS[4].bg // Diamond: the quality scale's purple
       default:
         return theme.palette.grey[400]
     }

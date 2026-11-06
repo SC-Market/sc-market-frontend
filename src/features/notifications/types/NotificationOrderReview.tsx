@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Notification } from "../../../hooks/login/UserProfile"
 import type { OrderReview } from "../../orders/domain/types"
@@ -31,7 +31,7 @@ export function NotificationOrderReview(props: { notif: Notification }) {
         }
         style={{
           textDecoration: "none",
-          color: theme.palette.secondary.main,
+          color: linkColor(theme),
         }}
       >
         <UnderlineLink>

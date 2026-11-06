@@ -380,7 +380,6 @@ export function MessagingSidebarContent(
         {isMobile ? (
           <HapticIconButton
             aria-label={t("MessagingSidebar.newMessage", "New message")}
-            color={"secondary"}
             onClick={() => setCreatingMessageGroup(true)}
           >
             <AddIcon />
@@ -388,7 +387,6 @@ export function MessagingSidebarContent(
         ) : (
           <Button
             variant={"contained"}
-            color={"secondary"}
             startIcon={<CreateIcon />}
             size={"large"}
             onClick={() => setCreatingMessageGroup(true)}
@@ -417,7 +415,6 @@ export function MessagingSidebarContent(
               </InputAdornment>
             ),
           }}
-          color={"secondary"}
           size={isMobile ? "small" : "medium"}
         />
       </Box>

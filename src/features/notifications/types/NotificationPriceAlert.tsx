@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import PriceChangeRoundedIcon from "@mui/icons-material/PriceChangeRounded"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { NotificationBase } from "../components/NotificationBase"
@@ -32,10 +32,7 @@ export function NotificationPriceAlert(props: { notif: Notification }) {
   return (
     <NotificationBase icon={<PriceChangeRoundedIcon />} to={to} notif={notif}>
       {t("notifications.price_alert", "Price alert:")}{" "}
-      <Link
-        to={to}
-        style={{ textDecoration: "none", color: theme.palette.secondary.main }}
-      >
+      <Link to={to} style={{ textDecoration: "none", color: linkColor(theme) }}>
         <UnderlineLink>{title || "..."}</UnderlineLink>
       </Link>{" "}
       {t(

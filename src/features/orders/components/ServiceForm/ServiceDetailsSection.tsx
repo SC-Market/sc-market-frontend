@@ -43,7 +43,6 @@ export function ServiceDetailsSection({ isEditing }: { isEditing: boolean }) {
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, service_name: e.target.value })
             }
-            color="secondary"
             aria-required="true"
             inputProps={{ maxLength: 100 }}
           />

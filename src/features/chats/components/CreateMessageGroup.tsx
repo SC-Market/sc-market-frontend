@@ -92,7 +92,6 @@ function MessageHeader(props: {
         alignItems={{ xs: "stretch", sm: "center" }}
       >
         <IconButton
-          color="secondary"
           aria-label={
             t("CreateMessageGroupBody.toggleSidebar") || "Toggle sidebar"
           }
@@ -270,7 +269,6 @@ function MessageHeader(props: {
           </Button>
 
           <IconButton
-            color="secondary"
             aria-label={t("CreateMessageGroupBody.close") || "Close"}
             onClick={onClose}
             size={isMobile ? "small" : "medium"}

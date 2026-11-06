@@ -419,7 +419,6 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
       <Button
         variant="contained"
-        color="secondary"
         disabled={!canAdd}
         onClick={() =>
           canAdd && scope && onAdd(definition.type, scope, settings)

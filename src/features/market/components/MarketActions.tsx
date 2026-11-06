@@ -26,7 +26,6 @@ export function MarketActions() {
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >
           <Button
-            color={"secondary"}
             startIcon={<CreateRounded />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
@@ -58,7 +57,7 @@ export function MarketActions() {
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >
           <Button
-            color={"secondary"}
+            color="neutral"
             variant={"outlined"}
             size={isMobile ? "medium" : "large"}
             fullWidth={isMobile}
@@ -113,7 +112,6 @@ export function BuyOrderActions() {
             style={{ color: "inherit", textDecoration: "none" }}
           >
             <Button
-              color={"secondary"}
               startIcon={<CreateRounded />}
               variant={"contained"}
               size={"large"}

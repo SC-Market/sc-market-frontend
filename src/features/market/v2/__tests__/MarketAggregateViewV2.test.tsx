@@ -421,7 +421,10 @@ const testTheme = createTheme({
     chip: 0.5,
     minimal: 0,
   },
-  palette: { outline: { main: "#e0e0e0" } },
+  palette: {
+    outline: { main: "#e0e0e0", strong: "#58677e" },
+    demand: { main: "#7a7efe" },
+  },
 })
 
 // Wrapper component for tests

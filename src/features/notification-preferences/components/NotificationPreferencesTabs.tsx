@@ -309,8 +309,6 @@ export function NotificationPreferencesTabs() {
         value={tab}
         onChange={(_e, v) => setTab(v)}
         variant="scrollable"
-        textColor="secondary"
-        indicatorColor="secondary"
         aria-label={t("settings.notifications.tabsLabel", "Notification areas")}
         sx={{ mb: 2 }}
       >

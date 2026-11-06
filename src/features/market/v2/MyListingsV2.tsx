@@ -188,8 +188,6 @@ function MobileListingsView() {
           value={selectedStatus}
           onChange={(_, v: MobileStatus) => setSelectedStatus(v)}
           variant="fullWidth"
-          textColor="secondary"
-          indicatorColor="secondary"
         >
           {statusTabs.map(({ value, label }) => (
             <Tab
@@ -291,7 +289,7 @@ function MobileListingsView() {
       {/* FAB — create listing */}
       <Link to={MARKET_PATHS.create}>
         <MobileFAB
-          color="secondary"
+          color="primary"
           aria-label={t("market.createListing", "Create Listing")}
         >
           <AddCircleOutlineRounded />
@@ -347,7 +345,6 @@ export function MyListingsV2() {
             <Link to={MARKET_PATHS.create} style={{ textDecoration: "none" }}>
               <Button
                 variant="contained"
-                color="secondary"
                 size="small"
                 startIcon={<AddCircleOutlineRounded />}
               >

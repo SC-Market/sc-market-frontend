@@ -44,7 +44,6 @@ import {
 import { remainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
 import { useCancelBuyOrder } from "../hooks/useBuyOrderActions"
-import { amber, green } from "@mui/material/colors"
 
 /**
  * MarketAggregateViewV2 Component
@@ -539,7 +538,6 @@ export function AggregateRowV2(props: {
             size="small"
             label={t("MarketAggregateView.quantityToBuy")}
             value={quantity}
-            color={"secondary"}
           />
         </Stack>
       </TableCell>
@@ -556,7 +554,6 @@ export function AggregateRowV2(props: {
             component={Link}
             to={MARKET_PATHS.cart}
             variant={"contained"}
-            color={"secondary"}
             size={"large"}
           >
             <VisibilityRounded />
@@ -693,7 +690,7 @@ export function BuyOrderRowV2(props: {
           event.stopPropagation()
         }}
       >
-        <Typography variant={"subtitle2"} color={"primary"}>
+        <Typography variant={"subtitle2"} color={"demand.main"}>
           {priceDisplay}
         </Typography>
       </TableCell>
@@ -705,7 +702,7 @@ export function BuyOrderRowV2(props: {
           event.stopPropagation()
         }}
       >
-        <Typography variant={"subtitle2"} color={"primary"}>
+        <Typography variant={"subtitle2"} color={"text.secondary"}>
           {buy_order.quantity_fulfilled
             ? `${fmt.number(remaining)}/${fmt.number(buy_order.quantity)}`
             : fmt.number(buy_order.quantity)}
@@ -719,7 +716,7 @@ export function BuyOrderRowV2(props: {
           event.stopPropagation()
         }}
       >
-        <Typography variant={"subtitle2"} color={"primary"}>
+        <Typography variant={"subtitle2"} color={"demand.main"}>
           {buy_order.total != null
             ? `${buy_order.negotiable ? "~" : ""}${fmt.number(buy_order.total)} aUEC`
             : t("buyorder.status.negotiable", "Negotiable")}
@@ -860,6 +857,9 @@ export function AggregateBuySellWallV2(props: {
 }) {
   const fmt = useFormatters()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  // Asks in the accent, bids in the buy side's colour
+  const depthColors = [theme.palette.primary.main, theme.palette.demand.main]
   const { aggregate: rawAggregate, compact, qualityTier } = props
 
   // Pre-filter listings/buy_orders to selected quality tier
@@ -1028,7 +1028,7 @@ export function AggregateBuySellWallV2(props: {
         ]}
         height={200}
         xAxisType="category"
-        colors={[green[500], amber[700]]}
+        colors={depthColors}
       />
     )
   }
@@ -1064,7 +1064,7 @@ export function AggregateBuySellWallV2(props: {
           ]}
           height={400}
           xAxisType="category"
-          colors={[green[500], amber[700]]}
+          colors={depthColors}
           xTickInterval={10}
           xValueFormatter={formatPrice}
         />

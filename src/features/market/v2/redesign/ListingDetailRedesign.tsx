@@ -277,7 +277,6 @@ export function ListingDetailRedesign() {
                     icon={<Inventory2Rounded />}
                     label={t("MarketDetailRedesign.bundle", "Bundle")}
                     size="small"
-                    color="secondary"
                     variant="outlined"
                   />
                 )}
@@ -544,7 +543,7 @@ export function ListingDetailRedesign() {
                       </Button>
                       <Button
                         variant="outlined"
-                        color="secondary"
+                        color="neutral"
                         size="large"
                         fullWidth
                         startIcon={<ShoppingCartRounded />}

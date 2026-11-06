@@ -62,7 +62,7 @@ function BannerEditArea(props: {
             <Fab
               component="span"
               disabled={isUploadingBanner}
-              color="secondary"
+              color="primary"
               aria-label={t("orgDetailEdit.set_banner")}
               sx={{ transition: "0.3s" }}
             >

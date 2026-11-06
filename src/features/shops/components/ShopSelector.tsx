@@ -85,7 +85,7 @@ export function ShopSelector({
         <Typography variant="body2" color="error">
           {t("ShopSelector.error", "Failed to load shops.")}
         </Typography>
-        <Button size="small" onClick={() => refetch()} color="secondary">
+        <Button size="small" onClick={() => refetch()} color="neutral">
           {t("ShopSelector.retry", "Retry")}
         </Button>
       </Box>
@@ -104,7 +104,7 @@ export function ShopSelector({
         </Typography>
         <LoadingButton
           variant="outlined"
-          color="secondary"
+          color="neutral"
           size="small"
           startIcon={<AddBusinessRounded />}
           loading={isCreating}
@@ -126,7 +126,6 @@ export function ShopSelector({
       label={label ?? t("ShopSelector.label", "Shop")}
       value={filteredShops.some((s) => s.shop_id === value) ? value : ""}
       onChange={(e) => onChange(e.target.value)}
-      color="secondary"
       helperText={
         helperText ??
         t(

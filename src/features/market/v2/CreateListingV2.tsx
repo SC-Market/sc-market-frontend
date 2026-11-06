@@ -362,7 +362,6 @@ export function CreateListingV2() {
                     clearError("title")
                     setTitle(e.target.value)
                   }}
-                  color="secondary"
                   required
                   error={!!fieldError("title")}
                   inputProps={{
@@ -451,7 +450,6 @@ export function CreateListingV2() {
                   id={LISTING_FIELD_IDS.base_price}
                   label={t("CreateListingV2.basePrice", "Price")}
                   value={basePrice}
-                  color="secondary"
                   InputProps={{
                     endAdornment: <Typography>aUEC</Typography>,
                     inputMode: "numeric",
@@ -493,7 +491,6 @@ export function CreateListingV2() {
                   id={LISTING_FIELD_IDS.quantity}
                   label={t("CreateListingV2.quantity", "Quantity")}
                   value={stockLots[0]?.quantity ?? 1}
-                  color="secondary"
                   required
                   error={!!fieldError("quantity")}
                   helperText={fieldError("quantity")}
@@ -529,7 +526,7 @@ export function CreateListingV2() {
             >
               <Button
                 variant="outlined"
-                color="secondary"
+                color="neutral"
                 onClick={() => setShowAdvanced((prev) => !prev)}
                 endIcon={
                   <ExpandMoreRounded
@@ -745,17 +742,17 @@ export function CreateListingV2() {
                         >
                           <FormControlLabel
                             value="fixed"
-                            control={<Radio color="secondary" />}
+                            control={<Radio />}
                             label={t("CreateListingV2.fixed", "Fixed Price")}
                           />
                           <FormControlLabel
                             value="auction"
-                            control={<Radio color="secondary" />}
+                            control={<Radio />}
                             label={t("CreateListingV2.auction", "Auction")}
                           />
                           <FormControlLabel
                             value="negotiable"
-                            control={<Radio color="secondary" />}
+                            control={<Radio />}
                             label={t(
                               "CreateListingV2.negotiable",
                               "Negotiable",
@@ -852,7 +849,7 @@ export function CreateListingV2() {
                         >
                           <FormControlLabel
                             value="unified"
-                            control={<Radio color="secondary" />}
+                            control={<Radio />}
                             label={t(
                               "CreateListingV2.unifiedPricing",
                               "Unified Price",
@@ -860,7 +857,7 @@ export function CreateListingV2() {
                           />
                           <FormControlLabel
                             value="per_variant"
-                            control={<Radio color="secondary" />}
+                            control={<Radio />}
                             label={t(
                               "CreateListingV2.perVariantPricing",
                               "Per-Variant Pricing",
@@ -894,7 +891,6 @@ export function CreateListingV2() {
                         thousandSeparator
                         size="small"
                         fullWidth
-                        color="secondary"
                         label={t("CreateListingV2.minQuantity", "Min Quantity")}
                         value={minOrderQuantity ?? ""}
                         onValueChange={(v) =>
@@ -914,7 +910,6 @@ export function CreateListingV2() {
                         thousandSeparator
                         size="small"
                         fullWidth
-                        color="secondary"
                         label={t("CreateListingV2.maxQuantity", "Max Quantity")}
                         value={maxOrderQuantity ?? ""}
                         onValueChange={(v) =>
@@ -934,7 +929,6 @@ export function CreateListingV2() {
                         thousandSeparator
                         size="small"
                         fullWidth
-                        color="secondary"
                         label={t(
                           "CreateListingV2.minValue",
                           "Min Value (aUEC)",
@@ -962,7 +956,6 @@ export function CreateListingV2() {
                         thousandSeparator
                         size="small"
                         fullWidth
-                        color="secondary"
                         label={t(
                           "CreateListingV2.maxValue",
                           "Max Value (aUEC)",
@@ -1064,7 +1057,6 @@ export function CreateListingV2() {
                                   "Quantity",
                                 )}
                                 value={lot.quantity}
-                                color="secondary"
                                 required
                                 inputProps={{
                                   inputMode: "numeric",
@@ -1120,7 +1112,6 @@ export function CreateListingV2() {
                                         "Quality Value",
                                       )}
                                       value={lot.quality_value ?? ""}
-                                      color="secondary"
                                       helperText={t(
                                         "CreateListingV2.qualityValueHelp",
                                         "Optional: 0-1000",
@@ -1155,7 +1146,6 @@ export function CreateListingV2() {
                                           : undefined,
                                       )
                                     }
-                                    color="secondary"
                                     helperText={t(
                                       "CreateListingV2.qualityTierHelp",
                                       "Optional: 1-5",
@@ -1196,7 +1186,6 @@ export function CreateListingV2() {
                                     e.target.value || undefined,
                                   )
                                 }
-                                color="secondary"
                                 helperText={t(
                                   "CreateListingV2.craftedSourceHelp",
                                   "Optional: How item was obtained",
@@ -1265,7 +1254,6 @@ export function CreateListingV2() {
                                   }}
                                   label={t("CreateListingV2.price", "Price")}
                                   value={lot.price ?? ""}
-                                  color="secondary"
                                   required
                                   InputProps={{
                                     endAdornment: <Typography>aUEC</Typography>,
@@ -1295,7 +1283,6 @@ export function CreateListingV2() {
                                     e.target.value || undefined,
                                   )
                                 }
-                                color="secondary"
                                 helperText={t(
                                   "CreateListingV2.notesHelp",
                                   "Optional: Internal notes for this lot",
@@ -1322,7 +1309,6 @@ export function CreateListingV2() {
                                         e.target.checked,
                                       )
                                     }
-                                    color="secondary"
                                   />
                                 }
                                 label={t(
@@ -1339,7 +1325,7 @@ export function CreateListingV2() {
                     <Grid item xs={12}>
                       <Button
                         variant="outlined"
-                        color="secondary"
+                        color="neutral"
                         startIcon={<AddCircleOutlineRounded />}
                         onClick={handleAddStockLot}
                       >
@@ -1364,7 +1350,6 @@ export function CreateListingV2() {
               <LoadingButton
                 size="large"
                 variant="contained"
-                color="secondary"
                 type="submit"
                 loading={isLoading}
                 disabled={isUploading}

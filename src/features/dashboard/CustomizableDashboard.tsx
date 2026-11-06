@@ -92,7 +92,7 @@ export function CustomizableDashboard({
         )}
         <Button
           variant={editing ? "contained" : "outlined"}
-          color="secondary"
+          color={editing ? "primary" : "neutral"}
           startIcon={editing ? <DoneIcon /> : <EditIcon />}
           onClick={() => {
             // Persist the seed layout on first edit so it becomes saved.

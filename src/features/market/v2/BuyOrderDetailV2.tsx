@@ -15,7 +15,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { alpha, useTheme } from "@mui/material/styles"
 import { useParams, useNavigate, Link as RouterLink } from "react-router-dom"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
@@ -189,7 +189,6 @@ export function BuyOrderDetailV2() {
                                   label={buyOrder.visibility === "roster_only" ? t("marketV2.rosterOnly") : t("marketV2.private")}
                                   size="small"
                                   variant="outlined"
-                                  color="secondary"
                                 />
                               </ListingDetailItem>
                             )}
@@ -215,17 +214,18 @@ export function BuyOrderDetailV2() {
                             variant="outlined"
                             sx={{
                               p: 2,
-                              background: theme.palette.mode === "dark"
-                                ? "rgba(255, 167, 38, 0.04)"
-                                : "rgba(255, 167, 38, 0.06)",
-                              borderColor: "warning.main",
+                              background: alpha(
+                                theme.palette.demand.main,
+                                theme.palette.mode === "dark" ? 0.04 : 0.06,
+                              ),
+                              borderColor: "demand.main",
                               borderStyle: "dashed",
                             }}
                           >
                             <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5 }}>
                               {t("marketV2.offering")}
                             </Typography>
-                            <Typography variant="h4" fontWeight="bold" color="warning.main">
+                            <Typography variant="h4" fontWeight="bold" color="demand.main">
                               {priceDisplay}
                             </Typography>
                             {!buyOrder.negotiable && buyOrder.quantity > 1 && (
@@ -351,7 +351,7 @@ export function BuyOrderDetailV2() {
                 component={RouterLink}
                 to={`/market/aggregate/${buyOrder.game_item_id}`}
                 variant="text"
-                color="secondary"
+                color="neutral"
                 startIcon={<ShoppingCartRounded />}
               >
                 {t("marketV2.viewAllListingsFor", { item: buyOrder.game_item_name })}

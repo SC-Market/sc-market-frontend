@@ -202,7 +202,7 @@ export function BulkStockManagementV2() {
                 {isMobile && (
                   <Button
                     variant="outlined"
-                    color="secondary"
+                    color="neutral"
                     startIcon={<FilterListIcon />}
                     onClick={() => setSidebarOpen((p) => !p)}
                     sx={{ borderRadius: 2, textTransform: "none" }}

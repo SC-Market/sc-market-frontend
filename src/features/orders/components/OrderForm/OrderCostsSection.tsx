@@ -55,7 +55,6 @@ export function OrderCostsSection() {
               fullWidth
               label={t("CreateOrderForm.collateralOptional")}
               id="collateral"
-              color="secondary"
               value={state.collateral}
               type="tel"
               disabled={!!formDisabled}
@@ -80,7 +79,6 @@ export function OrderCostsSection() {
               fullWidth
               label={t("CreateOrderForm.aUECOffer")}
               id="offer"
-              color="secondary"
               value={state.offer}
               type="tel"
               disabled={!!formDisabled}
@@ -123,7 +121,6 @@ export function OrderCostsSection() {
         <LoadingButton
           size="large"
           variant="contained"
-          color="secondary"
           type="submit"
           loading={isLoading}
           disabled={!!formDisabled}

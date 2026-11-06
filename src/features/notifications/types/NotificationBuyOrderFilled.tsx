@@ -4,7 +4,7 @@ import { Chip, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import ShoppingCartCheckoutRoundedIcon from "@mui/icons-material/ShoppingCartCheckoutRounded"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, linkColor } from "../../../hooks/styles/Theme"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { NotificationBase } from "../components/NotificationBase"
@@ -44,7 +44,7 @@ export function NotificationBuyOrderFilled(props: { notif: Notification }) {
           to={USER_PATHS.profile(seller)}
           style={{
             textDecoration: "none",
-            color: theme.palette.secondary.main,
+            color: linkColor(theme),
           }}
         >
           <UnderlineLink>{seller}</UnderlineLink>

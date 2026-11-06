@@ -149,7 +149,7 @@ export function GuidesDirectoryToggle() {
     <Box>
       <Button
         variant="outlined"
-        color="secondary"
+        color="neutral"
         size="small"
         startIcon={<MenuBookRounded />}
         endIcon={open ? <ExpandLessRounded /> : <ExpandMoreRounded />}

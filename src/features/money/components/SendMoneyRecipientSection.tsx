@@ -121,7 +121,6 @@ export function SendMoneyRecipientSection(
       <Grid item xs={12}>
         <Button
           variant={"contained"}
-          color={"secondary"}
           disabled={!(props.target && !props.error && props.targetObject)}
           onClick={props.onNext}
           aria-label={t("accessibility.nextStep", "Continue to next step")}
