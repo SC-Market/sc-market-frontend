@@ -57,9 +57,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
   const isMobile = useBreakpointDown("sm")
 
   // State for filters
-  const [categoryFilter, setCategoryFilter] = useState<string>(
-    itemCategory || "",
-  )
+  const [categoryFilter, setCategoryFilter] = useState<string>(itemCategory || "")
   const [rarityFilter, setRarityFilter] = useState<string>("")
   const [tierFilter, setTierFilter] = useState<number | "">("")
   const [craftableOnly, setCraftableOnly] = useState<boolean>(false)
@@ -157,9 +155,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           alignItems={{ xs: "stretch", sm: "center" }}
         >
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel id="craftable-category-label">
-              {t("CraftableItemsView.category", "Category")}
-            </InputLabel>
+            <InputLabel id="craftable-category-label">{t("CraftableItemsView.category", "Category")}</InputLabel>
             <Select
               labelId="craftable-category-label"
               value={categoryFilter}
@@ -167,25 +163,15 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
               label={t("CraftableItemsView.category", "Category")}
             >
               <MenuItem value="">{t("CraftableItemsView.all", "All")}</MenuItem>
-              <MenuItem value="Weapons">
-                {t("CraftableItemsView.weapons", "Weapons")}
-              </MenuItem>
-              <MenuItem value="Armor">
-                {t("CraftableItemsView.armor", "Armor")}
-              </MenuItem>
-              <MenuItem value="Components">
-                {t("CraftableItemsView.components", "Components")}
-              </MenuItem>
-              <MenuItem value="Consumables">
-                {t("CraftableItemsView.consumables", "Consumables")}
-              </MenuItem>
+              <MenuItem value="Weapons">{t("CraftableItemsView.weapons", "Weapons")}</MenuItem>
+              <MenuItem value="Armor">{t("CraftableItemsView.armor", "Armor")}</MenuItem>
+              <MenuItem value="Components">{t("CraftableItemsView.components", "Components")}</MenuItem>
+              <MenuItem value="Consumables">{t("CraftableItemsView.consumables", "Consumables")}</MenuItem>
             </Select>
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel id="craftable-rarity-label">
-              {t("CraftableItemsView.rarity", "Rarity")}
-            </InputLabel>
+            <InputLabel id="craftable-rarity-label">{t("CraftableItemsView.rarity", "Rarity")}</InputLabel>
             <Select
               labelId="craftable-rarity-label"
               value={rarityFilter}
@@ -193,28 +179,16 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
               label={t("CraftableItemsView.rarity", "Rarity")}
             >
               <MenuItem value="">{t("CraftableItemsView.all", "All")}</MenuItem>
-              <MenuItem value="Common">
-                {t("CraftableItemsView.common", "Common")}
-              </MenuItem>
-              <MenuItem value="Uncommon">
-                {t("CraftableItemsView.uncommon", "Uncommon")}
-              </MenuItem>
-              <MenuItem value="Rare">
-                {t("CraftableItemsView.rare", "Rare")}
-              </MenuItem>
-              <MenuItem value="Epic">
-                {t("CraftableItemsView.epic", "Epic")}
-              </MenuItem>
-              <MenuItem value="Legendary">
-                {t("CraftableItemsView.legendary", "Legendary")}
-              </MenuItem>
+              <MenuItem value="Common">{t("CraftableItemsView.common", "Common")}</MenuItem>
+              <MenuItem value="Uncommon">{t("CraftableItemsView.uncommon", "Uncommon")}</MenuItem>
+              <MenuItem value="Rare">{t("CraftableItemsView.rare", "Rare")}</MenuItem>
+              <MenuItem value="Epic">{t("CraftableItemsView.epic", "Epic")}</MenuItem>
+              <MenuItem value="Legendary">{t("CraftableItemsView.legendary", "Legendary")}</MenuItem>
             </Select>
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel id="craftable-tier-label">
-              {t("CraftableItemsView.tier", "Tier")}
-            </InputLabel>
+            <InputLabel id="craftable-tier-label">{t("CraftableItemsView.tier", "Tier")}</InputLabel>
             <Select
               labelId="craftable-tier-label"
               value={tierFilter}
@@ -231,18 +205,14 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel id="craftable-availability-label">
-              {t("CraftableItemsView.availability", "Availability")}
-            </InputLabel>
+            <InputLabel id="craftable-availability-label">{t("CraftableItemsView.availability", "Availability")}</InputLabel>
             <Select
               labelId="craftable-availability-label"
               value={craftableOnly ? "craftable" : "all"}
               onChange={(e) => setCraftableOnly(e.target.value === "craftable")}
               label={t("CraftableItemsView.availability", "Availability")}
             >
-              <MenuItem value="all">
-                {t("CraftableItemsView.allItems", "All Items")}
-              </MenuItem>
+              <MenuItem value="all">{t("CraftableItemsView.allItems", "All Items")}</MenuItem>
               <MenuItem value="craftable">
                 {t("CraftableItemsView.craftableOnly", "Craftable Only")}
               </MenuItem>
@@ -299,10 +269,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
                       />
                     ) : (
                       <Chip
-                        label={t(
-                          "CraftableItemsView.missingMats",
-                          "Missing Materials",
-                        )}
+                        label={t("CraftableItemsView.missingMats", "Missing Materials")}
                         color="warning"
                         size="small"
                         icon={<WarningIcon />}
@@ -315,11 +282,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
                       {item.blueprint_name}
                     </Typography>
                     {item.rarity && (
-                      <Chip
-                        label={item.rarity}
-                        size="small"
-                        variant="outlined"
-                      />
+                      <Chip label={item.rarity} size="small" variant="outlined" />
                     )}
                     {item.tier && (
                       <Chip
@@ -366,8 +329,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
               <Collapse in={expandedItems.has(item.blueprint_id)}>
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="body2" fontWeight="medium" mb={1}>
-                  {t("CraftableItemsView.materials", "Materials")} (
-                  {item.materials.length})
+                  {t("CraftableItemsView.materials", "Materials")} ({item.materials.length})
                 </Typography>
                 <Stack spacing={1.5}>
                   {item.materials.map((material) => (
@@ -378,20 +340,13 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
                         alignItems="center"
                         mb={0.5}
                       >
-                        <Typography variant="body2">
-                          {material.material_name}
-                        </Typography>
+                        <Typography variant="body2">{material.material_name}</Typography>
                         <Stack direction="row" spacing={1} alignItems="center">
                           <Typography
                             variant="body2"
-                            color={
-                              material.is_sufficient
-                                ? "success.main"
-                                : "error.main"
-                            }
+                            color={material.is_sufficient ? "success.main" : "error.main"}
                           >
-                            {material.quantity_available} /{" "}
-                            {material.quantity_required}
+                            {material.quantity_available} / {material.quantity_required}
                           </Typography>
                           {material.quality_tier_min !== undefined &&
                             material.quality_tier_max !== undefined && (
@@ -414,9 +369,7 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
                         variant="determinate"
                         value={Math.min(
                           100,
-                          (material.quantity_available /
-                            material.quantity_required) *
-                            100,
+                          (material.quantity_available / material.quantity_required) * 100,
                         )}
                         color={material.is_sufficient ? "success" : "error"}
                         sx={{ height: 6, borderRadius: 1 }}
@@ -451,3 +404,4 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
     </Box>
   )
 }
+

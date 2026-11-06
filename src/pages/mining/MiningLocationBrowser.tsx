@@ -34,6 +34,8 @@ import {
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { useUrlPagination } from "../../components/pagination/useUrlPagination"
 import { MINING_LOCATION_PAGE_SIZE } from "./constants"
 
 function friendlyName(name: string): string {
@@ -50,11 +52,6 @@ import {
 } from "@mui/icons-material"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
-import {
-  CARD_GRID_PAGE_SIZE_OPTIONS,
-  NumberedPagination,
-  parsePageSize,
-} from "../../components/pagination/NumberedPagination"
 
 // The API sends English display names for mining groups and location types;
 // translate the known ones, show anything else as sent.
@@ -95,12 +92,11 @@ export function MiningLocationBrowser() {
   const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const page = parseInt(searchParams.get("page") || "1") || 1
-  const pageSize = parsePageSize(
-    searchParams.get("page_size"),
-    CARD_GRID_PAGE_SIZE_OPTIONS,
-    PAGE_SIZE,
-  )
+  const { page, pageSize, pagination } = useUrlPagination({
+    path: GAME_DATA_PATHS.miningLocations,
+    defaultPageSize: PAGE_SIZE,
+    replace: true,
+  })
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
   const searchTokens = useMemo(
@@ -114,21 +110,6 @@ export function MiningLocationBrowser() {
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(locationTokensToParams(tokens))
-    setSearchParams(params, { replace: true })
-  }
-
-  const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams)
-    if (newPage > 0) params.set("page", String(newPage + 1))
-    else params.delete("page")
-    setSearchParams(params, { replace: true })
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-  const handlePageSizeChange = (size: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.delete("page")
-    if (size === PAGE_SIZE) params.delete("page_size")
-    else params.set("page_size", String(size))
     setSearchParams(params, { replace: true })
   }
 
@@ -219,18 +200,11 @@ export function MiningLocationBrowser() {
               </Typography>
             </Box>
           )}
-          {data.total > 0 && (
-            <NumberedPagination
-              count={data.total}
-              page={page - 1}
-              rowsPerPage={pageSize}
-              onPageChange={handlePageChange}
-              rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
-              onRowsPerPageChange={handlePageSizeChange}
-              link={{ path: GAME_DATA_PATHS.miningLocations, searchParams }}
-              sx={{ mt: 2 }}
-            />
-          )}
+          <NumberedPagination
+            count={data.total}
+            {...pagination}
+            sx={{ mt: 2 }}
+          />
         </>
       )}
       <MiningLocationDetailModal

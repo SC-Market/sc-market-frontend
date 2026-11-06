@@ -26,10 +26,12 @@ import ConstructionIcon from "@mui/icons-material/Construction"
 import InventoryIcon from "@mui/icons-material/Inventory"
 import { useTranslation } from "react-i18next"
 import {
-  useGetCommoditiesQuery,
-  useGetResourceCategoriesQuery,
+  useGetCommoditiesQuery, useGetResourceCategoriesQuery,
 } from "../../store/api/v2/market"
-import { Link as RouterLink, useSearchParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  useSearchParams,
+} from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -37,42 +39,17 @@ import { getCommodityColor } from "../../util/gameIcons"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiCommoditiesSeoText } from "../../seo/hubHeads"
-import {
-  NumberedPagination,
-  parsePageSize,
-} from "../../components/pagination/NumberedPagination"
-
-const COMMODITY_PAGE_SIZE = 50
-const COMMODITY_PAGE_SIZE_OPTIONS: readonly number[] = [25, 50, 100]
+import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { useUrlPagination } from "../../components/pagination/useUrlPagination"
 
 type AcqFilter = "all" | "mined" | "purchased" | "salvaged" | "looted"
 
-const ACQ_FILTERS: {
-  value: AcqFilter
-  label: string
-  icon: React.ReactNode
-}[] = [
+const ACQ_FILTERS: { value: AcqFilter; label: string; icon: React.ReactNode }[] = [
   { value: "all", label: "All", icon: null },
-  {
-    value: "mined",
-    label: "Minable",
-    icon: <HardwareRoundedIcon sx={{ fontSize: 14 }} />,
-  },
-  {
-    value: "purchased",
-    label: "Purchasable",
-    icon: <ShoppingCartIcon sx={{ fontSize: 14 }} />,
-  },
-  {
-    value: "salvaged",
-    label: "Salvageable",
-    icon: <ConstructionIcon sx={{ fontSize: 14 }} />,
-  },
-  {
-    value: "looted",
-    label: "Lootable",
-    icon: <InventoryIcon sx={{ fontSize: 14 }} />,
-  },
+  { value: "mined", label: "Minable", icon: <HardwareRoundedIcon sx={{ fontSize: 14 }} /> },
+  { value: "purchased", label: "Purchasable", icon: <ShoppingCartIcon sx={{ fontSize: 14 }} /> },
+  { value: "salvaged", label: "Salvageable", icon: <ConstructionIcon sx={{ fontSize: 14 }} /> },
+  { value: "looted", label: "Lootable", icon: <InventoryIcon sx={{ fontSize: 14 }} /> },
 ]
 
 const ACQ_FILTER_KEYS: Record<AcqFilter, string> = {
@@ -83,52 +60,15 @@ const ACQ_FILTER_KEYS: Record<AcqFilter, string> = {
   looted: "wiki.commodityBrowser.acqFilter.looted",
 }
 
-function AcqChips({
-  can_be_mined,
-  can_be_purchased,
-  can_be_salvaged,
-  can_be_looted,
-}: {
-  can_be_mined: boolean
-  can_be_purchased: boolean
-  can_be_salvaged: boolean
-  can_be_looted: boolean
+function AcqChips({ can_be_mined, can_be_purchased, can_be_salvaged, can_be_looted }: {
+  can_be_mined: boolean; can_be_purchased: boolean; can_be_salvaged: boolean; can_be_looted: boolean
 }) {
   const { t } = useTranslation()
-  const chips: {
-    key: string
-    label: string
-    icon: React.ReactElement
-    color: "success" | "primary" | "warning" | "error"
-  }[] = []
-  if (can_be_mined)
-    chips.push({
-      key: "mine",
-      label: t("wiki.commodityBrowser.acqChip.mine", "Mine"),
-      icon: <HardwareRoundedIcon />,
-      color: "success",
-    })
-  if (can_be_purchased)
-    chips.push({
-      key: "buy",
-      label: t("wiki.commodityBrowser.acqChip.buy", "Buy"),
-      icon: <ShoppingCartIcon />,
-      color: "primary",
-    })
-  if (can_be_salvaged)
-    chips.push({
-      key: "salvage",
-      label: t("wiki.commodityBrowser.acqChip.salvage", "Salvage"),
-      icon: <ConstructionIcon />,
-      color: "warning",
-    })
-  if (can_be_looted)
-    chips.push({
-      key: "loot",
-      label: t("wiki.commodityBrowser.acqChip.loot", "Loot"),
-      icon: <InventoryIcon />,
-      color: "error",
-    })
+  const chips: { key: string; label: string; icon: React.ReactElement; color: "success" | "primary" | "warning" | "error" }[] = []
+  if (can_be_mined) chips.push({ key: "mine", label: t("wiki.commodityBrowser.acqChip.mine", "Mine"), icon: <HardwareRoundedIcon />, color: "success" })
+  if (can_be_purchased) chips.push({ key: "buy", label: t("wiki.commodityBrowser.acqChip.buy", "Buy"), icon: <ShoppingCartIcon />, color: "primary" })
+  if (can_be_salvaged) chips.push({ key: "salvage", label: t("wiki.commodityBrowser.acqChip.salvage", "Salvage"), icon: <ConstructionIcon />, color: "warning" })
+  if (can_be_looted) chips.push({ key: "loot", label: t("wiki.commodityBrowser.acqChip.loot", "Loot"), icon: <InventoryIcon />, color: "error" })
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
       {chips.map((c) => (
@@ -138,12 +78,7 @@ function AcqChips({
           label={c.label}
           size="small"
           color={c.color}
-          sx={{
-            height: 18,
-            fontSize: "0.6rem",
-            fontWeight: 600,
-            "& .MuiChip-icon": { fontSize: 11 },
-          }}
+          sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600, "& .MuiChip-icon": { fontSize: 11 } }}
         />
       ))}
     </Stack>
@@ -157,29 +92,21 @@ export function WikiCommodityBrowser() {
   const text = searchParams.get("q") || ""
   const category = searchParams.get("category") || ""
   const acq = (searchParams.get("acq") as AcqFilter) || "all"
-  const page = Number(searchParams.get("page")) || 1
-
-  const updateParam = useCallback(
-    (key: string, value: string) => {
-      const p = new URLSearchParams(searchParams)
-      if (value) p.set(key, value)
-      else p.delete(key)
-      if (key !== "page") p.delete("page")
-      setSearchParams(p, { replace: true })
-    },
-    [searchParams, setSearchParams],
-  )
-
-  const pageSize = parsePageSize(
-    searchParams.get("page_size"),
-    COMMODITY_PAGE_SIZE_OPTIONS,
-    COMMODITY_PAGE_SIZE,
-  )
-  const { data, isLoading, error } = useGetCommoditiesQuery({
-    category: category || undefined,
-    page,
-    pageSize,
+  const { page, pageSize, pagination } = useUrlPagination({
+    path: WIKI_PATHS.commodities,
+    defaultPageSize: 50,
+    pageSizeOptions: [25, 50, 100],
+    replace: true,
   })
+
+  const updateParam = useCallback((key: string, value: string) => {
+    const p = new URLSearchParams(searchParams)
+    if (value) p.set(key, value); else p.delete(key)
+    if (key !== "page") p.delete("page")
+    setSearchParams(p, { replace: true })
+  }, [searchParams, setSearchParams])
+
+  const { data, isLoading, error } = useGetCommoditiesQuery({ category: category || undefined, page, pageSize })
   const { data: categoriesData } = useGetResourceCategoriesQuery({})
 
   const categories = useMemo(() => {
@@ -202,11 +129,10 @@ export function WikiCommodityBrowser() {
     let items = data?.commodities || []
     if (text) {
       const q = text.toLowerCase()
-      items = items.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.resource_category?.toLowerCase().includes(q) ||
-          c.resource_subcategory?.toLowerCase().includes(q),
+      items = items.filter((c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.resource_category?.toLowerCase().includes(q) ||
+        c.resource_subcategory?.toLowerCase().includes(q),
       )
     }
     if (acq !== "all") {
@@ -232,54 +158,24 @@ export function WikiCommodityBrowser() {
   const filtersContent = (
     <Stack spacing={2}>
       <Box>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            fontWeight: 700,
-            mb: 0.5,
-            display: "block",
-          }}
-        >
+        <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}>
           {t("wiki.commodityBrowser.category", "Category")}
         </Typography>
         <Stack spacing={0.25}>
-          {[
-            {
-              label: t("wiki.commodityBrowser.allCategories", "All Categories"),
-              value: "",
-            },
-            ...categories.map((c) => ({ label: c, value: c })),
-          ].map((opt) => (
+          {[{ label: t("wiki.commodityBrowser.allCategories", "All Categories"), value: "" }, ...categories.map((c) => ({ label: c, value: c }))].map((opt) => (
             <Box
               key={opt.value}
               onClick={() => updateParam("category", opt.value)}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                px: 1.5,
-                py: 0.6,
-                borderRadius: 1,
-                cursor: "pointer",
-                transition: "background 0.12s",
-                bgcolor:
-                  category === opt.value ? "action.selected" : "transparent",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                px: 1.5, py: 0.6, borderRadius: 1, cursor: "pointer", transition: "background 0.12s",
+                bgcolor: category === opt.value ? "action.selected" : "transparent",
                 "&:hover": { bgcolor: "action.hover" },
               }}
             >
-              <Typography
-                variant="body2"
-                fontWeight={category === opt.value ? 700 : 400}
-              >
-                {opt.label}
-              </Typography>
+              <Typography variant="body2" fontWeight={category === opt.value ? 700 : 400}>{opt.label}</Typography>
               {opt.value && categoryCounts[opt.value] && (
-                <Typography variant="caption" color="text.secondary">
-                  {categoryCounts[opt.value]}
-                </Typography>
+                <Typography variant="caption" color="text.secondary">{categoryCounts[opt.value]}</Typography>
               )}
             </Box>
           ))}
@@ -289,40 +185,19 @@ export function WikiCommodityBrowser() {
       <Divider />
 
       <Box>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            fontWeight: 700,
-            mb: 0.5,
-            display: "block",
-          }}
-        >
+        <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}>
           {t("wiki.commodityBrowser.acquisition", "Acquisition")}
         </Typography>
         <ToggleButtonGroup
           orientation="vertical"
           value={acq}
           exclusive
-          onChange={(_, v) => {
-            if (v !== null) updateParam("acq", v === "all" ? "" : v)
-          }}
+          onChange={(_, v) => { if (v !== null) updateParam("acq", v === "all" ? "" : v) }}
           fullWidth
           size="small"
         >
           {ACQ_FILTERS.map(({ value, label, icon }) => (
-            <ToggleButton
-              key={value}
-              value={value}
-              sx={{
-                justifyContent: "flex-start",
-                gap: 1,
-                textTransform: "none",
-                fontSize: "0.8rem",
-              }}
-            >
+            <ToggleButton key={value} value={value} sx={{ justifyContent: "flex-start", gap: 1, textTransform: "none", fontSize: "0.8rem" }}>
               {icon}
               {t(ACQ_FILTER_KEYS[value], label)}
             </ToggleButton>
@@ -344,64 +219,34 @@ export function WikiCommodityBrowser() {
   )
 
   return (
-    <StandardPageLayout
-      title={pageTitle}
-      description={pageDescription}
-      headerTitle={t("wiki.commodityBrowser.headerTitle", "Commodities")}
-      sidebarOpen={true}
-      maxWidth="xl"
-    >
+    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle={t("wiki.commodityBrowser.headerTitle", "Commodities")} sidebarOpen={true} maxWidth="xl">
       <Helmet>
         {page > 1 && (
-          <link
-            rel="prev"
-            href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`}
-          />
+          <link rel="prev" href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`} />
         )}
         {page < totalPages && (
-          <link
-            rel="next"
-            href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`}
-          />
+          <link rel="next" href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`} />
         )}
       </Helmet>
       <Grid item xs={12}>
-        <FilterSidebarLayout
-          filters={filtersContent}
-          filterTitle={t("wiki.commodityBrowser.filters", "Filters")}
-          sidebarWidth={210}
-        >
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.commodityBrowser.filters", "Filters")} sidebarWidth={210}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <TextField
               size="small"
-              placeholder={t(
-                "wiki.commodityBrowser.searchPlaceholder",
-                "Search commodities...",
-              )}
+              placeholder={t("wiki.commodityBrowser.searchPlaceholder", "Search commodities...")}
               value={text}
               onChange={(e) => updateParam("q", e.target.value)}
               sx={{ flex: 1, maxWidth: 360 }}
             />
             {data && (
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ whiteSpace: "nowrap" }}
-              >
+              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
                 {t("wikiUi.resultCount", { count: filtered.length })}
               </Typography>
             )}
           </Box>
 
           {isLoading && <TableSkeleton rows={12} />}
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {t(
-                "wiki.commodityBrowser.loadError",
-                "Failed to load commodities.",
-              )}
-            </Alert>
-          )}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.commodityBrowser.loadError", "Failed to load commodities.")}</Alert>}
 
           {data && (
             <>
@@ -421,50 +266,22 @@ export function WikiCommodityBrowser() {
                       }}
                     >
                       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
-                        <Stack
-                          direction="row"
-                          spacing={1.5}
-                          alignItems="flex-start"
-                        >
+                        <Stack direction="row" spacing={1.5} alignItems="flex-start">
                           <Avatar
                             src={c.image_url || FALLBACK_IMAGE_URL}
                             variant="rounded"
                             sx={{
-                              width: 40,
-                              height: 40,
-                              flexShrink: 0,
-                              bgcolor:
-                                getCommodityColor(c.resource_subcategory) ||
-                                "grey.800",
+                              width: 40, height: 40, flexShrink: 0,
+                              bgcolor: getCommodityColor(c.resource_subcategory) || "grey.800",
                             }}
-                            imgProps={{
-                              loading: "lazy",
-                              style: { objectFit: "contain" },
-                            }}
+                            imgProps={{ loading: "lazy", style: { objectFit: "contain" } }}
                           />
                           <Box sx={{ flex: 1, minWidth: 0 }}>
-                            <Typography variant="body2" fontWeight={700} noWrap>
-                              {c.name}
-                            </Typography>
-                            <Stack
-                              direction="row"
-                              spacing={0.5}
-                              sx={{ mt: 0.5 }}
-                              flexWrap="wrap"
-                              useFlexGap
-                            >
-                              <Chip
-                                label={c.resource_category}
-                                size="small"
-                                variant="outlined"
-                                sx={{ height: 18, fontSize: "0.65rem" }}
-                              />
+                            <Typography variant="body2" fontWeight={700} noWrap>{c.name}</Typography>
+                            <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
+                              <Chip label={c.resource_category} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
                               {c.resource_subcategory && (
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                  sx={{ alignSelf: "center" }}
-                                >
+                                <Typography variant="caption" color="text.secondary" sx={{ alignSelf: "center" }}>
                                   {c.resource_subcategory}
                                 </Typography>
                               )}
@@ -487,35 +304,11 @@ export function WikiCommodityBrowser() {
 
               {filtered.length === 0 && (
                 <Box sx={{ textAlign: "center", py: 6 }}>
-                  <Typography color="text.secondary">
-                    {t(
-                      "wiki.commodityBrowser.noResults",
-                      "No commodities found.",
-                    )}
-                  </Typography>
+                  <Typography color="text.secondary">{t("wiki.commodityBrowser.noResults", "No commodities found.")}</Typography>
                 </Box>
               )}
 
-              {data && data.total > 0 && (
-                <NumberedPagination
-                  count={data.total}
-                  page={page - 1}
-                  rowsPerPage={pageSize}
-                  onPageChange={(newPage) => {
-                    updateParam("page", newPage > 0 ? String(newPage + 1) : "")
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }}
-                  rowsPerPageOptions={COMMODITY_PAGE_SIZE_OPTIONS}
-                  onRowsPerPageChange={(size) =>
-                    updateParam(
-                      "page_size",
-                      size === COMMODITY_PAGE_SIZE ? "" : String(size),
-                    )
-                  }
-                  link={{ path: WIKI_PATHS.commodities, searchParams }}
-                  sx={{ mt: 3 }}
-                />
-              )}
+              <NumberedPagination count={data?.total ?? 0} {...pagination} sx={{ mt: 3 }} />
             </>
           )}
         </FilterSidebarLayout>
