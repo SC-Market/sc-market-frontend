@@ -1701,47 +1701,6 @@ exports[`routes (shard 3/4) > /resources/:resource_id 1`] = `
 }
 `;
 
-exports[`routes (shard 3/4) > /sell 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/sell",
-  "h1": [
-    "We Buy Resources!Sell your resources in bulk with us! Skip the refining process and sell to us at a premium!",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/sell",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/developers",
-    "/discord/install?type=server&src=footer",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/sell",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Commodities - SC Market",
-  "url": "/sell",
-}
-`;
-
 exports[`routes (shard 3/4) > /services 1`] = `
 {
   "consoleErrors": [],

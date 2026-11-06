@@ -1422,16 +1422,6 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/messaging",
   },
   {
-    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /sell",
-    "errorBoundaryAt": "(layout:AppLayout)",
-    "guards": [
-      "AppLayout",
-      "LoggedInRoute",
-    ],
-    "lazy": true,
-    "pattern": "/sell",
-  },
-  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /dashboard/shops",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

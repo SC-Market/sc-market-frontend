@@ -66,7 +66,6 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   // Market management routes
   "/market/manage": () => import("../components/market/MarketRouter"),
   "/market/manage-stock": () => import("../pages/market/ManageStockLots"),
-  "/sell": () => import("../pages/market/SellMaterials"),
 
   // Order routes
   "/orders": () => import("../pages/contracting/CreateOrder"),

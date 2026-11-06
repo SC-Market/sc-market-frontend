@@ -2500,33 +2500,6 @@
   "MemberAssignments": {
     "assignments": "Завдання"
   },
-  "SellMaterialsList": {
-    "title": "Продати матеріали",
-    "commodity": "Товар",
-    "code": "Код",
-    "kindLabel": "Тип",
-    "sellPrice": "Ціна продажу",
-    "sell": "Продати",
-    "search": "Пошук",
-    "any": "Будь-який",
-    "kind": {
-      "Agricultural": "Сільськогосподарський",
-      "Waste": "Відходи",
-      "Metal": "Метал",
-      "Drug": "Наркотик",
-      "Vice": "Заборонені товари",
-      "Natural": "Природний",
-      "Mineral": "Мінерал",
-      "Halogen": "Галоген",
-      "Temporary": "Тимчасовий",
-      "Scrap": "Брухт",
-      "Gas": "Газ",
-      "Medical": "Медичний",
-      "Food": "Їжа",
-      "Other": "Інше"
-    },
-    "kindHeader": "Заголовок типу"
-  },
   "PageSearch": {
     "selectItem": "Виберіть предмет",
     "selectedItem": "Обраний предмет",
@@ -3266,11 +3239,6 @@
       "invalidUser": "Неправильний користувач!",
       "enterAmount": "Введіть суму!"
     }
-  },
-  "sellMaterials": {
-    "commodities": "Товари",
-    "title": "Ми купуємо ресурси!",
-    "subtitle": "Продавайте свої ресурси оптом з нами! Пропустіть процес переробки і продавайте нам з націнкою!"
   },
   "cart": {
     "ofAvailable": "з {{available}} доступних",

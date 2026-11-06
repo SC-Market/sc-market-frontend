@@ -69,7 +69,6 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/market/cart": MarketCartSkeleton,
   "/inventory": InventoryPageSkeleton,
   "/buyorder/create": FormPageSkeleton,
-  "/sell": FormPageSkeleton,
 
   // Contractor routes
   "/contractors": ContractorsListSkeleton,

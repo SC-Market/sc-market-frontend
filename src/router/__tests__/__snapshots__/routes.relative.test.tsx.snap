@@ -5575,42 +5575,6 @@ exports[`relative link resolution (every leaf) > /resources/:resource_id 1`] = `
 }
 `;
 
-exports[`relative link resolution (every leaf) > /sell 1`] = `
-{
-  "links": {
-    "path:""": "/sell",
-    "path:"#frag"": "/sell#frag",
-    "path:"."": "/sell",
-    "path:".."": "/",
-    "path:"../.."": "/",
-    "path:"../sibling"": "/sibling",
-    "path:"./"": "/sell/",
-    "path:"./child"": "/sell/child",
-    "path:"?tab=x"": "/sell?tab=x",
-    "path:"child"": "/sell/child",
-    "route:""": "/sell",
-    "route:"#frag"": "/sell#frag",
-    "route:"."": "/sell",
-    "route:".."": "/",
-    "route:"../.."": "/",
-    "route:"../sibling"": "/sibling",
-    "route:"./"": "/sell/",
-    "route:"./child"": "/sell/child",
-    "route:"?tab=x"": "/sell?tab=x",
-    "route:"child"": "/sell/child",
-  },
-  "location": "/sell",
-  "params": {},
-  "probeChain": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/sell",
-  ],
-  "resolvedDot": "/sell",
-  "url": "/sell",
-}
-`;
-
 exports[`relative link resolution (every leaf) > /send 1`] = `
 {
   "links": {

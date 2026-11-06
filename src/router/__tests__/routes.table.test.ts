@@ -24,7 +24,7 @@ describe("route table", () => {
   })
 
   it("lists every leaf route", () => {
-    expect(leaves.length).toMatchInlineSnapshot(`184`)
+    expect(leaves.length).toMatchInlineSnapshot(`183`)
     expect(
       leaves.map((leaf) => ({
         pattern: leaf.pattern,

@@ -2491,33 +2491,6 @@
   "MemberAssignments": {
     "assignments": "Assignations"
   },
-  "SellMaterialsList": {
-    "title": "Vendre des matériaux",
-    "commodity": "Marchandise",
-    "code": "Code",
-    "kindLabel": "Type",
-    "sellPrice": "Prix de vente",
-    "sell": "Vendre",
-    "search": "Rechercher",
-    "any": "Tout",
-    "kind": {
-      "Agricultural": "Agricole",
-      "Waste": "Déchets",
-      "Metal": "Métal",
-      "Drug": "Drogue",
-      "Vice": "Vice",
-      "Natural": "Naturel",
-      "Mineral": "Minéral",
-      "Halogen": "Halogène",
-      "Temporary": "Temporaire",
-      "Scrap": "Ferraille",
-      "Gas": "Gaz",
-      "Medical": "Médical",
-      "Food": "Nourriture",
-      "Other": "Autre"
-    },
-    "kindHeader": "En-tête de type"
-  },
   "PageSearch": {
     "selectItem": "Sélectionner un article",
     "selectedItem": "Article sélectionné",
@@ -3290,11 +3263,6 @@
       "invalidUser": "Utilisateur invalide !",
       "enterAmount": "Veuillez saisir un montant !"
     }
-  },
-  "sellMaterials": {
-    "commodities": "Marchandises",
-    "title": "Nous achetons des ressources !",
-    "subtitle": "Vendez vos ressources en gros chez nous ! Sautez l'étape du raffinage et vendez-nous au prix fort !"
   },
   "cart": {
     "ofAvailable": "sur {{available}} disponibles",

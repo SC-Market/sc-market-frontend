@@ -4460,38 +4460,6 @@
     "removeQualityRow": "Remove quality row",
     "removeBundleItem": "Remove bundle item"
   },
-  "sellMaterials": {
-    "commodities": "Commodities",
-    "subtitle": "Sell your resources in bulk with us! Skip the refining process and sell to us at a premium!",
-    "title": "We Buy Resources!"
-  },
-  "SellMaterialsList": {
-    "any": "Any",
-    "code": "Code",
-    "commodity": "Commodity",
-    "kind": {
-      "Agricultural": "Agricultural",
-      "Drug": "Drug",
-      "Food": "Food",
-      "Gas": "Gas",
-      "Halogen": "Halogen",
-      "Medical": "Medical",
-      "Metal": "Metal",
-      "Mineral": "Mineral",
-      "Natural": "Natural",
-      "Other": "Other",
-      "Scrap": "Scrap",
-      "Temporary": "Temporary",
-      "Vice": "Vice",
-      "Waste": "Waste"
-    },
-    "kindHeader": "Kind Header",
-    "kindLabel": "Kind",
-    "search": "Search",
-    "sell": "Sell",
-    "sellPrice": "Sell Price",
-    "title": "Sell Materials"
-  },
   "sendMoney": {
     "amount": "Amount",
     "back": "Back",

@@ -2473,33 +2473,6 @@
   "MemberAssignments": {
     "assignments": "割り当て"
   },
-  "SellMaterialsList": {
-    "title": "素材を売る",
-    "commodity": "商品",
-    "code": "コード",
-    "kindLabel": "種類",
-    "sellPrice": "売却価格",
-    "sell": "売る",
-    "search": "検索",
-    "any": "指定なし",
-    "kind": {
-      "Agricultural": "農産物",
-      "Waste": "廃棄物",
-      "Metal": "金属",
-      "Drug": "薬物",
-      "Vice": "嗜好品",
-      "Natural": "天然物",
-      "Mineral": "鉱物",
-      "Halogen": "ハロゲン",
-      "Temporary": "一時的",
-      "Scrap": "スクラップ",
-      "Gas": "ガス",
-      "Medical": "医療品",
-      "Food": "食料",
-      "Other": "その他"
-    },
-    "kindHeader": "種類ヘッダー"
-  },
   "PageSearch": {
     "selectItem": "アイテムを選択",
     "selectedItem": "選択したアイテム",
@@ -3260,11 +3233,6 @@
       "invalidUser": "無効なユーザーです！",
       "enterAmount": "金額を入力してください！"
     }
-  },
-  "sellMaterials": {
-    "commodities": "商品",
-    "title": "リソースを買い取ります！",
-    "subtitle": "リソースをまとめて私たちに売りましょう！精製の手間を省いて、好条件で私たちに売却できます！"
   },
   "cart": {
     "ofAvailable": "/ 在庫 {{available}} 個",

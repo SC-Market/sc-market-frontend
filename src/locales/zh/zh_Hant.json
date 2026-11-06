@@ -2415,33 +2415,6 @@
   "MemberAssignments": {
     "assignments": "指派任務"
   },
-  "SellMaterialsList": {
-    "title": "出售原料",
-    "commodity": "大宗商品",
-    "code": "代碼",
-    "kindLabel": "種類",
-    "sellPrice": "售價",
-    "sell": "出售",
-    "search": "搜尋",
-    "any": "任何",
-    "kind": {
-      "Agricultural": "農業",
-      "Waste": "廢料",
-      "Metal": "金屬",
-      "Drug": "藥物",
-      "Vice": "違禁品",
-      "Natural": "天然",
-      "Mineral": "礦物",
-      "Halogen": "鹵素",
-      "Temporary": "暫時",
-      "Scrap": "廢金屬",
-      "Gas": "氣體",
-      "Medical": "醫療",
-      "Food": "食物",
-      "Other": "其他"
-    },
-    "kindHeader": "種類標題"
-  },
   "PageSearch": {
     "selectItem": "選擇物品",
     "selectedItem": "已選物品",
@@ -3178,11 +3151,6 @@
       "invalidUser": "無效的使用者！",
       "enterAmount": "請輸入金額！"
     }
-  },
-  "sellMaterials": {
-    "commodities": "大宗商品",
-    "title": "我們收購資源！",
-    "subtitle": "與我們一起大量出售你的資源！省去精煉流程，以優惠價格賣給我們！"
   },
   "cart": {
     "ofAvailable": "／共 {{available}} 件可售",

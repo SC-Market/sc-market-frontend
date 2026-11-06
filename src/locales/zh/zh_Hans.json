@@ -2475,33 +2475,6 @@
   "MemberAssignments": {
     "assignments": "指派"
   },
-  "SellMaterialsList": {
-    "title": "出售材料",
-    "commodity": "大宗商品",
-    "code": "代码",
-    "kindLabel": "类型",
-    "sellPrice": "出售价格",
-    "sell": "出售",
-    "search": "搜索",
-    "any": "任意",
-    "kind": {
-      "Agricultural": "农业品",
-      "Waste": "废弃物",
-      "Metal": "金属",
-      "Drug": "药物",
-      "Vice": "违禁品",
-      "Natural": "天然物",
-      "Mineral": "矿物",
-      "Halogen": "卤素",
-      "Temporary": "临时品",
-      "Scrap": "废料",
-      "Gas": "气体",
-      "Medical": "医疗",
-      "Food": "食品",
-      "Other": "其他"
-    },
-    "kindHeader": "类别标题"
-  },
   "PageSearch": {
     "selectItem": "选择物品",
     "selectedItem": "已选物品",
@@ -3273,11 +3246,6 @@
       "invalidUser": "无效的用户！",
       "enterAmount": "请输入金额！"
     }
-  },
-  "sellMaterials": {
-    "commodities": "大宗商品",
-    "title": "我们收购资源！",
-    "subtitle": "把你的资源批量卖给我们！省去精炼流程，以更高的价格卖给我们！"
   },
   "cart": {
     "ofAvailable": "/ 共 {{available}} 件可售",

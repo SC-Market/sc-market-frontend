@@ -450,10 +450,6 @@ export const pages = {
     () => import("../pages/resources/ResourceDetail"),
     (m) => m.ResourceDetail,
   ),
-  SellMaterials: pageEntry(
-    () => import("../pages/market/SellMaterials"),
-    (m) => m.SellMaterials,
-  ),
   SendMoney: pageEntry(
     () => import("../pages/money/SendMoney"),
     (m) => m.SendMoney,

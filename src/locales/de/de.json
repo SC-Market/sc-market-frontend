@@ -2482,33 +2482,6 @@
   "MemberAssignments": {
     "assignments": "Zuweisungen"
   },
-  "SellMaterialsList": {
-    "title": "Materialien verkaufen",
-    "commodity": "Ware",
-    "code": "Code",
-    "kindLabel": "Art",
-    "sellPrice": "Verkaufspreis",
-    "sell": "Verkaufen",
-    "search": "Suchen",
-    "any": "Beliebig",
-    "kind": {
-      "Agricultural": "Landwirtschaftlich",
-      "Waste": "Abfall",
-      "Metal": "Metall",
-      "Drug": "Droge",
-      "Vice": "Laster",
-      "Natural": "Natürlich",
-      "Mineral": "Mineral",
-      "Halogen": "Halogen",
-      "Temporary": "Temporär",
-      "Scrap": "Schrott",
-      "Gas": "Gas",
-      "Medical": "Medizinisch",
-      "Food": "Nahrung",
-      "Other": "Sonstige"
-    },
-    "kindHeader": "Art-Überschrift"
-  },
   "PageSearch": {
     "selectItem": "Artikel auswählen",
     "selectedItem": "Ausgewählter Artikel",
@@ -3275,11 +3248,6 @@
       "invalidUser": "Ungültiger Benutzer!",
       "enterAmount": "Bitte gib einen Betrag ein!"
     }
-  },
-  "sellMaterials": {
-    "commodities": "Waren",
-    "title": "Wir kaufen Ressourcen!",
-    "subtitle": "Verkaufe deine Ressourcen in großen Mengen an uns! Überspringe den Raffinationsprozess und verkaufe an uns zu einem Aufpreis!"
   },
   "cart": {
     "ofAvailable": "von {{available}} verfügbar",

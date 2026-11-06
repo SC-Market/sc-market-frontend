@@ -335,11 +335,6 @@ export default [
             file: "routes/pages/Messages.tsx",
           },
           {
-            id: "routes/pages/SellMaterials",
-            path: "/sell",
-            file: "routes/pages/SellMaterials.tsx",
-          },
-          {
             id: "routes/pages/MyShops",
             path: "/dashboard/shops",
             file: "routes/pages/MyShops.tsx",

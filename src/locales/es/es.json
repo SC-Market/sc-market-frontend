@@ -2491,33 +2491,6 @@
   "MemberAssignments": {
     "assignments": "Asignaciones"
   },
-  "SellMaterialsList": {
-    "title": "Vender materiales",
-    "commodity": "Materia prima",
-    "code": "Código",
-    "kindLabel": "Tipo",
-    "sellPrice": "Precio de venta",
-    "sell": "Vender",
-    "search": "Buscar",
-    "any": "Cualquiera",
-    "kind": {
-      "Agricultural": "Agrícola",
-      "Waste": "Residuos",
-      "Metal": "Metal",
-      "Drug": "Droga",
-      "Vice": "Vicio",
-      "Natural": "Natural",
-      "Mineral": "Mineral",
-      "Halogen": "Halógeno",
-      "Temporary": "Temporal",
-      "Scrap": "Chatarra",
-      "Gas": "Gas",
-      "Medical": "Médico",
-      "Food": "Comida",
-      "Other": "Otro"
-    },
-    "kindHeader": "Encabezado de tipo"
-  },
   "PageSearch": {
     "selectItem": "Seleccionar artículo",
     "selectedItem": "Artículo seleccionado",
@@ -3290,11 +3263,6 @@
       "invalidUser": "¡Usuario no válido!",
       "enterAmount": "¡Introduce un importe!"
     }
-  },
-  "sellMaterials": {
-    "commodities": "Materias primas",
-    "title": "¡Compramos recursos!",
-    "subtitle": "¡Vende tus recursos a granel con nosotros! ¡Sáltate el proceso de refinado y véndenos a un precio superior!"
   },
   "cart": {
     "ofAvailable": "de {{available}} disponibles",
