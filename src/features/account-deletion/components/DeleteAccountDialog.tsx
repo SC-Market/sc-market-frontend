@@ -12,11 +12,8 @@ import {
   CircularProgress,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import {
-  useAccountDeletionPrecheckQuery,
-  useAccountRequestDeletionMutation,
-} from "../../profile/api/profileApi"
-import { useLogoutMutation } from "../../profile/api/profileApi"
+import { useAccountDeletionPrecheckQuery } from "../../profile/api/profileApi"
+import { useRequestAccountDeletion } from "../hooks/useAccountDeletion"
 
 interface DeleteAccountDialogProps {
   open: boolean
@@ -33,24 +30,12 @@ export function DeleteAccountDialog({
 
   const { data: precheck, isLoading: precheckLoading } =
     useAccountDeletionPrecheckQuery(undefined, { skip: !open })
-  const [requestDeletion, { isLoading: deleting }] =
-    useAccountRequestDeletionMutation()
-  const [logout] = useLogoutMutation()
+  const { request: requestDeletion, deleting } = useRequestAccountDeletion()
 
   const canConfirm =
     confirmText === "DELETE" && precheck?.canDelete && !deleting
 
-  const handleDelete = async () => {
-    try {
-      await requestDeletion({ reason: reason || undefined }).unwrap()
-      await logout()
-        .unwrap()
-        .catch(() => {})
-      window.location.href = "/"
-    } catch {
-      // Error is shown via RTK Query state
-    }
-  }
+  const handleDelete = () => requestDeletion(reason)
 
   const handleClose = () => {
     setReason("")

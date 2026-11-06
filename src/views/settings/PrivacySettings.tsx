@@ -2,7 +2,6 @@ import { FlatSection } from "../../components/paper/Section"
 import React, { useCallback, useState } from "react"
 import {
   useGetUserProfileQuery,
-  useProfileUpdateSettingsMutation,
   useAccountDeletionStatusQuery,
 } from "../../features/profile/api/profileApi"
 import {
@@ -16,35 +15,23 @@ import {
 import { AccountSettingsBody } from "../../hooks/login/UserProfile"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useUpdateAccountSettings } from "../../features/profile/hooks/useAccountSettingsActions"
 import { DeleteAccountDialog } from "../../features/account-deletion/components/DeleteAccountDialog"
 import { PendingDeletionBanner } from "../../features/account-deletion/components/PendingDeletionBanner"
 import { CookiePreferences } from "./CookiePreferences"
 
 export function PrivacySettings() {
   const { data: profile, refetch } = useGetUserProfileQuery()
-  const [updateProfile] = useProfileUpdateSettingsMutation()
+  const updateSettings = useUpdateAccountSettings()
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const { data: deletionStatus } = useAccountDeletionStatusQuery()
 
   const handleUpdate = useCallback(
-    (body: AccountSettingsBody) => {
-      updateProfile(body)
-        .unwrap()
-        .then(() => {
-          issueAlert({
-            message: t("privacy_settings.updated", {
-              defaultValue: "Settings updated",
-            }),
-            severity: "success",
-          })
-          refetch()
-        })
-        .catch(issueAlert)
+    async (body: AccountSettingsBody) => {
+      if (await updateSettings(body)) refetch()
     },
-    [updateProfile, refetch, issueAlert, t],
+    [updateSettings, refetch],
   )
 
   return (

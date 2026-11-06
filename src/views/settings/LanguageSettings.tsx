@@ -2,27 +2,21 @@ import React, { useState, useEffect } from "react"
 import { Box, Grid, Typography, Alert } from "@mui/material"
 import { FlatSection } from "../../components/paper/Section"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
-import {
-  useProfileGetLanguagesQuery,
-  useProfileSetLanguagesMutation,
-} from "../../features/profile/api/profileApi"
+import { useProfileGetLanguagesQuery } from "../../features/profile/api/profileApi"
+import { useSaveProfileLanguages } from "../../features/profile/hooks/useAccountSettingsActions"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import LoadingButton from "@mui/lab/LoadingButton"
 
 export function LanguageSettings() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-  const [saving, setSaving] = useState(false)
+  const { save, saving } = useSaveProfileLanguages()
 
   const {
     data: languagesData,
     isLoading,
     error,
   } = useProfileGetLanguagesQuery()
-
-  const [setLanguages] = useProfileSetLanguagesMutation()
 
   // Update local state when data loads
   useEffect(() => {
@@ -31,28 +25,7 @@ export function LanguageSettings() {
     }
   }, [languagesData])
 
-  const handleSave = async () => {
-    setSaving(true)
-
-    try {
-      await setLanguages({ language_codes: selectedLanguages }).unwrap()
-      issueAlert({
-        message: t("settings.languages.saveSuccess", "Languages updated"),
-        severity: "success",
-      })
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : t("settings.languages.saveError", "Failed to update languages")
-      issueAlert({
-        message,
-        severity: "error",
-      })
-    } finally {
-      setSaving(false)
-    }
-  }
+  const handleSave = () => save(selectedLanguages)
 
   return (
     <FlatSection title={t("settings.languages.title", "Supported Languages")}>

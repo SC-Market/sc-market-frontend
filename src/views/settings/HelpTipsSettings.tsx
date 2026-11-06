@@ -1,12 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import { Box, Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import { FlatSection } from "../../components/paper/Section"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useSession } from "../../hooks/login/useSession"
-import { useClearDismissedHintsMutation } from "../../store/api/v2/market"
-import { clearLocalDismissedHints } from "../../features/help/dismissedHintsStorage"
+import { useResetDismissedHints } from "../../features/help/hooks/useResetDismissedHints"
 
 /**
  * "Show tips again": brings back every first-use hint the user dismissed.
@@ -15,26 +13,8 @@ import { clearLocalDismissedHints } from "../../features/help/dismissedHintsStor
  */
 export function HelpTipsSettings() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const session = useSession()
-  const [clearOnAccount] = useClearDismissedHintsMutation()
-  const [busy, setBusy] = useState(false)
-
-  const handleClick = async () => {
-    setBusy(true)
-    try {
-      if (session.status === "authenticated") {
-        await clearOnAccount().unwrap()
-      } else {
-        clearLocalDismissedHints()
-      }
-      issueAlert({ message: t("settings.tips.reset"), severity: "success" })
-    } catch {
-      issueAlert({ message: t("settings.tips.resetError"), severity: "error" })
-    } finally {
-      setBusy(false)
-    }
-  }
+  const { reset: handleClick, busy } = useResetDismissedHints()
 
   return (
     <FlatSection title={t("settings.tips.title")}>

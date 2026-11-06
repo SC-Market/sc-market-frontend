@@ -5,13 +5,9 @@ import { AddAPhotoRounded, SaveRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import {
-  useGetUserProfileQuery,
-  useProfileUploadBannerMutation,
-} from "../api/profileApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useGetUserProfileQuery } from "../api/profileApi"
+import { useProfileBannerUpload } from "../hooks/useProfileStatusActions"
 import { DarkBannerContainer, LightBannerContainer } from "./BannerContainers"
-import { resizeImageFile, BANNER_RESIZE } from "../../../util/imageResize"
 
 function BannerEditArea(props: {
   profile: User
@@ -28,10 +24,7 @@ function BannerEditArea(props: {
 
   const [bannerFileInputRef, setBannerFileInputRef] =
     useState<HTMLInputElement | null>(null)
-  const issueAlert = useAlertHook()
-
-  const [uploadBanner, { isLoading: isUploadingBanner }] =
-    useProfileUploadBannerMutation()
+  const { upload, isUploadingBanner } = useProfileBannerUpload()
 
   async function handleBannerUpload(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -39,24 +32,10 @@ function BannerEditArea(props: {
     const original = event.target.files?.[0]
     if (!original) return
 
-    const file = await resizeImageFile(original, BANNER_RESIZE)
-
-    uploadBanner(file)
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("viewProfile.banner_uploaded", {
-            defaultValue: "Banner uploaded",
-          }),
-          severity: "success",
-        })
-      })
-      .catch(issueAlert)
-      .finally(() => {
-        if (bannerFileInputRef) {
-          bannerFileInputRef.value = ""
-        }
-      })
+    await upload(original)
+    if (bannerFileInputRef) {
+      bannerFileInputRef.value = ""
+    }
   }
 
   return (

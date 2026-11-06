@@ -20,12 +20,9 @@ import {
   PriceChangeRounded,
   SettingsRounded,
 } from "@mui/icons-material"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useLogoutMutation } from "../../features/profile/api/profileApi"
-import { useDispatch } from "react-redux"
-import { serviceApi } from "../../store/service"
-import { tokensApi } from "../../features/api-tokens/api/tokensApi"
+import { useLogout } from "../../features/profile/hooks/useLogout"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton } from "../../components/haptic"
@@ -38,9 +35,7 @@ export function ProfileNavAvatar() {
   const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
-  const [logout] = useLogoutMutation()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const logout = useLogout()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (notifOpen) {
@@ -56,45 +51,7 @@ export function ProfileNavAvatar() {
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault()
     handleClose()
-
-    try {
-      // Clear service worker caches
-      if ("serviceWorker" in navigator && "caches" in window) {
-        try {
-          const cacheNames = await caches.keys()
-          await Promise.all(
-            cacheNames.map((cacheName) => {
-              // Clear API cache and other caches that might contain authenticated data
-              if (
-                cacheName.includes("api") ||
-                cacheName.includes("pages") ||
-                cacheName.includes("mutations")
-              ) {
-                return caches.delete(cacheName)
-              }
-              return Promise.resolve()
-            }),
-          )
-        } catch (error) {
-          console.error("Failed to clear service worker caches:", error)
-        }
-      }
-
-      // Clear RTK Query cache (also done in mutation's onQueryStarted, but do it here too for immediate effect)
-      dispatch(serviceApi.util.resetApiState())
-      dispatch(tokensApi.util.resetApiState())
-
-      // Call logout mutation
-      await logout().unwrap()
-
-      // Navigate to home page after successful logout
-      // Using navigate instead of window.location to avoid full page reload
-      navigate(PATHS.home, { replace: true })
-    } catch (error) {
-      // Even if logout fails, navigate to home (session might be cleared anyway)
-      console.error("Logout error:", error)
-      navigate(PATHS.home, { replace: true })
-    }
+    await logout()
   }
 
   return (

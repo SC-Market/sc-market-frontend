@@ -1,15 +1,15 @@
 import { Switch, FormControlLabel } from "@mui/material"
-import { useProfileUpdateInGameStatusMutation } from "../api/profileApi"
+import { useSetInGameStatus } from "../hooks/useProfileStatusActions"
 import { useGetUserProfileQuery } from "../api/profileApi"
 import { useTranslation } from "react-i18next"
 
 export function InGameToggle() {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
-  const [updateStatus] = useProfileUpdateInGameStatusMutation()
+  const setInGame = useSetInGameStatus()
 
   const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateStatus({ in_game: e.target.checked })
+    setInGame(e.target.checked)
   }
 
   return (

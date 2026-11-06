@@ -1,8 +1,7 @@
 import React from "react"
 import { Alert, Button, CircularProgress } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useAccountCancelDeletionMutation } from "../../profile/api/profileApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useCancelAccountDeletion } from "../hooks/useAccountDeletion"
 import { useFormatters } from "../../../util/format"
 
 interface PendingDeletionBannerProps {
@@ -14,22 +13,7 @@ export function PendingDeletionBanner({
 }: PendingDeletionBannerProps) {
   const { t } = useTranslation()
   const fmt = useFormatters()
-  const [cancelDeletion, { isLoading }] = useAccountCancelDeletionMutation()
-  const issueAlert = useAlertHook()
-
-  const handleCancel = async () => {
-    try {
-      const result = await cancelDeletion().unwrap()
-      issueAlert({ message: result.message, severity: "success" })
-    } catch {
-      issueAlert({
-        message: t("account_deletion.cancel_error", {
-          defaultValue: "Failed to cancel deletion. Please try again.",
-        }),
-        severity: "error",
-      })
-    }
-  }
+  const { cancel: handleCancel, isLoading } = useCancelAccountDeletion()
 
   const formattedDate = fmt.date(scheduledAt, {
     year: "numeric",

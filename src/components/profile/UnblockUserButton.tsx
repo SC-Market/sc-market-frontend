@@ -10,9 +10,10 @@ import { PersonAdd } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
-import { useProfileUnblockUserMutation } from "../../features/profile/api/profileApi"
-import { useUnblockUserForOrgMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import {
+  useUnblockUser,
+  useUnblockUserForOrg,
+} from "../../features/profile/hooks/useBlocklistActions"
 
 interface UnblockUserButtonProps {
   user: User
@@ -27,38 +28,10 @@ export function UnblockUserButton({
 }: UnblockUserButtonProps) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const issueAlert = useAlertHook()
-
-  const [unblockUser, { isLoading: unblocking }] =
-    useProfileUnblockUserMutation()
+  const { unblock, isLoading: unblocking } = useUnblockUser()
 
   const handleUnblock = async () => {
-    try {
-      await unblockUser(user.username).unwrap()
-      issueAlert({
-        message: t("unblockUser.success", { username: user.username }),
-        severity: "success",
-      })
-      onSuccess()
-    } catch (error: unknown) {
-      let errorMessage = t("unblockUser.error")
-
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else if (typeof error === "object" && error !== null) {
-        const err = error as Record<string, Record<string, string>>
-        if (err.error?.message) {
-          errorMessage = err.error.message
-        } else if (err.data?.message) {
-          errorMessage = err.data.message
-        }
-      }
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
+    if (await unblock(user.username)) onSuccess()
   }
 
   return (
@@ -96,41 +69,11 @@ export function UnblockUserForOrgButton({
 }: UnblockUserForOrgButtonProps) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const issueAlert = useAlertHook()
-
-  const [unblockUserForOrg, { isLoading: unblockingForOrg }] =
-    useUnblockUserForOrgMutation()
+  const { unblock, isLoading: unblockingForOrg } =
+    useUnblockUserForOrg(spectrumId)
 
   const handleUnblock = async () => {
-    try {
-      await unblockUserForOrg({
-        spectrum_id: spectrumId,
-        username: user.username,
-      }).unwrap()
-      issueAlert({
-        message: t("unblockUser.success", { username: user.username }),
-        severity: "success",
-      })
-      onSuccess()
-    } catch (error: unknown) {
-      let errorMessage = t("unblockUser.error")
-
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else if (typeof error === "object" && error !== null) {
-        const err = error as Record<string, Record<string, string>>
-        if (err.error?.message) {
-          errorMessage = err.error.message
-        } else if (err.data?.message) {
-          errorMessage = err.data.message
-        }
-      }
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
+    if (await unblock(user.username)) onSuccess()
   }
 
   return (

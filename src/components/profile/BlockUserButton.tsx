@@ -10,9 +10,10 @@ import { Person, Business } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
-import { useProfileBlockUserMutation } from "../../features/profile/api/profileApi"
-import { useBlockUserForOrgMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import {
+  useBlockUser,
+  useBlockUserForOrg,
+} from "../../features/profile/hooks/useBlocklistActions"
 
 interface BlockUserButtonProps {
   user: User
@@ -29,37 +30,10 @@ export function BlockUserButton({
 }: BlockUserButtonProps) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const issueAlert = useAlertHook()
-
-  const [blockUser, { isLoading: blocking }] = useProfileBlockUserMutation()
+  const { block, isLoading: blocking } = useBlockUser()
 
   const handleBlock = async () => {
-    try {
-      await blockUser({ username: user.username }).unwrap()
-      issueAlert({
-        message: t("blockUser.success", { username: user.username }),
-        severity: "success",
-      })
-      onSuccess()
-    } catch (error: unknown) {
-      let errorMessage = t("blockUser.error")
-
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else if (typeof error === "object" && error !== null) {
-        const err = error as Record<string, Record<string, string>>
-        if (err.error?.message) {
-          errorMessage = err.error.message
-        } else if (err.data?.message) {
-          errorMessage = err.data.message
-        }
-      }
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
+    if (await block(user.username)) onSuccess()
   }
 
   return (
@@ -102,41 +76,10 @@ export function BlockUserForOrgButton({
 }: BlockUserForOrgButtonProps) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const issueAlert = useAlertHook()
-
-  const [blockUserForOrg, { isLoading: blockingForOrg }] =
-    useBlockUserForOrgMutation()
+  const { block, isLoading: blockingForOrg } = useBlockUserForOrg(spectrumId)
 
   const handleBlock = async () => {
-    try {
-      await blockUserForOrg({
-        spectrum_id: spectrumId,
-        username: user.username,
-      }).unwrap()
-      issueAlert({
-        message: t("blockUser.success", { username: user.username }),
-        severity: "success",
-      })
-      onSuccess()
-    } catch (error: unknown) {
-      let errorMessage = t("blockUser.error")
-
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else if (typeof error === "object" && error !== null) {
-        const err = error as Record<string, Record<string, string>>
-        if (err.error?.message) {
-          errorMessage = err.error.message
-        } else if (err.data?.message) {
-          errorMessage = err.data.message
-        }
-      }
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
+    if (await block(user.username)) onSuccess()
   }
 
   return (

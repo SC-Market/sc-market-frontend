@@ -1,18 +1,19 @@
 import { Grid, Typography, Alert } from "@mui/material"
 import React from "react"
-import { useProfileSyncHandleMutation } from "../../features/profile/api/profileApi"
+import { useSyncRsiHandle } from "../../features/profile/hooks/useAccountSettingsActions"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"
 
 export function ReVerifyProfile() {
   const { t } = useTranslation()
-  const [syncHandle, { isLoading, isSuccess, isError, error }] =
-    useProfileSyncHandleMutation()
-
-  const handleSyncHandle = () => {
-    syncHandle()
-  }
+  const {
+    sync: handleSyncHandle,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useSyncRsiHandle()
 
   return (
     <FlatSection title={t("settings.profile.reVerifyTitle")}>

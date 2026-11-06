@@ -9,12 +9,11 @@ import {
 } from "@mui/material"
 import { Block, PersonRemove } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { useProfileGetBlocklistQuery } from "../../features/profile/api/profileApi"
 import {
-  useProfileGetBlocklistQuery,
-  useProfileUnblockUserMutation,
-  useProfileBlockUserMutation,
-} from "../../features/profile/api/profileApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+  useBlockUser,
+  useUnblockUser,
+} from "../../features/profile/hooks/useBlocklistActions"
 import { BlocklistEntry } from "../../features/profile/api/profileApi"
 import { FlatSection } from "../../components/paper/Section"
 import { UserSearch } from "../../components/search/UserSearch"
@@ -129,7 +128,6 @@ export function BlocklistSettings() {
   const { t } = useTranslation()
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [reason, setReason] = useState("")
-  const issueAlert = useAlertHook()
 
   const {
     data: blocklist = [],
@@ -137,27 +135,11 @@ export function BlocklistSettings() {
     refetch,
     error,
   } = useProfileGetBlocklistQuery()
-  const [unblockUser, { isLoading: unblocking }] =
-    useProfileUnblockUserMutation()
-  const [blockUser, { isLoading: blocking }] = useProfileBlockUserMutation()
+  const { unblock, isLoading: unblocking } = useUnblockUser()
+  const { block, isLoading: blocking } = useBlockUser()
 
   const handleUnblock = async (username: string) => {
-    try {
-      await unblockUser(username).unwrap()
-      issueAlert({
-        message: t("unblockUser.success", { username }),
-        severity: "success",
-      })
-      refetch()
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : t("unblockUser.error")
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
-    }
+    if (await unblock(username)) refetch()
   }
 
   const handleUserSelect = (user: User) => {
@@ -167,26 +149,10 @@ export function BlocklistSettings() {
   const handleBlockUser = async () => {
     if (!selectedUser) return
 
-    try {
-      await blockUser({
-        username: selectedUser.username,
-        reason: reason.trim() || undefined,
-      }).unwrap()
-      issueAlert({
-        message: t("blockUser.success", { username: selectedUser.username }),
-        severity: "success",
-      })
+    if (await block(selectedUser.username, reason.trim() || undefined)) {
       setSelectedUser(null)
       setReason("")
       refetch()
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : t("blockUser.error")
-
-      issueAlert({
-        message: errorMessage,
-        severity: "error",
-      })
     }
   }
 

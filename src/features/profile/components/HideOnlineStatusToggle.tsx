@@ -1,10 +1,7 @@
 import { FormControlLabel, Stack, Switch, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import {
-  useGetAccountPrivacyQuery,
-  useUpdateAccountPrivacyMutation,
-} from "../../../store/api/v2/market"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useGetAccountPrivacyQuery } from "../../../store/api/v2/market"
+import { useHideOnlineStatus } from "../hooks/useProfileStatusActions"
 
 /**
  * "Hide my online status": buyers then never see when you were last active
@@ -12,25 +9,11 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
  */
 export function HideOnlineStatusToggle() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const { data, isLoading } = useGetAccountPrivacyQuery()
-  const [update, { isLoading: saving }] = useUpdateAccountPrivacyMutation()
+  const { setHidden, saving } = useHideOnlineStatus()
 
-  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      await update({
-        updateAccountPrivacyRequest: { hide_online_status: e.target.checked },
-      }).unwrap()
-    } catch {
-      issueAlert({
-        message: t(
-          "settings.profile.hideOnlineStatusError",
-          "Couldn't save your online status setting",
-        ),
-        severity: "error",
-      })
-    }
-  }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setHidden(e.target.checked)
 
   return (
     <Stack spacing={0}>

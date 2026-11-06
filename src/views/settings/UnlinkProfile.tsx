@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React from "react"
-import { useProfileUnlinkAccountMutation } from "../../features/profile/api/profileApi"
+import { useUnlinkRsiAccount } from "../../features/profile/hooks/useAccountSettingsActions"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"
@@ -21,8 +21,13 @@ import { BottomSheet } from "../../components/mobile/BottomSheet"
 export function UnlinkProfile() {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
-  const [unlinkAccount, { isLoading, isSuccess, isError, error }] =
-    useProfileUnlinkAccountMutation()
+  const {
+    unlink: unlinkAccount,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useUnlinkRsiAccount()
   const [open, setOpen] = React.useState(false)
 
   const handleUnlinkClick = () => {
