@@ -20,6 +20,7 @@ export const natureThemeOptions: ThemeOptions = {
     // #6B8E23, moved to reach AA as text. The neutral (secondary) comes
     // from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
     text: {
       primary: "#2C3E1F", // Dark green-gray
       secondary: "#4A5D2E",

@@ -71,6 +71,8 @@ declare module "@mui/material/styles" {
     demand: Palette["primary"]
     /** Neutral controls: secondary buttons, outlined chips. */
     neutral: Palette["primary"]
+    /** Premium and supporter badges. Same value as demand, its own meaning. */
+    premium: Palette["primary"]
   }
 
   interface PaletteOptions {
@@ -78,6 +80,7 @@ declare module "@mui/material/styles" {
     outline?: Partial<OutlineColor>
     demand?: PaletteOptions["primary"]
     neutral?: PaletteOptions["primary"]
+    premium?: PaletteOptions["primary"]
   }
 
   interface ThemeOptions {
@@ -103,5 +106,6 @@ declare module "@mui/material/Button" {
 declare module "@mui/material/Chip" {
   interface ChipPropsColorOverrides {
     demand: true
+    premium: true
   }
 }

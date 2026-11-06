@@ -634,8 +634,8 @@ export function BadgeDisplay(props: {
                 y2={1}
                 gradientTransform="rotate(-15)"
               >
-                <stop offset={0} stopColor={theme.palette.primary.main} />
-                <stop offset={1} stopColor={theme.palette.primary.light} />
+                <stop offset={0} stopColor={theme.palette.premium.main} />
+                <stop offset={1} stopColor={theme.palette.premium.light} />
               </linearGradient>
             </svg>
             <FavoriteRounded

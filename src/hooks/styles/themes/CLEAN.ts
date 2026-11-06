@@ -16,6 +16,7 @@ export const cleanThemeOptions: ThemeOptions = {
     // One accent. `demand` marks the buy side; the neutral (secondary)
     // comes from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
     text: { primary: "#1A1A1A", secondary: "#555555", disabled: "#AAAAAA" },
     background: {
       default: "#FFFFFF",

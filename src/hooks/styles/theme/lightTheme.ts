@@ -23,6 +23,9 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     demand: refTheme.palette.augmentColor({
       color: { main: "#4e36f5" },
     }),
+    premium: refTheme.palette.augmentColor({
+      color: { main: "#4e36f5" },
+    }),
     // Light-mode shades (mainThemeOptions sets the dark-mode ones). Orange
     // takes dark text (6.15:1); white stays on red, where dark can't reach AA.
     error: refTheme.palette.augmentColor({ color: { main: "#d32f2f" } }),

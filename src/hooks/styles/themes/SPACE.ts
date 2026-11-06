@@ -20,6 +20,7 @@ export const spaceThemeOptions: ThemeOptions = {
     // controls and marks the buy side (green-only accent, 2026-11).
     neutral: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
     demand: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
     text: {
       primary: "#E1BEE7", // Light purple
       secondary: "#B39DDB",

@@ -20,6 +20,7 @@ export const cyberpunkThemeOptions: ThemeOptions = {
     // controls and marks the buy side (green-only accent, 2026-11).
     neutral: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
     demand: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
     text: {
       primary: "#00FF41", // Neon green text
       secondary: "#00D9FF", // Cyan

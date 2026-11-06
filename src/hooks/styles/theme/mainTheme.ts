@@ -27,6 +27,11 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     demand: refTheme.palette.augmentColor({
       color: { main: "#7a7efe", contrastText: "#111828" },
     }),
+    // Premium and supporter badges share the violet; kept as its own token
+    // so the two meanings can part later.
+    premium: refTheme.palette.augmentColor({
+      color: { main: "#7a7efe", contrastText: "#111828" },
+    }),
     // MUI's dark-mode shades, pinned with dark text: MUI would put white on
     // the red (3.68:1). Dark text is 5.20:1 and 9.85:1. These layers also
     // reach light themes, which set their own (lightThemeOptions).

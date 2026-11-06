@@ -14,6 +14,7 @@ export const highconThemeOptions: ThemeOptions = {
     // controls and marks the buy side (green-only accent, 2026-11).
     neutral: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
     demand: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
     text: { primary: "#FFFFFF", secondary: "#FFFF00", disabled: "#666600" },
     background: {
       default: "#000000",

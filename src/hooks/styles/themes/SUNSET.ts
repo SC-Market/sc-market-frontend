@@ -20,6 +20,7 @@ export const sunsetThemeOptions: ThemeOptions = {
     // #E91E63, moved to reach AA as text. The neutral (secondary) comes
     // from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#C2185B" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#C2185B" } }),
     text: {
       primary: "#5D4037", // Brown-gray
       secondary: "#8D6E63",

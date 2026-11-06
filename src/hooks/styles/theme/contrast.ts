@@ -144,6 +144,7 @@ export const ACCENT_FILLS = [
   "secondary",
   "neutral",
   "demand",
+  "premium",
   "warning",
   "error",
 ] as const

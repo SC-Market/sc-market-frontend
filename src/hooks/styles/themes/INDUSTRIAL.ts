@@ -20,6 +20,7 @@ export const industrialThemeOptions: ThemeOptions = {
     // controls and marks the buy side (green-only accent, 2026-11).
     neutral: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
     demand: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
     text: {
       primary: "#E8E8E8",
       secondary: "#B8B8B8",

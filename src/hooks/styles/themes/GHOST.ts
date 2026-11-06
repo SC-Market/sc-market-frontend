@@ -10,6 +10,7 @@ export const ghostThemeOptions: ThemeOptions = {
     // One accent. `demand` marks the buy side; the neutral (secondary)
     // comes from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#888888" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#888888" } }),
     text: { primary: "#E0E0E0", secondary: "#808080", disabled: "#404040" },
     background: {
       default: "#050505",

@@ -20,6 +20,7 @@ export const oceanThemeOptions: ThemeOptions = {
     // #00ACC1, moved to reach AA as text. The neutral (secondary) comes
     // from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#006B7A" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#006B7A" } }),
     text: {
       primary: "#01579B", // Dark blue
       secondary: "#0277BD",

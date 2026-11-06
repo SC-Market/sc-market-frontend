@@ -14,6 +14,7 @@ export const natureDarkThemeOptions: ThemeOptions = {
     // accent (#66BB6A) was the same green as the asks. The neutral
     // (secondary) comes from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
     text: {
       primary: "#E8F5E9", // Very light green-tinted white
       secondary: "#C8E6C9", // Light green-gray

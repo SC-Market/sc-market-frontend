@@ -17,6 +17,7 @@ export const originThemeOptions: ThemeOptions = {
     // #8A7030, moved to reach AA as text. The neutral (secondary) comes
     // from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#75602A" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#75602A" } }),
     text: { primary: "#2A2418", secondary: "#6A5E40", disabled: "#B0A880" },
     background: {
       default: "#FFFDF6",

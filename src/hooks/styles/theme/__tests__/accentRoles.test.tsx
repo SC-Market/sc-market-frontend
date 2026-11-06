@@ -56,6 +56,11 @@ describe.each(themes)("%s theme accent roles", (_name, theme) => {
     expect(worst(theme, palette.demand.main)).toBeGreaterThanOrEqual(AA_TEXT)
   })
 
+  it("premium reads at AA on paper and the page, and matches demand", () => {
+    expect(worst(theme, palette.premium.main)).toBeGreaterThanOrEqual(AA_TEXT)
+    expect(palette.premium.main).toBe(palette.demand.main)
+  })
+
   it("neutral text reads at AA on paper and the page", () => {
     expect(worst(theme, palette.neutral.main)).toBeGreaterThanOrEqual(AA_TEXT)
   })

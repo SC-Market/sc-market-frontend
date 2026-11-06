@@ -74,7 +74,7 @@ export function AdminPremiumManagementView() {
       renderCell: (params: GridRenderCellParams) => (
         <Chip
           label={params.value}
-          color="primary"
+          color="premium"
           size="small"
           variant="outlined"
         />

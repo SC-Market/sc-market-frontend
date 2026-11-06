@@ -17,6 +17,7 @@ export const princessThemeOptions: ThemeOptions = {
     // #80CBC4, moved to reach AA as text. The neutral (secondary) comes
     // from the base theme.
     demand: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
+    premium: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
     text: { primary: "#2A1A28", secondary: "#6E4A6E", disabled: "#C0A0C0" },
     background: {
       default: "#FFF5F9",
