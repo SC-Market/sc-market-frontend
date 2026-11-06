@@ -117,6 +117,37 @@ const RAW_MUI_PATHS = Object.entries(RAW_MUI).flatMap(([name, instead]) => [
     allowTypeImports: true,
   },
 ])
+// scm-style/mui-rounded-icons: the only non-Rounded @mui/icons-material
+// names allowed. Brand marks have no Rounded variant; SvgIconComponent is a
+// type, not an icon.
+const MUI_ICON_ALLOWLIST = new Set([
+  "SvgIconComponent",
+  "Apple",
+  "Facebook",
+  "GitHub",
+  "Google",
+  "Instagram",
+  "LinkedIn",
+  "Microsoft",
+  "Pinterest",
+  "Reddit",
+  "Telegram",
+  "Twitter",
+  "WhatsApp",
+  "X",
+  "YouTube",
+])
+// Icon packages other than MUI: only src/components/icons/ may import them.
+const OTHER_ICON_PACKS = [
+  "@fortawesome",
+  "@heroicons",
+  "@iconify",
+  "@phosphor-icons",
+  "@tabler/icons",
+  "@tabler/icons-react",
+  "lucide-react",
+  "react-icons",
+]
 const HEX = "#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})"
 const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
@@ -255,6 +286,77 @@ const scmStyle = {
         return {
           Literal: (node) => check(node, node.value),
           TemplateElement: (node) => check(node, node.value.cooked),
+        }
+      },
+    },
+    // MUI icons are the Rounded variant: `@mui/icons-material/DeleteRounded`,
+    // `{ DeleteRounded }` from the barrel. A filled vs outline state uses the
+    // Rounded pair (StarRounded / StarBorderRounded, FavoriteRounded /
+    // FavoriteBorderRounded, CheckBoxRounded / CheckBoxOutlineBlankRounded),
+    // so it needs no exception. An icon MUI lacks (the Discord mark) is
+    // borrowed into src/components/icons/ as an SvgIcon wrapper with a
+    // source/licence comment; other icon packs and raw `.svg?react` imports
+    // are only allowed there.
+    "mui-rounded-icons": {
+      meta: {
+        type: "suggestion",
+        messages: {
+          variant:
+            'Use the Rounded MUI icon: "{{name}}" -> "{{name}}Rounded" (strip any Outlined/Sharp/TwoTone suffix first).',
+          pack: 'Icon import "{{source}}" outside src/components/icons/. Use a Rounded MUI icon, or borrow the glyph into src/components/icons/ as an SvgIcon wrapper with a source/licence comment.',
+        },
+        schema: [],
+      },
+      create(context) {
+        const file = relative(import.meta.dirname, context.filename)
+          .split(sep)
+          .join("/")
+        const inIconsDir = file.startsWith("src/components/icons/")
+        const checkName = (node, name) => {
+          if (name.endsWith("Rounded") || MUI_ICON_ALLOWLIST.has(name)) return
+          const base = name.replace(/(Outlined|Sharp|TwoTone)$/, "")
+          context.report({ node, messageId: "variant", data: { name: base } })
+        }
+        const checkSource = (node, source, specifiers) => {
+          if (typeof source !== "string") return
+          if (source === "@mui/icons-material") {
+            for (const s of specifiers ?? []) {
+              if (s.importKind === "type" || s.exportKind === "type") continue
+              const imported =
+                s.type === "ImportSpecifier" ? s.imported : s.local
+              if (imported && s.type !== "ImportNamespaceSpecifier")
+                checkName(s, imported.name ?? imported.value)
+            }
+            return
+          }
+          if (source.startsWith("@mui/icons-material/")) {
+            checkName(node, source.split("/").pop())
+            return
+          }
+          if (
+            !inIconsDir &&
+            (OTHER_ICON_PACKS.some(
+              (p) => source === p || source.startsWith(`${p}/`),
+            ) ||
+              /\.svg\?react$/.test(source))
+          )
+            context.report({ node, messageId: "pack", data: { source } })
+        }
+        return {
+          ImportDeclaration: (node) => {
+            if (node.importKind === "type") return
+            checkSource(node, node.source.value, node.specifiers)
+          },
+          ExportNamedDeclaration: (node) => {
+            if (node.source && node.exportKind !== "type")
+              checkSource(node, node.source.value, node.specifiers)
+          },
+          ExportAllDeclaration: (node) =>
+            checkSource(node, node.source.value, []),
+          ImportExpression: (node) => {
+            if (node.source.type === "Literal")
+              checkSource(node, node.source.value, [])
+          },
         }
       },
     },
@@ -523,6 +625,16 @@ export default [
     plugins: { "scm-style": scmStyle },
     rules: {
       "scm-style/no-secondary-accent": "error",
+    },
+  },
+
+  // ── Icons (error): MUI icons are the Rounded variant ──
+  // Borrowed glyphs (Discord) live in src/components/icons/. Tests included.
+  {
+    files: ["src/**/*.{ts,tsx,js,jsx,mjs}"],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/mui-rounded-icons": "error",
     },
   },
 
