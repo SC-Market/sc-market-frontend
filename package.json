@@ -22,7 +22,6 @@
     "@mui/x-data-grid": "^8.5.3",
     "@mui/x-date-pickers": "^7.29.4",
     "@reduxjs/toolkit": "^2.8.2",
-    "@tanstack/react-virtual": "^3.13.13",
     "@unhead/react": "^3.2.3",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "date-fns": "^2.30.0",

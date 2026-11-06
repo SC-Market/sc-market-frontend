@@ -29,7 +29,7 @@ interface AdCardProps {
   ad: AdConfig
   /** Index for animation delay */
   index: number
-  /** If true, renders without wrapper (for use in VirtualizedGrid) */
+  /** If true, renders without ListingWrapper (the caller lays out the grid) */
   noGridWrapper?: boolean
 }
 
