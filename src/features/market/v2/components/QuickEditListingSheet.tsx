@@ -10,7 +10,7 @@
  * the user taps "Open Full Editor" which navigates to EditListingV2.
  */
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useId, useState } from "react"
 import { Box, Button, Chip, Stack, TextField, Typography } from "@mui/material"
 import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { LabeledSwitch } from "../../../../components/buttons/LabeledSwitch"
@@ -51,6 +51,7 @@ export function QuickEditListingSheet({
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const headingId = useId()
   const issueAlert = useAlertHook()
   const { save: saveListing, isLoading } = useQuickEditListing()
 
@@ -145,6 +146,7 @@ export function QuickEditListingSheet({
       onClose={onClose}
       maxHeight="85vh"
       showCloseButton={false}
+      ariaLabelledBy={headingId}
       snapPoints={["half", "75"]}
       defaultSnap="half"
     >
@@ -168,7 +170,13 @@ export function QuickEditListingSheet({
           imgProps={{ loading: "lazy" }}
         />
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="subtitle1" fontWeight={600} noWrap>
+          <Typography
+            id={headingId}
+            variant="subtitle1"
+            component="h2"
+            fontWeight={600}
+            noWrap
+          >
             {listing.title}
           </Typography>
           <Typography variant="caption" color="text.secondary">

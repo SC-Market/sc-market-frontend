@@ -391,17 +391,22 @@ function RequisitionDetailDialog({
       onClose={onClose}
       maxWidth="sm"
       title={
-        <>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <InventoryRounded />
-            <Box>
-              <Typography variant="h6">{req.title}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {req.order_id}
-              </Typography>
+        <Stack component="span" direction="row" spacing={1} alignItems="center">
+          <InventoryRounded />
+          <Box component="span" sx={{ display: "block", minWidth: 0 }}>
+            <Box component="span" sx={{ display: "block" }}>
+              {req.title}
             </Box>
-          </Stack>
-        </>
+            <Typography
+              component="span"
+              variant="caption"
+              color="text.secondary"
+              display="block"
+            >
+              {req.order_id}
+            </Typography>
+          </Box>
+        </Stack>
       }
       actions={
         <>

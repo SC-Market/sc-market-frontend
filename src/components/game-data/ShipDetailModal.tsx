@@ -51,7 +51,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" noWrap sx={{ flex: 1 }}>
+        <Typography component="span" variant="inherit" noWrap sx={{ flex: 1 }}>
           {ship?.name || t("wikiUi.shipModal.title")}
         </Typography>
         <IconButton

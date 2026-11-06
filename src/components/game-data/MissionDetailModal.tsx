@@ -49,7 +49,7 @@ export function MissionDetailModal({
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" noWrap sx={{ flex: 1 }}>
+        <Typography component="span" variant="inherit" noWrap sx={{ flex: 1 }}>
           <MissionName name={m?.mission_name} variant="inherit" />
         </Typography>
         <IconButton

@@ -40,14 +40,10 @@ export function InsufficientStockDialog({
       onClose={onClose}
       maxWidth="sm"
       title={
-        <>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <WarningRounded color="warning" />
-            <Typography variant="h6">
-              {t("allocationUi.insufficient.title")}
-            </Typography>
-          </Stack>
-        </>
+        <Stack component="span" direction="row" spacing={1} alignItems="center">
+          <WarningRounded color="warning" />
+          <span>{t("allocationUi.insufficient.title")}</span>
+        </Stack>
       }
       actions={
         <>

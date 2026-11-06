@@ -235,7 +235,12 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             sx={{ bgcolor: getItemCategoryColor(bp?.item_category) }}
           />
           <Box sx={{ minWidth: 0 }}>
-            <Typography variant="h6" noWrap>
+            <Typography
+              component="span"
+              variant="inherit"
+              display="block"
+              noWrap
+            >
               {itemName}
             </Typography>
             {data && (

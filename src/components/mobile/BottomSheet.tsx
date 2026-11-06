@@ -2,7 +2,19 @@
  * BottomSheet Component
  * A mobile-friendly modal that slides up from the bottom
  * Better UX than full-screen modals on mobile devices
- * Supports swipe-down to dismiss gesture
+ * Supports swipe-down to dismiss gesture and snap points
+ *
+ * Accessibility: the sheet is a modal dialog (`role="dialog"`,
+ * `aria-modal`), named by its visible title or by `ariaLabel` when there is
+ * none. MUI's modal gives the focus trap, Escape, and focus return to the
+ * opener on close.
+ *
+ * Mounting: content unmounts once the sheet has closed (after the exit
+ * transition). Pass `keepMounted` for content that must survive a close.
+ *
+ * SSR: nothing here reads `window` during render. Snap heights are CSS
+ * (`dvh`, with a `vh` fallback); the viewport is only measured inside
+ * touch handlers, while a drag is in progress.
  */
 
 import {
@@ -13,30 +25,82 @@ import {
   useTheme,
 } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
-import React, { ReactNode, useState, useRef, useEffect } from "react"
+import React, { ReactNode, useEffect, useId, useRef, useState } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
 import { useTranslation } from "react-i18next"
 
+export type BottomSheetSnap = "peek" | "half" | "66" | "75" | "full"
+
 interface BottomSheetProps {
   open: boolean
   onClose: () => void
+  /** Visible title; also the sheet's accessible name */
   title?: string
+  /** Accessible name when there is no visible title */
+  ariaLabel?: string
+  /** Id of an element inside the sheet that names it (overrides `title`) */
+  ariaLabelledBy?: string
+  /** Id of an element inside the sheet that describes it */
+  ariaDescribedBy?: string
   children: ReactNode
+  /** Height of the "full" snap: a `vh` string (e.g. "90vh") or pixels */
   maxHeight?: string | number
   showCloseButton?: boolean
   fullHeight?: boolean
   disableBackdropClose?: boolean
-  snapPoints?: ("peek" | "half" | "66" | "75" | "full")[]
-  defaultSnap?: "peek" | "half" | "66" | "75" | "full"
+  snapPoints?: BottomSheetSnap[]
+  defaultSnap?: BottomSheetSnap
   peekHeight?: number
+  /** Keep the content mounted while the sheet is closed */
+  keepMounted?: boolean
+}
+
+type ViewportUnit = "vh" | "dvh"
+
+/** A snap's height: a fraction of the viewport, pixels, or raw CSS. */
+type SnapSize = { fraction: number } | { px: number } | { css: string }
+
+function snapSize(
+  snap: BottomSheetSnap,
+  maxHeight: string | number,
+  fullHeight: boolean,
+  peekHeight: number,
+): SnapSize {
+  if (snap === "peek") return { px: peekHeight }
+  if (snap === "half") return { fraction: 0.5 }
+  if (snap === "66") return { fraction: 0.66 }
+  if (snap === "75") return { fraction: 0.75 }
+  if (fullHeight) return { fraction: 1 }
+  if (typeof maxHeight === "number") return { px: maxHeight }
+  if (maxHeight.endsWith("vh")) {
+    return { fraction: parseFloat(maxHeight) / 100 }
+  }
+  return { css: maxHeight }
+}
+
+/** CSS height for render: no viewport measurement needed. */
+function sizeToCss(size: SnapSize, unit: ViewportUnit): string {
+  if ("px" in size) return `${size.px}px`
+  if ("css" in size) return size.css
+  return `${Math.round(size.fraction * 10000) / 100}${unit}`
+}
+
+/** Pixel height, for drag maths. Only call from event handlers. */
+function sizeToPx(size: SnapSize, viewportHeight: number): number {
+  if ("px" in size) return size.px
+  if ("fraction" in size) return size.fraction * viewportHeight
+  return viewportHeight * 0.9
 }
 
 export function BottomSheet({
   open,
   onClose,
   title,
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
   children,
   maxHeight = "90vh",
   showCloseButton = true,
@@ -45,85 +109,62 @@ export function BottomSheet({
   snapPoints = ["full"],
   defaultSnap = "full",
   peekHeight = 120,
+  keepMounted = false,
 }: BottomSheetProps) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
-  const [currentSnap, setCurrentSnap] = useState<
-    "peek" | "half" | "66" | "75" | "full"
-  >(defaultSnap)
-  const [dragOffset, setDragOffset] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
+  const titleId = useId()
+  const [currentSnap, setCurrentSnap] = useState<BottomSheetSnap>(defaultSnap)
+  /** Pixel height while the handle is being dragged, else null */
+  const [dragHeight, setDragHeight] = useState<number | null>(null)
   const dragStartY = useRef<number | null>(null)
   const dragStartHeight = useRef<number>(0)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   // Reset snap when sheet opens
   useEffect(() => {
     if (open) {
       setCurrentSnap(defaultSnap)
-      setDragOffset(0)
+      setDragHeight(null)
     }
   }, [open, defaultSnap])
 
-  const getSnapHeight = (snap: "peek" | "half" | "66" | "75" | "full") => {
-    if (snap === "peek") return peekHeight
-    if (snap === "half") return window.innerHeight * 0.5
-    if (snap === "66") return window.innerHeight * 0.66
-    if (snap === "75") return window.innerHeight * 0.75
+  const sizeOf = (snap: BottomSheetSnap) =>
+    snapSize(snap, maxHeight, fullHeight, peekHeight)
 
-    if (typeof maxHeight === "string" && maxHeight.endsWith("vh")) {
-      const percentage = parseInt(maxHeight) / 100
-      return window.innerHeight * percentage
-    }
-    if (typeof maxHeight === "number") {
-      return maxHeight
-    }
-    return fullHeight ? window.innerHeight : window.innerHeight * 0.9
-  }
+  // Event handlers only: measures the viewport
+  const snapPx = (snap: BottomSheetSnap) =>
+    sizeToPx(sizeOf(snap), window.innerHeight)
 
-  const currentHeight = getSnapHeight(currentSnap)
-
-  const findClosestSnap = (height: number): typeof currentSnap => {
-    const snapHeights = snapPoints.map((snap) => ({
-      snap,
-      height: getSnapHeight(snap),
-    }))
-
-    return snapHeights.reduce((closest, current) => {
-      const closestDiff = Math.abs(closest.height - height)
-      const currentDiff = Math.abs(current.height - height)
-      return currentDiff < closestDiff ? current : closest
-    }).snap
-  }
+  const findClosestSnap = (height: number): BottomSheetSnap =>
+    snapPoints
+      .map((snap) => ({ snap, height: snapPx(snap) }))
+      .reduce((closest, current) =>
+        Math.abs(current.height - height) < Math.abs(closest.height - height)
+          ? current
+          : closest,
+      ).snap
 
   const handleDragStart = (clientY: number) => {
-    setIsDragging(true)
+    const startHeight = snapPx(currentSnap)
     dragStartY.current = clientY
-    dragStartHeight.current = currentHeight
+    dragStartHeight.current = startHeight
+    setDragHeight(startHeight)
   }
 
   const handleDragMove = (clientY: number) => {
-    if (!isDragging || dragStartY.current === null) return
-
-    const deltaY = dragStartY.current - clientY
-    const newHeight = dragStartHeight.current + deltaY
-
+    if (dragStartY.current === null) return
+    const newHeight = dragStartHeight.current + (dragStartY.current - clientY)
     // Constrain between peek and full
-    const minHeight = getSnapHeight("peek")
-    const maxHeight = getSnapHeight("full")
-    const constrainedHeight = Math.max(
-      minHeight,
-      Math.min(maxHeight, newHeight),
-    )
-
-    setDragOffset(constrainedHeight - currentHeight)
+    setDragHeight(Math.max(snapPx("peek"), Math.min(snapPx("full"), newHeight)))
   }
 
   const handleDragEnd = () => {
-    if (!isDragging) return
+    if (dragStartY.current === null || dragHeight === null) return
 
-    const finalHeight = currentHeight + dragOffset
-    const closestSnap = findClosestSnap(finalHeight)
+    const dragOffset = dragHeight - dragStartHeight.current
+    const closestSnap = findClosestSnap(dragHeight)
 
     // If dragged down significantly from peek, close
     if (closestSnap === "peek" && dragOffset < -50) {
@@ -137,25 +178,8 @@ export function BottomSheet({
       setCurrentSnap(closestSnap)
     }
 
-    setIsDragging(false)
-    setDragOffset(0)
+    setDragHeight(null)
     dragStartY.current = null
-  }
-
-  const handlePullerTouchStart = (e: React.TouchEvent) => {
-    handleDragStart(e.touches[0].clientY)
-  }
-
-  const handlePullerTouchMove = (e: React.TouchEvent) => {
-    handleDragMove(e.touches[0].clientY)
-  }
-
-  const handlePullerTouchEnd = () => {
-    handleDragEnd()
-  }
-
-  const handleOpen = () => {
-    haptic.light()
   }
 
   const handleClose = () => {
@@ -163,30 +187,42 @@ export function BottomSheet({
     onClose()
   }
 
-  const displayHeight = isDragging ? currentHeight + dragOffset : currentHeight
-
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  // Only allow SwipeableDrawer's built-in close when content is at scroll top
-  const handleSwipeClose = () => {
-    const el = contentRef.current
-    if (el && el.scrollTop > 0) return // Don't close if scrolled down
+  // Modal closes pass a reason (Escape, backdrop); SwipeableDrawer's own
+  // swipe-to-close passes none, and only counts at the content's scroll top.
+  const handleDrawerClose = (_event?: unknown, reason?: string) => {
+    if (reason === "backdropClick" && disableBackdropClose) return
+    if (reason === undefined) {
+      const el = contentRef.current
+      if (el && el.scrollTop > 0) return
+    }
     handleClose()
   }
+
+  const isDragging = dragHeight !== null
+  const snapHeight = sizeOf(currentSnap)
+  const labelledBy = ariaLabelledBy ?? (title ? titleId : undefined)
 
   return (
     <SwipeableDrawer
       anchor="bottom"
       open={open}
-      onClose={handleSwipeClose}
-      onOpen={handleOpen}
+      onClose={handleDrawerClose}
+      onOpen={() => haptic.light()}
       disableSwipeToOpen
       swipeAreaWidth={0}
       hysteresis={0.7}
       minFlingVelocity={800}
       PaperProps={{
+        role: "dialog",
+        "aria-modal": true,
+        "aria-labelledby": labelledBy,
+        "aria-label": labelledBy ? undefined : ariaLabel,
+        "aria-describedby": ariaDescribedBy,
         sx: {
-          height: displayHeight,
+          height: isDragging ? `${dragHeight}px` : sizeToCss(snapHeight, "vh"),
+          "@supports (height: 1dvh)": isDragging
+            ? undefined
+            : { height: sizeToCss(snapHeight, "dvh") },
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,
@@ -196,7 +232,7 @@ export function BottomSheet({
         },
       }}
       ModalProps={{
-        keepMounted: true,
+        keepMounted,
         sx: {
           zIndex: theme.zIndex.modal + 10,
         },
@@ -206,16 +242,18 @@ export function BottomSheet({
               backdropFilter: "blur(4px)",
               backgroundColor: theme.palette.background.overlay,
             },
-            onClick: disableBackdropClose ? undefined : onClose,
           },
         },
       }}
     >
       {/* Puller - draggable handle */}
       <Box
-        onTouchStart={handlePullerTouchStart}
-        onTouchMove={handlePullerTouchMove}
-        onTouchEnd={handlePullerTouchEnd}
+        aria-hidden
+        data-testid="bottom-sheet-handle"
+        onTouchStart={(e) => handleDragStart(e.touches[0].clientY)}
+        onTouchMove={(e) => handleDragMove(e.touches[0].clientY)}
+        onTouchEnd={handleDragEnd}
+        onTouchCancel={handleDragEnd}
         sx={{
           width: "100%",
           display: "flex",
@@ -250,22 +288,24 @@ export function BottomSheet({
             px: 2,
             pt: 1,
             pb: title ? 1 : 0,
-            borderBottom: title ? 1 : 0,
+            borderBottom: title ? theme.borderWidth.hairline : 0,
             borderColor: theme.palette.divider,
           }}
         >
           {title && (
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            <Typography
+              id={titleId}
+              variant="h6"
+              component="h2"
+              sx={{ fontWeight: 600 }}
+            >
               {title}
             </Typography>
           )}
           {showCloseButton && (
             <IconButton
               aria-label={t("ui.close", "Close")}
-              onClick={() => {
-                haptic.light()
-                onClose()
-              }}
+              onClick={handleClose}
               size="small"
               sx={{ ml: title ? "auto" : 0 }}
             >

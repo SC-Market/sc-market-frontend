@@ -14,6 +14,9 @@ A mobile-friendly modal that slides up from the bottom. Better UX than full-scre
 - Drag handle indicator
 - Safe area support for iOS
 - Falls back to regular drawer on desktop
+- Modal dialog semantics: named by `title`, or `ariaLabel` when there is no title
+- Content unmounts when closed; pass `keepMounted` to keep it
+- SSR-safe: snap heights are CSS (`dvh`), no `window` reads during render
 
 **Usage:**
 

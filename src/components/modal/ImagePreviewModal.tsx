@@ -84,8 +84,8 @@ export function ImagePreviewModal(props: {
         open={open}
         onClose={onClose}
         fullHeight
-        aria-labelledby="image-preview-title"
-        aria-describedby="image-preview-description"
+        ariaLabelledBy="image-preview-title"
+        ariaDescribedBy="image-preview-description"
       >
         <Box
           sx={{
