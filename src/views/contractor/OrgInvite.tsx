@@ -15,8 +15,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import throttle from "lodash/throttle"
 import { useSearchUsersQuery } from "../../features/profile/api/profileApi"
 import { MinimalUser } from "../../datatypes/User"
-import { useInviteContractorMembersMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useInviteOrgMembers } from "../../features/contractor/hooks/useOrgInviteActions"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
@@ -41,34 +40,16 @@ export function OrgInvite() {
 
   const [choices, setChoices] = useState<MinimalUser[]>([])
 
-  const [
-    sendInvites, // This is the mutation trigger
-  ] = useInviteContractorMembersMutation()
-
-  const issueAlert = useAlertHook()
+  const inviteMembers = useInviteOrgMembers(currentOrg?.spectrum_id)
 
   const submitInviteForm = useCallback(async () => {
-    // event.preventDefault();
-    if (!currentOrg) return
-    sendInvites({
-      contractor: currentOrg.spectrum_id,
-      users: choices.map((u) => u.username),
-      message: message,
-    })
-      .unwrap()
-      .then(() => {
-        setChoices([])
-        setBuffer("")
-
-        issueAlert({
-          message: t("orgInvite.submitted"),
-          severity: "success",
-        })
-      })
-      .catch((err) => issueAlert(err))
-
+    const usernames = choices.map((u) => u.username)
+    if (await inviteMembers(usernames, message)) {
+      setChoices([])
+      setBuffer("")
+    }
     return false
-  }, [choices, currentOrg, message, sendInvites, issueAlert, t])
+  }, [choices, message, inviteMembers])
 
   return (
     <Section xs={12} lg={12}>

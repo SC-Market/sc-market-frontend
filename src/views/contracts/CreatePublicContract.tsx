@@ -10,17 +10,14 @@ import { orderIcons } from "../../features/orders/components/orderIcons"
 import type { OrderKind, PaymentType } from "../../features/orders/domain/types"
 import { PAYMENT_TYPES } from "../../util/constants"
 import React, { useCallback, useState } from "react"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { useNavigate } from "react-router-dom"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { NumericFormat } from "react-number-format"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useCreatePublicContractMutation } from "../../features/contracting/api/publicContractsApi"
+import { useCreatePublicContract } from "../../features/contracting/hooks/useCreatePublicContract"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { ORDER_PATHS } from "../../routes/paths"
 
 export function CreatePublicContract() {
   const { t } = useTranslation()
@@ -33,16 +30,9 @@ export function CreatePublicContract() {
   const [collateral, setCollateral] = useState(0)
   const [paymentType, setPaymentType] = useState<PaymentType>("one-time")
 
-  const issueAlert = useAlertHook()
+  const { create: createPublicContract, isLoading } = useCreatePublicContract()
 
-  const [
-    createPublicContract, // This is the mutation trigger
-    { isLoading },
-  ] = useCreatePublicContractMutation()
-
-  const navigate = useNavigate()
   const submitOrder = useCallback(async () => {
-    // event.preventDefault();
     createPublicContract({
       title,
       description,
@@ -51,30 +41,15 @@ export function CreatePublicContract() {
       cost,
       payment_type: paymentType,
     })
-      .unwrap()
-      .then((data) => {
-        issueAlert({
-          message: t("createPublicContract.submitted"),
-          severity: "success",
-        })
-
-        navigate(ORDER_PATHS.publicContract(data.contract_id))
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
     return false
   }, [
     collateral,
     cost,
     createPublicContract,
     description,
-    issueAlert,
     kind,
-    navigate,
     paymentType,
     title,
-    t,
   ])
 
   return (

@@ -1,8 +1,7 @@
 import { Button, Divider, Grid, TextField, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import React, { useCallback, useState } from "react"
-import { useCreateContractorInviteMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useCreateOrgInviteCode } from "../../features/contractor/hooks/useOrgInviteActions"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
@@ -11,43 +10,12 @@ export function CreateOrgInviteCode() {
   const [maxUses, setMaxUses] = useState(0)
   const { t } = useTranslation()
 
-  const [
-    createContractorInvite, // This is the mutation trigger
-  ] = useCreateContractorInviteMutation()
-
-  const issueAlert = useAlertHook()
+  const createInviteCode = useCreateOrgInviteCode(currentOrg?.spectrum_id)
 
   const submitCreateForm = useCallback(async () => {
-    // event.preventDefault();
-    const res = await createContractorInvite({
-      contractor: currentOrg!.spectrum_id,
-      body: {
-        max_uses: maxUses,
-      },
-    })
-
-    if (res?.data && !res?.error) {
-      setMaxUses(0)
-
-      issueAlert({
-        message: t("inviteCodes.submitted"),
-        severity: "success",
-      })
-    } else {
-      let reason = t("sharedUi.errors.unknown")
-      if (res.error && "data" in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error ?? errData.message ?? reason
-      } else if (res.error && "message" in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: t("inviteCodes.failed_submit", { reason }),
-        severity: "error",
-      })
-    }
+    if (await createInviteCode(maxUses)) setMaxUses(0)
     return false
-  }, [createContractorInvite, currentOrg, maxUses, issueAlert, t])
+  }, [createInviteCode, maxUses])
 
   return (
     <Section xs={12} lg={12}>

@@ -2,11 +2,9 @@ import React, { MouseEventHandler, ReactElement, useCallback } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import {
-  useDeleteContractorInviteMutation,
-  useGetContractorInvitesQuery,
-} from "../../features/contractor/api/contractorApi"
+import { useGetContractorInvitesQuery } from "../../features/contractor/api/contractorApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useDeleteOrgInviteCode } from "../../features/contractor/hooks/useOrgInviteActions"
 import { ContentCopyRounded, DeleteRounded } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ContractorInviteCode } from "../../features/contractor/domain/types"
@@ -50,37 +48,14 @@ export function InviteRow(props: {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
-  const [deleteContractorInvite] = useDeleteContractorInviteMutation()
+  const deleteInviteCode = useDeleteOrgInviteCode(currentOrg?.spectrum_id)
 
   const issueAlert = useAlertHook()
 
   const submitDelete = useCallback(async () => {
-    // event.preventDefault();
-    const res = await deleteContractorInvite({
-      contractor: currentOrg!.spectrum_id,
-      invite_id: row.invite_id,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("inviteCodes.submitted"),
-        severity: "success",
-      })
-    } else {
-      let reason = String(res.error || "")
-      if (res.error && "data" in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error || errData.message || reason
-      } else if (res.error && "message" in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: t("inviteCodes.failed_submit", { reason }),
-        severity: "error",
-      })
-    }
+    await deleteInviteCode(row.invite_id)
     return false
-  }, [currentOrg, deleteContractorInvite, row.invite_id, issueAlert, t])
+  }, [deleteInviteCode, row.invite_id])
 
   return (
     <>

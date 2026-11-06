@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles"
 import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useRefetchContractorDetailsMutation } from "../api/contractorApi"
+import { useRefetchOrgDetails } from "../hooks/useOrgSettingsActions"
 import {
   DarkBannerContainer,
   LightBannerContainer,
@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next"
 function OrgRefetchButton(props: { org: Contractor }) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
-  const [refetch] = useRefetchContractorDetailsMutation()
+  const refetch = useRefetchOrgDetails()
 
   return (
     <>

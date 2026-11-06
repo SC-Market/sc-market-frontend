@@ -9,14 +9,11 @@ import {
   TextField,
 } from "@mui/material"
 import React, { useCallback, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useRegisterContractorMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useRegisterOrg } from "../../features/contractor/hooks/useOrgRegistration"
 import { isAlphaNumeric } from "./AuthenticateRSI"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
-import { ORG_PATHS } from "../../routes/paths"
 
 export const fallback_image =
   "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
@@ -33,14 +30,7 @@ export function CreateNewContractor() {
   const [error, setError] = useState(false)
   const { t } = useTranslation()
 
-  const [
-    registerNewContractor, // This is the mutation trigger
-    // {isLoading}, // This is the destructured mutation result
-  ] = useRegisterContractorMutation()
-
-  const navigate = useNavigate()
-
-  const issueAlert = useAlertHook()
+  const registerOrg = useRegisterOrg()
 
   const submit = useCallback(async () => {
     if (!contractorName) {
@@ -48,7 +38,7 @@ export function CreateNewContractor() {
       return
     }
 
-    registerNewContractor({
+    registerOrg({
       description,
       name: contractorName,
       identifier: contractorIdentifier,
@@ -56,32 +46,16 @@ export function CreateNewContractor() {
       banner,
       language_codes: selectedLanguages,
     })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("contractorCreate.success", {
-            defaultValue: "Organization created",
-          }),
-          severity: "success",
-        })
-        navigate(ORG_PATHS.profile(`~${contractorIdentifier}`))
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
 
     return false
   }, [
     contractorName,
-    registerNewContractor,
+    registerOrg,
     description,
     contractorIdentifier,
     avatar,
     banner,
     selectedLanguages,
-    navigate,
-    issueAlert,
-    t,
   ])
 
   return (

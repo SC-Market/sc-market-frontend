@@ -24,7 +24,6 @@ import {
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ContractorRole } from "../../features/contractor/domain/types"
 import {
   KeyboardArrowDownRounded,
@@ -33,11 +32,7 @@ import {
 import { BorderlessCell } from "../orders/Services"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import {
-  useCreateContractorRoleMutation,
-  useDeleteContractorRoleMutation,
-  useUpdateContractorRoleMutation,
-} from "../../features/contractor/api/contractorApi"
+import { useOrgRoleActions } from "../../features/contractor/hooks/useOrgRoleActions"
 import { useTranslation } from "react-i18next"
 
 export {
@@ -55,7 +50,6 @@ import {
 import { HelpTip } from "../../features/help/components/HelpTip"
 
 import { useFormatters } from "../../util/format"
-import omit from "lodash/omit"
 function RolePermissionCheck(props: {
   permission_name: RolePermission
   role: ContractorRole
@@ -130,46 +124,20 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
     setNewRole(role)
   }, [role])
 
-  const issueAlert = useAlertHook()
   const [currentOrg] = useCurrentOrg()
-
-  const [updateRole] = useUpdateContractorRoleMutation()
-  const [deleteRole] = useDeleteContractorRoleMutation()
+  const roleActions = useOrgRoleActions(currentOrg?.spectrum_id)
 
   const theme = useTheme<ExtendedTheme>()
 
-  const submitUpdate = useCallback(async () => {
-    const body = omit(newRole, ["contractor_id", "role_id"])
+  const submitUpdate = useCallback(
+    () => roleActions.update(role.role_id, newRole),
+    [roleActions, role.role_id, newRole],
+  )
 
-    updateRole({
-      contractor: currentOrg!.spectrum_id,
-      role_id: role.role_id,
-      body,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("manageRoles.updated"),
-          severity: "success",
-        })
-      })
-      .catch((err) => issueAlert(err))
-  }, [currentOrg, role, issueAlert, newRole, t, updateRole])
-
-  const deleteRoleCallback = useCallback(async () => {
-    deleteRole({
-      contractor: currentOrg!.spectrum_id,
-      role_id: role.role_id,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("manageRoles.deleted"),
-          severity: "success",
-        })
-      })
-      .catch((err) => issueAlert(err))
-  }, [currentOrg, role, issueAlert, t, deleteRole])
+  const deleteRoleCallback = useCallback(
+    () => roleActions.remove(role.role_id),
+    [roleActions, role.role_id],
+  )
 
   return (
     <>
@@ -418,30 +386,12 @@ export function AddRole() {
   const [newRole, setNewRole] = useState<ContractorRole>(defaultRole)
   const { t } = useTranslation()
 
-  const [createRole] = useCreateContractorRoleMutation()
   const [currentOrg] = useCurrentOrg()
-
-  const issueAlert = useAlertHook()
+  const { create: createRole } = useOrgRoleActions(currentOrg?.spectrum_id)
 
   const submitUpdate = useCallback(async () => {
-    const body = omit(newRole, ["contractor_id", "role_id", "position"])
-
-    createRole({
-      contractor: currentOrg!.spectrum_id,
-      body,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("manageRoles.updated"),
-          severity: "success",
-        })
-        setNewRole(defaultRole)
-      })
-      .catch((err) => {
-        issueAlert(err)
-      })
-  }, [currentOrg, issueAlert, newRole, t, createRole])
+    if (await createRole(newRole)) setNewRole(defaultRole)
+  }, [createRole, newRole])
 
   return (
     <>

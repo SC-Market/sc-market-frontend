@@ -11,8 +11,7 @@ import React, { useCallback, useState } from "react"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import { useGetAuthenticatorIdentifier } from "../../features/profile/api/profileApi"
 import { useNavigate } from "react-router-dom"
-import { useContractorLinkMutation } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useLinkRsiOrg } from "../../features/contractor/hooks/useOrgRegistration"
 import { Trans, useTranslation } from "react-i18next"
 import {
   extractOrgIdFromUrl,
@@ -37,14 +36,9 @@ export function AuthenticateContractor() {
   const [verifiedOrg, setVerifiedOrg] = useState<string | null>(null)
   const { t } = useTranslation()
 
-  const [
-    activateContractorLink, // This is the mutation trigger
-    // {isLoading}, // This is the destructured mutation result
-  ] = useContractorLinkMutation()
+  const linkRsiOrg = useLinkRsiOrg()
 
   const navigate = useNavigate()
-
-  const issueAlert = useAlertHook()
 
   const submit = useCallback(async () => {
     if (!orgName) {
@@ -52,19 +46,10 @@ export function AuthenticateContractor() {
       return
     }
 
-    activateContractorLink({
-      contractor: orgName,
-    })
-      .unwrap()
-      .then(() => {
-        setVerifiedOrg(orgName)
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
+    if (await linkRsiOrg(orgName)) setVerifiedOrg(orgName)
 
     return false
-  }, [activateContractorLink, orgName, issueAlert])
+  }, [linkRsiOrg, orgName])
 
   // A failed identifier request is an error, not a skeleton forever. The
   // error body stays inside this tab so "New Contractor" still works.

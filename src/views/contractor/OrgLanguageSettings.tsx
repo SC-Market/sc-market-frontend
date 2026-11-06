@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react"
 import { Box, Grid, Typography, Alert, CircularProgress } from "@mui/material"
 import { FlatSection } from "../../components/paper/Section"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
-import {
-  useGetContractorLanguagesQuery,
-  useSetContractorLanguagesMutation,
-} from "../../features/contractor/api/contractorApi"
+import { useGetContractorLanguagesQuery } from "../../features/contractor/api/contractorApi"
+import { useSaveOrgLanguages } from "../../features/contractor/hooks/useOrgSettingsActions"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { canManageOrgDetails } from "../../features/contractor/domain/orgPermissions"
@@ -15,11 +12,9 @@ import LoadingButton from "@mui/lab/LoadingButton"
 
 export function OrgLanguageSettings() {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const [contractor] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-  const [saving, setSaving] = useState(false)
 
   const canEditLanguages = canManageOrgDetails(contractor, profile)
 
@@ -31,7 +26,7 @@ export function OrgLanguageSettings() {
     skip: !contractor?.spectrum_id,
   })
 
-  const [setLanguages] = useSetContractorLanguagesMutation()
+  const { save, saving } = useSaveOrgLanguages(contractor?.spectrum_id)
 
   // Update local state when data loads
   useEffect(() => {
@@ -40,33 +35,7 @@ export function OrgLanguageSettings() {
     }
   }, [languagesData])
 
-  const handleSave = async () => {
-    if (!contractor?.spectrum_id) return
-
-    setSaving(true)
-
-    try {
-      await setLanguages({
-        spectrum_id: contractor.spectrum_id,
-        language_codes: selectedLanguages,
-      }).unwrap()
-      issueAlert({
-        message: t("settings.languages.saveSuccess", "Languages updated"),
-        severity: "success",
-      })
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : t("settings.languages.saveError", "Failed to update languages")
-      issueAlert({
-        message,
-        severity: "error",
-      })
-    } finally {
-      setSaving(false)
-    }
-  }
+  const handleSave = () => save(selectedLanguages)
 
   if (!canEditLanguages) {
     return (

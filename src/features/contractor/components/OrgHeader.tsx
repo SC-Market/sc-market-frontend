@@ -19,11 +19,7 @@ import { useTranslation } from "react-i18next"
 import { ShareButton } from "../../../components/buttons/ShareButton"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetNotificationsQuery } from "../../notifications/api/notificationApi"
-import {
-  useAcceptContractorInviteMutation,
-  useDeclineContractorInviteMutation,
-} from "../api/contractorApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useOrgInviteResponse } from "../hooks/useOrgSettingsActions"
 import { VerifiedOrgBadge } from "../../storefront/components/VerifiedOrgBadge"
 import { isRsiVerifiedSpectrumId } from "../../storefront/domain"
 
@@ -35,7 +31,6 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
-  const issueAlert = useAlertHook()
 
   const isMember = profile?.contractors?.some(
     (c) => c.spectrum_id === contractor.spectrum_id,
@@ -55,41 +50,12 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
     )
   }, [inviteNotifs, contractor.spectrum_id])
 
-  const [acceptInvite, { isLoading: isAccepting }] =
-    useAcceptContractorInviteMutation()
-
-  const [declineInvite, { isLoading: isDeclining }] =
-    useDeclineContractorInviteMutation()
-
-  const handleDecline = async () => {
-    try {
-      await declineInvite({ contractor: contractor.spectrum_id }).unwrap()
-      issueAlert({
-        message: t("org.invite.declined", "Invite declined"),
-        severity: "success",
-      })
-    } catch {
-      issueAlert({
-        message: t("org.invite.declineFailed", "Failed to decline the invite"),
-        severity: "error",
-      })
-    }
-  }
-
-  const handleAccept = async () => {
-    try {
-      await acceptInvite({ contractor: contractor.spectrum_id }).unwrap()
-      issueAlert({
-        message: t("org.invite.accepted", "Invite accepted"),
-        severity: "success",
-      })
-    } catch {
-      issueAlert({
-        message: t("org.invite.acceptFailed", "Failed to join"),
-        severity: "error",
-      })
-    }
-  }
+  const {
+    accept: handleAccept,
+    decline: handleDecline,
+    isAccepting,
+    isDeclining,
+  } = useOrgInviteResponse(contractor.spectrum_id)
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">

@@ -1,9 +1,8 @@
 import { Grid, TextField } from "@mui/material"
 import React, { useCallback, useState } from "react"
-import { useAdminExpressVerifyContractorMutation } from "../../features/contractor/api/contractorApi"
+import { useAdminExpressVerifyOrg } from "../../features/contractor/hooks/useOrgRegistration"
 import { FlatSection } from "../../components/paper/Section"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import {
   extractOrgIdFromUrl,
@@ -19,37 +18,13 @@ export function AdminExpressVerify() {
     owner_username: "",
     spectrum_id: "",
   })
-  const [expressVerify, { isLoading }] =
-    useAdminExpressVerifyContractorMutation()
-  const issueAlert = useAlertHook()
+  const { verify, isLoading } = useAdminExpressVerifyOrg()
 
   const callback = useCallback(async () => {
-    const res = await expressVerify(state)
-
-    if ("data" in res && !("error" in res)) {
+    if (await verify(state)) {
       setState({ owner_discord_id: "", owner_username: "", spectrum_id: "" })
-
-      issueAlert({
-        message: t("adminExpressVerify.success"),
-        severity: "success",
-      })
-    } else {
-      let reason = String(res.error)
-      if (res.error && "data" in res.error && res.error.data) {
-        const errData = res.error.data as { error?: string; message?: string }
-        reason = errData.error || errData.message || reason
-      } else if (res.error && "message" in res.error) {
-        reason = res.error.message ?? reason
-      }
-      issueAlert({
-        message: t("adminExpressVerify.failure", {
-          defaultValue: "Couldn't verify the org: {{reason}}",
-          reason,
-        }),
-        severity: "error",
-      })
     }
-  }, [state, t, expressVerify, issueAlert])
+  }, [state, verify])
 
   return (
     <FlatSection title={t("adminExpressVerify.title")}>
