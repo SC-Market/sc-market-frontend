@@ -10,17 +10,10 @@ export const cyberpunkThemeOptions: ThemeOptions = {
         contrastText: "#000000",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#FF00FF", // Neon magenta
-        contrastText: "#FFFFFF",
-      },
-    }),
-    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
-    // controls and marks the buy side (green-only accent, 2026-11).
-    neutral: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
-    demand: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
+    // Two-tone: the second hue is `secondary`, the buy side and premium
+    // badges (AA as text on paper and the page). Neutral controls use the
+    // base neutral, so they don't share the bid colour.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#FF00FF" } }),
     text: {
       primary: "#00FF41", // Neon green text
       secondary: "#00D9FF", // Cyan

@@ -143,8 +143,6 @@ function cached<K extends string, V>(compute: (theme: Theme, key: K) => V) {
 export const ACCENT_FILLS = [
   "secondary",
   "neutral",
-  "demand",
-  "premium",
   "warning",
   "error",
 ] as const

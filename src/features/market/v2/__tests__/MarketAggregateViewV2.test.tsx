@@ -423,7 +423,7 @@ const testTheme = createTheme({
   },
   palette: {
     outline: { main: "#e0e0e0", strong: "#58677e" },
-    demand: { main: "#7a7efe" },
+    secondary: { main: "#7a7efe" },
   },
 })
 

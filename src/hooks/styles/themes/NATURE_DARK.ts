@@ -10,11 +10,10 @@ export const natureDarkThemeOptions: ThemeOptions = {
         contrastText: "#000000",
       },
     }),
-    // One accent. `demand` marks the buy side in lavender: the old second
-    // accent (#66BB6A) was the same green as the asks. The neutral
-    // (secondary) comes from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
+    // One accent. `secondary` marks the buy side and premium in lavender: the old
+    // second accent (#66BB6A) was the same green as the asks. The neutral
+    // comes from the base theme.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#B39DDB" } }),
     text: {
       primary: "#E8F5E9", // Very light green-tinted white
       secondary: "#C8E6C9", // Light green-gray

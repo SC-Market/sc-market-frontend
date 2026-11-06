@@ -13,18 +13,13 @@ export const lightThemeOptions: ExtendedThemeOptions = {
         main: "#10b881",
       },
     }),
+    // The buy side and premium on white: 6.62:1 (the dark theme's #7a7efe
+    // is 3.1:1 here)
     secondary: refTheme.palette.augmentColor({
-      color: { main: NEUTRAL_LIGHT },
+      color: { main: "#4e36f5" },
     }),
     neutral: refTheme.palette.augmentColor({
       color: { main: NEUTRAL_LIGHT },
-    }),
-    // The buy side on white: 6.62:1 (the dark theme's #7a7efe is 3.1:1 here)
-    demand: refTheme.palette.augmentColor({
-      color: { main: "#4e36f5" },
-    }),
-    premium: refTheme.palette.augmentColor({
-      color: { main: "#4e36f5" },
     }),
     // Light-mode shades (mainThemeOptions sets the dark-mode ones). Orange
     // takes dark text (6.15:1); white stays on red, where dark can't reach AA.

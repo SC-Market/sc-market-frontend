@@ -7,14 +7,10 @@ export const highconThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#FFFF00", contrastText: "#000000" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#00FF00", contrastText: "#000000" },
-    }),
-    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
-    // controls and marks the buy side (green-only accent, 2026-11).
-    neutral: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
-    demand: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
+    // Two-tone: the second hue is `secondary`, the buy side and premium
+    // badges (AA as text on paper and the page). Neutral controls use the
+    // base neutral, so they don't share the bid colour.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#00FF00" } }),
     text: { primary: "#FFFFFF", secondary: "#FFFF00", disabled: "#666600" },
     background: {
       default: "#000000",

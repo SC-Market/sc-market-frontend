@@ -772,7 +772,7 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
                 <Chip
                   label={t("MarketRedesign.topBid", "Top bid")}
                   size="small"
-                  color="demand"
+                  color="secondary"
                   sx={{ height: 20 }}
                 />
               )}
@@ -794,7 +794,7 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
                 variant="body2"
                 sx={{
                   // A bid price: the buy side's colour
-                  color: "demand.main",
+                  color: "secondary.main",
                   fontWeight: 700,
                   width: 120,
                   textAlign: "right",

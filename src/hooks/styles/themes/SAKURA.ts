@@ -13,10 +13,9 @@ export const sakuraThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#D4618C", contrastText: "#FFFFFF" },
     }),
-    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // One accent. `secondary` marks the buy side and premium; the neutral
     // comes from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#A0466A" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#A0466A" } }),
+    secondary: refTheme.palette.augmentColor({ color: { main: "#A0466A" } }),
     text: { primary: "#2A1A20", secondary: "#6E4A56", disabled: "#C0A0B0" },
     background: {
       default: "#FFF8FA",

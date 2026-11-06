@@ -13,11 +13,10 @@ export const princessThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#F48FB1", contrastText: "#FFFFFF" },
     }),
-    // One accent. `demand` marks the buy side: the old second accent
-    // #80CBC4, moved to reach AA as text. The neutral (secondary) comes
-    // from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
+    // One accent. `secondary` marks the buy side and premium: the old second
+    // accent #80CBC4, moved to reach AA as text. The neutral comes from the
+    // base theme.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#2A716B" } }),
     text: { primary: "#2A1A28", secondary: "#6E4A6E", disabled: "#C0A0C0" },
     background: {
       default: "#FFF5F9",

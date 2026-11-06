@@ -10,17 +10,11 @@ export const industrialThemeOptions: ThemeOptions = {
         contrastText: "#000000",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#4A90E2", // Steel blue
-        contrastText: "#FFFFFF",
-      },
-    }),
-    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
-    // controls and marks the buy side (green-only accent, 2026-11).
-    neutral: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
-    demand: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
+    // Two-tone: the second hue is `secondary`, the buy side and premium
+    // badges, lightened from #4A90E2 to reach AA as text on paper and the
+    // page. Neutral controls use the base neutral, so they don't share the
+    // bid colour.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#5A9BE6" } }),
     text: {
       primary: "#E8E8E8",
       secondary: "#B8B8B8",

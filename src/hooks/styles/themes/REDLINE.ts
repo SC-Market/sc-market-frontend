@@ -7,8 +7,8 @@ export const redlineThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#CC2222", contrastText: "#FFFFFF" },
     }),
-    // One accent. `demand` (the buy side) keeps the default violet, which
-    // is AA here; the neutral (secondary) comes from the base theme.
+    // One accent. `secondary` (the buy side and premium) keeps the default
+    // violet, which is AA here; the neutral comes from the base theme.
     text: { primary: "#E0D0D0", secondary: "#A08080", disabled: "#503030" },
     background: {
       default: "#050202",

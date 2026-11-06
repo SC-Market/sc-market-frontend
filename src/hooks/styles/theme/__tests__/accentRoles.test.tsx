@@ -8,7 +8,7 @@ import { CUSTOM_THEMES } from "../../custom_themes"
 import { AA_TEXT, AA_UI, contrast, flatten, surfaces } from "../contrast"
 
 // Green-only accent (2026-11): one accent (primary), a neutral for
-// secondary-role controls, and `demand` for the buy side.
+// secondary-role controls, and `secondary` for the buy side and premium.
 
 const themes: [string, Theme][] = [
   ["main", mainTheme],
@@ -32,16 +32,15 @@ describe("main theme accent roles", () => {
     )
   })
 
-  it("the demand colour is the violet and reads at AA on paper and the page", () => {
-    expect(palette.demand.main).toBe("#7a7efe")
-    expect(worst(mainTheme, palette.demand.main)).toBeGreaterThanOrEqual(
+  it("secondary (the buy side and premium) is the violet and reads at AA on paper and the page", () => {
+    expect(palette.secondary.main).toBe("#7a7efe")
+    expect(worst(mainTheme, palette.secondary.main)).toBeGreaterThanOrEqual(
       AA_TEXT,
     )
   })
 
-  it("secondary is the neutral, not a second accent", () => {
-    expect(palette.secondary.main).toBe(palette.neutral.main)
-    expect(palette.secondary.main).not.toBe(palette.demand.main)
+  it("the light theme's secondary is the deeper violet", () => {
+    expect(lightTheme.palette.secondary.main).toBe("#4e36f5")
   })
 
   it("the focus ring is the accent", () => {
@@ -52,17 +51,18 @@ describe("main theme accent roles", () => {
 describe.each(themes)("%s theme accent roles", (_name, theme) => {
   const { palette } = theme
 
-  it("demand reads at AA on paper and the page", () => {
-    expect(worst(theme, palette.demand.main)).toBeGreaterThanOrEqual(AA_TEXT)
-  })
-
-  it("premium reads at AA on paper and the page, and matches demand", () => {
-    expect(worst(theme, palette.premium.main)).toBeGreaterThanOrEqual(AA_TEXT)
-    expect(palette.premium.main).toBe(palette.demand.main)
+  it("secondary (the buy side and premium) reads at AA on paper and the page", () => {
+    expect(worst(theme, palette.secondary.main)).toBeGreaterThanOrEqual(AA_TEXT)
   })
 
   it("neutral text reads at AA on paper and the page", () => {
     expect(worst(theme, palette.neutral.main)).toBeGreaterThanOrEqual(AA_TEXT)
+  })
+
+  it("neutral is the base neutral, not the buy-side colour", () => {
+    const base = palette.mode === "light" ? lightTheme : mainTheme
+    expect(palette.neutral.main).toBe(base.palette.neutral.main)
+    expect(palette.neutral.main).not.toBe(palette.secondary.main)
   })
 
   it("the focus ring is at least 3:1 on paper and the page", () => {

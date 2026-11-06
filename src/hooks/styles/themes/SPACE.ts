@@ -10,17 +10,11 @@ export const spaceThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: {
-        main: "#1976D2", // Deep blue
-        contrastText: "#FFFFFF",
-      },
-    }),
-    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
-    // controls and marks the buy side (green-only accent, 2026-11).
-    neutral: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
-    demand: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
+    // Two-tone: the second hue is `secondary`, the buy side and premium
+    // badges, lightened from #1976D2 to reach AA as text on paper and the
+    // page. Neutral controls use the base neutral, so they don't share the
+    // bid colour.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#4D9BE8" } }),
     text: {
       primary: "#E1BEE7", // Light purple
       secondary: "#B39DDB",

@@ -7,8 +7,8 @@ export const goldThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#E2C036", contrastText: "#1A1A2E" },
     }),
-    // One accent. `demand` (the buy side) keeps the default violet, which
-    // is AA here; the neutral (secondary) comes from the base theme.
+    // One accent. `secondary` (the buy side and premium) keeps the default
+    // violet, which is AA here; the neutral comes from the base theme.
     text: { primary: "#E2D8B0", secondary: "#A09060", disabled: "#504830" },
     background: {
       default: "#0E0C08",

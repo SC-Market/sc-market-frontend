@@ -690,7 +690,7 @@ export function BuyOrderRowV2(props: {
           event.stopPropagation()
         }}
       >
-        <Typography variant={"subtitle2"} color={"demand.main"}>
+        <Typography variant={"subtitle2"} color={"secondary.main"}>
           {priceDisplay}
         </Typography>
       </TableCell>
@@ -716,7 +716,7 @@ export function BuyOrderRowV2(props: {
           event.stopPropagation()
         }}
       >
-        <Typography variant={"subtitle2"} color={"demand.main"}>
+        <Typography variant={"subtitle2"} color={"secondary.main"}>
           {buy_order.total != null
             ? `${buy_order.negotiable ? "~" : ""}${fmt.number(buy_order.total)} aUEC`
             : t("buyorder.status.negotiable", "Negotiable")}
@@ -859,7 +859,7 @@ export function AggregateBuySellWallV2(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   // Asks in the accent, bids in the buy side's colour
-  const depthColors = [theme.palette.primary.main, theme.palette.demand.main]
+  const depthColors = [theme.palette.primary.main, theme.palette.secondary.main]
   const { aggregate: rawAggregate, compact, qualityTier } = props
 
   // Pre-filter listings/buy_orders to selected quality tier

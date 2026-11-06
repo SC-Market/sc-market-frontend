@@ -12,8 +12,8 @@ export const bwinThemeOptions: ThemeOptions = {
         // contrastText: '#89348c'
       },
     }),
-    // One accent. `demand` (the buy side) keeps the default violet, which
-    // is AA here; the neutral (secondary) comes from the base theme.
+    // One accent. `secondary` (the buy side and premium) keeps the default
+    // violet, which is AA here; the neutral comes from the base theme.
     background: {
       // default: "linear-gradient(45deg, #cb5cff, #9c61f8)",
       default: "rgb(30, 30, 30)",

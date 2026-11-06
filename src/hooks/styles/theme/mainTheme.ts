@@ -13,24 +13,16 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#10b881", contrastText: ON_ACCENT_DARK },
     }),
-    // `secondary` is no longer an accent: it is the neutral, so stock MUI
-    // parts that reach for it stay calm. Pages use `neutral` (or `demand`);
-    // scm-style/no-secondary-accent keeps palette.secondary out of them.
+    // `secondary` is the buy side and premium, not a second accent: bid
+    // prices, "Top bid", the depth chart's bid curve, buy orders, supporter
+    // and premium badges. 5.69:1 on the page, 5.27:1 on paper; dark text on
+    // it 5.27:1. scm-style/no-secondary-accent keeps it off controls.
     secondary: refTheme.palette.augmentColor({
-      color: { main: NEUTRAL_DARK, contrastText: "#111828" },
+      color: { main: "#7a7efe", contrastText: "#111828" },
     }),
+    // Neutral controls: secondary-role buttons, outlined chips.
     neutral: refTheme.palette.augmentColor({
       color: { main: NEUTRAL_DARK, contrastText: "#111828" },
-    }),
-    // The buy side: bid prices, "Top bid", the depth chart's bid curve.
-    // 5.69:1 on the page, 5.27:1 on paper; dark text on it 5.27:1.
-    demand: refTheme.palette.augmentColor({
-      color: { main: "#7a7efe", contrastText: "#111828" },
-    }),
-    // Premium and supporter badges share the violet; kept as its own token
-    // so the two meanings can part later.
-    premium: refTheme.palette.augmentColor({
-      color: { main: "#7a7efe", contrastText: "#111828" },
     }),
     // MUI's dark-mode shades, pinned with dark text: MUI would put white on
     // the red (3.68:1). Dark text is 5.20:1 and 9.85:1. These layers also

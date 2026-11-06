@@ -67,20 +67,14 @@ declare module "@mui/material/styles" {
   interface Palette {
     discord: Palette["primary"]
     outline: OutlineColor
-    /** The buy side (bids, buy orders). Not an accent. */
-    demand: Palette["primary"]
-    /** Neutral controls: secondary buttons, outlined chips. */
+    /** Neutral controls: secondary-role buttons, outlined chips. */
     neutral: Palette["primary"]
-    /** Premium and supporter badges. Same value as demand, its own meaning. */
-    premium: Palette["primary"]
   }
 
   interface PaletteOptions {
     discord?: PaletteOptions["primary"]
     outline?: Partial<OutlineColor>
-    demand?: PaletteOptions["primary"]
     neutral?: PaletteOptions["primary"]
-    premium?: PaletteOptions["primary"]
   }
 
   interface ThemeOptions {
@@ -100,12 +94,5 @@ declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     discord: true
     neutral: true
-  }
-}
-
-declare module "@mui/material/Chip" {
-  interface ChipPropsColorOverrides {
-    demand: true
-    premium: true
   }
 }

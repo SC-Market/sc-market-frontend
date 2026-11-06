@@ -116,7 +116,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
       <TableCell align="right" sx={CELL_SX}>
         <Typography
           component="span"
-          color="demand.main"
+          color="secondary.main"
           sx={{ display: "block", fontSize: "0.875rem", lineHeight: 1.3 }}
         >
           {order.price_per_unit > 0

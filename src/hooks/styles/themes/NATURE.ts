@@ -16,11 +16,10 @@ export const natureThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
-    // One accent. `demand` marks the buy side: the old second accent
-    // #6B8E23, moved to reach AA as text. The neutral (secondary) comes
-    // from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
+    // One accent. `secondary` marks the buy side and premium: the old second
+    // accent #6B8E23, moved to reach AA as text. The neutral comes from the
+    // base theme.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#556F1B" } }),
     text: {
       primary: "#2C3E1F", // Dark green-gray
       secondary: "#4A5D2E",

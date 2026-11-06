@@ -7,14 +7,10 @@ export const neonVioletThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#B44EFF", contrastText: "#060810" },
     }),
-    secondary: refTheme.palette.augmentColor({
-      color: { main: "#00E5FF", contrastText: "#060810" },
-    }),
-    // Two-tone on purpose: the second hue stays on neutral (secondary-role)
-    // controls and marks the buy side (green-only accent, 2026-11).
-    neutral: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
-    demand: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
+    // Two-tone: the second hue is `secondary`, the buy side and premium
+    // badges (AA as text on paper and the page). Neutral controls use the
+    // base neutral, so they don't share the bid colour.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#00E5FF" } }),
     text: { primary: "#C0D0F0", secondary: "#5068A0", disabled: "#2A3460" },
     background: {
       default: "#060810",

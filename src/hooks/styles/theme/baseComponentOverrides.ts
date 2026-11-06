@@ -48,7 +48,7 @@ export function getBaseComponentOverrides(): Components<
       styleOverrides: {
         // Contrast rules (computed from the active palette, so every theme
         // gets them): readable disabled labels, and dark text on
-        // neutral/demand/warning/error fills. See ./contrast.ts.
+        // secondary/neutral/warning/error fills. See ./contrast.ts.
         root: ({ theme, ownerState }) =>
           withContrast(() => {
             const disabled = disabledButton(theme, "all")
@@ -57,9 +57,9 @@ export function getBaseComponentOverrides(): Components<
               isAccentFill(ownerState.color)
                 ? accentFill(theme, ownerState.color)
                 : null
-            // Neutral (secondary) actions: an instrument-panel outline,
+            // Neutral (secondary-role) actions: an outline,
             // bright neutral text on a crisp 3:1 border (outline.strong),
-            // the surface steps on hover. Two-tone presets tint `neutral`.
+            // the surface steps on hover.
             const neutral =
               ownerState.color === "neutral" &&
               ownerState.variant !== "contained"

@@ -16,11 +16,10 @@ export const oceanThemeOptions: ThemeOptions = {
         contrastText: "#FFFFFF",
       },
     }),
-    // One accent. `demand` marks the buy side: the old second accent
-    // #00ACC1, moved to reach AA as text. The neutral (secondary) comes
-    // from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#006B7A" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#006B7A" } }),
+    // One accent. `secondary` marks the buy side and premium: the old second
+    // accent #00ACC1, moved to reach AA as text. The neutral comes from the
+    // base theme.
+    secondary: refTheme.palette.augmentColor({ color: { main: "#006B7A" } }),
     text: {
       primary: "#01579B", // Dark blue
       secondary: "#0277BD",

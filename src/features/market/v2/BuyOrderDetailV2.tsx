@@ -215,17 +215,17 @@ export function BuyOrderDetailV2() {
                             sx={{
                               p: 2,
                               background: alpha(
-                                theme.palette.demand.main,
+                                theme.palette.secondary.main,
                                 theme.palette.mode === "dark" ? 0.04 : 0.06,
                               ),
-                              borderColor: "demand.main",
+                              borderColor: "secondary.main",
                               borderStyle: "dashed",
                             }}
                           >
                             <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5 }}>
                               {t("marketV2.offering")}
                             </Typography>
-                            <Typography variant="h4" fontWeight="bold" color="demand.main">
+                            <Typography variant="h4" fontWeight="bold" color="secondary.main">
                               {priceDisplay}
                             </Typography>
                             {!buyOrder.negotiable && buyOrder.quantity > 1 && (

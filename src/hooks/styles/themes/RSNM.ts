@@ -12,10 +12,9 @@ export const rsnmThemeOptions: ThemeOptions = {
         // contrastText: '#89348c'
       },
     }),
-    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // One accent. `secondary` marks the buy side and premium; the neutral
     // comes from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#D8B45A" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#D8B45A" } }),
+    secondary: refTheme.palette.augmentColor({ color: { main: "#D8B45A" } }),
     background: {
       // default: "linear-gradient(45deg, #cb5cff, #9c61f8)",
       default: "#000000",

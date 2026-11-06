@@ -13,10 +13,9 @@ export const cleanThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({
       color: { main: "#1A1A1A", contrastText: "#FFFFFF" },
     }),
-    // One accent. `demand` marks the buy side; the neutral (secondary)
+    // One accent. `secondary` marks the buy side and premium; the neutral
     // comes from the base theme.
-    demand: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
-    premium: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
+    secondary: refTheme.palette.augmentColor({ color: { main: "#432dd2" } }),
     text: { primary: "#1A1A1A", secondary: "#555555", disabled: "#AAAAAA" },
     background: {
       default: "#FFFFFF",
