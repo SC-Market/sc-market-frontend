@@ -212,9 +212,22 @@ export function AdminGameDataImportView() {
     pollingInterval: hasRunning ? 2000 : 30000,
   })
 
-  // Track last alerted job to avoid duplicate alerts
+  // Alert once per job, and only for jobs that finish while the page is
+  // open: jobs already finished in the first list we see are marked as
+  // alerted without a toast.
   const alertedRef = React.useRef<Set<string>>(new Set())
+  const seededRef = React.useRef(false)
   React.useEffect(() => {
+    if (!jobsData) return
+    if (!seededRef.current) {
+      seededRef.current = true
+      for (const j of jobs) {
+        if (j.status === "completed" || j.status === "failed") {
+          alertedRef.current.add(j.id)
+        }
+      }
+      return
+    }
     for (const j of jobs) {
       if ((j.status === "completed" || j.status === "failed") && !alertedRef.current.has(j.id)) {
         alertedRef.current.add(j.id)
@@ -225,7 +238,7 @@ export function AdminGameDataImportView() {
         }
       }
     }
-  }, [jobs, issueAlert, t])
+  }, [jobsData, jobs, issueAlert, t])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
