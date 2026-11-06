@@ -15,7 +15,18 @@ import { useTranslation } from "react-i18next"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { debounce } from "lodash-es"
 
+interface GameItemOption {
+  name: string
+  type: string
+  id: string
+}
+
 interface GameItemSearchAutocompleteProps {
+  /**
+   * Name of the selected game item. Initialises the field (edit forms) and
+   * re-syncs it whenever the parent changes it; typing in the box does not
+   * touch it until an option is picked.
+   */
   value: string | null
   onChange: (
     itemName: string | null,
@@ -31,7 +42,13 @@ interface GameItemSearchAutocompleteProps {
   errorText?: string
 }
 
+/** Stand-in option for a `value` the field did not pick itself. */
+function optionFromValue(value: string | null): GameItemOption | null {
+  return value ? { name: value, type: "", id: "" } : null
+}
+
 export function GameItemSearchAutocomplete({
+  value,
   onChange,
   label,
   size = "medium",
@@ -41,16 +58,25 @@ export function GameItemSearchAutocomplete({
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
   const [searchTrigger] = marketV2Api.endpoints.searchGameItems.useLazyQuery()
-  const [itemOptions, setItemOptions] = useState<
-    Array<{ name: string; type: string; id: string }>
-  >([])
-  const [inputValue, setInputValue] = useState("")
+  const [itemOptions, setItemOptions] = useState<GameItemOption[]>([])
+  const [inputValue, setInputValue] = useState(value ?? "")
   const [isSearching, setIsSearching] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<{
-    name: string
-    type: string
-    id: string
-  } | null>(null)
+  const [selectedItem, setSelectedItem] = useState<GameItemOption | null>(() =>
+    optionFromValue(value),
+  )
+
+  // Follow `value` when the parent changes it (e.g. an edit row loads, or a
+  // form resets). A value that matches the current selection is the echo of
+  // our own onChange, so the picked option (with its id/type) is kept.
+  const [syncedValue, setSyncedValue] = useState(value)
+  if (value !== syncedValue) {
+    setSyncedValue(value)
+    if (value !== (selectedItem?.name ?? null)) {
+      setSelectedItem(optionFromValue(value))
+      setInputValue(value ?? "")
+    }
+  }
+  const selectedName = selectedItem?.name
 
   const debouncedSearch = useMemo(
     () =>
@@ -70,11 +96,13 @@ export function GameItemSearchAutocomplete({
   )
 
   useEffect(() => {
+    // The box showing the selected item's name is not a search.
+    if (inputValue === selectedName) return
     debouncedSearch(inputValue)
     return () => {
       debouncedSearch.cancel()
     }
-  }, [inputValue, debouncedSearch])
+  }, [inputValue, selectedName, debouncedSearch])
 
   return (
     <Autocomplete
@@ -102,7 +130,9 @@ export function GameItemSearchAutocomplete({
         }
       }}
       filterOptions={(x) => x}
-      isOptionEqualToValue={(option, val) => option.id === val.id}
+      isOptionEqualToValue={(option, val) =>
+        val.id ? option.id === val.id : option.name === val.name
+      }
       getOptionLabel={(option) => option.name}
       renderOption={(props, option) => (
         <li {...props} key={option.id}>
