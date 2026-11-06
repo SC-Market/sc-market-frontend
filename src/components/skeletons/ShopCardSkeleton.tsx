@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Container,
-  Fade,
-  Grid,
-} from "@mui/material"
+import { Box, Card, CardContent, Chip, Container, Grid } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import {
   SHOP_DIRECTORY_PAGE_SIZE,
@@ -17,36 +9,35 @@ import {
 /**
  * One shop card (features/shops/components/ShopCard) as a placeholder: logo +
  * name/owner, rating, stats line and the two-line description, with the same
- * paddings and gaps, so it is as tall as a typical card.
+ * paddings and gaps, so it is as tall as a typical card. No fade-in: a
+ * fade from 0 blanks the grid between boundaries, and it moves.
  */
-export function ShopCardSkeleton({ index = 0 }: { index?: number }) {
+export function ShopCardSkeleton() {
   return (
-    <Fade in timeout={400} style={{ transitionDelay: `${50 + 30 * index}ms` }}>
-      <Card sx={{ height: "100%" }}>
-        <CardContent
-          sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2 }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-            <BaseSkeleton
-              variant="rounded"
-              width={48}
-              height={48}
-              sx={{ flexShrink: 0 }}
-            />
-            <Box sx={{ minWidth: 0, flex: 1 }}>
-              <BaseSkeleton variant="text" width="70%" height={24} />
-              <BaseSkeleton variant="text" width="45%" height={20} />
-            </Box>
+    <Card sx={{ height: "100%" }}>
+      <CardContent
+        sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2 }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <BaseSkeleton
+            variant="rounded"
+            width={48}
+            height={48}
+            sx={{ flexShrink: 0 }}
+          />
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <BaseSkeleton variant="text" width="70%" height={24} />
+            <BaseSkeleton variant="text" width="45%" height={20} />
           </Box>
-          <BaseSkeleton variant="text" width={110} height={18} />
-          <BaseSkeleton variant="text" width="60%" height={17} />
-          <Box>
-            <BaseSkeleton variant="text" width="100%" height={20} />
-            <BaseSkeleton variant="text" width="75%" height={20} />
-          </Box>
-        </CardContent>
-      </Card>
-    </Fade>
+        </Box>
+        <BaseSkeleton variant="text" width={110} height={18} />
+        <BaseSkeleton variant="text" width="60%" height={17} />
+        <Box>
+          <BaseSkeleton variant="text" width="100%" height={20} />
+          <BaseSkeleton variant="text" width="75%" height={20} />
+        </Box>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -56,7 +47,7 @@ export function ShopCardGridSkeleton() {
     <Grid container spacing={2}>
       {Array.from({ length: SHOP_DIRECTORY_PAGE_SIZE }).map((_, i) => (
         <Grid item {...SHOP_GRID_BREAKPOINTS} key={i}>
-          <ShopCardSkeleton index={i} />
+          <ShopCardSkeleton />
         </Grid>
       ))}
     </Grid>
@@ -98,7 +89,7 @@ export function ShopListSkeleton({ count = 2 }: { count?: number }) {
     <Grid container spacing={2}>
       {Array.from({ length: count }).map((_, i) => (
         <Grid item {...OWNER_SHOP_GRID_BREAKPOINTS} key={i}>
-          <ShopCardSkeleton index={i} />
+          <ShopCardSkeleton />
         </Grid>
       ))}
     </Grid>

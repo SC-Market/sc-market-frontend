@@ -77,7 +77,7 @@ export function TopRatedShopsSkeleton() {
       <PageBusy />
       {Array.from({ length: TOP_RATED_SHOPS_COUNT }, (_, i) => (
         <TopShopCell key={i}>
-          <ShopCardSkeleton index={i} />
+          <ShopCardSkeleton />
         </TopShopCell>
       ))}
     </TopRatedShopsLayout>

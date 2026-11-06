@@ -31,6 +31,7 @@ import {
   type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { MINING_LOCATION_CARD_GRID } from "../../components/game-data/cardGrids"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
@@ -176,7 +177,7 @@ export function MiningLocationBrowser() {
         )}
       </Box>
 
-      {isLoading && <CardGridSkeleton />}
+      {isLoading && <CardGridSkeleton shape={MINING_LOCATION_CARD_GRID} />}
       {error && (
         <Alert severity="error">
           {t("gameTaxonomyUi.locationsLoadFailed")}
@@ -184,9 +185,9 @@ export function MiningLocationBrowser() {
       )}
       {data && (
         <>
-          <Grid container spacing={1.5}>
+          <Grid container spacing={MINING_LOCATION_CARD_GRID.spacing}>
             {data.locations.map((loc) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
+              <Grid item {...MINING_LOCATION_CARD_GRID.item} key={loc.name}>
                 <LocationCard
                   location={loc}
                   onClick={() => handleLocationClick(loc.name)}

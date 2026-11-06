@@ -57,6 +57,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { MISSION_CARD_GRID } from "../../components/game-data/cardGrids"
 import {
   UnifiedSearchBar,
   missionParamsToTokens,
@@ -439,7 +440,7 @@ export function MissionSearch() {
           {/* Loading State */}
           {isLoading &&
             (viewMode === "grid" ? (
-              <CardGridSkeleton />
+              <CardGridSkeleton shape={MISSION_CARD_GRID} />
             ) : (
               <MissionTableSkeleton />
             ))}
@@ -454,15 +455,16 @@ export function MissionSearch() {
           {/* Results */}
           {data && (
             <>
-              <Grid container spacing={0.75} alignItems="stretch">
+              <Grid
+                container
+                spacing={MISSION_CARD_GRID.spacing}
+                alignItems="stretch"
+              >
                 {viewMode === "grid" ? (
                   shownMissions.map((mission) => (
                     <Grid
                       item
-                      xs={6}
-                      sm={6}
-                      md={4}
-                      lg={3}
+                      {...MISSION_CARD_GRID.item}
                       key={mission.mission_id}
                       sx={{ display: "flex" }}
                     >

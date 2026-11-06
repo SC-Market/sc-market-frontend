@@ -30,6 +30,7 @@ import {
 } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { MANUFACTURER_CARD_GRID } from "../../components/game-data/cardGrids"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { manufacturersSeoText } from "../../seo/hubHeads"
@@ -124,7 +125,7 @@ export function WikiManufacturerList() {
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={isLoading}
-      skeleton={<CardGridSkeleton />}
+      skeleton={<CardGridSkeleton shape={MANUFACTURER_CARD_GRID} />}
       error={error || undefined}
     >
       <Grid item xs={12}>
@@ -144,12 +145,12 @@ export function WikiManufacturerList() {
         </Box>
 
         {viewMode === "grid" ? (
-          <Grid container spacing={2}>
+          <Grid container spacing={MANUFACTURER_CARD_GRID.spacing}>
             {manufacturers?.map((m) => {
               const displayName = m.display_name || m.manufacturer
               const meta = getMfrMeta(displayName)
               return (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={m.manufacturer}>
+                <Grid item {...MANUFACTURER_CARD_GRID.item} key={m.manufacturer}>
                   <Card
                     component={RouterLink}
                     to={WIKI_PATHS.manufacturer(

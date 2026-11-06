@@ -31,6 +31,7 @@ import {
   type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { ORE_CARD_GRID } from "../../components/game-data/cardGrids"
 
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
@@ -151,7 +152,7 @@ export function MiningOreBrowser() {
         )}
       </Box>
 
-      {isLoading && <CardGridSkeleton />}
+      {isLoading && <CardGridSkeleton shape={ORE_CARD_GRID} />}
       {error && (
         <Alert severity="error">
           {t("mining.error", "Failed to load ores.")}
@@ -159,9 +160,9 @@ export function MiningOreBrowser() {
       )}
       {data && (
         <>
-          <Grid container spacing={1.5}>
+          <Grid container spacing={ORE_CARD_GRID.spacing}>
             {data.ores.map((ore) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
+              <Grid item {...ORE_CARD_GRID.item} key={ore.name}>
                 <OreCard ore={ore} onClick={() => handleOreClick(ore.name)} />
               </Grid>
             ))}

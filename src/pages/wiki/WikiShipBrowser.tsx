@@ -48,6 +48,7 @@ import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { SHIP_CARD_GRID } from "../../components/game-data/cardGrids"
 import {
   ShipSilhouette,
   getShipColor,
@@ -1035,9 +1036,9 @@ export function WikiShipBrowser() {
 
   function renderGrid(items: WikiShipSearchResult[]) {
     return (
-      <Grid container spacing={1.25}>
+      <Grid container spacing={SHIP_CARD_GRID.spacing}>
         {items.map((vehicle) => (
-          <Grid item xs={6} sm={4} md={3} key={vehicle.id}>
+          <Grid item {...SHIP_CARD_GRID.item} key={vehicle.id}>
             <VehicleCard
               ship={vehicle}
               onClick={() => handleShipClick(vehicle.ship_code, vehicle.id)}
@@ -1135,7 +1136,7 @@ export function WikiShipBrowser() {
             </Box>
           )}
 
-          {isLoading && <CardGridSkeleton />}
+          {isLoading && <CardGridSkeleton shape={SHIP_CARD_GRID} />}
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {t("wiki.shipBrowser.failedToLoad", "Failed to load ships.")}

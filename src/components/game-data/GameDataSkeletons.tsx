@@ -4,7 +4,8 @@
  */
 
 import React from "react"
-import { Box, Skeleton, Stack, Grid2 as Grid } from "@mui/material"
+import { Box, Grid, Skeleton, Stack } from "@mui/material"
+import type { CardGridShape } from "./cardGrids"
 
 /** Skeleton for a mission/blueprint detail modal or page */
 export function DetailSkeleton() {
@@ -39,24 +40,26 @@ export function DetailSkeleton() {
 }
 
 /**
- * Skeleton for a grid of cards (missions, blueprints, ores…). `cardHeight`
- * should be the loaded card's typical height; the default count fills more
- * than a desktop viewport so the footer can't flash into view and jump.
+ * Skeleton for a grid of cards (missions, blueprints, ores…), laid out with
+ * the page's own grid shape (cardGrids.ts: the same Grid spacing and item
+ * spans as the real cards, and the card's typical height), so the
+ * placeholder and the cards line up. The default count fills more than a
+ * desktop viewport so the footer can't flash into view and jump.
  */
 export function CardGridSkeleton({
+  shape,
   count = 16,
-  cardHeight = 180,
 }: {
+  shape: CardGridShape
   count?: number
-  cardHeight?: number
 }) {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={shape.spacing} data-skeleton="card-grid">
       {Array.from({ length: count }).map((_, i) => (
-        <Grid key={i} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+        <Grid item key={i} {...shape.item}>
           <Skeleton
             variant="rounded"
-            height={cardHeight}
+            height={shape.cardHeight}
             sx={{ borderRadius: 1 }}
           />
         </Grid>

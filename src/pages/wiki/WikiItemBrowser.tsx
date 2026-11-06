@@ -28,6 +28,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { WIKI_ITEM_CARD_GRID, WIKI_ITEM_CARD_HEIGHT } from "../../components/game-data/cardGrids"
 import { wikiItemImage } from "./wikiItemImage"
 import {
   UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, manufacturerSearchTokens, type SearchToken,
@@ -44,8 +45,8 @@ import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { useFormatters } from "../../util/format"
 import { TagChip } from "../../components/tags/TagChip"
 const VIEW_MODES = ["grid", "list"] as const
-const CARD_HEIGHT = 280
-const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
+const CARD_HEIGHT = WIKI_ITEM_CARD_HEIGHT
+const gridBreakpoints = WIKI_ITEM_CARD_GRID.item
 
 // Common item types for the sidebar filter
 const ITEM_TYPES = [
@@ -344,13 +345,13 @@ export function WikiItemBrowser() {
             </ToggleButtonGroup>
           </Box>
 
-          {isLoading && <CardGridSkeleton />}
+          {isLoading && <CardGridSkeleton shape={WIKI_ITEM_CARD_GRID} />}
           {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.itemBrowser.loadError", "Failed to load items.")}</Alert>}
 
           {data && (
             <>
               {viewMode === "grid" ? (
-                <Grid container spacing={1}>
+                <Grid container spacing={WIKI_ITEM_CARD_GRID.spacing}>
                   {data.items.map((item) => (
                     <Grid item {...gridBreakpoints} key={item.id}>
                       <ItemGridCard item={item} />

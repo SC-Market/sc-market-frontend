@@ -1,20 +1,23 @@
-import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Box,
-} from "@mui/material"
+import { Box, Card, CardContent, Typography } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
-import { useTheme } from "@mui/material/styles"
-
+import { NUMERIC_SX } from "../../hooks/styles/theme/fonts"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
+import { listingCardActionAreaSx } from "../../features/market/components/listings/ListingCardActionArea"
+import { LISTING_CARD_HEIGHT } from "../../features/market/v2/marketSearchLayout"
+
+/** Light mode: the photo's height above the card's text (ListingCardV2). */
+export const LISTING_CARD_MEDIA_HEIGHT = 180
 
 /**
- * Skeleton component for market listing cards
- * Matches the detailed layout of actual listing cards
- * Returns a Box with fixed width (use in map functions)
+ * A market listing card (ListingCardV2) as a placeholder. Built from the
+ * card's own pieces: ListingWrapper, the action area's box
+ * (listingCardActionAreaSx), a Card of LISTING_CARD_HEIGHT, the photo at the
+ * card's size (the whole card in dark mode, 180px in light mode) under the
+ * same fade, and the text lines in the card's Typography (price h6, title
+ * body2 two lines, shop and rating captions), so each line has the card's
+ * line height. Returns the wrapper (use it in a grid item or a row).
  *
  * No fade-in: the market passes through several loading boundaries (route
  * skeleton, chunk fallbacks, the grid loading its data), and each one mounts
@@ -23,152 +26,69 @@ import { ListingWrapper } from "../../features/market/components/listings/Listin
  */
 export function ListingSkeleton() {
   const theme = useTheme<ExtendedTheme>()
+  const dark = theme.palette.mode === "dark"
 
   return (
-    <ListingWrapper>
+    <ListingWrapper data-testid="listing-card-skeleton">
       <Box
-        sx={{
-          position: "relative",
-          borderRadius: theme.spacing(theme.borderRadius.topLevel),
-        }}
+        sx={listingCardActionAreaSx}
+        aria-hidden
+        data-skeleton="listing-card"
       >
-        <CardActionArea
-          sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
-        >
-          <Card
+        <Card sx={{ height: LISTING_CARD_HEIGHT, position: "relative" }}>
+          <BaseSkeleton
+            variant="rectangular"
+            animation="wave"
+            width="100%"
+            height={dark ? "100%" : LISTING_CARD_MEDIA_HEIGHT}
+          />
+          {dark && (
+            <Box
+              sx={{
+                position: "absolute",
+                zIndex: 3,
+                inset: 0,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                background: cardFadeGradient(theme, 50, 60),
+              }}
+            />
+          )}
+          <CardContent
             sx={{
-              height: 300,
-              position: "relative",
+              ...(dark ? { position: "absolute", bottom: 0, zIndex: 4 } : {}),
+              width: "100%",
+              boxSizing: "border-box",
+              maxWidth: "100%",
+              padding: "8px 12px !important",
             }}
           >
-            {/* Optional "NEW" chip skeleton (top left) */}
-            <BaseSkeleton
-              variant="rectangular"
-              width={50}
-              height={24}
-              sx={{
-                position: "absolute",
-                top: 8,
-                left: 8,
-                zIndex: 5,
-                borderRadius: 1,
-              }}
-            />
-
-            {/* Optional "INTERNAL" chip skeleton (top right) */}
-            <BaseSkeleton
-              variant="rectangular"
-              width={80}
-              height={20}
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                zIndex: 5,
-                borderRadius: 1,
-              }}
-            />
-
-            {/* CardMedia - Image area */}
-            <CardMedia
-              sx={{
-                height: theme.palette.mode === "dark" ? "100%" : 150,
-                overflow: "hidden",
-              }}
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ ...NUMERIC_SX, fontSize: "0.95rem", mb: 0.5 }}
             >
-              <BaseSkeleton
-                variant="rectangular"
-                width="100%"
-                height="100%"
-                animation="wave"
-                sx={{
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                }}
-              />
-            </CardMedia>
-
-            {/* Dark mode gradient overlay */}
-            {theme.palette.mode === "dark" && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  zIndex: 3,
-                  top: 0,
-                  left: 0,
-                  height: "100%",
-                  width: "100%",
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                  background: cardFadeGradient(theme, 60, 70),
-                }}
-              />
-            )}
-
-            {/* CardContent - Bottom section */}
-            <CardContent
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-                maxWidth: "100%",
-                padding: "8px 12px !important",
-              }}
+              <BaseSkeleton variant="text" width={100} />
+            </Typography>
+            <Typography
+              variant="body2"
+              component="div"
+              sx={{ fontSize: "0.75rem", lineHeight: 1.3, mb: 0.5 }}
             >
-              {/* Price (h5, primary, bold) */}
-              <BaseSkeleton
-                variant="text"
-                width={100}
-                height={24}
-                sx={{ mb: 0.5 }}
-              />
-
-              {/* Title with item_type (subtitle2, 2 lines max) */}
-              <BaseSkeleton
-                variant="text"
-                width="95%"
-                height={36}
-                sx={{
-                  mb: 0.5,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
-              />
-
-              {/* Seller name and rating (on separate lines) */}
-              <Box sx={{ mb: 0.25 }}>
-                <BaseSkeleton
-                  variant="text"
-                  width={60}
-                  height={14}
-                  sx={{ mb: 0.25, display: "block" }}
-                />
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                  }}
-                >
-                  <BaseSkeleton variant="circular" width={12} height={12} />
-                  <BaseSkeleton variant="text" width={30} height={14} />
-                </Box>
-              </Box>
-
-              {/* Available quantity */}
-              <BaseSkeleton
-                variant="text"
-                width={70}
-                height={14}
-                sx={{ mb: 0 }}
-              />
-            </CardContent>
-          </Card>
-        </CardActionArea>
+              <BaseSkeleton variant="text" width="95%" />
+              <BaseSkeleton variant="text" width="70%" />
+            </Typography>
+            <Typography
+              variant="caption"
+              component="div"
+              sx={{ fontSize: "0.7rem", lineHeight: 1.2, mb: 0.25 }}
+            >
+              <BaseSkeleton variant="text" width={70} />
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <BaseSkeleton variant="text" width={64} height={16} />
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
     </ListingWrapper>
   )

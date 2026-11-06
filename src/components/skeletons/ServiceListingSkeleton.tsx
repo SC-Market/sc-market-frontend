@@ -11,6 +11,8 @@ import {
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
+import { SERVICE_LISTING_GRID_BREAKPOINTS } from "../../features/services/components/ServiceListing"
+import { SERVICE_CARD_HEIGHT } from "../../features/services/components/ServiceListingCard"
 
 /**
  * Services per page in ServiceListings (its first page), and so the number of
@@ -32,7 +34,7 @@ export function ServiceListingSkeleton() {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Grid item xs={12} lg={6}>
+    <Grid item {...SERVICE_LISTING_GRID_BREAKPOINTS}>
       <CardActionArea
         sx={{
           borderRadius: theme.spacing(theme.borderRadius.topLevel),
@@ -41,6 +43,9 @@ export function ServiceListingSkeleton() {
         <Card
           sx={{
             borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            // The loaded card's height (SERVICE_CARD_HEIGHT, every width)
+            height: SERVICE_CARD_HEIGHT,
+            overflow: "hidden",
           }}
         >
           <CardHeader

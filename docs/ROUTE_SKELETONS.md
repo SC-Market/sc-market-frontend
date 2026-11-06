@@ -60,3 +60,14 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
 - `ContractDetailSkeleton` - Contract details
 - `RecruitingPostViewSkeleton` - Recruiting post
 - `OfferDetailSkeleton` - Offer details
+
+## Matching the page (no layout shift)
+
+A skeleton is built from the shape it stands in for, so it can't drift:
+
+- **Frame.** The generic route skeletons (`RouteSkeleton.tsx`) sit in StandardPageLayout's frame: `ContainerGrid` and the real title row (`PageHeaderRowSkeleton`), with the page's sections as grid items. Admin pages have no extra sidebar (the app's is the only one); form pages use FormPageLayout's `lg` width.
+- **Cards.** `ListingSkeleton` is ListingCardV2's pieces (ListingWrapper, `listingCardActionAreaSx`, a Card of `LISTING_CARD_HEIGHT`, the 180px photo in light mode, the card's Typography for each line). `ServiceListingSkeleton` uses `SERVICE_LISTING_GRID_BREAKPOINTS` and `SERVICE_CARD_HEIGHT`. The game-data pages lay out their cards with a shape from `components/game-data/cardGrids.ts` and pass the same shape to `CardGridSkeleton`.
+- **DataGrids.** `LazyDataGrid` shows `DataGridSkeleton` with `dataGridSkeletonProps(props)` (visible columns, first page of rows, density, footer) while the grid's chunk loads; autoHeight grids get their exact height.
+- **Motion.** The theme's `MuiSkeleton` override stops the pulse and wave under `prefers-reduced-motion: reduce`. Skeletons don't fade in (a fade from 0 blanks the page between boundaries). Widths are fixed, never random, so the prerendered HTML and the client agree.
+
+`src/router/__tests__/skeletonFamilies.test.tsx` renders every family and checks it against those shapes.

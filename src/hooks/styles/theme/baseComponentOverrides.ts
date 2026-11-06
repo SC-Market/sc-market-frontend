@@ -104,6 +104,18 @@ export function getBaseComponentOverrides(): Components<
         },
       },
     },
+    MuiSkeleton: {
+      styleOverrides: {
+        // Loading placeholders pulse (or shimmer); with reduced motion asked
+        // for they hold still: the same shape, a steady fill.
+        root: {
+          "@media (prefers-reduced-motion: reduce)": {
+            animation: "none",
+            "&::after": { animation: "none", display: "none" },
+          },
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {

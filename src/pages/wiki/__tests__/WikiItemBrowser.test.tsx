@@ -7,10 +7,12 @@ import { render, screen } from "@testing-library/react"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider } from "@mui/material/styles"
 import { vi } from "vitest"
 import { WikiItemBrowser } from "../WikiItemBrowser"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
+import { mainTheme } from "../../../hooks/styles/Theme"
 
 // Mock Page to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", () => ({
@@ -69,9 +71,11 @@ describe("WikiItemBrowser", () => {
   it("renders the component with title", () => {
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <WikiItemBrowser />
-        </BrowserRouter>
+        <ThemeProvider theme={mainTheme}>
+          <BrowserRouter>
+            <WikiItemBrowser />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     )
 
@@ -81,9 +85,11 @@ describe("WikiItemBrowser", () => {
   it("renders filter controls", () => {
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <WikiItemBrowser />
-        </BrowserRouter>
+        <ThemeProvider theme={mainTheme}>
+          <BrowserRouter>
+            <WikiItemBrowser />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     )
 
@@ -96,9 +102,11 @@ describe("WikiItemBrowser", () => {
   it("displays loading state", () => {
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <WikiItemBrowser />
-        </BrowserRouter>
+        <ThemeProvider theme={mainTheme}>
+          <BrowserRouter>
+            <WikiItemBrowser />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     )
 

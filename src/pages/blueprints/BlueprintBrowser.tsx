@@ -74,6 +74,7 @@ import {
   CardGridSkeleton,
   TableSkeleton,
 } from "../../components/game-data/GameDataSkeletons"
+import { BLUEPRINT_CARD_GRID } from "../../components/game-data/cardGrids"
 import {
   UnifiedSearchBar,
   blueprintParamsToTokens,
@@ -627,7 +628,7 @@ export function BlueprintBrowser() {
           {/* Grid cards: icon row, name, ingredient chips, actions (~270px) */}
           {isLoading &&
             (viewMode === "grid" ? (
-              <CardGridSkeleton count={12} cardHeight={270} />
+              <CardGridSkeleton shape={BLUEPRINT_CARD_GRID} count={12} />
             ) : (
               <TableSkeleton />
             ))}
@@ -644,14 +645,11 @@ export function BlueprintBrowser() {
             <>
               {/* Grid View */}
               {viewMode === "grid" && (
-                <Grid container spacing={2}>
+                <Grid container spacing={BLUEPRINT_CARD_GRID.spacing}>
                   {shownBlueprints.map((blueprint) => (
                     <Grid
                       item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
+                      {...BLUEPRINT_CARD_GRID.item}
                       key={blueprint.blueprint_id}
                     >
                       <BlueprintCard
