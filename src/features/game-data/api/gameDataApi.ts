@@ -25,6 +25,7 @@ export type {
   BlueprintSearchResult,
   EntitySpawn,
   GameVersion,
+  GetOrgBlueprintOwnersApiResponse,
   HaulingOrder,
   ItemAcquisitionDocument,
   Mission,

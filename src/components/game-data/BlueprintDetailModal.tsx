@@ -14,57 +14,49 @@ import {
   Stack,
   Alert,
   Divider,
-  Slider,
   TextField,
   ButtonGroup,
   Button,
   Tabs,
   Tab,
-  Avatar,
 } from "@mui/material"
 import {
   CloseRounded,
   BuildRounded,
   TimerRounded,
-  TrackChangesRounded,
   BookmarkRounded,
   BookmarkBorderRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { Link as RouterLink, useNavigate } from "react-router-dom"
-import { readableMissionText } from "../../seo/missionText"
 import {
   useGetBlueprintDetailQuery,
   useGetOrgBlueprintOwnersQuery,
-  type BlueprintIngredient,
-  type SlotModifier,
-  type MissionRewardingBlueprint,
 } from "../../features/game-data/api/gameDataApi"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useBlueprintOwnership } from "../../features/game-data/hooks/useGameDataActions"
-import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
+import { getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
 import { BlueprintTags, blueprintTagsFromDetail } from "./BlueprintTags"
-
-function formatQty(scu: number | string): string {
-  const n = typeof scu === "string" ? parseFloat(scu) : scu
-  if (isNaN(n)) return "0.00 SCU"
-  return `${n.toFixed(2)} SCU`
-}
 
 import { formatCraftingTime } from "../../constants/crafting"
 import {
   isModifierPositive,
-  interpolateModifier,
   formatModifierValue,
   buildPropertyDefMap,
   propertyDisplayName,
 } from "../../util/statDisplay"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
-import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 
-import { useFormatters } from "../../util/format"
-import { grey } from "@mui/material/colors"
+import { useBlueprintModalQualities } from "./useBlueprintModalQualities"
+import {
+  BlueprintIngredientSliders,
+  BlueprintMissionChips,
+  BlueprintProductStats,
+} from "./BlueprintModalCraftParts"
+import {
+  BlueprintDisassembleTab,
+  BlueprintOrgOwnersTab,
+} from "./BlueprintModalTabs"
 
 interface Props {
   blueprintId: string | null
@@ -74,8 +66,6 @@ interface Props {
 
 export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const { t } = useTranslation()
-  const fmt = useFormatters()
-  const navigate = useNavigate()
   const { data, isLoading, error } = useGetBlueprintDetailQuery(
     { blueprintId: blueprintId! },
     { skip: !blueprintId },
@@ -114,103 +104,22 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
     setTab(0)
   }, [blueprintId])
 
-  // Quality state
-  const modsBySlot = useMemo(() => {
-    const map = new Map<string, SlotModifier[]>()
-    for (const m of slotModifiers) {
-      if (!map.has(m.slot_name)) map.set(m.slot_name, [])
-      map.get(m.slot_name)!.push(m)
-    }
-    return map
-  }, [slotModifiers])
+  const {
+    modsBySlot,
+    qualities,
+    qualityRanges,
+    setQuality,
+    setAllQualities,
+    combinedModifiers,
+    outputQuality,
+  } = useBlueprintModalQualities(ingredients, slotModifiers)
 
   const propDefMap = useMemo(
     () => buildPropertyDefMap(craftedPropertyDefs),
     [craftedPropertyDefs],
   )
 
-  const [qualities, setQualities] = useState<number[]>([])
   const [craftQty, setCraftQty] = useState(1)
-
-  // Quality range per ingredient from slot modifiers
-  const qualityRanges = useMemo(() => {
-    return ingredients.map((ing: BlueprintIngredient) => {
-      const mods = modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
-      if (!mods.length) return { min: 0, max: 1000 }
-      const min = Math.min(...mods.map((m: SlotModifier) => m.start_quality))
-      const max = Math.max(...mods.map((m: SlotModifier) => m.end_quality))
-      return { min, max }
-    })
-  }, [ingredients, modsBySlot])
-
-  React.useEffect(() => {
-    if (ingredients.length && qualities.length !== ingredients.length)
-      setQualities(qualityRanges.map((r) => Math.round((r.min + r.max) / 2)))
-  }, [ingredients.length, qualities.length, qualityRanges])
-
-  const setQuality = (idx: number, v: number) => {
-    const r = qualityRanges[idx] || { min: 0, max: 1000 }
-    setQualities((prev) =>
-      prev.map((q, i) => (i === idx ? Math.max(r.min, Math.min(r.max, v)) : q)),
-    )
-  }
-  const setAllQualities = (mode: "min" | "mid" | "max") =>
-    setQualities(
-      qualityRanges.map((r) =>
-        mode === "min"
-          ? r.min
-          : mode === "max"
-            ? r.max
-            : Math.round((r.min + r.max) / 2),
-      ),
-    )
-
-  const combinedModifiers = useMemo(() => {
-    const result = new Map<
-      string,
-      { value: number; modifierType: "linear" | "additive" }
-    >()
-    for (const mod of slotModifiers) {
-      const slotIdx = ingredients.findIndex(
-        (ing: BlueprintIngredient) =>
-          (ing.slot_name || ing.game_item?.name) === mod.slot_name,
-      )
-      const qv = qualities[slotIdx] ?? 500
-      const factor = interpolateModifier(
-        qv,
-        mod.start_quality,
-        mod.end_quality,
-        mod.modifier_at_start,
-        mod.modifier_at_end,
-      )
-      const existing = result.get(mod.property)
-      if (mod.modifier_type === "additive") {
-        // Additive modifiers sum together
-        result.set(mod.property, {
-          value: (existing?.value ?? 0) + factor,
-          modifierType: "additive",
-        })
-      } else {
-        // Linear (multiplicative) modifiers multiply together
-        result.set(mod.property, {
-          value: (existing?.value ?? 1) * factor,
-          modifierType: "linear",
-        })
-      }
-    }
-    return result
-  }, [slotModifiers, qualities, ingredients])
-
-  const outputQuality = useMemo(() => {
-    if (!ingredients.length || !qualities.length) return 500
-    return Math.round(
-      ingredients.reduce(
-        (s: number, _: BlueprintIngredient, i: number) =>
-          s + (qualities[i] ?? 500),
-        0,
-      ) / ingredients.length,
-    )
-  }, [qualities, ingredients])
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -299,132 +208,20 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
         {data && tab === 0 && (
           <Stack spacing={2}>
             {/* Product Stats */}
-            {(() => {
-              if (!Object.keys(itemAttrs).length || !combinedModifiers.size)
-                return null
-              const stats = Array.from(combinedModifiers.entries()).filter(
-                ([prop]) => {
-                  const baseKey = Object.keys(itemAttrs).find((k) =>
-                    k
-                      .toLowerCase()
-                      .includes(prop.replace(/^gpp_armor_/, "").toLowerCase()),
-                  )
-                  return baseKey && !isNaN(parseFloat(itemAttrs[baseKey]))
-                },
-              )
-              if (!stats.length) return null
-              return (
-                <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    {t("blueprintsUi.detail.productStats")}
-                  </Typography>
-                  {stats.map(([prop, { value: modifier, modifierType }]) => {
-                    const def = propDefMap.get(prop)
-                    const baseKey = Object.keys(itemAttrs).find((k) =>
-                      k
-                        .toLowerCase()
-                        .includes(
-                          prop.replace(/^gpp_armor_/, "").toLowerCase(),
-                        ),
-                    )!
-                    const baseVal = parseFloat(itemAttrs[baseKey])
-                    const modified =
-                      modifierType === "additive"
-                        ? baseVal + modifier
-                        : baseVal * modifier
-                    const formattedMod = formatModifierValue(
-                      modifier,
-                      modifierType,
-                      def,
-                    )
-                    return (
-                      <Stack
-                        key={prop}
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        sx={{ py: 0.25 }}
-                      >
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ minWidth: 140 }}
-                        >
-                          {propertyDisplayName(prop, def, t)}
-                        </Typography>
-                        <Typography variant="caption">
-                          {baseVal.toFixed(2)}
-                        </Typography>
-                        <Typography variant="caption" color="text.disabled">
-                          {"→"}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          fontWeight={600}
-                          color={
-                            isModifierPositive(
-                              prop,
-                              modifierType === "additive"
-                                ? 1 + modifier
-                                : modifier,
-                            )
-                              ? "success.main"
-                              : modifier ===
-                                  (modifierType === "additive" ? 0 : 1)
-                                ? "text.secondary"
-                                : "error.main"
-                          }
-                        >
-                          {modified.toFixed(2)} ({formattedMod})
-                        </Typography>
-                      </Stack>
-                    )
-                  })}
-                  <Divider sx={{ mt: 1 }} />
-                </Box>
-              )
-            })()}
+            <BlueprintProductStats
+              itemAttrs={itemAttrs}
+              combinedModifiers={combinedModifiers}
+              propDefMap={propDefMap}
+            />
 
             {/* Missions */}
             {data.missions_rewarding?.length > 0 && (
-              <Box>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                  <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />
-                  {t("blueprintsUi.detail.missionsCount", {
-                    count: data.missions_rewarding.length,
-                  })}
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {(missionsExpanded
-                    ? data.missions_rewarding
-                    : data.missions_rewarding.slice(0, 8)
-                  ).map((m: MissionRewardingBlueprint) => (
-                    <Chip
-                      key={m.mission_id}
-                      label={readableMissionText(m.mission_name)}
-                      size="small"
-                      sx={{ height: 22, cursor: "pointer" }}
-                      clickable
-                      component={RouterLink}
-                      to={GAME_DATA_PATHS.mission(m.mission_id)}
-                      onClick={() => onClose()}
-                    />
-                  ))}
-                  {data.missions_rewarding.length > 8 && (
-                    <Chip
-                      label={
-                        missionsExpanded
-                          ? t("blueprintsUi.detail.showLess")
-                          : `+${data.missions_rewarding.length - 8}`
-                      }
-                      size="small"
-                      variant="outlined"
-                      sx={{ height: 22, cursor: "pointer" }}
-                      onClick={() => setMissionsExpanded(!missionsExpanded)}
-                    />
-                  )}
-                </Box>
-              </Box>
+              <BlueprintMissionChips
+                missions={data.missions_rewarding}
+                expanded={missionsExpanded}
+                setExpanded={setMissionsExpanded}
+                onClose={onClose}
+              />
             )}
 
             <Divider />
@@ -538,172 +335,15 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 )}
               </Stack>
             )}
-            <Stack spacing={1}>
-              {ingredients.map((ing: BlueprintIngredient, idx: number) => {
-                const qv =
-                  qualities[idx] ??
-                  Math.round(
-                    (qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2,
-                  )
-                const qr = qualityRanges[idx] || { min: 0, max: 1000 }
-                const color =
-                  getCommodityColor(ing.game_item?.sub_type) || grey[700]
-                return (
-                  <Box
-                    key={idx}
-                    sx={{
-                      border: 1,
-                      borderColor: "divider",
-                      borderRadius: 1,
-                      p: 1,
-                    }}
-                  >
-                    {ing.slot_display_name && (
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        fontWeight={600}
-                        sx={{ mb: 0.25, display: "block" }}
-                      >
-                        {ing.slot_display_name}
-                      </Typography>
-                    )}
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <GameItemAvatar
-                        name={ing.game_item?.name}
-                        iconUrl={ing.game_item?.icon_url}
-                        subType={ing.game_item?.sub_type}
-                        itemType={ing.game_item?.type}
-                        size={24}
-                      />
-                      <Box sx={{ minWidth: 100 }}>
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          lineHeight={1.2}
-                        >
-                          {ing.game_item?.name ||
-                            t("blueprintsUi.detail.unknown")}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          lineHeight={1}
-                        >
-                          {formatQty(
-                            parseFloat(String(ing.quantity_required)) *
-                              craftQty,
-                          )}
-                          {craftQty > 1 &&
-                            ` ${t("blueprintsUi.detail.perEach", { qty: formatQty(ing.quantity_required) })}`}
-                          {ing.min_quality_tier
-                            ? ` · ${t("blueprintsUi.detail.minTier", { tier: ing.min_quality_tier })}`
-                            : ""}
-                        </Typography>
-                      </Box>
-                      <Slider
-                        size="small"
-                        min={qr.min}
-                        max={qr.max}
-                        value={qv}
-                        onChange={(_, v) => setQuality(idx, v as number)}
-                        aria-label={
-                          ing.game_item?.name
-                            ? t("blueprintsUi.detail.qualityOf", {
-                                name: ing.game_item.name,
-                              })
-                            : t("blueprintsUi.detail.qualityOfIngredient")
-                        }
-                        sx={{
-                          flex: 1,
-                          color,
-                          "& .MuiSlider-thumb": { width: 12, height: 12 },
-                        }}
-                      />
-                      <TextField
-                        size="small"
-                        type="number"
-                        value={qv}
-                        onChange={(e) => setQuality(idx, +e.target.value || 0)}
-                        inputProps={{ min: qr.min, max: qr.max }}
-                        sx={{
-                          width: 70,
-                          "& input": { py: 0.5, fontSize: "0.8rem" },
-                        }}
-                      />
-                    </Stack>
-                    {(
-                      modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
-                    ).map((mod: SlotModifier, mi: number) => {
-                      const def = propDefMap.get(mod.property)
-                      const factor = interpolateModifier(
-                        qv,
-                        mod.start_quality,
-                        mod.end_quality,
-                        mod.modifier_at_start,
-                        mod.modifier_at_end,
-                      )
-                      const currentFormatted = formatModifierValue(
-                        factor,
-                        mod.modifier_type,
-                        def,
-                      )
-                      const startFormatted = formatModifierValue(
-                        mod.modifier_at_start,
-                        mod.modifier_type,
-                        def,
-                      )
-                      const endFormatted = formatModifierValue(
-                        mod.modifier_at_end,
-                        mod.modifier_type,
-                        def,
-                      )
-                      // For color: normalize additive to multiplicative-like for isModifierPositive
-                      const positiveCheck =
-                        mod.modifier_type === "additive" ? 1 + factor : factor
-                      const neutralValue =
-                        mod.modifier_type === "additive" ? 0 : 1
-                      return (
-                        <Stack
-                          key={mi}
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{ mt: 0.25 }}
-                        >
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ minWidth: 120 }}
-                          >
-                            {propertyDisplayName(mod.property, def, t)}
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            fontWeight={600}
-                            color={
-                              isModifierPositive(mod.property, positiveCheck)
-                                ? "success.main"
-                                : factor === neutralValue
-                                  ? "text.secondary"
-                                  : "error.main"
-                            }
-                          >
-                            {currentFormatted}
-                          </Typography>
-                          <Typography variant="caption" color="text.disabled">
-                            {t("blueprintsUi.detail.range", {
-                              start: startFormatted,
-                              end: endFormatted,
-                            })}
-                          </Typography>
-                        </Stack>
-                      )
-                    })}
-                  </Box>
-                )
-              })}
-            </Stack>
+            <BlueprintIngredientSliders
+              ingredients={ingredients}
+              qualities={qualities}
+              qualityRanges={qualityRanges}
+              setQuality={setQuality}
+              modsBySlot={modsBySlot}
+              propDefMap={propDefMap}
+              craftQty={craftQty}
+            />
 
             {bp?.crafting_time_seconds && (
               <Typography variant="body2" color="text.secondary">
@@ -722,143 +362,17 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
         {/* Disassemble tab */}
         {data && tab === 1 && (
-          <Stack spacing={2}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("blueprintsUi.detail.efficiency")}
-                </Typography>
-                <Typography variant="body1" fontWeight={600}>
-                  50%
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("blueprintsUi.detail.timePerItem")}
-                </Typography>
-                <Typography variant="body1" fontWeight={600}>
-                  <TimerRounded
-                    sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }}
-                  />
-                  {t("blueprintsUi.detail.secondsShort", { seconds: 15 })}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("blueprintsUi.detail.quantity")}
-                </Typography>
-                <TextField
-                  size="small"
-                  type="number"
-                  value={craftQty}
-                  sx={{ width: 60, "& input": { py: 0.5, fontSize: "0.8rem" } }}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setCraftQty(Math.max(1, +e.target.value || 1))
-                  }
-                  inputProps={{ min: 1 }}
-                />
-              </Box>
-              {craftQty > 1 && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("blueprintsUi.detail.totalTime")}
-                  </Typography>
-                  <Typography variant="body1" fontWeight={600}>
-                    {formatCraftingTime(
-                      (bp?.crafting_time_seconds || 0) * craftQty,
-                    )}
-                  </Typography>
-                </Box>
-              )}
-            </Stack>
-            <Divider />
-            <Typography variant="subtitle2">
-              {craftQty > 1
-                ? t("blueprintsUi.detail.recoveredMaterialsTimes", {
-                    qty: craftQty,
-                  })
-                : t("blueprintsUi.detail.recoveredMaterials")}
-            </Typography>
-            <Stack spacing={0.75}>
-              {ingredients.map((ing: BlueprintIngredient, i: number) => {
-                const recovered =
-                  parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
-                return (
-                  <Stack
-                    key={i}
-                    direction="row"
-                    spacing={1}
-                    alignItems="center"
-                  >
-                    <GameItemAvatar
-                      name={ing.game_item?.name}
-                      iconUrl={ing.game_item?.icon_url}
-                      subType={ing.game_item?.sub_type}
-                      itemType={ing.game_item?.type}
-                      size={28}
-                    />
-                    <Typography variant="body2" sx={{ flex: 1 }}>
-                      {ing.game_item?.name || t("blueprintsUi.detail.unknown")}
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                      {recovered.toFixed(2)} SCU
-                    </Typography>
-                  </Stack>
-                )
-              })}
-            </Stack>
-          </Stack>
+          <BlueprintDisassembleTab
+            bp={bp}
+            ingredients={ingredients}
+            craftQty={craftQty}
+            setCraftQty={setCraftQty}
+          />
         )}
 
         {/* Org Owners tab */}
         {tab === 2 && spectrumId && (
-          <Box>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t("blueprintsUi.detail.orgOwnersTitle")}
-            </Typography>
-            {orgOwners?.members.length ? (
-              <Stack spacing={0.75}>
-                {orgOwners.members.map((m) => (
-                  <Stack
-                    key={m.user_id}
-                    direction="row"
-                    spacing={1}
-                    alignItems="center"
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      onClose()
-                      navigate(USER_PATHS.profile(m.username))
-                    }}
-                  >
-                    <Avatar
-                      src={m.avatar}
-                      sx={{ width: 32, height: 32, fontSize: "0.65rem" }}
-                    >
-                      {m.display_name.slice(0, 2).toUpperCase()}
-                    </Avatar>
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        color="primary"
-                      >
-                        {m.display_name}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        @{m.username}
-                        {m.acquisition_date &&
-                          ` · ${fmt.date(m.acquisition_date)}`}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                ))}
-              </Stack>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                {t("blueprintsUi.detail.noOrgOwners")}
-              </Typography>
-            )}
-          </Box>
+          <BlueprintOrgOwnersTab orgOwners={orgOwners} onClose={onClose} />
         )}
       </DialogContent>
     </Dialog>
