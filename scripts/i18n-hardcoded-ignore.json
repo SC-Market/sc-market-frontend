@@ -30,12 +30,12 @@
     "reason": "HTTP header in a code sample; must stay verbatim"
   },
   {
-    "file": "src/pages/admin/AdminSupplierRoster.tsx",
+    "file": "src/pages/admin/AddSupplierDialog.tsx",
     "text": "user_id (UUID)",
     "reason": "API field name shown as an input placeholder for an ID; technical, not prose"
   },
   {
-    "file": "src/pages/admin/AdminSupplierRoster.tsx",
+    "file": "src/pages/admin/AddSupplierDialog.tsx",
     "text": "contractor_id (UUID)",
     "reason": "API field name shown as an input placeholder for an ID; technical, not prose"
   }

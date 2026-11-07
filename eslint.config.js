@@ -179,7 +179,7 @@ const BORDER_RAILS = [
     reason: "order row, primary left rail",
   },
   {
-    file: "src/pages/admin/AdminSupplierDashboard.tsx",
+    file: "src/pages/admin/SupplierBuyOrdersPanel.tsx",
     reason: "targeted (private) buy order row rail",
   },
 ]
