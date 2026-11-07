@@ -17,10 +17,6 @@
 
 import React, { useState, useEffect } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
   Stack,
@@ -32,6 +28,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useRateMission } from "../../features/game-data/hooks/useGameDataActions"
+import { ResponsiveDialog } from "../dialog/ResponsiveDialog"
 
 export interface MissionRatingDialogProps {
   open: boolean
@@ -136,137 +133,141 @@ export function MissionRatingDialog({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {existingRating
+    <ResponsiveDialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="sm"
+      mobile="fullScreen"
+      disableClose={isLoading}
+      title={
+        existingRating
           ? t("missionToolsUi.updateRating")
-          : t("missionToolsUi.rateMission")}
-      </DialogTitle>
-
-      <DialogContent>
-        <Stack spacing={3} mt={1}>
-          {/* Mission Name */}
-          <Box>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              {t("missionToolsUi.mission")}
-            </Typography>
-            <Typography variant="body1" fontWeight="medium">
-              {missionName}
-            </Typography>
-          </Box>
-
-          {/* Error Alert */}
-          {error && (
-            <Alert severity="error" onClose={() => setError(null)}>
-              {error}
-            </Alert>
-          )}
-
-          {/* Difficulty Rating (Requirement 49.1) */}
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              {t("missionToolsUi.difficultyRatingRequired")}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              display="block"
-              mb={1}
-            >
-              {t("missionToolsUi.difficultyQuestion")}
-            </Typography>
-            <Rating
-              value={difficultyRating}
-              onChange={(_, newValue) => setDifficultyRating(newValue)}
-              size="large"
-              precision={1}
-              max={5}
-            />
-            {difficultyRating && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                display="block"
-                mt={0.5}
-              >
-                {t("missionToolsUi.starsOutOf5", { value: difficultyRating })}
-              </Typography>
+          : t("missionToolsUi.rateMission")
+      }
+      actions={
+        <>
+          <Button onClick={handleClose} disabled={isLoading}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            disabled={isLoading || !difficultyRating || !satisfactionRating}
+          >
+            {isLoading ? (
+              <CircularProgress size={20} />
+            ) : existingRating ? (
+              t("missionToolsUi.updateRating")
+            ) : (
+              t("missionToolsUi.submitRating")
             )}
-          </Box>
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={3} mt={1}>
+        {/* Mission Name */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+            {t("missionToolsUi.mission")}
+          </Typography>
+          <Typography variant="body1" fontWeight="medium">
+            {missionName}
+          </Typography>
+        </Box>
 
-          {/* Satisfaction Rating (Requirement 49.2) */}
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              {t("missionToolsUi.satisfactionRatingRequired")}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              display="block"
-              mb={1}
-            >
-              {t("missionToolsUi.satisfactionQuestion")}
-            </Typography>
-            <Rating
-              value={satisfactionRating}
-              onChange={(_, newValue) => setSatisfactionRating(newValue)}
-              size="large"
-              precision={1}
-              max={5}
-            />
-            {satisfactionRating && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                display="block"
-                mt={0.5}
-              >
-                {t("missionToolsUi.starsOutOf5", { value: satisfactionRating })}
-              </Typography>
-            )}
-          </Box>
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
 
-          {/* Optional Comment (Requirement 49.6, 49.7) */}
-          <TextField
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            multiline
-            rows={4}
-            fullWidth
-            label={t("missionToolsUi.commentOptional")}
-            placeholder={t("missionToolsUi.commentPlaceholder")}
-            inputProps={{ maxLength: 1000 }}
-            helperText={t("missionToolsUi.commentCharCount", {
-              length: comment.length,
-              max: 1000,
-            })}
+        {/* Difficulty Rating (Requirement 49.1) */}
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            {t("missionToolsUi.difficultyRatingRequired")}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            mb={1}
+          >
+            {t("missionToolsUi.difficultyQuestion")}
+          </Typography>
+          <Rating
+            value={difficultyRating}
+            onChange={(_, newValue) => setDifficultyRating(newValue)}
+            size="large"
+            precision={1}
+            max={5}
           />
-
-          {/* Update Notice (Requirement 49.8) */}
-          {existingRating && (
-            <Alert severity="info">{t("missionToolsUi.alreadyRated")}</Alert>
+          {difficultyRating && (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              mt={0.5}
+            >
+              {t("missionToolsUi.starsOutOf5", { value: difficultyRating })}
+            </Typography>
           )}
-        </Stack>
-      </DialogContent>
+        </Box>
 
-      <DialogActions>
-        <Button onClick={handleClose} disabled={isLoading}>
-          {t("common.cancel")}
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={isLoading || !difficultyRating || !satisfactionRating}
-        >
-          {isLoading ? (
-            <CircularProgress size={20} />
-          ) : existingRating ? (
-            t("missionToolsUi.updateRating")
-          ) : (
-            t("missionToolsUi.submitRating")
+        {/* Satisfaction Rating (Requirement 49.2) */}
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            {t("missionToolsUi.satisfactionRatingRequired")}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            mb={1}
+          >
+            {t("missionToolsUi.satisfactionQuestion")}
+          </Typography>
+          <Rating
+            value={satisfactionRating}
+            onChange={(_, newValue) => setSatisfactionRating(newValue)}
+            size="large"
+            precision={1}
+            max={5}
+          />
+          {satisfactionRating && (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              mt={0.5}
+            >
+              {t("missionToolsUi.starsOutOf5", { value: satisfactionRating })}
+            </Typography>
           )}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </Box>
+
+        {/* Optional Comment (Requirement 49.6, 49.7) */}
+        <TextField
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          multiline
+          rows={4}
+          fullWidth
+          label={t("missionToolsUi.commentOptional")}
+          placeholder={t("missionToolsUi.commentPlaceholder")}
+          inputProps={{ maxLength: 1000 }}
+          helperText={t("missionToolsUi.commentCharCount", {
+            length: comment.length,
+            max: 1000,
+          })}
+        />
+
+        {/* Update Notice (Requirement 49.8) */}
+        {existingRating && (
+          <Alert severity="info">{t("missionToolsUi.alreadyRated")}</Alert>
+        )}
+      </Stack>
+    </ResponsiveDialog>
   )
 }

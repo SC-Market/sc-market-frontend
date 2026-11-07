@@ -1,18 +1,10 @@
 import React, { useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Typography,
-  CircularProgress,
-} from "@mui/material"
+import { Button, Typography } from "@mui/material"
 import { WarningRounded } from "@mui/icons-material"
 import { useGetActiveListingCountQuery } from "../../store/api/v2/market"
 import { useExpireAllListings } from "../../features/admin/hooks/useExpireAllListings"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 
 export function ExpireAllListingsButton() {
   const { t } = useTranslation()
@@ -41,47 +33,40 @@ export function ExpireAllListingsButton() {
         {t("adminUi.expireListings.button")}
       </Button>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>{t("adminUi.expireListings.dialogTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {countData ? (
-              <Trans
-                i18nKey="adminUi.expireListings.confirmBody"
-                count={countData.count}
-                components={{ strong: <strong /> }}
-              />
-            ) : (
-              <Trans
-                i18nKey="adminUi.expireListings.confirmBodyLoading"
-                components={{ strong: <strong /> }}
-              />
-            )}
-          </DialogContentText>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {t("adminUi.expireListings.note")}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleConfirm}
-            color="error"
-            variant="contained"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <CircularProgress size={20} />
-            ) : countData ? (
-              t("adminUi.expireListings.confirmButton", {
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t("adminUi.expireListings.dialogTitle")}
+        message={
+          countData ? (
+            <Trans
+              i18nKey="adminUi.expireListings.confirmBody"
+              count={countData.count}
+              components={{ strong: <strong /> }}
+            />
+          ) : (
+            <Trans
+              i18nKey="adminUi.expireListings.confirmBodyLoading"
+              components={{ strong: <strong /> }}
+            />
+          )
+        }
+        onConfirm={handleConfirm}
+        confirmLabel={
+          countData
+            ? t("adminUi.expireListings.confirmButton", {
                 count: countData.count,
               })
-            ) : (
-              t("adminUi.expireListings.confirmButtonNoCount")
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            : t("adminUi.expireListings.confirmButtonNoCount")
+        }
+        cancelLabel={t("common.cancel")}
+        destructive
+        loading={isLoading}
+      >
+        <Typography variant="body2" color="text.secondary">
+          {t("adminUi.expireListings.note")}
+        </Typography>
+      </ConfirmDialog>
     </>
   )
 }

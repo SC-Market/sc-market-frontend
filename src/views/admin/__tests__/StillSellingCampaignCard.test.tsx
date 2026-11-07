@@ -232,7 +232,9 @@ describe("StillSellingCampaignCard", () => {
     render(<StillSellingCampaignCard />)
     fireEvent.click(screen.getByRole("button", { name: "Send" }))
     expect(send).not.toHaveBeenCalled()
-    expect(screen.getByText("Send the campaign?")).toBeInTheDocument()
+    expect(
+      screen.getByRole("dialog", { name: "Send the campaign?" }),
+    ).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Send to 42 people" }))
     expect(send).toHaveBeenCalledWith({
       stillSellingSendRequest: { expected_recipients: 42 },

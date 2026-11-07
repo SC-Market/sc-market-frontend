@@ -87,6 +87,19 @@ describe("MissionRatingDialog", () => {
     expect(screen.getByText(mockMissionName)).toBeInTheDocument()
   })
 
+  it("is named by its title", () => {
+    const store = createMockStore()
+    render(
+      <Provider store={store}>
+        <MissionRatingDialog {...defaultProps} />
+      </Provider>,
+    )
+
+    expect(
+      screen.getByRole("dialog", { name: "Rate Mission" }),
+    ).toBeInTheDocument()
+  })
+
   it("renders difficulty rating field (Requirement 49.1)", () => {
     const store = createMockStore()
     render(

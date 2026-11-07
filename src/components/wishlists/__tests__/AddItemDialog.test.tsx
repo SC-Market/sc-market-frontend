@@ -70,6 +70,13 @@ describe("AddItemDialog", () => {
       expect(screen.getByText("Add Item to Shopping List")).toBeInTheDocument()
     })
 
+    it("is named by its title", () => {
+      renderComponent()
+      expect(
+        screen.getByRole("dialog", { name: "Add Item to Shopping List" }),
+      ).toBeInTheDocument()
+    })
+
     it("should not render the dialog when closed", () => {
       renderComponent({ open: false })
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument()

@@ -3,10 +3,6 @@ import {
   Alert,
   Button,
   Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -25,6 +21,7 @@ import {
   type IdentityActionId,
 } from "../../features/admin/hooks/useIdentityAction"
 import { REASON_MIN, REASON_MAX } from "./identityShared"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 
 export const SPECTRUM_ID_RE = /^[0-9]{1,20}$/
 
@@ -115,108 +112,14 @@ export function ActionDialog(props: {
   }
 
   return (
-    <Dialog open={action !== null} onClose={close} fullWidth maxWidth="sm">
-      {action && (
-        <>
-          <DialogTitle>{titles[action]}</DialogTitle>
-          <DialogContent>
-            <Stack spacing={2} sx={{ mt: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                {bodies[action]}
-              </Typography>
-              {action === "unlinkDiscord" && discordOnlyLogin && (
-                <Alert severity="warning">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={allowNoLogin}
-                        onChange={(e) => setAllowNoLogin(e.target.checked)}
-                        inputProps={{
-                          "aria-label": t(
-                            "adminIdentity.dialog.allowNoLogin",
-                            "Discord is the only login method. Leave the account without one.",
-                          ),
-                        }}
-                      />
-                    }
-                    label={t(
-                      "adminIdentity.dialog.allowNoLogin",
-                      "Discord is the only login method. Leave the account without one.",
-                    )}
-                  />
-                </Alert>
-              )}
-              {action === "spectrum" && (
-                <>
-                  <RadioGroup
-                    row
-                    value={spectrumMode}
-                    onChange={(e) =>
-                      setSpectrumMode(
-                        e.target.value === "set" ? "set" : "clear",
-                      )
-                    }
-                  >
-                    <FormControlLabel
-                      value="clear"
-                      control={<Radio />}
-                      label={t("adminIdentity.dialog.spectrumClear", "Clear")}
-                    />
-                    <FormControlLabel
-                      value="set"
-                      control={<Radio />}
-                      label={t("adminIdentity.dialog.spectrumSet", "Set")}
-                    />
-                  </RadioGroup>
-                  {spectrumMode === "set" && (
-                    <TextField
-                      label={t(
-                        "adminIdentity.dialog.spectrumId",
-                        "Spectrum id (digits)",
-                      )}
-                      value={spectrumId}
-                      onChange={(e) => setSpectrumId(e.target.value)}
-                      error={
-                        spectrumId !== "" &&
-                        !SPECTRUM_ID_RE.test(spectrumId.trim())
-                      }
-                      inputProps={{
-                        "data-testid": "identity-spectrum-id",
-                        inputMode: "numeric",
-                        autoComplete: "off",
-                      }}
-                    />
-                  )}
-                </>
-              )}
-              <TextField
-                label={t("adminIdentity.dialog.reason", "Reason")}
-                value={reason}
-                onChange={(e) => setReason(e.target.value.slice(0, REASON_MAX))}
-                multiline
-                minRows={2}
-                required
-                helperText={t(
-                  "adminIdentity.dialog.reasonHelp",
-                  "Required, {{min}} to {{max}} characters. Kept in the audit log; the user never sees it.",
-                  { min: REASON_MIN, max: REASON_MAX },
-                )}
-                inputProps={{ "data-testid": "identity-reason" }}
-              />
-              <Typography variant="caption" color="text.primary">
-                {t(
-                  "adminIdentity.dialog.stepUpNote",
-                  "You will be asked for a two-factor code if you haven't entered one in the last 10 minutes.",
-                )}
-              </Typography>
-              {identityAction.error && (
-                <Alert severity="error">
-                  {describeMfaError(identityAction.error, t)}
-                </Alert>
-              )}
-            </Stack>
-          </DialogContent>
-          <DialogActions>
+    <ResponsiveDialog
+      open={action !== null}
+      onClose={close}
+      maxWidth="sm"
+      title={action ? titles[action] : undefined}
+      actions={
+        action && (
+          <>
             <Button color="inherit" onClick={close}>
               {t("adminIdentity.dialog.cancel", "Cancel")}
             </Button>
@@ -229,9 +132,104 @@ export function ActionDialog(props: {
             >
               {titles[action]}
             </Button>
-          </DialogActions>
-        </>
+          </>
+        )
+      }
+    >
+      {action && (
+        <Stack spacing={2} sx={{ mt: 1 }}>
+          <Typography variant="body2" color="text.secondary">
+            {bodies[action]}
+          </Typography>
+          {action === "unlinkDiscord" && discordOnlyLogin && (
+            <Alert severity="warning">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={allowNoLogin}
+                    onChange={(e) => setAllowNoLogin(e.target.checked)}
+                    inputProps={{
+                      "aria-label": t(
+                        "adminIdentity.dialog.allowNoLogin",
+                        "Discord is the only login method. Leave the account without one.",
+                      ),
+                    }}
+                  />
+                }
+                label={t(
+                  "adminIdentity.dialog.allowNoLogin",
+                  "Discord is the only login method. Leave the account without one.",
+                )}
+              />
+            </Alert>
+          )}
+          {action === "spectrum" && (
+            <>
+              <RadioGroup
+                row
+                value={spectrumMode}
+                onChange={(e) =>
+                  setSpectrumMode(e.target.value === "set" ? "set" : "clear")
+                }
+              >
+                <FormControlLabel
+                  value="clear"
+                  control={<Radio />}
+                  label={t("adminIdentity.dialog.spectrumClear", "Clear")}
+                />
+                <FormControlLabel
+                  value="set"
+                  control={<Radio />}
+                  label={t("adminIdentity.dialog.spectrumSet", "Set")}
+                />
+              </RadioGroup>
+              {spectrumMode === "set" && (
+                <TextField
+                  label={t(
+                    "adminIdentity.dialog.spectrumId",
+                    "Spectrum id (digits)",
+                  )}
+                  value={spectrumId}
+                  onChange={(e) => setSpectrumId(e.target.value)}
+                  error={
+                    spectrumId !== "" && !SPECTRUM_ID_RE.test(spectrumId.trim())
+                  }
+                  inputProps={{
+                    "data-testid": "identity-spectrum-id",
+                    inputMode: "numeric",
+                    autoComplete: "off",
+                  }}
+                />
+              )}
+            </>
+          )}
+          <TextField
+            label={t("adminIdentity.dialog.reason", "Reason")}
+            value={reason}
+            onChange={(e) => setReason(e.target.value.slice(0, REASON_MAX))}
+            multiline
+            minRows={2}
+            required
+            helperText={t(
+              "adminIdentity.dialog.reasonHelp",
+              "Required, {{min}} to {{max}} characters. Kept in the audit log; the user never sees it.",
+              { min: REASON_MIN, max: REASON_MAX },
+            )}
+            inputProps={{ "data-testid": "identity-reason" }}
+          />
+          <Typography variant="caption" color="text.primary">
+            {t(
+              "adminIdentity.dialog.stepUpNote",
+              "You will be asked for a two-factor code if you haven't entered one in the last 10 minutes.",
+            )}
+          </Typography>
+          {identityAction.error && (
+            <Alert severity="error">
+              {describeMfaError(identityAction.error, t)}
+            </Alert>
+          )}
+        </Stack>
       )}
-    </Dialog>
+    </ResponsiveDialog>
   )
 }

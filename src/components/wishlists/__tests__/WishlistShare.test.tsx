@@ -96,6 +96,17 @@ describe("WishlistShare Component", () => {
       expect(screen.getByText("My Test Wishlist")).toBeInTheDocument()
     })
 
+    it("is named by its title and has one Close button", () => {
+      renderWithRedux(
+        <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,
+      )
+
+      expect(
+        screen.getByRole("dialog", { name: "Share Wishlist" }),
+      ).toBeInTheDocument()
+      expect(screen.getAllByRole("button", { name: /Close/i })).toHaveLength(1)
+    })
+
     it("should render privacy settings section", () => {
       renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />,

@@ -5,11 +5,6 @@ import {
   Button,
   Card,
   CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Skeleton,
   Stack,
   Typography,
@@ -26,6 +21,7 @@ import {
   StillSellingSamplePreview,
 } from "./StillSellingCampaignParts"
 import { FeedbackSection } from "./StillSellingFeedback"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 
 /** Poll while a send runs, so the progress counts move. */
 const RUNNING_POLL_MS = 10_000
@@ -283,59 +279,43 @@ export function StillSellingCampaignCard() {
         )}
       </CardContent>
 
-      <Dialog open={testConfirmOpen} onClose={() => setTestConfirmOpen(false)}>
-        <DialogTitle>
-          {t(
-            "adminUi.stillSelling.testConfirmTitle",
-            "Send a test DM to yourself?",
-          )}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t("adminUi.stillSelling.testConfirmBody", {
-              locale,
-              limit: 5,
-            })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setTestConfirmOpen(false)}>
-            {t("adminUi.stillSelling.cancel", "Cancel")}
-          </Button>
-          <Button variant="contained" onClick={onSendTest}>
-            {t("adminUi.stillSelling.testConfirmSend", "Send it to me")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={testConfirmOpen}
+        onClose={() => setTestConfirmOpen(false)}
+        title={t(
+          "adminUi.stillSelling.testConfirmTitle",
+          "Send a test DM to yourself?",
+        )}
+        message={t("adminUi.stillSelling.testConfirmBody", {
+          locale,
+          limit: 5,
+        })}
+        onConfirm={onSendTest}
+        confirmLabel={t(
+          "adminUi.stillSelling.testConfirmSend",
+          "Send it to me",
+        )}
+        cancelLabel={t("adminUi.stillSelling.cancel", "Cancel")}
+        maxWidth="sm"
+      />
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>
-          {t("adminUi.stillSelling.confirmTitle", "Send the campaign?")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t("adminUi.stillSelling.confirmBody", {
-              count: data?.recipients ?? 0,
-              batch: data?.batch_size ?? 0,
-              seconds: data?.batch_pause_seconds ?? 0,
-            })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)}>
-            {t("adminUi.stillSelling.cancel", "Cancel")}
-          </Button>
-          <Button
-            color="warning"
-            variant="contained"
-            onClick={() => void onSend()}
-          >
-            {t("adminUi.stillSelling.confirmSend", {
-              count: data?.recipients ?? 0,
-            })}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        title={t("adminUi.stillSelling.confirmTitle", "Send the campaign?")}
+        message={t("adminUi.stillSelling.confirmBody", {
+          count: data?.recipients ?? 0,
+          batch: data?.batch_size ?? 0,
+          seconds: data?.batch_pause_seconds ?? 0,
+        })}
+        onConfirm={() => void onSend()}
+        confirmLabel={t("adminUi.stillSelling.confirmSend", {
+          count: data?.recipients ?? 0,
+        })}
+        cancelLabel={t("adminUi.stillSelling.cancel", "Cancel")}
+        confirmColor="warning"
+        maxWidth="sm"
+      />
     </Card>
   )
 }
