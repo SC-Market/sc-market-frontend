@@ -260,3 +260,6 @@ export function useOrderDetails(order: Order) {
     refetchOrder,
   }
 }
+
+/** Everything useOrderDetails returns for one order. */
+export type OrderDetailsState = ReturnType<typeof useOrderDetails>

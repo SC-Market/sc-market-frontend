@@ -292,3 +292,6 @@ export function useOfferDetails(
 }
 
 export { normalizeOfferStatus }
+
+/** Everything useOfferDetails returns for one offer session. */
+export type OfferDetailsState = ReturnType<typeof useOfferDetails>

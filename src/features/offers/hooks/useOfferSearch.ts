@@ -215,3 +215,6 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     issueAlert,
   }
 }
+
+/** Everything useOfferSearch returns: the offer list's search state and results. */
+export type OfferSearchResult = ReturnType<typeof useOfferSearch>

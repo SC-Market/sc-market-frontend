@@ -1,7 +1,6 @@
 import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import { useGetShopQuery } from "../../store/api/v2/market"
 import {
-  Chip,
   Grid,
   Link as MaterialLink,
   Paper,
@@ -11,41 +10,31 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  Autocomplete,
-  TextField,
-  Box,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material"
-import React, { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import {
-  AnnouncementRounded,
-  CancelRounded,
-  CheckCircleRounded,
-  HourglassTopRounded,
-} from "@mui/icons-material"
-import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
+import {} from "@mui/icons-material"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
 import { Link, useSearchParams } from "react-router-dom"
-import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
-import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
+import { OfferAcceptRow } from "./OfferAcceptRow"
+import { OfferAssignedRow } from "./OfferAssignedRow"
+import { OfferTermsRows } from "./OfferTermsRows"
 import { SHOP_PATHS, ORDER_PATHS } from "../../routes/paths"
-import { useFormatters } from "../../util/format"
 import { useClearEntityNotifications } from "../../features/notifications/hooks/useClearEntityNotifications"
 
 export function OfferMessagesArea(props: {
@@ -90,39 +79,23 @@ export function OfferDetailsArea(props: {
   session: GetOfferSessionV2Response
   selectedOfferIndex?: number
 }) {
-  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
   const { t } = useTranslation()
   const { session } = props
 
+  const details = useOfferDetails(session, props.selectedOfferIndex)
   const {
     profile,
     publicContract,
     currentOffer,
-    offerChanges,
-    isEditingAssigned,
-    setIsEditingAssigned,
-    target,
-    setTarget,
-    targetObject,
-    setTargetObject,
-    options,
-    members,
-    handleAssignSave,
-    handleAssignCancel,
-    handleUnassign,
-    handleClaimOffer,
-    actions,
     statusKey,
-    statusColor,
-    showAccept,
     showCancel,
     isUpdatingStatus,
     updateStatusCallback,
     createThread,
     refetchOffer,
-  } = useOfferDetails(session, props.selectedOfferIndex)
+  } = details
 
   const { data: shop } = useGetShopQuery(
     { slug: session.shop_slug! },
@@ -146,48 +119,6 @@ export function OfferDetailsArea(props: {
     next.delete("action")
     setSearchParams(next, { replace: true })
   }, [searchParams, setSearchParams, canWithdraw, profile])
-
-  const v2SummaryItems = useMemo(() => {
-    if (!currentOffer) return []
-    if (currentOffer?.market_listings_v2?.length) {
-      return currentOffer.market_listings_v2.flatMap((ml) =>
-        ml.v2_variants.map((v) => ({
-          order_item_id: v.variant_id,
-          listing_id: ml.listing_id,
-          item_id: "",
-          listing_title: ml.title,
-          variant: {
-            variant_id: v.variant_id,
-            attributes: v.attributes,
-            display_name: v.display_name,
-            short_name: v.short_name,
-          },
-          quantity: v.quantity,
-          price_per_unit: v.price_per_unit,
-          subtotal: v.quantity * v.price_per_unit,
-        })),
-      )
-    }
-    // Fall back to V1 market_listings
-    if (currentOffer?.market_listings?.length) {
-      return currentOffer.market_listings.map((ml) => ({
-        order_item_id: ml.listing_id,
-        listing_id: ml.listing_id,
-        item_id: "",
-        listing_title: ml.title,
-        variant: {
-          variant_id: "",
-          attributes: {},
-          display_name: "",
-          short_name: "",
-        },
-        quantity: ml.quantity,
-        price_per_unit: ml.price,
-        subtotal: ml.quantity * ml.price,
-      }))
-    }
-    return []
-  }, [currentOffer])
 
   if (!currentOffer) {
     return (
@@ -289,300 +220,12 @@ export function OfferDetailsArea(props: {
             )}
 
             {/* Assigned row */}
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  {t("orderDetailsArea.assigned", "Assigned")}
-                  {actions.canAssign && (
-                    <Button
-                      size="small"
-                      variant="text"
-                      onClick={() => setIsEditingAssigned(!isEditingAssigned)}
-                      sx={{ textTransform: "none", fontSize: "0.75rem" }}
-                    >
-                      {isEditingAssigned
-                        ? t("common.cancel")
-                        : t("memberAssignArea.assign")}
-                    </Button>
-                  )}
-                </Stack>
-              </TableCell>
-              <TableCell align="right">
-                <Stack
-                  direction="row"
-                  justifyContent="right"
-                  alignItems="center"
-                  spacing={1}
-                >
-                  {session.assigned_to ? (
-                    <Stack direction="column">
-                      <UserDetails user={session.assigned_to} />
-                    </Stack>
-                  ) : (
-                    <>
-                      <Typography variant="body2" color="text.secondary">
-                        {t("orderDetailsArea.none", "None")}
-                      </Typography>
-                      {actions.canClaim && (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleClaimOffer}
-                        >
-                          {t("orderDetailsArea.claim", "Claim")}
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </Stack>
-
-                {/* Assign Member Dialog */}
-                <Dialog
-                  open={isEditingAssigned}
-                  onClose={handleAssignCancel}
-                  maxWidth="xs"
-                  fullWidth
-                >
-                  <DialogTitle>
-                    {t("memberAssignArea.assignMember", "Assign Member")}
-                  </DialogTitle>
-                  <DialogContent>
-                    <Autocomplete
-                      filterOptions={(x) => x}
-                      fullWidth
-                      size="small"
-                      sx={{ mt: 1 }}
-                      options={
-                        target
-                          ? options
-                          : members
-                              .map((u) => ({
-                                username: u.username,
-                                display_name: u.username,
-                              }))
-                              .slice(0, 8)
-                      }
-                      getOptionLabel={(option) =>
-                        `${option.username} (${option.display_name})`
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={t("memberAssignArea.handle")}
-                          SelectProps={{
-                            IconComponent: KeyboardArrowDownRoundedIcon,
-                          }}
-                        />
-                      )}
-                      value={targetObject}
-                      onChange={(_event: React.SyntheticEvent, newValue) => {
-                        setTargetObject(newValue)
-                      }}
-                      inputValue={target}
-                      onInputChange={(_event, newInputValue) => {
-                        setTarget(newInputValue)
-                      }}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    {session.assigned_to && (
-                      <Button color="error" onClick={handleUnassign}>
-                        {t("memberAssignArea.unassign", "Unassign")}
-                      </Button>
-                    )}
-                    <Box sx={{ flex: 1 }} />
-                    <Button onClick={handleAssignCancel}>
-                      {t("common.cancel", "Cancel")}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={handleAssignSave}
-                      disabled={!targetObject}
-                    >
-                      {t("common.save", "Save")}
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {t("OfferDetailsArea.date")}
-              </TableCell>
-              <TableCell align="right">
-                <Stack direction="row" justifyContent={"right"}>
-                  {fmt.dateTime(currentOffer.created_at, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </Stack>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {t("OfferDetailsArea.status")}
-              </TableCell>
-              <TableCell align="right">
-                <Stack direction="row" justifyContent={"right"}>
-                  <Chip
-                    label={t(
-                      `OffersViewPaginated.${statusKey}`,
-                      session.status,
-                    )}
-                    color={statusColor}
-                    icon={
-                      statusKey === "waitingSeller" ? (
-                        <AnnouncementRounded />
-                      ) : statusKey === "waitingCustomer" ? (
-                        <HourglassTopRounded />
-                      ) : statusKey === "rejected" ? (
-                        <CancelRounded />
-                      ) : (
-                        <CheckCircleRounded />
-                      )
-                    }
-                  />
-                </Stack>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {t("OfferDetailsArea.title")}
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-              >
-                <Stack direction="row" justifyContent={"right"}>
-                  <Typography
-                    color={"text.secondary"}
-                    variant={"subtitle2"}
-                    sx={{
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                      textAlign: "right",
-                    }}
-                  >
-                    {currentOffer.title}
-                  </Typography>
-                </Stack>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {t("OfferDetailsArea.kind")}
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-              >
-                <Stack direction="row" justifyContent={"right"}>
-                  <Typography
-                    color={"text.secondary"}
-                    variant={"subtitle2"}
-                    sx={{
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                      textAlign: "right",
-                    }}
-                  >
-                    {currentOffer.kind}
-                  </Typography>
-                </Stack>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              {/*<TableCell component="th" scope="row">*/}
-              {/*  Description*/}
-              {/*</TableCell>*/}
-              <TableCell
-                colSpan={2}
-                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-              >
-                <Stack direction="column" spacing={theme.layoutSpacing.compact}>
-                  {t("OfferDetailsArea.details")}
-                  <Typography
-                    color={"text.secondary"}
-                    variant={"subtitle2"}
-                    component="div"
-                    sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-                  >
-                    <MarkdownRender text={currentOffer.description} />
-                  </Typography>
-                  {v2SummaryItems.length > 0 && (
-                    <OrderSummarySectionV2
-                      items={v2SummaryItems}
-                      offerChanges={offerChanges}
-                    />
-                  )}
-                </Stack>
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {t("OfferDetailsArea.offer")}
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent={"right"}
-                  spacing={1}
-                  alignItems="center"
-                >
-                  <Typography
-                    color={"text.secondary"}
-                    variant={"subtitle2"}
-                    sx={{
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                      textAlign: "right",
-                    }}
-                  >
-                    {fmt.number(+currentOffer.cost)}{" "}
-                    <Typography
-                      color={"text.primary"}
-                      variant={"subtitle2"}
-                      display={"inline"}
-                      sx={{
-                        wordBreak: "break-word",
-                        overflowWrap: "break-word",
-                      }}
-                    >
-                      aUEC{" "}
-                      {t(PAYMENT_TYPE_MAP.get(currentOffer.payment_type) || "")}
-                    </Typography>
-                  </Typography>
-                  {offerChanges?.costChanged && (
-                    <Chip
-                      label={t("contractsUi.newBadge")}
-                      size="small"
-                      color="primary"
-                    />
-                  )}
-                </Stack>
-              </TableCell>
-            </TableRow>
+            <OfferAssignedRow session={session} details={details} />
+            <OfferTermsRows
+              session={session}
+              details={details}
+              currentOffer={currentOffer}
+            />
             {session.discord_server_id && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -629,58 +272,11 @@ export function OfferDetailsArea(props: {
                 </TableCell>
               </TableRow>
             )}
-            {showAccept && isLatestOffer && (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {t("OfferDetailsArea.acceptOrDecline")}
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-                >
-                  <Stack
-                    direction={{ xs: "column", sm: "row" }}
-                    justifyContent={{ xs: "stretch", sm: "right" }}
-                    spacing={theme.layoutSpacing.compact}
-                    sx={{ gap: theme.layoutSpacing.compact }}
-                  >
-                    <LoadingButton
-                      color={"success"}
-                      variant={"contained"}
-                      loading={isUpdatingStatus}
-                      onClick={() => updateStatusCallback("accepted")}
-                      fullWidth={isMobile}
-                    >
-                      {t("OfferDetailsArea.accept")}
-                    </LoadingButton>
-                    <Link
-                      to={ORDER_PATHS.counterOffer(session.session_id)}
-                      style={{ width: isMobile ? "100%" : "auto" }}
-                    >
-                      <LoadingButton
-                        color={"warning"}
-                        variant={"contained"}
-                        fullWidth={isMobile}
-                        sx={{ width: isMobile ? "100%" : "auto" }}
-                      >
-                        {t("OfferDetailsArea.counterOffer")}
-                      </LoadingButton>
-                    </Link>
-                    <LoadingButton
-                      color={"error"}
-                      variant={"contained"}
-                      loading={isUpdatingStatus}
-                      onClick={() => updateStatusCallback("rejected")}
-                      fullWidth={isMobile}
-                    >
-                      {t("OfferDetailsArea.reject")}
-                    </LoadingButton>
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            )}
+            <OfferAcceptRow
+              session={session}
+              details={details}
+              isLatestOffer={isLatestOffer}
+            />
             {showCancel && isLatestOffer && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
