@@ -1,4 +1,3 @@
-import React from "react"
 import { useTranslation } from "react-i18next"
 import {
   Typography,
@@ -13,26 +12,20 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   Box,
   IconButton,
-  Switch,
-  FormControlLabel,
-  Autocomplete,
 } from "@mui/material"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { AdminIcons } from "../../components/icons"
-import {
-  MarkdownRender,
-  MarkdownEditor,
-} from "../../components/markdown/Markdown.lazy"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
+import { CreateAlertDialog } from "./CreateAlertDialog"
+import { EditAlertDialog } from "./EditAlertDialog"
 import { safeRedirectPath } from "../../util/safeRedirect"
-import { AlertChannelsField } from "../../features/admin/components/AlertChannelsField"
 import { useFormatters } from "../../util/format"
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
 
@@ -41,6 +34,7 @@ export function AdminAlertsView() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
+  const alerts = useAdminAlerts()
   const {
     alertsData,
     isLoading,
@@ -55,38 +49,18 @@ export function AdminAlertsView() {
     activeFilter,
     setActiveFilter,
     selectedAlert,
-    isCreateModalOpen,
-    isEditModalOpen,
     isDeleteModalOpen,
     handleOpenCreateModal,
     handleOpenEditModal,
     handleOpenDeleteModal,
     handleCloseModals,
-    formData,
-    setFormData,
-    channels,
-    setChannels,
     confirmEmailOpen,
     setConfirmEmailOpen,
-    linkError,
-    handleLinkChange,
-    contractorError,
-    contractorSearchQuery,
-    setContractorSearchQuery,
-    selectedContractor,
-    contractorOptions,
-    isSearchingContractors,
-    handleContractorChange,
-    handleTargetTypeChange,
     isCreating,
-    isUpdating,
     isDeleting,
     handleCreateAlert,
-    handleUpdateAlert,
     handleDeleteAlert,
-    updateAlertMut,
-    issueAlert,
-  } = useAdminAlerts()
+  } = alerts
 
   const columns: GridColDef[] = [
     {
@@ -332,164 +306,7 @@ export function AdminAlertsView() {
       )}
 
       {/* Create Alert Modal */}
-      <Dialog
-        open={isCreateModalOpen}
-        onClose={handleCloseModals}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>
-          {t("admin.alerts.createAlert", "Create Alert")}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label={t("admin.alerts.field.title", "Title")}
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              sx={{ mb: 2 }}
-              inputProps={{ maxLength: 200 }}
-            />
-            <TextField
-              fullWidth
-              label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
-              placeholder={t(
-                "admin.alerts.linkPlaceholder",
-                "https://example.com",
-              )}
-              value={formData.link || ""}
-              onChange={(e) => handleLinkChange(e.target.value)}
-              error={!!linkError}
-              helperText={linkError}
-              sx={{ mb: 2 }}
-              type="url"
-            />
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="admin-alerts-view-target-type-2-label">
-                {t("admin.alerts.targetType", "Target Type")}
-              </InputLabel>
-              <Select
-                labelId="admin-alerts-view-target-type-2-label"
-                value={formData.target_type}
-                label={t("admin.alerts.targetType", "Target Type")}
-                onChange={(e) => handleTargetTypeChange(e.target.value)}
-              >
-                <MenuItem value="all_users">
-                  {t("adminUi.alerts.targetTypes.allUsers")}
-                </MenuItem>
-                <MenuItem value="org_members">
-                  {t("adminUi.alerts.targetTypes.orgMembers")}
-                </MenuItem>
-                <MenuItem value="org_owners">
-                  {t("adminUi.alerts.targetTypes.orgOwners")}
-                </MenuItem>
-                <MenuItem value="admins_only">
-                  {t("adminUi.alerts.targetTypes.adminsOnly")}
-                </MenuItem>
-                <MenuItem value="specific_org">
-                  {t("adminUi.alerts.targetTypes.specificOrg")}
-                </MenuItem>
-              </Select>
-            </FormControl>
-            {formData.target_type === "specific_org" && (
-              <Autocomplete
-                fullWidth
-                options={contractorOptions}
-                getOptionLabel={(option) => option.name}
-                value={selectedContractor}
-                onChange={(event, newValue) => handleContractorChange(newValue)}
-                inputValue={contractorSearchQuery}
-                onInputChange={(event, newInputValue) => {
-                  setContractorSearchQuery(newInputValue)
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label={t(
-                      "admin.alerts.selectContractor",
-                      "Select Contractor",
-                    )}
-                    error={!!contractorError}
-                    helperText={contractorError}
-                    placeholder={t(
-                      "admin.alerts.contractorPlaceholder",
-                      "Search orgs",
-                    )}
-                  />
-                )}
-                renderOption={(props, option) => (
-                  <Box component="li" {...props}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {option.avatar && (
-                        <Box
-                          component="img"
-                          src={option.avatar}
-                          alt={option.name}
-                          sx={{ width: 24, height: 24, borderRadius: "50%" }}
-                        />
-                      )}
-                      <Box>
-                        <Typography variant="body2">{option.name}</Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {option.spectrum_id}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
-                sx={{ mb: 2 }}
-                noOptionsText={t(
-                  "admin.alerts.noContractorsFound",
-                  "No contractors found",
-                )}
-                loading={isSearchingContractors}
-                loadingText={t("admin.alerts.searching", "Searching...")}
-              />
-            )}
-            <AlertChannelsField
-              channels={channels}
-              onChange={setChannels}
-              targetType={formData.target_type}
-              targetSpectrumId={formData.target_spectrum_id}
-            />
-            <MarkdownEditor
-              value={formData.content}
-              onChange={(value: string) =>
-                setFormData({ ...formData, content: value })
-              }
-              TextFieldProps={{
-                label: t("admin.alerts.content", "Content"),
-                placeholder: t(
-                  "admin.alerts.contentPlaceholder",
-                  "Enter alert content in Markdown format...",
-                ),
-              }}
-              variant="vertical"
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-          <Button
-            onClick={() => handleCreateAlert()}
-            variant="contained"
-            disabled={
-              isCreating ||
-              !formData.title ||
-              !formData.content ||
-              !!linkError ||
-              !!contractorError
-            }
-          >
-            {isCreating
-              ? t("admin.alerts.creating", "Creating...")
-              : t("admin.alerts.create", "Create")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CreateAlertDialog alerts={alerts} />
 
       {/* Emailing every user: confirm first. */}
       <Dialog
@@ -525,188 +342,7 @@ export function AdminAlertsView() {
       </Dialog>
 
       {/* Edit Alert Modal */}
-      <Dialog
-        open={isEditModalOpen}
-        onClose={handleCloseModals}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>{t("admin.alerts.editAlert", "Edit Alert")}</DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label={t("admin.alerts.field.title", "Title")}
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              sx={{ mb: 2 }}
-              inputProps={{ maxLength: 200 }}
-            />
-            <TextField
-              fullWidth
-              label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
-              placeholder={t(
-                "admin.alerts.linkPlaceholder",
-                "https://example.com",
-              )}
-              value={formData.link || ""}
-              onChange={(e) => handleLinkChange(e.target.value)}
-              error={!!linkError}
-              helperText={linkError}
-              sx={{ mb: 2 }}
-              type="url"
-            />
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="admin-alerts-view-target-type-3-label">
-                {t("admin.alerts.targetType", "Target Type")}
-              </InputLabel>
-              <Select
-                labelId="admin-alerts-view-target-type-3-label"
-                value={formData.target_type}
-                label={t("admin.alerts.targetType", "Target Type")}
-                onChange={(e) => handleTargetTypeChange(e.target.value)}
-              >
-                <MenuItem value="all_users">
-                  {t("adminUi.alerts.targetTypes.allUsers")}
-                </MenuItem>
-                <MenuItem value="org_members">
-                  {t("adminUi.alerts.targetTypes.orgMembers")}
-                </MenuItem>
-                <MenuItem value="org_owners">
-                  {t("adminUi.alerts.targetTypes.orgOwners")}
-                </MenuItem>
-                <MenuItem value="admins_only">
-                  {t("adminUi.alerts.targetTypes.adminsOnly")}
-                </MenuItem>
-                <MenuItem value="specific_org">
-                  {t("adminUi.alerts.targetTypes.specificOrg")}
-                </MenuItem>
-              </Select>
-            </FormControl>
-            {formData.target_type === "specific_org" && (
-              <Autocomplete
-                fullWidth
-                options={contractorOptions}
-                getOptionLabel={(option) => option.name}
-                value={selectedContractor}
-                onChange={(event, newValue) => handleContractorChange(newValue)}
-                inputValue={contractorSearchQuery}
-                onInputChange={(event, newInputValue) => {
-                  setContractorSearchQuery(newInputValue)
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label={t(
-                      "admin.alerts.selectContractor",
-                      "Select Contractor",
-                    )}
-                    error={!!contractorError}
-                    helperText={contractorError}
-                    placeholder={t(
-                      "admin.alerts.contractorPlaceholder",
-                      "Search orgs",
-                    )}
-                  />
-                )}
-                renderOption={(props, option) => (
-                  <Box component="li" {...props}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {option.avatar && (
-                        <Box
-                          component="img"
-                          src={option.avatar}
-                          alt={option.name}
-                          sx={{ width: 24, height: 24, borderRadius: "50%" }}
-                        />
-                      )}
-                      <Box>
-                        <Typography variant="body2">{option.name}</Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {option.spectrum_id}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
-                sx={{ mb: 2 }}
-                noOptionsText={t(
-                  "admin.alerts.noContractorsFound",
-                  "No contractors found",
-                )}
-                loading={isSearchingContractors}
-                loadingText={t("admin.alerts.searching", "Searching...")}
-              />
-            )}
-            <MarkdownEditor
-              value={formData.content}
-              onChange={(value: string) =>
-                setFormData({ ...formData, content: value })
-              }
-              TextFieldProps={{
-                label: t("admin.alerts.content", "Content"),
-                placeholder: t(
-                  "admin.alerts.contentPlaceholder",
-                  "Enter alert content in Markdown format...",
-                ),
-              }}
-              variant="vertical"
-            />
-            {selectedAlert && (
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={selectedAlert.active}
-                    onChange={(e) => {
-                      if (selectedAlert) {
-                        updateAlertMut({
-                          alertId: selectedAlert.alert_id,
-                          data: { active: e.target.checked },
-                        })
-                          .unwrap()
-                          .then(() => {
-                            issueAlert({
-                              message: t(
-                                "admin.alerts.updated",
-                                "Alert updated",
-                              ),
-                              severity: "success",
-                            })
-                          })
-                          .catch((error) => {
-                            issueAlert(error)
-                          })
-                      }
-                    }}
-                  />
-                }
-                label={t("admin.alerts.active", "Active")}
-                sx={{ mt: 2 }}
-              />
-            )}
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleUpdateAlert}
-            variant="contained"
-            disabled={
-              isUpdating ||
-              !formData.title ||
-              !formData.content ||
-              !!linkError ||
-              !!contractorError
-            }
-          >
-            {isUpdating
-              ? t("admin.alerts.updating", "Updating...")
-              : t("admin.alerts.update", "Update")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <EditAlertDialog alerts={alerts} />
 
       {/* Delete Alert Modal */}
       <Dialog

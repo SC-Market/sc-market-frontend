@@ -333,3 +333,6 @@ export function useAdminAlerts() {
     issueAlert,
   }
 }
+
+/** Everything useAdminAlerts returns: list state, filters, form and dialog state. */
+export type AdminAlertsState = ReturnType<typeof useAdminAlerts>
