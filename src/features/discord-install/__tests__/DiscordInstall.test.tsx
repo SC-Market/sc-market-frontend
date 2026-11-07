@@ -58,7 +58,6 @@ const reach = (r: Partial<marketApi.DiscordReachabilityResponse> | undefined) =>
       dm_reachable: false,
       shares_server: false,
       user_installed: false,
-      user_install_counts_as_dm: true,
       user_install_available: true,
       user_install_url: null,
       ...r,

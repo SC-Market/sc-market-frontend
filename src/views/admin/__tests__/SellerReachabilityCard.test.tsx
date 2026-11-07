@@ -69,7 +69,6 @@ const report = (
     discord_dm_refusal_codes: [50007, 50278],
     discord_shared_server_checked_at: checkedAt,
     discord_shared_server_fresh_days: 3,
-    discord_user_install_counts_as_dm: true,
     email_delivery_results: true,
     email_delivered_window_days: 90,
     push_delivery_results: false,
