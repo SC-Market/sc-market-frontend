@@ -35,6 +35,21 @@ export function stripQuery(url: string): string {
 }
 
 /**
+ * The browser's "ResizeObserver loop completed with undelivered
+ * notifications" (Chromium, Safari; older Chromium: "ResizeObserver loop
+ * limit exceeded"): a ResizeObserver callback resized something, so the
+ * browser deferred the rest to the next frame and reported it on
+ * window.onerror. Nothing threw and nothing was lost, so it is not reported.
+ * Matched on the whole message only: any other ResizeObserver error is ours.
+ */
+const RESIZE_OBSERVER_LOOP =
+  /^(?:Uncaught )?(?:Error: )?ResizeObserver loop (completed with undelivered notifications|limit exceeded)\.?$/
+
+export function isResizeObserverLoopNoise(message: string): boolean {
+  return RESIZE_OBSERVER_LOOP.test(message.trim())
+}
+
+/**
  * BugSnag Performance (page-load and navigation timings) is analytics, so it
  * only starts after the visitor clicks "Accept" in the cookie banner
  * (components/alert/CookieConsent.tsx). It stores no device id, sends no
@@ -111,6 +126,14 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
             }
           },
           onError: (event) => {
+            if (
+              event.errors.length > 0 &&
+              event.errors.every((error) =>
+                isResizeObserverLoopNoise(error.errorMessage),
+              )
+            ) {
+              return false
+            }
             if (event.request.url) {
               event.request.url = stripQuery(event.request.url)
             }

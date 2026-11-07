@@ -411,11 +411,13 @@
           var reason = event.reason
           var text =
             reason && reason.message ? String(reason.message) : String(reason)
+          // Chromium and Firefox name the chunk's URL, so require one of
+          // ours. Safari's "Importing a module script failed." names none;
+          // before the entry has run only our bootstrap imports modules.
           if (
-            /dynamically imported module|Importing a module script failed/i.test(
-              text,
-            ) &&
-            text.indexOf("/assets/") !== -1
+            (/dynamically imported module/i.test(text) &&
+              text.indexOf("/assets/") !== -1) ||
+            /Importing a module script failed/i.test(text)
           ) {
             tryEmergencyReload()
           }

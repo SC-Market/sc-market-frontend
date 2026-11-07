@@ -30,6 +30,73 @@ describe("document.html", () => {
   })
 })
 
+describe("document.html pre-entry chunk-failure reload", () => {
+  // The inline script with the asset-reload guard, run against a fake window.
+  const guard = documentTemplate.match(
+    /<script data-cfasync="false">\s*(\/\/ Keep in sync with src\/util\/assetReloadGuard\.ts[\s\S]*?)<\/script>/,
+  )?.[1]
+
+  function boot() {
+    const listeners: Record<string, (event: unknown) => void> = {}
+    const store = new Map<string, string>()
+    let reloads = 0
+    const fakeWindow = {
+      addEventListener: (type: string, fn: (event: unknown) => void) => {
+        listeners[type] = fn
+      },
+      location: {
+        origin: "https://sc-market.space",
+        reload: () => {
+          reloads++
+        },
+      },
+    }
+    const fakeSessionStorage = {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => store.set(key, value),
+    }
+    new Function("window", "sessionStorage", guard ?? "")(
+      fakeWindow,
+      fakeSessionStorage,
+    )
+    return {
+      reject: (reason: unknown) => listeners.unhandledrejection({ reason }),
+      reloads: () => reloads,
+    }
+  }
+
+  it("is found in the template", () => {
+    expect(guard).toBeTruthy()
+  })
+
+  it("reloads for Safari's failed entry import, which names no URL", () => {
+    const page = boot()
+    page.reject(new TypeError("Importing a module script failed."))
+    expect(page.reloads()).toBe(1)
+  })
+
+  it("reloads for Chromium's failed import of one of our chunks", () => {
+    const page = boot()
+    page.reject(
+      new TypeError(
+        "Failed to fetch dynamically imported module: https://sc-market.space/assets/entry.client-x.js",
+      ),
+    )
+    expect(page.reloads()).toBe(1)
+  })
+
+  it("ignores another site's chunk and plain network failures", () => {
+    const page = boot()
+    page.reject(
+      new TypeError(
+        "Failed to fetch dynamically imported module: https://cdn.example.com/x.js",
+      ),
+    )
+    page.reject(new TypeError("Load failed"))
+    expect(page.reloads()).toBe(0)
+  })
+})
+
 describe("renderDocument", () => {
   const app =
     '<script>window.__reactRouterContext = {}</script><script type="module">import("/assets/entry.client-x.js")</script>'
