@@ -22,51 +22,17 @@ import {
   Alert,
   ToggleButtonGroup,
   ToggleButton,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  Stack,
-  Button,
-  Tooltip,
-  Card,
-  CardContent,
-  LinearProgress,
-  Autocomplete,
 } from "@mui/material"
-import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import {
-  ViewModuleRounded,
-  ViewListRounded,
-  RestartAltRounded,
-} from "@mui/icons-material"
+import { ViewModuleRounded, ViewListRounded } from "@mui/icons-material"
 import {
   useSearchBlueprintsQuery,
   useGetBlueprintCategoriesQuery,
   useAddBlueprintToInventoryMutation,
   useRemoveBlueprintFromInventoryMutation,
-  useGetUserBlueprintInventoryQuery,
-  useGetManufacturersQuery,
   type BlueprintSearchResult,
 } from "../../store/api/v2/market"
-import {
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom"
-import { inAppClick } from "../../components/links/inAppClick"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
@@ -75,19 +41,9 @@ import {
   TableSkeleton,
 } from "../../components/game-data/GameDataSkeletons"
 import { BLUEPRINT_CARD_GRID } from "../../components/game-data/cardGrids"
-import {
-  UnifiedSearchBar,
-  blueprintParamsToTokens,
-  blueprintTokensToParams,
-  manufacturerSearchTokens,
-  type SearchToken,
-} from "../../components/game-data/UnifiedSearchBar"
-import { formatCategoryName } from "../../util/categoryDisplay"
-import { getCommodityColor } from "../../util/gameIcons"
+import { UnifiedSearchBar } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
-import { formatCraftingTime } from "../../constants/crafting"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
-import { BlueprintTags } from "../../components/game-data/BlueprintTags"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
@@ -98,58 +54,14 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { blueprintsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
-import { common } from "@mui/material/colors"
+
+import { BlueprintResultsTable } from "./BlueprintResultsTable"
+import { BlueprintBrowserFilters } from "./BlueprintBrowserFilters"
+import { useBlueprintFilterParams } from "./useBlueprintFilterParams"
+import { CollectionProgressCard } from "./CollectionProgressCard"
 
 type ViewMode = "grid" | "list"
 const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
-
-function CollectionProgressCard() {
-  const { t } = useTranslation()
-  const { data } = useGetUserBlueprintInventoryQuery({ page: 1, pageSize: 1 })
-  const stats = data?.statistics
-  if (!stats) return null
-  return (
-    <Card sx={{ mb: 2 }}>
-      <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
-        <Typography variant="subtitle2" gutterBottom>
-          {t("blueprintsUi.browser.collectionProgress")}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 0.5 }}>
-          <Box sx={{ flex: 1 }}>
-            <LinearProgress
-              variant="determinate"
-              value={stats.completion_percentage}
-              sx={{ height: 8, borderRadius: 4 }}
-            />
-          </Box>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ minWidth: 80 }}
-          >
-            {stats.completion_percentage.toFixed(1)}%
-          </Typography>
-        </Box>
-        <Typography variant="caption" color="text.secondary">
-          {t("blueprintsUi.browser.collectionCount", {
-            owned: stats.total_owned,
-            count: stats.total_available,
-          })}
-        </Typography>
-        {stats.recently_acquired_count > 0 && (
-          <Chip
-            label={t("blueprintsUi.browser.newThisWeek", {
-              count: stats.recently_acquired_count,
-            })}
-            size="small"
-            color="primary"
-            sx={{ ml: 1, height: 18, fontSize: "0.65rem" }}
-          />
-        )}
-      </CardContent>
-    </Card>
-  )
-}
 
 export function BlueprintBrowser() {
   const { t } = useTranslation()
@@ -167,91 +79,38 @@ export function BlueprintBrowser() {
   // Search and filter state — persisted to URL params
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const searchText = searchParams.get("q") || ""
-  const category = searchParams.get("category") || ""
-  const subcategory = searchParams.get("subcategory") || ""
-  const rarity = searchParams.get("rarity") || ""
-  const tier: number | "" = searchParams.get("tier")
-    ? Number(searchParams.get("tier"))
-    : ""
-  const craftingStation = searchParams.get("station") || ""
-  const ownedOnly = searchParams.get("owned") === "true"
-  const hasMissionSource = searchParams.get("missions") === "true"
-
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    setSearchParams(params, { replace: true })
-  }
-
-  const setSearchText = (v: string) => updateParam("q", v)
-  const setCategory = (v: string) => {
-    updateParam("category", v)
-    updateParam("subcategory", "")
-  }
-  const setSubcategory = (v: string) => updateParam("subcategory", v)
-  const setTier = (v: number | "") =>
-    updateParam("tier", v === "" ? "" : String(v))
-  const setOwnedOnly = (v: boolean) => updateParam("owned", v ? "true" : "")
-  const setHasMissionSource = (v: boolean) =>
-    updateParam("missions", v ? "true" : "")
-  const source = searchParams.get("source") || ""
-  const setSource = (v: string) => updateParam("source", v)
-  const hideUnsourceable = searchParams.get("hide_unsourceable") !== "false" // default true
-  const setHideUnsourceable = (v: boolean) =>
-    updateParam("hide_unsourceable", v ? "" : "false")
-  const manufacturer = searchParams.get("mfr") || ""
-  const setManufacturer = (v: string) => updateParam("mfr", v)
-  // The filter takes the code ("behr"); users pick and see the name ("Behring").
-  const { data: manufacturers } = useGetManufacturersQuery()
-  const manufacturerOptions = useMemo(() => {
-    const options = manufacturerSearchTokens(manufacturers).sort((a, b) =>
-      a.label.localeCompare(b.label),
-    )
-    // A code from the URL that the list doesn't name stays selectable.
-    if (manufacturer && !options.some((o) => o.value === manufacturer))
-      options.unshift({
-        type: "manufacturer",
-        label: manufacturer,
-        value: manufacturer,
-      })
-    return options
-  }, [manufacturers, manufacturer])
-  const ingredientName = searchParams.get("ingredient") || ""
-  const setIngredientName = (v: string) => updateParam("ingredient", v)
+  const {
+    searchText,
+    category,
+    subcategory,
+    rarity,
+    tier,
+    craftingStation,
+    ownedOnly,
+    hasMissionSource,
+    setSearchText,
+    setCategory,
+    setSubcategory,
+    setTier,
+    setOwnedOnly,
+    setHasMissionSource,
+    source,
+    setSource,
+    hideUnsourceable,
+    setHideUnsourceable,
+    manufacturer,
+    setManufacturer,
+    manufacturerOptions,
+    ingredientName,
+    setIngredientName,
+    searchTokens,
+    handleTokensChange,
+  } = useBlueprintFilterParams(searchParams, setSearchParams)
   const isMobile = useBreakpointDown("lg")
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<BlueprintSearchResult[]>(
     [],
   )
-
-  // Unified search bar tokens
-  const searchTokens = useMemo(
-    () => blueprintParamsToTokens(searchParams),
-    [searchParams],
-  )
-  const handleTokensChange = (tokens: SearchToken[]) => {
-    const tokenParams = blueprintTokensToParams(tokens)
-    const params = new URLSearchParams(searchParams)
-    for (const key of [
-      "q",
-      "category",
-      "subcategory",
-      "rarity",
-      "ingredient",
-      "mfr",
-      "source",
-      "missions",
-      "owned",
-    ]) {
-      params.delete(key)
-    }
-    for (const [k, v] of Object.entries(tokenParams)) {
-      params.set(k, v)
-    }
-    setSearchParams(params, { replace: true })
-  }
 
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
@@ -397,177 +256,33 @@ export function BlueprintBrowser() {
       .sort() || []
 
   const filtersContent = (
-    <Stack spacing={1.5}>
-      <TextField
-        fullWidth
-        size="small"
-        label={t("blueprintsUi.browser.search")}
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        placeholder={t("blueprintsUi.browser.searchPlaceholder")}
-      />
-      <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-category-label">
-          {t("blueprintsUi.browser.category")}
-        </InputLabel>
-        <Select
-          labelId="blueprint-browser-category-label"
-          value={category}
-          label={t("blueprintsUi.browser.category")}
-          onChange={(e) => {
-            setCategory(e.target.value)
-            setSubcategory("")
-          }}
-        >
-          <MenuItem value="">{t("common.all")}</MenuItem>
-          {uniqueCategories.map((c) => (
-            <MenuItem key={c} value={c}>
-              {c}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {subcategoriesForCategory.length > 0 && (
-        <FormControl fullWidth size="small">
-          <InputLabel id="blueprint-browser-subcategory-label">
-            {t("blueprintsUi.browser.subcategory")}
-          </InputLabel>
-          <Select
-            labelId="blueprint-browser-subcategory-label"
-            value={subcategory}
-            label={t("blueprintsUi.browser.subcategory")}
-            onChange={(e) => setSubcategory(e.target.value)}
-          >
-            <MenuItem value="">{t("common.all")}</MenuItem>
-            {subcategoriesForCategory.map((s) => (
-              <MenuItem key={s} value={s}>
-                {s}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
-      <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-tier-label">
-          {t("blueprintsUi.browser.tier")}
-        </InputLabel>
-        <Select
-          labelId="blueprint-browser-tier-label"
-          value={tier}
-          label={t("blueprintsUi.browser.tier")}
-          onChange={(e) =>
-            setTier(e.target.value === "" ? "" : Number(e.target.value))
-          }
-        >
-          <MenuItem value="">{t("common.all")}</MenuItem>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <MenuItem key={n} value={n}>
-              {t("blueprintsUi.tierN", { tier: n })}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {isLoggedIn && (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={ownedOnly}
-              onChange={(e) => setOwnedOnly(e.target.checked)}
-              size="small"
-            />
-          }
-          label={
-            <Typography variant="body2">
-              {t("blueprintsUi.browser.ownedOnly")}
-            </Typography>
-          }
-          sx={{ ml: 0 }}
-        />
-      )}
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={hasMissionSource}
-            onChange={(e) => setHasMissionSource(e.target.checked)}
-            size="small"
-          />
-        }
-        label={
-          <Typography variant="body2">
-            {t("blueprintsUi.browser.hasMissionSource")}
-          </Typography>
-        }
-        sx={{ ml: 0 }}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={hideUnsourceable}
-            onChange={(e) => setHideUnsourceable(e.target.checked)}
-            size="small"
-          />
-        }
-        label={
-          <Typography variant="body2">
-            {t("blueprintsUi.browser.hideUnsourceable")}
-          </Typography>
-        }
-        sx={{ ml: 0 }}
-      />
-      <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-source-label">
-          {t("blueprintsUi.browser.source")}
-        </InputLabel>
-        <Select
-          labelId="blueprint-browser-source-label"
-          value={source}
-          label={t("blueprintsUi.browser.source")}
-          onChange={(e) => setSource(e.target.value)}
-        >
-          <MenuItem value="">{t("common.all")}</MenuItem>
-          <MenuItem value="default">
-            {t("blueprintsUi.browser.sourceDefault")}
-          </MenuItem>
-          <MenuItem value="mission_reward">
-            {t("blueprintsUi.browser.sourceMissionReward")}
-          </MenuItem>
-        </Select>
-      </FormControl>
-      <Autocomplete
-        fullWidth
-        size="small"
-        options={manufacturerOptions}
-        value={
-          manufacturerOptions.find((o) => o.value === manufacturer) ?? null
-        }
-        onChange={(_, option) => setManufacturer(option?.value ?? "")}
-        getOptionLabel={(o) => o.label}
-        isOptionEqualToValue={(o, v) => o.value === v.value}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label={t("blueprintsUi.browser.manufacturer")}
-            placeholder={t("blueprintsUi.browser.manufacturerPlaceholder")}
-          />
-        )}
-      />
-      <TextField
-        fullWidth
-        size="small"
-        label={t("blueprintsUi.browser.ingredient")}
-        value={ingredientName}
-        onChange={(e) => setIngredientName(e.target.value)}
-        placeholder={t("blueprintsUi.browser.ingredientPlaceholder")}
-      />
-      <Button
-        size="small"
-        startIcon={<RestartAltRounded />}
-        onClick={handleResetFilters}
-        sx={{ textTransform: "none" }}
-      >
-        {t("blueprintsUi.browser.resetFilters")}
-      </Button>
-    </Stack>
+    <BlueprintBrowserFilters
+      searchText={searchText}
+      setSearchText={setSearchText}
+      category={category}
+      setCategory={setCategory}
+      subcategory={subcategory}
+      setSubcategory={setSubcategory}
+      uniqueCategories={uniqueCategories}
+      subcategoriesForCategory={subcategoriesForCategory}
+      tier={tier}
+      setTier={setTier}
+      isLoggedIn={isLoggedIn}
+      ownedOnly={ownedOnly}
+      setOwnedOnly={setOwnedOnly}
+      hasMissionSource={hasMissionSource}
+      setHasMissionSource={setHasMissionSource}
+      hideUnsourceable={hideUnsourceable}
+      setHideUnsourceable={setHideUnsourceable}
+      source={source}
+      setSource={setSource}
+      manufacturer={manufacturer}
+      setManufacturer={setManufacturer}
+      manufacturerOptions={manufacturerOptions}
+      ingredientName={ingredientName}
+      setIngredientName={setIngredientName}
+      handleResetFilters={handleResetFilters}
+    />
   )
 
   return (
@@ -666,200 +381,10 @@ export function BlueprintBrowser() {
 
               {/* List View */}
               {viewMode === "list" && (
-                <Paper>
-                  <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell />
-                        <TableCell>
-                          {t("blueprintsUi.browser.columnItem")}
-                        </TableCell>
-                        <TableCell>
-                          {t("blueprintsUi.browser.category")}
-                        </TableCell>
-                        <TableCell>
-                          {t("blueprintsUi.browser.columnTags")}
-                        </TableCell>
-                        <TableCell>
-                          {t("blueprintsUi.browser.columnIngredients")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {t("blueprintsUi.browser.columnMissionSources")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {t("blueprintsUi.browser.columnCraftTime")}
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {shownBlueprints.map((bp) => (
-                        <TableRow
-                          key={bp.blueprint_id}
-                          hover
-                          sx={{ cursor: "pointer" }}
-                          onClick={() =>
-                            handleBlueprintClick(
-                              bp.blueprint_id,
-                              bp.blueprint_name,
-                            )
-                          }
-                        >
-                          <TableCell sx={{ width: 40 }}>
-                            <ImageAvatar
-                              alt=""
-                              src={bp.output_item_icon}
-                              variant="rounded"
-                              sx={{
-                                width: 28,
-                                height: 28,
-                                fontSize: "0.6rem",
-                                bgcolor: "primary.main",
-                              }}
-                              imgProps={{ style: { objectFit: "cover" } }}
-                            >
-                              {(bp.output_item_name || "?")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </ImageAvatar>
-                          </TableCell>
-                          <TableCell>
-                            <Tooltip
-                              title={bp.output_item_name}
-                              arrow
-                              enterDelay={500}
-                            >
-                              {/* A real link (crawlable, middle-click); a plain click opens the modal like the row. */}
-                              <Typography
-                                variant="body2"
-                                fontWeight={600}
-                                noWrap
-                                component={RouterLink}
-                                to={GAME_DATA_PATHS.blueprint(
-                                  bp.blueprint_name,
-                                )}
-                                onClick={(event: React.MouseEvent) => {
-                                  event.stopPropagation()
-                                  inAppClick(() =>
-                                    handleBlueprintClick(
-                                      bp.blueprint_id,
-                                      bp.blueprint_name,
-                                    ),
-                                  )(event)
-                                }}
-                                sx={{
-                                  maxWidth: 240,
-                                  display: "block",
-                                  color: "inherit",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                {bp.output_item_name}
-                              </Typography>
-                            </Tooltip>
-                          </TableCell>
-                          <TableCell>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              noWrap
-                            >
-                              {formatCategoryName(bp.item_category, t)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Stack
-                              direction="row"
-                              spacing={0.5}
-                              flexWrap="nowrap"
-                            >
-                              <BlueprintTags
-                                blueprint={bp}
-                                nested
-                                wrap={false}
-                                hide={["manufacturer", "category", "modifiers"]}
-                              />
-                            </Stack>
-                          </TableCell>
-                          <TableCell>
-                            <Stack
-                              direction="row"
-                              spacing={0.5}
-                              flexWrap="wrap"
-                              useFlexGap
-                              sx={{ maxWidth: 200 }}
-                            >
-                              {(bp.ingredients || [])
-                                .slice(0, 4)
-                                .map((ing, i: number) => {
-                                  const short =
-                                    ing.name
-                                      .replace(/[aeiou]/gi, "")
-                                      .slice(0, 4)
-                                      .toUpperCase() ||
-                                    ing.name.slice(0, 4).toUpperCase()
-                                  const qty = ing.quantity_required.toFixed(2)
-                                  return (
-                                    <Tooltip
-                                      key={i}
-                                      title={`${ing.name} — ${qty} SCU`}
-                                      arrow
-                                    >
-                                      <Chip
-                                        label={`${short}×${qty}`}
-                                        size="small"
-                                        sx={{
-                                          height: 18,
-                                          fontSize: "0.6rem",
-                                          bgcolor:
-                                            getCommodityColor(ing.sub_type) ||
-                                            "grey.600",
-                                          color: common.white,
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )
-                                })}
-                              {(bp.ingredients || []).length > 4 && (
-                                <Chip
-                                  label={`+${bp.ingredients.length - 4}`}
-                                  size="small"
-                                  variant="outlined"
-                                  sx={{ height: 18, fontSize: "0.6rem" }}
-                                />
-                              )}
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="center">
-                            {bp.mission_count > 0 ? (
-                              <Chip
-                                label={bp.mission_count}
-                                size="small"
-                                color="info"
-                                sx={{
-                                  height: 18,
-                                  fontSize: "0.65rem",
-                                  minWidth: 24,
-                                }}
-                              />
-                            ) : (
-                              <Typography
-                                variant="caption"
-                                color="text.disabled"
-                              >
-                                —
-                              </Typography>
-                            )}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="caption">
-                              {formatCraftingTime(bp.crafting_time_seconds)}
-                            </Typography>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
+                <BlueprintResultsTable
+                  blueprints={shownBlueprints}
+                  onBlueprintClick={handleBlueprintClick}
+                />
               )}
 
               {shownBlueprints.length === 0 && !isFetching && (

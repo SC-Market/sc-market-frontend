@@ -23,36 +23,15 @@ import {
   Alert,
   ToggleButtonGroup,
   ToggleButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  Stack,
-  Tooltip,
 } from "@mui/material"
-import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import {
-  ViewListRounded,
-  ViewModuleRounded,
-  ShieldRounded,
-  BuildRounded,
-} from "@mui/icons-material"
+import { ViewListRounded, ViewModuleRounded } from "@mui/icons-material"
 import {
   useSearchMissionsQuery,
   useGetGameEventsQuery,
   type MissionSearchResult,
 } from "../../store/api/v2/market"
-import {
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom"
-import { inAppClick } from "../../components/links/inAppClick"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
@@ -60,8 +39,6 @@ import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { MISSION_CARD_GRID } from "../../components/game-data/cardGrids"
 import {
   UnifiedSearchBar,
-  missionParamsToTokens,
-  missionTokensToParams,
   type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
@@ -69,142 +46,62 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
-import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
-import { missionsCapabilityText } from "../../seo/missionText"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
-import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
-import { MissionName } from "../../components/game-data/MissionName"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { missionsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
-import { useFormatters } from "../../util/format"
-import { common } from "@mui/material/colors"
+import { MissionResultsTable } from "./MissionResultsTable"
+import { useMissionFilterParams } from "./useMissionFilterParams"
+import { MissionDatabaseAbout } from "./MissionDatabaseAbout"
+import { MissionTableSkeleton } from "./MissionResultsTable"
 
 const VIEW_MODES = ["list", "grid"] as const
 
-const microChip = {
-  height: 18,
-  fontSize: "0.65rem",
-  fontWeight: "bold",
-  textTransform: "uppercase" as const,
-}
-
 export function MissionSearch() {
   const { t } = useTranslation()
-  const fmt = useFormatters()
   const navigate = useNavigate()
 
   // Search and filter state — synced with URL search params
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const searchText = searchParams.get("q") || ""
-  const category = searchParams.get("category") || ""
-  const careerType = searchParams.get("career") || ""
-  const starSystem = searchParams.get("system") || ""
-  const faction = searchParams.get("faction") || ""
-  const missionGiver = searchParams.get("giver") || ""
-  const legalStatus = (searchParams.get("legal") || "") as
-    | ""
-    | "LEGAL"
-    | "ILLEGAL"
-  const diffMin = parseInt(searchParams.get("diff_min") || "1") || 1
-  const diffMax = parseInt(searchParams.get("diff_max") || "5") || 5
-  const difficultyRange = [diffMin, diffMax]
-  const isShareable =
-    searchParams.get("shareable") === "true"
-      ? true
-      : searchParams.get("shareable") === "false"
-        ? false
-        : undefined
-  const hasBlueprints =
-    searchParams.get("blueprints") === "true"
-      ? true
-      : searchParams.get("blueprints") === "false"
-        ? false
-        : undefined
-  const isChainStarter =
-    searchParams.get("chain") === "true"
-      ? true
-      : searchParams.get("chain") === "false"
-        ? false
-        : undefined
-  const creditRewardMin: number | "" = searchParams.get("min_reward")
-    ? Number(searchParams.get("min_reward"))
-    : ""
-
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    params.delete("page")
-    setSearchParams(params, { replace: true })
-  }
-
-  const setSearchText = (v: string) => updateParam("q", v)
-  const setCategory = (v: string) => updateParam("category", v)
-  const setCareerType = (v: string) => updateParam("career", v)
-  const setStarSystem = (v: string) => updateParam("system", v)
-  const setFaction = (v: string) => updateParam("faction", v)
-  const setMissionGiver = (v: string) => updateParam("giver", v)
-  const setLegalStatus = (v: "" | "LEGAL" | "ILLEGAL") =>
-    updateParam("legal", v)
-  const setDifficultyRange = (v: number[]) => {
-    updateParam("diff_min", v[0] === 1 ? "" : String(v[0]))
-    updateParam("diff_max", v[1] === 5 ? "" : String(v[1]))
-  }
-  const setIsShareable = (v: boolean | undefined) =>
-    updateParam("shareable", v === undefined ? "" : String(v))
-  const setHasBlueprints = (v: boolean | undefined) =>
-    updateParam("blueprints", v === undefined ? "" : String(v))
-  const setIsChainStarter = (v: boolean | undefined) =>
-    updateParam("chain", v === undefined ? "" : String(v))
-  const setCreditRewardMin = (v: number | "") =>
-    updateParam("min_reward", v === "" ? "" : String(v))
-  const eventCode = searchParams.get("event") || ""
-  const setEventCode = (v: string) => updateParam("event", v)
-  const showEventMissions = searchParams.get("show_events") === "true"
-  const setShowEventMissions = (v: boolean) =>
-    updateParam("show_events", v ? "true" : "")
+  const {
+    searchText,
+    category,
+    careerType,
+    starSystem,
+    faction,
+    missionGiver,
+    legalStatus,
+    difficultyRange,
+    isShareable,
+    hasBlueprints,
+    isChainStarter,
+    creditRewardMin,
+    setSearchText,
+    setCategory,
+    setCareerType,
+    setStarSystem,
+    setFaction,
+    setMissionGiver,
+    setLegalStatus,
+    setDifficultyRange,
+    setIsShareable,
+    setHasBlueprints,
+    setIsChainStarter,
+    setCreditRewardMin,
+    eventCode,
+    setEventCode,
+    showEventMissions,
+    setShowEventMissions,
+    searchTokens,
+    handleTokensChange,
+  } = useMissionFilterParams(searchParams, setSearchParams)
 
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<MissionSearchResult[]>([])
-
-  // Unified search bar tokens — derived from URL params
-  const searchTokens = useMemo(
-    () => missionParamsToTokens(searchParams),
-    [searchParams],
-  )
-  const handleTokensChange = (tokens: SearchToken[]) => {
-    const tokenParams = missionTokensToParams(tokens)
-    // Merge: start with current params, remove token-managed keys, add new token values
-    const params = new URLSearchParams(searchParams)
-    for (const key of [
-      "q",
-      "category",
-      "system",
-      "giver",
-      "faction",
-      "legal",
-      "shareable",
-      "unique",
-      "chain",
-      "blueprints",
-      "event",
-      "show_events",
-    ]) {
-      params.delete(key)
-    }
-    for (const [k, v] of Object.entries(tokenParams)) {
-      params.set(k, v)
-    }
-    params.delete("page")
-    setSearchParams(params, { replace: true })
-  }
   const { data: eventsData } = useGetGameEventsQuery()
   const eventOptions: SearchToken[] = useMemo(
     () =>
@@ -482,331 +379,10 @@ export function MissionSearch() {
                   ))
                 ) : (
                   <Grid item xs={12}>
-                    <Paper>
-                      <Table size="small" sx={MISSION_TABLE_SX}>
-                        <MissionTableHead />
-                        <TableBody>
-                          {shownMissions.map((m) => (
-                            <TableRow
-                              key={m.mission_id}
-                              hover
-                              sx={{ cursor: "pointer" }}
-                              onClick={() =>
-                                handleMissionClick(m.mission_code, m.mission_id)
-                              }
-                            >
-                              <TableCell sx={{ width: 40, py: 0.5 }}>
-                                <Tooltip
-                                  title={getMissionTypeLabel(m.category, t)}
-                                  arrow
-                                >
-                                  <ImageAvatar
-                                    alt=""
-                                    src={
-                                      getMissionIcon(m.category) || undefined
-                                    }
-                                    variant="rounded"
-                                    sx={{
-                                      width: 24,
-                                      height: 24,
-                                      bgcolor: getMissionCategoryColor(
-                                        m.category,
-                                      ),
-                                    }}
-                                    imgProps={{
-                                      loading: "lazy",
-                                      style: {
-                                        objectFit: "contain",
-                                        padding: 4,
-                                      },
-                                    }}
-                                  >
-                                    {(m.category || "?")[0].toUpperCase()}
-                                  </ImageAvatar>
-                                </Tooltip>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                  variant="caption"
-                                  noWrap
-                                  sx={{ maxWidth: 80, display: "block" }}
-                                >
-                                  {m.star_system || "—"}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                {/* A real link (crawlable, middle-click); a plain click opens the modal like the row. */}
-                                <Tooltip
-                                  title={m.mission_name}
-                                  arrow
-                                  enterDelay={500}
-                                >
-                                  <RouterLink
-                                    to={GAME_DATA_PATHS.mission(m.mission_code)}
-                                    onClick={(event) => {
-                                      event.stopPropagation()
-                                      inAppClick(() =>
-                                        handleMissionClick(
-                                          m.mission_code,
-                                          m.mission_id,
-                                        ),
-                                      )(event)
-                                    }}
-                                    style={{
-                                      color: "inherit",
-                                      textDecoration: "none",
-                                      display: "block",
-                                    }}
-                                  >
-                                    <MissionName
-                                      name={m.mission_name}
-                                      variant="body2"
-                                      fontWeight={600}
-                                      noWrap
-                                      sx={{ maxWidth: 260, display: "block" }}
-                                    />
-                                  </RouterLink>
-                                </Tooltip>
-                              </TableCell>
-                              <TableCell>
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                  noWrap
-                                  sx={{ maxWidth: 100, display: "block" }}
-                                >
-                                  {m.faction?.includes("~mission")
-                                    ? t("missionsUi.various")
-                                    : m.faction || "—"}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Stack
-                                  direction="row"
-                                  spacing={0.25}
-                                  flexWrap="wrap"
-                                  useFlexGap
-                                >
-                                  {m.category && (
-                                    <Tooltip
-                                      title={getMissionTypeLabel(m.category, t)}
-                                    >
-                                      <Chip
-                                        label={getMissionTypeLabel(
-                                          m.category,
-                                          t,
-                                        )}
-                                        size="small"
-                                        color="primary"
-                                        sx={microChip}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                  {(m.is_illegal ||
-                                    m.legal_status === "ILLEGAL") && (
-                                    <Tooltip
-                                      title={t("missionsUi.illegalMission")}
-                                    >
-                                      <Chip
-                                        label={t("missionsUi.illegal")}
-                                        size="small"
-                                        color="error"
-                                        sx={microChip}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                  {m.is_unique_mission && (
-                                    <Tooltip
-                                      title={t("missionsUi.uniqueOneTime")}
-                                    >
-                                      <Chip
-                                        label={t("missionsUi.unique")}
-                                        size="small"
-                                        color="warning"
-                                        sx={microChip}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                  {m.is_chain_starter && (
-                                    <Tooltip
-                                      title={t("missionsUi.chainStarter")}
-                                    >
-                                      <Chip
-                                        label={t("missionsUi.starter")}
-                                        size="small"
-                                        variant="outlined"
-                                        sx={microChip}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                  {m.is_chain_mission &&
-                                    !m.is_chain_starter && (
-                                      <Tooltip
-                                        title={t("missionsUi.partOfChain")}
-                                      >
-                                        <Chip
-                                          label={t("missionsUi.chain")}
-                                          size="small"
-                                          variant="outlined"
-                                          sx={microChip}
-                                        />
-                                      </Tooltip>
-                                    )}
-                                  {m.associated_event && (
-                                    <Tooltip title={m.associated_event}>
-                                      <Chip
-                                        label={m.associated_event}
-                                        size="small"
-                                        sx={{
-                                          ...microChip,
-                                          maxWidth: 100,
-                                          bgcolor: "info.main",
-                                          color: common.white,
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                  {m.ship_encounter_count > 0 && (
-                                    <Tooltip
-                                      title={t("missionsUi.shipCount", {
-                                        count: m.ship_encounter_count,
-                                      })}
-                                    >
-                                      <Chip
-                                        icon={
-                                          <ShieldRounded
-                                            sx={{ fontSize: 14 }}
-                                          />
-                                        }
-                                        label={m.ship_encounter_count}
-                                        size="small"
-                                        color="info"
-                                        variant="outlined"
-                                        sx={microChip}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                </Stack>
-                              </TableCell>
-                              <TableCell>
-                                {(m.hauling_orders?.length ?? 0) > 0 ? (
-                                  <Stack
-                                    direction="row"
-                                    spacing={0.25}
-                                    flexWrap="wrap"
-                                    useFlexGap
-                                  >
-                                    {m.hauling_orders!.map((h, i: number) => (
-                                      <Tooltip
-                                        key={i}
-                                        title={h.resource_name}
-                                        arrow
-                                      >
-                                        <Chip
-                                          label={h.resource_name
-                                            .split(/[\s,]+/)
-                                            .filter(Boolean)
-                                            .map((w: string) => w[0])
-                                            .join("")
-                                            .slice(0, 4)
-                                            .toUpperCase()}
-                                          size="small"
-                                          sx={{
-                                            height: 18,
-                                            fontSize: "0.6rem",
-                                            fontFamily: "monospace",
-                                            bgcolor: "action.selected",
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    ))}
-                                  </Stack>
-                                ) : (
-                                  <Typography
-                                    variant="caption"
-                                    color="text.disabled"
-                                  >
-                                    —
-                                  </Typography>
-                                )}
-                              </TableCell>
-                              <TableCell align="center">
-                                {m.blueprint_reward_count > 0 ? (
-                                  <Tooltip
-                                    title={
-                                      m.blueprint_reward_names?.join(", ") ||
-                                      t("missionsUi.blueprintCount", {
-                                        count: m.blueprint_reward_count,
-                                      })
-                                    }
-                                    arrow
-                                  >
-                                    <Chip
-                                      icon={
-                                        <BuildRounded sx={{ fontSize: 14 }} />
-                                      }
-                                      label={m.blueprint_reward_count}
-                                      size="small"
-                                      color="success"
-                                      sx={{ ...microChip, minWidth: 24 }}
-                                    />
-                                  </Tooltip>
-                                ) : (
-                                  <Typography
-                                    variant="caption"
-                                    color="text.disabled"
-                                  >
-                                    —
-                                  </Typography>
-                                )}
-                              </TableCell>
-                              <TableCell align="right">
-                                <Typography
-                                  variant="caption"
-                                  color={
-                                    m.reputation_reward
-                                      ? "text.primary"
-                                      : "text.secondary"
-                                  }
-                                >
-                                  {m.reputation_reward
-                                    ? `${fmt.number(m.reputation_reward)} XP`
-                                    : "—"}
-                                </Typography>
-                              </TableCell>
-                              <TableCell align="right">
-                                <Typography
-                                  variant="body2"
-                                  color={
-                                    (m.credit_reward_min ?? 0) < 0
-                                      ? "error.main"
-                                      : "success.main"
-                                  }
-                                  fontWeight={600}
-                                  noWrap
-                                >
-                                  {(m.credit_reward_min ?? 0) < 0
-                                    ? t("missionsUi.fee", {
-                                        amount: formatCredits(
-                                          Math.abs(m.credit_reward_min!),
-                                          fmt.locale,
-                                        ),
-                                      })
-                                    : m.credit_reward_min ===
-                                          m.credit_reward_max ||
-                                        !m.credit_reward_max
-                                      ? formatCredits(
-                                          m.credit_reward_min,
-                                          fmt.locale,
-                                        )
-                                      : `${formatCredits(m.credit_reward_min, fmt.locale)} – ${formatCredits(m.credit_reward_max, fmt.locale)}`}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </Paper>
+                    <MissionResultsTable
+                      missions={shownMissions}
+                      onMissionClick={handleMissionClick}
+                    />
                   </Grid>
                 )}
               </Grid>
@@ -842,30 +418,7 @@ export function MissionSearch() {
       </Grid>
       {/* What the database offers, in plain text (prerendered, so search and
           answer engines can describe it). Shared with the bridge and SSR. */}
-      <Grid item xs={12} component="section" aria-labelledby="missions-about">
-        <Typography
-          id="missions-about"
-          variant="h6"
-          component="h2"
-          color="text.secondary"
-          sx={{ mt: 4, mb: 1 }}
-        >
-          {t("missions.about.title", "About the mission database")}
-        </Typography>
-        {missionsCapabilityText(data?.total).map((line) => (
-          <Typography
-            key={line}
-            variant="body2"
-            color="text.primary"
-            component="p"
-            sx={{ mb: 0.75 }}
-          >
-            {line}
-          </Typography>
-        ))}
-        <MissionHubIndexLinks />
-        <GameDataFreshness />
-      </Grid>
+      <MissionDatabaseAbout total={data?.total} />
       <MissionDetailModal
         missionId={selectedMissionId}
         open={!!selectedMissionId}
@@ -886,60 +439,5 @@ export function MissionSearch() {
         onClose={() => setSelectedBlueprintId(null)}
       />
     </StandardPageLayout>
-  )
-}
-
-/** Mission list table cell padding (loaded table and its skeleton). */
-const MISSION_TABLE_SX = { "& td, & th": { py: 0.5, px: 1 } } as const
-
-function MissionTableHead() {
-  const { t } = useTranslation()
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell sx={{ width: 40 }} />
-        <TableCell>{t("missionsUi.system")}</TableCell>
-        <TableCell>{t("missionsUi.title")}</TableCell>
-        <TableCell>{t("missionsUi.faction")}</TableCell>
-        <TableCell sx={{ maxWidth: 280 }}>{t("missionsUi.tags")}</TableCell>
-        <TableCell>{t("missionsUi.materials")}</TableCell>
-        <TableCell align="center">{t("missionsUi.bps")}</TableCell>
-        <TableCell align="right">{t("missionsUi.baseXp")}</TableCell>
-        <TableCell align="right">{t("missionsUi.reward")}</TableCell>
-      </TableRow>
-    </TableHead>
-  )
-}
-
-/** The mission list while the first page loads: same table, placeholder rows. */
-function MissionTableSkeleton({ rows = 15 }: { rows?: number }) {
-  return (
-    <Grid container spacing={0.75}>
-      <Grid item xs={12}>
-        <Paper>
-          <Table size="small" sx={MISSION_TABLE_SX}>
-            <MissionTableHead />
-            <TableBody>
-              {Array.from({ length: rows }).map((_, i) => (
-                <TableRow key={i}>
-                  <TableCell sx={{ width: 40, py: 0.5 }}>
-                    <Skeleton variant="rounded" width={24} height={24} />
-                  </TableCell>
-                  {[60, 200, 80, 120, 50, 24, 50, 90].map((w, j) => (
-                    <TableCell key={j}>
-                      <Skeleton
-                        variant="text"
-                        width={w}
-                        sx={{ ml: j >= 6 ? "auto" : undefined }}
-                      />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </Grid>
-    </Grid>
   )
 }
