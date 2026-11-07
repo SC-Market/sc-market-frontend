@@ -4293,6 +4293,7 @@
       "scam": "Scam",
       "spam": "Spam"
     },
+    "report": "Report",
     "reportContent": "Report Content",
     "reportDescription": "Help us keep the community safe by reporting content that violates our guidelines.",
     "reportFailed": "Failed to submit report. Please try again.",

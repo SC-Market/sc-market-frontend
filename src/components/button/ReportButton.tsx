@@ -28,10 +28,7 @@ interface ReportButtonProps {
   children?: React.ReactNode
 }
 
-export function ReportButton({
-  reportedUrl,
-  children = "Report",
-}: ReportButtonProps) {
+export function ReportButton({ reportedUrl, children }: ReportButtonProps) {
   const [open, setOpen] = useState(false)
   const [reason, setReason] = useState<string>("")
   const [details, setDetails] = useState<string>("")
@@ -190,7 +187,9 @@ export function ReportButton({
         aria-label={t("accessibility.reportContent", "Report this content")}
         aria-describedby="report-button-description"
       >
-        <UnderlineLink component="span">{children}</UnderlineLink>
+        <UnderlineLink component="span">
+          {children ?? t("ReportButton.report", "Report")}
+        </UnderlineLink>
         <span id="report-button-description" className="sr-only">
           {t(
             "accessibility.reportContentDescription",

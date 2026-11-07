@@ -182,19 +182,19 @@ export function AggregateMarketDataV2(props: {
     const points = priceData.data
     return [
       {
-        name: "Average",
+        name: t("resources.avgPrice", "Average"),
         data: points.map((p) => ({ x: p.timestamp, y: p.avg_price })),
       },
       {
-        name: "Min",
+        name: t("resources.minPrice", "Min"),
         data: points.map((p) => ({ x: p.timestamp, y: p.min_price })),
       },
       {
-        name: "Max",
+        name: t("resources.maxPrice", "Max"),
         data: points.map((p) => ({ x: p.timestamp, y: p.max_price })),
       },
     ]
-  }, [priceData])
+  }, [priceData, t])
 
   if (isLoading || !series) return null
 

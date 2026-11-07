@@ -2636,6 +2636,7 @@
     "uploadFailed": "アップロードに失敗しました"
   },
   "ReportButton": {
+    "report": "報告",
     "reportContent": "コンテンツを報告",
     "reportDescription": "コミュニティガイドラインに違反するコンテンツを報告して、コミュニティの安全を守るのを手伝ってください。",
     "reportingUrl": "報告されたURL",

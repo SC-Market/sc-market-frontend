@@ -2638,6 +2638,7 @@
     "uploadFailed": "上传失败"
   },
   "ReportButton": {
+    "report": "举报",
     "reportContent": "举报内容",
     "reportDescription": "通过举报违反我们指导原则的内容，帮助我们保持社区安全。",
     "reportingUrl": "举报的URL",

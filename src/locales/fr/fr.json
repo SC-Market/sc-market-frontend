@@ -2658,6 +2658,7 @@
     "uploadFailed": "Échec de l’envoi"
   },
   "ReportButton": {
+    "report": "Signaler",
     "reportContent": "Signaler le contenu",
     "reportDescription": "Aidez-nous à maintenir la communauté en sécurité en signalant le contenu qui viole nos directives.",
     "reportingUrl": "URL signalée",

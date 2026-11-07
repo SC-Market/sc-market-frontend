@@ -130,7 +130,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             <Chip
               key={field}
               color="primary"
-              label={field}
+              label={t(`contractorList.fields.${field}`, field)}
               sx={{
                 padding: 0.5,
                 textTransform: "capitalize",

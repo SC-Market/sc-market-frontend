@@ -180,7 +180,9 @@ function Services(props: { storefront: OrgStorefront }) {
                 {service.cost > 0
                   ? fmt.price(service.cost)
                   : t("storefront.serviceQuote", "Price on request")}
-                {service.kind ? ` · ${service.kind}` : ""}
+                {service.kind
+                  ? ` · ${t(`orderKinds.${service.kind}`, service.kind)}`
+                  : ""}
               </Typography>
             </Paper>
           </Grid>

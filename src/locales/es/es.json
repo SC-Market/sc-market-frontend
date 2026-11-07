@@ -2658,6 +2658,7 @@
     "uploadFailed": "Error al subir"
   },
   "ReportButton": {
+    "report": "Denunciar",
     "reportContent": "Denunciar contenido",
     "reportDescription": "Ayúdanos a mantener la comunidad segura denunciando el contenido que incumple nuestras normas.",
     "reportingUrl": "URL denunciada",

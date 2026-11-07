@@ -2647,6 +2647,7 @@
     "uploadFailed": "Hochladen fehlgeschlagen"
   },
   "ReportButton": {
+    "report": "Melden",
     "reportContent": "Inhalt melden",
     "reportDescription": "Hilf uns, die Community sicher zu halten, indem du Inhalte meldest, die gegen unsere Richtlinien verstoßen.",
     "reportingUrl": "Gemeldete URL",
