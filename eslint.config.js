@@ -84,6 +84,32 @@ const RAW_MUI = {
     "use BottomSheet / MobileSidebarWrapper (components/mobile) or DockedSidePanel (components/sidebar)",
   Switch: "use a labelled FormControlLabel + Switch from a shared component",
 }
+// Files still on a raw MUI Dialog (see the components/dialog guard below).
+// Convert one to ResponsiveDialog / ConfirmDialog, then drop it from here.
+// Never add to this list.
+const DIALOG_LEGACY = [
+  "src/components/accessibility/AccessibleDialog.tsx",
+  "src/components/button/ReportButton.tsx",
+  "src/components/command-palette/CommandPalette.tsx",
+  "src/views/admin/AdminAlertsView.tsx",
+  "src/views/admin/AdminAttributeDefinitionsView.tsx",
+  "src/views/admin/AdminFeatureFlagDetailView.tsx",
+  "src/views/admin/AdminGameItemAttributesView.tsx",
+  "src/views/admin/AdminModerationView.tsx",
+  "src/views/admin/AdminPremiumManagementView.tsx",
+  "src/views/admin/AdminTestAccountsView.tsx",
+  "src/views/admin/AttributeDefinitionFormDialogs.tsx",
+  "src/views/admin/CreateAlertDialog.tsx",
+  "src/views/admin/EditAlertDialog.tsx",
+  "src/views/contractor/SettingsManageContractors.tsx",
+  "src/views/offers/MergeOffersDialog.tsx",
+  "src/views/offers/OfferAssignedRow.tsx",
+  "src/views/offers/OfferDetailsArea.tsx",
+  "src/views/orders/AvailabilityModalWrapper.tsx",
+  "src/views/orders/OrderAssignedRow.tsx",
+  "src/views/settings/AccountLinks.tsx",
+  "src/views/settings/UnlinkProfile.tsx",
+]
 const LEGACY_STORE_SLICES = [
   "**/store/profile",
   "**/store/contractor",
@@ -820,6 +846,48 @@ export default [
             "CallExpression[callee.name='lazy'], CallExpression[callee.property.name='lazy']",
           message:
             "Route modules load pages through definePage, not React.lazy.",
+        },
+      ],
+    },
+  },
+
+  // ── Guard rails: raw MUI Dialog only in components/dialog (error) ──
+  // Everywhere else uses ResponsiveDialog / ConfirmDialog. The three detail
+  // modals stay a modal over the hub on desktop and a page on mobile (owner's
+  // call). DIALOG_LEGACY lists files not converted yet: it may only shrink,
+  // never grow. pages/ and features/ are covered by the stricter block below,
+  // which comes later and so has the last word on those files.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/pages/**",
+      "src/features/**",
+      "src/components/dialog/**",
+      "src/components/game-data/BlueprintDetailModal.tsx",
+      "src/components/game-data/MissionDetailModal.tsx",
+      "src/components/game-data/ShipDetailModal.tsx",
+      ...DIALOG_LEGACY,
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/__tests__/**",
+    ],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@mui/material",
+              importNames: ["Dialog"],
+              message: `Raw MUI Dialog: ${RAW_MUI.Dialog}.`,
+              allowTypeImports: true,
+            },
+            {
+              name: "@mui/material/Dialog",
+              message: `Raw MUI Dialog: ${RAW_MUI.Dialog}.`,
+              allowTypeImports: true,
+            },
+          ],
         },
       ],
     },
