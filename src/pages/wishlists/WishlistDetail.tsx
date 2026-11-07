@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useMemo } from "react"
-import { useParams, useNavigate, Link } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   Box,
@@ -20,32 +20,21 @@ import {
   CardContent,
   CircularProgress,
   Alert,
-  Chip,
-  IconButton,
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
   Stack,
-  LinearProgress,
   Select,
   FormControl,
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material"
-import { ImageAvatar } from "../../components/avatar/ImageAvatar"
 import {
   AddRounded,
-  MoreVertRounded,
   EditRounded,
   DeleteRounded,
-  CheckCircleRounded,
-  RadioButtonUncheckedRounded,
-  StarRounded,
-  StarBorderRounded,
   SortRounded,
-  BuildRounded,
-  ShoppingCartRounded,
 } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
@@ -55,8 +44,9 @@ import {
   type WishlistItemWithDetails,
 } from "../../store/api/v2/market"
 import { AddItemDialog } from "../../components/wishlists"
-import { PATHS, GAME_DATA_PATHS } from "../../routes/paths"
-import { useFormatters } from "../../util/format"
+import { PATHS } from "../../routes/paths"
+import { WishlistItemCard } from "./WishlistItemCard"
+import { WishlistProgressCard } from "./WishlistProgressCard"
 import ChevronLeftRounded from "@mui/icons-material/ChevronLeftRounded"
 
 type SortOption = "priority" | "name" | "status" | "quality"
@@ -76,7 +66,6 @@ type SortOption = "priority" | "name" | "status" | "quality"
  * - Actions: add, edit, remove, mark acquired
  */
 export function WishlistDetail() {
-  const fmt = useFormatters()
   const { t } = useTranslation()
   const { wishlist_id } = useParams<{ wishlist_id: string }>()
   const navigate = useNavigate()
@@ -286,74 +275,10 @@ export function WishlistDetail() {
         </Grid>
       )}
 
-      <Grid item xs={12} lg={wishlist.wishlist_description ? 6 : 12}>
-        <Card sx={{ height: "100%" }}>
-          <CardContent>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
-            >
-              <Typography variant="subtitle2" color="text.secondary">
-                {t("wishlists.progress", "Progress")}
-              </Typography>
-              <Typography variant="h5" color="primary" fontWeight="bold">
-                {statistics.progress_percentage}%
-              </Typography>
-            </Box>
-
-            <LinearProgress
-              variant="determinate"
-              value={statistics.progress_percentage}
-              sx={{ height: 8, borderRadius: 4, mb: 2 }}
-            />
-
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
-                gap: 1,
-              }}
-            >
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("wishlists.totalItems", "Total Items")}
-                </Typography>
-                <Typography variant="h6">{statistics.total_items}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("wishlists.completed", "Completed")}
-                </Typography>
-                <Typography variant="h6" color="success.main">
-                  {statistics.completed_items}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("wishlists.remaining", "Remaining")}
-                </Typography>
-                <Typography variant="h6" color="warning.main">
-                  {statistics.total_items - statistics.completed_items}
-                </Typography>
-              </Box>
-              {statistics.total_estimated_cost > 0 && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("wishlists.estimatedCost", "Estimated Cost")}
-                  </Typography>
-                  <Typography variant="h6">
-                    {fmt.number(statistics.total_estimated_cost)} aUEC
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-          </CardContent>
-        </Card>
-      </Grid>
+      <WishlistProgressCard
+        statistics={statistics}
+        fullWidth={!wishlist.wishlist_description}
+      />
 
       {/* Items Header + Sort Controls */}
       <Grid item xs={12}>
@@ -428,256 +353,12 @@ export function WishlistDetail() {
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {sortedItems.map((item) => (
-                <Card
+                <WishlistItemCard
                   key={item.item_id}
-                  sx={{
-                    opacity: item.is_acquired ? 0.6 : 1,
-                    transition: "all 0.2s",
-                    "&:hover": {
-                      boxShadow: 3,
-                    },
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      {/* Item Icon */}
-                      <ImageAvatar
-                        src={item.game_item_icon}
-                        alt={item.game_item_name}
-                        sx={{ width: 64, height: 64 }}
-                        variant="rounded"
-                      >
-                        {item.game_item_name.charAt(0)}
-                      </ImageAvatar>
-
-                      {/* Item Details */}
-                      <Box sx={{ flex: 1 }}>
-                        {/* Item Name and Status */}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
-                            mb: 1,
-                          }}
-                        >
-                          <Box sx={{ flex: 1 }}>
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                              }}
-                            >
-                              {item.game_item_name}
-                              {item.is_acquired && (
-                                <Chip
-                                  icon={<CheckCircleRounded />}
-                                  label={t("wishlistsUi.detail.acquired")}
-                                  size="small"
-                                  color="success"
-                                  variant="outlined"
-                                />
-                              )}
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                            >
-                              {item.game_item_type}
-                            </Typography>
-                          </Box>
-
-                          {/* Actions Menu */}
-                          <IconButton
-                            size="small"
-                            onClick={(e) => handleItemMenuOpen(e, item)}
-                            aria-label={t("wishlistsUi.detail.itemActionsFor", {
-                              name: item.game_item_name,
-                            })}
-                            aria-haspopup="menu"
-                          >
-                            <MoreVertRounded />
-                          </IconButton>
-                        </Box>
-
-                        {/* Item Properties */}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 2,
-                            mb: 1,
-                          }}
-                        >
-                          {/* Quantity (Requirement 53.2) */}
-                          <Box>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              display="block"
-                            >
-                              {t("wishlists.quantity", "Quantity")}
-                            </Typography>
-                            <Typography variant="body2">
-                              {item.acquired_quantity} / {item.desired_quantity}
-                            </Typography>
-                          </Box>
-
-                          {/* Quality Tier (Requirement 53.6) */}
-                          {item.desired_quality_tier && (
-                            <Box>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                display="block"
-                              >
-                                {t("wishlists.qualityTier", "Quality Tier")}
-                              </Typography>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 0.5,
-                                }}
-                              >
-                                {[1, 2, 3, 4, 5].map((tier) => (
-                                  <Box key={tier}>
-                                    {tier <= item.desired_quality_tier! ? (
-                                      <StarRounded
-                                        fontSize="small"
-                                        color="primary"
-                                      />
-                                    ) : (
-                                      <StarBorderRounded
-                                        fontSize="small"
-                                        color="disabled"
-                                      />
-                                    )}
-                                  </Box>
-                                ))}
-                              </Box>
-                            </Box>
-                          )}
-
-                          {/* Priority (Requirement 53.5) */}
-                          <Box>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              display="block"
-                            >
-                              {t("wishlists.priority", "Priority")}
-                            </Typography>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 0.5,
-                              }}
-                            >
-                              {[1, 2, 3, 4, 5].map((level) => (
-                                <Box
-                                  key={level}
-                                  sx={{
-                                    width: 8,
-                                    height: 16,
-                                    bgcolor:
-                                      level <= item.priority
-                                        ? "primary.main"
-                                        : "action.disabled",
-                                    borderRadius: 0.5,
-                                  }}
-                                />
-                              ))}
-                            </Box>
-                          </Box>
-
-                          {/* Acquisition Mode */}
-                          {item.acquisition_mode === "craft" &&
-                          item.blueprint_name ? (
-                            <Chip
-                              icon={<BuildRounded />}
-                              label={t("wishlistsUi.detail.craft", {
-                                name: item.blueprint_name,
-                              })}
-                              size="small"
-                              color="info"
-                              variant="outlined"
-                              component={Link}
-                              to={GAME_DATA_PATHS.blueprint(item.blueprint_id!)}
-                              clickable
-                            />
-                          ) : item.crafting_available ? (
-                            <Chip
-                              icon={<ShoppingCartRounded />}
-                              label={t("wishlistsUi.detail.buyFromMarket")}
-                              size="small"
-                              color="primary"
-                              variant="outlined"
-                            />
-                          ) : null}
-
-                          {/* Estimated Cost */}
-                          {item.estimated_cost && (
-                            <Box>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                display="block"
-                              >
-                                {t("wishlists.estCost", "Est. Cost")}
-                              </Typography>
-                              <Typography variant="body2">
-                                {fmt.number(item.estimated_cost)} aUEC
-                              </Typography>
-                            </Box>
-                          )}
-                        </Box>
-
-                        {/* Notes (Requirement 53.7) */}
-                        {item.notes && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{
-                              fontStyle: "italic",
-                              mt: 1,
-                              p: 1,
-                              bgcolor: "action.hover",
-                              borderRadius: 1,
-                            }}
-                          >
-                            {item.notes}
-                          </Typography>
-                        )}
-
-                        {/* Quick Actions */}
-                        <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                          <Button
-                            size="small"
-                            variant={
-                              item.is_acquired ? "outlined" : "contained"
-                            }
-                            startIcon={
-                              item.is_acquired ? (
-                                <RadioButtonUncheckedRounded />
-                              ) : (
-                                <CheckCircleRounded />
-                              )
-                            }
-                            onClick={() => handleToggleAcquired(item)}
-                          >
-                            {item.is_acquired
-                              ? t("wishlists.markNeeded", "Mark as Needed")
-                              : t("wishlists.markAcquired", "Mark as Acquired")}
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
+                  item={item}
+                  onMenuOpen={handleItemMenuOpen}
+                  onToggleAcquired={handleToggleAcquired}
+                />
               ))}
             </Box>
           )}

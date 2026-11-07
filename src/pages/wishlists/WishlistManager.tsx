@@ -15,25 +15,12 @@ import {
   Button,
   Card,
   CardContent,
-  CardActions,
   CircularProgress,
   Alert,
   TextField,
-  IconButton,
-  LinearProgress,
-  Chip,
-  Stack,
 } from "@mui/material"
 import { LabeledSwitch } from "../../components/buttons/LabeledSwitch"
-import {
-  AddRounded,
-  PlaylistAddRounded,
-  DeleteRounded,
-  ShareRounded,
-  LockRounded,
-  PublicRounded,
-  CheckCircleRounded,
-} from "@mui/icons-material"
+import { AddRounded, PlaylistAddRounded } from "@mui/icons-material"
 import {
   useGetWishlistsQuery,
   useCreateWishlistMutation,
@@ -44,7 +31,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../hooks/accessibility/useFocusOnReveal"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useFormatters } from "../../util/format"
+import { WishlistSummaryCard } from "./WishlistSummaryCard"
 import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 
@@ -63,7 +50,6 @@ import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
  * - Authentication required
  */
 export function WishlistManager() {
-  const fmt = useFormatters()
   const { t } = useTranslation()
   const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const { data: userProfile } = useGetUserProfileQuery()
@@ -271,158 +257,12 @@ export function WishlistManager() {
             }}
           >
             {wishlists.map((wishlist) => (
-              <Card
+              <WishlistSummaryCard
                 key={wishlist.wishlist_id}
-                sx={{
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: 4,
-                  },
-                }}
-                onClick={() => handleWishlistClick(wishlist.wishlist_id)}
-              >
-                <CardContent>
-                  {/* Wishlist Name and Badges */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      mb: 2,
-                    }}
-                  >
-                    <Typography variant="h6" sx={{ flex: 1, mr: 1 }}>
-                      {wishlist.wishlist_name}
-                    </Typography>
-                    <Stack direction="row" spacing={0.5}>
-                      {wishlist.is_public ? (
-                        <PublicRounded
-                          fontSize="small"
-                          color="action"
-                          titleAccess={t("wishlistsUi.public")}
-                        />
-                      ) : (
-                        <LockRounded
-                          fontSize="small"
-                          color="action"
-                          titleAccess={t("wishlistsUi.private")}
-                        />
-                      )}
-                      {wishlist.is_collaborative && (
-                        <ShareRounded
-                          fontSize="small"
-                          color="action"
-                          titleAccess={t("wishlistsUi.collaborative")}
-                        />
-                      )}
-                    </Stack>
-                  </Box>
-
-                  {/* Description */}
-                  {wishlist.wishlist_description && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        mb: 2,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                      }}
-                    >
-                      {wishlist.wishlist_description}
-                    </Typography>
-                  )}
-
-                  {/* Item Count */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      mb: 2,
-                    }}
-                  >
-                    <Typography variant="body2" color="text.secondary">
-                      {t("wishlistsUi.manager.itemCount", {
-                        count: wishlist.item_count,
-                      })}
-                    </Typography>
-                    {wishlist.completed_items > 0 && (
-                      <>
-                        <Typography variant="body2" color="text.secondary">
-                          •
-                        </Typography>
-                        <Chip
-                          icon={<CheckCircleRounded />}
-                          label={t("wishlistsUi.manager.acquiredCount", {
-                            count: wishlist.completed_items,
-                          })}
-                          size="small"
-                          color="success"
-                          variant="outlined"
-                        />
-                      </>
-                    )}
-                  </Box>
-
-                  {/* Progress Bar (Requirement 8.3) */}
-                  {wishlist.item_count > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          mb: 0.5,
-                        }}
-                      >
-                        <Typography variant="caption" color="text.secondary">
-                          {t("wishlists.progress")}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {wishlist.progress_percentage}%
-                        </Typography>
-                      </Box>
-                      <LinearProgress
-                        variant="determinate"
-                        value={wishlist.progress_percentage}
-                        sx={{ height: 6, borderRadius: 3 }}
-                      />
-                    </Box>
-                  )}
-
-                  {/* Created Date */}
-                  <Typography variant="caption" color="text.secondary">
-                    {t("wishlistsUi.manager.createdOn", {
-                      date: fmt.date(wishlist.created_at),
-                    })}
-                  </Typography>
-                </CardContent>
-
-                <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
-                  <IconButton
-                    size="small"
-                    onClick={(e) =>
-                      handleDeleteClick(
-                        wishlist.wishlist_id,
-                        wishlist.wishlist_name,
-                        e,
-                      )
-                    }
-                    color="error"
-                    aria-label={t("wishlistsUi.manager.deleteNamed", {
-                      name: wishlist.wishlist_name,
-                    })}
-                  >
-                    <DeleteRounded fontSize="small" />
-                  </IconButton>
-                </CardActions>
-              </Card>
+                wishlist={wishlist}
+                onOpen={handleWishlistClick}
+                onDelete={handleDeleteClick}
+              />
             ))}
           </Box>
         )}
