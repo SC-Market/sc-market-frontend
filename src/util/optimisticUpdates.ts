@@ -101,15 +101,17 @@ export async function createOptimisticUpdate<TResult>(
     await queryFulfilled
     // If successful, the server response will replace the optimistic update
     // via cache invalidation or transformResponse
-  } catch (error) {
-    // Rollback all patches on error
+  } catch {
+    // Roll back all patches. Not rethrown: RTK Query ignores the promise
+    // onQueryStarted returns, so a rethrow was an unhandled rejection of
+    // its { error } object (BugSnag: "unhandledrejection handler received
+    // a non-error"). The component already gets the failure from its own
+    // mutation promise (unwrap / result.error).
     patchArray.forEach((patch) => {
       if (patch && typeof patch.undo === "function") {
         patch.undo()
       }
     })
-    // Re-throw the error so it can be handled by the component
-    throw error
   }
 }
 
