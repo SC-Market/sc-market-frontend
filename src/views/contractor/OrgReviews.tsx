@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useMemo } from "react"
+import React, { MouseEventHandler, useMemo } from "react"
 import {
   Avatar,
   Box,
@@ -29,7 +29,7 @@ import {
   SellerRatingCount,
 } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
-import { toSupportedLocale } from "../../util/locales"
+import { useFormatters } from "../../util/format"
 import { EmptyReviews } from "../../components/empty-states"
 import { Grid } from "@mui/material"
 import { isAwaitingData } from "../../util/queryLoading"
@@ -43,18 +43,10 @@ function ReviewRow(props: {
 }) {
   const { row, onClick, isItemSelected, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-  const { i18n } = useTranslation()
-  // The page's language (as rendered on the server), not the browser's.
-  const locale = toSupportedLocale(i18n.language)
-  const formatDate = useCallback(
-    (date: number) =>
-      Intl.DateTimeFormat(locale, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }).format(new Date(date)),
-    [locale],
-  )
+  // The page's language and, until hydrated, UTC: the server render and the
+  // hydrating browser must print the same day (a review at 03:00 UTC is the
+  // previous day in the Americas).
+  const fmt = useFormatters()
 
   return (
     <>
@@ -130,7 +122,11 @@ function ReviewRow(props: {
             }}
           >
             <Typography variant={"subtitle2"} color={"text.secondary"}>
-              {formatDate(row.timestamp)}
+              {fmt.date(row.timestamp, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </Typography>
             <Typography variant={"subtitle1"}>{row.content}</Typography>
           </Box>

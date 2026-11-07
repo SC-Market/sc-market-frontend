@@ -182,10 +182,12 @@ export function calculateBadgesFromRating(rating: Rating): string[] {
  * Used on shop profiles when the backend provides the `metrics` field.
  *
  * @param metrics Shop metrics data
+ * @param now The render's time in ms (useNow()), for the account age
  * @returns Array of badge IDs
  */
 export function calculateBadgesFromShopMetrics(
   metrics: ShopMetricsForBadges,
+  now: number,
 ): string[] {
   const badges: string[] = []
 
@@ -237,11 +239,13 @@ export function calculateBadgesFromShopMetrics(
   }
 
   // Consistency badges — based on account age (created_at)
+  // `now` is the render's time (useNow) and the months are counted in UTC,
+  // so a server render and the browser hydrating it award the same badges.
   const createdAt = new Date(metrics.created_at)
-  const now = new Date()
+  const today = new Date(now)
   const ageMonths =
-    (now.getFullYear() - createdAt.getFullYear()) * 12 +
-    (now.getMonth() - createdAt.getMonth())
+    (today.getUTCFullYear() - createdAt.getUTCFullYear()) * 12 +
+    (today.getUTCMonth() - createdAt.getUTCMonth())
   if (ageMonths >= 36 && metrics.total_completed >= 50) {
     badges.push(BADGE_CONSISTENCY_PRO)
   } else if (ageMonths >= 24 && metrics.total_completed >= 30) {

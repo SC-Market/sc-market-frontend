@@ -27,7 +27,7 @@ import {
 import { BadgeDisplay } from "../../../components/rating/ListingRating"
 import { ORG_PATHS, USER_PATHS } from "../../../routes/paths"
 import { Trans, useTranslation } from "react-i18next"
-import { useFormatters } from "../../../util/format"
+import { useFormatters, useNow } from "../../../util/format"
 
 export function ShopHeader(props: { shop: ShopPublicResponse }) {
   const { shop } = props
@@ -202,6 +202,7 @@ export function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
   }, [reviewsData])
 
   // Prefer server-computed badge_ids; fall back to client-side metrics calc
+  const now = useNow()
   const shopBadges = useMemo(() => {
     if (shop.badge_ids && shop.badge_ids.length > 0) {
       return prioritizeBadges(shop.badge_ids)
@@ -209,18 +210,21 @@ export function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
     const metrics = (shop as ShopPublicResponseWithMetrics).metrics
     if (!metrics) return []
     return prioritizeBadges(
-      calculateBadgesFromShopMetrics({
-        avg_rating: shop.rating || 0,
-        rating_count: shop.rating_count,
-        total_orders: metrics.total_orders,
-        total_completed: metrics.total_completed,
-        streak: metrics.streak,
-        response_rate: metrics.response_rate,
-        avg_completion_hours: metrics.avg_completion_hours,
-        created_at: shop.created_at,
-      }),
+      calculateBadgesFromShopMetrics(
+        {
+          avg_rating: shop.rating || 0,
+          rating_count: shop.rating_count,
+          total_orders: metrics.total_orders,
+          total_completed: metrics.total_completed,
+          streak: metrics.streak,
+          response_rate: metrics.response_rate,
+          avg_completion_hours: metrics.avg_completion_hours,
+          created_at: shop.created_at,
+        },
+        now,
+      ),
     )
-  }, [shop])
+  }, [shop, now])
 
   return (
     <Box display="flex" sx={{ maxWidth: 800, width: "100%", marginTop: 2 }}>

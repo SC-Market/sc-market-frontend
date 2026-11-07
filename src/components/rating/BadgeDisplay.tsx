@@ -10,6 +10,7 @@ import {
   RocketLaunchRounded,
   FavoriteRounded,
 } from "@mui/icons-material"
+import { useId } from "react"
 import { Box, Tooltip } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -55,8 +56,10 @@ export function BadgeDisplay(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  // Create unique gradient ID for each instance to avoid conflicts
-  const gradientId = `linearColors-${Math.random().toString(36).substr(2, 9)}`
+  // A unique gradient ID per instance, the same on the server and in the
+  // hydrating browser (useId; Math.random would not match, and the fills
+  // would point at gradients that don't exist). Only id/url()-safe chars.
+  const gradientId = `linearColors-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`
 
   return (
     <Box

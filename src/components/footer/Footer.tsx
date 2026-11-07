@@ -257,7 +257,7 @@ export function Footer() {
             align="center"
           >
             {t("footer.copyright", "Copyright © ")} SC Market{" "}
-            {new Date(now).getFullYear() + 930}.
+            {new Date(now).getUTCFullYear() + 930}.
             <br />
             {t(
               "footer.trademark",
