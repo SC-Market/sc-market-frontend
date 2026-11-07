@@ -10,41 +10,22 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
   Skeleton,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   useGetStillSellingCampaignQuery,
-  type StillSellingFeedbackGroup,
-  type StillSellingFeedbackSummary,
   type StillSellingLocale,
 } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
 import { useStillSellingCampaignActions } from "../../features/admin/hooks/useStillSellingCampaign"
-
-const LOCALES: StillSellingLocale[] = [
-  "en",
-  "de",
-  "es",
-  "fr",
-  "ja",
-  "uk",
-  "zh-CN",
-  "zh-TW",
-]
+import {
+  StillSellingProgressTable,
+  StillSellingSamplePreview,
+} from "./StillSellingCampaignParts"
+import { FeedbackSection } from "./StillSellingFeedback"
 
 /** Poll while a send runs, so the progress counts move. */
 const RUNNING_POLL_MS = 10_000
@@ -54,100 +35,6 @@ function apiErrorMessage(error: unknown): string | null {
     | { error?: { message?: string }; message?: string }
     | undefined
   return data?.error?.message ?? data?.message ?? null
-}
-
-const REASONS = [
-  "not_playing",
-  "waiting_patch",
-  "not_enough_buyers",
-  "selling_elsewhere",
-  "too_much_work",
-  "about_sc_market",
-  "other",
-] as const
-
-function FeedbackGroup({
-  group,
-  testid,
-}: {
-  group: StillSellingFeedbackGroup
-  testid: string
-}) {
-  const { t } = useTranslation()
-  const fmt = useFormatters()
-  const fieldLabel = (f: string) =>
-    ({
-      about_sc_market: t(
-        "stillSellingPage.feedback.reasons.about_sc_market",
-        "Something about SC Market",
-      ),
-      other: t("stillSellingPage.feedback.reasons.other", "Other"),
-      easier: t(
-        "adminUi.stillSelling.feedback.easier",
-        "Would make selling easier",
-      ),
-    })[f] ?? f
-  return (
-    <Box data-testid={testid}>
-      <Table size="small">
-        <TableBody>
-          {REASONS.map((r) => (
-            <TableRow key={r}>
-              <TableCell>
-                {t(`stillSellingPage.feedback.reasons.${r}`)}
-              </TableCell>
-              <TableCell align="right">{group.reasons[r]}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {group.texts.length > 0 && (
-        <Box component="ul" sx={{ mt: 1, mb: 0, pl: 2.5 }}>
-          {group.texts.map((x, i) => (
-            <Typography component="li" variant="body2" key={i}>
-              {fmt.date(x.created_at)} · {x.display_name} ·{" "}
-              {fieldLabel(x.field)}: {x.text}
-            </Typography>
-          ))}
-        </Box>
-      )}
-    </Box>
-  )
-}
-
-/** Feedback from the landing page; answers from test links shown apart. */
-function FeedbackSection({
-  feedback,
-}: {
-  feedback: StillSellingFeedbackSummary
-}) {
-  const { t } = useTranslation()
-  return (
-    <Box>
-      <Typography variant="subtitle2">
-        {t("adminUi.stillSelling.feedback.title", {
-          count: feedback.real.responses,
-        })}
-      </Typography>
-      <FeedbackGroup
-        group={feedback.real}
-        testid="still-selling-feedback-real"
-      />
-      {feedback.test.responses > 0 && (
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle2" color="text.secondary">
-            {t("adminUi.stillSelling.feedback.testTitle", {
-              count: feedback.test.responses,
-            })}
-          </Typography>
-          <FeedbackGroup
-            group={feedback.test}
-            testid="still-selling-feedback-test"
-          />
-        </Box>
-      )}
-    </Box>
-  )
 }
 
 /**
@@ -315,61 +202,11 @@ export function StillSellingCampaignCard() {
               </Box>
             )}
 
-            <Paper variant="outlined" sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                spacing={2}
-                sx={{ mb: 1 }}
-              >
-                <Typography variant="subtitle2">
-                  {t(
-                    "adminUi.stillSelling.sample",
-                    "Sample DM (fake data: 3 listings, 2 months)",
-                  )}
-                </Typography>
-                <FormControl size="small" sx={{ minWidth: 120 }}>
-                  <InputLabel id="still-selling-locale">
-                    {t("adminUi.stillSelling.sampleLocale", "Language")}
-                  </InputLabel>
-                  <Select
-                    labelId="still-selling-locale"
-                    label={t("adminUi.stillSelling.sampleLocale", "Language")}
-                    value={locale}
-                    onChange={(e) =>
-                      setLocale(e.target.value as StillSellingLocale)
-                    }
-                  >
-                    {LOCALES.map((l) => (
-                      <MenuItem key={l} value={l}>
-                        {l}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              <Typography
-                variant="body2"
-                sx={{ mb: 1 }}
-                data-testid="still-selling-sample-text"
-              >
-                {data.sample.text}
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {data.sample.buttons.map((b) => (
-                  <Button
-                    key={b.label}
-                    size="small"
-                    variant="outlined"
-                    disabled
-                    title={b.url}
-                  >
-                    {b.label}
-                  </Button>
-                ))}
-              </Stack>
-            </Paper>
+            <StillSellingSamplePreview
+              sample={data.sample}
+              locale={locale}
+              setLocale={setLocale}
+            />
 
             {data.run.running ? (
               <Alert severity="info" data-testid="still-selling-running">
@@ -439,77 +276,7 @@ export function StillSellingCampaignCard() {
               </Alert>
             )}
 
-            <TableContainer>
-              <Table size="small" data-testid="still-selling-progress">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="right">
-                      {t("adminUi.stillSelling.progress.sent", "Sent")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.delivered",
-                        "Delivered",
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.failedClosed",
-                        "Failed (closed)",
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.failedOther",
-                        "Failed (other)",
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.clickedKeep",
-                        "Clicked keep",
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.clickedPause",
-                        "Clicked pause",
-                      )}
-                    </TableCell>
-                    <TableCell align="right">
-                      {t(
-                        "adminUi.stillSelling.progress.listings",
-                        "Listings kept · paused",
-                      )}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="right">{data.progress.sent}</TableCell>
-                    <TableCell align="right">
-                      {data.progress.delivered}
-                    </TableCell>
-                    <TableCell align="right">
-                      {data.progress.failed_closed}
-                    </TableCell>
-                    <TableCell align="right">
-                      {data.progress.failed - data.progress.failed_closed}
-                    </TableCell>
-                    <TableCell align="right">
-                      {data.progress.clicked_keep}
-                    </TableCell>
-                    <TableCell align="right">
-                      {data.progress.clicked_pause}
-                    </TableCell>
-                    <TableCell align="right">
-                      {data.progress.kept_listings} ·{" "}
-                      {data.progress.paused_listings}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <StillSellingProgressTable progress={data.progress} />
 
             <FeedbackSection feedback={data.feedback} />
           </Stack>

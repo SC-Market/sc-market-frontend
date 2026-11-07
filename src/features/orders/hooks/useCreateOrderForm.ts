@@ -23,7 +23,7 @@ import { convertAvailability } from "../../../pages/availability/Availability.la
 import type { Service, PaymentType } from "../domain/types"
 import type { OrderLimits } from "../domain/types"
 
-interface WorkRequestState {
+export interface WorkRequestState {
   title: string
   rush: boolean
   description: string
