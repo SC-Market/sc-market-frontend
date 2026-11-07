@@ -1,10 +1,10 @@
-import React, { useEffect } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { Box, Button, Link, Paper, Typography } from "@mui/material"
 import { useCookies } from "react-cookie"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { CookieRounded } from "@mui/icons-material"
 import ReactGA from "react-ga4"
-import { useLocation } from "react-router-dom"
+import { type Location, useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -34,6 +34,26 @@ export function CookieConsent() {
   // gate and public/privacy.html must say the same thing.
   const analyticsAllowed = cookies.cookie_consent === "all"
 
+  // One page_view per pathname. Filters and search write the query string
+  // with replaceState (/market -> /market?...), which must not count as a new
+  // page; the full URL still goes in page_location so real pageviews keep
+  // their filter context. gtag's own page_view on config is turned off
+  // (send_page_view: false) so this is the only source and nothing doubles.
+  const latestLocation = useRef<Location>(location)
+  latestLocation.current = location
+  const lastSentPathname = useRef<string | null>(null)
+
+  const sendPageview = useCallback((loc: Location) => {
+    if (!ReactGA.isInitialized) return
+    if (lastSentPathname.current === loc.pathname) return
+    lastSentPathname.current = loc.pathname
+    ReactGA.send({
+      hitType: "pageview",
+      page: loc.pathname + loc.search,
+      page_location: window.location.origin + loc.pathname + loc.search,
+    })
+  }, [])
+
   useEffect(() => {
     if (!analyticsAllowed) return
     // Delay analytics initialization until page is interactive
@@ -43,24 +63,22 @@ export function CookieConsent() {
       if (!ReactGA.isInitialized) {
         ReactGA.initialize(GA_TRACKING_ID, {
           gtagOptions: {
+            send_page_view: false,
             ad_storage: "denied",
             ad_user_data: "denied",
             ad_personalization: "denied",
           },
         })
       }
+      // The landing page: the location effect below ran before GA existed.
+      sendPageview(latestLocation.current)
       startPerformanceMonitoring(import.meta.env.VITE_BUGSNAG_API_KEY || "")
     })
-  }, [analyticsAllowed])
+  }, [analyticsAllowed, sendPageview])
 
   useEffect(() => {
-    if (location && analyticsAllowed && ReactGA.isInitialized) {
-      ReactGA.send({
-        hitType: "pageview",
-        page: location.pathname + location.search,
-      })
-    }
-  }, [location, analyticsAllowed])
+    if (analyticsAllowed) sendPageview(location)
+  }, [location, analyticsAllowed, sendPageview])
 
   const theme = useTheme<ExtendedTheme>()
   // Sit just above the mobile bottom navigation (64px on phones, 0 otherwise)
