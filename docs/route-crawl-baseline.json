@@ -3,7 +3,7 @@
     "base": "http://127.0.0.1:4173",
     "api": "https://api.sc-market.space",
     "crawledAt": "2026-10-25T06:56:58.847Z",
-    "routeCount": 116,
+    "routeCount": 115,
     "upstreamApiRequests": 90,
     "browserRelaunches": 0
   },
@@ -2381,32 +2381,6 @@
       "h1": [
         "Ace Interceptor Helmet"
       ],
-      "hasMainNav": true,
-      "hasMain": true,
-      "consoleErrors": [
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
-        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
-        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
-        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
-      ],
-      "consoleWarnings": [],
-      "pageErrors": [],
-      "failedOwnRequests": [],
-      "apiNon2xx": [
-        "GET /api/domain/127.0.0.1 404",
-        "GET /api/profile 401",
-        "GET /api/v2/shops/mine 401",
-        "POST /api/auth/refresh 405"
-      ],
-      "navigationError": null,
-      "pendingAtTimeout": []
-    },
-    "/sell": {
-      "route": "/sell",
-      "url": "/sell",
-      "finalUrl": "/login?redirect=%2Fsell",
-      "title": "Sign in to SC Market",
-      "h1": [],
       "hasMainNav": true,
       "hasMain": true,
       "consoleErrors": [
