@@ -5,7 +5,7 @@
 //   node scripts/lint-ratchet.mjs           check against the baseline
 //   node scripts/lint-ratchet.mjs --update  write today's counts as the baseline
 //
-// prettier/prettier is left out: formatting is not ratcheted here.
+// prettier/prettier counts like any other rule: src stays Prettier-clean.
 // react-hooks/rules-of-hooks must stay at zero whatever the baseline says.
 //
 // Fixed some warnings? Run with --update and commit the lower baseline.
@@ -18,10 +18,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const baselinePath = join(root, "scripts", "lint-baseline.json")
 const update = process.argv.includes("--update")
 
-const eslint = new ESLint({
-  cwd: root,
-  overrideConfig: { rules: { "prettier/prettier": "off" } },
-})
+const eslint = new ESLint({ cwd: root })
 const results = await eslint.lintFiles(["src"])
 
 const counts = { warnings: 0, errors: 0, byRule: {} }

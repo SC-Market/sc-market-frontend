@@ -1,7 +1,5 @@
 {
-  "warnings": 74,
+  "warnings": 0,
   "errors": 0,
-  "byRule": {
-    "max-lines": 74
-  }
+  "byRule": {}
 }

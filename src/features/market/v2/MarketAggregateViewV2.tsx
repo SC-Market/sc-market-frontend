@@ -15,7 +15,10 @@ import {
   useGetPriceHistoryQuery,
   useSearchBuyOrdersQuery,
 } from "../../../store/api/v2/market"
-import type { AggregateListingV2Row, GameItemAggregateV2 } from "./aggregateV2Types"
+import type {
+  AggregateListingV2Row,
+  GameItemAggregateV2,
+} from "./aggregateV2Types"
 
 /**
  * MarketAggregateViewV2 Component
