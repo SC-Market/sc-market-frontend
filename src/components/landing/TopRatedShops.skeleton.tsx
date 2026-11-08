@@ -14,7 +14,7 @@ export const TOP_RATED_SHOPS_COUNT = 4
 /**
  * The section's query (the SPA and the SSR first-page data send the same):
  * the /shops Top Rated sort, only shops that trade (`featured`: an order
- * fulfilled in the last 90 days).
+ * fulfilled in the last 365 days).
  */
 export const TOP_RATED_SHOPS_ARGS: BrowseShopsApiArg = {
   page: 1,
