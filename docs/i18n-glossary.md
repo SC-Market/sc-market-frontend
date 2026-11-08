@@ -7,8 +7,8 @@ existing string that uses the term, and add a row here. One English term gets
 one rendering per locale. Never two.
 
 The same file lives in SC Orgs (`sc-orgs-monorepo/docs/i18n-glossary.md`). Keep the two copies identical. The es and
-zh-Hant columns apply to SC Market only, and the Dispatch, Intel, Treasury and
-AAR rows to SC Orgs only.
+zh-Hant columns apply to SC Market only, and the Dispatch, Intel, Treasury,
+AAR, Joint op and Contingent rows to SC Orgs only.
 
 English (`en`) is the source of truth. The guards (`check-i18n`,
 `i18n-hardcoded --check` and the locale catalog test) check keys, plural forms
@@ -113,6 +113,8 @@ replaced a competing rendering. Do not reintroduce the old one.
 | Intel                                                     | **Intel** (recon: Aufklärung)                    |                                        | renseignement                                | **情報**                              | розвідка                                       | 情报                                  |                           |
 | Treasury                                                  | **Kasse**                                        |                                        | trésorerie                                   | **財務**                              | скарбниця                                      | **金库**                              |                           |
 | AAR                                                       | **Nachbereitung** (titles: Einsatznachbereitung) |                                        | **retex**                                    | 事後報告                              | розбір операції                                | 行动复盘                              |                           |
+| Joint op (agreement type: Joint Ops)                      | **Gemeinsame Op** (pl. Gemeinsame Ops)           |                                        | **opération conjointe**                      | **共同作戦**                          | **спільна операція**                           | **联合行动**                          |                           |
+| Contingent (an org's side of a joint op)                  | Kontingent                                       |                                        | contingent                                   | 部隊                                  | загін                                          | 分队                                  |                           |
 | Fleet                                                     | Flotte                                           | flota                                  | flotte                                       | **フリート**                          | флот                                           | 舰队                                  | 艦隊                      |
 | Ship                                                      | Schiff                                           | nave                                   | vaisseau                                     | **艦船**                              | корабель                                       | **舰船**                              | **艦船**                  |
 | Item                                                      | Artikel (market) / Gegenstand (wiki, game)       | **artículo**                           | article (market) / objet (wiki, game)        | アイテム                              | предмет                                        | 物品                                  | **物品**                  |
