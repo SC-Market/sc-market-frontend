@@ -84,10 +84,6 @@ const RAW_MUI = {
     "use BottomSheet / MobileSidebarWrapper (components/mobile) or DockedSidePanel (components/sidebar)",
   Switch: "use a labelled FormControlLabel + Switch from a shared component",
 }
-// Files still on a raw MUI Dialog (see the components/dialog guard below).
-// Convert one to ResponsiveDialog / ConfirmDialog, then drop it from here.
-// Never add to this list.
-const DIALOG_LEGACY = []
 const LEGACY_STORE_SLICES = [
   "**/store/profile",
   "**/store/contractor",
@@ -832,9 +828,9 @@ export default [
   // ── Guard rails: raw MUI Dialog only in components/dialog (error) ──
   // Everywhere else uses ResponsiveDialog / ConfirmDialog. The three detail
   // modals stay a modal over the hub on desktop and a page on mobile (owner's
-  // call). DIALOG_LEGACY lists files not converted yet: it may only shrink,
-  // never grow. pages/ and features/ are covered by the stricter block below,
-  // which comes later and so has the last word on those files.
+  // call). No exceptions beyond these: new dialogs go on ResponsiveDialog.
+  // pages/ and features/ are covered by the stricter block below, which
+  // comes later and so has the last word on those files.
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: [
@@ -844,7 +840,6 @@ export default [
       "src/components/game-data/BlueprintDetailModal.tsx",
       "src/components/game-data/MissionDetailModal.tsx",
       "src/components/game-data/ShipDetailModal.tsx",
-      ...DIALOG_LEGACY,
       "**/*.test.ts",
       "**/*.test.tsx",
       "**/__tests__/**",
