@@ -4,10 +4,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Paper,
   Stack,
   Table,
@@ -19,6 +15,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { useTranslation } from "react-i18next"
 import { useListTestAccountsQuery } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
@@ -245,41 +242,26 @@ export function AdminTestAccountsView() {
         onClose={() => createState.reset()}
       />
 
-      <Dialog
+      <ConfirmDialog
         open={confirmDelete !== null}
         onClose={() => setConfirmDelete(null)}
-      >
-        <DialogTitle>
-          {t("admin.testAccounts.deleteTitle", "Delete {{username}}?", {
-            username: confirmDelete,
-          })}
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">
-            {t(
-              "admin.testAccounts.deleteBody",
-              "Deletes the test account with its test orgs, shops, listings and orders. Remove its entry from your secrets file too.",
-            )}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button color="inherit" onClick={() => setConfirmDelete(null)}>
-            {t("mfa.common.cancel", "Cancel")}
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            disabled={removeState.isLoading}
-            onClick={async () => {
-              const name = confirmDelete!
-              setConfirmDelete(null)
-              await remove(name)
-            }}
-          >
-            {t("admin.testAccounts.delete", "Delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title={t("admin.testAccounts.deleteTitle", "Delete {{username}}?", {
+          username: confirmDelete,
+        })}
+        message={t(
+          "admin.testAccounts.deleteBody",
+          "Deletes the test account with its test orgs, shops, listings and orders. Remove its entry from your secrets file too.",
+        )}
+        cancelLabel={t("mfa.common.cancel", "Cancel")}
+        confirmLabel={t("admin.testAccounts.delete", "Delete")}
+        destructive
+        confirmDisabled={removeState.isLoading}
+        onConfirm={async () => {
+          const name = confirmDelete!
+          setConfirmDelete(null)
+          await remove(name)
+        }}
+      />
     </Stack>
   )
 }

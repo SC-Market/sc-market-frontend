@@ -6,10 +6,6 @@ import {
   Card,
   CardContent,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   FormControl,
   Grid,
@@ -28,6 +24,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import DeleteRounded from "@mui/icons-material/DeleteRounded"
 import {
   useGetStatsQuery,
@@ -283,56 +280,53 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
       </TableContainer>
 
       {/* Add dialog */}
-      <Dialog
+      <ResponsiveDialog
         open={addOpen}
         onClose={() => setAddOpen(false)}
+        title={t("adminUi.featureFlags.addOverrideFor", { label })}
         maxWidth="xs"
-        fullWidth
+        actions={
+          <>
+            <Button
+              onClick={() => {
+                setAddOpen(false)
+                setNewUsername("")
+              }}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleAdd}
+              disabled={!newUsername.trim()}
+            >
+              {t("adminUi.featureFlags.add")}
+            </Button>
+          </>
+        }
       >
-        <DialogTitle>
-          {t("adminUi.featureFlags.addOverrideFor", { label })}
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <UserSearch
-              onUserSelect={(user) => setNewUsername(user.username)}
-              placeholder={t("adminUi.featureFlags.searchByUsername")}
+        <Stack spacing={2} sx={{ mt: 1 }}>
+          <UserSearch
+            onUserSelect={(user) => setNewUsername(user.username)}
+            placeholder={t("adminUi.featureFlags.searchByUsername")}
+          />
+          {newUsername && (
+            <Chip label={newUsername} onDelete={() => setNewUsername("")} />
+          )}
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="body2">
+              {t("adminUi.featureFlags.enabled")}
+            </Typography>
+            <Switch
+              checked={newEnabled}
+              onChange={(e) => setNewEnabled(e.target.checked)}
+              inputProps={{
+                "aria-label": t("adminUi.featureFlags.enabledForUser"),
+              }}
             />
-            {newUsername && (
-              <Chip label={newUsername} onDelete={() => setNewUsername("")} />
-            )}
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography variant="body2">
-                {t("adminUi.featureFlags.enabled")}
-              </Typography>
-              <Switch
-                checked={newEnabled}
-                onChange={(e) => setNewEnabled(e.target.checked)}
-                inputProps={{
-                  "aria-label": t("adminUi.featureFlags.enabledForUser"),
-                }}
-              />
-            </Stack>
           </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setAddOpen(false)
-              setNewUsername("")
-            }}
-          >
-            {t("common.cancel")}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleAdd}
-            disabled={!newUsername.trim()}
-          >
-            {t("adminUi.featureFlags.add")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </Stack>
+      </ResponsiveDialog>
     </Box>
   )
 }

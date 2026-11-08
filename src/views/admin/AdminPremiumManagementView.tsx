@@ -4,10 +4,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -16,6 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { useGetPremiumOrgsQuery, PremiumTier } from "../../store/api/premium"
@@ -158,112 +155,114 @@ export function AdminPremiumManagementView() {
         />
       </Grid>
 
-      <Dialog
+      <ResponsiveDialog
         open={grantDialogOpen}
         onClose={() => setGrantDialogOpen(false)}
+        title={t("admin.premium.grantTitle", "Grant Premium Tier")}
         maxWidth="sm"
-        fullWidth
+        mobile="fullScreen"
+        disableClose={isSetting}
+        actions={
+          <>
+            <Button
+              onClick={() => setGrantDialogOpen(false)}
+              disabled={isSetting}
+            >
+              {t("common.cancel", "Cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleGrant}
+              disabled={!selectedOrg || isSetting}
+            >
+              {t("admin.premium.grant", "Grant Premium")}
+            </Button>
+          </>
+        }
       >
-        <DialogTitle>
-          {t("admin.premium.grantTitle", "Grant Premium Tier")}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            label={t("admin.premium.searchOrg", "Search organization")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ mt: 1, mb: 2 }}
-          />
-          {searchOrgs.length > 0 && searchQuery.length >= 2 && (
-            <Box sx={{ mb: 2, maxHeight: 200, overflow: "auto" }}>
-              {searchOrgs.map((org) => (
-                <Button
-                  key={org.spectrum_id}
-                  fullWidth
-                  variant={
-                    selectedOrg?.spectrum_id === org.spectrum_id
-                      ? "contained"
-                      : "text"
-                  }
-                  onClick={() => setSelectedOrg(org)}
+        <TextField
+          fullWidth
+          label={t("admin.premium.searchOrg", "Search organization")}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ mt: 1, mb: 2 }}
+        />
+        {searchOrgs.length > 0 && searchQuery.length >= 2 && (
+          <Box sx={{ mb: 2, maxHeight: 200, overflow: "auto" }}>
+            {searchOrgs.map((org) => (
+              <Button
+                key={org.spectrum_id}
+                fullWidth
+                variant={
+                  selectedOrg?.spectrum_id === org.spectrum_id
+                    ? "contained"
+                    : "text"
+                }
+                onClick={() => setSelectedOrg(org)}
+                sx={{
+                  justifyContent: "flex-start",
+                  textTransform: "none",
+                  py: 1,
+                  px: 1.5,
+                }}
+              >
+                <Box
                   sx={{
-                    justifyContent: "flex-start",
-                    textTransform: "none",
-                    py: 1,
-                    px: 1.5,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    width: "100%",
                   }}
                 >
+                  <Avatar
+                    src={org.avatar}
+                    alt={org.name}
+                    sx={{ width: 32, height: 32 }}
+                  />
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                      width: "100%",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      lineHeight: 1.3,
                     }}
                   >
-                    <Avatar
-                      src={org.avatar}
-                      alt={org.name}
-                      sx={{ width: 32, height: 32 }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      <Typography variant="body2">{org.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {org.spectrum_id}
-                      </Typography>
-                    </Box>
+                    <Typography variant="body2">{org.name}</Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {org.spectrum_id}
+                    </Typography>
                   </Box>
-                </Button>
-              ))}
-            </Box>
-          )}
-          <FormControl fullWidth sx={{ mt: 1 }}>
-            <InputLabel id="admin-premium-management-view-tier-label">
-              {t("admin.premium.tier", "Tier")}
-            </InputLabel>
-            <Select
-              labelId="admin-premium-management-view-tier-label"
-              value={selectedTier}
-              label={t("admin.premium.tier", "Tier")}
-              onChange={(e) => setSelectedTier(e.target.value)}
-            >
-              <MenuItem value="white_label">{t("org.whiteLabelTab")}</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label={t("admin.premium.domain", "Custom Domain")}
-            placeholder="org.sc-market.space"
-            value={selectedDomain}
-            onChange={(e) => setSelectedDomain(e.target.value)}
-            sx={{ mt: 2 }}
-            helperText={t(
-              "admin.premium.domainHelp",
-              "The hostname for this org's white-label site. Configure DNS to point here.",
-            )}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setGrantDialogOpen(false)}>
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleGrant}
-            disabled={!selectedOrg || isSetting}
+                </Box>
+              </Button>
+            ))}
+          </Box>
+        )}
+        <FormControl fullWidth sx={{ mt: 1 }}>
+          <InputLabel id="admin-premium-management-view-tier-label">
+            {t("admin.premium.tier", "Tier")}
+          </InputLabel>
+          <Select
+            labelId="admin-premium-management-view-tier-label"
+            value={selectedTier}
+            label={t("admin.premium.tier", "Tier")}
+            onChange={(e) => setSelectedTier(e.target.value)}
           >
-            {t("admin.premium.grant", "Grant Premium")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <MenuItem value="white_label">{t("org.whiteLabelTab")}</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          fullWidth
+          label={t("admin.premium.domain", "Custom Domain")}
+          placeholder="org.sc-market.space"
+          value={selectedDomain}
+          onChange={(e) => setSelectedDomain(e.target.value)}
+          sx={{ mt: 2 }}
+          helperText={t(
+            "admin.premium.domainHelp",
+            "The hostname for this org's white-label site. Configure DNS to point here.",
+          )}
+        />
+      </ResponsiveDialog>
     </Grid>
   )
 }

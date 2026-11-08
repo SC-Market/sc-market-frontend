@@ -88,16 +88,6 @@ const RAW_MUI = {
 // Convert one to ResponsiveDialog / ConfirmDialog, then drop it from here.
 // Never add to this list.
 const DIALOG_LEGACY = [
-  "src/views/admin/AdminAlertsView.tsx",
-  "src/views/admin/AdminAttributeDefinitionsView.tsx",
-  "src/views/admin/AdminFeatureFlagDetailView.tsx",
-  "src/views/admin/AdminGameItemAttributesView.tsx",
-  "src/views/admin/AdminModerationView.tsx",
-  "src/views/admin/AdminPremiumManagementView.tsx",
-  "src/views/admin/AdminTestAccountsView.tsx",
-  "src/views/admin/AttributeDefinitionFormDialogs.tsx",
-  "src/views/admin/CreateAlertDialog.tsx",
-  "src/views/admin/EditAlertDialog.tsx",
   "src/views/contractor/SettingsManageContractors.tsx",
   "src/views/offers/MergeOffersDialog.tsx",
   "src/views/offers/OfferAssignedRow.tsx",

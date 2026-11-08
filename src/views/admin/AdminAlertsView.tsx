@@ -8,10 +8,6 @@ import {
   MenuItem,
   Grid,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
   IconButton,
 } from "@mui/material"
@@ -25,6 +21,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
 import { CreateAlertDialog } from "./CreateAlertDialog"
 import { EditAlertDialog } from "./EditAlertDialog"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import { useFormatters } from "../../util/format"
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded"
@@ -309,86 +306,57 @@ export function AdminAlertsView() {
       <CreateAlertDialog alerts={alerts} />
 
       {/* Emailing every user: confirm first. */}
-      <Dialog
+      <ConfirmDialog
         open={confirmEmailOpen}
         onClose={() => setConfirmEmailOpen(false)}
-        maxWidth="xs"
-      >
-        <DialogTitle>
-          {t("admin.alerts.confirmEmail.title", "Email every user?")}
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">
-            {t(
-              "admin.alerts.confirmEmail.body",
-              "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
-            )}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmEmailOpen(false)}>
-            {t("admin.alerts.confirmEmail.cancel", "Go back")}
-          </Button>
-          <Button
-            color="warning"
-            variant="contained"
-            disabled={isCreating}
-            onClick={() => handleCreateAlert(true)}
-            data-testid="confirm-email-all"
-          >
-            {t("admin.alerts.confirmEmail.confirm", "Send the email")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        stackAbove
+        title={t("admin.alerts.confirmEmail.title", "Email every user?")}
+        message={t(
+          "admin.alerts.confirmEmail.body",
+          "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
+        )}
+        cancelLabel={t("admin.alerts.confirmEmail.cancel", "Go back")}
+        confirmLabel={t("admin.alerts.confirmEmail.confirm", "Send the email")}
+        confirmColor="warning"
+        loading={isCreating}
+        onConfirm={() => handleCreateAlert(true)}
+      />
 
       {/* Edit Alert Modal */}
       <EditAlertDialog alerts={alerts} />
 
       {/* Delete Alert Modal */}
-      <Dialog
+      <ConfirmDialog
         open={isDeleteModalOpen}
         onClose={handleCloseModals}
         maxWidth="sm"
-        fullWidth
+        title={t("admin.alerts.deleteAlert", "Delete Alert")}
+        message={t(
+          "admin.alerts.deleteConfirm",
+          "Are you sure you want to delete this alert? This action cannot be undone.",
+        )}
+        confirmLabel={
+          isDeleting
+            ? t("admin.alerts.deleting", "Deleting...")
+            : t("admin.alerts.delete", "Delete")
+        }
+        destructive
+        loading={isDeleting}
+        onConfirm={handleDeleteAlert}
       >
-        <DialogTitle>
-          {t("admin.alerts.deleteAlert", "Delete Alert")}
-        </DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t(
-              "admin.alerts.deleteConfirm",
-              "Are you sure you want to delete this alert? This action cannot be undone.",
-            )}
-          </Typography>
-          {selectedAlert && (
-            <Box
-              sx={{
-                mt: 2,
-                p: 2,
-                bgcolor: "grey.100",
-                borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              }}
-            >
-              <Typography variant="h6">{selectedAlert.title}</Typography>
-              <MarkdownRender text={selectedAlert.content} />
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleDeleteAlert}
-            variant="contained"
-            color="error"
-            disabled={isDeleting}
+        {selectedAlert && (
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: "grey.100",
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            }}
           >
-            {isDeleting
-              ? t("admin.alerts.deleting", "Deleting...")
-              : t("admin.alerts.delete", "Delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <Typography variant="h6">{selectedAlert.title}</Typography>
+            <MarkdownRender text={selectedAlert.content} />
+          </Box>
+        )}
+      </ConfirmDialog>
     </>
   )
 }

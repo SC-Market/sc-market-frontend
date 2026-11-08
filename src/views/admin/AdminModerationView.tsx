@@ -9,13 +9,10 @@ import {
   MenuItem,
   Grid,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   Box,
 } from "@mui/material"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { useGetAdminReportsQuery } from "../../features/admin/api/moderationApi"
 import { useUpdateReport } from "../../features/admin/hooks/useModerationActions"
 import { ContentReport } from "../../features/admin/api/moderationApi"
@@ -261,73 +258,74 @@ export function AdminModerationView() {
       )}
 
       {/* Handle Report Modal */}
-      <Dialog
+      <ResponsiveDialog
         open={isModalOpen}
         onClose={handleCloseModal}
+        title={t("admin.moderation.dialog.handleReport", "Handle Report")}
         maxWidth="sm"
-        fullWidth
+        disableClose={isUpdating}
+        disableBackdropClose
+        actions={
+          <>
+            <Button onClick={handleCloseModal} disabled={isUpdating}>
+              {t("common.cancel")}
+            </Button>
+            <Button
+              onClick={handleUpdateReport}
+              variant="contained"
+              disabled={isUpdating}
+            >
+              {isUpdating
+                ? t("admin.moderation.updating", "Updating...")
+                : t("admin.moderation.updateReport", "Update Report")}
+            </Button>
+          </>
+        }
       >
-        <DialogTitle>
-          {t("admin.moderation.dialog.handleReport", "Handle Report")}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2 }}>
-            <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel id="admin-moderation-view-status-label">
-                {t("admin.moderation.field.status", "Status")}
-              </InputLabel>
-              <Select
-                labelId="admin-moderation-view-status-label"
-                value={updateStatus}
-                label={t("admin.moderation.field.status", "Status")}
-                onChange={(e) => setUpdateStatus(e.target.value)}
-              >
-                <MenuItem value="pending">
-                  {t("adminUi.moderation.statuses.pending")}
-                </MenuItem>
-                <MenuItem value="in_progress">
-                  {t("adminUi.moderation.statuses.inProgress")}
-                </MenuItem>
-                <MenuItem value="resolved">
-                  {t("adminUi.moderation.statuses.resolved")}
-                </MenuItem>
-                <MenuItem value="dismissed">
-                  {t("adminUi.moderation.statuses.dismissed")}
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              label={t("admin.moderation.notes", "Notes")}
-              placeholder={t(
-                "admin.moderation.notesPlaceholder",
-                "Enter moderation notes or action taken...",
-              )}
-              helperText={t(
-                "admin.moderation.notesHelperText",
-                "Optional notes about the moderation action (max 2000 characters)",
-              )}
-              value={updateNotes}
-              onChange={(e) => setUpdateNotes(e.target.value)}
-              inputProps={{ maxLength: 2000 }}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleUpdateReport}
-            variant="contained"
-            disabled={isUpdating}
-          >
-            {isUpdating
-              ? t("admin.moderation.updating", "Updating...")
-              : t("admin.moderation.updateReport", "Update Report")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Box sx={{ mt: 2 }}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel id="admin-moderation-view-status-label">
+              {t("admin.moderation.field.status", "Status")}
+            </InputLabel>
+            <Select
+              labelId="admin-moderation-view-status-label"
+              value={updateStatus}
+              label={t("admin.moderation.field.status", "Status")}
+              onChange={(e) => setUpdateStatus(e.target.value)}
+            >
+              <MenuItem value="pending">
+                {t("adminUi.moderation.statuses.pending")}
+              </MenuItem>
+              <MenuItem value="in_progress">
+                {t("adminUi.moderation.statuses.inProgress")}
+              </MenuItem>
+              <MenuItem value="resolved">
+                {t("adminUi.moderation.statuses.resolved")}
+              </MenuItem>
+              <MenuItem value="dismissed">
+                {t("adminUi.moderation.statuses.dismissed")}
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label={t("admin.moderation.notes", "Notes")}
+            placeholder={t(
+              "admin.moderation.notesPlaceholder",
+              "Enter moderation notes or action taken...",
+            )}
+            helperText={t(
+              "admin.moderation.notesHelperText",
+              "Optional notes about the moderation action (max 2000 characters)",
+            )}
+            value={updateNotes}
+            onChange={(e) => setUpdateNotes(e.target.value)}
+            inputProps={{ maxLength: 2000 }}
+          />
+        </Box>
+      </ResponsiveDialog>
     </>
   )
 }

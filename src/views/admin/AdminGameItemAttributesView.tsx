@@ -5,14 +5,11 @@ import {
   Chip,
   Grid,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
   IconButton,
   CircularProgress,
 } from "@mui/material"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import {
   useGetGameItemAttributesQuery,
   useGetAttributeDefinitionsQuery,
@@ -273,55 +270,45 @@ export function AdminGameItemAttributesView({
       />
 
       {/* Delete Modal */}
-      <Dialog
+      <ConfirmDialog
         open={isDeleteModalOpen}
         onClose={handleCloseModals}
         maxWidth="sm"
-        fullWidth
+        title={t(
+          "admin.gameItemAttributes.deleteAttribute",
+          "Delete Attribute",
+        )}
+        message={t(
+          "admin.gameItemAttributes.deleteConfirm",
+          "Are you sure you want to delete this attribute?",
+        )}
+        confirmLabel={
+          isDeleting
+            ? t("admin.gameItemAttributes.deleting", "Deleting...")
+            : t("admin.gameItemAttributes.delete", "Delete")
+        }
+        destructive
+        loading={isDeleting}
+        onConfirm={handleDeleteAttribute}
       >
-        <DialogTitle>
-          {t("admin.gameItemAttributes.deleteAttribute", "Delete Attribute")}
-        </DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t(
-              "admin.gameItemAttributes.deleteConfirm",
-              "Are you sure you want to delete this attribute?",
-            )}
-          </Typography>
-          {selectedAttribute && (
-            <Box
-              sx={{
-                mt: 2,
-                p: 2,
-                bgcolor: "grey.100",
-                borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              }}
-            >
-              <Typography variant="h6">
-                {selectedAttribute.display_name ||
-                  selectedAttribute.attribute_name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {selectedAttribute.attribute_value}
-              </Typography>
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleDeleteAttribute}
-            variant="contained"
-            color="error"
-            disabled={isDeleting}
+        {selectedAttribute && (
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: "grey.100",
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            }}
           >
-            {isDeleting
-              ? t("admin.gameItemAttributes.deleting", "Deleting...")
-              : t("admin.gameItemAttributes.delete", "Delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <Typography variant="h6">
+              {selectedAttribute.display_name ||
+                selectedAttribute.attribute_name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {selectedAttribute.attribute_value}
+            </Typography>
+          </Box>
+        )}
+      </ConfirmDialog>
     </>
   )
 }

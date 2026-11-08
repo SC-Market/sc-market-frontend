@@ -6,16 +6,13 @@ import {
   Select,
   MenuItem,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   Box,
   Switch,
   FormControlLabel,
   Autocomplete,
 } from "@mui/material"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import type { AdminAlertsState } from "../../features/admin/hooks/useAdminAlerts"
 
@@ -44,184 +41,180 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
     issueAlert,
   } = alerts
   return (
-    <Dialog
+    <ResponsiveDialog
       open={isEditModalOpen}
       onClose={handleCloseModals}
       maxWidth="md"
-      fullWidth
-    >
-      <DialogTitle>{t("admin.alerts.editAlert", "Edit Alert")}</DialogTitle>
-      <DialogContent>
-        <Box sx={{ mt: 2 }}>
-          <TextField
-            fullWidth
-            label={t("admin.alerts.field.title", "Title")}
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
+      mobile="fullScreen"
+      title={t("admin.alerts.editAlert", "Edit Alert")}
+      disableClose={isUpdating}
+      disableBackdropClose
+      actions={
+        <>
+          <Button onClick={handleCloseModals} disabled={isUpdating}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleUpdateAlert}
+            variant="contained"
+            disabled={
+              isUpdating ||
+              !formData.title ||
+              !formData.content ||
+              !!linkError ||
+              !!contractorError
             }
-            sx={{ mb: 2 }}
-            inputProps={{ maxLength: 200 }}
-          />
-          <TextField
+          >
+            {isUpdating
+              ? t("admin.alerts.updating", "Updating...")
+              : t("admin.alerts.update", "Update")}
+          </Button>
+        </>
+      }
+    >
+      <Box sx={{ mt: 2 }}>
+        <TextField
+          fullWidth
+          label={t("admin.alerts.field.title", "Title")}
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          sx={{ mb: 2 }}
+          inputProps={{ maxLength: 200 }}
+        />
+        <TextField
+          fullWidth
+          label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
+          placeholder={t("admin.alerts.linkPlaceholder", "https://example.com")}
+          value={formData.link || ""}
+          onChange={(e) => handleLinkChange(e.target.value)}
+          error={!!linkError}
+          helperText={linkError}
+          sx={{ mb: 2 }}
+          type="url"
+        />
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="admin-alerts-view-target-type-3-label">
+            {t("admin.alerts.targetType", "Target Type")}
+          </InputLabel>
+          <Select
+            labelId="admin-alerts-view-target-type-3-label"
+            value={formData.target_type}
+            label={t("admin.alerts.targetType", "Target Type")}
+            onChange={(e) => handleTargetTypeChange(e.target.value)}
+          >
+            <MenuItem value="all_users">
+              {t("adminUi.alerts.targetTypes.allUsers")}
+            </MenuItem>
+            <MenuItem value="org_members">
+              {t("adminUi.alerts.targetTypes.orgMembers")}
+            </MenuItem>
+            <MenuItem value="org_owners">
+              {t("adminUi.alerts.targetTypes.orgOwners")}
+            </MenuItem>
+            <MenuItem value="admins_only">
+              {t("adminUi.alerts.targetTypes.adminsOnly")}
+            </MenuItem>
+            <MenuItem value="specific_org">
+              {t("adminUi.alerts.targetTypes.specificOrg")}
+            </MenuItem>
+          </Select>
+        </FormControl>
+        {formData.target_type === "specific_org" && (
+          <Autocomplete
             fullWidth
-            label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
-            placeholder={t(
-              "admin.alerts.linkPlaceholder",
-              "https://example.com",
+            options={contractorOptions}
+            getOptionLabel={(option) => option.name}
+            value={selectedContractor}
+            onChange={(event, newValue) => handleContractorChange(newValue)}
+            inputValue={contractorSearchQuery}
+            onInputChange={(event, newInputValue) => {
+              setContractorSearchQuery(newInputValue)
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t("admin.alerts.selectContractor", "Select Contractor")}
+                error={!!contractorError}
+                helperText={contractorError}
+                placeholder={t(
+                  "admin.alerts.contractorPlaceholder",
+                  "Search orgs",
+                )}
+              />
             )}
-            value={formData.link || ""}
-            onChange={(e) => handleLinkChange(e.target.value)}
-            error={!!linkError}
-            helperText={linkError}
-            sx={{ mb: 2 }}
-            type="url"
-          />
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel id="admin-alerts-view-target-type-3-label">
-              {t("admin.alerts.targetType", "Target Type")}
-            </InputLabel>
-            <Select
-              labelId="admin-alerts-view-target-type-3-label"
-              value={formData.target_type}
-              label={t("admin.alerts.targetType", "Target Type")}
-              onChange={(e) => handleTargetTypeChange(e.target.value)}
-            >
-              <MenuItem value="all_users">
-                {t("adminUi.alerts.targetTypes.allUsers")}
-              </MenuItem>
-              <MenuItem value="org_members">
-                {t("adminUi.alerts.targetTypes.orgMembers")}
-              </MenuItem>
-              <MenuItem value="org_owners">
-                {t("adminUi.alerts.targetTypes.orgOwners")}
-              </MenuItem>
-              <MenuItem value="admins_only">
-                {t("adminUi.alerts.targetTypes.adminsOnly")}
-              </MenuItem>
-              <MenuItem value="specific_org">
-                {t("adminUi.alerts.targetTypes.specificOrg")}
-              </MenuItem>
-            </Select>
-          </FormControl>
-          {formData.target_type === "specific_org" && (
-            <Autocomplete
-              fullWidth
-              options={contractorOptions}
-              getOptionLabel={(option) => option.name}
-              value={selectedContractor}
-              onChange={(event, newValue) => handleContractorChange(newValue)}
-              inputValue={contractorSearchQuery}
-              onInputChange={(event, newInputValue) => {
-                setContractorSearchQuery(newInputValue)
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t(
-                    "admin.alerts.selectContractor",
-                    "Select Contractor",
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {option.avatar && (
+                    <Box
+                      component="img"
+                      src={option.avatar}
+                      alt={option.name}
+                      sx={{ width: 24, height: 24, borderRadius: "50%" }}
+                    />
                   )}
-                  error={!!contractorError}
-                  helperText={contractorError}
-                  placeholder={t(
-                    "admin.alerts.contractorPlaceholder",
-                    "Search orgs",
-                  )}
-                />
-              )}
-              renderOption={(props, option) => (
-                <Box component="li" {...props}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {option.avatar && (
-                      <Box
-                        component="img"
-                        src={option.avatar}
-                        alt={option.name}
-                        sx={{ width: 24, height: 24, borderRadius: "50%" }}
-                      />
-                    )}
-                    <Box>
-                      <Typography variant="body2">{option.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {option.spectrum_id}
-                      </Typography>
-                    </Box>
+                  <Box>
+                    <Typography variant="body2">{option.name}</Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {option.spectrum_id}
+                    </Typography>
                   </Box>
                 </Box>
-              )}
-              sx={{ mb: 2 }}
-              noOptionsText={t(
-                "admin.alerts.noContractorsFound",
-                "No contractors found",
-              )}
-              loading={isSearchingContractors}
-              loadingText={t("admin.alerts.searching", "Searching...")}
-            />
-          )}
-          <MarkdownEditor
-            value={formData.content}
-            onChange={(value: string) =>
-              setFormData({ ...formData, content: value })
-            }
-            TextFieldProps={{
-              label: t("admin.alerts.content", "Content"),
-              placeholder: t(
-                "admin.alerts.contentPlaceholder",
-                "Enter alert content in Markdown format...",
-              ),
-            }}
-            variant="vertical"
+              </Box>
+            )}
+            sx={{ mb: 2 }}
+            noOptionsText={t(
+              "admin.alerts.noContractorsFound",
+              "No contractors found",
+            )}
+            loading={isSearchingContractors}
+            loadingText={t("admin.alerts.searching", "Searching...")}
           />
-          {selectedAlert && (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={selectedAlert.active}
-                  onChange={(e) => {
-                    if (selectedAlert) {
-                      updateAlertMut({
-                        alertId: selectedAlert.alert_id,
-                        data: { active: e.target.checked },
-                      })
-                        .unwrap()
-                        .then(() => {
-                          issueAlert({
-                            message: t("admin.alerts.updated", "Alert updated"),
-                            severity: "success",
-                          })
-                        })
-                        .catch((error) => {
-                          issueAlert(error)
-                        })
-                    }
-                  }}
-                />
-              }
-              label={t("admin.alerts.active", "Active")}
-              sx={{ mt: 2 }}
-            />
-          )}
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-        <Button
-          onClick={handleUpdateAlert}
-          variant="contained"
-          disabled={
-            isUpdating ||
-            !formData.title ||
-            !formData.content ||
-            !!linkError ||
-            !!contractorError
+        )}
+        <MarkdownEditor
+          value={formData.content}
+          onChange={(value: string) =>
+            setFormData({ ...formData, content: value })
           }
-        >
-          {isUpdating
-            ? t("admin.alerts.updating", "Updating...")
-            : t("admin.alerts.update", "Update")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          TextFieldProps={{
+            label: t("admin.alerts.content", "Content"),
+            placeholder: t(
+              "admin.alerts.contentPlaceholder",
+              "Enter alert content in Markdown format...",
+            ),
+          }}
+          variant="vertical"
+        />
+        {selectedAlert && (
+          <FormControlLabel
+            control={
+              <Switch
+                checked={selectedAlert.active}
+                onChange={(e) => {
+                  if (selectedAlert) {
+                    updateAlertMut({
+                      alertId: selectedAlert.alert_id,
+                      data: { active: e.target.checked },
+                    })
+                      .unwrap()
+                      .then(() => {
+                        issueAlert({
+                          message: t("admin.alerts.updated", "Alert updated"),
+                          severity: "success",
+                        })
+                      })
+                      .catch((error) => {
+                        issueAlert(error)
+                      })
+                  }
+                }}
+              />
+            }
+            label={t("admin.alerts.active", "Active")}
+            sx={{ mt: 2 }}
+          />
+        )}
+      </Box>
+    </ResponsiveDialog>
   )
 }

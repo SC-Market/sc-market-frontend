@@ -4,16 +4,13 @@ import {
   Chip,
   Grid,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
   IconButton,
   FormControl,
   Select,
   MenuItem,
 } from "@mui/material"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -203,85 +200,72 @@ export function AdminAttributeDefinitionsView() {
       <EditAttributeDefinitionDialog defs={defs} />
 
       {/* Delete Modal */}
-      <Dialog
+      <ConfirmDialog
         open={isDeleteModalOpen}
         onClose={handleCloseModals}
         maxWidth="sm"
-        fullWidth
+        title={t(
+          "admin.attributes.deleteDefinition",
+          "Delete Attribute Definition",
+        )}
+        message={t(
+          "admin.attributes.deleteConfirm",
+          "Are you sure you want to delete this attribute definition?",
+        )}
+        confirmLabel={
+          isDeleting
+            ? t("admin.attributes.deleting", "Deleting...")
+            : t("admin.attributes.delete", "Delete")
+        }
+        destructive
+        loading={isDeleting}
+        onConfirm={handleDeleteDefinition}
       >
-        <DialogTitle>
-          {t(
-            "admin.attributes.deleteDefinition",
-            "Delete Attribute Definition",
-          )}
-        </DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t(
-              "admin.attributes.deleteConfirm",
-              "Are you sure you want to delete this attribute definition?",
-            )}
-          </Typography>
-          {selectedDefinition && (
-            <Box
-              sx={{
-                mt: 2,
-                p: 2,
-                bgcolor: "grey.100",
-                borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              }}
-            >
-              <Typography variant="h6">
-                {selectedDefinition.display_name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {selectedDefinition.attribute_name}
-              </Typography>
-            </Box>
-          )}
-          <Box sx={{ mt: 2 }}>
-            <FormControl component="fieldset">
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                {t(
-                  "admin.attributes.cascadeOption",
-                  "Also delete all game item attributes with this name?",
-                )}
-              </Typography>
-              <Select
-                inputProps={{
-                  "aria-label": t("adminUi.attributes.cascadeDelete"),
-                }}
-                SelectDisplayProps={{
-                  "aria-label": t("adminUi.attributes.cascadeDelete"),
-                }}
-                value={cascadeDelete ? "yes" : "no"}
-                onChange={(e) => setCascadeDelete(e.target.value === "yes")}
-                size="small"
-              >
-                <MenuItem value="no">
-                  {t("admin.attributes.keepAttributes", "Keep attributes")}
-                </MenuItem>
-                <MenuItem value="yes">
-                  {t("admin.attributes.deleteAttributes", "Delete attributes")}
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
-          <Button
-            onClick={handleDeleteDefinition}
-            variant="contained"
-            color="error"
-            disabled={isDeleting}
+        {selectedDefinition && (
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: "grey.100",
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            }}
           >
-            {isDeleting
-              ? t("admin.attributes.deleting", "Deleting...")
-              : t("admin.attributes.delete", "Delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <Typography variant="h6">
+              {selectedDefinition.display_name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {selectedDefinition.attribute_name}
+            </Typography>
+          </Box>
+        )}
+        <Box sx={{ mt: 2 }}>
+          <FormControl component="fieldset">
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              {t(
+                "admin.attributes.cascadeOption",
+                "Also delete all game item attributes with this name?",
+              )}
+            </Typography>
+            <Select
+              inputProps={{
+                "aria-label": t("adminUi.attributes.cascadeDelete"),
+              }}
+              SelectDisplayProps={{
+                "aria-label": t("adminUi.attributes.cascadeDelete"),
+              }}
+              value={cascadeDelete ? "yes" : "no"}
+              onChange={(e) => setCascadeDelete(e.target.value === "yes")}
+              size="small"
+            >
+              <MenuItem value="no">
+                {t("admin.attributes.keepAttributes", "Keep attributes")}
+              </MenuItem>
+              <MenuItem value="yes">
+                {t("admin.attributes.deleteAttributes", "Delete attributes")}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </ConfirmDialog>
     </>
   )
 }
