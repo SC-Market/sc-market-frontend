@@ -234,6 +234,7 @@ const injectedRtkApi = api
             page_size: queryArg.pageSize,
             sort_by: queryArg.sortBy,
             sort_order: queryArg.sortOrder,
+            featured: queryArg.featured,
           },
         }),
         providesTags: ["Shops"],
@@ -427,6 +428,7 @@ const injectedRtkApi = api
             page: queryArg.page,
             page_size: queryArg.pageSize,
             field: queryArg.field,
+            featured: queryArg.featured,
           },
         }),
         providesTags: ["Contractors"],
@@ -2751,6 +2753,8 @@ export type BrowseShopsApiArg = {
   pageSize?: number
   sortBy?: "name" | "rating" | "created_at" | "total_sales"
   sortOrder?: "asc" | "desc"
+  /** Only shops that trade: an order fulfilled in the last 90 days (the homepage's "Top rated shops"). */
+  featured?: boolean
 }
 export type QuickCreateShopApiResponse = /** status 200 Ok */ ShopResponse
 export type QuickCreateShopApiArg = {
@@ -2871,6 +2875,8 @@ export type GetStorefrontsApiArg = {
   pageSize?: number
   /** Only orgs with this field (one of `fields`). */
   field?: string
+  /** Only orgs that trade: a shown shop with an order fulfilled in the last 90 days (the homepage row). */
+  featured?: boolean
 }
 export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
 export type GetOrgStorefrontApiArg = {

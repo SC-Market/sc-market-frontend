@@ -32,8 +32,6 @@ export const STOREFRONTS_PAGE_SIZE = 24
 
 /**
  * The Storefronts hub's query for `page`, optionally only orgs with `field`.
- * The homepage row asks for page 1 with these same args, so the two share
- * one cache entry (and the prerendered data of both pages).
  */
 export function storefrontsHubArgs(
   page = 1,
@@ -41,6 +39,18 @@ export function storefrontsHubArgs(
   pageSize = STOREFRONTS_PAGE_SIZE,
 ): GetStorefrontsApiArg {
   return field ? { page, pageSize, field } : { page, pageSize }
+}
+
+/** Org storefronts the homepage features. */
+export const LANDING_STOREFRONTS = 6
+
+/**
+ * The homepage's "Org storefronts" row: the hub's order, but only orgs that
+ * trade (`featured`: a shown shop with an order fulfilled in the last 90
+ * days), so SC Market's own org and dormant orgs are never featured.
+ */
+export function landingStorefrontsArgs(): GetStorefrontsApiArg {
+  return { page: 1, pageSize: LANDING_STOREFRONTS, featured: true }
 }
 
 /**

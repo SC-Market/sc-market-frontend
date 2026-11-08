@@ -34,7 +34,7 @@ import {
   LATEST_LISTINGS_ARGS,
   WANTED_NOW_ARGS,
 } from "../components/landing/landingLinks"
-import { TOP_RATED_SHOPS_COUNT } from "../components/landing/TopRatedShops.skeleton"
+import { TOP_RATED_SHOPS_ARGS } from "../components/landing/TopRatedShops.skeleton"
 import { SERVICE_LISTINGS_PAGE_SIZE } from "../components/skeletons/ServiceListingSkeleton"
 import { breakpointsValues } from "../hooks/styles/theme/constants"
 import type { SessionCheckResult } from "../store/networkEnv"
@@ -121,12 +121,7 @@ export async function prefetchFirstPageData(
       ),
       settleQuery(
         dispatch(
-          marketV2Api.endpoints.browseShops.initiate({
-            page: 1,
-            pageSize: TOP_RATED_SHOPS_COUNT,
-            sortBy: "rating",
-            sortOrder: "desc",
-          }),
+          marketV2Api.endpoints.browseShops.initiate(TOP_RATED_SHOPS_ARGS),
         ),
       ),
     )

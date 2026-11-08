@@ -6,9 +6,23 @@ import { MARKET_PATHS } from "../../routes/paths"
 import { ShopCardSkeleton } from "../skeletons/ShopCardSkeleton"
 import { PageBusy } from "../metadata/PageReady"
 import { LandingSection, LandingSectionHeader } from "./LandingSection"
+import type { BrowseShopsApiArg } from "../../features/shops/api/shopsApi"
 
 /** Shops in the section: the top rated ones. */
 export const TOP_RATED_SHOPS_COUNT = 4
+
+/**
+ * The section's query (the SPA and the SSR first-page data send the same):
+ * the /shops Top Rated sort, only shops that trade (`featured`: an order
+ * fulfilled in the last 90 days).
+ */
+export const TOP_RATED_SHOPS_ARGS: BrowseShopsApiArg = {
+  page: 1,
+  pageSize: TOP_RATED_SHOPS_COUNT,
+  sortBy: "rating",
+  sortOrder: "desc",
+  featured: true,
+}
 
 /**
  * Every shop cell's height (px). A compact ShopCard (logo + name/owner,

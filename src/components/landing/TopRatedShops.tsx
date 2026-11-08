@@ -6,7 +6,7 @@ import { ShopCard } from "../../features/shops/components/ShopCard"
 import { usePageReady } from "../metadata/PageReady"
 import { isPrimaryLoading } from "../metadata/pageReadyStore"
 import {
-  TOP_RATED_SHOPS_COUNT,
+  TOP_RATED_SHOPS_ARGS,
   TOP_SHOP_CELL_HEIGHT,
   TopRatedShopsLayout,
   TopRatedShopsSkeleton,
@@ -14,17 +14,12 @@ import {
 } from "./TopRatedShops.skeleton"
 
 /**
- * "Top rated shops": the /shops directory's Top Rated sort, first page of
- * TOP_RATED_SHOPS_COUNT, as its compact cards in fixed-height cells.
+ * "Top rated shops": the /shops directory's Top Rated sort among shops that
+ * trade (TOP_RATED_SHOPS_ARGS), as its compact cards in fixed-height cells.
  */
 export function TopRatedShops() {
   const { t } = useTranslation()
-  const result = useBrowseShopsQuery({
-    page: 1,
-    pageSize: TOP_RATED_SHOPS_COUNT,
-    sortBy: "rating",
-    sortOrder: "desc",
-  })
+  const result = useBrowseShopsQuery(TOP_RATED_SHOPS_ARGS)
   usePageReady(isPrimaryLoading(result))
 
   if (result.isLoading) return <TopRatedShopsSkeleton />

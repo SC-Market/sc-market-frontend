@@ -9,15 +9,13 @@ import {
   STOREFRONT_CARD_HEIGHT,
 } from "../../features/storefront/components/StorefrontCard"
 import { PATHS } from "../../routes/paths"
-import { storefrontsHubArgs } from "../../features/storefront/domain"
+import { landingStorefrontsArgs } from "../../features/storefront/domain"
 
-/** The homepage's "Org storefronts" row: the first 6 of the Storefronts hub's page 1 (same query). */
-export const LANDING_STOREFRONTS = 6
-
+/** The homepage's "Org storefronts" row: featured orgs (landingStorefrontsArgs), in the hub's order. */
 export function LandingStorefronts() {
   const { t } = useTranslation()
-  const { data, isLoading } = useGetStorefrontsQuery(storefrontsHubArgs())
-  const storefronts = (data?.storefronts ?? []).slice(0, LANDING_STOREFRONTS)
+  const { data, isLoading } = useGetStorefrontsQuery(landingStorefrontsArgs())
+  const storefronts = data?.storefronts ?? []
   if (!isLoading && storefronts.length === 0) return null
   return (
     <LandingSection

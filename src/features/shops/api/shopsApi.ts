@@ -10,6 +10,7 @@ export {
   useGetShopQuery,
 } from "../../../store/api/v2/market"
 export type {
+  BrowseShopsApiArg,
   LastSeenBucket,
   ReplyTimeBucket,
   SellerActivity,
