@@ -2,11 +2,6 @@ import React from "react"
 import {
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   Paper,
   TextField,
@@ -15,6 +10,7 @@ import {
   Box,
   Typography,
 } from "@mui/material"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef } from "@mui/x-data-grid"
 import { useTranslation } from "react-i18next"
@@ -94,177 +90,133 @@ export function SettingsManageContractors() {
           }}
         />
       </Paper>
-      <Dialog
+      <ConfirmDialog
         open={Boolean(archiveTarget)}
         onClose={() => {
-          if (!isArchiving) {
-            setArchiveTarget(null)
-            setArchiveReason("")
-          }
+          setArchiveTarget(null)
+          setArchiveReason("")
         }}
+        title={t("settingsManageContractors.disband_org_confirm_title")}
+        message={t("settingsManageContractors.disband_org_confirm_body", {
+          name: archiveTarget?.name ?? "",
+        })}
+        cancelLabel={t(
+          "settingsManageContractors.disband_org_confirm_cancel_button",
+        )}
+        confirmLabel={t(
+          "settingsManageContractors.disband_org_confirm_confirm_button",
+        )}
+        destructive
+        loading={isArchiving}
+        onConfirm={handleArchiveOrg}
       >
-        <DialogTitle>
-          {t("settingsManageContractors.disband_org_confirm_title")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            {t("settingsManageContractors.disband_org_confirm_body", {
-              name: archiveTarget?.name ?? "",
-            })}
-          </DialogContentText>
-          <TextField
-            fullWidth
-            multiline
-            minRows={3}
-            value={archiveReason}
-            onChange={(event) => setArchiveReason(event.target.value)}
-            label={t(
-              "settingsManageContractors.disband_org_confirm_reason_label",
-            )}
-            placeholder={t(
-              "settingsManageContractors.disband_org_confirm_reason_placeholder",
-            )}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              if (!isArchiving) {
-                setArchiveTarget(null)
-                setArchiveReason("")
-              }
-            }}
-            disabled={isArchiving}
-          >
-            {t("settingsManageContractors.disband_org_confirm_cancel_button")}
-          </Button>
-          <Button
-            onClick={handleArchiveOrg}
-            color="error"
-            variant="contained"
-            disabled={isArchiving}
-          >
-            {t("settingsManageContractors.disband_org_confirm_confirm_button")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
+        <TextField
+          fullWidth
+          multiline
+          minRows={3}
+          value={archiveReason}
+          onChange={(event) => setArchiveReason(event.target.value)}
+          label={t(
+            "settingsManageContractors.disband_org_confirm_reason_label",
+          )}
+          placeholder={t(
+            "settingsManageContractors.disband_org_confirm_reason_placeholder",
+          )}
+        />
+      </ConfirmDialog>
+      <ConfirmDialog
         open={Boolean(transferTarget)}
         onClose={() => {
-          if (!isTransferring) {
-            setTransferTarget(null)
-            setTransferSearchQuery("")
-            setTransferSelectedUser(null)
-            setTransferSearchOptions([])
-          }
+          setTransferTarget(null)
+          setTransferSearchQuery("")
+          setTransferSelectedUser(null)
+          setTransferSearchOptions([])
         }}
         maxWidth="sm"
-        fullWidth
+        title={t("settingsManageContractors.transfer_ownership_confirm_title")}
+        message={t(
+          "settingsManageContractors.transfer_ownership_confirm_body",
+          {
+            name: transferTarget?.name ?? "",
+          },
+        )}
+        cancelLabel={t(
+          "settingsManageContractors.transfer_ownership_confirm_cancel_button",
+        )}
+        confirmLabel={t(
+          "settingsManageContractors.transfer_ownership_confirm_confirm_button",
+        )}
+        loading={isTransferring}
+        confirmDisabled={!transferSelectedUser}
+        onConfirm={handleTransferOwnership}
       >
-        <DialogTitle>
-          {t("settingsManageContractors.transfer_ownership_confirm_title")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            {t("settingsManageContractors.transfer_ownership_confirm_body", {
-              name: transferTarget?.name ?? "",
-            })}
-          </DialogContentText>
-          <Autocomplete
-            filterOptions={(x) => x}
-            fullWidth
-            options={
-              transferSearchQuery
-                ? transferSearchOptions
-                : transferMembers
-                    .map((u) => ({
-                      username: u.username,
-                      display_name: u.display_name || u.username,
-                      avatar: u.avatar,
-                    }))
-                    .slice(0, 8)
-            }
-            getOptionLabel={(option) =>
-              `${option.display_name || option.username} (@${option.username})`
-            }
-            renderOption={(props, option) => (
-              <Box component="li" {...props}>
-                <Avatar
-                  src={option.avatar}
-                  sx={{ width: 32, height: 32, mr: 2 }}
-                />
-                <Box>
-                  <Typography variant="body2" fontWeight={500}>
-                    {option.display_name || option.username}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    @{option.username}
-                  </Typography>
-                </Box>
-              </Box>
-            )}
-            disablePortal
-            value={transferSelectedUser}
-            onChange={(
-              _event: React.SyntheticEvent,
-              newValue: {
-                display_name: string
-                username: string
-                avatar?: string
-              } | null,
-            ) => {
-              setTransferSelectedUser(newValue)
-            }}
-            inputValue={transferSearchQuery}
-            onInputChange={(event, newInputValue) => {
-              setTransferSearchQuery(newInputValue)
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t(
-                  "settingsManageContractors.transfer_ownership_confirm_username_label",
-                )}
-                placeholder={t(
-                  "settingsManageContractors.transfer_ownership_confirm_username_placeholder",
-                )}
-                disabled={isTransferring}
-                SelectProps={{
-                  IconComponent: KeyboardArrowDownRoundedIcon,
-                }}
+        <Autocomplete
+          filterOptions={(x) => x}
+          fullWidth
+          options={
+            transferSearchQuery
+              ? transferSearchOptions
+              : transferMembers
+                  .map((u) => ({
+                    username: u.username,
+                    display_name: u.display_name || u.username,
+                    avatar: u.avatar,
+                  }))
+                  .slice(0, 8)
+          }
+          getOptionLabel={(option) =>
+            `${option.display_name || option.username} (@${option.username})`
+          }
+          renderOption={(props, option) => (
+            <Box component="li" {...props}>
+              <Avatar
+                src={option.avatar}
+                sx={{ width: 32, height: 32, mr: 2 }}
               />
-            )}
-            disabled={isTransferring}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              if (!isTransferring) {
-                setTransferTarget(null)
-                setTransferSearchQuery("")
-                setTransferSelectedUser(null)
-                setTransferSearchOptions([])
-              }
-            }}
-            disabled={isTransferring}
-          >
-            {t(
-              "settingsManageContractors.transfer_ownership_confirm_cancel_button",
-            )}
-          </Button>
-          <Button
-            onClick={handleTransferOwnership}
-            color="primary"
-            variant="contained"
-            disabled={isTransferring || !transferSelectedUser}
-          >
-            {t(
-              "settingsManageContractors.transfer_ownership_confirm_confirm_button",
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              <Box>
+                <Typography variant="body2" fontWeight={500}>
+                  {option.display_name || option.username}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  @{option.username}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+          disablePortal
+          value={transferSelectedUser}
+          onChange={(
+            _event: React.SyntheticEvent,
+            newValue: {
+              display_name: string
+              username: string
+              avatar?: string
+            } | null,
+          ) => {
+            setTransferSelectedUser(newValue)
+          }}
+          inputValue={transferSearchQuery}
+          onInputChange={(event, newInputValue) => {
+            setTransferSearchQuery(newInputValue)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={t(
+                "settingsManageContractors.transfer_ownership_confirm_username_label",
+              )}
+              placeholder={t(
+                "settingsManageContractors.transfer_ownership_confirm_username_placeholder",
+              )}
+              disabled={isTransferring}
+              SelectProps={{
+                IconComponent: KeyboardArrowDownRoundedIcon,
+              }}
+            />
+          )}
+          disabled={isTransferring}
+        />
+      </ConfirmDialog>
     </Grid>
   )
 }

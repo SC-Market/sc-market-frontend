@@ -87,11 +87,7 @@ const RAW_MUI = {
 // Files still on a raw MUI Dialog (see the components/dialog guard below).
 // Convert one to ResponsiveDialog / ConfirmDialog, then drop it from here.
 // Never add to this list.
-const DIALOG_LEGACY = [
-  "src/views/contractor/SettingsManageContractors.tsx",
-  "src/views/settings/AccountLinks.tsx",
-  "src/views/settings/UnlinkProfile.tsx",
-]
+const DIALOG_LEGACY = []
 const LEGACY_STORE_SLICES = [
   "**/store/profile",
   "**/store/contractor",

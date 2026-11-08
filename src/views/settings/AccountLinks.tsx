@@ -4,16 +4,10 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   Skeleton,
   Typography,
 } from "@mui/material"
-import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { FlatSection } from "../../components/paper/Section"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -25,14 +19,12 @@ import { DiscordIcon } from "../../components/icons/DiscordIcon"
 import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
 import { LinkCitizenIDButton } from "../../components/button/LinkCitizenIDButton"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
-import { BottomSheet } from "../../components/mobile/BottomSheet"
-import LoadingButton from "@mui/lab/LoadingButton"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { useAccountLinks } from "../../features/profile/hooks/useAccountLinks"
 
 export function AccountLinks() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useIsMobile()
 
   const {
     isLoading,
@@ -268,79 +260,25 @@ export function AccountLinks() {
         )}
       </FlatSection>
 
-      {/* On mobile, use BottomSheet */}
-      {isMobile ? (
-        <BottomSheet
-          open={unlinkDialog.open}
-          onClose={handleCancelUnlink}
-          title={t("settings.profile.unlinkProviderTitle", "Unlink Account")}
-          maxHeight="90vh"
-        >
-          <DialogContentText id="unlink-dialog-description">
-            {t(
-              "settings.profile.unlinkProviderDescription",
-              "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
-              {
-                provider: unlinkDialog.providerType
-                  ? getProviderName(unlinkDialog.providerType)
-                  : "",
-              },
-            )}
-          </DialogContentText>
-          <Box
-            sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
-          >
-            <Button onClick={handleCancelUnlink}>
-              {t("common.cancel", "Cancel")}
-            </Button>
-            <LoadingButton
-              onClick={handleConfirmUnlink}
-              color="error"
-              loading={isUnlinking}
-              variant="contained"
-            >
-              {t("settings.profile.unlink", "Unlink")}
-            </LoadingButton>
-          </Box>
-        </BottomSheet>
-      ) : (
-        <Dialog
-          open={unlinkDialog.open}
-          onClose={handleCancelUnlink}
-          aria-labelledby="unlink-dialog-title"
-          aria-describedby="unlink-dialog-description"
-        >
-          <DialogTitle id="unlink-dialog-title">
-            {t("settings.profile.unlinkProviderTitle", "Unlink Account")}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="unlink-dialog-description">
-              {t(
-                "settings.profile.unlinkProviderDescription",
-                "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
-                {
-                  provider: unlinkDialog.providerType
-                    ? getProviderName(unlinkDialog.providerType)
-                    : "",
-                },
-              )}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelUnlink}>
-              {t("common.cancel", "Cancel")}
-            </Button>
-            <LoadingButton
-              onClick={handleConfirmUnlink}
-              color="error"
-              loading={isUnlinking}
-              variant="contained"
-            >
-              {t("settings.profile.unlink", "Unlink")}
-            </LoadingButton>
-          </DialogActions>
-        </Dialog>
-      )}
+      <ConfirmDialog
+        open={unlinkDialog.open}
+        onClose={handleCancelUnlink}
+        title={t("settings.profile.unlinkProviderTitle", "Unlink Account")}
+        message={t(
+          "settings.profile.unlinkProviderDescription",
+          "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
+          {
+            provider: unlinkDialog.providerType
+              ? getProviderName(unlinkDialog.providerType)
+              : "",
+          },
+        )}
+        cancelLabel={t("common.cancel", "Cancel")}
+        confirmLabel={t("settings.profile.unlink", "Unlink")}
+        destructive
+        loading={isUnlinking}
+        onConfirm={handleConfirmUnlink}
+      />
     </>
   )
 }
