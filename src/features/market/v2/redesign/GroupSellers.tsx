@@ -26,33 +26,26 @@ import {
 } from "../../../../util/qualityColor"
 import { useFormatters } from "../../../../util/format"
 import { useAddToCart } from "../../hooks/useCartActions"
+import { type SellerTag, sellerCards } from "./groupSellerRule"
 
-/** Quality score for a variant (higher = better). Value preferred over tier. */
-function variantQualityScore(v: GameItemListingResult): number {
-  if (v.quality_value != null) return v.quality_value
-  if (v.quality_tier != null) return v.quality_tier
-  return -1 // unspecified quality sorts last
-}
-
-interface HighlightTag {
-  labelKey: string
-  labelFallback: string
-}
-
-interface Highlight {
-  variant: GameItemListingResult
-  /** All superlatives this variant wins (e.g. lowest price AND top rated). */
-  tags: HighlightTag[]
+const TAG_LABELS: Record<SellerTag, { key: string; fallback: string }> = {
+  lowestPrice: { key: "MarketRedesign.lowestPrice", fallback: "Lowest price" },
+  highestQuality: {
+    key: "MarketRedesign.highestQuality",
+    fallback: "Highest quality",
+  },
+  topRated: { key: "MarketRedesign.topRated", fallback: "Top rated seller" },
 }
 
 /**
- * GroupSellers — the SELL side of an item's market depth, as a SUMMARY of the
- * few listings that matter, not a full dump. Fetched server-side by game_item_id
- * (per-variant), so highlights are drawn from ALL sellers/variants. We surface
- * the lowest price, the highest quality, and the highest-rated seller (deduped —
- * one variant may win more than one, then it carries multiple tags). Each row is
- * the exact unit a buyer adds to cart (listing_id + variant_id). "See all"
- * opens the full aggregate page for the complete, filterable depth.
+ * GroupSellers — the SELL side of an item's market depth. Fetched server-side
+ * by game_item_id (per-variant), so it covers ALL sellers, not just the search
+ * page. One card per seller (groupSellerRule.ts, the same rule as the collapsed
+ * card's "N sellers"): the lowest price, highest quality and top rated sellers
+ * first, carrying their tags, then every other seller. Each card is the exact
+ * unit a buyer adds to cart (listing_id + variant_id). The summary line above
+ * the cards counts the same sellers. "See all" opens the aggregate page for
+ * the complete, filterable depth.
  */
 export function GroupSellers({
   gameItemId,
@@ -62,6 +55,7 @@ export function GroupSellers({
   gameItemName: string
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const [searchParams] = useSearchParams()
 
   // Thread the page's active quality-tier filter into the per-variant fetch so
@@ -91,55 +85,13 @@ export function GroupSellers({
   const variants = useMemo(() => data?.listings ?? [], [data])
   const totalCount = data?.total ?? variants.length
 
-  // Pick the standout variants. A variant that wins several superlatives is
-  // shown once with all its tags (deduped by listing_id:variant_id).
-  const highlights = useMemo<Highlight[]>(() => {
-    if (variants.length === 0) return []
-    const keyOf = (v: GameItemListingResult) =>
-      `${v.listing_id}:${v.variant_id}`
-
-    const lowestPrice = variants.reduce((a, b) => (b.price < a.price ? b : a))
-    const highestQuality = variants.reduce((a, b) =>
-      variantQualityScore(b) > variantQualityScore(a) ? b : a,
-    )
-    // Weight rating by review count (Bayesian shrink toward a prior) so a
-    // 5★/1-review shop doesn't outrank a 4.9★/300-review one. A shop with zero
-    // ratings scores the prior, not 0, but the >0 guard below still excludes it.
-    const PRIOR_MEAN = 3.5 // neutral prior for an unrated shop
-    const PRIOR_WEIGHT = 5 // ~5 reviews of "pull" toward the prior
-    const ratingScore = (v: GameItemListingResult) => {
-      const n = v.shop_rating_count ?? 0
-      const r = v.shop_rating ?? 0
-      return (PRIOR_WEIGHT * PRIOR_MEAN + n * r) / (PRIOR_WEIGHT + n)
-    }
-    const topRated = variants.reduce((a, b) =>
-      ratingScore(b) > ratingScore(a) ? b : a,
-    )
-
-    // Collect tags per winning variant. A variant that wins several
-    // superlatives is ONE row carrying multiple tags; distinct winners are
-    // separate rows (so multiple variants show as separate entries). Insertion
-    // order gives a sensible display order.
-    const tagsByKey = new Map<string, Highlight>()
-    const add = (
-      v: GameItemListingResult,
-      labelKey: string,
-      labelFallback: string,
-    ) => {
-      const k = keyOf(v)
-      const entry = tagsByKey.get(k) ?? { variant: v, tags: [] }
-      entry.tags.push({ labelKey, labelFallback })
-      tagsByKey.set(k, entry)
-    }
-    add(lowestPrice, "MarketRedesign.lowestPrice", "Lowest price")
-    if (variantQualityScore(highestQuality) >= 0) {
-      add(highestQuality, "MarketRedesign.highestQuality", "Highest quality")
-    }
-    if ((topRated.shop_rating ?? 0) > 0) {
-      add(topRated, "MarketRedesign.topRated", "Top rated seller")
-    }
-    return [...tagsByKey.values()]
-  }, [variants])
+  const cards = useMemo(() => sellerCards(variants), [variants])
+  const priceMin = Math.min(...variants.map((v) => v.price))
+  const priceMax = Math.max(...variants.map((v) => v.price))
+  const totalQuantity = variants.reduce(
+    (sum, v) => sum + (v.quantity_available ?? 0),
+    0,
+  )
 
   if (isLoading) {
     return (
@@ -158,15 +110,23 @@ export function GroupSellers({
 
   return (
     <Box>
+      <Typography
+        variant="body2"
+        sx={{ color: "text.secondary", mb: 1.5 }}
+        data-testid="group-sellers-summary"
+      >
+        {fmt.priceRange(priceMin, priceMax)} {"·"}{" "}
+        {t("MarketRedesign.sellersCount", "{{count}} sellers", {
+          count: cards.length,
+        })}{" "}
+        {"·"}{" "}
+        {t("MarketRedesign.unitsAvailable", "{{count}} units available", {
+          count: totalQuantity,
+        })}
+      </Typography>
       <Grid container spacing={1.5}>
-        {highlights.map((h, i) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            key={`${h.variant.listing_id}:${h.variant.variant_id}`}
-          >
+        {cards.map((c, i) => (
+          <Grid item xs={12} sm={6} md={4} key={c.shop_id}>
             <Grow
               in
               timeout={300}
@@ -176,7 +136,7 @@ export function GroupSellers({
               }}
             >
               <Box sx={{ height: "100%" }}>
-                <VariantHighlightCard variant={h.variant} tags={h.tags} />
+                <VariantHighlightCard variant={c.variant} tags={c.tags} />
               </Box>
             </Grow>
           </Grid>
@@ -249,8 +209,8 @@ function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
 }
 
 /**
- * One highlight as a rich card (lowest price / highest quality / top rated).
- * Carries all superlative tags it wins, its quality chip, shop rating, price,
+ * One seller as a rich card. Carries the superlative tags it wins (lowest
+ * price / highest quality / top rated; none for the other sellers), its quality chip, shop rating, price,
  * availability, and an add-to-cart button for that exact variant.
  */
 function VariantHighlightCard({
@@ -258,7 +218,7 @@ function VariantHighlightCard({
   tags,
 }: {
   variant: GameItemListingResult
-  tags: HighlightTag[]
+  tags: SellerTag[]
 }) {
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -280,8 +240,8 @@ function VariantHighlightCard({
         >
           {tags.map((tag) => (
             <Chip
-              key={tag.labelKey}
-              label={t(tag.labelKey, tag.labelFallback)}
+              key={tag}
+              label={t(TAG_LABELS[tag].key, TAG_LABELS[tag].fallback)}
               size="small"
               color="primary"
               sx={{ height: 20, fontSize: "0.65rem" }}

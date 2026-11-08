@@ -32,6 +32,7 @@ import { useFormatters } from "../../../../util/format"
 import { TagChip } from "../../../../components/tags/TagChip"
 import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
 import { GroupSellers } from "./GroupSellers"
+import { sellerCount as groupSellerCount } from "./groupSellerRule"
 import { GroupBuyOrders } from "./GroupBuyOrders"
 import { GroupSellersFallback } from "./GroupSellersFallback"
 
@@ -117,10 +118,10 @@ export function GroupCard({
   const fmt = useFormatters()
 
   const cheapest = listings[0]
-  // "N sellers" = distinct SHOPS, not listing rows. One shop can have several
-  // listings/variants of the same item (e.g. Major Guns listed twice), which
-  // would otherwise inflate the count and mismatch what the expansion shows.
-  const sellerCount = new Set(listings.map((l) => l.shop_id)).size
+  // "N sellers" = distinct SHOPS, not listing rows (one shop can list the
+  // item several times). Same rule as the expanded list (groupSellerRule.ts),
+  // which shows one card per seller.
+  const sellerCount = groupSellerCount(listings)
   const priceMin = Math.min(...listings.map((l) => l.price_min ?? 0))
   const priceMax = Math.max(
     ...listings.map((l) => l.price_max ?? l.price_min ?? 0),
@@ -352,19 +353,25 @@ export function GroupCard({
         {/* Expanded seller comparison */}
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ p: 1.5 }}>
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary", mb: 1.5 }}
-            >
-              {fmt.priceRange(priceMin, priceMax)} {"·"}{" "}
-              {t("MarketRedesign.sellersCount", "{{count}} sellers", {
-                count: sellerCount,
-              })}{" "}
-              {"·"}{" "}
-              {t("MarketRedesign.unitsAvailable", "{{count}} units available", {
-                count: totalQuantity,
-              })}
-            </Typography>
+            {/* GroupSellers prints this summary from what it fetched (all
+                sellers), so it always counts the cards it shows. */}
+            {!cheapest.game_item_id && (
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", mb: 1.5 }}
+              >
+                {fmt.priceRange(priceMin, priceMax)} {"·"}{" "}
+                {t("MarketRedesign.sellersCount", "{{count}} sellers", {
+                  count: sellerCount,
+                })}{" "}
+                {"·"}{" "}
+                {t(
+                  "MarketRedesign.unitsAvailable",
+                  "{{count}} units available",
+                  { count: totalQuantity },
+                )}
+              </Typography>
+            )}
 
             {/* Sell side — who's offering this item */}
             <Typography
