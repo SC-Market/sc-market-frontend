@@ -10,12 +10,8 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { useEffect, useState } from "react"
 import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
@@ -311,40 +307,23 @@ export function OfferDetailsArea(props: {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog
+      <ConfirmDialog
         open={withdrawOpen}
         onClose={() => setWithdrawOpen(false)}
-        aria-labelledby="withdraw-offer-title"
-      >
-        <DialogTitle id="withdraw-offer-title">
-          {t("OfferDetailsArea.withdrawTitle", "Withdraw this offer?")}
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" color="text.primary">
-            {t(
-              "OfferDetailsArea.withdrawBody",
-              "The seller won't be able to accept it any more. To keep waiting instead, close this.",
-            )}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setWithdrawOpen(false)}>
-            {t("OfferDetailsArea.keepWaiting", "Keep waiting")}
-          </Button>
-          <LoadingButton
-            color="error"
-            variant="contained"
-            loading={isUpdatingStatus}
-            data-testid="confirm-withdraw-offer"
-            onClick={() => {
-              setWithdrawOpen(false)
-              updateStatusCallback("cancelled")
-            }}
-          >
-            {t("OfferDetailsArea.withdraw", "Withdraw the offer")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+        title={t("OfferDetailsArea.withdrawTitle", "Withdraw this offer?")}
+        message={t(
+          "OfferDetailsArea.withdrawBody",
+          "The seller won't be able to accept it any more. To keep waiting instead, close this.",
+        )}
+        cancelLabel={t("OfferDetailsArea.keepWaiting", "Keep waiting")}
+        confirmLabel={t("OfferDetailsArea.withdraw", "Withdraw the offer")}
+        destructive
+        loading={isUpdatingStatus}
+        onConfirm={() => {
+          setWithdrawOpen(false)
+          updateStatusCallback("cancelled")
+        }}
+      />
     </Grid>
   )
 }

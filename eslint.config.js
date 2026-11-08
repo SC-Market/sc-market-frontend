@@ -89,11 +89,6 @@ const RAW_MUI = {
 // Never add to this list.
 const DIALOG_LEGACY = [
   "src/views/contractor/SettingsManageContractors.tsx",
-  "src/views/offers/MergeOffersDialog.tsx",
-  "src/views/offers/OfferAssignedRow.tsx",
-  "src/views/offers/OfferDetailsArea.tsx",
-  "src/views/orders/AvailabilityModalWrapper.tsx",
-  "src/views/orders/OrderAssignedRow.tsx",
   "src/views/settings/AccountLinks.tsx",
   "src/views/settings/UnlinkProfile.tsx",
 ]

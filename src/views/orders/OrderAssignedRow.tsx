@@ -6,11 +6,8 @@ import {
   TextField,
   Box,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material"
+import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import React from "react"
 import {
   UserDetails,
@@ -102,72 +99,69 @@ export function OrderAssignedRow({
             </Stack>
 
             {/* Assign Member Dialog */}
-            <Dialog
+            <ResponsiveDialog
               open={isEditingAssigned}
               onClose={handleAssignCancel}
+              title={t("memberAssignArea.assignMember", "Assign Member")}
               maxWidth="xs"
-              fullWidth
-            >
-              <DialogTitle>
-                {t("memberAssignArea.assignMember", "Assign Member")}
-              </DialogTitle>
-              <DialogContent>
-                <Autocomplete
-                  filterOptions={(x) => x}
-                  fullWidth
-                  size="small"
-                  sx={{ mt: 1 }}
-                  options={
-                    target
-                      ? options
-                      : members
-                          .map((u) => ({
-                            username: u.username,
-                            display_name: u.username,
-                          }))
-                          .slice(0, 8)
-                  }
-                  getOptionLabel={(option) =>
-                    `${option.username} (${option.display_name})`
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t("memberAssignArea.handle")}
-                      SelectProps={{
-                        IconComponent: KeyboardArrowDownRoundedIcon,
-                      }}
-                    />
+              actions={
+                <>
+                  {order.assigned_to && (
+                    <Button color="error" onClick={handleUnassign}>
+                      {t("memberAssignArea.unassign", "Unassign")}
+                    </Button>
                   )}
-                  value={targetObject}
-                  onChange={(_event: React.SyntheticEvent, newValue) => {
-                    setTargetObject(newValue)
-                  }}
-                  inputValue={target}
-                  onInputChange={(_event, newInputValue) => {
-                    setTarget(newInputValue)
-                  }}
-                />
-              </DialogContent>
-              <DialogActions>
-                {order.assigned_to && (
-                  <Button color="error" onClick={handleUnassign}>
-                    {t("memberAssignArea.unassign", "Unassign")}
+                  <Box sx={{ flex: 1, display: { xs: "none", md: "block" } }} />
+                  <Button onClick={handleAssignCancel}>
+                    {t("common.cancel", "Cancel")}
                   </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleAssignSave}
+                    disabled={!targetObject}
+                  >
+                    {t("common.save", "Save")}
+                  </Button>
+                </>
+              }
+            >
+              <Autocomplete
+                filterOptions={(x) => x}
+                fullWidth
+                size="small"
+                sx={{ mt: 1 }}
+                options={
+                  target
+                    ? options
+                    : members
+                        .map((u) => ({
+                          username: u.username,
+                          display_name: u.username,
+                        }))
+                        .slice(0, 8)
+                }
+                getOptionLabel={(option) =>
+                  `${option.username} (${option.display_name})`
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={t("memberAssignArea.handle")}
+                    SelectProps={{
+                      IconComponent: KeyboardArrowDownRoundedIcon,
+                    }}
+                  />
                 )}
-                <Box sx={{ flex: 1 }} />
-                <Button onClick={handleAssignCancel}>
-                  {t("common.cancel", "Cancel")}
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleAssignSave}
-                  disabled={!targetObject}
-                >
-                  {t("common.save", "Save")}
-                </Button>
-              </DialogActions>
-            </Dialog>
+                value={targetObject}
+                onChange={(_event: React.SyntheticEvent, newValue) => {
+                  setTargetObject(newValue)
+                }}
+                inputValue={target}
+                onInputChange={(_event, newInputValue) => {
+                  setTarget(newInputValue)
+                }}
+              />
+            </ResponsiveDialog>
           </TableCell>
         </TableRow>
       )}
