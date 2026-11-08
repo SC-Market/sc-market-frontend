@@ -11,7 +11,7 @@ import {
 import { PATHS } from "../../routes/paths"
 import { landingStorefrontsArgs } from "../../features/storefront/domain"
 
-/** The homepage's "Org storefronts" row: featured orgs (landingStorefrontsArgs), in the hub's order. */
+/** The homepage's "Org storefronts" row: featured orgs (landingStorefrontsArgs), ranked by recent trading. */
 export function LandingStorefronts() {
   const { t } = useTranslation()
   const { data, isLoading } = useGetStorefrontsQuery(landingStorefrontsArgs())

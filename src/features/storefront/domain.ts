@@ -45,9 +45,10 @@ export function storefrontsHubArgs(
 export const LANDING_STOREFRONTS = 6
 
 /**
- * The homepage's "Org storefronts" row: the hub's order, but only orgs that
- * trade (`featured`: a shown shop with an order fulfilled in the last 365
- * days), so SC Market's own org and dormant orgs are never featured.
+ * The homepage's "Org storefronts" row: only orgs that trade (`featured`: a
+ * shown shop with an order fulfilled in the last 365 days), ranked by recent
+ * trading (the backend's activity score) with no showcase pin, so a spot is
+ * earned by activity.
  */
 export function landingStorefrontsArgs(): GetStorefrontsApiArg {
   return { page: 1, pageSize: LANDING_STOREFRONTS, featured: true }

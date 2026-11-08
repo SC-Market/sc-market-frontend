@@ -2875,7 +2875,7 @@ export type GetStorefrontsApiArg = {
   pageSize?: number
   /** Only orgs with this field (one of `fields`). */
   field?: string
-  /** Only orgs that trade: a shown shop with an order fulfilled in the last 365 days (the homepage row). */
+  /** Only orgs that trade: a shown shop with an order fulfilled in the last 365 days (the homepage row). Showcase orgs aren't pinned. */
   featured?: boolean
 }
 export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
@@ -4978,6 +4978,22 @@ export type UpsertShopOrderSettingRequest = {
   message_content: string
   enabled: boolean
 }
+export type StorefrontActivity = {
+  /** Orders fulfilled in the last 90 days (RECENT_ACTIVITY_DAYS). */
+  orders_90d: number
+  /** Orders fulfilled in the last 365 days (FEATURED_TRADE_WINDOW_DAYS), orders_90d included. */
+  orders_365d: number
+  /** Reviews left in the last 90 days. */
+  reviews_90d: number
+  /** Public, active listings updated in the last 90 days. */
+  listings_updated_90d: number
+  /** Active services posted in the last 90 days. */
+  services_posted_90d: number
+  /** The ranking score: 3 per order fulfilled in 90 days, 1 per order in 365 days, 1 per review in 90 days, 1 per listing updated in 90 days (at most 5). */
+  score: number
+  /** No order fulfilled in 365 days and no listing updated or service posted in 90 days: ranks after every other org (never hidden). */
+  stale: boolean
+}
 export type StorefrontCard = {
   spectrum_id: string
   name: string
@@ -4995,8 +5011,10 @@ export type StorefrontCard = {
   completed_orders: number
   avg_rating: number | null
   rating_count: number
-  /** A showcase org, listed first. */
+  /** A showcase org (SHOWCASE_STOREFRONTS), pinned first in the hub (not on the homepage). */
   showcase: boolean
+  /** The recent activity the order ranks on (storefrontActivityScore). */
+  activity: StorefrontActivity
 }
 export type StorefrontsResponse = {
   /** This page: showcase orgs first, stale orgs last, then by completed orders. */

@@ -39,7 +39,8 @@ import AddRounded from "@mui/icons-material/AddRounded"
 
 /**
  * /storefronts: verified orgs' storefronts (backend: RSI-verified, a public
- * listing or an active service; showcase orgs first), a page at a time.
+ * listing or an active service; showcase orgs first, then by recent trading,
+ * stale orgs last), a page at a time.
  * The page is in the URL (?page=N, like /shops), so each page has its own
  * crawlable, self-canonical URL (src/seo/queryIndexing.ts); the focus
  * filter (?field=) is a noindex variant. Page 1 is prerendered at build time

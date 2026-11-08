@@ -66,6 +66,15 @@ const card = (over: Partial<StorefrontCardData> = {}): StorefrontCardData => ({
   avg_rating: null,
   rating_count: 0,
   showcase: false,
+  activity: {
+    orders_90d: 0,
+    orders_365d: 0,
+    reviews_90d: 0,
+    listings_updated_90d: 0,
+    services_posted_90d: 0,
+    score: 0,
+    stale: true,
+  },
   ...over,
 })
 
