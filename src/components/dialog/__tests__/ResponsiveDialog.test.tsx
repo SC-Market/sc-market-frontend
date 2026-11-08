@@ -166,6 +166,21 @@ describe("ResponsiveDialog", () => {
     fireEvent.click(screen.getByRole("button", { name: "Add" }))
     expect(submit).toHaveBeenCalledTimes(1)
   })
+
+  it("calls onEntered once open and styles the backdrop", async () => {
+    const onEntered = vi.fn()
+    wrap(
+      <Opener
+        onEntered={onEntered}
+        backdropSx={{ backgroundColor: "rgb(1, 2, 3)" }}
+      />,
+    )
+    fireEvent.click(screen.getByText("Open it"))
+    await waitFor(() => expect(onEntered).toHaveBeenCalledTimes(1))
+    const backdrop = document.querySelector(".MuiBackdrop-root")
+    expect(backdrop).not.toBeNull()
+    expect(backdrop).toHaveStyle({ backgroundColor: "rgb(1, 2, 3)" })
+  })
 })
 
 describe("ConfirmDialog", () => {

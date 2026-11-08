@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react"
 import {
-  Dialog,
+  IconButton,
   InputBase,
   List,
   ListItemButton,
@@ -10,12 +10,14 @@ import {
   Box,
   Chip,
 } from "@mui/material"
-import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
+import { ResponsiveDialog } from "../dialog/ResponsiveDialog"
 import { useTheme } from "@mui/material/styles"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   SearchRounded,
+  CloseRounded,
   StorefrontRounded,
   AddRounded,
   MessageRounded,
@@ -50,7 +52,7 @@ export function CommandPalette() {
   const { data: shops = [] } = useGetMyShopsQuery(undefined, {
     skip: !isAuthenticated || !startupDone,
   })
-  const isMobile = useBreakpointDown("sm")
+  const isMobile = useIsMobile()
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
@@ -214,29 +216,36 @@ export function CommandPalette() {
     }
   }
 
+  const close = () => {
+    setOpen(false)
+    setQuery("")
+  }
+
+  // Desktop: a centred overlay near the top. Phones: full screen, with a
+  // close button since there's no Esc key.
   return (
-    <Dialog
+    <ResponsiveDialog
       open={open}
-      onClose={() => {
-        setOpen(false)
-        setQuery("")
-      }}
+      onClose={close}
+      onEntered={() => inputRef.current?.focus()}
+      ariaLabel={t("appUi.commandPalette.placeholder")}
       maxWidth="sm"
-      fullWidth
-      sx={{
-        "& .MuiDialog-paper": {
-          borderRadius: 2,
-          overflow: "hidden",
-          maxHeight: isMobile ? "90vh" : 480,
-          mt: isMobile ? 2 : 8,
-          mx: isMobile ? 1 : undefined,
-        },
-        "& .MuiBackdrop-root": {
-          backgroundColor: "rgba(0,0,0,0.4)",
-          backdropFilter: "blur(4px)",
-        },
+      mobile="fullScreen"
+      paperSx={
+        isMobile
+          ? undefined
+          : { borderRadius: 2, overflow: "hidden", maxHeight: 480, mt: 8 }
+      }
+      contentSx={{
+        p: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
       }}
-      TransitionProps={{ onEntered: () => inputRef.current?.focus() }}
+      backdropSx={{
+        backgroundColor: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(4px)",
+      }}
     >
       <Box
         sx={{
@@ -257,18 +266,30 @@ export function CommandPalette() {
           fullWidth
           sx={{ fontSize: "1rem" }}
         />
-        <Chip
-          label="ESC"
-          size="small"
-          variant="outlined"
-          sx={{ height: 22, fontSize: "0.7rem" }}
-        />
+        {isMobile ? (
+          <IconButton aria-label={t("ui.close", "Close")} onClick={close}>
+            <CloseRounded />
+          </IconButton>
+        ) : (
+          <Chip
+            label="ESC"
+            size="small"
+            variant="outlined"
+            sx={{ height: 22, fontSize: "0.7rem" }}
+          />
+        )}
       </Box>
 
       <List
         ref={listRef}
         dense
-        sx={{ py: 0.5, maxHeight: 380, overflowY: "auto" }}
+        sx={{
+          py: 0.5,
+          maxHeight: isMobile ? undefined : 380,
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+        }}
       >
         {filteredItems.length === 0 && (
           <Box sx={{ py: 4, textAlign: "center" }}>
@@ -350,8 +371,8 @@ export function CommandPalette() {
         sx={{
           px: 2,
           py: 1,
+          display: isMobile ? "none" : "flex",
           borderTop: `1px solid ${theme.palette.divider}`,
-          display: "flex",
           gap: 2,
           justifyContent: "center",
         }}
@@ -396,6 +417,6 @@ export function CommandPalette() {
           {t("appUi.commandPalette.hintClose")}
         </Typography>
       </Box>
-    </Dialog>
+    </ResponsiveDialog>
   )
 }

@@ -1,10 +1,6 @@
 import { useLocation } from "react-router-dom"
 import React, { useState } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   FormControl,
   InputLabel,
@@ -14,14 +10,13 @@ import {
   Box,
   Button,
 } from "@mui/material"
-import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ReportRounded as ReportIcon } from "@mui/icons-material"
 import type { CreateReportRequest } from "../../features/admin/api/moderationApi"
 import { useReportContent } from "../../features/admin/hooks/useModerationActions"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { UnderlineLink } from "../typography/UnderlineLink"
-import { BottomSheet } from "../mobile/BottomSheet"
+import { ResponsiveDialog } from "../dialog/ResponsiveDialog"
 
 interface ReportButtonProps {
   reportedUrl?: string // Optional custom URL, defaults to current page
@@ -34,7 +29,6 @@ export function ReportButton({ reportedUrl, children }: ReportButtonProps) {
   const [details, setDetails] = useState<string>("")
   const { submit, isSubmitting } = useReportContent()
   const { t } = useTranslation()
-  const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
 
   // Get current page path if none provided (from the router: this also
@@ -89,10 +83,6 @@ export function ReportButton({ reportedUrl, children }: ReportButtonProps) {
   // Content to reuse
   const dialogContent = (
     <>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        {t("ReportButton.reportDescription")}
-      </Typography>
-
       <Typography variant="body2" sx={{ mb: 1, fontWeight: "medium" }}>
         {t("ReportButton.reportingUrl")}:{" "}
         <code
@@ -152,7 +142,6 @@ export function ReportButton({ reportedUrl, children }: ReportButtonProps) {
         variant="contained"
         color="error"
         disabled={isSubmitting || !reason}
-        startIcon={isSubmitting ? undefined : <ReportIcon />}
         aria-label={t("accessibility.submitReport", "Submit report")}
         aria-describedby={isSubmitting ? "submitting-status" : undefined}
       >
@@ -198,43 +187,22 @@ export function ReportButton({ reportedUrl, children }: ReportButtonProps) {
         </span>
       </Box>
 
-      {/* On mobile, use BottomSheet */}
-      {isMobile ? (
-        <BottomSheet
-          open={open}
-          onClose={handleClose}
-          title={t("ReportButton.reportContent")}
-          maxHeight="90vh"
-        >
-          <Box display="flex" alignItems="center" gap={1} mb={2}>
-            <ReportIcon color="error" />
+      <ResponsiveDialog
+        open={open}
+        onClose={handleClose}
+        title={
+          <Box component="span" display="flex" alignItems="center" gap={1}>
+            <ReportIcon color="error" aria-hidden />
+            {t("ReportButton.reportContent")}
           </Box>
-          {dialogContent}
-          <Box
-            sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
-          >
-            {dialogActions}
-          </Box>
-        </BottomSheet>
-      ) : (
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          maxWidth="sm"
-          fullWidth
-          aria-labelledby="report-dialog-title"
-          aria-describedby="report-dialog-description"
-        >
-          <DialogTitle id="report-dialog-title">
-            <Box display="flex" alignItems="center" gap={1}>
-              <ReportIcon color="error" />
-              {t("ReportButton.reportContent")}
-            </Box>
-          </DialogTitle>
-          <DialogContent>{dialogContent}</DialogContent>
-          <DialogActions>{dialogActions}</DialogActions>
-        </Dialog>
-      )}
+        }
+        description={t("ReportButton.reportDescription")}
+        disableClose={isSubmitting}
+        disableBackdropClose
+        actions={dialogActions}
+      >
+        {dialogContent}
+      </ResponsiveDialog>
     </>
   )
 }

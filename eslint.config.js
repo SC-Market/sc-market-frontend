@@ -88,9 +88,6 @@ const RAW_MUI = {
 // Convert one to ResponsiveDialog / ConfirmDialog, then drop it from here.
 // Never add to this list.
 const DIALOG_LEGACY = [
-  "src/components/accessibility/AccessibleDialog.tsx",
-  "src/components/button/ReportButton.tsx",
-  "src/components/command-palette/CommandPalette.tsx",
   "src/views/admin/AdminAlertsView.tsx",
   "src/views/admin/AdminAttributeDefinitionsView.tsx",
   "src/views/admin/AdminFeatureFlagDetailView.tsx",

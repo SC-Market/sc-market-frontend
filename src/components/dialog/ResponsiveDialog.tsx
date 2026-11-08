@@ -81,9 +81,13 @@ export interface ResponsiveDialogProps {
   onSubmit?: (event: React.FormEvent<HTMLElement>) => void
   /** Called once the close transition has finished (reset state here) */
   onExited?: () => void
+  /** Called once the open transition has finished (e.g. focus an input) */
+  onEntered?: () => void
   keepMounted?: boolean
   contentSx?: SxProps<Theme>
   paperSx?: SxProps<Theme>
+  /** Styles for the backdrop (e.g. the command palette's blur) */
+  backdropSx?: SxProps<Theme>
 }
 
 const SlideUp = React.forwardRef(function SlideUp(
@@ -120,9 +124,11 @@ export function ResponsiveDialog({
   stackAbove = false,
   onSubmit,
   onExited,
+  onEntered,
   keepMounted,
   contentSx,
   paperSx,
+  backdropSx,
 }: ResponsiveDialogProps) {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
@@ -183,7 +189,8 @@ export function ResponsiveDialog({
       }
       slots={isSheet ? { transition: SlideUp } : undefined}
       slotProps={{
-        transition: onExited ? { onExited } : undefined,
+        transition: onExited || onEntered ? { onExited, onEntered } : undefined,
+        backdrop: backdropSx ? { sx: backdropSx } : undefined,
         container: isSheet ? { sx: { alignItems: "flex-end" } } : undefined,
         paper: {
           "aria-label": title == null ? ariaLabel : undefined,
