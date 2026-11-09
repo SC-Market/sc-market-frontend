@@ -45,6 +45,8 @@ import {
 
 import { useFormatters } from "../../util/format"
 import { TagChip } from "../../components/tags/TagChip"
+import { MarketPriceLine } from "../../features/game-data/market-price/MarketPriceLine"
+import { useMarketPrices } from "../../features/game-data/market-price/useMarketPrices"
 import {
   ItemCraftingTab,
   ItemDisassemblyTab,
@@ -82,6 +84,9 @@ export function WikiItemDetail() {
     { id: id! },
     { skip: !id },
   )
+
+  // "Lowest on SC Market": by UUID (the route param may be a short slug).
+  const marketPrices = useMarketPrices(item ? [item.id] : [])
 
   const [tab, setTab] = useState(TAB_OVERVIEW)
   const [disassemblyQty, setDisassemblyQty] = useState(1)
@@ -219,6 +224,13 @@ export function WikiItemDetail() {
                           />
                         )}
                       </Stack>
+
+                      <MarketPriceLine
+                        price={marketPrices.get(item.id.toLowerCase())}
+                        gameItemId={item.id}
+                        itemName={item.name}
+                        sx={{ mb: 1.5 }}
+                      />
 
                       <Stack
                         direction="row"

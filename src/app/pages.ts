@@ -554,6 +554,10 @@ export const pages = {
     () => import("../pages/wiki/WikiManufacturerPage"),
     (m) => m.WikiManufacturerPage,
   ),
+  WikiComparePage: pageEntry(
+    () => import("../pages/wiki/compare/WikiComparePage"),
+    (m) => m.WikiComparePage,
+  ),
   WikiRefineryPage: pageEntry(
     () => import("../pages/wiki/WikiRefineryPage"),
     (m) => m.WikiRefineryPage,

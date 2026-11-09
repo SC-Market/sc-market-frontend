@@ -177,6 +177,9 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/wiki/manufacturers": () => import("../pages/wiki/WikiManufacturerList"),
   "/wiki/manufacturers/:id": () => import("../pages/wiki/WikiManufacturerPage"),
   "/wiki/refinery": () => import("../pages/wiki/WikiRefineryPage"),
+  "/wiki/compare": () => import("../pages/wiki/compare/WikiComparePage"),
+  "/wiki/compare/:category": () =>
+    import("../pages/wiki/compare/WikiComparePage"),
   "/guides": () => import("../pages/guides/GuidesHub"),
   "/guides/:category": () => import("../pages/guides/GuideCategory"),
   "/guides/:category/:slug": () => import("../pages/guides/GuidePage"),

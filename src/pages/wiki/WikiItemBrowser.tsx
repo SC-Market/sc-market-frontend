@@ -57,6 +57,7 @@ import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { useFormatters } from "../../util/format"
 import { FilterSection } from "./WikiItemFilterSection"
 import { ItemGridCard, ItemListRow } from "./WikiItemCards"
+import { useMarketPrices } from "../../features/game-data/market-price/useMarketPrices"
 const VIEW_MODES = ["grid", "list"] as const
 const gridBreakpoints = WIKI_ITEM_CARD_GRID.item
 
@@ -150,6 +151,10 @@ export function WikiItemBrowser() {
     page,
     pageSize,
   })
+  // One batched request for the page's market prices (client-only).
+  const marketPrices = useMarketPrices(
+    useMemo(() => data?.items.map((item) => item.id) ?? [], [data]),
+  )
   // Primary content: drives main[data-ready].
   usePageReady(
     isPrimaryLoading({
@@ -316,7 +321,10 @@ export function WikiItemBrowser() {
                 <Grid container spacing={WIKI_ITEM_CARD_GRID.spacing}>
                   {data.items.map((item) => (
                     <Grid item {...gridBreakpoints} key={item.id}>
-                      <ItemGridCard item={item} />
+                      <ItemGridCard
+                        item={item}
+                        price={marketPrices.get(item.id.toLowerCase())}
+                      />
                     </Grid>
                   ))}
                 </Grid>
@@ -344,6 +352,9 @@ export function WikiItemBrowser() {
                             "Manufacturer",
                           )}
                         </TableCell>
+                        <TableCell align="right">
+                          {t("marketPrice.column", "SC Market price")}
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -351,6 +362,7 @@ export function WikiItemBrowser() {
                         <ItemListRow
                           key={item.id}
                           item={item}
+                          price={marketPrices.get(item.id.toLowerCase())}
                           onClick={() => handleItemClick(item.id)}
                         />
                       ))}

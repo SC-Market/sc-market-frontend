@@ -63,6 +63,7 @@ export const PATTERN_PARAM_OVERRIDES: Record<string, Record<string, string>> = {
   "/market/create/:tab": { tab: "unique" },
   // A real guide, so the suite renders content rather than the 404 body.
   "/guides/:category/:slug": { category: "buying", slug: "buy-an-item" },
+  "/wiki/compare/:category": { category: "shield" },
 }
 
 const OWNER_ROLE: ContractorRole = {

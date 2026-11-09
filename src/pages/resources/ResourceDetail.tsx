@@ -35,6 +35,8 @@ import { useFormatters } from "../../util/format"
 import { TagChip } from "../../components/tags/TagChip"
 import { qualityTagSx } from "../../components/tags/tagColors"
 import { qualityValueColor } from "../../util/qualityColor"
+import { MarketPriceLine } from "../../features/game-data/market-price/MarketPriceLine"
+import { useMarketPrices } from "../../features/game-data/market-price/useMarketPrices"
 export function ResourceDetail() {
   const { t } = useTranslation()
   const fmt = useFormatters()
@@ -43,6 +45,8 @@ export function ResourceDetail() {
   const { data, isLoading, error } = useGetResourceQuery({
     resourceId: resource_id!,
   })
+  const gameItemId = data?.resource.game_item_id
+  const marketPrices = useMarketPrices(gameItemId ? [gameItemId] : [])
 
   if (isLoading) {
     return (
@@ -149,6 +153,12 @@ export function ResourceDetail() {
           <Typography variant="h6" gutterBottom>
             {t("resources.marketPrice", "Market Price")}
           </Typography>
+          <MarketPriceLine
+            price={marketPrices.get(resource.game_item_id.toLowerCase())}
+            gameItemId={resource.game_item_id}
+            itemName={resource.resource_name}
+            sx={{ mb: 1 }}
+          />
           {market_price ? (
             <Stack spacing={1}>
               {market_price.min_price != null && (

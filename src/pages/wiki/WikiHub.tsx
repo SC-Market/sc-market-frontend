@@ -19,6 +19,7 @@ import {
   CalculateRounded,
   TerrainRounded,
   ConstructionRounded,
+  CompareArrowsRounded,
 } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -36,6 +37,7 @@ const SECTION_ICONS: Record<string, React.ReactElement> = {
   [WIKI_PATHS.locations]: <LocationOnRounded />,
   [WIKI_PATHS.manufacturers]: <BusinessRounded />,
   [WIKI_PATHS.refinery]: <SettingsRounded />,
+  [WIKI_PATHS.compareHub]: <CompareArrowsRounded />,
   [GAME_DATA_PATHS.missions]: <AssignmentRounded />,
   [GAME_DATA_PATHS.blueprints]: <DescriptionRounded />,
   [GAME_DATA_PATHS.craftingCalculator]: <CalculateRounded />,

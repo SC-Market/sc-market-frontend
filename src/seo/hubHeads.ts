@@ -242,6 +242,11 @@ export const WIKI_HUB_SECTIONS: readonly {
     route: WIKI_PATHS.refinery,
   },
   {
+    label: "Compare items",
+    labelKey: "wiki.hub.sectionCompare",
+    route: WIKI_PATHS.compareHub,
+  },
+  {
     label: "Missions",
     labelKey: "wiki.hub.sectionMissions",
     route: GAME_DATA_PATHS.missions,

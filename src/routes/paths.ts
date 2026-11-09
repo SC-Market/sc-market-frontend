@@ -177,6 +177,12 @@ export const WIKI_PATHS = {
       ? `/wiki/commodities/${formatShortSlug(id, name)}`
       : `/wiki/commodities/${id}`,
   manufacturer: (code: string) => `/wiki/manufacturers/${code}`,
+  /** Comparison tables: /wiki/compare (the default category) or one category. */
+  compareHub: "/wiki/compare",
+  compare: (category: string, search?: URLSearchParams | string) => {
+    const query = search ? String(search) : ""
+    return `/wiki/compare/${category}${query ? `?${query}` : ""}`
+  },
 } as const
 
 export const GAME_DATA_PATHS = {

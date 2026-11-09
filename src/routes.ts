@@ -948,6 +948,16 @@ export default [
         file: "routes/pages/WikiManufacturerPage.tsx",
       },
       {
+        id: "routes/pages/WikiComparePage",
+        path: "/wiki/compare",
+        file: "routes/pages/WikiComparePage.tsx",
+      },
+      {
+        id: "routes/pages/WikiComparePage~2",
+        path: "/wiki/compare/:category",
+        file: "routes/pages/WikiComparePage.tsx",
+      },
+      {
         id: "routes/pages/WikiManufacturerList",
         path: "/wiki/manufacturers",
         file: "routes/pages/WikiManufacturerList.tsx",

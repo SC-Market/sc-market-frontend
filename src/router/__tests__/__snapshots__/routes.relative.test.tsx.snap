@@ -6611,6 +6611,78 @@ exports[`relative link resolution (every leaf) > /wiki/commodities/:id 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /wiki/compare 1`] = `
+{
+  "links": {
+    "path:""": "/wiki/compare",
+    "path:"#frag"": "/wiki/compare#frag",
+    "path:"."": "/wiki/compare",
+    "path:".."": "/wiki",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/wiki/sibling",
+    "path:"./"": "/wiki/compare/",
+    "path:"./child"": "/wiki/compare/child",
+    "path:"?tab=x"": "/wiki/compare?tab=x",
+    "path:"child"": "/wiki/compare/child",
+    "route:""": "/wiki/compare",
+    "route:"#frag"": "/wiki/compare#frag",
+    "route:"."": "/wiki/compare",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/wiki/compare/",
+    "route:"./child"": "/wiki/compare/child",
+    "route:"?tab=x"": "/wiki/compare?tab=x",
+    "route:"child"": "/wiki/compare/child",
+  },
+  "location": "/wiki/compare",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/wiki/compare",
+  ],
+  "resolvedDot": "/wiki/compare",
+  "url": "/wiki/compare",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /wiki/compare/:category 1`] = `
+{
+  "links": {
+    "path:""": "/wiki/compare/shield",
+    "path:"#frag"": "/wiki/compare/shield#frag",
+    "path:"."": "/wiki/compare/shield",
+    "path:".."": "/wiki/compare",
+    "path:"../.."": "/wiki",
+    "path:"../sibling"": "/wiki/compare/sibling",
+    "path:"./"": "/wiki/compare/shield/",
+    "path:"./child"": "/wiki/compare/shield/child",
+    "path:"?tab=x"": "/wiki/compare/shield?tab=x",
+    "path:"child"": "/wiki/compare/shield/child",
+    "route:""": "/wiki/compare/shield",
+    "route:"#frag"": "/wiki/compare/shield#frag",
+    "route:"."": "/wiki/compare/shield",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/wiki/compare/shield/",
+    "route:"./child"": "/wiki/compare/shield/child",
+    "route:"?tab=x"": "/wiki/compare/shield?tab=x",
+    "route:"child"": "/wiki/compare/shield/child",
+  },
+  "location": "/wiki/compare/shield",
+  "params": {
+    "category": "shield",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/wiki/compare/:category",
+  ],
+  "resolvedDot": "/wiki/compare/shield",
+  "url": "/wiki/compare/shield",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /wiki/items 1`] = `
 {
   "links": {

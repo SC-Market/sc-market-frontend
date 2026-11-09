@@ -38,6 +38,8 @@ import { SeoHead } from "../../seo/SeoHead"
 
 import { useFormatters } from "../../util/format"
 import { MiningDataSection, BoolChip } from "./WikiCommodityMiningData"
+import { MarketPriceLine } from "../../features/game-data/market-price/MarketPriceLine"
+import { useMarketPrices } from "../../features/game-data/market-price/useMarketPrices"
 
 export function WikiCommodityDetail() {
   const { t } = useTranslation()
@@ -52,6 +54,7 @@ export function WikiCommodityDetail() {
   const r = data?.resource
   const bps = data?.blueprints_requiring || []
   const price = data?.market_price
+  const marketPrices = useMarketPrices(r ? [r.game_item_id] : [])
   const answers = data ? buildCommodityAnswers(data, t, fmt.locale) : null
 
   const head = data?.resource ? buildCommodityHead(data, FRONTEND_URL) : null
@@ -178,6 +181,15 @@ export function WikiCommodityDetail() {
                 />
               )}
             </Stack>
+
+            {r && (
+              <MarketPriceLine
+                price={marketPrices.get(r.game_item_id.toLowerCase())}
+                gameItemId={r.game_item_id}
+                itemName={r.resource_name}
+                sx={{ mb: 2 }}
+              />
+            )}
 
             {/* Market Price */}
             {price && (price.average_price || price.min_price) && (

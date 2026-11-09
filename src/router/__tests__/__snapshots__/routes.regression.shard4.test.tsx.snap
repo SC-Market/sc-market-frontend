@@ -1783,6 +1783,64 @@ exports[`routes (shard 4/4) > /storefronts 1`] = `
 }
 `;
 
+exports[`routes (shard 4/4) > /wiki/compare/:category 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/wiki/compare/shield",
+  "h1": [
+    "Compare items",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/wiki/compare/:category",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/discord/install?type=server&src=footer",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+    "/wiki",
+    "/wiki/compare",
+    "/wiki/compare/arms",
+    "/wiki/compare/backpack",
+    "/wiki/compare/cooler",
+    "/wiki/compare/countermeasure",
+    "/wiki/compare/fps-weapon",
+    "/wiki/compare/helmet",
+    "/wiki/compare/jump-drive",
+    "/wiki/compare/legs",
+    "/wiki/compare/mining-head",
+    "/wiki/compare/missile",
+    "/wiki/compare/power-plant",
+    "/wiki/compare/quantum-drive",
+    "/wiki/compare/radar",
+    "/wiki/compare/shield",
+    "/wiki/compare/ship-weapon",
+    "/wiki/compare/torso",
+    "/wiki/compare/undersuit",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/wiki/compare/:category",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Compare Shields | SC Market",
+  "url": "/wiki/compare/shield",
+}
+`;
+
 exports[`routes (shard 4/4) > /wiki/manufacturers 1`] = `
 {
   "consoleErrors": [],

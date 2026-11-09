@@ -2544,6 +2544,24 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/wiki/manufacturers/:id",
   },
   {
+    "chain": "(layout:AppLayout) > /wiki/compare",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/compare",
+  },
+  {
+    "chain": "(layout:AppLayout) > /wiki/compare/:category",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/compare/:category",
+  },
+  {
     "chain": "(layout:AppLayout) > /wiki/manufacturers",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

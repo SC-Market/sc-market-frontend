@@ -1139,6 +1139,18 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Items V2"],
       }),
+      getMarketPrices: build.query<
+        GetMarketPricesApiResponse,
+        GetMarketPricesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-items/market-prices`,
+          params: {
+            ids: queryArg.ids,
+          },
+        }),
+        providesTags: ["Game Items V2"],
+      }),
       getPriceStats: build.query<GetPriceStatsApiResponse, GetPriceStatsApiArg>(
         {
           query: (queryArg) => ({
@@ -1311,6 +1323,15 @@ const injectedRtkApi = api
       getItemShops: build.query<GetItemShopsApiResponse, GetItemShopsApiArg>({
         query: (queryArg) => ({
           url: `/game-data/wiki/items/${queryArg.id}/shops`,
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getCompareTable: build.query<
+        GetCompareTableApiResponse,
+        GetCompareTableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/wiki/compare/${queryArg.category}`,
         }),
         providesTags: ["Game Data - Wiki"],
       }),
@@ -3342,6 +3363,12 @@ export type SearchGameItemsApiArg = {
   /** Max results (default 50) */
   limit?: number
 }
+export type GetMarketPricesApiResponse =
+  /** status 200 Ok */ GetGameItemMarketPricesResponse
+export type GetMarketPricesApiArg = {
+  /** Comma-separated game item UUIDs (at most 120) */
+  ids: string
+}
 export type GetPriceStatsApiResponse = /** status 200 Ok */ PriceOracleItem
 export type GetPriceStatsApiArg = {
   /** Game item UUID or short slug */
@@ -3481,6 +3508,12 @@ export type GetItemShopsApiResponse =
 export type GetItemShopsApiArg = {
   /** Game item UUID (resolve short slugs with GET /game-data/wiki/items/{id} first) */
   id: string
+}
+export type GetCompareTableApiResponse =
+  /** status 200 Ok */ WikiCompareResponse
+export type GetCompareTableApiArg = {
+  /** Comparison category */
+  category: WikiCompareCategory
 }
 export type GetShipsApiResponse =
   /** status 200 Ship search results with pagination */ {
@@ -6468,6 +6501,21 @@ export type GameItemSearchResult = {
   name: string
   type: string
 }
+export type GameItemMarketPrice = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Lowest per-unit fixed-price ask in aUEC, above the 1 aUEC placeholder;
+    null when every listing is an auction or a placeholder price */
+  lowest_price: number | null
+  /** Distinct sellers: one per shop, however many listings it has */
+  seller_count: number
+  /** Live listings of the item */
+  listing_count: number
+}
+export type GetGameItemMarketPricesResponse = {
+  /** Only the items somebody sells (an item with no seller has no entry), in the order asked */
+  items: GameItemMarketPrice[]
+}
 export type PublicFeedLicense = {
   /** SPDX identifier, "CC-BY-4.0" */
   license: string
@@ -7085,6 +7133,69 @@ export type WikiItemShop = {
 export type WikiItemShopsResponse = {
   /** Shops that stock the item, cheapest first; empty when no shop does */
   shops: WikiItemShop[]
+}
+export type WikiCompareCategory =
+  | "quantum-drive"
+  | "shield"
+  | "power-plant"
+  | "cooler"
+  | "radar"
+  | "jump-drive"
+  | "ship-weapon"
+  | "missile"
+  | "countermeasure"
+  | "mining-head"
+  | "fps-weapon"
+  | "helmet"
+  | "torso"
+  | "arms"
+  | "legs"
+  | "undersuit"
+  | "backpack"
+export type WikiCompareColumn = {
+  /** Stat key; also the key into each row's `stats` */
+  key: string
+  /** "text" stats (fire modes, laser power ranges) are not ranked */
+  kind: "number" | "text"
+  /** Which way is better, for highlighting the best value; null when neither */
+  better: ("higher" | "lower" | null) | null
+  /** Display unit (a symbol, never translated); null when unitless */
+  unit:
+    | ("s" | "m" | "m/s" | "rpm" | "\u00B0C" | "%" | "\u00B5SCU" | null)
+    | null
+}
+export type WikiCompareRow = {
+  id: string
+  name: string
+  size: number | null
+  /** Component grade A-D; null for categories without grades */
+  grade: string | null
+  /** Class (Military, Ballistic Cannon, Heavy, ...), as the game data names it */
+  class: string | null
+  /** The game's sub-type (Small, Torpedo, ...), null when the data has none */
+  sub_type: string | null
+  /** Manufacturer display name */
+  manufacturer: string | null
+  /** Manufacturer code (game_items.manufacturer), e.g. "behr" */
+  manufacturer_code: string | null
+  image_url: string | null
+  thumbnail_path: string | null
+  /** Stat key → value; a stat the item lacks is absent. Text when the data isn't a plain number. */
+  stats: {
+    [key: string]: number | string
+  }
+  /** null when nobody sells the item on SC Market */
+  market: GameItemMarketPrice | null
+}
+export type WikiCompareResponse = {
+  category: WikiCompareCategory
+  group: "ship" | "fps"
+  /** Only stats some items have and that differ between items */
+  columns: WikiCompareColumn[]
+  /** Every item of the category, by name */
+  items: WikiCompareRow[]
+  /** When the document was computed (ISO 8601); market prices are as of then */
+  as_of: string
 }
 export type WikiShipSearchResult = {
   id: string
@@ -9836,6 +9947,7 @@ export const {
   useDismissHintMutation,
   useGetHealthQuery,
   useSearchGameItemsQuery,
+  useGetMarketPricesQuery,
   useGetPriceStatsQuery,
   useGetAcquisitionQuery,
   useGetCategoriesQuery,
@@ -9853,6 +9965,7 @@ export const {
   useSearchItemsQuery,
   useGetItemDetailQuery,
   useGetItemShopsQuery,
+  useGetCompareTableQuery,
   useGetShipsQuery,
   useGetShipDetailQuery,
   useGetCommoditiesQuery,

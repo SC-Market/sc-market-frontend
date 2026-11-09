@@ -9,17 +9,33 @@ import {
   TableRow,
 } from "@mui/material"
 import { ImageAvatar } from "../../components/avatar/ImageAvatar"
-import { type WikiItemSearchResult } from "../../store/api/v2/market"
+import {
+  type GameItemMarketPrice,
+  type WikiItemSearchResult,
+} from "../../store/api/v2/market"
 import { Link as RouterLink } from "react-router-dom"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { WIKI_ITEM_CARD_HEIGHT } from "../../components/game-data/cardGrids"
 import { wikiItemImage } from "./wikiItemImage"
 import { WIKI_PATHS } from "../../routes/paths"
 import { TagChip } from "../../components/tags/TagChip"
+import { useFormatters } from "../../util/format"
+import {
+  MarketPriceCaption,
+  hasMarketPrice,
+  useMarketPriceText,
+} from "../../features/game-data/market-price/MarketPriceLine"
 
 export const CARD_HEIGHT = WIKI_ITEM_CARD_HEIGHT
 
-export function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
+export function ItemGridCard({
+  item,
+  price,
+}: {
+  item: WikiItemSearchResult
+  /** SC Market price; none when nobody sells the item */
+  price?: GameItemMarketPrice
+}) {
   // A real link (crawlable, middle-click, prerendered with the hub).
   return (
     <Card
@@ -106,6 +122,7 @@ export function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
             {item.manufacturer}
           </Typography>
         )}
+        <MarketPriceCaption price={price} />
       </CardContent>
     </Card>
   )
@@ -113,9 +130,12 @@ export function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
 
 export function ItemListRow({
   item,
+  price,
   onClick,
 }: {
   item: WikiItemSearchResult
+  /** SC Market price; none when nobody sells the item */
+  price?: GameItemMarketPrice
   onClick: () => void
 }) {
   return (
@@ -157,6 +177,25 @@ export function ItemListRow({
           {item.manufacturer || "—"}
         </Typography>
       </TableCell>
+      <TableCell sx={{ py: 0.5, whiteSpace: "nowrap" }} align="right">
+        <MarketPriceCell price={price} />
+      </TableCell>
     </TableRow>
+  )
+}
+
+/** The list view's price column: "1.5M aUEC · 3 sellers", or a dash. */
+function MarketPriceCell({ price }: { price?: GameItemMarketPrice }) {
+  const text = useMarketPriceText()
+  const fmt = useFormatters()
+  if (!hasMarketPrice(price)) return <>—</>
+  return (
+    <Typography
+      variant="body2"
+      component="span"
+      title={fmt.exactPrice(price.lowest_price)}
+    >
+      {text(price, "compact")}
+    </Typography>
   )
 }

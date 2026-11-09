@@ -1931,6 +1931,7 @@ exports[`routes (shard 3/4) > /wiki 1`] = `
     "/resources",
     "/terms",
     "/wiki/commodities",
+    "/wiki/compare",
     "/wiki/items",
     "/wiki/locations",
     "/wiki/manufacturers",
@@ -1947,6 +1948,64 @@ exports[`routes (shard 3/4) > /wiki 1`] = `
   "stillLoading": false,
   "title": "Game Database — Star Citizen Items, Ships & More | SC Market",
   "url": "/wiki",
+}
+`;
+
+exports[`routes (shard 3/4) > /wiki/compare 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/wiki/compare/quantum-drive",
+  "h1": [
+    "Compare items",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/wiki/compare",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/discord/install?type=server&src=footer",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+    "/wiki",
+    "/wiki/compare",
+    "/wiki/compare/arms",
+    "/wiki/compare/backpack",
+    "/wiki/compare/cooler",
+    "/wiki/compare/countermeasure",
+    "/wiki/compare/fps-weapon",
+    "/wiki/compare/helmet",
+    "/wiki/compare/jump-drive",
+    "/wiki/compare/legs",
+    "/wiki/compare/mining-head",
+    "/wiki/compare/missile",
+    "/wiki/compare/power-plant",
+    "/wiki/compare/quantum-drive",
+    "/wiki/compare/radar",
+    "/wiki/compare/shield",
+    "/wiki/compare/ship-weapon",
+    "/wiki/compare/torso",
+    "/wiki/compare/undersuit",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/wiki/compare/:category",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Compare Quantum drives | SC Market",
+  "url": "/wiki/compare",
 }
 `;
 
