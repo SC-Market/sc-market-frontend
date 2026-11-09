@@ -16,6 +16,7 @@ import {
   insertAds,
 } from "../adConfig"
 import type { AdConfig } from "../types"
+import { IAE_2956 } from "../iae2956"
 
 const SC_ORGS_POSTERS = [
   "sc-orgs-finder",
@@ -244,5 +245,66 @@ describe("market ad rotation", () => {
       const ratio = (luminance(rgb(p.accent)) + 0.05) / (luminance(glow) + 0.05)
       expect(ratio, `${p.id} ${p.accent}`).toBeGreaterThanOrEqual(4.5)
     }
+  })
+})
+
+describe("campaign ad slot", () => {
+  const key = (l: { listing_id: string }) => l.listing_id
+  const adsOf = (out: ReturnType<typeof insertAds<{ listing_id: string }>>) =>
+    out.flatMap((item) => ("_isAd" in item ? [item.ad] : []))
+
+  // 12 and 24 listings: 1 slot (SC Orgs); 48 (the default): 2; 120: 5.
+  it.each([
+    [12, 1, 0],
+    [24, 1, 0],
+    [48, 2, 1],
+    [120, 5, 1],
+    [200, 8, 1],
+  ])(
+    "a page of %i listings (%i slots) shows %i campaign ad and still exactly one SC Orgs ad",
+    (size, slots, campaignCount) => {
+      for (const creative of IAE_2956.creatives) {
+        for (let seed = 0; seed < 20; seed++) {
+          const page = listings(size, `c${seed}-`)
+          const withCampaign = adsOf(insertAds(page, key, MARKET_ADS, creative))
+          const without = adsOf(insertAds(page, key, MARKET_ADS))
+          expect(withCampaign).toHaveLength(slots)
+          expect(
+            withCampaign.filter((ad) => ad.id.startsWith("iae2956-")),
+          ).toHaveLength(campaignCount)
+          expect(withCampaign.filter((ad) => ad.sisterSite)).toHaveLength(1)
+          // The campaign ad replaces one ship poster; every other slot,
+          // the SC Orgs one included, keeps its ad.
+          const changed = withCampaign.filter((ad, i) => ad !== without[i])
+          expect(changed).toHaveLength(campaignCount)
+          if (campaignCount) expect(changed[0]).toBe(creative)
+        }
+      }
+    },
+  )
+
+  it("moves the campaign ad between the non-SC Orgs slots across pages", () => {
+    const creative = IAE_2956.creatives[0]
+    const slotsSeen = new Set<number>()
+    for (let seed = 0; seed < 100; seed++) {
+      const ads = adsOf(
+        insertAds(listings(120, `m${seed}-`), key, MARKET_ADS, creative),
+      )
+      const slot = ads.indexOf(creative)
+      expect(ads[slot].sisterSite).toBeFalsy()
+      slotsSeen.add(slot)
+    }
+    // 5 slots: it takes each of them on some page (never the SC Orgs one).
+    expect(slotsSeen.size).toBe(5)
+  })
+
+  it("is the same with a null campaign ad as without one", () => {
+    const page = listings(120)
+    expect(insertAds(page, key, MARKET_ADS, null)).toEqual(insertAds(page, key))
+  })
+
+  it("keeps the campaign creatives out of the regular rotation", () => {
+    const ids = new Set(MARKET_ADS.map((ad) => ad.id))
+    for (const c of IAE_2956.creatives) expect(ids.has(c.id)).toBe(false)
   })
 })

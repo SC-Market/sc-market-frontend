@@ -42,6 +42,9 @@ interface AdCardProps {
  * Cropping to fill the card (object-fit: cover) cut that copy off on every
  * card not of the image's own shape, so the whole image is shown (contain),
  * over a blurred, darkened copy of itself filling the bands either side.
+ * The IAE 2956 posters (1:2) are drawn the same way, so their manufacturer
+ * logo, IAE mark and tagline are never cropped; they also carry 2x and AVIF
+ * copies.
  */
 function ImageCreative(props: { ad: ImageAdConfig }) {
   const { ad } = props
@@ -65,20 +68,36 @@ function ImageCreative(props: { ad: ImageAdConfig }) {
           transform: "scale(1.15)",
         }}
       />
-      <Box
-        component="img"
-        src={ad.imageUrl}
-        alt={t("appUi.ads.imageAlt", { title: ad.title })}
-        loading="lazy"
-        sx={{
-          position: "relative",
-          display: "block",
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-          objectPosition: "center",
-        }}
-      />
+      {/* display: contents lays the img out as the Box's own child. */}
+      <picture style={{ display: "contents" }}>
+        {ad.avif && (
+          <source
+            type="image/avif"
+            srcSet={`${ad.avif.x1} 1x, ${ad.avif.x2} 2x`}
+          />
+        )}
+        <Box
+          component="img"
+          src={ad.imageUrl}
+          srcSet={
+            ad.imageUrl2x ? `${ad.imageUrl} 1x, ${ad.imageUrl2x} 2x` : undefined
+          }
+          alt={
+            ad.alt
+              ? t(ad.alt.key, ad.alt.values)
+              : t("appUi.ads.imageAlt", { title: ad.title })
+          }
+          loading="lazy"
+          sx={{
+            position: "relative",
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "center",
+          }}
+        />
+      </picture>
     </Box>
   )
 }

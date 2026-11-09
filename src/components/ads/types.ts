@@ -30,6 +30,12 @@ export interface ImageAdConfig extends AdBase {
   /** URL of the ad image */
   imageUrl: string
   description?: string
+  /** The image at twice the card's size, for high-density screens */
+  imageUrl2x?: string
+  /** AVIF copies of the image (1x and 2x), preferred where supported */
+  avif?: { x1: string; x2: string }
+  /** The alt text's i18n key and values, instead of `appUi.ads.imageAlt` */
+  alt?: { key: string; values: Record<string, string> }
 }
 
 export interface PosterAdConfig extends AdBase {
@@ -44,3 +50,19 @@ export interface PosterAdConfig extends AdBase {
 }
 
 export type AdConfig = ImageAdConfig | PosterAdConfig
+
+/**
+ * A time-boxed set of image ads (e.g. an in-game event). While it runs, each
+ * visitor is shown one creative from the set, the same one for the whole
+ * campaign, in at most one ad slot per page (see useCampaignAd, insertAds).
+ */
+export interface AdCampaign {
+  id: string
+  /** ISO 8601 instant the campaign starts (inclusive) */
+  start: string
+  /** ISO 8601 instant the campaign ends (exclusive) */
+  end: string
+  /** localStorage key holding an anonymous visitor's creative id */
+  storageKey: string
+  creatives: ImageAdConfig[]
+}

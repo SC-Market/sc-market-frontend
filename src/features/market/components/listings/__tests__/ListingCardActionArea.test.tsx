@@ -10,6 +10,7 @@ import { MemoryRouter } from "react-router-dom"
 import { mainTheme } from "../../../../../hooks/styles/Theme"
 import { AdCard } from "../../../../../components/ads/AdCard"
 import { MARKET_ADS } from "../../../../../components/ads/adConfig"
+import { IAE_2956 } from "../../../../../components/ads/iae2956"
 import { ListingCardV2 } from "../../../v2/ListingCardV2"
 import { LISTING_CARD_ACTION_CLASS } from "../ListingCardActionArea"
 import { formatMarketUrl } from "../../../domain/urls"
@@ -59,40 +60,39 @@ function tileOf(link: HTMLElement) {
 }
 
 describe("AdCard hover", () => {
-  it.each(MARKET_ADS.map((ad) => [ad.id, ad] as const))(
-    "%s uses the listing card's hover, focus and press styling",
-    (_id, ad) => {
-      render(
-        <ThemeProvider theme={mainTheme}>
-          <MemoryRouter>
-            <div data-testid="listing">
-              <ListingCardV2 listing={listing} index={0} />
-            </div>
-            <div data-testid="ad">
-              <AdCard ad={ad} index={0} noGridWrapper />
-            </div>
-          </MemoryRouter>
-        </ThemeProvider>,
-      )
-      const listingTile = tileOf(
-        within(screen.getByTestId("listing")).getByRole("link", {
-          name: /Arrowhead Sniper Rifle/,
-        }),
-      )
-      const adTile = tileOf(within(screen.getByTestId("ad")).getByRole("link"))
+  it.each(
+    [...MARKET_ADS, ...IAE_2956.creatives].map((ad) => [ad.id, ad] as const),
+  )("%s uses the listing card's hover, focus and press styling", (_id, ad) => {
+    render(
+      <ThemeProvider theme={mainTheme}>
+        <MemoryRouter>
+          <div data-testid="listing">
+            <ListingCardV2 listing={listing} index={0} />
+          </div>
+          <div data-testid="ad">
+            <AdCard ad={ad} index={0} noGridWrapper />
+          </div>
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+    const listingTile = tileOf(
+      within(screen.getByTestId("listing")).getByRole("link", {
+        name: /Arrowhead Sniper Rifle/,
+      }),
+    )
+    const adTile = tileOf(within(screen.getByTestId("ad")).getByRole("link"))
 
-      // The tile itself is the link (one tab stop, focus-visible on it).
-      expect(listingTile.getAttribute("href")).toBe(formatMarketUrl(listing))
-      expect(adTile.getAttribute("href")).toBe(ad.linkUrl)
-      expect(adTile.getAttribute("target")).toBe("_blank")
-      expect(adTile.getAttribute("rel")).toBe("noopener noreferrer")
+    // The tile itself is the link (one tab stop, focus-visible on it).
+    expect(listingTile.getAttribute("href")).toBe(formatMarketUrl(listing))
+    expect(adTile.getAttribute("href")).toBe(ad.linkUrl)
+    expect(adTile.getAttribute("target")).toBe("_blank")
+    expect(adTile.getAttribute("rel")).toBe("noopener noreferrer")
 
-      // Same style source, so the same generated class.
-      expect(styleClass(adTile)).toEqual(styleClass(listingTile))
-      expect(styleClass(adTile)).toHaveLength(1)
+    // Same style source, so the same generated class.
+    expect(styleClass(adTile)).toEqual(styleClass(listingTile))
+    expect(styleClass(adTile)).toHaveLength(1)
 
-      // Card height is unchanged.
-      expect(adTile.firstElementChild?.classList).toContain("MuiCard-root")
-    },
-  )
+    // Card height is unchanged.
+    expect(adTile.firstElementChild?.classList).toContain("MuiCard-root")
+  })
 })

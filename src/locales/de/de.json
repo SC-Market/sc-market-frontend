@@ -356,6 +356,9 @@
         "tagline": "Einsätze für Rettung, Geleitschutz, Betankung und Transport, und wer sie übernimmt.",
         "cta": "Demo ansehen"
       }
+    },
+    "iae2956": {
+      "alt": "IAE 2956 – {{manufacturer}}: Wähle dein Abenteuer"
     }
   },
   "auth": {

@@ -682,6 +682,9 @@
         "tagline": "Rescue, escort, refuel and transport calls, and who’s answering them.",
         "cta": "See the demo"
       }
+    },
+    "iae2956": {
+      "alt": "IAE 2956 – {{manufacturer}}: Choose your adventure"
     }
   },
   "AggregateMarketListingForm": {

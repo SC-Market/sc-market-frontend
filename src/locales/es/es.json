@@ -357,6 +357,9 @@
         "tagline": "Avisos de rescate, escolta, repostaje y transporte, y quién los atiende.",
         "cta": "Ver la demo"
       }
+    },
+    "iae2956": {
+      "alt": "IAE 2956 – {{manufacturer}}: Elige tu aventura"
     }
   },
   "auth": {

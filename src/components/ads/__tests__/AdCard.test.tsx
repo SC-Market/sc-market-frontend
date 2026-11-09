@@ -10,6 +10,7 @@ import { mainTheme } from "../../../hooks/styles/Theme"
 import { AdCard } from "../AdCard"
 import { MARKET_ADS } from "../adConfig"
 import type { ImageAdConfig } from "../types"
+import { IAE_2956 } from "../iae2956"
 
 vi.mock("react-i18next", async (importOriginal) =>
   (await import("../../../test/mocks/reactI18next")).mockReactI18next(
@@ -45,6 +46,41 @@ describe("AdCard image ads", () => {
       // The card links to the ad.
       const link = screen.getByRole("link")
       expect(link.getAttribute("href")).toBe(ad.linkUrl)
+    },
+  )
+})
+
+describe("AdCard IAE 2956 creatives", () => {
+  it.each(IAE_2956.creatives.map((ad) => [ad.title, ad] as const))(
+    "%s: whole poster, alt text, 2x and AVIF sources, RSI link in a new tab",
+    (manufacturer, ad) => {
+      const { container } = render(
+        <ThemeProvider theme={mainTheme}>
+          <AdCard ad={ad} index={0} noGridWrapper />
+        </ThemeProvider>,
+      )
+      const poster = screen.getByRole("img", {
+        name: `IAE 2956 – ${manufacturer}: Choose your adventure`,
+      })
+      // Uncropped: the logo (top) and IAE mark (foot) always show.
+      expect(getComputedStyle(poster).objectFit).toBe("contain")
+      expect(poster.getAttribute("src")).toBe(ad.imageUrl)
+      expect(poster.getAttribute("srcset")).toBe(
+        `${ad.imageUrl} 1x, ${ad.imageUrl2x} 2x`,
+      )
+      const source = container.querySelector("picture > source")
+      expect(source?.getAttribute("type")).toBe("image/avif")
+      expect(source?.getAttribute("srcset")).toBe(
+        `${ad.avif!.x1} 1x, ${ad.avif!.x2} 2x`,
+      )
+      expect(screen.getAllByRole("img")).toHaveLength(1)
+
+      const link = screen.getByRole("link")
+      expect(link.getAttribute("href")).toBe(
+        "https://robertsspaceindustries.com/en/comm-link/transmission/21389-Countdown-To-IAE-2956",
+      )
+      expect(link.getAttribute("target")).toBe("_blank")
+      expect(link.getAttribute("rel")).toContain("noopener")
     },
   )
 })

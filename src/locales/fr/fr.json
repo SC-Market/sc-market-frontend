@@ -357,6 +357,9 @@
         "tagline": "Appels de sauvetage, d’escorte, de ravitaillement et de transport, et qui y répond.",
         "cta": "Voir la démo"
       }
+    },
+    "iae2956": {
+      "alt": "IAE 2956 – {{manufacturer}} : choisissez votre aventure"
     }
   },
   "auth": {

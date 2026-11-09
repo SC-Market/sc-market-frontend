@@ -173,7 +173,7 @@ export function buildAdRotation(ads: AdConfig[]): AdConfig[] {
 }
 
 /** A small stable string hash (FNV-1a). */
-function hashString(value: string): number {
+export function hashString(value: string): number {
   let hash = 0x811c9dc5
   for (let i = 0; i < value.length; i++) {
     hash ^= value.charCodeAt(i)
@@ -207,12 +207,20 @@ function adPositions(count: number): number[] {
  * same results always the same ones (no Math.random: server and client
  * render the same grid).
  *
+ * `campaignAd` (an event campaign's creative for this visitor, see
+ * useCampaignAd) takes one of the other slots, never the SC Orgs one: at most
+ * one per page, in a slot from the same hash. The remaining slots keep the
+ * ads they would have had, so a campaign ad arriving after hydration swaps
+ * one creative in place rather than reshuffling the page. A page with one
+ * slot keeps it for SC Orgs and shows no campaign ad.
+ *
  * Call it once per page of results: each call places one SC Orgs ad.
  */
 export function insertAds<T>(
   listings: T[],
   keyOf: (listing: T) => string,
   ads: AdConfig[] = MARKET_ADS,
+  campaignAd: AdConfig | null = null,
 ): WithAds<T>[] {
   if (listings.length < AD_MIN_LISTINGS || ads.length === 0) return listings
   const sisterRotation = buildAdRotation(ads.filter((ad) => ad.sisterSite))
@@ -223,6 +231,16 @@ export function insertAds<T>(
   const posterHash = hashString(`sister:${keyOf(listings[0])}`)
   const sisterSlot = sisterRotation.length > 0 ? hash % positions.length : -1
   const otherStart = otherRotation.length > 0 ? hash % otherRotation.length : 0
+  // The campaign's slot: one of the slots that aren't the sister slot.
+  const campaignSlots = positions
+    .map((_, slot) => slot)
+    .filter((slot) => slot !== sisterSlot)
+  const campaignSlot =
+    campaignAd && campaignSlots.length > 0
+      ? campaignSlots[
+          hashString(`campaign:${keyOf(listings[0])}`) % campaignSlots.length
+        ]
+      : -1
 
   const result: WithAds<T>[] = [...listings]
   let other = 0
@@ -231,6 +249,10 @@ export function insertAds<T>(
     let ad: AdConfig
     if (slot === sisterSlot) {
       ad = sisterRotation[posterHash % sisterRotation.length]
+    } else if (slot === campaignSlot && campaignAd) {
+      ad = campaignAd
+      // The slot's rotation ad is skipped, so the other slots keep theirs.
+      other++
     } else if (otherRotation.length > 0) {
       ad = otherRotation[(otherStart + other++) % otherRotation.length]
     } else {

@@ -34,6 +34,7 @@ import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { useTranslation } from "react-i18next"
 import { AdCard } from "../../../components/ads/AdCard"
 import { insertAds, type WithAds } from "../../../components/ads/adConfig"
+import { useCampaignAd } from "../../../components/ads/useCampaignAd"
 import { formatMarketUrl } from "../domain/urls"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid"
@@ -363,9 +364,11 @@ type ListingOrAd = WithAds<ListingSearchResult>
 
 const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
   ({ listings, loading, error, onRetry, gridBreakpoints }, ref) => {
+    const campaignAd = useCampaignAd()
     const listingsWithAds = useMemo(
-      (): ListingOrAd[] => insertAds(listings, (listing) => listing.listing_id),
-      [listings],
+      (): ListingOrAd[] =>
+        insertAds(listings, (l) => l.listing_id, undefined, campaignAd),
+      [listings, campaignAd],
     )
 
     // Only the first screen of cards in the commit that shows the results;
