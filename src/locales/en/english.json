@@ -2001,7 +2001,11 @@
     "cookiePreferences": "Cookie preferences",
     "changelog": "Changelog",
     "sdkNpm": "SDK on npm",
-    "orgsSdkNpm": "SC Orgs SDK on npm"
+    "orgsSdkNpm": "SC Orgs SDK on npm",
+    "groupHelp": "Help",
+    "groupProject": "Project",
+    "groupLegal": "Legal",
+    "scOrgsHome": "Visit SC Orgs"
   },
   "frontendError": {
     "afterRefresh": "if you see this error after refreshing the page.",

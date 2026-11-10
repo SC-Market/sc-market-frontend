@@ -475,7 +475,11 @@
     "cookiePreferences": "Налаштування cookie",
     "changelog": "Журнал змін",
     "sdkNpm": "SDK на npm",
-    "orgsSdkNpm": "SDK SC Orgs на npm"
+    "orgsSdkNpm": "SDK SC Orgs на npm",
+    "groupHelp": "Допомога",
+    "groupProject": "Проєкт",
+    "groupLegal": "Правова інформація",
+    "scOrgsHome": "Перейти на SC Orgs"
   },
   "itemAcquisition": {
     "addToCart": "Додати в кошик",
