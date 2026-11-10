@@ -73,6 +73,75 @@ export function whiteLabelHeadTitle(headTags: string, orgName: string): string {
   )
 }
 
+/** The org's host and name, for whiteLabelPageHead. */
+export interface WhiteLabelHeadOptions {
+  orgName: string
+  /** The white-label host's origin, e.g. https://medrunner.sc-market.space */
+  origin: string
+  /** The main site's origin, which the bridge's builders use. */
+  mainOrigin: string
+}
+
+const ATTR_UNESCAPE = (v: string) =>
+  v
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+const ATTR_ESCAPE = (v: string) =>
+  v
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+
+/**
+ * A page's server-rendered head tags for the org's own white-label host
+ * (the SSR `host` variant; the pages it renders there are the org's own,
+ * the rest answer 302 to sc-market.space):
+ *
+ * - the <title>, og:title and twitter:title in the white-label form
+ *   (applyWhiteLabelTitle);
+ * - the page's own URL (canonical, og:url, twitter:url, the JSON-LD's) on
+ *   the org's host: the org's pages are indexed on its domain;
+ * - twitter:domain and og:site_name for the org, replacing the shell's.
+ *
+ * Other URLs (images, links to other pages) are left as they are.
+ */
+export function whiteLabelPageHead(
+  headTags: string,
+  { orgName, origin, mainOrigin }: WhiteLabelHeadOptions,
+): string {
+  let tags = whiteLabelHeadTitle(headTags, orgName).replace(
+    /(<meta\b[^>]*\b(?:property|name)="(?:og:title|twitter:title)"[^>]*\bcontent=")([^"]*)(")/g,
+    (_m, before: string, title: string, after: string) =>
+      `${before}${ATTR_ESCAPE(applyWhiteLabelTitle(orgName, ATTR_UNESCAPE(title)))}${after}`,
+  )
+  const canonical = /<link\b[^>]*\brel="canonical"[^>]*\bhref="([^"]*)"/.exec(
+    tags,
+  )?.[1]
+  const pageUrl = canonical ? ATTR_UNESCAPE(canonical) : null
+  let hostUrl: string | null = null
+  if (pageUrl && pageUrl.startsWith(`${mainOrigin}/`)) {
+    hostUrl = `${origin}${pageUrl.slice(mainOrigin.length)}`
+    // Attribute values (escaped) and JSON-LD strings (raw), whole values only.
+    for (const [from, to] of [
+      [ATTR_ESCAPE(pageUrl), ATTR_ESCAPE(hostUrl)],
+      [pageUrl, hostUrl],
+    ]) {
+      tags = tags.split(`"${from}"`).join(`"${to}"`)
+    }
+  }
+  const extra = [
+    `<meta property="og:site_name" content="${ATTR_ESCAPE(orgName)}">`,
+    `<meta property="twitter:domain" content="${ATTR_ESCAPE(new URL(origin).host)}">`,
+  ]
+  if (hostUrl && !/\b(?:name|property)="twitter:url"/.test(tags)) {
+    extra.push(`<meta name="twitter:url" content="${ATTR_ESCAPE(hostUrl)}">`)
+  }
+  return `${tags}\n${extra.join("\n")}`
+}
+
 /**
  * Serialize JSON-LD for inline <script> content. Escapes `<`, `>`, `&` and
  * U+2028/U+2029 as JSON unicode escapes so user content (e.g. a listing title

@@ -27,8 +27,40 @@ import { NotificationEntry } from "../../features/notifications"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton, HapticTablePagination } from "../haptic"
 import { useNotifications } from "../../features/notifications/hooks/useNotifications"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
+import { mainSiteUrl } from "../../features/storefront/whiteLabelRoutes"
 
+/**
+ * The navbar bell. On an org's white-label domain it links to the
+ * notifications page on sc-market.space instead of opening the list, which
+ * holds everything the visitor does on SC Market (features/storefront/
+ * whiteLabelRoutes.ts, MAIN_SITE_ACCOUNT_SECTIONS).
+ */
 export function NotificationsButton() {
+  const { isCustomDomain } = useCustomDomain()
+  return isCustomDomain ? <MainSiteNotificationsLink /> : <NotificationsMenu />
+}
+
+/** The bell on a white-label domain: the unread count, linking to sc-market.space. */
+function MainSiteNotificationsLink() {
+  const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
+  const { unreadCount } = useNotifications()
+  return (
+    <IconButton
+      href={mainSiteUrl(PATHS.notifications)}
+      aria-label={t("navbar.notifications", "Notifications")}
+      sx={{ marginRight: 2, color: getNavbarContrastText(theme) }}
+      color="inherit"
+    >
+      <Badge badgeContent={unreadCount} color={"primary"}>
+        <NotificationsActiveRoundedIcon />
+      </Badge>
+    </IconButton>
+  )
+}
+
+function NotificationsMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const notifOpen = Boolean(anchorEl)
   const theme = useTheme<ExtendedTheme>()

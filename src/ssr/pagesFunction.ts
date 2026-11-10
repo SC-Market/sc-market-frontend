@@ -26,7 +26,6 @@ import { isMainSiteHostname } from "../util/mainSiteHost"
 import { hasPageQuery } from "../document/pageQuery"
 import { createApiFetch, type ApiFetch } from "./apiFetch"
 import {
-  ALL_SSR_VARIANTS,
   requestContextFrom,
   SSR_FAILURE_HEADER,
   SSR_OUTCOME_HEADER,
@@ -34,10 +33,21 @@ import {
   variantKey,
   type RequestContextValue,
   type SsrEntryModule,
-  type SsrVariant,
   type SsrWhiteLabel,
 } from "./protocol"
 import { SSR_BUILD_VERSION } from "./buildVersion"
+import {
+  isWhiteLabelCandidate,
+  ssrSwitchedOn,
+  ssrVariants,
+  whiteLabelHostServed,
+} from "./variants"
+import {
+  isMainSiteOnlyPath,
+  mainSiteUrl,
+} from "../features/storefront/whiteLabelRoutes"
+
+export { isWhiteLabelCandidate, ssrSwitchedOn, ssrVariants } from "./variants"
 
 declare const caches: { default: Cache }
 
@@ -193,18 +203,6 @@ export function cacheUse(
 
 const RENDERED_AT_HEADER = "x-ssr-rendered-at"
 
-export function ssrSwitchedOn(env: SsrEnv, hostname: string): boolean {
-  const flag = env.SSR_ENABLED?.trim().toLowerCase()
-  if (flag === "false" || flag === "0" || flag === "off") return false
-  if (flag === "true" || flag === "1" || flag === "on") return true
-  // Unset: only where nobody depends on it (production needs "true").
-  return (
-    hostname === "localhost" ||
-    hostname.endsWith(".localhost") ||
-    hostname.endsWith(".sc-market-frontend.pages.dev")
-  )
-}
-
 export function kindEnabled(env: SsrEnv, kind: BridgePageKind): boolean {
   if (!SSR_KINDS.has(kind)) return false
   const list = env.SSR_KINDS?.trim()
@@ -213,29 +211,6 @@ export function kindEnabled(env: SsrEnv, kind: BridgePageKind): boolean {
     .split(",")
     .map((k) => k.trim())
     .includes(kind)
-}
-
-/** The page variants this request may get (env SSR_VARIANTS); pure (tested). */
-export function ssrVariants(env: SsrEnv, hostname: string): Set<SsrVariant> {
-  const list = env.SSR_VARIANTS?.trim().toLowerCase()
-  if (list === undefined || list === "") {
-    // Unset: only where nobody depends on it, like SSR_ENABLED.
-    const preview =
-      hostname === "localhost" ||
-      hostname.endsWith(".localhost") ||
-      hostname.endsWith(".sc-market-frontend.pages.dev")
-    return new Set(preview ? ALL_SSR_VARIANTS : [])
-  }
-  const named = list.split(",").map((v) => v.trim())
-  return new Set(ALL_SSR_VARIANTS.filter((variant) => named.includes(variant)))
-}
-
-/** A hostname we may look up as a white-label domain (no ports, IPs, junk). */
-const HOSTNAME =
-  /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/
-
-export function isWhiteLabelCandidate(hostname: string): boolean {
-  return !isMainSiteHostname(hostname) && HOSTNAME.test(hostname)
 }
 
 export type SsrDecision =
@@ -280,6 +255,40 @@ export function ssrDecision(request: Request, env: SsrEnv): SsrDecision {
   // bridge marks it noindex (src/seo/queryIndexing.ts).
   if (hasPageQuery(url.search)) return { render: false, reason: "query" }
   return { render: true, kind: match.route.kind }
+}
+
+/**
+ * Whether this request is for a page an org's white-label domain doesn't
+ * serve whichever org it is (features/storefront/whiteLabelRoutes.ts: SC
+ * Market-wide pages, users' profiles), on a white-label host the edge
+ * serves (`host` variant): answered with a 302 to the same page on
+ * sc-market.space before any lookup or render. Another org's page needs
+ * the host's org (onRequest, after planFor), another seller's listing or
+ * shop its owner (the render: `handoff`). Pure (tested).
+ */
+export function isWhiteLabelHandoff(request: Request, env: SsrEnv): boolean {
+  if (request.method !== "GET" && request.method !== "HEAD") return false
+  if (request.headers.get(SSR_OFF_HEADER)) return false
+  const url = new URL(request.url)
+  return (
+    whiteLabelHostServed(env, url.hostname) &&
+    isMainSiteOnlyPath(url.pathname, undefined)
+  )
+}
+
+/**
+ * The same page on sc-market.space: a 302 (the org may serve it one day,
+ * e.g. a tab it turns on), briefly cacheable.
+ */
+export function handoffResponse(url: URL): Response {
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: mainSiteUrl(url.pathname + url.search),
+      "Cache-Control": "public, max-age=300",
+      "X-SCM-SSR": "handoff",
+    },
+  })
 }
 
 /** React Router's `build.prerender`, saying yes to every path (see below). */
@@ -472,6 +481,8 @@ type Rendered =
   | { kind: "notFound" }
   /** Not the canonical spelling: 301 (src/bridge/handler.ts canonicalRedirect). */
   | { kind: "redirect"; location: string }
+  /** On a white-label host, a page it doesn't serve (another seller's): 302. */
+  | { kind: "handoff" }
   | { kind: "failed"; reason: string }
 
 async function render(
@@ -481,7 +492,11 @@ async function render(
 ): Promise<Rendered> {
   const requestHandler = await loadHandler()
   const loadContext = entryModule!.createSsrLoadContext({
-    requestContext: plan.requestContext,
+    // Each render reports its own hand-off (a background render must not
+    // share a request's).
+    requestContext: plan.requestContext.whiteLabel
+      ? { ...plan.requestContext, handoff: { leaving: false } }
+      : plan.requestContext,
     api: plan.api,
     assets: context.env.ASSETS,
     env: {
@@ -505,6 +520,7 @@ async function render(
     return { kind: "page", html, partial }
   }
   if (outcome === "not-found") return { kind: "notFound" }
+  if (outcome === "handoff") return { kind: "handoff" }
   if (outcome === "failed") {
     return {
       kind: "failed",
@@ -613,7 +629,9 @@ function renderAndStore(
       context.waitUntil(caches.default.put(plan.key, entry).catch(() => {}))
     }
     if (
-      (rendered.kind === "notFound" || rendered.kind === "redirect") &&
+      (rendered.kind === "notFound" ||
+        rendered.kind === "redirect" ||
+        rendered.kind === "handoff") &&
       plan.cacheable
     ) {
       // Sold, cancelled, renamed since it was cached: drop the old page so
@@ -630,6 +648,9 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   // If the Function dies (an uncaught exception, the CPU limit), Pages
   // serves the static file for the path: the SPA shell.
   context.passThroughOnException?.()
+  if (isWhiteLabelHandoff(context.request, context.env)) {
+    return handoffResponse(new URL(context.request.url))
+  }
   const decision = ssrDecision(context.request, context.env)
   if (!decision.render) {
     // Paths this Function never renders (hubs, aggregates) say nothing.
@@ -647,6 +668,14 @@ export async function onRequest(context: PagesContext): Promise<Response> {
     }
     console.error(`ssr fail-open ${url.pathname}:`, error)
     return fallback(context, "error")
+  }
+  // Another org's page on this org's domain.
+  const whiteLabel = plan.requestContext.whiteLabel
+  if (
+    whiteLabel &&
+    isMainSiteOnlyPath(url.pathname, whiteLabel.domain.spectrum_id)
+  ) {
+    return handoffResponse(url)
   }
   try {
     // A cache hit never loads the app (no render, ~1 ms CPU).
@@ -703,6 +732,7 @@ export async function onRequest(context: PagesContext): Promise<Response> {
     if (rendered.kind === "redirect") {
       return redirectResponse(new URL(rendered.location), url)
     }
+    if (rendered.kind === "handoff") return handoffResponse(url)
     if (rendered.kind === "failed") {
       console.warn(`ssr fail-open ${url.pathname}: ${rendered.reason}`)
       return fallback(context, rendered.reason)

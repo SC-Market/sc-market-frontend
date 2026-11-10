@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  isMainSiteAccountPath,
   isMainSiteOnlyPath,
   isOrgOwned,
   mainSiteUrl,
@@ -28,6 +29,10 @@ describe("isMainSiteOnlyPath", () => {
     "/user/someone",
     "/user/someone/reviews",
     "/buyorders?sort=price",
+    "/messages",
+    "/messages/abc-chat",
+    "/notifications",
+    "/notifications/",
   ])("%s is served only on sc-market.space", (path) => {
     expect(isMainSiteOnlyPath(path, "MEDRUNNER")).toBe(true)
   })
@@ -44,8 +49,8 @@ describe("isMainSiteOnlyPath", () => {
     "/contractor/medrunner/about",
     "/contracts",
     "/orders",
-    "/messages",
     "/login",
+    "/messagesboard",
     "/marketplace",
     "/wikipedia",
   ])("%s is served on the org's domain", (path) => {
@@ -89,6 +94,17 @@ describe("isMainSiteOnlyPath: tabs the org turned off", () => {
       expect(isMainSiteOnlyPath(path, "MEDRUNNER", off)).toBe(false)
     },
   )
+})
+
+describe("isMainSiteAccountPath", () => {
+  it("is the visitor's messages and notifications, still linked on the org's domain", () => {
+    expect(isMainSiteAccountPath("/messages")).toBe(true)
+    expect(isMainSiteAccountPath("/messages/abc-chat?x=1")).toBe(true)
+    expect(isMainSiteAccountPath("/notifications")).toBe(true)
+    expect(isMainSiteAccountPath("/buyorders")).toBe(false)
+    expect(isMainSiteAccountPath("/market/cart")).toBe(false)
+    expect(isMainSiteAccountPath("/settings")).toBe(false)
+  })
 })
 
 describe("isOrgOwned", () => {

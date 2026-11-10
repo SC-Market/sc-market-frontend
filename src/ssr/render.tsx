@@ -29,8 +29,9 @@ import {
 } from "../server/prerenderData"
 import { createRenderCache, emotionStyleTags } from "../server/emotionStyles"
 import { bridgeHeadTags } from "../server/bridgeHead"
-import { applyTitleTemplate, whiteLabelHeadTitle } from "../seo/pageHead"
+import { applyTitleTemplate, whiteLabelPageHead } from "../seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
+import { whiteLabelDocument } from "./whiteLabel"
 import { RenderedContentBodies } from "../features/help/content"
 import { RequestContextProvider } from "./requestContext"
 import { I18nextProvider } from "react-i18next"
@@ -218,6 +219,14 @@ async function renderPageNow(
   await stream.allReady
   const appHtml = await new Response(stream).text()
   if (renderError) throw renderError
+  // The page hands the visitor to sc-market.space (another seller's listing
+  // or shop on this org's domain): the Function answers a 302.
+  if (ssr.requestContext.handoff?.leaving) {
+    return new Response(null, {
+      status: 302,
+      headers: { [SSR_OUTCOME_HEADER]: "handoff" },
+    })
+  }
 
   const stylesheets = Object.values(routerContext.manifest.routes).flatMap(
     (route) => route?.css ?? [],
@@ -229,10 +238,18 @@ async function renderPageNow(
           .headTags
   const { whiteLabel } = ssr.requestContext
   // On the org's white-label host: "<Org> — <page>", as the browser's title
-  // template makes it (entry.client.tsx). The canonical, og:url and JSON-LD
-  // stay on sc-market.space (the bridge's builders): one indexed URL per page.
+  // template makes it (entry.client.tsx), and the page's own URL (canonical,
+  // og:url, JSON-LD) on the org's host. Every page rendered there is the
+  // org's own: the others answer 302 to sc-market.space (pagesFunction.ts).
   const pageHeadTags = whiteLabel
-    ? whiteLabelHeadTitle(headTags, whiteLabel.domain.name)
+    ? whiteLabelPageHead(headTags, {
+        orgName: whiteLabel.domain.name,
+        origin: `https://${whiteLabel.hostname}`,
+        mainOrigin: (ssr.env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(
+          /\/+$/,
+          "",
+        ),
+      })
     : headTags
 
   if (ssr.api.unprefetched.length > 0) {
@@ -241,7 +258,7 @@ async function renderPageNow(
     )
   }
 
-  const html = renderDocument(documentTemplate, {
+  const documentHtml = renderDocument(documentTemplate, {
     // The bridge summary's link lists after the app (removed before
     // hydrating, like the summary), so the HTML links everywhere the
     // bridge's page does.
@@ -267,6 +284,10 @@ async function renderPageNow(
       } satisfies PrerenderedData,
     },
   })
+
+  const html = whiteLabel
+    ? whiteLabelDocument(documentHtml, whiteLabel)
+    : documentHtml
 
   responseHeaders.set("Content-Type", "text/html; charset=utf-8")
   responseHeaders.set(SSR_OUTCOME_HEADER, "page")

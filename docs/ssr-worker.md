@@ -125,14 +125,40 @@ visitor).
 Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   wanted, they are a route-table and sitemap change; this variant would
   then render them.
-- **White-label hosts point at sc-market.space.** The canonical, `og:url`
-  and JSON-LD are the main site's URL for the page (the bridge's builders
-  use `VITE_FRONTEND_URL`), so a storefront host never competes with the
-  main page (whitelabel-overhaul-plan §A6.5). Only the `<title>` is the
-  host's. In-app links are relative, so they stay on the host.
+- **White-label hosts index the org's own pages (owner decision,
+  2026-11-10).** A page rendered there is always the org's own (its org
+  page, its shops, its listings): every other page answers a 302 to the
+  same URL on sc-market.space (below). Its canonical, `og:url`,
+  `twitter:url` and the JSON-LD's page URL are on the host, the titles
+  (`<title>`, `og:title`, `twitter:title`) are "<Org> — <page>", and
+  `og:site_name` / `twitter:domain` are the org's (`whiteLabelPageHead`,
+  src/seo/pageHead.ts). Links to other pages and images keep their URLs.
+  The document drops SC Market's web-app manifest and uses the org theme's
+  favicon (`whiteLabelDocument`, src/ssr/whiteLabel.ts). In-app links are
+  relative, so they stay on the host.
 - **Theme** never changes content, only colours.
 
 ### White-label hosts: limits and safety
+
+- **Pages the host doesn't serve: 302.** With `host` on, a white-label
+  request the Function sees for a page no org's domain serves
+  (`isMainSiteOnlyPath`: users' profiles, game data and the wiki, the shop
+  directory, aggregates) answers `302` to the same URL on sc-market.space
+  before any lookup (`X-SCM-SSR: handoff`). Another org's page does too,
+  after the domain lookup, and so does another seller's listing or shop:
+  the page's own hand-off (WhiteLabelRouteGuard /
+  `useWhiteLabelOwnerHandoff`) is reported by the render
+  (`RequestContextValue.handoff`) and never cached. Pages that never
+  invoke the Function (`/buyorders`, `/messages`, `/notifications`, ...)
+  keep the browser's hand-off.
+- **robots.txt and sitemap.xml per host** (src/bridge/whiteLabelSeo.ts,
+  through `functions/[sitemap].ts`; `_routes.json` adds the exact
+  `/robots.txt`). robots.txt is the site's rules with
+  `Sitemap: https://<host>/sitemap.xml`; sitemap.xml lists the org page,
+  its active shops and its listings (up to 1,000) on the host; both are
+  edge-cached for an hour per host. A members-only or internal domain
+  disallows everything and has no sitemap. On the main host robots.txt
+  passes straight to the static file.
 
 - Only the SSR prefixes (`/market/<id>`, `/shops/*`, `/contractor/*`,
   `/user/*`, the game-data detail pages) are server-rendered on a
@@ -291,7 +317,11 @@ rate, since each variant fills its own cache entries.
   per 11 minutes at most (fresh 60 s + stale 600 s).
 - `host`: one more set of entries per white-label host, plus two API
   lookups per render (domain, theme; edge-cached 60 s), and a domain lookup
-  on every request to a white-label host (a cache hit, ~1 ms).
+  on every request to a white-label host (a cache hit, ~1 ms). It adds no
+  invocations on the SSR prefixes (a white-label host already invoked the
+  Function there, for the bridge's pass-through), and its 302s cost less
+  than the pass-through did. The one new invocation is `/robots.txt`, on
+  every host (on the main host it only passes to the static file).
 - Rough upper bound: if 30 % of SSR visitors are non-default and none of
   their pages is cached yet, renders grow by about 30 % of visitor misses;
   at the current levels (well under the 8M-request / 25M-CPU-ms alerts)

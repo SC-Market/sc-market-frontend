@@ -40,6 +40,17 @@ const MAIN_SITE_ONLY_SECTIONS: readonly string[] = [
   USER_PATHS.profile("").slice(0, -1),
 ]
 
+/**
+ * The visitor's own account pages that list everything they do on SC
+ * Market (chats with every seller, every notification): served only on
+ * sc-market.space, but still linked on the org's domain, where the link
+ * opens them on sc-market.space.
+ */
+const MAIN_SITE_ACCOUNT_SECTIONS: readonly string[] = [
+  PATHS.messages,
+  PATHS.notifications,
+]
+
 /** Directory pages served only on sc-market.space (their children are not). */
 const MAIN_SITE_ONLY_PAGES: readonly string[] = [MARKET_PATHS.shops]
 
@@ -67,6 +78,22 @@ function inSection(pathname: string, section: string): boolean {
   return pathname === section || pathname.startsWith(`${section}/`)
 }
 
+/** `pathname` without its query, hash and trailing slash. */
+function barePath(pathname: string): string {
+  const bare = pathname.split(/[?#]/)[0]
+  return bare.length > 1 && bare.endsWith("/") ? bare.slice(0, -1) : bare
+}
+
+/**
+ * Whether `pathname` is one of the visitor's account pages served only on
+ * sc-market.space (messages, notifications) that the org's domain still
+ * links: the link opens it there.
+ */
+export function isMainSiteAccountPath(pathname: string): boolean {
+  const path = barePath(pathname)
+  return MAIN_SITE_ACCOUNT_SECTIONS.some((s) => inSection(path, s))
+}
+
 /**
  * Whether `pathname` is a page the white-label domain of `customOrg` does not
  * serve: an SC Market-wide page, another org's profile, or a page of a tab
@@ -77,8 +104,7 @@ export function isMainSiteOnlyPath(
   customOrg: string | undefined,
   hiddenTabs: ReadonlySet<string> = new Set(),
 ): boolean {
-  const bare = pathname.split(/[?#]/)[0]
-  const path = bare.length > 1 && bare.endsWith("/") ? bare.slice(0, -1) : bare
+  const path = barePath(pathname)
   for (const tab of hiddenTabs) {
     const pages = TAB_PAGES[tab]
     if (!pages) continue
@@ -87,6 +113,7 @@ export function isMainSiteOnlyPath(
   }
   if (MAIN_SITE_ONLY_PAGES.includes(path)) return true
   if (MAIN_SITE_ONLY_SECTIONS.some((s) => inSection(path, s))) return true
+  if (isMainSiteAccountPath(path)) return true
   if (customOrg && path.startsWith(ORG_PROFILE_PREFIX)) {
     const orgId = decodeURIComponent(
       path.slice(ORG_PROFILE_PREFIX.length).split("/")[0],

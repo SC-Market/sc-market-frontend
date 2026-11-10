@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useWhiteLabelSidebar } from "../../contractor/hooks/useWhiteLabelSidebar"
-import { isMainSiteOnlyPath } from "../whiteLabelRoutes"
+import { isMainSiteAccountPath, isMainSiteOnlyPath } from "../whiteLabelRoutes"
 
 /**
  * Which pages this domain serves (features/storefront/whiteLabelRoutes.ts):
@@ -10,6 +10,8 @@ import { isMainSiteOnlyPath } from "../whiteLabelRoutes"
  *
  * - `shows(path)`: whether to link it (sidebar, bottom nav, command
  *   palette); until the org's settings load, its tabs have their defaults.
+ *   The visitor's messages and notifications stay linked: the guard opens
+ *   them on sc-market.space.
  * - `leaves(path)`: whether visiting it hands the visitor to sc-market.space
  *   (WhiteLabelRouteGuard); the org's tab settings apply once loaded, so an
  *   opted-in tab is never left on a first render.
@@ -22,7 +24,9 @@ export function useWhiteLabelRoutes(): {
   const { hidden, loaded } = useWhiteLabelSidebar()
   const shows = useCallback(
     (path: string) =>
-      !isCustomDomain || !isMainSiteOnlyPath(path, customOrg, hidden),
+      !isCustomDomain ||
+      isMainSiteAccountPath(path) ||
+      !isMainSiteOnlyPath(path, customOrg, hidden),
     [isCustomDomain, customOrg, hidden],
   )
   const leaves = useCallback(

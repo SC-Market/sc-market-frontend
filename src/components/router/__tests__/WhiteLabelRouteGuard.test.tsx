@@ -58,6 +58,26 @@ describe("WhiteLabelRouteGuard", () => {
     expect(replace).toHaveBeenCalledWith("https://sc-market.space/user/someone")
   })
 
+  it("opens the visitor's chats and notifications on sc-market.space", () => {
+    renderAt("/messages/abc-chat", WL)
+    expect(screen.queryByText("page")).not.toBeInTheDocument()
+    expect(replace).toHaveBeenCalledWith(
+      "https://sc-market.space/messages/abc-chat",
+    )
+    renderAt("/messages", WL)
+    expect(replace).toHaveBeenCalledWith("https://sc-market.space/messages")
+    renderAt("/notifications", WL)
+    expect(replace).toHaveBeenCalledWith(
+      "https://sc-market.space/notifications",
+    )
+  })
+
+  it("keeps the cart on the org's domain", () => {
+    renderAt("/market/cart", WL)
+    expect(screen.getByText("page")).toBeInTheDocument()
+    expect(replace).not.toHaveBeenCalled()
+  })
+
   it("sends a tab the org turned off to sc-market.space, once its settings load", () => {
     mockSidebar = {
       hidden: new Set(["contracts"]),

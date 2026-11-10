@@ -34,7 +34,8 @@
     "/guides",
     "/guides/*",
     "/about",
-    "/sitemap*.xml"
+    "/sitemap*.xml",
+    "/robots.txt"
   ],
   "exclude": [
     "/assets/*",
