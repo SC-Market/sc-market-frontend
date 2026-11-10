@@ -1,6 +1,7 @@
 /**
- * The footer's links sit in labelled groups (one nav landmark per column,
- * each with a heading), not one long separated row.
+ * The footer is an anchored band: the brand and tagline, the links in
+ * labelled groups (one nav landmark per column, each with a heading), and
+ * the notices in a bar underneath.
  */
 import React from "react"
 import { render, screen, within } from "@testing-library/react"
@@ -34,6 +35,24 @@ function renderFooter() {
     </ThemeProvider>,
   )
 }
+
+function renderWhiteLabelFooter() {
+  return render(
+    <ThemeProvider theme={theme}>
+      <CookiesProvider>
+        <CustomDomainContext.Provider
+          value={{ isCustomDomain: true, customOrg: "MEDRUNNER" }}
+        >
+          <MemoryRouter>
+            <Footer />
+          </MemoryRouter>
+        </CustomDomainContext.Provider>
+      </CookiesProvider>
+    </ThemeProvider>,
+  )
+}
+
+const FANSITE = /This is an unofficial Star Citizen fansite/
 
 function group(name: string) {
   return within(screen.getByRole("navigation", { name }))
@@ -82,6 +101,30 @@ describe("Footer groups", () => {
     ).toBeTruthy()
   })
 
+  it("leads with the brand and tagline, linking home", () => {
+    renderFooter()
+    expect(
+      screen.getByRole("link", { name: "SC Market" }).getAttribute("href"),
+    ).toBe("/")
+    expect(
+      screen.getByText("The player-to-player marketplace for Star Citizen"),
+    ).toBeTruthy()
+  })
+
+  it("shows the notices: fansite, official site, the logo credit and the referral code", () => {
+    renderFooter()
+    expect(screen.getByText(FANSITE)).toBeTruthy()
+    expect(
+      screen
+        .getByRole("link", { name: "robertsspaceindustries.com" })
+        .getAttribute("href"),
+    ).toBe("https://robertsspaceindustries.com")
+    expect(
+      screen.getByRole("link", { name: "LadyFleur" }).getAttribute("href"),
+    ).toBe("https://www.youtube.com/@robinerino")
+    expect(screen.getByText(/STAR-GSFY-MQW9/)).toBeTruthy()
+  })
+
   it("drops the pipe separators", () => {
     renderFooter()
     for (const nav of screen.getAllByRole("navigation")) {
@@ -92,19 +135,7 @@ describe("Footer groups", () => {
 
 describe("Footer on an org's white-label domain", () => {
   it("keeps only help and legal: no SC Market project, developer or SC Orgs links", () => {
-    render(
-      <ThemeProvider theme={theme}>
-        <CookiesProvider>
-          <CustomDomainContext.Provider
-            value={{ isCustomDomain: true, customOrg: "MEDRUNNER" }}
-          >
-            <MemoryRouter>
-              <Footer />
-            </MemoryRouter>
-          </CustomDomainContext.Provider>
-        </CookiesProvider>
-      </ThemeProvider>,
-    )
+    renderWhiteLabelFooter()
     expect(
       screen
         .getAllByRole("navigation")
@@ -118,5 +149,19 @@ describe("Footer on an org's white-label domain", () => {
     expect(
       group("Legal").getByRole("link", { name: "Privacy Policy" }),
     ).toBeTruthy()
+  })
+
+  it("keeps the notices but drops the brand, credit and referral code", () => {
+    renderWhiteLabelFooter()
+    expect(screen.getByText(FANSITE)).toBeTruthy()
+    expect(
+      screen.getByRole("link", { name: "robertsspaceindustries.com" }),
+    ).toBeTruthy()
+    expect(screen.queryByRole("link", { name: "SC Market" })).toBeNull()
+    expect(
+      screen.queryByText("The player-to-player marketplace for Star Citizen"),
+    ).toBeNull()
+    expect(screen.queryByRole("link", { name: "LadyFleur" })).toBeNull()
+    expect(screen.queryByText(/STAR-GSFY-MQW9/)).toBeNull()
   })
 })
