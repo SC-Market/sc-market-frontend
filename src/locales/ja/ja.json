@@ -466,7 +466,7 @@
     "unofficial": "これは非公式の Star Citizen ファンサイトであり、Cloud Imperium グループ各社とは提携していません。当サイト上のコンテンツのうち、運営者またはユーザーが作成したものではないものは、すべてそれぞれの権利者に帰属します",
     "officialSite": "Star Citizen 公式サイト：",
     "referralCode": "紹介コード：{{code}}",
-    "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
+    "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さんに特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "クッキーの設定",
@@ -2629,7 +2629,6 @@
     "photoUploadFailed": "一部の写真のアップロードに失敗しました"
   },
   "SelectPhotosArea": {
-    "imageSearch": "画像検索",
     "upload": "アップロード",
     "addUrl": "URL追加",
     "enterImageUrl": "画像URLを入力:",
@@ -4585,11 +4584,6 @@
     "none": "なし",
     "selectMultiple": "選択..."
   },
-  "imageSearch": {
-    "noImageSelected": "画像が選択されていません",
-    "searchResultImage": "検索結果の画像 {{index}}",
-    "selectedImagePreview": "URLから選択した画像のプレビュー：{{url}}"
-  },
   "inventory": {
     "actions": "操作",
     "addLot": "ロットを追加",
@@ -5645,16 +5639,7 @@
         "buttons": {
           "cancel": "キャンセル",
           "saveAndClose": "保存して閉じる"
-        },
-        "imageSearch": {
-          "label": "画像検索",
-          "placeholder": "starcitizen.tools から画像を検索するための検索語"
-        },
-        "imageUrl": {
-          "label": "画像 URL",
-          "placeholder": "Imgur、RSI、または starcitizen.tools からの画像への直接 URL である必要があります"
-        },
-        "title": "画像を選択"
+        }
       }
     },
     "goBack": "戻る",

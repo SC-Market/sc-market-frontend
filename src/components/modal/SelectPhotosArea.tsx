@@ -1,16 +1,8 @@
 import { Stack } from "@mui/system"
-import {
-  Box,
-  ButtonBase,
-  Paper,
-  Typography,
-  useTheme,
-  CircularProgress,
-} from "@mui/material"
+import { Box, ButtonBase, Paper, Typography, useTheme } from "@mui/material"
 import { AddAPhotoRounded, CloudUploadRounded } from "@mui/icons-material"
-import { useState, useRef, Suspense } from "react"
+import { useState, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import { lazyWithRetry } from "../../util/lazyWithRetry"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ImageUrlDialog } from "./ImageUrlDialog"
 import { usePhotoFileDrop } from "./usePhotoFileDrop"
@@ -20,13 +12,6 @@ import {
   UploadingPhotoEntry,
   UploadedImageStatus,
 } from "./PhotoEntries"
-
-// Lazy load heavy modal components
-const ImageSearch = lazyWithRetry(() =>
-  import("../../features/market/components/ImageSearch").then((module) => ({
-    default: module.ImageSearch,
-  })),
-)
 
 export function SelectPhotosArea(props: {
   setPhotos: (photos: string[]) => void
@@ -55,7 +40,6 @@ export function SelectPhotosArea(props: {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [photoOpen, setPhotoOpen] = useState(false)
   const [urlModalOpen, setUrlModalOpen] = useState(false)
 
   const {
@@ -150,33 +134,6 @@ export function SelectPhotosArea(props: {
           }
         }}
       >
-        {/* Image search button - temporarily hidden */}
-        {/* <Paper sx={{ width: 96, height: 96, bgcolor: "#00000099" }}>
-          <ButtonBase
-            sx={{ width: "100%", height: "100%" }}
-            onClick={() => {
-              setPhotoOpen(true)
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <AddAPhotoRounded />
-              <Typography
-                variant="caption"
-                sx={{ fontSize: "0.7rem", mt: 0.5 }}
-              >
-                {t("SelectPhotosArea.imageSearch")}
-              </Typography>
-            </Box>
-          </ButtonBase>
-        </Paper> */}
-
         {/* URL input button for external image URLs */}
         <Paper
           sx={{
@@ -338,21 +295,6 @@ export function SelectPhotosArea(props: {
         onClose={() => setUrlModalOpen(false)}
         onAdd={(url) => setPhotos([...photos, url])}
       />
-
-      {/* ImageSearch component - lazy loaded */}
-      {photoOpen && (
-        <Suspense fallback={<CircularProgress />}>
-          <ImageSearch
-            open={photoOpen}
-            setOpen={setPhotoOpen}
-            callback={(arg) => {
-              if (arg) {
-                setPhotos([...photos, arg])
-              }
-            }}
-          />
-        </Suspense>
-      )}
     </>
   )
 }

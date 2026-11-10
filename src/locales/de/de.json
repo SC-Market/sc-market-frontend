@@ -467,7 +467,7 @@
     "unofficial": "Dies ist eine inoffizielle Star-Citizen-Fanseite, die nicht mit der Unternehmensgruppe Cloud Imperium verbunden ist. Alle Inhalte auf dieser Seite, die nicht vom Betreiber oder den Nutzern erstellt wurden, sind Eigentum der jeweiligen Rechteinhaber",
     "officialSite": "Offizielle Star-Citizen-Website:",
     "referralCode": "Empfehlungscode: {{code}}",
-    "acknowledgments": "Vielen Dank an <ladyFleurLink>LadyFleur</ladyFleurLink> für das Logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> und <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> für ihre APIs.",
+    "acknowledgments": "Vielen Dank an <ladyFleurLink>LadyFleur</ladyFleurLink> für das Logo.",
     "apiDocs": "API-Dokumentation",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie-Einstellungen",
@@ -2640,7 +2640,6 @@
     "photoUploadFailed": "Fehler beim Hochladen einiger Fotos"
   },
   "SelectPhotosArea": {
-    "imageSearch": "Bildsuche",
     "upload": "Hochladen",
     "addUrl": "URL hinzufügen",
     "enterImageUrl": "Bild-URL eingeben:",
@@ -4610,11 +4609,6 @@
     "none": "Keine",
     "selectMultiple": "Auswählen..."
   },
-  "imageSearch": {
-    "noImageSelected": "Kein Bild ausgewählt",
-    "searchResultImage": "Suchergebnisbild {{index}}",
-    "selectedImagePreview": "Vorschau des ausgewählten Bildes von URL: {{url}}"
-  },
   "inventory": {
     "actions": "Aktionen",
     "addLot": "Los hinzufügen",
@@ -5681,16 +5675,7 @@
         "buttons": {
           "cancel": "Abbrechen",
           "saveAndClose": "Speichern und schließen"
-        },
-        "imageSearch": {
-          "label": "Bildsuche",
-          "placeholder": "Suchanfrage, um Bilder von starcitizen.tools zu suchen"
-        },
-        "imageUrl": {
-          "label": "Bild-URL",
-          "placeholder": "Muss eine direkte URL zum Bild sein, von Imgur, RSI oder starcitizen.tools"
-        },
-        "title": "Bild auswählen"
+        }
       }
     },
     "goBack": "Zurück",

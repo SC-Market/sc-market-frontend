@@ -468,7 +468,7 @@
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries® та Cloud Imperium® — зареєстровані торговельні марки компанії Cloud Imperium Rights LLC",
     "unofficial": "Це неофіційний фан-сайт Star Citizen, який не має стосунку до компаній групи Cloud Imperium. Увесь контент, який не створено адміністрацією чи користувачами цього сайту, є власністю відповідних правовласників",
     "officialSite": "Офіційний сайт Star Citizen:",
-    "acknowledgments": "Особлива подяка <ladyFleurLink>LadyFleur</ladyFleurLink> за логотип, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> та <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> за їхні API.",
+    "acknowledgments": "Особлива подяка <ladyFleurLink>LadyFleur</ladyFleurLink> за логотип.",
     "referralCode": "Реферальний код: {{code}}",
     "apiDocs": "Документація API",
     "scOrgs": "SC Orgs",
@@ -3715,15 +3715,6 @@
     },
     "dialog": {
       "selectImage": {
-        "title": "Вибір зображення",
-        "imageUrl": {
-          "label": "URL зображення",
-          "placeholder": "Має бути прямий URL до зображення (Imgur, RSI або starcitizen.tools)"
-        },
-        "imageSearch": {
-          "label": "Пошук зображення",
-          "placeholder": "Пошуковий запит для зображень зі starcitizen.tools"
-        },
         "buttons": {
           "cancel": "Скасувати",
           "saveAndClose": "Зберегти й закрити"
@@ -3767,7 +3758,6 @@
     }
   },
   "SelectPhotosArea": {
-    "imageSearch": "Пошук зображень",
     "upload": "Завантажити",
     "addUrl": "Додати URL",
     "enterImageUrl": "Введіть URL зображення:",
@@ -4727,11 +4717,6 @@
     "min": "Мін.",
     "none": "Немає",
     "selectMultiple": "Виберіть..."
-  },
-  "imageSearch": {
-    "noImageSelected": "Зображення не вибрано",
-    "searchResultImage": "Зображення результату пошуку {{index}}",
-    "selectedImagePreview": "Попередній перегляд вибраного зображення за URL: {{url}}"
   },
   "inventory": {
     "actions": "Дії",

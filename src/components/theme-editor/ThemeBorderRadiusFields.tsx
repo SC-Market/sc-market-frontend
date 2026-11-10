@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { MISSING_IMAGE_URL } from "../../hooks/styles/Theme"
 import {
   BORDER_RADIUS_FIELDS,
   getNestedValue,
@@ -87,7 +88,7 @@ export function ThemeBorderRadiusFields({
             {field.key === "image" && (
               <Box
                 component="img"
-                src="https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
+                src={MISSING_IMAGE_URL}
                 alt={t("appUi.themeEditor.imageRadiusPreview")}
                 sx={{
                   width: "100%",
