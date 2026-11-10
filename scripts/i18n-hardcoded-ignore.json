@@ -38,5 +38,10 @@
     "file": "src/pages/admin/AddSupplierDialog.tsx",
     "text": "contractor_id (UUID)",
     "reason": "API field name shown as an input placeholder for an ID; technical, not prose"
+  },
+  {
+    "file": "src/components/theme-editor/ThemeContrastPanel.tsx",
+    "text": "Aa",
+    "reason": "Type sample in an aria-hidden contrast swatch, not words"
   }
 ]
