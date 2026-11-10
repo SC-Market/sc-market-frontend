@@ -39,7 +39,7 @@ export function ThemeContrastPanel({
       <Typography variant="caption" component="p" sx={{ mb: 1 }}>
         {t(
           "theme.contrastIntro",
-          "Text needs 4.5:1 against what it sits on; borders and the focus ring need 3:1. Colours you leave empty are derived to pass.",
+          "Text needs 4.5:1 against what it sits on; borders, the focus ring and the selected indicator need 3:1. Disabled text is exempt from AA but needs 3:1 to stay legible. Colours you leave empty are derived to pass.",
         )}
       </Typography>
       <Stack
@@ -71,7 +71,9 @@ function ContrastRow({
   const minimum =
     check.kind === "text"
       ? t("theme.contrastMinText", "Text 4.5:1")
-      : t("theme.contrastMinUi", "UI 3:1")
+      : check.kind === "disabled"
+        ? t("theme.contrastMinDisabled", "Disabled 3:1")
+        : t("theme.contrastMinUi", "UI 3:1")
   return (
     <Box
       component="li"
@@ -101,7 +103,7 @@ function ContrastRow({
           fontWeight: 700,
         }}
       >
-        {check.kind === "text" ? (
+        {check.kind !== "ui" ? (
           // A type sample, not words (the swatch is aria-hidden)
           "Aa"
         ) : (
@@ -131,9 +133,14 @@ function ContrastRow({
         color={check.pass ? "success" : "error"}
         icon={check.pass ? <CheckCircleRounded /> : <ErrorRounded />}
         label={
-          check.pass
-            ? t("theme.contrastPass", "Passes AA")
-            : t("theme.contrastFail", "Fails AA")
+          // Disabled text is exempt from AA: it is judged on legibility
+          check.kind === "disabled"
+            ? check.pass
+              ? t("theme.contrastLegible", "Legible")
+              : t("theme.contrastTooFaint", "Too faint")
+            : check.pass
+              ? t("theme.contrastPass", "Passes AA")
+              : t("theme.contrastFail", "Fails AA")
         }
       />
       {check.fix && (

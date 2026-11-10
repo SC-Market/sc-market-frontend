@@ -320,7 +320,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                     sx={{
                       ...microChip,
                       fontFamily: "monospace",
-                      bgcolor: "action.selected",
                     }}
                   />
                 </Tooltip>

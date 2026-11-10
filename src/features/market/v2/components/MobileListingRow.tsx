@@ -176,7 +176,7 @@ export function MobileListingRow({
             <Typography variant="caption" fontWeight={600} color="primary.main">
               {priceLabel}
             </Typography>
-            <Typography variant="caption" color="text.disabled">
+            <Typography variant="caption" color="text.primary">
               ·
             </Typography>
             <Typography variant="caption" color="text.secondary">
@@ -186,17 +186,17 @@ export function MobileListingRow({
             </Typography>
             {listing.variant_count > 1 && (
               <>
-                <Typography variant="caption" color="text.disabled">
+                <Typography variant="caption" color="text.primary">
                   ·
                 </Typography>
-                <Typography variant="caption" color="text.disabled">
+                <Typography variant="caption" color="text.primary">
                   {listing.variant_count} var.
                 </Typography>
               </>
             )}
             <Typography
               variant="caption"
-              color="text.disabled"
+              color="text.primary"
               sx={{ ml: "auto", flexShrink: 0 }}
             >
               {fmt.relative(new Date(listing.updated_at), now)}

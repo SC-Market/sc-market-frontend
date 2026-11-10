@@ -57,6 +57,31 @@ describe("ThemeContrastPanel", () => {
     expect(
       within(row("controlBorder")).getByText("Passes AA"),
     ).toBeInTheDocument()
+
+    // Selected and disabled state, derived (hooks/styles/theme/roles.ts)
+    for (const key of ["selectedText", "selectedVsHover"]) {
+      expect(within(row(key)).getByText("Passes AA")).toBeInTheDocument()
+      expect(within(row(key)).getByText(/Auto/)).toBeInTheDocument()
+    }
+    // Disabled text is judged on legibility, not AA
+    const disabled = within(row("disabledText"))
+    expect(disabled.getByText("Legible")).toBeInTheDocument()
+    expect(disabled.getByText(/Disabled 3:1/)).toBeInTheDocument()
+  })
+
+  it("raises a saved disabled colour too faint to read to 3:1", () => {
+    // Every built theme floors text.disabled at 3:1 (applyContrastFloors),
+    // so a saved value under it renders, and passes, at the floor
+    const data = dark() as ReturnType<typeof dark> & {
+      palette: { text: { disabled?: string } }
+    }
+    data.palette.text.disabled = "#2a3445"
+    const check = themeContrastChecks(data, "dark").find(
+      (c) => c.key === "disabledText",
+    )!
+    expect(check.auto).toBe(false)
+    expect(check.pass).toBe(true)
+    expect(check.ratio).toBeGreaterThanOrEqual(3)
   })
 
   it("auto-fix writes the nearest passing colour to the token", () => {

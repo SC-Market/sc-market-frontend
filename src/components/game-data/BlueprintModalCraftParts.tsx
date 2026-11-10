@@ -202,7 +202,7 @@ export function BlueprintIngredientSliders({
                     >
                       {currentFormatted}
                     </Typography>
-                    <Typography variant="caption" color="text.disabled">
+                    <Typography variant="caption" color="text.primary">
                       {t("blueprintsUi.detail.range", {
                         start: startFormatted,
                         end: endFormatted,
@@ -324,7 +324,7 @@ export function BlueprintProductStats({
               {propertyDisplayName(prop, def, t)}
             </Typography>
             <Typography variant="caption">{baseVal.toFixed(2)}</Typography>
-            <Typography variant="caption" color="text.disabled">
+            <Typography variant="caption" color="text.primary">
               {"→"}
             </Typography>
             <Typography

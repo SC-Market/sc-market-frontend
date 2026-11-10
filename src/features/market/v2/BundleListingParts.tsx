@@ -51,7 +51,7 @@ export function ShopSellerLink(props: {
             height: 40,
             borderRadius: 1,
             objectFit: "cover",
-            bgcolor: "action.selected",
+            bgcolor: "action.disabledBackground",
           }}
         />
         <Typography variant="body1">{props.name}</Typography>

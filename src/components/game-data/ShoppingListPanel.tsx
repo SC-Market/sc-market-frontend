@@ -352,7 +352,7 @@ function MaterialRow({ material: m }: { material: ShoppingListMaterial }) {
       {m.used_by_items.length > 1 && (
         <Typography
           variant="caption"
-          color="text.disabled"
+          color="text.primary"
           sx={{ mt: 0.25, display: "block" }}
         >
           {t("shoppingListUi.panel.usedBy", {

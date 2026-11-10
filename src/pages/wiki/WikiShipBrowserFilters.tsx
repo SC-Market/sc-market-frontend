@@ -106,7 +106,7 @@ export function ShipBrowserFilters({
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "text.disabled",
+            color: "text.primary",
             mb: 0.75,
             display: "block",
           }}
@@ -162,7 +162,7 @@ export function ShipBrowserFilters({
                   component="span"
                   sx={{
                     fontSize: "0.68rem",
-                    color: isActive ? "primary.main" : "text.disabled",
+                    color: isActive ? "primary.main" : "text.primary",
                     opacity: isActive ? 0.7 : 1,
                     fontVariantNumeric: "tabular-nums",
                   }}
@@ -185,7 +185,7 @@ export function ShipBrowserFilters({
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "text.disabled",
+            color: "text.primary",
             mb: 0.75,
             display: "block",
           }}
@@ -231,7 +231,7 @@ export function ShipBrowserFilters({
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "text.disabled",
+            color: "text.primary",
             mb: 0.75,
             display: "block",
           }}
@@ -251,7 +251,7 @@ export function ShipBrowserFilters({
             border: "1px solid",
             borderColor: role ? "primary.main" : "divider",
             borderRadius: 1.25,
-            color: role ? "text.secondary" : "text.disabled",
+            color: role ? "text.secondary" : "text.primary",
             fontFamily: "inherit",
             fontSize: "0.78rem",
             px: 1.25,
@@ -284,7 +284,7 @@ export function ShipBrowserFilters({
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "text.disabled",
+            color: "text.primary",
             mb: 0.75,
             display: "block",
           }}
@@ -304,7 +304,7 @@ export function ShipBrowserFilters({
             border: "1px solid",
             borderColor: manufacturer ? "primary.main" : "divider",
             borderRadius: 1.25,
-            color: manufacturer ? "text.secondary" : "text.disabled",
+            color: manufacturer ? "text.secondary" : "text.primary",
             fontFamily: "inherit",
             fontSize: "0.78rem",
             px: 1.25,
@@ -337,7 +337,7 @@ export function ShipBrowserFilters({
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "text.disabled",
+            color: "text.primary",
             mb: 0.75,
             display: "block",
           }}
@@ -357,7 +357,7 @@ export function ShipBrowserFilters({
             border: "1px solid",
             borderColor: size ? "primary.main" : "divider",
             borderRadius: 1.25,
-            color: size ? "text.secondary" : "text.disabled",
+            color: size ? "text.secondary" : "text.primary",
             fontFamily: "inherit",
             fontSize: "0.78rem",
             px: 1.25,
@@ -389,7 +389,7 @@ export function ShipBrowserFilters({
             borderColor: "divider",
             borderRadius: 1,
             bgcolor: "transparent",
-            color: "text.disabled",
+            color: "text.primary",
             fontFamily: "inherit",
             fontSize: "0.72rem",
             py: 0.75,

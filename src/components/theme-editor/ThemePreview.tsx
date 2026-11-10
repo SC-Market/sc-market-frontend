@@ -236,7 +236,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             />
             <Typography
               variant="caption"
-              color="text.disabled"
+              color="text.primary"
               display="block"
               sx={{ mt: 0.25 }}
             >
@@ -341,7 +341,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             </Card>
             <Typography
               variant="caption"
-              color="text.disabled"
+              color="text.primary"
               sx={{ mt: 0.5, display: "block", lineHeight: 1.35 }}
             >
               {theme.palette.mode === "light"

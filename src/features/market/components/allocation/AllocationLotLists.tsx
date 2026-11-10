@@ -32,7 +32,7 @@ function lotLocation(lot: OrderAllocationLot | null, t: TFunction) {
 function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
   if (!lot?.owner) {
     return (
-      <Typography variant="body2" color="text.disabled">
+      <Typography variant="body2" color="text.primary">
         —
       </Typography>
     )

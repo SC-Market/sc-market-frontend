@@ -223,41 +223,46 @@ export const accentFill = cached((theme: Theme, color: AccentFill) => {
 })
 
 /**
- * Disabled button colours: a muted label that still reads at AA on Paper,
- * the page and the disabled fill, and an outline at 3:1.
+ * Disabled button colours: the disabled label (text.disabled, ~3:1, see
+ * ./roles.ts) kept at 3:1 on Paper, the page and the disabled fill
+ * (action.disabledBackground), and an outline at 3:1.
  */
 export const disabledButton = cached((theme: Theme) => {
   const { paper, page } = surfaces(theme)
   const base = flatten(theme.palette.text.primary, paper)
-  const fill = mix(paper, base, 0.12)
+  const fill = flatten(theme.palette.action.disabledBackground, paper)
   const text = ensureContrast(
-    mix(paper, base, 0.55),
+    flatten(theme.palette.text.disabled, paper),
     [paper, page, fill],
-    AA_TEXT,
+    AA_UI,
   )
   const border = ensureContrast(mix(paper, base, 0.4), [paper, page], AA_UI)
   return { text, fill, border }
 })
 
 /**
- * Selected ToggleButton: a stronger tint of the accent (the palette colour,
- * or the high-emphasis text colour for "standard"), a 1px inset ring at 3:1
- * against the surface, and a label at AA on the tint. Unselected labels use
- * text.primary at AA.
+ * Selected ToggleButton. "standard" and "primary" use the selected-state
+ * tokens (./roles.ts): the action.selected tint, a text.selected label and
+ * a 1px inset ring in it. Other palette colours get a tint of their own
+ * colour, a ring at 3:1 against the surface and a label at AA on the tint.
+ * Unselected labels use text.primary at AA.
  */
 export const selectedToggle = cached((theme: Theme, color: string) => {
   const { paper, page } = surfaces(theme)
   const entry = (theme.palette as unknown as Record<string, { main?: string }>)[
     color
   ]
+  const own = color !== "standard" && color !== "primary"
   const accent = flatten(
-    color !== "standard" && typeof entry?.main === "string"
+    own && typeof entry?.main === "string"
       ? entry.main
-      : theme.palette.text.secondary,
+      : theme.palette.text.selected,
     paper,
   )
-  const fill = mix(paper, accent, 0.24)
-  const hover = mix(paper, accent, 0.32)
+  const fill = own
+    ? mix(paper, accent, 0.24)
+    : flatten(theme.palette.action.selected, paper)
+  const hover = own ? mix(paper, accent, 0.32) : mix(fill, accent, 0.08)
   const ring = ensureContrast(accent, [paper, page], AA_UI)
   const text = ensureContrast(accent, [fill, hover], AA_TEXT)
   // Unselected label: text.primary at AA (MUI's default is action.active).
@@ -270,11 +275,13 @@ export const selectedToggle = cached((theme: Theme, color: string) => {
 })
 
 /**
- * AA floors for the palette's disabled colours, applied to every built
- * theme: action.disabled (disabled icons, IconButtons, checkbox and input
- * outlines) reaches 3:1 and text.disabled (disabled input text and labels)
- * 4.5:1, on both Paper and the page. Values that already pass are kept as
- * they are; surfaces the maths can't read leave MUI's values alone.
+ * Legibility floors for the palette's disabled colours, applied to every
+ * built theme: action.disabled (disabled icons, IconButtons, checkbox and
+ * input outlines) and text.disabled (disabled input text and labels) reach
+ * 3:1 on both Paper and the page. Disabled controls are exempt from AA's
+ * 4.5:1; 3:1 keeps them legible while still reading as off (./roles.ts
+ * derives both when a theme leaves them out). Values that already pass are
+ * kept as they are; surfaces the maths can't read leave MUI's values alone.
  */
 export function applyContrastFloors(theme: Theme): Theme {
   try {
@@ -286,7 +293,7 @@ export function applyContrastFloors(theme: Theme): Theme {
         : ensureContrast(solid, [paper, page], min)
     }
     theme.palette.action.disabled = floor(theme.palette.action.disabled, AA_UI)
-    theme.palette.text.disabled = floor(theme.palette.text.disabled, AA_TEXT)
+    theme.palette.text.disabled = floor(theme.palette.text.disabled, AA_UI)
   } catch {
     // unreadable surface colour (gradient, url(), CSS variable)
   }

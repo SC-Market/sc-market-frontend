@@ -36,7 +36,6 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     text: {
       primary: "#000000AA",
       secondary: "#000000",
-      disabled: "#EEEEEEC0",
       subtle: "rgba(0, 0, 0, 0.4)",
     },
     background: {

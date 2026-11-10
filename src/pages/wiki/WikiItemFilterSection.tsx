@@ -45,9 +45,17 @@ export function FilterSection({
               borderRadius: 1,
               cursor: "pointer",
               transition: "background 0.12s",
-              bgcolor:
-                selected === opt.value ? "action.selected" : "transparent",
-              "&:hover": { bgcolor: "action.hover" },
+              // Selected: the theme's selected tint, label and rail, kept on hover
+              ...(selected === opt.value && {
+                bgcolor: "action.selected",
+                color: "text.selected",
+                boxShadow: (theme) =>
+                  `inset ${theme.borderWidth.emphasis}px 0 0 ${theme.palette.text.selected}`,
+              }),
+              "&:hover": {
+                bgcolor:
+                  selected === opt.value ? "action.selected" : "action.hover",
+              },
             }}
           >
             <Typography

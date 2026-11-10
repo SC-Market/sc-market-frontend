@@ -36,7 +36,6 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     text: {
       primary: "#b7b7b7",
       secondary: "#e8e8e8",
-      disabled: "#EEEEEEC0",
       subtle: "rgba(255, 255, 255, 0.5)",
     },
     DataGrid: {

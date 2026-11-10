@@ -16,16 +16,18 @@ import { getNestedValue, type ThemeModeData } from "./themeEditorFields"
 /**
  * The colour pairs a theme has to get right for WCAG 2.2 AA, measured on the
  * theme as it renders (derived tokens included, ../../hooks/styles/theme/
- * roles.ts): text at 4.5:1 (1.4.3), borders and the focus ring at 3:1
- * (1.4.11). The editor shows each as a pass/fail badge, offers the nearest
- * passing colour, and asks before saving a failing theme.
+ * roles.ts): text at 4.5:1 (1.4.3), borders, the focus ring and the
+ * selected indicator at 3:1 (1.4.11). Disabled text is exempt from AA but
+ * held to 3:1 so it stays legible ("disabled"). The editor shows each as a
+ * pass/fail badge, offers the nearest passing colour, and asks before
+ * saving a failing theme.
  */
 export interface ContrastCheck {
   key: string
   labelKey: string
   fallback: string
-  /** "text": 4.5:1, "ui": 3:1 */
-  kind: "text" | "ui"
+  /** "text": 4.5:1, "ui": 3:1, "disabled": 3:1 (legibility, not AA) */
+  kind: CheckKind
   min: number
   /** The pair as shown: text (or border) colour, and the background it
    * does worst on */
@@ -41,11 +43,13 @@ export interface ContrastCheck {
   fix: string | null
 }
 
+type CheckKind = "text" | "ui" | "disabled"
+
 interface Pair {
   key: string
   labelKey: string
   fallback: string
-  kind: "text" | "ui"
+  kind: CheckKind
   path: string[]
   /** The token as it renders */
   value: (theme: Theme) => string
@@ -53,7 +57,19 @@ interface Pair {
   backgrounds: (theme: Theme, page: string, paper: string) => string[]
   /** The token is the background (a hover fill): swap them for display */
   isBackground?: boolean
+  /** The pair passes some other way (the selected fill itself stands 3:1
+   * off the hover fill), whatever its own ratio */
+  passesAnyway?: (theme: Theme, page: string, paper: string) => boolean
 }
+
+const selectedFills = (t: Theme, page: string, paper: string) => [
+  flatten(t.palette.action.selected, paper),
+  flatten(t.palette.action.selected, page),
+]
+const hoverFills = (t: Theme, page: string, paper: string) => [
+  flatten(t.palette.action.hover, paper),
+  flatten(t.palette.action.hover, page),
+]
 
 const onSurfaces: Pair["backgrounds"] = (_t, page, paper) => [paper, page]
 
@@ -121,6 +137,45 @@ const PAIRS: Pair[] = [
     },
   },
   {
+    key: "selectedText",
+    labelKey: "theme.contrastSelectedText",
+    fallback: "Selected text on Selected background",
+    kind: "text",
+    path: ["palette", "text", "selected"],
+    value: (t) => t.palette.text.selected,
+    backgrounds: (t, page, paper) => [
+      ...selectedFills(t, page, paper),
+      paper,
+      page,
+    ],
+  },
+  {
+    key: "selectedVsHover",
+    labelKey: "theme.contrastSelectedVsHover",
+    fallback: "Selected indicator against Menu & list hover",
+    kind: "ui",
+    path: ["palette", "text", "selected"],
+    value: (t) => t.palette.text.selected,
+    backgrounds: hoverFills,
+    // A selected row is told from a hovered one by its indicator, or by
+    // its fill when that alone differs from the hover fill by 3:1
+    passesAnyway: (t, page, paper) => {
+      const hovers = hoverFills(t, page, paper)
+      return selectedFills(t, page, paper).every(
+        (fill, i) => contrast(fill, hovers[i]) >= AA_UI,
+      )
+    },
+  },
+  {
+    key: "disabledText",
+    labelKey: "theme.contrastDisabledText",
+    fallback: "Disabled text on the page and Paper",
+    kind: "disabled",
+    path: ["palette", "text", "disabled"],
+    value: (t) => t.palette.text.disabled,
+    backgrounds: onSurfaces,
+  },
+  {
     key: "focus",
     labelKey: "theme.contrastFocus",
     fallback: "Focus ring on the page and Paper",
@@ -156,7 +211,8 @@ export function themeContrastChecks(
       const ratios = bgs.map((bg) => contrast(fg, bg))
       const ratio = Math.min(...ratios)
       const min = pair.kind === "text" ? AA_TEXT : AA_UI
-      const pass = ratio >= min
+      const pass =
+        ratio >= min || (pair.passesAnyway?.(theme, page, paper) ?? false)
       const worstBg = bgs[ratios.indexOf(ratio)]
       return {
         key: pair.key,

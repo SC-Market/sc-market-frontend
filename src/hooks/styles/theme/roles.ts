@@ -1,13 +1,17 @@
 import type { Theme, ThemeOptions } from "@mui/material"
+import { alpha } from "@mui/material/styles"
 import {
   AA_TEXT,
   AA_UI,
   ON_ACCENT_DARK,
   contrast,
   flatten,
+  mix,
   nudgeToContrast,
   pickReadable,
   surfaces,
+  toHex,
+  worst,
 } from "./contrast"
 
 /**
@@ -25,6 +29,14 @@ import {
  * | Control borders (inputs,     | outline.strong         | 3:1               |
  * | outlined neutral controls)   |                        |                   |
  * | Body / emphasis text         | text.primary/secondary | 4.5:1             |
+ * | Selected fill (rows, menu    | action.selected        | -                 |
+ * | items, toggles)              |                        |                   |
+ * | Selected label & indicator   | text.selected          | 4.5:1 on the fill |
+ * | (rail, tab underline, ring)  |                        | and surfaces; 3:1 |
+ * |                              |                        | against hover     |
+ * | Disabled text and icons      | text.disabled,         | ~3:1, under body  |
+ * |                              | action.disabled        | text              |
+ * | Disabled fill                | action.disabledBg...   | -                 |
  *
  * A token the theme's own layer sets is used as it is: the theme editor
  * shows its contrast and offers a fix, but the org decides. A token it
@@ -89,6 +101,8 @@ export function applyRoleTokens(theme: Theme, layer?: ThemeOptions): Theme {
     }
 
     text.accent = accent
+    applySelectedTokens(theme, set, accent)
+    applyDisabledTokens(theme, set)
     palette.primary = {
       ...palette.primary,
       main: accent,
@@ -99,6 +113,81 @@ export function applyRoleTokens(theme: Theme, layer?: ThemeOptions): Theme {
     // Unreadable surface (gradient, url(), CSS variable): MUI's values stay
   }
   return theme
+}
+
+type IsSet = (group: string, key: string) => boolean
+
+/** How strong the derived selected tint is, per mode. */
+const SELECTED_ALPHA = { dark: 0.2, light: 0.12 } as const
+
+/**
+ * Selected state: a tint of the accent (action.selected) and a label and
+ * indicator colour (text.selected).
+ *
+ * - action.selected: text.accent at 20% (dark) / 12% (light), so it reads
+ *   as the accent's colour on any surface.
+ * - text.selected: text.accent moved just far enough to reach 4.5:1 on the
+ *   tint and the bare surfaces (so its rail or underline is also over 3:1
+ *   on the background). A hovered row must not pass for a selected one:
+ *   when the tint isn't 3:1 away from the hover fill, the label is moved on
+ *   until it is 3:1 from the hover fill too, if that keeps the 4.5:1.
+ */
+function applySelectedTokens(theme: Theme, set: IsSet, accent: string) {
+  const { palette } = theme
+  const text = palette.text
+  // Paper and the page. The sidebar can be a different shade altogether
+  // (the site's light theme has a dark one): its rows check the label
+  // against their own surface (components/sidebar/sidebarStyles.ts).
+  const { paper, page } = surfaces(theme)
+  const rest = [paper, page]
+  if (!set("action", "selected")) {
+    palette.action.selected = alpha(accent, SELECTED_ALPHA[palette.mode])
+  }
+  if (set("text", "selected")) return
+  const fills = rest.map((bg) => flatten(palette.action.selected, bg))
+  const hovers = rest.map((bg) => flatten(palette.action.hover, bg))
+  const onSelected = [...fills, ...rest]
+  let label = nudgeToContrast(accent, onSelected, AA_TEXT)
+  const fillDistinct = fills.every(
+    (fill, i) => contrast(fill, hovers[i]) >= AA_UI,
+  )
+  if (!fillDistinct && worst(label, hovers) < AA_UI) {
+    const further = nudgeToContrast(label, hovers, AA_UI)
+    if (worst(further, onSelected) >= AA_TEXT) label = further
+  }
+  text.selected = label
+}
+
+/**
+ * Disabled state. Disabled controls are exempt from WCAG's minimums, but
+ * the label still has to be legible and look switched off:
+ *
+ * - action.disabledBackground: body text at 12% over Paper (disabled
+ *   button and chip fills).
+ * - text.disabled: body text at 30% over Paper (well under the body text,
+ *   so it reads as off), raised to 3:1 on Paper and the page. Labels on the
+ *   disabled fill (buttons, chips) are kept at 3:1 on it by disabledButton
+ *   (./contrast.ts).
+ * - action.disabled (disabled icons, checkbox and switch marks): the same
+ *   colour as the disabled label.
+ */
+function applyDisabledTokens(theme: Theme, set: IsSet) {
+  const { palette } = theme
+  const { paper, page } = surfaces(theme)
+  const body = flatten(palette.text.primary, paper)
+  if (!set("action", "disabledBackground")) {
+    palette.action.disabledBackground = toHex(mix(paper, body, 0.12))
+  }
+  if (!set("text", "disabled")) {
+    palette.text.disabled = nudgeToContrast(
+      toHex(mix(paper, body, 0.3)),
+      [paper, page],
+      AA_UI,
+    )
+  }
+  if (!set("action", "disabled")) {
+    palette.action.disabled = palette.text.disabled
+  }
 }
 
 /** The filled-control colour: the brand, before the text role took `main`. */

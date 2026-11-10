@@ -1,5 +1,31 @@
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import {
+  AA_TEXT,
+  flatten,
+  nudgeToContrast,
+  surfaces,
+} from "../../hooks/styles/theme/contrast"
+
+/**
+ * The selected row's label on the sidebar: text.selected, moved to 4.5:1 on
+ * the selected tint over the sidebar when the sidebar is a different shade
+ * from Paper (the site's light theme has a dark sidebar).
+ */
+function sidebarSelectedLabel(theme: ExtendedTheme): string {
+  const label = theme.palette.text.selected ?? theme.palette.primary.main
+  try {
+    const { page } = surfaces(theme)
+    const sidebar = flatten(
+      theme.palette.background.sidebar || theme.palette.background.paper,
+      page,
+    )
+    const fill = flatten(theme.palette.action.selected, sidebar)
+    return nudgeToContrast(label, [fill, sidebar], AA_TEXT)
+  } catch {
+    return label
+  }
+}
 
 /** The sidebar's shared sx: nav rows, section headers and the pin button. */
 export function useSidebarStyles() {
@@ -7,6 +33,8 @@ export function useSidebarStyles() {
   const sidebarContrast = theme.palette.getContrastText(
     theme.palette.background.sidebar || theme.palette.background.paper,
   )
+
+  const selectedLabel = sidebarSelectedLabel(theme)
 
   const itemSx = {
     borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
@@ -24,9 +52,13 @@ export function useSidebarStyles() {
       fontWeight: 600,
       transition: "0.3s",
     },
+    // The selected tint, rail and hover are the theme's (selectedState,
+    // hooks/styles/theme/baseComponentOverrides.ts); the label is checked
+    // against the sidebar's own surface.
     "&.Mui-selected": {
-      "& .MuiListItemIcon-root": { color: "primary.main" },
-      "& .MuiListItemText-primary": { color: "primary.main" },
+      boxShadow: `inset ${theme.borderWidth?.emphasis ?? 2}px 0 0 ${selectedLabel}`,
+      "& .MuiListItemIcon-root": { color: selectedLabel },
+      "& .MuiListItemText-primary": { color: selectedLabel },
     },
     "&:hover": { backgroundColor: theme.palette.action.hover },
     // reveal star button on hover

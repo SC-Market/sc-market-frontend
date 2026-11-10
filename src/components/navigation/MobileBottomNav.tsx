@@ -339,7 +339,7 @@ export function MobileBottomNav() {
               minWidth: 0,
               padding: "6px 0",
               "&.Mui-selected": {
-                color: theme.palette.primary.main,
+                color: theme.palette.text.selected,
               },
             },
             "& .MuiBottomNavigationAction-label": {

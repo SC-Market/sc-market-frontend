@@ -85,7 +85,7 @@ export function BidAreaV2({
             />
             <Typography
               variant="body2"
-              color={isActive ? "warning.main" : "text.disabled"}
+              color={isActive ? "warning.main" : "text.primary"}
             >
               {isActive
                 ? t("BidAreaV2.endsIn", { time: fmt.timeUntil(endTime, now) })

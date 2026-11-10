@@ -230,14 +230,13 @@ export function MissionResultsTable({
                             height: 18,
                             fontSize: "0.6rem",
                             fontFamily: "monospace",
-                            bgcolor: "action.selected",
                           }}
                         />
                       </Tooltip>
                     ))}
                   </Stack>
                 ) : (
-                  <Typography variant="caption" color="text.disabled">
+                  <Typography variant="caption" color="text.primary">
                     —
                   </Typography>
                 )}
@@ -262,7 +261,7 @@ export function MissionResultsTable({
                     />
                   </Tooltip>
                 ) : (
-                  <Typography variant="caption" color="text.disabled">
+                  <Typography variant="caption" color="text.primary">
                     —
                   </Typography>
                 )}

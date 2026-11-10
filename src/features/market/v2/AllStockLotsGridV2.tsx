@@ -201,7 +201,7 @@ export function AllStockLotsGridV2() {
                 {title}
               </UnderlineLink>
             ) : (
-              <Typography variant="body2" color="text.disabled">
+              <Typography variant="body2" color="text.primary">
                 {title}
               </Typography>
             )}

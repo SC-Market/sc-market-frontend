@@ -62,7 +62,7 @@ export function SectionHeader({
           whiteSpace: "nowrap",
           fontSize: "0.62rem",
           letterSpacing: "0.12em",
-          color: "text.disabled",
+          color: "text.primary",
           fontWeight: 700,
         }}
       >
@@ -75,7 +75,7 @@ export function SectionHeader({
           height: 16,
           fontSize: "0.6rem",
           bgcolor: (theme) => alpha(theme.palette.text.primary, 0.07),
-          color: "text.disabled",
+          color: "text.primary",
           "& .MuiChip-label": { px: 0.75 },
         }}
       />
@@ -208,7 +208,7 @@ export function VehicleCard({
               fontSize: "0.58rem",
               bgcolor: "rgba(0,0,0,0.55)",
               border: "1px solid rgba(255,255,255,0.10)",
-              color: "text.disabled",
+              color: "text.primary",
             }}
           >
             S{ship.size}
@@ -254,7 +254,7 @@ export function VehicleCard({
           <Typography
             variant="caption"
             sx={{
-              color: "text.disabled",
+              color: "text.primary",
               fontSize: "0.62rem",
               display: "block",
               mb: 0.5,
@@ -294,7 +294,7 @@ export function VehicleCard({
                 height: 16,
                 fontSize: "0.58rem",
                 bgcolor: (theme) => alpha(theme.palette.text.primary, 0.04),
-                color: "text.disabled",
+                color: "text.primary",
                 border: (theme) =>
                   `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
                 "& .MuiChip-label": { px: 0.75 },
@@ -323,7 +323,7 @@ export function VehicleCard({
                     sx={{ fontSize: 11, color: "text.disabled", opacity: 0.6 }}
                   />
                   <Typography
-                    sx={{ fontSize: "0.62rem", color: "text.disabled" }}
+                    sx={{ fontSize: "0.62rem", color: "text.primary" }}
                   >
                     {ship.crew_size}
                   </Typography>
@@ -340,7 +340,7 @@ export function VehicleCard({
                     sx={{ fontSize: 11, color: "text.disabled", opacity: 0.6 }}
                   />
                   <Typography
-                    sx={{ fontSize: "0.62rem", color: "text.disabled" }}
+                    sx={{ fontSize: "0.62rem", color: "text.primary" }}
                   >
                     {ship.length_m}m
                   </Typography>

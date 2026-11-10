@@ -166,7 +166,7 @@ export function InventoryLotsTable({
                     />
                   </Box>
                 ) : (
-                  <Typography variant="body2" color="text.disabled">
+                  <Typography variant="body2" color="text.primary">
                     {t("inventory.unlisted", "Unlisted")}
                   </Typography>
                 )}

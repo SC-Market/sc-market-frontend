@@ -334,9 +334,6 @@ export function CommandPalette() {
                     mx: 1,
                     borderRadius: 1,
                     py: 0.75,
-                    "&.Mui-selected": {
-                      backgroundColor: theme.palette.action.selected,
-                    },
                   }}
                 >
                   <ListItemIcon
@@ -344,7 +341,7 @@ export function CommandPalette() {
                       minWidth: 36,
                       color:
                         idx === selectedIndex
-                          ? "primary.main"
+                          ? "text.selected"
                           : "text.secondary",
                     }}
                   >

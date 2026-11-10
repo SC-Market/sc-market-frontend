@@ -295,7 +295,7 @@ export function WikiShipBrowser() {
                 variant="body2"
                 sx={{
                   whiteSpace: "nowrap",
-                  color: "text.disabled",
+                  color: "text.primary",
                   fontSize: "0.78rem",
                 }}
               >
@@ -372,7 +372,7 @@ export function WikiShipBrowser() {
                       mx: "auto",
                     }}
                   />
-                  <Typography color="text.disabled" variant="body2">
+                  <Typography color="text.primary" variant="body2">
                     {t("wiki.shipBrowser.noResults", "No results found.")}
                   </Typography>
                 </Box>

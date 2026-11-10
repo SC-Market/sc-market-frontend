@@ -35,7 +35,34 @@ export const COLOR_FIELDS: ColorField[] = [
     path: ["palette", "text", "accent"],
     usageNoteKey: "chromeUi.themeEditor.usageAccentText",
     usageNoteFallback:
-      "Links, tabs, selected items and accent icons on the page. Leave empty to use Primary, lightened or darkened just enough to reach 4.5:1.",
+      "Links and accent icons on the page. Leave empty to use Primary, lightened or darkened just enough to reach 4.5:1.",
+  },
+  {
+    key: "selectedBg",
+    labelKey: "chromeUi.themeEditor.selectedBg",
+    fallback: "Selected background",
+    path: ["palette", "action", "selected"],
+    usageNoteKey: "chromeUi.themeEditor.usageSelectedBg",
+    usageNoteFallback:
+      "Behind selected rows, menu items, toggles and table rows. Leave empty for Accent text as a light tint.",
+  },
+  {
+    key: "selectedText",
+    labelKey: "chromeUi.themeEditor.selectedText",
+    fallback: "Selected text & indicator",
+    path: ["palette", "text", "selected"],
+    usageNoteKey: "chromeUi.themeEditor.usageSelectedText",
+    usageNoteFallback:
+      "The label and the edge bar or underline of a selected row, active tab or toggled chip. Leave empty to use Accent text, adjusted to reach 4.5:1 on Selected background and stand out from Menu & list hover.",
+  },
+  {
+    key: "disabledText",
+    labelKey: "chromeUi.themeEditor.disabledText",
+    fallback: "Disabled text",
+    path: ["palette", "text", "disabled"],
+    usageNoteKey: "chromeUi.themeEditor.usageDisabledText",
+    usageNoteFallback:
+      "Labels and icons of controls that are switched off. Leave empty for Body text faded to about 3:1: still legible, clearly off.",
   },
   {
     key: "focus",

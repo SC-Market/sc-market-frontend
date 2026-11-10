@@ -119,7 +119,7 @@ export function BlueprintProductStatsPanel({
               {propertyLabel(prop, t)}
             </Typography>
             <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
-            <Typography variant="caption" color="text.disabled">
+            <Typography variant="caption" color="text.primary">
               →
             </Typography>
             <Typography
@@ -289,7 +289,7 @@ export function BlueprintIngredientRows({
                       ×{factor.toFixed(3)} {pctChange >= 0 ? "+" : ""}
                       {pctChange.toFixed(2)}%
                     </Typography>
-                    <Typography variant="caption" color="text.disabled">
+                    <Typography variant="caption" color="text.primary">
                       {t("blueprintsUi.detail.factorRange", {
                         start: mod.modifier_at_start,
                         end: mod.modifier_at_end,

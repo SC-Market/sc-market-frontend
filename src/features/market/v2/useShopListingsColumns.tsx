@@ -202,7 +202,7 @@ export function useShopListingsColumns({
           const max = params.row.quality_tier_max
           if (min == null)
             return (
-              <Typography variant="body2" color="text.disabled">
+              <Typography variant="body2" color="text.primary">
                 —
               </Typography>
             )

@@ -8,6 +8,7 @@ import {
   selectedToggle,
   withContrast,
 } from "./contrast"
+import { AA_UI, flatten, surfaces, worst } from "./contrast"
 import { primaryFill, primaryFillHover } from "./roles"
 
 /**
@@ -36,6 +37,45 @@ function primaryFilled(theme: Theme) {
     "&:hover": {
       backgroundColor: primaryFillHover(theme),
       "@media (hover: none)": { backgroundColor: fill },
+    },
+  }
+}
+
+/**
+ * The selected state (./roles.ts): the action.selected tint, a
+ * text.selected label and a 2px inset rail on the leading edge (`rail`
+ * selects where it goes: the row itself, or a table row's first cell).
+ * A selected row keeps its tint on hover and focus, so it never looks like
+ * a merely hovered one.
+ */
+function selectedState(theme: Theme, rail = "&") {
+  const color = theme.palette.text.selected
+  if (!color) return {}
+  const fill = theme.palette.action.selected
+  const width = theme.borderWidth?.emphasis ?? 2
+  return {
+    "&.Mui-selected": {
+      backgroundColor: fill,
+      color,
+      [rail]: { boxShadow: `inset ${width}px 0 0 ${color}` },
+      "&:hover, &.Mui-focusVisible": {
+        backgroundColor: fill,
+        "@media (hover: none)": { backgroundColor: fill },
+      },
+    },
+  }
+}
+
+/**
+ * Disabled rows and chips: the text.disabled label (~3:1, ./roles.ts) at
+ * full opacity. MUI fades the whole control to 38% instead, which takes
+ * the label under 2:1 on most themes.
+ */
+function disabledState(theme: Theme) {
+  return {
+    "&.Mui-disabled": {
+      opacity: 1,
+      color: theme.palette.text.disabled,
     },
   }
 }
@@ -147,17 +187,87 @@ export function getBaseComponentOverrides(): Components<
     },
     MuiTab: {
       styleOverrides: {
-        root: ({ theme }) => focusRing(theme, true),
+        // The active tab: the selected label colour (./roles.ts)
+        root: ({ theme, ownerState }) => ({
+          ...focusRing(theme, true),
+          ...((ownerState.textColor ?? "primary") === "primary" &&
+            theme.palette.text.selected && {
+              "&.Mui-selected": { color: theme.palette.text.selected },
+            }),
+        }),
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: ({ theme, ownerState }) =>
+          (ownerState.indicatorColor ?? "primary") === "primary" &&
+          theme.palette.text.selected
+            ? { backgroundColor: theme.palette.text.selected }
+            : {},
+      },
+    },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: ({ theme }) =>
+          theme.palette.text.selected
+            ? { "&.Mui-selected": { color: theme.palette.text.selected } }
+            : {},
       },
     },
     MuiMenuItem: {
       styleOverrides: {
-        root: ({ theme }) => focusRing(theme, true),
+        root: ({ theme }) => ({
+          ...focusRing(theme, true),
+          ...selectedState(theme),
+          ...disabledState(theme),
+        }),
       },
     },
     MuiListItemButton: {
       styleOverrides: {
-        root: ({ theme }) => focusRing(theme, true),
+        root: ({ theme }) => ({
+          ...focusRing(theme, true),
+          ...selectedState(theme),
+          ...disabledState(theme),
+        }),
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: ({ theme }) =>
+          selectedState(theme, "& > .MuiTableCell-root:first-of-type"),
+      },
+    },
+    MuiDataGrid: {
+      styleOverrides: {
+        row: ({ theme }) =>
+          selectedState(theme, "& > .MuiDataGrid-cell:first-of-type"),
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        option: ({ theme }) => {
+          const color = theme.palette.text.selected
+          if (!color) return {}
+          const fill = theme.palette.action.selected
+          const width = theme.borderWidth?.emphasis ?? 2
+          return {
+            '&[aria-selected="true"], &[aria-selected="true"].Mui-focused': {
+              backgroundColor: fill,
+              color,
+              boxShadow: `inset ${width}px 0 0 ${color}`,
+            },
+          }
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) =>
+          (ownerState.color ?? "standard") === "standard" &&
+          theme.palette.text.selected
+            ? { "&.Mui-selected": { color: theme.palette.text.selected } }
+            : {},
       },
     },
     MuiFab: {
@@ -264,6 +374,37 @@ export function getBaseComponentOverrides(): Components<
                   },
                 }
               : {}
+          // A toggled (clickable, filled primary) chip whose brand fill
+          // doesn't stand 3:1 off the surface gets a ring in the selected
+          // colour, so it reads as on against its outlined neighbours.
+          const toggledRing =
+            ownerState.variant !== "outlined" &&
+            ownerState.color === "primary" &&
+            ownerState.clickable
+              ? withContrast(() => {
+                  const { paper, page } = surfaces(theme)
+                  const fill = flatten(primaryFill(theme), paper)
+                  return worst(fill, [paper, page]) < AA_UI
+                    ? {
+                        boxShadow: `inset 0 0 0 1px ${theme.palette.text.selected}`,
+                      }
+                    : {}
+                })
+              : {}
+          // Disabled: the disabled label and fill at full opacity
+          const disabled = {
+            "&.Mui-disabled": {
+              opacity: 1,
+              color: theme.palette.text.disabled,
+              boxShadow: "none",
+              "& .MuiChip-icon, & .MuiChip-deleteIcon": { color: "inherit" },
+              ...(ownerState.variant !== "outlined" &&
+                withContrast(() => {
+                  const d = disabledButton(theme, "all")
+                  return { backgroundColor: d.fill, color: d.text }
+                })),
+            },
+          }
           // Neutral outlined chips: bright text on the 3:1 control border
           const neutral =
             ownerState.variant === "outlined" &&
@@ -278,7 +419,9 @@ export function getBaseComponentOverrides(): Components<
             borderRadius: theme.spacing(extTheme.borderRadius.chip),
             ...neutral,
             ...filledPrimary,
+            ...toggledRing,
             ...accent,
+            ...disabled,
           }
         },
       },

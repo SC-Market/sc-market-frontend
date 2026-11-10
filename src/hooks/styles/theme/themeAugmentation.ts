@@ -43,6 +43,15 @@ declare module "@mui/material/styles" {
      * (./roles.ts). At runtime `primary.main` carries the same colour.
      */
     accent: string
+    /**
+     * The label and indicator (rail, underline, ring) of a selected item:
+     * nav and list rows, menu items, active tabs, toggled chips and
+     * buttons, selected table rows. 4.5:1 on the selected fill
+     * (action.selected) and the surfaces, and 3:1 against the hover fill
+     * unless the selected fill already differs from it by 3:1. Derived from
+     * text.accent unless a theme sets it (./roles.ts).
+     */
+    selected: string
   }
 
   interface PaletteColor {

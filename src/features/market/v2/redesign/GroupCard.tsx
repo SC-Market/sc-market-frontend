@@ -328,7 +328,7 @@ export function GroupCard({
                     py: 0.25,
                     borderRadius: 999,
                     bgcolor: open ? "action.selected" : "action.hover",
-                    color: open ? "text.secondary" : "text.primary",
+                    color: open ? "text.selected" : "text.primary",
                     transition: "background-color .2s, color .2s",
                     fontSize: "0.68rem",
                     fontWeight: 700,

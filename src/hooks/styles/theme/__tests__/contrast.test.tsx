@@ -9,6 +9,7 @@ import {
   ThemeProvider,
   ToggleButton,
 } from "@mui/material"
+import { alpha } from "@mui/material/styles"
 import DeleteIcon from "@mui/icons-material/DeleteRounded"
 import type { Theme } from "@mui/material"
 import { mainTheme } from "../mainTheme"
@@ -44,20 +45,27 @@ describe.each(themes)("%s theme contrast", (_name, theme) => {
       expect(
         contrast(flatten(action.disabled, paper), bg),
       ).toBeGreaterThanOrEqual(AA_UI)
-      // disabled TextField value and label
+      // disabled TextField value and label: exempt from AA, legible at 3:1
       expect(
         contrast(flatten(text.disabled, paper), bg),
-      ).toBeGreaterThanOrEqual(AA_TEXT)
+      ).toBeGreaterThanOrEqual(AA_UI)
+      // ...and clearly dimmer than the body text, so it reads as off
+      expect(contrast(flatten(text.disabled, paper), bg)).toBeLessThan(
+        contrast(flatten(text.primary, paper), bg),
+      )
     }
   })
 
   it("derives the action palette for its own mode", () => {
     const ink = theme.palette.mode === "dark" ? "255, 255, 255" : "0, 0, 0"
     const { action } = theme.palette
-    expect(action.disabledBackground).toBe(`rgba(${ink}, 0.12)`)
     expect(action.focus).toBe(`rgba(${ink}, 0.12)`)
+    // The selected tint is the accent's (../roles.ts), at the mode's alpha
     expect(action.selected).toBe(
-      `rgba(${ink}, ${theme.palette.mode === "dark" ? 0.16 : 0.08})`,
+      alpha(
+        theme.palette.text.accent,
+        theme.palette.mode === "dark" ? 0.2 : 0.12,
+      ),
     )
     expect(action.active).toBe(
       theme.palette.mode === "dark" ? "#fff" : "rgba(0, 0, 0, 0.54)",
@@ -123,10 +131,10 @@ describe.each(themes)("%s theme contrast", (_name, theme) => {
     expect(getComputedStyle(outline).borderColor).toBe(o.focus)
   })
 
-  it("disabled buttons read at AA", () => {
+  it("disabled button labels stay legible (3:1, exempt from AA)", () => {
     const d = disabledButton(theme, "all")
     for (const bg of [paper, page, d.fill]) {
-      expect(contrast(d.text, bg)).toBeGreaterThanOrEqual(AA_TEXT)
+      expect(contrast(d.text, bg)).toBeGreaterThanOrEqual(AA_UI)
     }
     for (const bg of [paper, page]) {
       expect(contrast(d.border, bg)).toBeGreaterThanOrEqual(AA_UI)

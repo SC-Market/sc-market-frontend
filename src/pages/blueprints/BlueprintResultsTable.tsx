@@ -171,7 +171,7 @@ export function BlueprintResultsTable({
                     }}
                   />
                 ) : (
-                  <Typography variant="caption" color="text.disabled">
+                  <Typography variant="caption" color="text.primary">
                     —
                   </Typography>
                 )}
