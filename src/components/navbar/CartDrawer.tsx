@@ -20,10 +20,10 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { BottomSheet } from "../mobile/BottomSheet"
 import {
-  useGetCartQuery,
   type GetCartResponse,
   type CartItemDetail,
 } from "../../features/market/api/marketV2Api"
+import { useDomainCart } from "../../features/market/hooks/useDomainCart"
 import { useRemoveCartItemQuietly } from "../../features/market/hooks/useCartActions"
 import { EmptyCart } from "../empty-states"
 import { MARKET_PATHS } from "../../routes/paths"
@@ -41,7 +41,8 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
 
-  const { data: cart, isLoading } = useGetCartQuery(undefined, { skip: !open })
+  // Only the org's items on its white-label domain (useDomainCart)
+  const { data: cart, isLoading } = useDomainCart({ skip: !open })
   const handleRemove = useRemoveCartItemQuietly()
 
   const cartData = cart as GetCartResponse | undefined

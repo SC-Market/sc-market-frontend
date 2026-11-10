@@ -19,10 +19,8 @@ import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { MobileSidebarWrapper } from "../../../../components/mobile/MobileSidebarWrapper"
-import {
-  useGetListingDetailQuery,
-  useGetCartQuery,
-} from "../../../../store/api/v2/market"
+import { useGetListingDetailQuery } from "../../../../store/api/v2/market"
+import { useDomainCart } from "../../hooks/useDomainCart"
 import { MARKET_PATHS } from "../../../../routes/paths"
 
 import { useFormatters } from "../../../../util/format"
@@ -45,7 +43,7 @@ export function AddToCartDrawer({
     { id: listingId },
     { skip: !open },
   )
-  const { data: cartData } = useGetCartQuery(undefined, { skip: !open })
+  const { data: cartData } = useDomainCart({ skip: !open })
   const { add: addToCart, isAdding } = useAddToCart()
   const handleRemoveCartItem = useRemoveCartItem()
 

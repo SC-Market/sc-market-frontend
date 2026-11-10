@@ -5,13 +5,16 @@
  * (every buyer's buy orders, the shop and storefront directories, other
  * orgs' pages, game data and the wiki, whose item pages list every seller)
  * are not linked there, and visiting one hands the visitor to sc-market.space
- * (WhiteLabelRouteGuard). Framework-free.
+ * (WhiteLabelRouteGuard). So do the tabs the org turned off (Sidebar Tabs,
+ * features/contractor/domain/whiteLabelTabs.ts). Framework-free.
  */
 import {
   GAME_DATA_PATHS,
   MARKET_PATHS,
+  ORDER_PATHS,
   ORG_PATHS,
   PATHS,
+  USER_PATHS,
   WIKI_PATHS,
 } from "../../routes/paths"
 import { DEFAULT_FRONTEND_URL } from "../../seo/constants"
@@ -33,6 +36,8 @@ const MAIN_SITE_ONLY_SECTIONS: readonly string[] = [
   // /crafting/calculator and /crafting/history
   "/crafting",
   WIKI_PATHS.hub,
+  // Users' profiles: their shops, listings and reviews everywhere
+  USER_PATHS.profile("").slice(0, -1),
 ]
 
 /** Directory pages served only on sc-market.space (their children are not). */
@@ -40,22 +45,46 @@ const MAIN_SITE_ONLY_PAGES: readonly string[] = [MARKET_PATHS.shops]
 
 const ORG_PROFILE_PREFIX = ORG_PATHS.profile("")
 
+/** The pages of each toggleable tab: `pages` exactly, `sections` with everything under them. */
+const TAB_PAGES: Record<
+  string,
+  { pages?: readonly string[]; sections?: readonly string[] }
+> = {
+  market: {
+    pages: [MARKET_PATHS.search],
+    sections: [MARKET_PATHS.category("").slice(0, -1)],
+  },
+  services: { pages: [MARKET_PATHS.services, "/services"] },
+  contracts: {
+    pages: [PATHS.contracts, PATHS.contractsCreate],
+    sections: [ORDER_PATHS.publicContract("").slice(0, -1)],
+  },
+  recruiting: { sections: [PATHS.recruiting] },
+  contractors: { pages: [PATHS.contractors] },
+}
+
 function inSection(pathname: string, section: string): boolean {
   return pathname === section || pathname.startsWith(`${section}/`)
 }
 
 /**
  * Whether `pathname` is a page the white-label domain of `customOrg` does not
- * serve: an SC Market-wide page, or another org's profile.
+ * serve: an SC Market-wide page, another org's profile, or a page of a tab
+ * in `hiddenTabs` (the org turned it off).
  */
 export function isMainSiteOnlyPath(
   pathname: string,
   customOrg: string | undefined,
+  hiddenTabs: ReadonlySet<string> = new Set(),
 ): boolean {
-  const path =
-    pathname.length > 1 && pathname.endsWith("/")
-      ? pathname.slice(0, -1)
-      : pathname
+  const bare = pathname.split(/[?#]/)[0]
+  const path = bare.length > 1 && bare.endsWith("/") ? bare.slice(0, -1) : bare
+  for (const tab of hiddenTabs) {
+    const pages = TAB_PAGES[tab]
+    if (!pages) continue
+    if (pages.pages?.includes(path)) return true
+    if (pages.sections?.some((s) => inSection(path, s))) return true
+  }
   if (MAIN_SITE_ONLY_PAGES.includes(path)) return true
   if (MAIN_SITE_ONLY_SECTIONS.some((s) => inSection(path, s))) return true
   if (customOrg && path.startsWith(ORG_PROFILE_PREFIX)) {
@@ -65,6 +94,21 @@ export function isMainSiteOnlyPath(
     return orgId.toLowerCase() !== customOrg.toLowerCase()
   }
   return false
+}
+
+/**
+ * Whether a page of an org-or-user-owned thing (a listing, a shop, a cart
+ * item) belongs on the white-label domain of `customOrg`: only the org's own.
+ * `ownerSpectrumId` is the owning org's spectrum_id, null for a user seller.
+ */
+export function isOrgOwned(
+  ownerSpectrumId: string | null,
+  customOrg: string,
+): boolean {
+  return (
+    !!ownerSpectrumId &&
+    ownerSpectrumId.toLowerCase() === customOrg.toLowerCase()
+  )
 }
 
 /** The same page (path, query and hash) on sc-market.space. */

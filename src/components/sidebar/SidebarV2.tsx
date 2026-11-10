@@ -31,7 +31,7 @@ import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPen
 import { haptic } from "../../util/haptics"
 import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
 import { getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
-import { isMainSiteOnlyPath } from "../../features/storefront/whiteLabelRoutes"
+import { useWhiteLabelRoutes } from "../../features/storefront/hooks/useWhiteLabelRoutes"
 
 import {
   browseDirectoryItems,
@@ -100,9 +100,10 @@ export function SidebarV2() {
       }
     : null
   // Not the tabs the org hid, nor SC Market-wide pages (whiteLabelRoutes.ts)
+  const { shows } = useWhiteLabelRoutes()
   const shownOnWhiteLabel = (item: NavItem) =>
     (!item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey)) &&
-    !(isCustomDomain && isMainSiteOnlyPath(item.to, customOrg))
+    shows(item.to)
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
 
@@ -183,12 +184,9 @@ export function SidebarV2() {
       flags.customizable_dashboard,
       pendingOrderCount,
       unreadChatCount,
-    ).filter(
-      (item) => !(isCustomDomain && isMainSiteOnlyPath(item.to, customOrg)),
-    )
+    ).filter((item) => shows(item.to))
   }, [
-    isCustomDomain,
-    customOrg,
+    shows,
     context,
     selectedShop,
     selectedOrgId,

@@ -139,6 +139,7 @@ const mockCartData: GetCartResponse = {
         shop_name: "TestSeller",
         shop_rating: 4.5,
         shop_slug: "testuser",
+        shop_owner_spectrum_id: null,
         status: "active",
       },
       variant: {
@@ -167,6 +168,7 @@ const mockCartData: GetCartResponse = {
         shop_name: "TestSeller2",
         shop_rating: 4.0,
         shop_slug: "testuser2",
+        shop_owner_spectrum_id: null,
         status: "active",
       },
       variant: {

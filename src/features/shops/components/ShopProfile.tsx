@@ -47,6 +47,7 @@ import { useTranslation } from "react-i18next"
 import { ShopHeader, ShopRatingSummary } from "./ShopProfileHeader"
 import { ShopReviewsTab } from "./ShopReviewsTab"
 import { ShopListingsTab } from "./ShopListingsTab"
+import { useWhiteLabelOwnerHandoff } from "../../../components/router/WhiteLabelRouteGuard"
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
@@ -67,8 +68,11 @@ export function ShopProfile() {
   )
   const currentTab = useShopTab()
   const { t } = useTranslation()
+  // Another seller's shop on an org's white-label domain: on sc-market.space.
+  const leaving = useWhiteLabelOwnerHandoff(shop?.owner_spectrum_id)
 
   if (isLoading) return <ShopProfileSkeleton />
+  if (leaving) return null
 
   if (error || !shop) {
     return (

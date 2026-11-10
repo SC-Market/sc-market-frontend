@@ -147,6 +147,7 @@ const mockListingDetail = {
     rating: 4.5,
     shop_id: "shop-1",
     slug: "test-shop",
+    owner_spectrum_id: null,
     languages: [],
   },
   items: [

@@ -74,8 +74,10 @@ describe("useWhiteLabelSidebar", () => {
     const { result: r } = renderHook(() => useWhiteLabelSidebar(), {
       wrapper: onDomain("WLORG"),
     })
-    expect([...r.current.hidden]).toEqual(["recruiting"])
+    // Recruiting turned off; Organizations off by default (no stored choice)
+    expect([...r.current.hidden].sort()).toEqual(["contractors", "recruiting"])
     expect(r.current.customTabs.map((t) => t.custom_label)).toEqual(["A", "B"])
+    expect(r.current.loaded).toBe(true)
   })
 
   it("applies nothing on the main site", () => {
@@ -84,5 +86,14 @@ describe("useWhiteLabelSidebar", () => {
     })
     expect(r.current.hidden.size).toBe(0)
     expect(r.current.customTabs).toEqual([])
+  })
+
+  it("hides the directory tabs by default until the org's settings say otherwise", () => {
+    query.mockImplementationOnce(() => ({}))
+    const { result: r } = renderHook(() => useWhiteLabelSidebar(), {
+      wrapper: onDomain("WLORG"),
+    })
+    expect([...r.current.hidden].sort()).toEqual(["contractors", "recruiting"])
+    expect(r.current.loaded).toBe(false)
   })
 })

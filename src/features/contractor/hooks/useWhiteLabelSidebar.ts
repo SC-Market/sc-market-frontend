@@ -4,15 +4,25 @@ import {
   useGetWhitelabelSidebarQuery,
   type SidebarConfigItem,
 } from "../../../store/api/contractors"
+import { hiddenStandardTabs } from "../domain/whiteLabelTabs"
 
 export interface WhiteLabelSidebar {
-  /** Standard tabs the org hid (keys from TOGGLEABLE_TABS: market, services, …). */
+  /**
+   * Standard tabs that are off (keys from TOGGLEABLE_TABS: market, services,
+   * …): the org's choices, else the defaults (whiteLabelTabs.ts).
+   */
   hidden: ReadonlySet<string>
   /** The org's own links, in their saved order. */
   customTabs: SidebarConfigItem[]
+  /** Whether `hidden` is the org's saved settings (not just the defaults). */
+  loaded: boolean
 }
 
-const NONE: WhiteLabelSidebar = { hidden: new Set(), customTabs: [] }
+const MAIN_SITE: WhiteLabelSidebar = {
+  hidden: new Set(),
+  customTabs: [],
+  loaded: true,
+}
 
 /**
  * The white-label org's sidebar settings (Theme & White Label › Sidebar
@@ -20,22 +30,20 @@ const NONE: WhiteLabelSidebar = { hidden: new Set(), customTabs: [] }
  * bar apply them. On sc-market.space nothing is hidden.
  */
 export function useWhiteLabelSidebar(): WhiteLabelSidebar {
-  const { customOrg } = useCustomDomain()
+  const { isCustomDomain, customOrg } = useCustomDomain()
   const { data } = useGetWhitelabelSidebarQuery(customOrg!, {
     skip: !customOrg,
   })
   return useMemo(() => {
-    const items = customOrg ? (data?.data ?? []) : []
-    if (!items.length) return NONE
+    if (!isCustomDomain) return MAIN_SITE
+    // Before the org (or its settings) is known: the defaults.
+    const items = (customOrg && data?.data) || []
     return {
-      hidden: new Set(
-        items
-          .filter((i) => i.standard_tab_key && !i.enabled)
-          .map((i) => i.standard_tab_key!),
-      ),
+      hidden: hiddenStandardTabs(items),
+      loaded: !!customOrg && data !== undefined,
       customTabs: items
         .filter((i) => !i.standard_tab_key && i.custom_path && i.enabled)
         .sort((a, b) => a.sort_order - b.sort_order),
     }
-  }, [customOrg, data])
+  }, [isCustomDomain, customOrg, data])
 }

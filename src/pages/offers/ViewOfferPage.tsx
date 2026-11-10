@@ -26,6 +26,7 @@ import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOffer } from "../../features/offers/hooks/usePageOffer"
 import { PATHS, ORDER_PATHS } from "../../routes/paths"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { useWhiteLabelOwnerHandoff } from "../../components/router/WhiteLabelRouteGuard"
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
@@ -43,10 +44,18 @@ export function ViewOfferPage() {
     }
   }, [session?.order_id, navigate])
 
+  // An offer with another seller on an org's white-label domain: on
+  // sc-market.space.
+  const leaving = useWhiteLabelOwnerHandoff(
+    session ? (session.contractor?.spectrum_id ?? null) : undefined,
+  )
+
   const selectedOffer = session?.offers[selectedOfferIndex]
   const hasV2Listings = (selectedOffer?.market_listings_v2?.length ?? 0) > 0
   const hasV1Listings = (selectedOffer?.market_listings?.length ?? 0) > 0
   const hasMarketListings = hasV2Listings || hasV1Listings
+
+  if (leaving) return null
 
   return (
     <DetailPageLayout

@@ -4814,6 +4814,8 @@ export type ShopPublicResponse = {
   rating_count: number
   /** Seller reputation badges, computed server-side from shop metrics + owner data */
   badge_ids: string[]
+  /** Spectrum ID of the org that owns the shop; null for a user's own shop */
+  owner_spectrum_id: string | null
   /** Owner information — link to user profile or org page (included in detail view) */
   owner?: ShopOwnerInfo
   /** Number of active listings in this shop */
@@ -6268,6 +6270,8 @@ export type SellerInfo = {
   name: string
   /** Shop slug — use for profile links: /shops/:slug */
   slug: string
+  /** Spectrum ID of the org that owns the shop; null for a user's own shop */
+  owner_spectrum_id: string | null
   /** Shop rating (0-5) */
   rating: number
   /** Shop logo URL */
@@ -8653,6 +8657,8 @@ export type CartListingInfo = {
   shop_name: string
   /** Shop slug — use for profile links: /shops/:slug */
   shop_slug: string
+  /** Spectrum ID of the org that owns the shop; null for a user's own shop */
+  shop_owner_spectrum_id: string | null
   /** Shop rating (0-5) */
   shop_rating: number
   /** Current listing status */

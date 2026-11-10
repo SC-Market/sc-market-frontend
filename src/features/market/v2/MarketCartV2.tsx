@@ -28,7 +28,7 @@ import {
   WarningRounded,
   PlaylistAddRounded,
 } from "@mui/icons-material"
-import { useGetCartQuery } from "../../../store/api/v2/market"
+import { useDomainCart } from "../hooks/useDomainCart"
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { MARKET_PATHS } from "../../../routes/paths"
@@ -62,8 +62,8 @@ export function MarketCartV2() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  // Fetch cart data
-  const { data: cartData, isLoading, error } = useGetCartQuery()
+  // Fetch cart data (only the org's items on its white-label domain)
+  const { data: cartData, isLoading, error } = useDomainCart()
 
   const {
     removeItem: handleRemove,

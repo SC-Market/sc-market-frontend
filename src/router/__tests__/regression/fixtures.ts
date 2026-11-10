@@ -189,6 +189,7 @@ export const fixtureShopPublic: ShopPublicResponse = {
   logo_url: null,
   rating: null,
   rating_count: 0,
+  owner_spectrum_id: null,
 }
 
 /**

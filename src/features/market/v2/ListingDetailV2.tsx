@@ -36,6 +36,7 @@ import { useListingPermissions } from "../hooks/useListingPermissions"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
+import { useWhiteLabelOwnerHandoff } from "../../../components/router/WhiteLabelRouteGuard"
 import { useNow } from "../../../util/format"
 import { isListingNew } from "../domain/listingBadges"
 import { useTranslation } from "react-i18next"
@@ -144,6 +145,9 @@ export function ListingDetailV2() {
   // own title and description must be the same, or the page changes them
   // after hydrating.
   const head = listingData ? buildListingHead(listingData, FRONTEND_URL) : null
+  // Another seller's listing on an org's white-label domain: on sc-market.space.
+  const leaving = useWhiteLabelOwnerHandoff(seller?.owner_spectrum_id)
+  if (leaving) return null
 
   return (
     <StandardPageLayout

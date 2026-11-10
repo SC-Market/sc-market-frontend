@@ -199,6 +199,7 @@ vi.mock("../../../../store/api/v2/market", () => {
       shop_id: "shop-1",
       name: "TestSeller",
       slug: "testseller",
+      owner_spectrum_id: null,
       logo_url: "https://example.com/logo.png",
       rating: 4.5,
       languages: ["en"],

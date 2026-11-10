@@ -7,6 +7,11 @@ import {
   useUpdateWhitelabelConfigMutation,
   useUpdateWhitelabelSidebarMutation,
 } from "../../../store/api/contractors"
+import {
+  TOGGLEABLE_TABS,
+  hiddenStandardTabs,
+  toggleableTabChoices,
+} from "../domain/whiteLabelTabs"
 
 interface SidebarConfigItem {
   standard_tab_key: string | null
@@ -35,14 +40,6 @@ const ALWAYS_ON_KEYS = [
   "manage_services",
   "availability",
 ]
-
-const TOGGLEABLE_TABS = [
-  { key: "market", label: "Player Market" },
-  { key: "services", label: "Services" },
-  { key: "contracts", label: "Contracts" },
-  { key: "recruiting", label: "Recruiting" },
-  { key: "contractors", label: "Organizations" },
-] as const
 
 function isExternal(path: string): boolean {
   return path.startsWith("https://")
@@ -105,11 +102,10 @@ export function useWhiteLabelSettings() {
   const [snack, setSnack] = useState<string | null>(null)
 
   useEffect(() => {
-    const disabled = new Set<string>()
+    // Tabs without a stored choice have their default (whiteLabelTabs.ts).
+    const disabled = hiddenStandardTabs(sidebarItems)
     const custom: CustomTab[] = []
     for (const item of sidebarItems) {
-      if (item.standard_tab_key && !item.enabled)
-        disabled.add(item.standard_tab_key)
       if (!item.standard_tab_key && item.custom_path) {
         custom.push({
           label: item.custom_label ?? "",
@@ -154,14 +150,15 @@ export function useWhiteLabelSettings() {
           sort_order: order++,
         })
       }
-      for (const tab of TOGGLEABLE_TABS) {
+      // Only the tabs set away from their default: a stored row is a choice.
+      for (const tab of toggleableTabChoices(disabledTabs)) {
         items.push({
           standard_tab_key: tab.key,
           custom_label: null,
           custom_path: null,
           custom_icon: null,
           is_external: false,
-          enabled: !disabledTabs.has(tab.key),
+          enabled: tab.enabled,
           sort_order: order++,
         })
       }

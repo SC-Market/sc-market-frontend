@@ -18,6 +18,7 @@ import { usePageOrder } from "../../features/contracting"
 import { PATHS, ORDER_PATHS } from "../../routes/paths"
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { useWhiteLabelOwnerHandoff } from "../../components/router/WhiteLabelRouteGuard"
 
 // Lazy load content sections
 const OrderDetailsArea = lazyWithRetry(() =>
@@ -109,6 +110,13 @@ export function ViewOrder() {
 
     return !!(order.contractor || order.assigned_to)
   }, [order])
+
+  // An order with another seller on an org's white-label domain: on
+  // sc-market.space (order.contractor: the seller org's spectrum_id).
+  const leaving = useWhiteLabelOwnerHandoff(
+    order ? order.contractor : undefined,
+  )
+  if (leaving) return null
 
   return (
     <DetailPageLayout

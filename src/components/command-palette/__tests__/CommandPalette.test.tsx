@@ -23,6 +23,13 @@ vi.mock("../../../features/market/api/marketV2Api", () => ({
 vi.mock("../../../features/shops/api/shopsApi", () => ({
   useGetMyShopsQuery: () => ({ data: [] }),
 }))
+vi.mock("../../../features/contractor/hooks/useWhiteLabelSidebar", () => ({
+  useWhiteLabelSidebar: () => ({
+    hidden: new Set(),
+    customTabs: [],
+    loaded: true,
+  }),
+}))
 vi.mock("../../../hooks/login/useSession", () => ({
   useIsAuthenticated: () => false,
 }))

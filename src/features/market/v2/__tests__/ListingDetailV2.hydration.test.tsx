@@ -87,6 +87,7 @@ const listing: GetListingDetailApiResponse = {
     shop_id: "shop-123",
     name: "Test Seller",
     slug: "test-seller",
+    owner_spectrum_id: null,
     rating: 4.5,
     languages: ["de"],
   },
