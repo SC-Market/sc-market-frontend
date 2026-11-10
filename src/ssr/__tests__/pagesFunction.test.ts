@@ -5,6 +5,7 @@ import {
   cacheUse,
   isCrawler,
   isWhiteLabelCandidate,
+  isWhiteLabelHandoff,
   kindEnabled,
   onRequest,
   redirectResponse,
@@ -289,5 +290,50 @@ describe("cacheKey", () => {
       cacheKey(url, "", "@v1:t"),
     ])
     expect(keys.size).toBe(5)
+  })
+})
+
+describe("isWhiteLabelHandoff", () => {
+  const ON = { SSR_ENABLED: "true", SSR_VARIANTS: "theme,locale,host" } as never
+  it("is the pages no org's domain serves, on a white-label host with `host` on", () => {
+    expect(
+      isWhiteLabelHandoff(req("https://medrunner.sc-market.space/user/x"), ON),
+    ).toBe(true)
+    expect(
+      isWhiteLabelHandoff(req("https://medrunner.sc-market.space/shops"), ON),
+    ).toBe(true)
+    // The org's own (and another org's: that needs the host's org) are not.
+    for (const path of ["/shops/medrunner", "/market/abc", "/contractor/X"]) {
+      expect(
+        isWhiteLabelHandoff(
+          req(`https://medrunner.sc-market.space${path}`),
+          ON,
+        ),
+      ).toBe(false)
+    }
+  })
+
+  it("is never on the main site, with the variant or SSR off, or for a POST", () => {
+    expect(isWhiteLabelHandoff(req("https://sc-market.space/user/x"), ON)).toBe(
+      false,
+    )
+    expect(
+      isWhiteLabelHandoff(req("https://medrunner.sc-market.space/user/x"), {
+        SSR_ENABLED: "true",
+        SSR_VARIANTS: "theme,locale",
+      } as never),
+    ).toBe(false)
+    expect(
+      isWhiteLabelHandoff(req("https://medrunner.sc-market.space/user/x"), {
+        SSR_ENABLED: "false",
+        SSR_VARIANTS: "host",
+      } as never),
+    ).toBe(false)
+    expect(
+      isWhiteLabelHandoff(
+        req("https://medrunner.sc-market.space/user/x", { method: "POST" }),
+        ON,
+      ),
+    ).toBe(false)
   })
 })

@@ -353,4 +353,78 @@ describe("white-label hosts", () => {
       expect(pageKeys()).toEqual([])
     },
   )
+
+  it.each(["/user/someone", "/wiki/items/abc", "/market/aggregate/1-laser"])(
+    "answers %s on the org's host with a 302 to sc-market.space, before any lookup",
+    async (path) => {
+      const calls = api({})
+      answer.lastOptions = null
+      const response = await onRequest(
+        visitor(`${HOST}${path}?utm_source=x`, {}, ENV),
+      )
+      expect(response.status).toBe(302)
+      expect(response.headers.get("Location")).toBe(
+        `https://sc-market.space${path}?utm_source=x`,
+      )
+      expect(response.headers.get("X-SCM-SSR")).toBe("handoff")
+      expect(calls).toEqual([])
+      expect(answer.lastOptions).toBeNull()
+    },
+  )
+
+  it("keeps guarded pages in the browser while the host variant is off", async () => {
+    api({})
+    const response = await onRequest(
+      visitor(`${HOST}/user/someone`, {}, { ...ENV, SSR_VARIANTS: "theme" }),
+    )
+    expect(response.status).toBe(200)
+    expect(response.headers.get(SSR_FALLBACK_HEADER)).toBe("white-label")
+  })
+
+  it("never hands off on the main site", async () => {
+    answer.next = async () => page()
+    const response = await onRequest(
+      visitor(`https://sc-market.space/user/someone`, {}, ENV),
+    )
+    expect(response.status).toBe(200)
+  })
+
+  it("sends another org's page on this org's host to sc-market.space", async () => {
+    api({
+      "/api/domain/medrunner.sc-market.space": [200, domain()],
+      "/api/contractors/MEDRUNNER/theme": [404, {}],
+    })
+    answer.lastOptions = null
+    const response = await onRequest(
+      visitor(`${HOST}/contractor/BWINCORP`, {}, ENV),
+    )
+    expect(response.status).toBe(302)
+    expect(response.headers.get("Location")).toBe(
+      "https://sc-market.space/contractor/BWINCORP",
+    )
+    expect(answer.lastOptions).toBeNull()
+  })
+
+  it("answers a 302 when the page hands off (another seller's listing), caching nothing", async () => {
+    api({
+      "/api/domain/medrunner.sc-market.space": [200, domain()],
+      "/api/contractors/MEDRUNNER/theme": [404, {}],
+    })
+    answer.next = async () =>
+      new Response(null, {
+        status: 302,
+        headers: { [SSR_OUTCOME_HEADER]: "handoff" },
+      })
+    const response = await onRequest(visitor(`${HOST}/market/abc`, {}, ENV))
+    await Promise.all(pending)
+    expect(response.status).toBe(302)
+    expect(response.headers.get("Location")).toBe(
+      "https://sc-market.space/market/abc",
+    )
+    // The render got its own hand-off report.
+    expect(answer.lastOptions?.requestContext.handoff).toEqual({
+      leaving: false,
+    })
+    expect(pageKeys()).toEqual([])
+  })
 })

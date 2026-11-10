@@ -6,9 +6,16 @@ import {
   mainSiteUrl,
 } from "../../features/storefront/whiteLabelRoutes"
 import { useWhiteLabelRoutes } from "../../features/storefront/hooks/useWhiteLabelRoutes"
+import { useServerHandoff } from "../../ssr/requestContext"
 
-/** Sends the browser to the current page on sc-market.space when `leave`. */
+/**
+ * Sends the browser to the current page on sc-market.space when `leave`. In
+ * a server render it reports the hand-off instead, and the SSR Function
+ * answers a 302 (src/ssr/pagesFunction.ts).
+ */
 function useLeaveForMainSite(leave: boolean): void {
+  const serverHandoff = useServerHandoff()
+  if (leave && serverHandoff) serverHandoff.leaving = true
   const { pathname, search, hash } = useLocation()
   useEffect(() => {
     if (leave) window.location.replace(mainSiteUrl(pathname + search + hash))
@@ -20,8 +27,8 @@ function useLeaveForMainSite(leave: boolean): void {
  * Market-wide page, another org's profile, a user's profile, or a tab the
  * org turned off: features/storefront/whiteLabelRoutes.ts) is not rendered
  * under the org's brand: the visitor goes to the same page on
- * sc-market.space. A server render renders nothing for it, so the browser's
- * first render matches before it leaves.
+ * sc-market.space. A server render answers a 302 for it (and renders
+ * nothing, so a browser's first render would match before it leaves).
  */
 export function WhiteLabelRouteGuard({
   children,

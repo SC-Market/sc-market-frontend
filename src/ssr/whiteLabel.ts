@@ -83,3 +83,30 @@ export function whiteLabelOrgTheme(
     return null
   }
 }
+
+const SHELL_MANIFEST = '<link rel="manifest" href="/manifest.webmanifest" />'
+const SHELL_ICON = '<link rel="icon" href="/favicon.ico" />'
+
+/**
+ * The document of a page rendered for an org's white-label host, branded
+ * for the org: its favicon (the org theme's, when it has one) instead of
+ * SC Market's, and no SC Market web-app manifest (installing the org's
+ * domain must not install SC Market). The page's head tags come from
+ * whiteLabelPageHead (src/seo/pageHead.ts).
+ */
+export function whiteLabelDocument(
+  html: string,
+  whiteLabel: SsrWhiteLabel,
+): string {
+  const escape = (v: string) =>
+    v.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;")
+  const favicon = whiteLabel.theme?.favicon_url
+  let out = html.replace(SHELL_MANIFEST, "")
+  if (favicon && /^https:\/\//i.test(favicon)) {
+    out = out.replace(
+      SHELL_ICON,
+      () => `<link rel="icon" href="${escape(favicon)}" />`,
+    )
+  }
+  return out
+}

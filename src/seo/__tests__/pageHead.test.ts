@@ -6,6 +6,7 @@ import {
   headDescription,
   serializeJsonLd,
   whiteLabelHeadTitle,
+  whiteLabelPageHead,
 } from "../pageHead"
 
 describe("serializeJsonLd", () => {
@@ -118,5 +119,79 @@ describe("whiteLabelHeadTitle", () => {
         "MEDRUNNER SERVICES",
       ),
     ).toBe("<title>MEDRUNNER SERVICES - Org</title>")
+  })
+})
+
+describe("whiteLabelPageHead", () => {
+  const options = {
+    orgName: "MEDRUNNER SERVICES",
+    origin: "https://medrunner.sc-market.space",
+    mainOrigin: "https://sc-market.space",
+  }
+  const TAGS = [
+    "<title>MEDRUNNER SERVICES - Org - SC Market</title>",
+    '<link rel="canonical" href="https://sc-market.space/contractor/MEDRUNNER">',
+    '<meta property="og:title" content="MEDRUNNER SERVICES - SC Market">',
+    '<meta property="og:url" content="https://sc-market.space/contractor/MEDRUNNER">',
+    '<meta property="og:image" content="https://sc-market.space/og.png">',
+    '<meta name="twitter:url" content="https://sc-market.space/contractor/MEDRUNNER">',
+    '<meta name="twitter:title" content="Med &amp; Kits - SC Market">',
+    '<script type="application/ld+json">{"url":"https://sc-market.space/contractor/MEDRUNNER","brand":{"url":"https://sc-market.space/contractor/MEDRUNNER/about"}}</script>',
+  ].join("")
+
+  it("puts the page's own URL on the org's host and brands the titles", () => {
+    const out = whiteLabelPageHead(TAGS, options)
+    expect(out).toContain("<title>MEDRUNNER SERVICES - Org</title>")
+    expect(out).toContain(
+      '<link rel="canonical" href="https://medrunner.sc-market.space/contractor/MEDRUNNER">',
+    )
+    expect(out).toContain(
+      '<meta property="og:url" content="https://medrunner.sc-market.space/contractor/MEDRUNNER">',
+    )
+    expect(out).toContain(
+      '<meta name="twitter:url" content="https://medrunner.sc-market.space/contractor/MEDRUNNER">',
+    )
+    expect(out).toContain(
+      '{"url":"https://medrunner.sc-market.space/contractor/MEDRUNNER"',
+    )
+    expect(out).toContain(
+      '<meta property="og:title" content="MEDRUNNER SERVICES">',
+    )
+    expect(out).toContain(
+      '<meta name="twitter:title" content="MEDRUNNER SERVICES — Med &amp; Kits">',
+    )
+    expect(out).toContain(
+      '<meta property="og:site_name" content="MEDRUNNER SERVICES">',
+    )
+    expect(out).toContain(
+      '<meta property="twitter:domain" content="medrunner.sc-market.space">',
+    )
+    // Other URLs stay: images, other pages.
+    expect(out).toContain('content="https://sc-market.space/og.png"')
+    expect(out).toContain(
+      '"url":"https://sc-market.space/contractor/MEDRUNNER/about"',
+    )
+    expect(out).not.toContain(
+      'content="https://sc-market.space/contractor/MEDRUNNER"',
+    )
+  })
+
+  it("adds twitter:url when the page has none, replacing the shell's", () => {
+    const out = whiteLabelPageHead(
+      '<title>X</title><link rel="canonical" href="https://sc-market.space/market/abc">',
+      options,
+    )
+    expect(out).toContain(
+      '<meta name="twitter:url" content="https://medrunner.sc-market.space/market/abc">',
+    )
+  })
+
+  it("leaves a canonical on another origin alone", () => {
+    const out = whiteLabelPageHead(
+      '<link rel="canonical" href="https://elsewhere.test/x">',
+      options,
+    )
+    expect(out).toContain('href="https://elsewhere.test/x"')
+    expect(out).not.toContain("twitter:url")
   })
 })

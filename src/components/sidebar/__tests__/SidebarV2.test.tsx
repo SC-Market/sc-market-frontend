@@ -459,6 +459,16 @@ describe("SidebarV2 — on an org's white-label host", () => {
     expect(screen.queryByText("Missions")).not.toBeInTheDocument()
     expect(screen.queryByText("Mining")).not.toBeInTheDocument()
   })
+
+  it("still links the visitor's messages: they open on sc-market.space", () => {
+    mockProfile = { ...loggedInProfile }
+    try {
+      render(sidebarOn({ isCustomDomain: true, customOrg: "MEDRUNNER" }))
+      expect(screen.getByText("Messages")).toBeInTheDocument()
+    } finally {
+      mockProfile = undefined
+    }
+  })
 })
 
 describe("SidebarV2 — browse context (logged in)", () => {

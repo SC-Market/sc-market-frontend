@@ -1,14 +1,17 @@
-// Main-host sitemap proxy: /sitemap.xml and /sitemap-<section>-<n>.xml only
-// (public/_routes.json includes just "/sitemap*.xml"; anything else that
-// reaches this single-segment route goes to Pages). See src/bridge/sitemapProxy.ts.
+// Main-host sitemap proxy: /sitemap.xml and /sitemap-<section>-<n>.xml, and
+// an org's white-label host's own robots.txt and sitemap.xml (public/_routes.json
+// includes just "/sitemap*.xml" and "/robots.txt"; anything else that reaches
+// this single-segment route goes to Pages, as does robots.txt on the main
+// host). See src/bridge/sitemapProxy.ts and src/bridge/whiteLabelSeo.ts.
 import { handleSitemapRequest } from "../src/bridge/sitemapProxy"
 import type { BridgeEnv } from "../src/bridge/handler"
+import type { SsrSwitchEnv } from "../src/ssr/variants"
 
 declare const caches: { default: Cache }
 
 interface PagesContext {
   request: Request
-  env: BridgeEnv
+  env: BridgeEnv & SsrSwitchEnv
   next(): Promise<Response>
   waitUntil(promise: Promise<unknown>): void
 }

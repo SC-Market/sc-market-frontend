@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest"
 import {
   customDomainFromRequest,
   seedRenderedWhiteLabel,
+  whiteLabelDocument,
   whiteLabelOrgTheme,
 } from "../whiteLabel"
 import type { SsrWhiteLabel } from "../protocol"
@@ -111,5 +112,32 @@ describe("server-side white-label context", () => {
       isCustomDomain: false,
       customOrg: undefined,
     })
+  })
+})
+
+describe("whiteLabelDocument", () => {
+  const SHELL =
+    '<head><link rel="icon" href="/favicon.ico" /><link rel="manifest" href="/manifest.webmanifest" /></head>'
+  it("drops SC Market's manifest and uses the org's favicon", () => {
+    const out = whiteLabelDocument(
+      SHELL,
+      rendered({ ...THEME!, favicon_url: "https://cdn.test/fav.png?a=1&b=2" }),
+    )
+    expect(out).not.toContain("manifest")
+    expect(out).toContain(
+      '<link rel="icon" href="https://cdn.test/fav.png?a=1&amp;b=2" />',
+    )
+  })
+
+  it("keeps the site favicon without an https org one", () => {
+    expect(whiteLabelDocument(SHELL, rendered(null))).toBe(
+      '<head><link rel="icon" href="/favicon.ico" /></head>',
+    )
+    expect(
+      whiteLabelDocument(
+        SHELL,
+        rendered({ ...THEME!, favicon_url: "javascript:alert(1)" }),
+      ),
+    ).toContain('href="/favicon.ico"')
   })
 })

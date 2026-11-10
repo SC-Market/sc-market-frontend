@@ -75,3 +75,11 @@ export function useRequestContext(): RequestContextValue {
     whiteLabel: null,
   }
 }
+
+/**
+ * A white-label server render's hand-off report (protocol.ts `handoff`):
+ * undefined in the browser and on the main site.
+ */
+export function useServerHandoff(): { leaving: boolean } | undefined {
+  return useContext(RequestContext)?.handoff
+}

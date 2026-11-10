@@ -80,6 +80,13 @@ export interface RequestContextValue {
    * null on the main site, and wherever it isn't rendered.
    */
   whiteLabel: SsrWhiteLabel | null
+  /**
+   * A server render on a white-label host: set to leaving when the page
+   * hands the visitor to sc-market.space (WhiteLabelRouteGuard,
+   * useWhiteLabelOwnerHandoff), and the Function answers a 302 instead of
+   * the page. Absent everywhere else (the browser leaves by itself).
+   */
+  handoff?: { leaving: boolean }
 }
 
 function cookieValue(cookies: string, name: string): string | undefined {
