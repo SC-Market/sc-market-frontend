@@ -2,31 +2,21 @@ import { useMemo } from "react"
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
   CircularProgress,
   Grid,
   Grow,
-  Stack,
   Typography,
 } from "@mui/material"
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { linkColor } from "../../../../hooks/styles/Theme"
-import { formatMarketUrl, formatShortSlug } from "../../domain/urls"
+import { formatShortSlug } from "../../domain/urls"
 import type { GameItemListingResult } from "../../../../store/api/v2/market"
 import { useGetListingsQuery } from "../../../../store/api/v2/market"
-import { MarketListingRating } from "../../../../components/rating/ListingRating"
-import {
-  type QualityColor,
-  qualityChipSx,
-  qualityTierColor,
-  qualityValueColor,
-} from "../../../../util/qualityColor"
 import { useFormatters } from "../../../../util/format"
 import { useAddToCart } from "../../hooks/useCartActions"
 import { type SellerTag, sellerCards } from "./groupSellerRule"
+import { GroupSellerRow, sellerRowFromVariant } from "./GroupSellerRow"
 
 const TAG_LABELS: Record<SellerTag, { key: string; fallback: string }> = {
   lowestPrice: { key: "MarketRedesign.lowestPrice", fallback: "Lowest price" },
@@ -158,29 +148,6 @@ export function GroupSellers({
   )
 }
 
-/** Quality chip for a single per-variant row (single tier/value, not a range). */
-function variantQualityChip(
-  v: GameItemListingResult,
-): { label: string; color: QualityColor } | null {
-  if (v.quality_value != null) {
-    return {
-      label: `${v.quality_value}`,
-      color: qualityValueColor(v.quality_value),
-    }
-  }
-  if (v.quality_tier != null) {
-    return {
-      label: `Q${v.quality_tier}`,
-      color: qualityTierColor(v.quality_tier),
-    }
-  }
-  return null
-}
-
-function variantLabel(v: GameItemListingResult): string | null {
-  return v.variant_display_name || v.variant_short_name || null
-}
-
 /** Add-to-cart button for a variant row — the unit buyers actually purchase. */
 function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
   const { t } = useTranslation()
@@ -209,9 +176,10 @@ function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
 }
 
 /**
- * One seller as a rich card. Carries the superlative tags it wins (lowest
- * price / highest quality / top rated; none for the other sellers), its quality chip, shop rating, price,
- * availability, and an add-to-cart button for that exact variant.
+ * One seller: the shared seller row (the listing card's details, compact)
+ * with the superlative tags it wins (lowest price / highest quality / top
+ * rated; none for the other sellers) and an add-to-cart button for that
+ * exact variant.
  */
 function VariantHighlightCard({
   variant,
@@ -221,118 +189,19 @@ function VariantHighlightCard({
   tags: SellerTag[]
 }) {
   const { t } = useTranslation()
-  const fmt = useFormatters()
-  const qc = variantQualityChip(variant)
-  const label = variantLabel(variant)
   return (
-    <Card
-      variant="outlined"
-      sx={{ height: "100%", "&:hover": { borderColor: "outline.strong" } }}
-    >
-      <CardContent>
-        {/* Superlative tags (Lowest price / Highest quality / Top rated) */}
-        <Stack
-          direction="row"
-          spacing={0.5}
-          sx={{ mb: 1 }}
-          flexWrap="wrap"
-          useFlexGap
-        >
-          {tags.map((tag) => (
-            <Chip
-              key={tag}
-              label={t(TAG_LABELS[tag].key, TAG_LABELS[tag].fallback)}
-              size="small"
-              color="primary"
-              sx={{ height: 20, fontSize: "0.65rem" }}
-            />
-          ))}
-        </Stack>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={0.5}
-          sx={{ mb: 0.5 }}
-          flexWrap="wrap"
-          useFlexGap
-        >
-          <RouterLink
-            to={formatMarketUrl(variant)}
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              flex: 1,
-              minWidth: 0,
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{
-                color: "text.secondary",
-                "&:hover": { color: linkColor },
-              }}
-              noWrap
-            >
-              {variant.shop_name}
-            </Typography>
-          </RouterLink>
-          {qc && (
-            <Chip
-              label={qc.label}
-              size="small"
-              sx={{
-                height: 20,
-                fontSize: "0.65rem",
-                ...qualityChipSx(qc.color),
-              }}
-            />
-          )}
-        </Stack>
-
-        {label && (
-          <Typography
-            variant="caption"
-            sx={{ color: "text.secondary", display: "block", mb: 0.5 }}
-            noWrap
-          >
-            {label}
-          </Typography>
-        )}
-
-        <MarketListingRating
-          avg_rating={variant.shop_rating}
-          rating_count={variant.shop_rating_count ?? null}
-          total_rating={0}
-          rating_streak={null}
-          total_orders={null}
-          total_assignments={null}
-          response_rate={null}
-          badge_ids={variant.shop_badge_ids}
-          display_limit={3}
-          showBadges={true}
+    <GroupSellerRow
+      row={sellerRowFromVariant(variant)}
+      tags={tags.map((tag) => (
+        <Chip
+          key={tag}
+          label={t(TAG_LABELS[tag].key, TAG_LABELS[tag].fallback)}
+          size="small"
+          color="primary"
+          sx={{ height: 18, fontSize: "0.6rem" }}
         />
-
-        <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
-          {fmt.price(variant.price)}
-        </Typography>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ mt: 0.5 }}
-        >
-          <Typography variant="caption" sx={{ color: "text.primary" }}>
-            {variant.quantity_available != null
-              ? t("MarketRedesign.available", "{{count}} available", {
-                  count: variant.quantity_available,
-                })
-              : ""}
-          </Typography>
-          <AddVariantButton variant={variant} />
-        </Stack>
-      </CardContent>
-    </Card>
+      ))}
+      action={<AddVariantButton variant={variant} />}
+    />
   )
 }

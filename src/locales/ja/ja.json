@@ -4744,7 +4744,6 @@
   "MarketRedesign": {
     "acrossSellers_other": "{{count}}人の販売者から",
     "addToCart": "追加",
-    "available_other": "在庫 {{count}} 個",
     "compare": "比較",
     "compareSellers_other": "{{count}}人の販売者を比較",
     "forSale": "販売中",
@@ -4755,6 +4754,7 @@
     "negotiable": "交渉可能",
     "noSellers": "現在出品している販売者はいません。",
     "seeAllCount_other": "{{count}}件の出品をすべて表示",
+    "sellerUpdated": "{{time}}に更新",
     "sellersCount_other": "{{count}}人の販売者",
     "topBid": "最高入札",
     "topRated": "高評価の販売者",

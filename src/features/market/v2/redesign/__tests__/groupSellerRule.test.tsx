@@ -76,6 +76,10 @@ function variant(o: Partial<GameItemListingResult>): GameItemListingResult {
     variant_display_name: "Standard",
     variant_short_name: "Std",
     created_at: "2026-11-02T13:52:46.257Z",
+    updated_at: "2026-11-02T13:52:46.257Z",
+    has_bulk_discount: false,
+    visibility: "public",
+    quantity_unit: "unit",
     ...o,
   }
 }

@@ -4818,7 +4818,6 @@
   "MarketRedesign": {
     "acrossSellers_other": "来自 {{count}} 位卖家",
     "addToCart": "加入",
-    "available_other": "{{count}} 件可售",
     "compare": "比较",
     "compareSellers_other": "比较 {{count}} 位卖家",
     "forSale": "出售中",
@@ -4829,6 +4828,7 @@
     "negotiable": "可议价",
     "noSellers": "目前没有可用的卖家。",
     "seeAllCount_other": "查看全部 {{count}} 个商品",
+    "sellerUpdated": "{{time}}更新",
     "sellersCount_other": "{{count}} 位卖家",
     "topBid": "最高出价",
     "topRated": "评分最高的卖家",
