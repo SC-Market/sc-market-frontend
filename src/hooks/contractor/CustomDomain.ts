@@ -2,7 +2,8 @@ import { createContext, useContext } from "react"
 import { isMainSiteHostname } from "../../util/mainSiteHost"
 
 // Resolve the current hostname to an org spectrum_id for white-label domains.
-// Uses localStorage cache for instant resolution, revalidated by HookProvider.
+// Uses localStorage cache for instant resolution; useResolvedCustomDomain
+// (HookProvider) asks the API on every load and applies its answer.
 
 const CACHE_KEY = "sc-market-domain-org"
 
@@ -58,6 +59,15 @@ export function getWhiteLabelConfig(): WhiteLabelDomainConfig | null {
   return getCachedDomainOrg()
 }
 
+/** Forget the cached domain answer (the API says this host is no org's). */
+export function clearDomainOrg(): void {
+  try {
+    localStorage.removeItem(CACHE_KEY)
+  } catch {
+    // silently fail
+  }
+}
+
 export interface CustomDomain {
   /**
    * Whether the hostname is a custom white-label domain (not the main site).
@@ -72,9 +82,10 @@ const MAIN_SITE: CustomDomain = { isCustomDomain: false, customOrg: undefined }
 
 /**
  * Resolve the white-label domain for the current page from `window.location`
- * and the domain cache. Browser-only; HookProvider calls it once per mount and
- * provides the result, so it stays fixed for the page's lifetime — background
- * revalidation updates the cache for the next load, not the current one.
+ * and the domain cache. Browser-only; it is the first render's answer
+ * (HookProvider, through useResolvedCustomDomain, which then asks the API and
+ * updates the page when the answer differs: on a first visit there is no
+ * cache yet, so the page must not stay the main site).
  * The build-time render of a prerendered page (src/prerender/paths.ts) is the
  * main site: prerendered pages are only hydrated on the main site
  * (entry.client.tsx renders them from scratch on white-label domains).

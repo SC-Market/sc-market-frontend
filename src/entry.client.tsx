@@ -143,17 +143,20 @@ installLinkIntentPrefetch()
 // themselves — see Page.tsx and src/hooks/router/usePageTitle.ts, which now set
 // bare titles through Unhead (useHead) rather than writing document.title.
 // On an org's white-label subdomain: "<Org> — <page>" (the org's name from
-// the domain cache; the first visit, before it's cached, keeps SC Market's).
-const whiteLabelOrgName = isMainSiteHostname(window.location.hostname)
-  ? undefined
-  : getWhiteLabelConfig()?.name
+// the domain cache, read per title: a first visit fills the cache once the
+// domain answer is in, and the titles after it carry the org's name).
+const onMainSite = isMainSiteHostname(window.location.hostname)
 const head = createHead({
   init: [
     {
-      titleTemplate: whiteLabelOrgName
-        ? (title?: string | null) =>
-            applyWhiteLabelTitle(whiteLabelOrgName, title)
-        : applyTitleTemplate,
+      titleTemplate: onMainSite
+        ? applyTitleTemplate
+        : (title?: string | null) => {
+            const orgName = getWhiteLabelConfig()?.name
+            return orgName
+              ? applyWhiteLabelTitle(orgName, title)
+              : applyTitleTemplate(title)
+          },
     },
   ],
 })

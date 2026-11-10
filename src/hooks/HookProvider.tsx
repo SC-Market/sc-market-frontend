@@ -28,10 +28,10 @@ import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies, CookiesProvider } from "react-cookie"
 import {
   CustomDomainContext,
-  cacheDomainOrg,
   resolveBrowserCustomDomain,
   useCustomDomain,
 } from "./contractor/CustomDomain"
+import { useResolvedCustomDomain } from "./contractor/useResolvedCustomDomain"
 import { contractorsApi } from "../store/api/contractors"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import {
@@ -74,7 +74,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     )
   const { i18n } = useTranslation()
   const dispatch = useAppDispatch()
-  const { isCustomDomain, customOrg } = useCustomDomain()
+  const { customOrg } = useCustomDomain()
 
   const mightBeCustomTheme =
     useLightTheme !== "light" &&
@@ -148,23 +148,17 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     startProactiveRefresh()
   }, [])
 
-  // Background: resolve domain + fetch theme for white-label sites
+  // Background: fetch the theme of the white-label org (the domain itself is
+  // resolved by useResolvedCustomDomain, which provides customOrg)
   useEffect(() => {
-    if (!isCustomDomain) return
-    const hostname = window.location.hostname
+    if (!customOrg) {
+      setDynamicOrgTheme(null)
+      return
+    }
+    const spectrum_id = customOrg
 
-    async function resolveAndFetchTheme() {
+    async function fetchTheme() {
       try {
-        // Step 1: Resolve domain → spectrum_id
-        const domainResult = await dispatch(
-          contractorsApi.endpoints.resolveDomain.initiate(hostname),
-        )
-        if (!domainResult.data?.data) return
-        const { spectrum_id } = domainResult.data.data
-        if (!spectrum_id) return
-        cacheDomainOrg(domainResult.data.data)
-
-        // Step 2: Fetch org theme
         const themeResult = await dispatch(
           contractorsApi.endpoints.getOrgTheme.initiate(spectrum_id),
         )
@@ -172,13 +166,13 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
         const themeData = themeResult.data.data
         const { theme_data, favicon_url, updated_at } = themeData
 
-        // Step 3: Check if newer than cache
+        // Newer than the cache?
         const cachedUpdatedAt = getCachedUpdatedAt(spectrum_id)
         if (!cachedUpdatedAt || updated_at > cachedUpdatedAt) {
           cacheOrgTheme(spectrum_id, theme_data, favicon_url, updated_at)
         }
 
-        // Step 4: Build and apply theme
+        // Build and apply it
         const built = buildOrgTheme(theme_data, resolvedMode)
         setDynamicOrgTheme(built)
       } catch {
@@ -186,8 +180,8 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       }
     }
 
-    resolveAndFetchTheme()
-  }, [resolvedMode, dispatch, isCustomDomain])
+    fetchTheme()
+  }, [resolvedMode, dispatch, customOrg])
 
   // Build a localized theme when language changes. The first render already
   // has MUI's own strings (pagination, ...) in the page's language: a server
@@ -368,8 +362,9 @@ export function HookProvider(props: { children: React.ReactElement }) {
   // The white-label domain: resolved from the request on a server render
   // (the SSR Function's `host` variant), from the page and its cache in the
   // browser.
+  // The browser then asks the API and applies its answer to this page.
   const requestWhiteLabel = useRequestContext().whiteLabel
-  const [customDomain] = useState(() =>
+  const customDomain = useResolvedCustomDomain(() =>
     typeof window === "undefined"
       ? customDomainFromRequest(requestWhiteLabel)
       : resolveBrowserCustomDomain(),

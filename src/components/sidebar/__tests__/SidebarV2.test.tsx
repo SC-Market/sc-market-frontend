@@ -30,6 +30,10 @@ import type { Contractor } from "../../../features/contractor/domain/types"
 import type { has_permission as HasPermission } from "../../../features/contractor/domain/permissions"
 import type { SidebarConfigItem } from "../../../features/contractor/api/contractorV2Api"
 import { withShopContext } from "../shopContextState"
+import {
+  CustomDomainContext,
+  type CustomDomain,
+} from "../../../hooks/contractor/CustomDomain"
 
 // ---- Mutable mock state -----------------------------------------------------
 let mockProfile: UserProfileState | undefined = undefined
@@ -380,6 +384,64 @@ describe("SidebarV2 — white-label sidebar settings", () => {
     const fleet = screen.getByRole("link", { name: /Our Fleet/ })
     expect(fleet).toHaveAttribute("href", "/fleet")
     expect(fleet).not.toHaveAttribute("target")
+  })
+})
+
+describe("SidebarV2 — on an org's white-label host", () => {
+  const sidebarOn = (domain: CustomDomain) => (
+    <ThemeProvider theme={testTheme}>
+      <Provider store={store}>
+        <CustomDomainContext.Provider value={domain}>
+          <MemoryRouter initialEntries={["/contractor/MEDRUNNER"]}>
+            <SidebarV2 />
+          </MemoryRouter>
+        </CustomDomainContext.Provider>
+      </Provider>
+    </ThemeProvider>
+  )
+  let store: ReturnType<typeof createStore>
+  beforeEach(() => {
+    store = createStore()
+    mockOfficialSite = false
+  })
+  const staffPortal: SidebarConfigItem = {
+    standard_tab_key: null,
+    custom_label: "Staff Portal",
+    custom_path: "https://staff.example.com",
+    custom_icon: "link",
+    is_external: true,
+    enabled: true,
+    sort_order: 12,
+  }
+
+  it("heads the sidebar with the org's brand, not SC Market's", () => {
+    render(sidebarOn({ isCustomDomain: true, customOrg: "MEDRUNNER" }))
+    const brand = screen.getByTestId("sidebar-org-brand")
+    expect(brand).toHaveTextContent("MEDRUNNER")
+    expect(brand).toHaveTextContent("Storefront on SC Market")
+    expect(screen.queryByText("SC Market")).not.toBeInTheDocument()
+  })
+
+  it("brings in the org's brand and links once the domain answer is in", () => {
+    // First visit: the host is known to be an org's, its answer isn't yet.
+    const { rerender } = render(
+      sidebarOn({ isCustomDomain: true, customOrg: undefined }),
+    )
+    expect(screen.queryByTestId("sidebar-org-brand")).not.toBeInTheDocument()
+    mockWhiteLabel = {
+      hidden: new Set(["contracts"]),
+      customTabs: [staffPortal],
+    }
+    rerender(sidebarOn({ isCustomDomain: true, customOrg: "MEDRUNNER" }))
+    expect(screen.getByTestId("sidebar-org-brand")).toHaveTextContent(
+      "MEDRUNNER",
+    )
+    expect(screen.getByRole("link", { name: /Staff Portal/ })).toHaveAttribute(
+      "href",
+      "https://staff.example.com",
+    )
+    expect(screen.queryByText("Contracts")).not.toBeInTheDocument()
+    expect(screen.getByText("Market")).toBeInTheDocument()
   })
 })
 
