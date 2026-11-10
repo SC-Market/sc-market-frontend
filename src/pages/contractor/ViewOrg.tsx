@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { orgPageTitle } from "../../seo/entityHeads"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
+import { PATHS } from "../../routes/paths"
 
 // Lazy load OrgInfo component
 const OrgInfo = lazyWithRetry(() =>
@@ -19,6 +21,8 @@ export function ViewOrg() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
   const pageData = usePageOrg(id!)
+  // On an org's white-label domain: no crumb into SC Market's org directory.
+  const { isCustomDomain } = useCustomDomain()
 
   return (
     <BannerPageLayout
@@ -28,10 +32,14 @@ export function ViewOrg() {
           : t("org.orgTitle")
       }
       breadcrumbs={[
-        {
-          label: t("contractors.title", "Contractors"),
-          href: "/contractors",
-        },
+        ...(isCustomDomain
+          ? []
+          : [
+              {
+                label: t("contractors.title", "Contractors"),
+                href: PATHS.contractors,
+              },
+            ]),
         {
           label: pageData.data?.contractor.name || t("org.loading"),
         },

@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../components/layout/BannerPageLayout"
 import { ProfileSkeleton as ProfileContentSkeleton } from "../features/profile/components/ProfileSkeleton"
 import { OrgInfoSkeleton } from "../features/contractor/components/OrgInfo"
+import { useCustomDomain } from "../hooks/contractor/CustomDomain"
+import { PATHS } from "../routes/paths"
 
 /**
  * Route-level skeleton for user profile pages: the same BannerPageLayout,
@@ -32,15 +34,20 @@ export function ProfileRouteSkeleton() {
  */
 export function OrgRouteSkeleton() {
   const { t } = useTranslation()
+  const { isCustomDomain } = useCustomDomain()
   return (
     <BannerPageLayout
       noFooter
       title={t("org.orgTitle")}
       breadcrumbs={[
-        {
-          label: t("contractors.title", "Contractors"),
-          href: "/contractors",
-        },
+        ...(isCustomDomain
+          ? []
+          : [
+              {
+                label: t("contractors.title", "Contractors"),
+                href: PATHS.contractors,
+              },
+            ]),
         { label: t("org.loading") },
       ]}
       sidebarOpen={true}

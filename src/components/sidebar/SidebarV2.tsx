@@ -31,6 +31,7 @@ import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPen
 import { haptic } from "../../util/haptics"
 import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
 import { getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import { isMainSiteOnlyPath } from "../../features/storefront/whiteLabelRoutes"
 
 import {
   browseDirectoryItems,
@@ -85,7 +86,7 @@ export function SidebarV2() {
   // On a white-label domain: the tabs the org hid and its own links.
   const whiteLabel = useWhiteLabelSidebar()
   // On an org's white-label subdomain the header is the org's brand.
-  const { customOrg } = useCustomDomain()
+  const { isCustomDomain, customOrg } = useCustomDomain()
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
     customOrg!,
     {
@@ -98,8 +99,10 @@ export function SidebarV2() {
         logo: customOrgData?.avatar || undefined,
       }
     : null
+  // Not the tabs the org hid, nor SC Market-wide pages (whiteLabelRoutes.ts)
   const shownOnWhiteLabel = (item: NavItem) =>
-    !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey)
+    (!item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey)) &&
+    !(isCustomDomain && isMainSiteOnlyPath(item.to, customOrg))
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
 
@@ -180,8 +183,12 @@ export function SidebarV2() {
       flags.customizable_dashboard,
       pendingOrderCount,
       unreadChatCount,
+    ).filter(
+      (item) => !(isCustomDomain && isMainSiteOnlyPath(item.to, customOrg)),
     )
   }, [
+    isCustomDomain,
+    customOrg,
     context,
     selectedShop,
     selectedOrgId,
@@ -267,13 +274,15 @@ export function SidebarV2() {
   )
 
   // Flat list of every navigable destination for starred lookup + search
+  // Game Data and the wiki are SC Market-wide: not on a white-label domain.
   const allNavigable = useMemo<NavItem[]>(() => {
+    if (isCustomDomain) return contextItems
     return [
       ...contextItems,
       ...gameDataNavItems(t, Boolean(profile)),
       ...wikiNavItems(t),
     ]
-  }, [contextItems, profile, t])
+  }, [contextItems, isCustomDomain, profile, t])
 
   const starredItems = useMemo(
     () => allNavigable.filter((item) => starred.includes(item.to)),
@@ -365,8 +374,8 @@ export function SidebarV2() {
               />
             )}
 
-            {/* Game Data section — browse mode only */}
-            {context === "browse" && (
+            {/* Game Data section — browse mode only, main site only */}
+            {context === "browse" && !isCustomDomain && (
               <SidebarGameDataSection
                 signedIn={Boolean(profile)}
                 renderNavItem={renderNavItem}

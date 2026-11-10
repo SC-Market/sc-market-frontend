@@ -22,6 +22,8 @@ import SearchIcon from "@mui/icons-material/SearchRounded"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
+import { orgScopedListingArgs } from "../../storefront/domain"
 import { useAutoApplySearchParams } from "../hooks/useAutoApplySearchParams"
 import { BUY_ORDER_SORT_FIELDS } from "./buyOrderSort"
 import { ItemTypeFilter, QualityFilterWrapper } from "./MarketSearchFilters"
@@ -111,8 +113,11 @@ export function MarketSearchAreaV2({
   // Suggestions follow the applied (debounced) search text, so they load
   // together with the results instead of on every keystroke.
   const appliedText = filters.applied("text")
+  // On an org's white-label domain: only the org's listings, and no buy
+  // orders (every buyer's, served only on sc-market.space).
+  const { isCustomDomain, customOrg } = useCustomDomain()
   const { data: suggestions } = useSearchListingsQuery(
-    { text: appliedText, pageSize: 5 },
+    orgScopedListingArgs({ text: appliedText, pageSize: 5 }, customOrg),
     { skip: appliedText.length < 2 },
   )
   const autocompleteOptions = useMemo(
@@ -156,7 +161,7 @@ export function MarketSearchAreaV2({
               </MenuItem>
             </TextField>
           </Grid>
-        ) : (
+        ) : isCustomDomain ? null : (
           <Grid item xs={12}>
             <ToggleButtonGroup
               value={viewMode}
