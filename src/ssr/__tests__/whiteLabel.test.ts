@@ -53,7 +53,9 @@ describe("seedRenderedWhiteLabel", () => {
       hostname: HOST,
     })
     expect(getCachedUpdatedAt("MEDRUNNER")).toBe(THEME!.updated_at)
-    expect(getCachedOrgTheme("MEDRUNNER", "dark")?.palette.primary.main).toBe(
+    // The saved brand colour is the fill; primary.main is the accent role,
+    // nudged to read at AA on the dark page (theme/roles.ts).
+    expect(getCachedOrgTheme("MEDRUNNER", "dark")?.palette.primary.fill).toBe(
       "#2c5278",
     )
   })
