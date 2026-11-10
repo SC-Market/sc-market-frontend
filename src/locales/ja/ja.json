@@ -3937,7 +3937,8 @@
     "viewUserProfile": "{{username}}のプロフィールを表示",
     "zeroStock": "在庫をゼロにする",
     "zeroStockHelp": "選択中の在庫アイテムの数量をゼロに設定します",
-    "zoomImage": "画像を拡大"
+    "zoomImage": "画像を拡大",
+    "starRatingShare": "星{{stars}}のレビュー"
   },
   "account_deletion": {
     "blockers_title": "これらの問題が解決されるまでアカウントを削除できません:",
@@ -5550,7 +5551,28 @@
     "saveSuccess": "テーマを保存しました",
     "saving": "保存中...",
     "style": "スタイル",
-    "unit": "単位"
+    "unit": "単位",
+    "contrastTitle": "コントラスト（WCAG 2.2 AA）",
+    "contrastIntro": "文字は背景に対して 4.5:1、枠線とフォーカスリングは 3:1 が必要です。空欄の色は基準を満たすように自動で決まります。",
+    "contrastHeadingText": "ページとペーパー上の見出し・強調テキスト",
+    "contrastBodyText": "ページとペーパー上の本文テキスト",
+    "contrastAccentText": "ページとペーパー上のアクセント文字・リンク",
+    "contrastButtonText": "プライマリ上のボタン文字",
+    "contrastSecondary": "ページとペーパー上のセカンダリ",
+    "contrastHoverText": "メニュー・リストのホバー上のサイドバー・メニュー文字",
+    "contrastFocus": "ページとペーパー上のフォーカスリング",
+    "contrastControlBorder": "ページとペーパー上のコントロールの枠線",
+    "contrastMinText": "文字 4.5:1",
+    "contrastMinUi": "UI要素 3:1",
+    "contrastAuto": "自動",
+    "contrastPass": "AA 合格",
+    "contrastFail": "AA 不合格",
+    "contrastAutoFix": "自動修正",
+    "contrastAutoFixAria": "{{label}}を自動修正",
+    "contrastWarnTitle": "WCAG AA を満たさない色があります",
+    "contrastWarnMessage": "これらの組み合わせは最低コントラストを下回っており、読みづらい訪問者がいます。「自動修正」で基準を満たす最も近い色を選べます。このまま保存することもできます。",
+    "contrastSaveAnyway": "このまま保存",
+    "contrastKeepEditing": "編集を続ける"
   },
   "toggle_contractor_sidebar": "コントラクターサイドバーを切り替え",
   "TransferLotDialog": {
@@ -8569,15 +8591,25 @@
       "bgSidebar": "サイドバー",
       "usageSidebar": "ダークモードの出品サムネイルや写真選択エリア（例: SelectPhotosArea）はこの色に向かってフェードします。",
       "bgNavbar": "ナビゲーションバー",
-      "textPrimary": "テキスト",
-      "textSecondary": "セカンダリテキスト",
+      "textPrimary": "本文テキスト",
+      "textSecondary": "見出し・強調テキスト",
       "outline": "ボーダーの色",
       "actionHover": "メニュー・リストのホバー",
       "usageActionHover": "サイドバーの行、メニュー、オートコンプリート、スケルトンの「ウェーブ」に使われます。塗りつぶしのプライマリボタンには使われません。",
       "borderRadiusTopLevel": "カード",
       "borderRadiusButton": "ボタン",
       "borderRadiusChip": "チップ",
-      "borderRadiusImage": "画像"
+      "borderRadiusImage": "画像",
+      "usagePrimaryContrast": "塗りつぶしのプライマリボタン上の文字。空欄にすると、4.5:1 に届く白または濃い色が使われます。",
+      "accentText": "アクセント文字・リンク",
+      "usageAccentText": "ページ上のリンク、タブ、選択中の項目、アクセントアイコン。空欄にすると、プライマリを 4.5:1 に届くぎりぎりまで明るく/暗くした色が使われます。",
+      "focus": "フォーカスリング",
+      "usageFocus": "キーボード操作中の要素を囲む枠。空欄にすると、3:1 のプライマリが使われます。",
+      "usageTextPrimary": "説明文、キャプション、補足テキスト。背景とペーパーに対して 4.5:1 が必要です。",
+      "usageTextSecondary": "見出し、名前、価格、統計、ほとんどのラベル。背景とペーパーに対して 4.5:1 が必要です。",
+      "usageOutline": "カードの縁や区切り線。装飾なので最低コントラストはありません。",
+      "outlineStrong": "コントロールの枠線",
+      "usageOutlineStrong": "テキスト欄、枠線付きのボタンやチップ。空欄にすると、3:1 にしたボーダーの色が使われます。"
     }
   },
   "gameTaxonomyUi": {

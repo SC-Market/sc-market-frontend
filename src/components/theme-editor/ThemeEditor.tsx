@@ -20,6 +20,11 @@ import { ThemePreview } from "./ThemePreview"
 import { ResetThemeDialog } from "./ResetThemeDialog"
 import { ThemePresetPicker } from "./ThemePresetPicker"
 import { ThemeColorFields } from "./ThemeColorFields"
+import { ThemeContrastPanel } from "./ThemeContrastPanel"
+import {
+  ContrastWarningDialog,
+  useContrastGuardedSave,
+} from "./ContrastWarningDialog"
 import { ThemeBorderRadiusFields } from "./ThemeBorderRadiusFields"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -162,6 +167,8 @@ export function ThemeEditor({
     }
   }
 
+  const contrastGuard = useContrastGuardedSave(themeData, handleSave)
+
   const handleReset = async () => {
     setIsResetting(true)
     try {
@@ -208,6 +215,12 @@ export function ThemeEditor({
 
           {/* Colors */}
           <ThemeColorFields currentMode={currentMode} onChange={updateValue} />
+
+          <ThemeContrastPanel
+            modeData={currentMode}
+            mode={editMode}
+            onChange={updateValue}
+          />
 
           {/* Style */}
           <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
@@ -383,7 +396,7 @@ export function ThemeEditor({
                 <SaveRounded />
               )
             }
-            onClick={handleSave}
+            onClick={contrastGuard.requestSave}
             disabled={isSaving}
           >
             {isSaving
@@ -392,6 +405,9 @@ export function ThemeEditor({
           </Button>
         </Box>
       </Grid>
+
+      {/* Failing contrast: say which pairs, then save if they want */}
+      <ContrastWarningDialog {...contrastGuard.dialog} />
 
       {/* Reset confirmation dialog */}
       <ResetThemeDialog

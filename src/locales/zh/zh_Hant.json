@@ -3854,7 +3854,8 @@
     "viewUserProfile": "檢視 {{username}} 的個人檔案",
     "zeroStock": "將庫存設為零",
     "zeroStockHelp": "將所選庫存物品的數量設為零",
-    "zoomImage": "縮放圖片"
+    "zoomImage": "縮放圖片",
+    "starRatingShare": "{{stars}} 星評價"
   },
   "account_deletion": {
     "blockers_title": "在解決這些問題之前，你無法刪除帳號：",
@@ -5550,7 +5551,28 @@
     "saveSuccess": "主題已儲存",
     "saving": "儲存中…",
     "style": "樣式",
-    "unit": "單位"
+    "unit": "單位",
+    "contrastTitle": "對比度（WCAG 2.2 AA）",
+    "contrastIntro": "文字與其背景的對比度需達到 4.5:1；外框與焦點框需達到 3:1。留空的顏色會自動推導為達標值。",
+    "contrastHeadingText": "頁面與紙張上的標題與強調文字",
+    "contrastBodyText": "頁面與紙張上的內文文字",
+    "contrastAccentText": "頁面與紙張上的強調文字與連結",
+    "contrastButtonText": "主要色上的按鈕文字",
+    "contrastSecondary": "頁面與紙張上的次要色",
+    "contrastHoverText": "選單與清單懸停色上的側邊欄與選單文字",
+    "contrastFocus": "頁面與紙張上的焦點框",
+    "contrastControlBorder": "頁面與紙張上的控制項外框",
+    "contrastMinText": "文字 4.5:1",
+    "contrastMinUi": "介面元素 3:1",
+    "contrastAuto": "自動",
+    "contrastPass": "符合 AA",
+    "contrastFail": "不符合 AA",
+    "contrastAutoFix": "自動修正",
+    "contrastAutoFixAria": "自動修正{{label}}",
+    "contrastWarnTitle": "部分顏色不符合 WCAG AA",
+    "contrastWarnMessage": "這些組合低於最低對比度，部分訪客會難以閱讀。「自動修正」會提供最接近的達標顏色。你仍然可以儲存。",
+    "contrastSaveAnyway": "仍然儲存",
+    "contrastKeepEditing": "繼續編輯"
   },
   "toggle_contractor_sidebar": "切換承包商側邊欄",
   "TransferLotDialog": {
@@ -8569,15 +8591,25 @@
       "bgSidebar": "側邊欄",
       "usageSidebar": "深色模式下的商品縮圖與照片選擇區域（例如 SelectPhotosArea）會漸變為此顏色。",
       "bgNavbar": "導覽列",
-      "textPrimary": "文字",
-      "textSecondary": "次要文字",
+      "textPrimary": "內文文字",
+      "textSecondary": "標題與強調文字",
       "outline": "外框顏色",
       "actionHover": "選單與清單懸停",
       "usageActionHover": "側邊欄列、選單、自動完成以及骨架「波浪」。不用於填色主要按鈕。",
       "borderRadiusTopLevel": "卡片",
       "borderRadiusButton": "按鈕",
       "borderRadiusChip": "標籤",
-      "borderRadiusImage": "圖片"
+      "borderRadiusImage": "圖片",
+      "usagePrimaryContrast": "主要色填滿按鈕上的文字。留空則使用白色或深色中能達到 4.5:1 的那個。",
+      "accentText": "強調文字與連結",
+      "usageAccentText": "頁面上的連結、分頁、已選項目與強調圖示。留空則使用主要色，並僅調亮或調暗到剛好達到 4.5:1。",
+      "focus": "焦點框",
+      "usageFocus": "鍵盤使用者目前所在控制項周圍的外框。留空則使用達到 3:1 的主要色。",
+      "usageTextPrimary": "描述、說明與輔助文字。在背景與紙張上需達到 4.5:1。",
+      "usageTextSecondary": "標題、名稱、價格、統計數據與大多數標籤。在背景與紙張上需達到 4.5:1。",
+      "usageOutline": "卡片邊緣與分隔線：屬於裝飾，沒有最低對比度要求。",
+      "outlineStrong": "控制項外框",
+      "usageOutlineStrong": "文字欄位以及有外框的按鈕與標籤。留空則使用調整到 3:1 的外框顏色。"
     }
   },
   "gameTaxonomyUi": {

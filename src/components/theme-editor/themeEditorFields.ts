@@ -24,6 +24,27 @@ export const COLOR_FIELDS: ColorField[] = [
     labelKey: "chromeUi.themeEditor.primaryContrast",
     fallback: "Button Text",
     path: ["palette", "primary", "contrastText"],
+    usageNoteKey: "chromeUi.themeEditor.usagePrimaryContrast",
+    usageNoteFallback:
+      "Text on filled Primary buttons. Leave empty for white or dark, whichever reaches 4.5:1.",
+  },
+  {
+    key: "accentText",
+    labelKey: "chromeUi.themeEditor.accentText",
+    fallback: "Accent text & links",
+    path: ["palette", "text", "accent"],
+    usageNoteKey: "chromeUi.themeEditor.usageAccentText",
+    usageNoteFallback:
+      "Links, tabs, selected items and accent icons on the page. Leave empty to use Primary, lightened or darkened just enough to reach 4.5:1.",
+  },
+  {
+    key: "focus",
+    labelKey: "chromeUi.themeEditor.focus",
+    fallback: "Focus ring",
+    path: ["palette", "common", "focus"],
+    usageNoteKey: "chromeUi.themeEditor.usageFocus",
+    usageNoteFallback:
+      "The outline around the control a keyboard user is on. Leave empty to use Primary at 3:1.",
   },
   {
     key: "primaryDark",
@@ -70,23 +91,43 @@ export const COLOR_FIELDS: ColorField[] = [
     fallback: "Navbar",
     path: ["palette", "background", "navbar"],
   },
+  // The names are MUI's; in SC Market text.secondary is the brighter,
+  // emphasis colour (headings, names, prices) and text.primary the body copy.
   {
     key: "textPrimary",
     labelKey: "chromeUi.themeEditor.textPrimary",
-    fallback: "Text",
+    fallback: "Body text",
     path: ["palette", "text", "primary"],
+    usageNoteKey: "chromeUi.themeEditor.usageTextPrimary",
+    usageNoteFallback:
+      "Descriptions, captions and supporting copy. Needs 4.5:1 on Background and Paper.",
   },
   {
     key: "textSecondary",
     labelKey: "chromeUi.themeEditor.textSecondary",
-    fallback: "Text Secondary",
+    fallback: "Headings & emphasis text",
     path: ["palette", "text", "secondary"],
+    usageNoteKey: "chromeUi.themeEditor.usageTextSecondary",
+    usageNoteFallback:
+      "Headings, names, prices, stats and most labels. Needs 4.5:1 on Background and Paper.",
   },
   {
     key: "outline",
     labelKey: "chromeUi.themeEditor.outline",
     fallback: "Border Color",
     path: ["palette", "outline", "main"],
+    usageNoteKey: "chromeUi.themeEditor.usageOutline",
+    usageNoteFallback:
+      "Card edges and dividers: decoration, no minimum contrast.",
+  },
+  {
+    key: "outlineStrong",
+    labelKey: "chromeUi.themeEditor.outlineStrong",
+    fallback: "Control borders",
+    path: ["palette", "outline", "strong"],
+    usageNoteKey: "chromeUi.themeEditor.usageOutlineStrong",
+    usageNoteFallback:
+      "Text fields and outlined buttons and chips. Leave empty to use Border Color at 3:1.",
   },
   {
     key: "actionHover",

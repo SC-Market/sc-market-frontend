@@ -3981,7 +3981,8 @@
     "viewUserProfile": "Voir le profil de {{username}}",
     "zeroStock": "Mettre le stock à zéro",
     "zeroStockHelp": "Mettre à zéro la quantité des articles de stock sélectionnés",
-    "zoomImage": "Zoomer sur l'image"
+    "zoomImage": "Zoomer sur l'image",
+    "starRatingShare": "Avis {{stars}} étoiles"
   },
   "account_deletion": {
     "blockers_title": "Vous ne pouvez pas supprimer votre compte tant que ces problèmes ne sont pas résolus :",
@@ -5622,7 +5623,28 @@
     "saveSuccess": "Thème enregistré",
     "saving": "Enregistrement...",
     "style": "Style",
-    "unit": "Unité"
+    "unit": "Unité",
+    "contrastTitle": "Contraste (WCAG 2.2 AA)",
+    "contrastIntro": "Le texte doit atteindre 4,5:1 sur son fond ; les bordures et l’anneau de focus, 3:1. Les couleurs laissées vides sont dérivées pour réussir.",
+    "contrastHeadingText": "Titres et texte mis en avant sur la page et le Papier",
+    "contrastBodyText": "Texte courant sur la page et le Papier",
+    "contrastAccentText": "Texte d’accent et liens sur la page et le Papier",
+    "contrastButtonText": "Texte des boutons sur Principal",
+    "contrastSecondary": "Secondaire sur la page et le Papier",
+    "contrastHoverText": "Texte de la barre latérale et des menus sur le survol des menus et listes",
+    "contrastFocus": "Anneau de focus sur la page et le Papier",
+    "contrastControlBorder": "Bordures des commandes sur la page et le Papier",
+    "contrastMinText": "Texte 4,5:1",
+    "contrastMinUi": "Interface 3:1",
+    "contrastAuto": "Automatique",
+    "contrastPass": "Conforme AA",
+    "contrastFail": "Non conforme AA",
+    "contrastAutoFix": "Corriger",
+    "contrastAutoFixAria": "Corriger {{label}}",
+    "contrastWarnTitle": "Certaines couleurs ne sont pas conformes WCAG AA",
+    "contrastWarnMessage": "Ces paires sont sous le contraste minimal : certains visiteurs auront du mal à les lire. « Corriger » propose la couleur conforme la plus proche. Vous pouvez quand même enregistrer.",
+    "contrastSaveAnyway": "Enregistrer quand même",
+    "contrastKeepEditing": "Continuer à modifier"
   },
   "toggle_contractor_sidebar": "Basculer la barre latérale du prestataire",
   "TransferLotDialog": {
@@ -8837,15 +8859,25 @@
       "bgSidebar": "Barre latérale",
       "usageSidebar": "En mode sombre, les miniatures d'annonces et les surfaces du sélecteur de photos (ex. SelectPhotosArea) se fondent vers cette couleur.",
       "bgNavbar": "Barre de navigation",
-      "textPrimary": "Texte",
-      "textSecondary": "Texte secondaire",
+      "textPrimary": "Texte courant",
+      "textSecondary": "Titres et texte mis en avant",
       "outline": "Couleur de bordure",
       "actionHover": "Survol des menus et listes",
       "usageActionHover": "Lignes de la barre latérale, menus, saisie semi-automatique et l'effet « wave » du squelette. Pas les boutons principaux remplis.",
       "borderRadiusTopLevel": "Cartes",
       "borderRadiusButton": "Boutons",
       "borderRadiusChip": "Puces",
-      "borderRadiusImage": "Images"
+      "borderRadiusImage": "Images",
+      "usagePrimaryContrast": "Texte sur les boutons remplis de couleur Principal. Laissez vide pour du blanc ou du foncé, selon ce qui atteint 4,5:1.",
+      "accentText": "Texte d’accent et liens",
+      "usageAccentText": "Liens, onglets, éléments sélectionnés et icônes d’accent sur la page. Laissez vide pour utiliser Principal, éclairci ou assombri juste assez pour atteindre 4,5:1.",
+      "focus": "Anneau de focus",
+      "usageFocus": "Le contour autour de la commande où se trouve l’utilisateur au clavier. Laissez vide pour utiliser Principal à 3:1.",
+      "usageTextPrimary": "Descriptions, légendes et textes d’appoint. Doit atteindre 4,5:1 sur Arrière-plan et Papier.",
+      "usageTextSecondary": "Titres, noms, prix, statistiques et la plupart des libellés. Doit atteindre 4,5:1 sur Arrière-plan et Papier.",
+      "usageOutline": "Bords des cartes et séparateurs : décoration, sans contraste minimal.",
+      "outlineStrong": "Bordures des commandes",
+      "usageOutlineStrong": "Champs de texte, boutons et puces à contour. Laissez vide pour utiliser la couleur de bordure à 3:1."
     }
   },
   "gameTaxonomyUi": {

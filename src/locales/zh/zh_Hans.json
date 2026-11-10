@@ -4007,7 +4007,8 @@
     "viewShoppingCart": "查看你的购物车",
     "viewSupporterWebsite": "访问 {{name}} 网站",
     "viewUserProfile": "查看 {{username}} 的资料",
-    "zoomImage": "缩放图片"
+    "zoomImage": "缩放图片",
+    "starRatingShare": "{{stars}} 星评价"
   },
   "account_deletion": {
     "blockers_title": "在解决以下问题之前，你无法删除账户：",
@@ -5613,7 +5614,28 @@
     "saveSuccess": "主题已保存",
     "saving": "保存中…",
     "style": "样式",
-    "unit": "单位"
+    "unit": "单位",
+    "contrastTitle": "对比度（WCAG 2.2 AA）",
+    "contrastIntro": "文字与其背景的对比度需达到 4.5:1；边框和焦点环需达到 3:1。留空的颜色会自动推导为达标值。",
+    "contrastHeadingText": "页面和纸张上的标题和强调文字",
+    "contrastBodyText": "页面和纸张上的正文文字",
+    "contrastAccentText": "页面和纸张上的强调文字和链接",
+    "contrastButtonText": "主要色上的按钮文字",
+    "contrastSecondary": "页面和纸张上的次要色",
+    "contrastHoverText": "菜单和列表悬停色上的侧边栏和菜单文字",
+    "contrastFocus": "页面和纸张上的焦点环",
+    "contrastControlBorder": "页面和纸张上的控件边框",
+    "contrastMinText": "文字 4.5:1",
+    "contrastMinUi": "界面元素 3:1",
+    "contrastAuto": "自动",
+    "contrastPass": "符合 AA",
+    "contrastFail": "不符合 AA",
+    "contrastAutoFix": "自动修复",
+    "contrastAutoFixAria": "自动修复{{label}}",
+    "contrastWarnTitle": "部分颜色不符合 WCAG AA",
+    "contrastWarnMessage": "这些组合低于最低对比度，部分访客会难以阅读。“自动修复”会提供最接近的达标颜色。你仍然可以保存。",
+    "contrastSaveAnyway": "仍然保存",
+    "contrastKeepEditing": "继续编辑"
   },
   "toggle_contractor_sidebar": "切换承包商侧边栏",
   "TransferLotDialog": {
@@ -8575,15 +8597,25 @@
       "bgSidebar": "侧边栏",
       "usageSidebar": "深色模式下的商品缩略图和照片选择区域（例如 SelectPhotosArea）会渐变为此颜色。",
       "bgNavbar": "导航栏",
-      "textPrimary": "文本",
-      "textSecondary": "次要文本",
+      "textPrimary": "正文文字",
+      "textSecondary": "标题和强调文字",
       "outline": "边框颜色",
       "actionHover": "菜单和列表悬停",
       "usageActionHover": "侧边栏行、菜单、自动补全以及骨架屏“波浪”。不用于填充主要按钮。",
       "borderRadiusTopLevel": "卡片",
       "borderRadiusButton": "按钮",
       "borderRadiusChip": "标签",
-      "borderRadiusImage": "图片"
+      "borderRadiusImage": "图片",
+      "usagePrimaryContrast": "主要色填充按钮上的文字。留空则使用白色或深色中能达到 4.5:1 的那个。",
+      "accentText": "强调文字和链接",
+      "usageAccentText": "页面上的链接、标签页、已选项目和强调图标。留空则使用主要色，并仅调亮或调暗到刚好达到 4.5:1。",
+      "focus": "焦点环",
+      "usageFocus": "键盘用户当前所在控件周围的轮廓。留空则使用达到 3:1 的主要色。",
+      "usageTextPrimary": "描述、说明和辅助文字。在背景和纸张上需达到 4.5:1。",
+      "usageTextSecondary": "标题、名称、价格、统计数据和大多数标签。在背景和纸张上需达到 4.5:1。",
+      "usageOutline": "卡片边缘和分隔线：属于装饰，没有最低对比度要求。",
+      "outlineStrong": "控件边框",
+      "usageOutlineStrong": "文本框以及带边框的按钮和标签。留空则使用调整到 3:1 的边框颜色。"
     }
   },
   "gameTaxonomyUi": {

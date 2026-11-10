@@ -3981,7 +3981,8 @@
     "viewUserProfile": "Ver el perfil de {{username}}",
     "zeroStock": "Poner el stock a cero",
     "zeroStockHelp": "Establece la cantidad de los artículos en stock seleccionados a cero",
-    "zoomImage": "Ampliar imagen"
+    "zoomImage": "Ampliar imagen",
+    "starRatingShare": "Reseñas de {{stars}} estrellas"
   },
   "account_deletion": {
     "blockers_title": "No puedes eliminar tu cuenta hasta que se resuelvan estos problemas:",
@@ -5622,7 +5623,28 @@
     "saveSuccess": "Tema guardado",
     "saving": "Guardando...",
     "style": "Estilo",
-    "unit": "Unidad"
+    "unit": "Unidad",
+    "contrastTitle": "Contraste (WCAG 2.2 AA)",
+    "contrastIntro": "El texto necesita 4,5:1 frente a lo que tiene detrás; los bordes y el anillo de foco, 3:1. Los colores que dejes vacíos se derivan para que cumplan.",
+    "contrastHeadingText": "Títulos y texto destacado sobre la página y el Papel",
+    "contrastBodyText": "Texto principal sobre la página y el Papel",
+    "contrastAccentText": "Texto de acento y enlaces sobre la página y el Papel",
+    "contrastButtonText": "Texto del botón sobre Principal",
+    "contrastSecondary": "Secundario sobre la página y el Papel",
+    "contrastHoverText": "Texto de la barra lateral y los menús sobre el hover de menús y listas",
+    "contrastFocus": "Anillo de foco sobre la página y el Papel",
+    "contrastControlBorder": "Bordes de controles sobre la página y el Papel",
+    "contrastMinText": "Texto 4,5:1",
+    "contrastMinUi": "Interfaz 3:1",
+    "contrastAuto": "Automático",
+    "contrastPass": "Cumple AA",
+    "contrastFail": "No cumple AA",
+    "contrastAutoFix": "Corregir",
+    "contrastAutoFixAria": "Corregir {{label}}",
+    "contrastWarnTitle": "Algunos colores no cumplen WCAG AA",
+    "contrastWarnMessage": "Estos pares están por debajo del contraste mínimo, así que a algunos visitantes les costará leerlos. «Corregir» propone el color más cercano que cumple. Aun así puedes guardar.",
+    "contrastSaveAnyway": "Guardar de todos modos",
+    "contrastKeepEditing": "Seguir editando"
   },
   "toggle_contractor_sidebar": "Alternar barra lateral de contratista",
   "TransferLotDialog": {
@@ -8837,15 +8859,25 @@
       "bgSidebar": "Barra lateral",
       "usageSidebar": "En modo oscuro, las miniaturas de anuncios y las superficies del selector de fotos (p. ej. SelectPhotosArea) se difuminan hacia este color.",
       "bgNavbar": "Barra de navegación",
-      "textPrimary": "Texto",
-      "textSecondary": "Texto secundario",
+      "textPrimary": "Texto principal",
+      "textSecondary": "Títulos y texto destacado",
       "outline": "Color del borde",
       "actionHover": "Hover de menús y listas",
       "usageActionHover": "Filas de la barra lateral, menús, autocompletado y la “onda” del esqueleto. No los botones principales rellenos.",
       "borderRadiusTopLevel": "Tarjetas",
       "borderRadiusButton": "Botones",
       "borderRadiusChip": "Chips",
-      "borderRadiusImage": "Imágenes"
+      "borderRadiusImage": "Imágenes",
+      "usagePrimaryContrast": "Texto sobre los botones rellenos de color Principal. Déjalo vacío para usar blanco u oscuro, el que alcance 4,5:1.",
+      "accentText": "Texto de acento y enlaces",
+      "usageAccentText": "Enlaces, pestañas, elementos seleccionados e iconos de acento en la página. Déjalo vacío para usar Principal, aclarado u oscurecido lo justo para alcanzar 4,5:1.",
+      "focus": "Anillo de foco",
+      "usageFocus": "El contorno del control en el que está quien usa el teclado. Déjalo vacío para usar Principal a 3:1.",
+      "usageTextPrimary": "Descripciones, leyendas y textos de apoyo. Necesita 4,5:1 sobre Fondo y Papel.",
+      "usageTextSecondary": "Títulos, nombres, precios, estadísticas y la mayoría de etiquetas. Necesita 4,5:1 sobre Fondo y Papel.",
+      "usageOutline": "Bordes de tarjetas y separadores: decoración, sin contraste mínimo.",
+      "outlineStrong": "Bordes de controles",
+      "usageOutlineStrong": "Campos de texto y botones y chips con contorno. Déjalo vacío para usar el color del borde a 3:1."
     }
   },
   "gameTaxonomyUi": {
