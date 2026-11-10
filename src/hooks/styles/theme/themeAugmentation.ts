@@ -37,6 +37,25 @@ declare module "@mui/material/styles" {
 
   interface TypeText {
     subtle: string
+    /**
+     * Accent text on surfaces: links, tabs, accent icons and indicators.
+     * Derived from the brand colour at 4.5:1 unless a theme sets it
+     * (./roles.ts). At runtime `primary.main` carries the same colour.
+     */
+    accent: string
+  }
+
+  interface PaletteColor {
+    /**
+     * The saved brand colour of a filled control (contained buttons, filled
+     * chips, badges), when `main` was moved to reach AA as text
+     * (./roles.ts). Read it through primaryFill().
+     */
+    fill?: string
+  }
+
+  interface SimplePaletteColorOptions {
+    fill?: string
   }
 
   interface TypeAction {

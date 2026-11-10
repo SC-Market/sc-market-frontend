@@ -106,14 +106,14 @@ describe("neutral controls", () => {
 })
 
 describe("light theme links", () => {
-  it("use the accent's dark shade, AA on white", () => {
+  it("use the accent text role, AA on white", () => {
     render(
       <ThemeProvider theme={lightTheme}>
         <Link href="#guide">Guide</Link>
       </ThemeProvider>,
     )
     const color = getComputedStyle(screen.getByText("Guide")).color
-    expect(color).toBe(lightTheme.palette.primary.dark)
+    expect(color).toBe(lightTheme.palette.text.accent)
     expect(worst(lightTheme, color)).toBeGreaterThanOrEqual(AA_TEXT)
   })
 })

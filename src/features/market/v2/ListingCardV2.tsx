@@ -11,7 +11,11 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { isListingNew } from "../domain/listingBadges"
 import { useNavigate } from "react-router-dom"
-import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
+import {
+  ExtendedTheme,
+  cardFadeGradient,
+  primaryFill,
+} from "../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { MarketListingRating } from "../../../components/rating/ListingRating"
@@ -281,7 +285,7 @@ export function ListingCardV2({
               bgcolor: "background.paper",
               boxShadow: 2,
               "&:hover": {
-                bgcolor: "primary.main",
+                bgcolor: primaryFill,
                 color: "primary.contrastText",
               },
             }}

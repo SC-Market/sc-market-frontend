@@ -87,18 +87,22 @@ export function buildOrgTheme(
   themeData: OrgThemeData,
   mode: "light" | "dark",
 ): Theme {
-  const orgOptions = mode === "light" ? themeData.light : themeData.dark
-  // Sync divider with outline.main so all border colors are consistent
-  const palette = orgOptions?.palette as
+  const saved = mode === "light" ? themeData.light : themeData.dark
+  // Sync divider with outline.main so all border colors are consistent.
+  // A copy: the API's answer is frozen (RTK Query), and assigning to it
+  // threw, so a first visit (no localStorage cache yet) kept the site theme
+  // until a reload.
+  const palette = saved?.palette as
     | (ThemeOptions["palette"] & {
         outline?: { main?: string }
         divider?: string
       })
     | undefined
   const outlineMain = palette?.outline?.main
-  if (outlineMain && !palette?.divider) {
-    orgOptions.palette = { ...orgOptions?.palette, divider: outlineMain }
-  }
+  const orgOptions: ThemeOptions | undefined =
+    outlineMain && !palette?.divider
+      ? { ...saved, palette: { ...palette, divider: outlineMain } }
+      : saved
   const base =
     mode === "light"
       ? [themeBase, mainThemeOptions, lightThemeOptions, orgOptions]

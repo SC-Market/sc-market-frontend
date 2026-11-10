@@ -18,7 +18,11 @@ import {
 } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import {
+  ExtendedTheme,
+  primaryFill,
+  primaryFillHover,
+} from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
 import { PATHS, MARKET_PATHS } from "../../routes/paths"
 
@@ -137,9 +141,10 @@ export function ContextAwareFAB() {
           ariaLabel={t("chromeUi.fab.quickActions")}
           sx={{
             "& .MuiSpeedDial-fab": {
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: primaryFill(theme),
+              color: theme.palette.primary.contrastText,
               "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
+                backgroundColor: primaryFillHover(theme),
               },
             },
           }}

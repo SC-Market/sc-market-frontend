@@ -2,6 +2,7 @@ import { Box, Tooltip, Typography } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import { useTranslation } from "react-i18next"
 import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
+import { primaryFill } from "../../hooks/styles/theme/roles"
 import type { ThemeModeData } from "./themeEditorFields"
 
 /** "Load Preset": a swatch per built-in custom theme. */
@@ -19,7 +20,8 @@ export function ThemePresetPicker({
       </Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
         {Array.from(CUSTOM_THEMES.entries()).map(([name, themeObj]) => {
-          const primary = themeObj.palette?.primary?.main || grey[600]
+          // The brand fill: primary.main became the accent text role (roles.ts)
+          const primary = primaryFill(themeObj) || grey[600]
           const bg = themeObj.palette?.background?.default || grey[900]
           return (
             <Tooltip key={name} title={name.replace(/_/g, " ")} placement="top">
@@ -44,7 +46,7 @@ export function ThemePresetPicker({
                       mode,
                       ...(p?.primary?.main && {
                         primary: {
-                          main: p.primary.main,
+                          main: primaryFill(themeObj),
                           contrastText: p.primary.contrastText,
                         },
                       }),

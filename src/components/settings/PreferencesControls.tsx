@@ -10,7 +10,11 @@ import {
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import {
+  ExtendedTheme,
+  primaryFill,
+  primaryFillHover,
+} from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import { changeLocale, languages } from "../../util/i18n"
 import { useLightTheme, ThemeChoice } from "../../hooks/styles/LightTheme"
@@ -273,10 +277,10 @@ export function PreferencesControls() {
                     borderBottomRightRadius: theme.shape.borderRadius,
                   },
                   "&.Mui-selected": {
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: primaryFill(theme),
                     color: theme.palette.primary.contrastText,
                     "&:hover": {
-                      backgroundColor: theme.palette.primary.dark,
+                      backgroundColor: primaryFillHover(theme),
                     },
                   },
                   "&:hover": {

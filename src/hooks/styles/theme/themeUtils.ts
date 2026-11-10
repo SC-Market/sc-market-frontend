@@ -15,14 +15,10 @@ export const bannerFadeGradient = (theme: Theme) =>
   `linear-gradient(to bottom, transparent, ${theme.palette.background.default}99 60%, ${theme.palette.background.default} 100%)`
 
 /**
- * Link text colour: the accent, or its dark shade on light themes (the
- * bright accent is under AA on white). MUI Link does the same through the
- * light theme's MuiLink override.
+ * Link text colour: the accent text role (text.accent; primary.main carries
+ * it at runtime), 4.5:1 on Paper and the page in every theme (./roles.ts).
  */
-export const linkColor = (theme: Theme) =>
-  theme.palette.mode === "light"
-    ? theme.palette.primary.dark
-    : theme.palette.primary.main
+export const linkColor = (theme: Theme) => theme.palette.primary.main
 
 /**
  * Navbar elevation shadow — uses the theme’s standard MUI shadow scale (same

@@ -1,6 +1,7 @@
 import React from "react"
 import { Box, Button } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { primaryFill } from "../../hooks/styles/Theme"
 
 export interface SkipLink {
   id: string
@@ -95,7 +96,7 @@ export function SkipNavigation({ links }: SkipNavigationProps) {
             position: "absolute",
             left: "-9999px",
             mr: 1,
-            backgroundColor: "primary.main",
+            backgroundColor: primaryFill,
             color: "primary.contrastText",
             "&:focus": {
               position: "static",

@@ -97,15 +97,15 @@ export const lightThemeOptions: ExtendedThemeOptions = {
         color: "inherit",
       },
     },
-    // Links take the accent. On white the bright green is 2.56:1, so light
-    // themes use its dark shade for link text (#10b881 -> 4.9:1).
+    // Links take the accent text colour (text.accent, which primary.main
+    // carries at runtime: ./roles.ts), 4.5:1 on Paper and the page.
     MuiLink: {
       styleOverrides: {
         root: ({ theme, ownerState }) =>
           (ownerState.color ?? "primary") === "primary"
             ? {
-                color: theme.palette.primary.dark,
-                textDecorationColor: alpha(theme.palette.primary.dark, 0.4),
+                color: theme.palette.primary.main,
+                textDecorationColor: alpha(theme.palette.primary.main, 0.4),
               }
             : {},
       },

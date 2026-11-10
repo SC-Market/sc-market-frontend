@@ -18,6 +18,8 @@ export {
   bannerFadeGradient,
   linkColor,
   navbarShadow,
+  primaryFill,
+  primaryFillHover,
 } from "./theme/index"
 
 export type { ExtendedTheme } from "./theme/index"

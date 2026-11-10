@@ -6,6 +6,7 @@ import {
 } from "@mui/material"
 import { deepmerge } from "@mui/utils"
 import { applyContrastFloors } from "./contrast"
+import { applyRoleTokens } from "./roles"
 import { applyTagPalette } from "./tagPalette"
 
 /**
@@ -24,8 +25,15 @@ export function createAppTheme(...layers: (ThemeOptions | undefined)[]): Theme {
     (merged, layer) => (layer ? deepmerge(merged, layer) : merged),
     {},
   )
+  // Role tokens are judged against the last layer: the theme's own choices
+  // (an org's saved theme, a preset) are kept, the rest derived (./roles.ts).
+  const own = layers[layers.length - 1]
   return responsiveFontSizes(
-    applyTagPalette(applyFocusRing(applyContrastFloors(createTheme(options)))),
+    applyTagPalette(
+      applyFocusRing(
+        applyRoleTokens(applyContrastFloors(createTheme(options)), own),
+      ),
+    ),
   )
 }
 

@@ -60,7 +60,8 @@ export function contrast(a: string, b: string): number {
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
 }
 
-function worst(color: string, backgrounds: string[]): number {
+/** The lowest contrast of `color` against any of the backgrounds. */
+export function worst(color: string, backgrounds: string[]): number {
   return Math.min(...backgrounds.map((bg) => contrast(color, bg)))
 }
 
@@ -84,6 +85,48 @@ export function ensureContrast(
     if (worst(candidate, backgrounds) >= min) return candidate
   }
   return pole
+}
+
+/** `color` as `#rrggbb` (alpha dropped: flatten translucent colours first). */
+export function toHex(color: string): string {
+  const [r, g, b] = toRgba(color)
+  return (
+    "#" +
+    [r, g, b]
+      .map((v) => Math.round(Math.min(255, Math.max(0, v))))
+      .map((v) => v.toString(16).padStart(2, "0"))
+      .join("")
+  )
+}
+
+/**
+ * The passing colour closest to `color`: moved towards white or black
+ * (whichever reaches `min` sooner) in 1% steps, so the hue and most of the
+ * look survive. A colour that already passes comes back unchanged; one
+ * that can't pass (the backgrounds are mid-grey) comes back as the better
+ * pole. Translucent colours are judged as painted on the first background.
+ */
+export function nudgeToContrast(
+  color: string,
+  backgrounds: string[],
+  min: number,
+): string {
+  const solid = flatten(color, backgrounds[0])
+  if (worst(solid, backgrounds) >= min) return color
+  const steps = (pole: string) => {
+    for (let i = 1; i <= 100; i++) {
+      const candidate = mix(solid, pole, i / 100)
+      if (worst(candidate, backgrounds) >= min) return { i, candidate }
+    }
+    return null
+  }
+  const up = steps("#ffffff")
+  const down = steps("#000000")
+  const best = up && down ? (up.i <= down.i ? up : down) : (up ?? down)
+  if (best) return toHex(best.candidate)
+  return worst("#ffffff", backgrounds) >= worst("#000000", backgrounds)
+    ? "#ffffff"
+    : "#000000"
 }
 
 /**
@@ -251,15 +294,19 @@ export function applyContrastFloors(theme: Theme): Theme {
 }
 
 /**
- * Outlined input borders. Resting: MUI's 23% ink, raised to 3:1 on Paper
- * and the page. Hover (text.primary) and focus (the input's palette colour)
+ * Outlined input borders. Resting: the control border (outline.strong),
+ * raised to 3:1 on Paper and the page. Hover (text.primary) and focus (the input's palette colour)
  * are raised to at least the resting ratio, so neither is ever weaker.
  */
 export const outlinedInput = cached((theme: Theme, color: string) => {
   const { paper, page } = surfaces(theme)
   const bgs = [paper, page]
+  // The control-border token (outline.strong, ./roles.ts), never under 3:1
   const ink = theme.palette.mode === "dark" ? "255, 255, 255" : "0, 0, 0"
-  const restingRaw = flatten(`rgba(${ink}, 0.23)`, paper)
+  const restingRaw = flatten(
+    theme.palette.outline?.strong ?? `rgba(${ink}, 0.23)`,
+    paper,
+  )
   const resting = ensureContrast(restingRaw, bgs, AA_UI)
   const floor = Math.max(AA_UI, worst(resting, bgs))
   const entry = (theme.palette as unknown as Record<string, { main?: string }>)[

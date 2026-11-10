@@ -8,6 +8,37 @@ import {
   selectedToggle,
   withContrast,
 } from "./contrast"
+import { primaryFill, primaryFillHover } from "./roles"
+
+/**
+ * Keyboard focus ring for every ButtonBase (buttons, tabs, list rows, icon
+ * buttons, chips, switches): MUI resets their outline to 0 and shows only a
+ * faint background, so src/index.css's `*:focus` ring never reached them.
+ * `inset` draws it inside the control, for ones inside clipping scrollers
+ * (Tabs, menus, lists).
+ */
+function focusRing(theme: Theme, inset = false) {
+  const width = theme.borderWidth?.focus ?? 2
+  return {
+    "&.Mui-focusVisible": {
+      outline: `${width}px solid ${theme.palette.common.focus}`,
+      outlineOffset: inset ? -width : 2,
+    },
+  }
+}
+
+/** Filled primary controls take the brand fill (./roles.ts). */
+function primaryFilled(theme: Theme) {
+  const fill = primaryFill(theme)
+  return {
+    backgroundColor: fill,
+    color: theme.palette.primary.contrastText,
+    "&:hover": {
+      backgroundColor: primaryFillHover(theme),
+      "@media (hover: none)": { backgroundColor: fill },
+    },
+  }
+}
 
 export function getBaseComponentOverrides(): Components<
   Omit<Theme, "components">
@@ -56,7 +87,12 @@ export function getBaseComponentOverrides(): Components<
             const neutral =
               ownerState.color === "neutral" &&
               ownerState.variant !== "contained"
+            // Filled primary: the brand fill, not the text role (./roles.ts)
+            const filledPrimary =
+              ownerState.variant === "contained" &&
+              (ownerState.color ?? "primary") === "primary"
             return {
+              ...(filledPrimary && primaryFilled(theme)),
               ...(accent && {
                 color: accent.text,
                 "&:hover": { backgroundColor: accent.hover },
@@ -102,6 +138,43 @@ export function getBaseComponentOverrides(): Components<
             borderRadius: theme.spacing(extTheme.borderRadius.button),
           }
         },
+      },
+    },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: ({ theme }) => focusRing(theme),
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }) => focusRing(theme, true),
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: ({ theme }) => focusRing(theme, true),
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: ({ theme }) => focusRing(theme, true),
+      },
+    },
+    MuiFab: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) =>
+          ownerState.color === "primary" ? primaryFilled(theme) : {},
+      },
+    },
+    MuiBadge: {
+      styleOverrides: {
+        badge: ({ theme, ownerState }) =>
+          ownerState.color === "primary"
+            ? {
+                backgroundColor: primaryFill(theme),
+                color: theme.palette.primary.contrastText,
+              }
+            : {},
       },
     },
     MuiSkeleton: {
@@ -179,6 +252,18 @@ export function getBaseComponentOverrides(): Components<
                   }
                 })
               : {}
+          // Filled primary chips: the brand fill (./roles.ts)
+          const filledPrimary =
+            ownerState.variant !== "outlined" && ownerState.color === "primary"
+              ? {
+                  backgroundColor: primaryFill(theme),
+                  color: theme.palette.primary.contrastText,
+                  "& .MuiChip-icon": { color: "inherit" },
+                  "&.MuiChip-clickable:hover, &.Mui-focusVisible": {
+                    backgroundColor: primaryFillHover(theme),
+                  },
+                }
+              : {}
           // Neutral outlined chips: bright text on the 3:1 control border
           const neutral =
             ownerState.variant === "outlined" &&
@@ -192,6 +277,7 @@ export function getBaseComponentOverrides(): Components<
             fontFamily: theme.typography.fontFamilyHeading,
             borderRadius: theme.spacing(extTheme.borderRadius.chip),
             ...neutral,
+            ...filledPrimary,
             ...accent,
           }
         },
