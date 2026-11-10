@@ -472,7 +472,7 @@
     "unofficial": "这是一个非官方的 Star Citizen 粉丝网站，与 Cloud Imperium 集团旗下公司无关。本站中非由站长或用户创作的所有内容，均归其各自所有者所有。",
     "officialSite": "Star Citizen 官方网站：",
     "referralCode": "推荐码：{{code}}",
-    "acknowledgments": "特别感谢 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供标志，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
+    "acknowledgments": "特别感谢 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供标志。",
     "apiDocs": "API 文档",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie 偏好",
@@ -482,7 +482,8 @@
     "groupHelp": "帮助",
     "groupProject": "项目",
     "groupLegal": "法律信息",
-    "scOrgsHome": "访问 SC Orgs"
+    "scOrgsHome": "访问 SC Orgs",
+    "tagline": "星际公民 (Star Citizen) 玩家对玩家交易市场"
   },
   "itemAcquisition": {
     "addToCart": "加入购物车",
@@ -2630,7 +2631,6 @@
     "photoUploadFailed": "部分照片上传失败"
   },
   "SelectPhotosArea": {
-    "imageSearch": "图片搜索",
     "upload": "上传",
     "addUrl": "添加URL",
     "enterImageUrl": "输入图片 URL：",
@@ -3713,15 +3713,6 @@
     },
     "dialog": {
       "selectImage": {
-        "title": "选择图片",
-        "imageUrl": {
-          "label": "图片链接",
-          "placeholder": "必须是图片的直接链接，来自 Imgur、RSI 或 starcitizen.tools"
-        },
-        "imageSearch": {
-          "label": "图片搜索",
-          "placeholder": "用于从 starcitizen.tools 搜索图片的查询词"
-        },
         "buttons": {
           "cancel": "取消",
           "saveAndClose": "保存并关闭"
@@ -4657,11 +4648,6 @@
     "min": "最小",
     "none": "无",
     "selectMultiple": "选择…"
-  },
-  "imageSearch": {
-    "noImageSelected": "未选择图片",
-    "searchResultImage": "搜索结果图片 {{index}}",
-    "selectedImagePreview": "所选图片预览，来自 URL：{{url}}"
   },
   "inventory": {
     "actions": "操作",

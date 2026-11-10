@@ -468,7 +468,7 @@
     "unofficial": "Este es un sitio de fans no oficial de Star Citizen, sin afiliación con el grupo de empresas Cloud Imperium. Todo el contenido de este sitio no creado por su anfitrión o sus usuarios es propiedad de sus respectivos dueños",
     "officialSite": "Sitio oficial de Star Citizen:",
     "referralCode": "Código de referido: {{code}}",
-    "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> y <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> por sus APIs.",
+    "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo.",
     "apiDocs": "Documentación de la API",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Preferencias de cookies",
@@ -478,7 +478,8 @@
     "groupHelp": "Ayuda",
     "groupProject": "Proyecto",
     "groupLegal": "Legal",
-    "scOrgsHome": "Visitar SC Orgs"
+    "scOrgsHome": "Visitar SC Orgs",
+    "tagline": "El mercado entre jugadores de Star Citizen"
   },
   "itemAcquisition": {
     "addToCart": "Añadir al carrito",
@@ -2650,7 +2651,6 @@
     "photoUploadFailed": "No se pudieron subir algunas fotos"
   },
   "SelectPhotosArea": {
-    "imageSearch": "Búsqueda de imágenes",
     "upload": "Subir",
     "addUrl": "Añadir URL",
     "enterImageUrl": "Introduce la URL de la imagen:",
@@ -4634,11 +4634,6 @@
     "none": "Ninguno",
     "selectMultiple": "Seleccionar..."
   },
-  "imageSearch": {
-    "noImageSelected": "No se ha seleccionado ninguna imagen",
-    "searchResultImage": "Imagen de resultado de búsqueda {{index}}",
-    "selectedImagePreview": "Vista previa de la imagen seleccionada desde la URL: {{url}}"
-  },
   "inventory": {
     "actions": "Acciones",
     "addLot": "Añadir lote",
@@ -5716,16 +5711,7 @@
         "buttons": {
           "cancel": "Cancelar",
           "saveAndClose": "Guardar y cerrar"
-        },
-        "imageSearch": {
-          "label": "Búsqueda de imágenes",
-          "placeholder": "Consulta para buscar imágenes de starcitizen.tools"
-        },
-        "imageUrl": {
-          "label": "URL de la imagen",
-          "placeholder": "Debe ser una URL directa a la imagen, de Imgur, RSI o starcitizen.tools"
-        },
-        "title": "Seleccionar imagen"
+        }
       }
     },
     "goBack": "Volver",

@@ -466,7 +466,7 @@
     "unofficial": "這是一個非官方的 Star Citizen 粉絲網站，與 Cloud Imperium 集團旗下公司無關。本站中非由站長或使用者創作的所有內容，均歸其各自所有者所有。",
     "officialSite": "Star Citizen 官方網站：",
     "referralCode": "推薦碼：{{code}}",
-    "acknowledgments": "特別感謝 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供標誌，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
+    "acknowledgments": "特別感謝 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供標誌。",
     "apiDocs": "API 文件",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie 偏好",
@@ -476,7 +476,8 @@
     "groupHelp": "幫助",
     "groupProject": "專案",
     "groupLegal": "法律資訊",
-    "scOrgsHome": "造訪 SC Orgs"
+    "scOrgsHome": "造訪 SC Orgs",
+    "tagline": "星際公民 (Star Citizen) 玩家對玩家交易市場"
   },
   "itemAcquisition": {
     "addToCart": "加入購物車",
@@ -2570,7 +2571,6 @@
     "photoUploadFailed": "部分照片上傳失敗"
   },
   "SelectPhotosArea": {
-    "imageSearch": "圖片搜尋",
     "upload": "上傳",
     "addUrl": "添加URL",
     "enterImageUrl": "輸入圖片網址：",
@@ -4501,11 +4501,6 @@
     "none": "無",
     "selectMultiple": "選擇…"
   },
-  "imageSearch": {
-    "noImageSelected": "未選擇圖片",
-    "searchResultImage": "搜尋結果圖片 {{index}}",
-    "selectedImagePreview": "來自 URL 的所選圖片預覽：{{url}}"
-  },
   "inventory": {
     "actions": "操作",
     "addLot": "新增批次",
@@ -5644,16 +5639,7 @@
         "buttons": {
           "cancel": "取消",
           "saveAndClose": "儲存並關閉"
-        },
-        "imageSearch": {
-          "label": "圖片搜尋",
-          "placeholder": "輸入搜尋查詢以從 starcitizen.tools 搜尋圖片"
-        },
-        "imageUrl": {
-          "label": "圖片網址",
-          "placeholder": "必須是圖片的直接網址，來自 Imgur、RSI 或 starcitizen.tools"
-        },
-        "title": "選擇圖片"
+        }
       }
     },
     "goBack": "返回",

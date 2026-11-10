@@ -1,6 +1,4 @@
-import { UnderlineLink } from "../typography/UnderlineLink"
-import { Box, Divider, Grid, Link, LinkProps, Typography } from "@mui/material"
-import React, { useId } from "react"
+import { Avatar, Box, Grid, Typography } from "@mui/material"
 import { useCookies } from "react-cookie"
 import { CONSENT_COOKIE } from "../../util/consent/analyticsConsent"
 import { DISCORD_INVITE } from "../../util/constants"
@@ -13,11 +11,25 @@ import { Helmet } from "@unhead/react/helmet"
 import { serializeJsonLd } from "../../seo/pageHead"
 import { siteJsonLd } from "../../seo/siteHeads"
 import { Link as RouterLink } from "react-router-dom"
-import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
+import {
+  CHANGELOG_PATHS,
+  HELP_PATHS,
+  LEGAL_PATHS,
+  PATHS,
+} from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "./developerLinks"
 import { useNow } from "../../util/format"
 import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
+import scMarketLogo from "../../assets/scmarket-logo.webp"
+import {
+  FooterGroup,
+  FooterLink,
+  MEDIUM,
+  NoticeLink,
+  PHONE,
+  useFooterColors,
+} from "./FooterParts"
 
 /** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
 export const SC_ORGS_LINKS = [
@@ -48,83 +60,16 @@ export const SC_ORGS_LINKS = [
   },
 ] as const
 
-/** One footer column: a labelled nav landmark with a heading and a link list. */
-function FooterGroup(props: { title: string; children: React.ReactNode }) {
-  const id = useId()
-  return (
-    <Box component="nav" aria-labelledby={id}>
-      <Typography
-        id={id}
-        component="h2"
-        variant="subtitle2"
-        color="text.secondary"
-        sx={{ fontWeight: 600, mb: 1 }}
-      >
-        {props.title}
-      </Typography>
-      <Box
-        component="ul"
-        sx={{
-          listStyle: "none",
-          m: 0,
-          p: 0,
-          display: "flex",
-          flexDirection: "column",
-          gap: 0.75,
-          typography: "body2",
-          // Links, and the Report button that inherits its colour.
-          color: "text.accent",
-        }}
-      >
-        {props.children}
-      </Box>
-    </Box>
-  )
-}
-
-/** A footer list item: an accent link with the site's hover underline. */
-function FooterLink({
-  children,
-  ...props
-}: LinkProps & {
-  /** RouterLink or "button"; `to` goes with RouterLink. */
-  component?: React.ElementType
-  to?: string
-  type?: "button"
-}) {
-  return (
-    <li>
-      <Link color="inherit" underline="none" {...props}>
-        <UnderlineLink component="span">{children}</UnderlineLink>
-      </Link>
-    </li>
-  )
-}
-
-/** An off-site link in the notices; `label` names it for screen readers. */
-function CreditLink(props: { href: string; label?: string }) {
-  return (
-    <Link
-      rel="noopener noreferrer"
-      target="_blank"
-      href={props.href}
-      aria-label={props.label}
-    >
-      <UnderlineLink component="span" color="text.primary" variant="body2">
-        {props.label ?? new URL(props.href).hostname}
-      </UnderlineLink>
-    </Link>
-  )
-}
-
 export function Footer() {
   const { t } = useTranslation()
   const now = useNow()
   const [, , removeCookie] = useCookies([CONSENT_COOKIE])
   const theme = useTheme<ExtendedTheme>()
+  const colors = useFooterColors(theme)
   // On an org's white-label domain the footer is the minimum (support, help,
-  // report, legal, the notices): no SC Market structured data, nor links into
-  // SC Market's project pages, its developer tools or SC Orgs.
+  // report, legal, the notices): no SC Market structured data, brand block,
+  // credit or referral code, nor links into SC Market's project pages, its
+  // developer tools or SC Orgs.
   const { isCustomDomain } = useCustomDomain()
   // Help pages render only on the official site; white-label domains link out.
   const helpLink = (path: string) =>
@@ -155,202 +100,285 @@ export function Footer() {
           </script>
         </Helmet>
       )}
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
+      {/* The band: a solid surface under a top rule, like the navbar. Its
+          border-image, outset sideways and down, carries the surface past
+          the page container's padding to the edges of <main> (which clips
+          it) and under the page's bottom padding. Outset paint is ink
+          overflow, so it never adds a scrollbar. */}
+      <Box
+        component="footer"
+        sx={{
+          containerType: "inline-size",
+          containerName: "sc-footer",
+          backgroundColor: colors.band,
+          borderImage: `linear-gradient(${theme.palette.divider} 0 1px, ${colors.band} 1px) fill 0 / 0 / 0 100vmax 100vmax`,
+          color: "text.primary",
+        }}
+      >
         {/* One centred, max-width container on every page, whatever width
-            the page layout around it uses (/market runs full-bleed). Its side
-            padding also keeps the text off the screen edge on phones.
-            Stacked below lg; from lg the link columns sit on the left and the
-            notices take the rest of the row on the right. */}
-        <Grid item xs={12}>
+            the page layout around it uses (/market runs full-bleed). */}
+        <Box
+          sx={{
+            maxWidth: 1200,
+            mx: "auto",
+            px: 4,
+            pt: 5.5,
+            [PHONE]: { px: 2, pt: 4 },
+          }}
+        >
+          {/* The brand and the link columns. Wide: the brand on the left and
+              five columns sized to their content. Medium: three columns under
+              the brand. Phones: two. */}
           <Box
             sx={{
-              maxWidth: 1200,
-              mx: "auto",
-              px: { xs: 2, sm: 3 },
-              pb: { xs: 3, lg: 4 },
-              display: "flex",
-              flexDirection: { xs: "column", lg: "row" },
-              alignItems: { lg: "flex-start" },
-              gap: { xs: 2.5, lg: 6 },
+              display: "grid",
+              gridTemplateColumns: isCustomDomain
+                ? "repeat(2, max-content)"
+                : "minmax(220px, 1fr) repeat(5, max-content)",
+              columnGap: isCustomDomain ? 9 : 5.5,
+              rowGap: 3.5,
+              [MEDIUM]: isCustomDomain
+                ? {}
+                : { gridTemplateColumns: "repeat(3, minmax(0, 1fr))" },
+              [PHONE]: {
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                columnGap: 2.5,
+              },
             }}
           >
-            {/* Columns sized to their content, not stretched. */}
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "minmax(0, 1fr)",
-                  sm: "repeat(3, minmax(0, max-content))",
-                  md: "repeat(5, minmax(0, max-content))",
-                },
-                flex: { lg: "0 1 auto" },
-                // Centred over the centred notices while stacked.
-                justifyContent: { sm: "center", lg: "start" },
-                minWidth: 0,
-                columnGap: { xs: 3, md: 4 },
-                rowGap: 2.5,
-              }}
-            >
-              <FooterGroup title={t("footer.groupHelp", "Help")}>
-                <FooterLink
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href={DISCORD_INVITE}
+            {!isCustomDomain && (
+              <Box sx={{ minWidth: 0, [MEDIUM]: { gridColumn: "1 / -1" } }}>
+                <Box
+                  component={RouterLink}
+                  to={PATHS.home}
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 1.25,
+                    color: "text.secondary",
+                    textDecoration: "none",
+                  }}
                 >
-                  {t("footer.support", "Support")}
-                </FooterLink>
-                <FooterLink {...helpLink(HELP_PATHS.hub)}>
-                  {t("footer.helpGuides", "Help & Guides")}
-                </FooterLink>
-                {!isCustomDomain && (
-                  <>
-                    <FooterLink
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={DISCORD_INVITE}
-                    >
-                      {t("footer.discord", "Discord")}
-                    </FooterLink>
-                    <FooterLink
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={discordInstallPath("server", "footer")}
-                    >
-                      {t("footer.discordBot", "Discord Bot")}
-                    </FooterLink>
-                  </>
-                )}
-                <li>
-                  <ReportButton />
-                </li>
-              </FooterGroup>
+                  {/* Decorative: the link's text says "SC Market". */}
+                  <Avatar
+                    src={scMarketLogo}
+                    alt=""
+                    variant="rounded"
+                    sx={{ width: 36, height: 36 }}
+                  />
+                  <Typography
+                    component="span"
+                    sx={{
+                      fontFamily: theme.typography.fontFamilyHeading,
+                      fontSize: "1.0625rem",
+                      fontWeight: 600,
+                    }}
+                  >
+                    SC Market
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    mt: 1.25,
+                    fontSize: "0.875rem",
+                    maxWidth: 280,
+                    [MEDIUM]: { maxWidth: "none" },
+                  }}
+                >
+                  {t(
+                    "footer.tagline",
+                    "The player-to-player marketplace for Star Citizen",
+                  )}
+                </Typography>
+              </Box>
+            )}
 
+            <FooterGroup title={t("footer.groupHelp", "Help")} colors={colors}>
+              <FooterLink
+                rel="noopener noreferrer"
+                target="_blank"
+                href={DISCORD_INVITE}
+              >
+                {t("footer.support", "Support")}
+              </FooterLink>
+              <FooterLink {...helpLink(HELP_PATHS.hub)}>
+                {t("footer.helpGuides", "Help & Guides")}
+              </FooterLink>
               {!isCustomDomain && (
                 <>
-                  <FooterGroup title={t("footer.groupProject", "Project")}>
-                    <FooterLink {...helpLink(HELP_PATHS.about)}>
-                      {t("footer.about", "About")}
-                    </FooterLink>
-                    <FooterLink {...helpLink(CHANGELOG_PATHS.index)}>
-                      {t("footer.changelog", "Changelog")}
-                    </FooterLink>
-                    <FooterLink
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={"https://www.patreon.com/henry232323"}
-                    >
-                      {t("footer.donate", "Donate")}
-                    </FooterLink>
-                    <FooterLink
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={"https://github.com/SC-Market"}
-                    >
-                      {t("footer.github", "Github")}
-                    </FooterLink>
-                  </FooterGroup>
-
-                  {/* Developers: the public API, its spec, the price feed and the SDK (also in the bridge HTML). */}
-                  <FooterGroup
-                    title={t(DEVELOPERS_HEADING.key, DEVELOPERS_HEADING.label)}
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={DISCORD_INVITE}
                   >
-                    <FooterLink
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href={"https://api.sc-market.space/docs"}
-                    >
-                      {t("footer.apiDocs", "API Docs")}
-                    </FooterLink>
-                    {DEVELOPER_LINKS.map((link) => (
-                      <FooterLink key={link.href} {...developerLink(link.href)}>
-                        {t(link.key, link.label)}
-                      </FooterLink>
-                    ))}
-                  </FooterGroup>
-
-                  {/* Deep links into SC Orgs (our sister site), not just its homepage. */}
-                  <FooterGroup title={t("footer.scOrgs", "SC Orgs")}>
-                    <FooterLink
-                      rel="noopener"
-                      target="_blank"
-                      href={"https://sc-orgs.space"}
-                    >
-                      {t("footer.scOrgsHome", "Visit SC Orgs")}
-                    </FooterLink>
-                    {SC_ORGS_LINKS.map((link) => (
-                      <FooterLink
-                        key={link.href}
-                        rel="noopener"
-                        target="_blank"
-                        href={link.href}
-                      >
-                        {t(link.key, link.label)}
-                      </FooterLink>
-                    ))}
-                  </FooterGroup>
+                    {t("footer.discord", "Discord")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={discordInstallPath("server", "footer")}
+                  >
+                    {t("footer.discordBot", "Discord Bot")}
+                  </FooterLink>
                 </>
               )}
+              <li>
+                <ReportButton />
+              </li>
+            </FooterGroup>
 
-              <FooterGroup title={t("footer.groupLegal", "Legal")}>
-                {/* nofollow: on every page, these boilerplate links outnumbered
-                  every content link in Search Console's internal links. */}
-                <FooterLink
-                  rel="nofollow noopener noreferrer"
-                  target="_blank"
-                  href={LEGAL_PATHS.privacy}
+            {!isCustomDomain && (
+              <>
+                <FooterGroup
+                  title={t("footer.groupProject", "Project")}
+                  colors={colors}
                 >
-                  {t("footer.privacyPolicy", "Privacy Policy")}
-                </FooterLink>
-                <FooterLink
-                  rel="nofollow noopener noreferrer"
-                  target="_blank"
-                  href={LEGAL_PATHS.terms}
+                  <FooterLink {...helpLink(HELP_PATHS.about)}>
+                    {t("footer.about", "About")}
+                  </FooterLink>
+                  <FooterLink {...helpLink(CHANGELOG_PATHS.index)}>
+                    {t("footer.changelog", "Changelog")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://www.patreon.com/henry232323"}
+                  >
+                    {t("footer.donate", "Donate")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://github.com/SC-Market"}
+                  >
+                    {t("footer.github", "Github")}
+                  </FooterLink>
+                </FooterGroup>
+
+                {/* Developers: the public API, its spec, the price feed and the SDK (also in the bridge HTML). */}
+                <FooterGroup
+                  title={t(DEVELOPERS_HEADING.key, DEVELOPERS_HEADING.label)}
+                  colors={colors}
                 >
-                  {t("footer.termsOfService", "Terms of Service")}
-                </FooterLink>
-                {/* Reopens the cookie bar (it shows while no choice is stored) */}
-                <FooterLink
-                  component="button"
-                  type="button"
-                  onClick={() => removeCookie(CONSENT_COOKIE, { path: "/" })}
-                  sx={{ font: "inherit", textAlign: "left" }}
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://api.sc-market.space/docs"}
+                  >
+                    {t("footer.apiDocs", "API Docs")}
+                  </FooterLink>
+                  {DEVELOPER_LINKS.map((link) => (
+                    <FooterLink key={link.href} {...developerLink(link.href)}>
+                      {t(link.key, link.label)}
+                    </FooterLink>
+                  ))}
+                </FooterGroup>
+
+                {/* Deep links into SC Orgs (our sister site), not just its homepage. */}
+                <FooterGroup
+                  title={t("footer.scOrgs", "SC Orgs")}
+                  colors={colors}
                 >
-                  {t("footer.cookiePreferences", "Cookie preferences")}
-                </FooterLink>
-              </FooterGroup>
-            </Box>
-            <Divider light sx={{ display: { lg: "none" } }} />
-            <Divider
-              light
-              orientation="vertical"
-              flexItem
-              sx={{ display: { xs: "none", lg: "block" } }}
-            />
-            {/* The notices: one short paragraph each, so they stay readable
-              in the narrower right-hand column. */}
-            <Typography
-              component="div"
-              variant="body2"
-              color="textSecondary"
-              sx={{
-                flex: { lg: "1 1 0" },
-                minWidth: { lg: 300 },
-                maxWidth: { xs: 720, lg: "none" },
-                mx: { xs: "auto", lg: 0 },
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-                textAlign: { xs: "center", lg: "left" },
-                "& p": { m: 0 },
-              }}
+                  <FooterLink
+                    rel="noopener"
+                    target="_blank"
+                    href={"https://sc-orgs.space"}
+                  >
+                    {t("footer.scOrgsHome", "Visit SC Orgs")}
+                  </FooterLink>
+                  {SC_ORGS_LINKS.map((link) => (
+                    <FooterLink
+                      key={link.href}
+                      rel="noopener"
+                      target="_blank"
+                      href={link.href}
+                    >
+                      {t(link.key, link.label)}
+                    </FooterLink>
+                  ))}
+                </FooterGroup>
+              </>
+            )}
+
+            <FooterGroup
+              title={t("footer.groupLegal", "Legal")}
+              colors={colors}
             >
-              <p>
+              {/* nofollow: on every page, these boilerplate links outnumbered
+                  every content link in Search Console's internal links. */}
+              <FooterLink
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                href={LEGAL_PATHS.privacy}
+              >
+                {t("footer.privacyPolicy", "Privacy Policy")}
+              </FooterLink>
+              <FooterLink
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                href={LEGAL_PATHS.terms}
+              >
+                {t("footer.termsOfService", "Terms of Service")}
+              </FooterLink>
+              {/* Reopens the cookie bar (it shows while no choice is stored) */}
+              <FooterLink
+                component="button"
+                type="button"
+                onClick={() => removeCookie(CONSENT_COOKIE, { path: "/" })}
+                sx={{ font: "inherit", textAlign: "left" }}
+              >
+                {t("footer.cookiePreferences", "Cookie preferences")}
+              </FooterLink>
+            </FooterGroup>
+          </Box>
+
+          {/* The notices, in a muted bar under a rule: the copyright (and
+              the referral code) on the left; the trademark and fansite
+              notices, the official-site link and the credit on the right.
+              The fansite notice and the official-site link always show
+              (RSI's fansite rules). */}
+          <Box
+            sx={{
+              mt: 5,
+              borderTop: 1,
+              borderColor: "divider",
+              pt: 2.5,
+              pb: 3.5,
+              display: "grid",
+              gridTemplateColumns: "260px minmax(0, 1fr)",
+              columnGap: 5,
+              rowGap: 1,
+              fontSize: "0.78125rem",
+              lineHeight: 1.55,
+              color: colors.notice,
+              "& p": { m: 0 },
+              [PHONE]: { gridTemplateColumns: "minmax(0, 1fr)", mt: 3.5 },
+            }}
+          >
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+              <Box
+                component="p"
+                sx={{ color: "text.primary", fontSize: "0.8125rem" }}
+              >
                 {t("footer.copyright", "Copyright © ")} SC Market{" "}
                 {new Date(now).getUTCFullYear() + 930}.
-              </p>
+              </Box>
+              {!isCustomDomain && (
+                <p>
+                  {t("footer.referralCode", {
+                    code: "STAR-GSFY-MQW9",
+                  })}
+                </p>
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.75,
+                maxWidth: 780,
+              }}
+            >
               <p>
                 {t(
                   "footer.trademark",
@@ -364,51 +392,32 @@ export function Footer() {
                 )}
               </p>
               <p>
-                {/* RSI's fansite rules: the notice plus a link to the official site. */}
                 {t("footer.officialSite", "Official Star Citizen site:")}{" "}
-                <CreditLink href="https://robertsspaceindustries.com" />
+                <NoticeLink
+                  href="https://robertsspaceindustries.com"
+                  colors={colors}
+                />
               </p>
               {!isCustomDomain && (
-                <>
-                  <p>
-                    <Trans
-                      i18nKey="footer.acknowledgments"
-                      components={{
-                        ladyFleurLink: (
-                          <CreditLink
-                            href="https://www.youtube.com/@robinerino"
-                            label="LadyFleur"
-                          />
-                        ),
-                        starCitizenApiLink: (
-                          <CreditLink
-                            href="https://starcitizen-api.com/"
-                            label="StarCitizen-API"
-                          />
-                        ),
-                        nexdLink: (
-                          <CreditLink href="https://nexd.to/" label="NEXD" />
-                        ),
-                        starCitizenWikiLink: (
-                          <CreditLink
-                            href="https://starcitizen.tools/"
-                            label="Star Citizen Wiki"
-                          />
-                        ),
-                      }}
-                    />
-                  </p>
-                  <p>
-                    {t("footer.referralCode", {
-                      code: "STAR-GSFY-MQW9",
-                    })}
-                  </p>
-                </>
+                <p>
+                  <Trans
+                    i18nKey="footer.acknowledgments"
+                    components={{
+                      ladyFleurLink: (
+                        <NoticeLink
+                          href="https://www.youtube.com/@robinerino"
+                          label="LadyFleur"
+                          colors={colors}
+                        />
+                      ),
+                    }}
+                  />
+                </p>
               )}
-            </Typography>
+            </Box>
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Grid>
   )
 }

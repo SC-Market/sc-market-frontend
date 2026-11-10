@@ -4,14 +4,11 @@ import { generatedApi } from "./generatedApi"
 import { generatedApiV2 } from "./generatedApiV2"
 import { v2CacheInvalidationMiddleware } from "./v2CacheInvalidation"
 import type { NetworkEnv, StoreExtra } from "./networkEnv"
-// import {wikiActionApi, wikiRestApi} from "./wiki";
 
 const rootReducer = combineReducers({
   [serviceApi.reducerPath]: serviceApi.reducer,
   [generatedApi.reducerPath]: generatedApi.reducer,
   [generatedApiV2.reducerPath]: generatedApiV2.reducer,
-  // [wikiRestApi.reducerPath]: wikiRestApi.reducer,
-  // [wikiActionApi.reducerPath]: wikiActionApi.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

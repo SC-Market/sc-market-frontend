@@ -47,7 +47,10 @@ export const breakpointsValues = {
   xxxl: 2200,
 } as const
 
-export const MISSING_IMAGE_URL =
-  "https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
+/**
+ * Missing-image placeholder, served from public/. A root-relative path, so it
+ * loads from the current origin on sc-market.space and on white-label domains.
+ */
+export const MISSING_IMAGE_URL = "/missing-image.webp"
 
 export { defaultLayoutSpacing, defaultBorderRadius, defaultBorderWidth }
