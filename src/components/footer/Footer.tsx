@@ -380,21 +380,6 @@ export function Footer() {
                             label="LadyFleur"
                           />
                         ),
-                        starCitizenApiLink: (
-                          <CreditLink
-                            href="https://starcitizen-api.com/"
-                            label="StarCitizen-API"
-                          />
-                        ),
-                        nexdLink: (
-                          <CreditLink href="https://nexd.to/" label="NEXD" />
-                        ),
-                        starCitizenWikiLink: (
-                          <CreditLink
-                            href="https://starcitizen.tools/"
-                            label="Star Citizen Wiki"
-                          />
-                        ),
                       }}
                     />
                   </p>

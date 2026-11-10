@@ -468,7 +468,7 @@
     "unofficial": "Ceci est un site de fans non officiel de Star Citizen, non affilié au groupe d'entreprises Cloud Imperium. Tout le contenu de ce site non rédigé par son hébergeur ou ses utilisateurs est la propriété de leurs détenteurs respectifs",
     "officialSite": "Site officiel de Star Citizen :",
     "referralCode": "Code de parrainage : {{code}}",
-    "acknowledgments": "Remerciements spéciaux à <ladyFleurLink>LadyFleur</ladyFleurLink> pour le logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> et <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> pour leurs APIs.",
+    "acknowledgments": "Remerciements spéciaux à <ladyFleurLink>LadyFleur</ladyFleurLink> pour le logo.",
     "apiDocs": "Documentation de l'API",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Préférences de cookies",
@@ -2650,7 +2650,6 @@
     "photoUploadFailed": "Échec de l'envoi de certaines photos"
   },
   "SelectPhotosArea": {
-    "imageSearch": "Recherche d'images",
     "upload": "Télécharger",
     "addUrl": "Ajouter URL",
     "enterImageUrl": "Entrer l'URL de l'image :",
@@ -4634,11 +4633,6 @@
     "none": "Aucun",
     "selectMultiple": "Sélectionner..."
   },
-  "imageSearch": {
-    "noImageSelected": "Aucune image sélectionnée",
-    "searchResultImage": "Image du résultat de recherche {{index}}",
-    "selectedImagePreview": "Aperçu de l'image sélectionnée depuis l'URL : {{url}}"
-  },
   "inventory": {
     "actions": "Actions",
     "addLot": "Ajouter un lot",
@@ -5716,16 +5710,7 @@
         "buttons": {
           "cancel": "Annuler",
           "saveAndClose": "Enregistrer et fermer"
-        },
-        "imageSearch": {
-          "label": "Recherche d'images",
-          "placeholder": "Requête pour rechercher des images sur starcitizen.tools"
-        },
-        "imageUrl": {
-          "label": "URL de l'image",
-          "placeholder": "Doit être une URL directe vers l'image, depuis Imgur, RSI ou starcitizen.tools"
-        },
-        "title": "Sélectionner une image"
+        }
       }
     },
     "goBack": "Retour",

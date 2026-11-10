@@ -1981,7 +1981,7 @@
     "priceFeed": "Price data feed",
     "sdk": "SDK on GitHub",
     "about": "About",
-    "acknowledgments": "Special thanks to <ladyFleurLink>LadyFleur</ladyFleurLink> for the logo, and <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink>, and <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> for their APIs.",
+    "acknowledgments": "Special thanks to <ladyFleurLink>LadyFleur</ladyFleurLink> for the logo.",
     "apiDocs": "API Docs",
     "copyright": "Copyright © ",
     "discord": "Discord",
@@ -2056,11 +2056,6 @@
     "image_url_help": "Must be a direct URL to the image, from Imgur, RSI, or starcitizen.tools",
     "save_and_close": "Save and Close",
     "select_image": "Select Image"
-  },
-  "imageSearch": {
-    "noImageSelected": "No image selected",
-    "searchResultImage": "Search result image {{index}}",
-    "selectedImagePreview": "Preview of selected image from URL: {{url}}"
   },
   "inventory": {
     "actions": "Actions",
@@ -4418,7 +4413,6 @@
     "dropHere": "Drop Here",
     "enterImageUrl": "Enter image URL:",
     "fileTooLarge": "File too large. Maximum size is 25MB.",
-    "imageSearch": "Image Search",
     "imageUrl": "Image URL",
     "imageUrlHelp": "Enter a direct URL to an image (from Imgur, RSI, or starcitizen.tools)",
     "someFilesTooLarge": "Some files were too large and were skipped. Maximum file size is 25MB.",
@@ -5649,16 +5643,7 @@
         "buttons": {
           "cancel": "Cancel",
           "saveAndClose": "Save and Close"
-        },
-        "imageSearch": {
-          "label": "Image Search",
-          "placeholder": "Search query to search for images from starcitizen.tools"
-        },
-        "imageUrl": {
-          "label": "Image URL",
-          "placeholder": "Must be a direct URL to the image, from Imgur, RSI, or starcitizen.tools"
-        },
-        "title": "Select Image"
+        }
       }
     },
     "goBack": "Go back",

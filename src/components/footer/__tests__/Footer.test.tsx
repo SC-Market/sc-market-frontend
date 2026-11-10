@@ -88,6 +88,17 @@ describe("Footer groups", () => {
       expect(nav.textContent).not.toContain("|")
     }
   })
+
+  it("credits only LadyFleur, for the logo", () => {
+    renderFooter()
+    const credit = screen.getByRole("link", { name: "LadyFleur" })
+    expect(credit.closest("p")?.textContent).toBe(
+      "Special thanks to LadyFleur for the logo.",
+    )
+    for (const name of ["StarCitizen-API", "NEXD", "Star Citizen Wiki"]) {
+      expect(screen.queryByRole("link", { name })).toBeNull()
+    }
+  })
 })
 
 describe("Footer on an org's white-label domain", () => {

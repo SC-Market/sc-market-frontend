@@ -90,8 +90,6 @@ const ALLOW = new Set(
     "X",
     "Reddit",
     "PayPal",
-    "Star Citizen Wiki",
-    "StarCitizen-API",
     "LadyFleur",
     "SCMDB",
     "UEX",
