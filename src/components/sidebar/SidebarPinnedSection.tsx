@@ -40,7 +40,7 @@ export function SidebarPinnedSection({
           {t("nav.pinned", "Pinned")}
         </Typography>
       </Box>
-      <List dense sx={{ px: 1 }}>
+      <List dense component="div" sx={{ px: 1 }}>
         {starredItems.map((item) => renderNavItem(item))}
       </List>
       <Divider sx={{ mx: 2, my: 0.5 }} />

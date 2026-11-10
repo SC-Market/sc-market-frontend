@@ -84,7 +84,7 @@ export function BadgeDisplay(props: {
       {/* Rating badges */}
       {badges.includes(BADGE_RATING_99_9) && (
         <Tooltip title={t("listing.99_9PercentRating25PlusTransactions")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={gradientId}
@@ -129,7 +129,7 @@ export function BadgeDisplay(props: {
       {/* Volume badges */}
       {badges.includes(BADGE_VOLUME_PRO) && (
         <Tooltip title={t("listing.5000PlusOrdersCompleted")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={`${gradientId}-volume`}
@@ -176,7 +176,7 @@ export function BadgeDisplay(props: {
       {/* Streak badges */}
       {badges.includes(BADGE_STREAK_PRO) && (
         <Tooltip title={t("listing.50PlusFiveStarStreak")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={`${gradientId}-streak`}
@@ -234,7 +234,7 @@ export function BadgeDisplay(props: {
       {/* Speed badges */}
       {badges.includes(BADGE_SPEED_PRO) && (
         <Tooltip title={t("listing.avgCompletionTimeLessThan3Hours")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={`${gradientId}-speed`}
@@ -275,7 +275,7 @@ export function BadgeDisplay(props: {
       {/* Consistency badges */}
       {badges.includes(BADGE_CONSISTENCY_PRO) && (
         <Tooltip title={t("listing.activeSellerFor3PlusYears")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={`${gradientId}-consistency`}
@@ -322,7 +322,7 @@ export function BadgeDisplay(props: {
       {/* Donor badges */}
       {badges.includes(BADGE_DONOR_PRO) && (
         <Tooltip title={t("listing.donor12PlusMonths")}>
-          <Box>
+          <Box role="img">
             <svg width={0} height={0}>
               <linearGradient
                 id={`${gradientId}-donor`}

@@ -71,8 +71,6 @@ export function ShopReviewRow(props: {
     <TableRow
       hover
       onClick={onClick}
-      role="checkbox"
-      aria-checked={isItemSelected}
       tabIndex={-1}
       key={row.author.username}
       selected={isItemSelected}

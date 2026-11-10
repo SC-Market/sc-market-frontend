@@ -38,7 +38,7 @@ export function SidebarWhiteLabelTabs({
       <Typography variant="body2" sx={sectionHeaderSx}>
         {brandName || t("nav.groupLinks", "Links")}
       </Typography>
-      <List dense sx={{ px: 1 }}>
+      <List dense component="div" sx={{ px: 1 }}>
         {customTabs.map((tab) => {
           const path = tab.custom_path!
           const external = path.startsWith("https://")

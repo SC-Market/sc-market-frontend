@@ -53,8 +53,6 @@ function ReviewRow(props: {
       <TableRow
         hover
         onClick={onClick}
-        role="checkbox"
-        aria-checked={isItemSelected}
         tabIndex={-1}
         key={row.user_author?.username || row.contractor_author!.spectrum_id}
         selected={isItemSelected}
@@ -286,7 +284,13 @@ export function ReviewSummaryArea(props: {
           {counts.map((d, i) => (
             <Box key={i}>
               {5 - i}&nbsp;&nbsp;
-              <BorderLinearProgress variant="determinate" value={d || 0} />
+              <BorderLinearProgress
+                variant="determinate"
+                value={d || 0}
+                aria-label={t("accessibility.starRatingShare", {
+                  stars: 5 - i,
+                })}
+              />
             </Box>
           ))}
         </Box>

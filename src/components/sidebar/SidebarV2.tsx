@@ -319,7 +319,7 @@ export function SidebarV2() {
             )}
 
             {/* Context-specific items — grouped by subsection */}
-            <List dense sx={{ px: 1 }}>
+            <List dense component="div" sx={{ px: 1 }}>
               {contextItems.map((item, i) => {
                 const showGroup =
                   item.group && item.group !== contextItems[i - 1]?.group
@@ -345,7 +345,7 @@ export function SidebarV2() {
                 <Typography variant="body2" sx={sectionHeaderSx}>
                   {t("nav.groupBrowse", "Browse")}
                 </Typography>
-                <List dense sx={{ px: 1 }}>
+                <List dense component="div" sx={{ px: 1 }}>
                   {browseDirectoryItems(t)
                     .filter(shownOnWhiteLabel)
                     .map((item) => renderNavItem(item))}

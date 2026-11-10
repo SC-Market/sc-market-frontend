@@ -34,7 +34,7 @@ export function SidebarFooter({
           to the official site (the guides only render there). */}
       <Box sx={{ flexShrink: 0 }}>
         <Divider sx={{ mx: 2 }} />
-        <List dense sx={{ px: 1, py: 0.5 }}>
+        <List dense component="div" sx={{ px: 1, py: 0.5 }}>
           {signedIn && (
             <ListItemButton
               component={Link}

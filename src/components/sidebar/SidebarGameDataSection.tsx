@@ -55,7 +55,7 @@ export function SidebarGameDataSection({
       <Typography variant="body2" sx={sectionHeaderSx}>
         {t("sidebar.gameData.title", "Game Data")}
       </Typography>
-      <List dense sx={{ px: 1 }}>
+      <List dense component="div" sx={{ px: 1 }}>
         {topLevel.map((item) => renderNavItem(item))}
 
         {/* Crafting — collapsible */}
@@ -74,7 +74,7 @@ export function SidebarGameDataSection({
           )}
         </ListItemButton>
         <Collapse in={craftingOpen}>
-          <List dense disablePadding sx={{ pl: 2 }}>
+          <List dense component="div" disablePadding sx={{ pl: 2 }}>
             {crafting.map((item) => renderNavItem(item, true))}
           </List>
         </Collapse>
@@ -95,7 +95,7 @@ export function SidebarGameDataSection({
           )}
         </ListItemButton>
         <Collapse in={wikiOpen}>
-          <List dense disablePadding sx={{ pl: 2 }}>
+          <List dense component="div" disablePadding sx={{ pl: 2 }}>
             {wikiNavItems(t).map((item) => renderNavItem(item, true))}
           </List>
         </Collapse>

@@ -13,7 +13,7 @@ export function SidebarSearchResults({
 }) {
   const { t } = useTranslation()
   return (
-    <List dense sx={{ px: 1 }}>
+    <List dense component="div" sx={{ px: 1 }}>
       {results.length === 0 ? (
         <Typography
           variant="body2"

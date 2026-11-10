@@ -245,7 +245,11 @@ export function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
         {counts.map((d, i) => (
           <Box key={i}>
             {5 - i}&nbsp;&nbsp;
-            <BorderLinearProgress variant="determinate" value={d || 0} />
+            <BorderLinearProgress
+              variant="determinate"
+              value={d || 0}
+              aria-label={t("accessibility.starRatingShare", { stars: 5 - i })}
+            />
           </Box>
         ))}
       </Box>
