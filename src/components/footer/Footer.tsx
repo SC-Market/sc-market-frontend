@@ -112,7 +112,7 @@ export function Footer() {
           containerName: "sc-footer",
           backgroundColor: colors.band,
           borderImage: `linear-gradient(${theme.palette.divider} 0 1px, ${colors.band} 1px) fill 0 / 0 / 0 100vmax 100vmax`,
-          color: "text.primary",
+          color: colors.link,
         }}
       >
         {/* One centred, max-width container on every page, whatever width
@@ -155,7 +155,7 @@ export function Footer() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 1.25,
-                    color: "text.secondary",
+                    color: colors.heading,
                     textDecoration: "none",
                   }}
                 >
@@ -180,6 +180,7 @@ export function Footer() {
                 <Typography
                   sx={{
                     mt: 1.25,
+                    color: colors.link,
                     fontSize: "0.875rem",
                     maxWidth: 280,
                     [MEDIUM]: { maxWidth: "none" },
@@ -358,7 +359,7 @@ export function Footer() {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
               <Box
                 component="p"
-                sx={{ color: "text.primary", fontSize: "0.8125rem" }}
+                sx={{ color: colors.link, fontSize: "0.8125rem" }}
               >
                 {t("footer.copyright", "Copyright © ")} SC Market{" "}
                 {new Date(now).getUTCFullYear() + 930}.

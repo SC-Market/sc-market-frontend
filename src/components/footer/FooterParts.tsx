@@ -27,6 +27,8 @@ const NOTICE_CONTRAST = 5
  * The footer band's colours, from the theme:
  * - band: the navbar surface in dark themes. Light themes have a dark navbar,
  *   so there the band is the paper tinted 4% towards it (#f5f6f6 on white).
+ * - heading, link: text.secondary and text.primary, kept at 4.5:1 on the
+ *   band (some org themes' secondary text is dimmer than that).
  * - hover: text.accent, kept at 4.5:1 on the band.
  * - notice: text.subtle, raised to NOTICE_CONTRAST on the band.
  * Custom themes the contrast maths can't read keep plain theme values.
@@ -36,6 +38,8 @@ export function useFooterColors(theme: ExtendedTheme) {
     const { palette } = theme
     const fallback = {
       band: palette.background.paper,
+      heading: palette.text.secondary,
+      link: palette.text.primary,
       hover: palette.text.accent ?? palette.primary.main,
       notice: palette.text.primary,
     }
@@ -45,8 +49,12 @@ export function useFooterColors(theme: ExtendedTheme) {
         const { paper } = surfaces(theme)
         const navbar = flatten(palette.background.navbar ?? paper, paper)
         const band = palette.mode === "dark" ? navbar : mix(paper, navbar, 0.04)
+        const readable = (color: string) =>
+          ensureContrast(flatten(color, band), [band], AA_TEXT)
         return {
           band,
+          heading: readable(palette.text.secondary),
+          link: readable(palette.text.primary),
           hover: ensureContrast(fallback.hover, [band], AA_TEXT),
           notice: ensureContrast(
             flatten(palette.text.subtle ?? palette.text.primary, band),
@@ -69,14 +77,14 @@ export function FooterGroup(props: {
 }) {
   const id = useId()
   const theme = useTheme<ExtendedTheme>()
-  const { hover } = props.colors
+  const { heading, link, hover } = props.colors
   return (
     <Box component="nav" aria-labelledby={id} sx={{ minWidth: 0 }}>
       <Typography
         id={id}
         component="h2"
-        color="text.secondary"
         sx={{
+          color: heading,
           fontFamily: theme.typography.fontFamilyHeading,
           fontSize: "0.84375rem",
           fontWeight: 600,
@@ -101,7 +109,7 @@ export function FooterGroup(props: {
           // Links (and the Report button) are muted at rest; on hover and
           // keyboard focus they take the accent and the UnderlineLink line.
           "& a, & button": {
-            color: "text.primary",
+            color: link,
             transition: theme.transitions.create("color", {
               duration: theme.transitions.duration.shortest,
             }),
