@@ -50,7 +50,7 @@ function setup(
       {
         request: new Request(`${origin}${path}`),
         env: {
-          ASSETS: { fetch: async () => new Response("") },
+          ASSETS: { fetch: async () => new Response(robotsTxt) },
           VITE_BACKEND_URL: API,
           ...env,
         },
@@ -105,6 +105,15 @@ describe("white-label robots.txt", () => {
     await off.run("/robots.txt")
     expect(off.next).toHaveBeenCalled()
     expect(off.fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it("falls back to the static file when the API fails (never a 5xx)", async () => {
+    const { run, next } = setup({
+      "/api/domain/medrunner.sc-market.space": () => json({}, 503),
+    })
+    const res = await run("/robots.txt")
+    expect(res.status).toBe(200)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it("keeps the rules when the site has no Sitemap line", () => {

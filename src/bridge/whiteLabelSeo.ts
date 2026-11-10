@@ -11,8 +11,9 @@
  *   active shops and its publicly listed listings. No section files.
  * - An unknown host, or the variant switched off: not handled (null), so
  *   the static files answer as before.
- * - Edge-cached for an hour per host and file; an API failure is a 503 with
- *   Retry-After (never cached).
+ * - Edge-cached for an hour per host and file. An API failure is a 503 with
+ *   Retry-After for the sitemap (never cached); robots.txt falls back to the
+ *   static file (a robots.txt 5xx pauses crawling).
  *
  * Anonymous GETs of public endpoints only, like the SSR renders.
  */
@@ -223,8 +224,12 @@ export async function handleWhiteLabelSeoFile(
     if (robots) {
       let body = PRIVATE_ROBOTS
       if (isPublic) {
-        const site = await ctx.next()
-        if (!site.ok) return unavailable()
+        // The site's static robots.txt, read from the assets.
+        const site = await env.ASSETS.fetch(new URL("/robots.txt", url))
+        if (!site.ok) {
+          console.warn(`white-label robots: assets ${site.status}`)
+          return null
+        }
         body = whiteLabelRobots(await site.text(), origin)
       }
       response = textResponse(
@@ -256,8 +261,11 @@ export async function handleWhiteLabelSeoFile(
       )
     }
   } catch (error) {
-    if (error instanceof ApiUnavailable) return unavailable()
-    throw error
+    if (!(error instanceof ApiUnavailable)) throw error
+    // A robots.txt 5xx makes crawlers stop crawling the host: let the
+    // static file answer instead.
+    console.warn(`white-label ${url.pathname}: ${error.message}`)
+    return robots ? null : unavailable()
   }
   if (runtime.cache) {
     ctx.waitUntil(runtime.cache.put(cacheKey, response.clone()))
