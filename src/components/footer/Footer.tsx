@@ -1,6 +1,6 @@
 import { UnderlineLink } from "../typography/UnderlineLink"
-import { Divider, Grid, Link, Typography } from "@mui/material"
-import React from "react"
+import { Box, Divider, Grid, Link, LinkProps, Typography } from "@mui/material"
+import React, { useId } from "react"
 import { useCookies } from "react-cookie"
 import { CONSENT_COOKIE } from "../../util/consent/analyticsConsent"
 import { DISCORD_INVITE } from "../../util/constants"
@@ -17,6 +17,7 @@ import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "./developerLinks"
 import { useNow } from "../../util/format"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 
 /** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
 export const SC_ORGS_LINKS = [
@@ -47,11 +48,68 @@ export const SC_ORGS_LINKS = [
   },
 ] as const
 
+/** One footer column: a labelled nav landmark with a heading and a link list. */
+function FooterGroup(props: { title: string; children: React.ReactNode }) {
+  const id = useId()
+  return (
+    <Box component="nav" aria-labelledby={id}>
+      <Typography
+        id={id}
+        component="h2"
+        variant="subtitle2"
+        color="text.secondary"
+        sx={{ fontWeight: 600, mb: 1 }}
+      >
+        {props.title}
+      </Typography>
+      <Box
+        component="ul"
+        sx={{
+          listStyle: "none",
+          m: 0,
+          p: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 0.75,
+          typography: "body2",
+          // Links, and the Report button that inherits its colour.
+          color: "text.accent",
+        }}
+      >
+        {props.children}
+      </Box>
+    </Box>
+  )
+}
+
+/** A footer list item: an accent link with the site's hover underline. */
+function FooterLink({
+  children,
+  ...props
+}: LinkProps & {
+  /** RouterLink or "button"; `to` goes with RouterLink. */
+  component?: React.ElementType
+  to?: string
+  type?: "button"
+}) {
+  return (
+    <li>
+      <Link color="inherit" underline="none" {...props}>
+        <UnderlineLink component="span">{children}</UnderlineLink>
+      </Link>
+    </li>
+  )
+}
+
 export function Footer() {
   const { t } = useTranslation()
   const now = useNow()
   const [, , removeCookie] = useCookies([CONSENT_COOKIE])
   const theme = useTheme<ExtendedTheme>()
+  // On an org's white-label domain the footer is the minimum (support, help,
+  // report, legal, the notices): no SC Market structured data, nor links into
+  // SC Market's project pages, its developer tools or SC Orgs.
+  const { isCustomDomain } = useCustomDomain()
   // Help pages render only on the official site; white-label domains link out.
   const helpLink = (path: string) =>
     isOfficialSite()
@@ -68,188 +126,167 @@ export function Footer() {
 
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
-      <Helmet>
-        {/*
+      {!isCustomDomain && (
+        <Helmet>
+          {/*
           Site-wide structured data (Organization + WebSite with the sitelinks
           SearchAction). The Footer renders on every page, so this is the
           single global injection point; the edge bridge emits the same nodes
           for "/" (src/seo/siteHeads.ts).
         */}
-        <script type="application/ld+json">
-          {serializeJsonLd(siteJsonLd())}
-        </script>
-      </Helmet>
+          <script type="application/ld+json">
+            {serializeJsonLd(siteJsonLd())}
+          </script>
+        </Helmet>
+      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Divider light />
         </Grid>
-        <Grid item xs={12}>
-          <Typography
-            component="div"
-            variant="body2"
-            color="text.primary"
-            align="center"
+        {/* Side padding on phones: some page layouts run the footer to the
+            screen edge (or a few px past it) below sm. */}
+        <Grid item xs={12} sx={{ "& > *": { px: { xs: 2, sm: 0 } } }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                sm: "repeat(3, minmax(0, 1fr))",
+                md: "repeat(5, minmax(0, 1fr))",
+              },
+              columnGap: 4,
+              rowGap: 3,
+            }}
           >
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={DISCORD_INVITE}
-              aria-label={t("footer.support", "Support")}
-            >
-              <UnderlineLink color={"text.secondary"}>
+            <FooterGroup title={t("footer.groupHelp", "Help")}>
+              <FooterLink
+                rel="noopener noreferrer"
+                target="_blank"
+                href={DISCORD_INVITE}
+              >
                 {t("footer.support", "Support")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={DISCORD_INVITE}
-              aria-label={t("footer.discord", "Discord")}
-            >
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.discord", "Discord")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={discordInstallPath("server", "footer")}
-              aria-label={t("footer.discordBot", "Discord Bot")}
-            >
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.discordBot", "Discord Bot")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link {...helpLink(HELP_PATHS.hub)}>
-              <UnderlineLink color={"text.secondary"}>
+              </FooterLink>
+              <FooterLink {...helpLink(HELP_PATHS.hub)}>
                 {t("footer.helpGuides", "Help & Guides")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link {...helpLink(HELP_PATHS.about)}>
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.about", "About")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link {...helpLink(CHANGELOG_PATHS.index)}>
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.changelog", "Changelog")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={"https://www.patreon.com/henry232323"}
-              aria-label={t("footer.donate", "Donate")}
-            >
-              <UnderlineLink color={"primary"}>
-                {t("footer.donate", "Donate")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={"https://github.com/SC-Market"}
-              aria-label={t("footer.github", "Github")}
-            >
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.github", "Github")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            {/* nofollow: on every page, these boilerplate links outnumbered
-                every content link in Search Console's internal links. */}
-            <Link
-              rel="nofollow noopener noreferrer"
-              target="_blank"
-              href={LEGAL_PATHS.privacy}
-              aria-label={t("footer.privacyPolicy", "Privacy Policy")}
-            >
-              <UnderlineLink color={"text.secondary"}>
+              </FooterLink>
+              {!isCustomDomain && (
+                <>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={DISCORD_INVITE}
+                  >
+                    {t("footer.discord", "Discord")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={discordInstallPath("server", "footer")}
+                  >
+                    {t("footer.discordBot", "Discord Bot")}
+                  </FooterLink>
+                </>
+              )}
+              <li>
+                <ReportButton />
+              </li>
+            </FooterGroup>
+
+            {!isCustomDomain && (
+              <>
+                <FooterGroup title={t("footer.groupProject", "Project")}>
+                  <FooterLink {...helpLink(HELP_PATHS.about)}>
+                    {t("footer.about", "About")}
+                  </FooterLink>
+                  <FooterLink {...helpLink(CHANGELOG_PATHS.index)}>
+                    {t("footer.changelog", "Changelog")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://www.patreon.com/henry232323"}
+                  >
+                    {t("footer.donate", "Donate")}
+                  </FooterLink>
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://github.com/SC-Market"}
+                  >
+                    {t("footer.github", "Github")}
+                  </FooterLink>
+                </FooterGroup>
+
+                {/* Developers: the public API, its spec, the price feed and the SDK (also in the bridge HTML). */}
+                <FooterGroup
+                  title={t(DEVELOPERS_HEADING.key, DEVELOPERS_HEADING.label)}
+                >
+                  <FooterLink
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={"https://api.sc-market.space/docs"}
+                  >
+                    {t("footer.apiDocs", "API Docs")}
+                  </FooterLink>
+                  {DEVELOPER_LINKS.map((link) => (
+                    <FooterLink key={link.href} {...developerLink(link.href)}>
+                      {t(link.key, link.label)}
+                    </FooterLink>
+                  ))}
+                </FooterGroup>
+
+                {/* Deep links into SC Orgs (our sister site), not just its homepage. */}
+                <FooterGroup title={t("footer.scOrgs", "SC Orgs")}>
+                  <FooterLink
+                    rel="noopener"
+                    target="_blank"
+                    href={"https://sc-orgs.space"}
+                  >
+                    {t("footer.scOrgsHome", "Visit SC Orgs")}
+                  </FooterLink>
+                  {SC_ORGS_LINKS.map((link) => (
+                    <FooterLink
+                      key={link.href}
+                      rel="noopener"
+                      target="_blank"
+                      href={link.href}
+                    >
+                      {t(link.key, link.label)}
+                    </FooterLink>
+                  ))}
+                </FooterGroup>
+              </>
+            )}
+
+            <FooterGroup title={t("footer.groupLegal", "Legal")}>
+              {/* nofollow: on every page, these boilerplate links outnumbered
+                  every content link in Search Console's internal links. */}
+              <FooterLink
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                href={LEGAL_PATHS.privacy}
+              >
                 {t("footer.privacyPolicy", "Privacy Policy")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="nofollow noopener noreferrer"
-              target="_blank"
-              href={LEGAL_PATHS.terms}
-              aria-label={t("footer.termsOfService", "Terms of Service")}
-            >
-              <UnderlineLink color={"text.secondary"}>
+              </FooterLink>
+              <FooterLink
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                href={LEGAL_PATHS.terms}
+              >
                 {t("footer.termsOfService", "Terms of Service")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            {/* Reopens the cookie bar (it shows while no choice is stored) */}
-            <Link
-              component="button"
-              type="button"
-              onClick={() => removeCookie(CONSENT_COOKIE, { path: "/" })}
-              sx={{ verticalAlign: "baseline", font: "inherit" }}
-            >
-              <UnderlineLink color={"text.secondary"}>
+              </FooterLink>
+              {/* Reopens the cookie bar (it shows while no choice is stored) */}
+              <FooterLink
+                component="button"
+                type="button"
+                onClick={() => removeCookie(CONSENT_COOKIE, { path: "/" })}
+                sx={{ font: "inherit", textAlign: "left" }}
+              >
                 {t("footer.cookiePreferences", "Cookie preferences")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={"https://api.sc-market.space/docs"}
-              aria-label={t("footer.apiDocs", "API Docs")}
-            >
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.apiDocs", "API Docs")}
-              </UnderlineLink>
-            </Link>
-            &nbsp;|&nbsp;
-            {/* Developers: the public API, its spec, the price feed and the SDK (also in the bridge HTML). */}
-            <Typography component="span" variant="body2" color="text.secondary">
-              {t(DEVELOPERS_HEADING.key, DEVELOPERS_HEADING.label)}:
-            </Typography>
-            {DEVELOPER_LINKS.map((link, i) => (
-              <React.Fragment key={link.href}>
-                {i === 0 ? " " : <>&nbsp;·&nbsp;</>}
-                <Link {...developerLink(link.href)}>
-                  <UnderlineLink color={"text.secondary"}>
-                    {t(link.key, link.label)}
-                  </UnderlineLink>
-                </Link>
-              </React.Fragment>
-            ))}
-            &nbsp;|&nbsp;
-            <Link
-              rel="noopener"
-              target="_blank"
-              href={"https://sc-orgs.space"}
-              aria-label={t("footer.scOrgs", "SC Orgs")}
-            >
-              <UnderlineLink color={"text.secondary"}>
-                {t("footer.scOrgs", "SC Orgs")}
-              </UnderlineLink>
-            </Link>
-            {/* Deep links into SC Orgs (our sister site), not just its homepage. */}
-            {SC_ORGS_LINKS.map((link) => (
-              <React.Fragment key={link.href}>
-                &nbsp;·&nbsp;
-                <Link rel="noopener" target="_blank" href={link.href}>
-                  <UnderlineLink color={"text.secondary"}>
-                    {t(link.key, link.label)}
-                  </UnderlineLink>
-                </Link>
-              </React.Fragment>
-            ))}
-            &nbsp;|&nbsp;
-            <ReportButton />
-          </Typography>
-          <br />
+              </FooterLink>
+            </FooterGroup>
+          </Box>
+          <Divider light sx={{ my: 3 }} />
           <Typography
             component="div"
             variant="body2"
@@ -284,80 +321,84 @@ export function Footer() {
                 robertsspaceindustries.com
               </UnderlineLink>
             </Link>
-            <br />
-            <Trans
-              i18nKey="footer.acknowledgments"
-              components={{
-                ladyFleurLink: (
-                  <Link
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="https://www.youtube.com/@robinerino"
-                    aria-label="LadyFleur"
-                  >
-                    <UnderlineLink
-                      component="span"
-                      color="text.primary"
-                      variant="body2"
-                    >
-                      LadyFleur
-                    </UnderlineLink>
-                  </Link>
-                ),
-                starCitizenApiLink: (
-                  <Link
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="https://starcitizen-api.com/"
-                    aria-label="StarCitizen-API"
-                  >
-                    <UnderlineLink
-                      component="span"
-                      color="text.primary"
-                      variant="body2"
-                    >
-                      StarCitizen-API
-                    </UnderlineLink>
-                  </Link>
-                ),
-                nexdLink: (
-                  <Link
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="https://nexd.to/"
-                    aria-label="NEXD"
-                  >
-                    <UnderlineLink
-                      component="span"
-                      color="text.primary"
-                      variant="body2"
-                    >
-                      NEXD
-                    </UnderlineLink>
-                  </Link>
-                ),
-                starCitizenWikiLink: (
-                  <Link
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="https://starcitizen.tools/"
-                    aria-label="Star Citizen Wiki"
-                  >
-                    <UnderlineLink
-                      component="span"
-                      color="text.primary"
-                      variant="body2"
-                    >
-                      Star Citizen Wiki
-                    </UnderlineLink>
-                  </Link>
-                ),
-              }}
-            />
-            <br />
-            {t("footer.referralCode", {
-              code: "STAR-GSFY-MQW9",
-            })}
+            {!isCustomDomain && (
+              <>
+                <br />
+                <Trans
+                  i18nKey="footer.acknowledgments"
+                  components={{
+                    ladyFleurLink: (
+                      <Link
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href="https://www.youtube.com/@robinerino"
+                        aria-label="LadyFleur"
+                      >
+                        <UnderlineLink
+                          component="span"
+                          color="text.primary"
+                          variant="body2"
+                        >
+                          LadyFleur
+                        </UnderlineLink>
+                      </Link>
+                    ),
+                    starCitizenApiLink: (
+                      <Link
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href="https://starcitizen-api.com/"
+                        aria-label="StarCitizen-API"
+                      >
+                        <UnderlineLink
+                          component="span"
+                          color="text.primary"
+                          variant="body2"
+                        >
+                          StarCitizen-API
+                        </UnderlineLink>
+                      </Link>
+                    ),
+                    nexdLink: (
+                      <Link
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href="https://nexd.to/"
+                        aria-label="NEXD"
+                      >
+                        <UnderlineLink
+                          component="span"
+                          color="text.primary"
+                          variant="body2"
+                        >
+                          NEXD
+                        </UnderlineLink>
+                      </Link>
+                    ),
+                    starCitizenWikiLink: (
+                      <Link
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href="https://starcitizen.tools/"
+                        aria-label="Star Citizen Wiki"
+                      >
+                        <UnderlineLink
+                          component="span"
+                          color="text.primary"
+                          variant="body2"
+                        >
+                          Star Citizen Wiki
+                        </UnderlineLink>
+                      </Link>
+                    ),
+                  }}
+                />
+                <br />
+                {t("footer.referralCode", {
+                  code: "STAR-GSFY-MQW9",
+                })}
+              </>
+            )}
           </Typography>
         </Grid>
       </Grid>

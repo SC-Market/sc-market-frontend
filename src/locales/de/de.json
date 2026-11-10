@@ -473,7 +473,11 @@
     "cookiePreferences": "Cookie-Einstellungen",
     "changelog": "Änderungsprotokoll",
     "sdkNpm": "SDK auf npm",
-    "orgsSdkNpm": "SC Orgs SDK auf npm"
+    "orgsSdkNpm": "SC Orgs SDK auf npm",
+    "groupHelp": "Hilfe",
+    "groupProject": "Projekt",
+    "groupLegal": "Rechtliches",
+    "scOrgsHome": "SC Orgs besuchen"
   },
   "itemAcquisition": {
     "addToCart": "In den Warenkorb",

@@ -35,6 +35,7 @@ import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { useListingPermissions } from "../hooks/useListingPermissions"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useNow } from "../../../util/format"
 import { isListingNew } from "../domain/listingBadges"
 import { useTranslation } from "react-i18next"
@@ -62,6 +63,9 @@ export function ListingDetailV2() {
   } = useGetListingDetailQuery({ id: id! })
 
   const { openAddToCart } = useCartDrawer()
+  // An org's white-label domain links nothing SC Market-wide: no every-seller
+  // item page, wiki link or market-wide price history.
+  const { isCustomDomain } = useCustomDomain()
   const { data: profile } = useGetUserProfileQuery()
 
   useTrackListingView(id)
@@ -118,7 +122,7 @@ export function ListingDetailV2() {
         href: `/market?type=${encodeURIComponent(gameItemType)}`,
       })
     }
-    if (gameItemId && gameItemName) {
+    if (gameItemId && gameItemName && !isCustomDomain) {
       crumbs.push({
         label: gameItemName,
         href: MARKET_PATHS.aggregate(gameItemId, gameItemName),
@@ -126,7 +130,7 @@ export function ListingDetailV2() {
     }
     if (listing) crumbs.push({ label: listing.title })
     return crumbs
-  }, [listing, gameItemType, gameItemId, gameItemName, t])
+  }, [listing, gameItemType, gameItemId, gameItemName, isCustomDomain, t])
 
   const belongsToSellerOrg = profile?.contractors?.some(
     (c) => c.spectrum_id === seller?.slug,
@@ -242,7 +246,7 @@ export function ListingDetailV2() {
                                   size="small"
                                 />
                               )}
-                              {gameItemId && (
+                              {gameItemId && !isCustomDomain && (
                                 <Chip
                                   icon={
                                     <MenuBookRounded sx={{ fontSize: 14 }} />
@@ -392,7 +396,7 @@ export function ListingDetailV2() {
             />
 
             {/* Market Analysis */}
-            {gameItemId && priceRange && (
+            {gameItemId && priceRange && !isCustomDomain && (
               <AggregateMarketDataV2
                 key={gameItemId}
                 gameItemId={gameItemId}

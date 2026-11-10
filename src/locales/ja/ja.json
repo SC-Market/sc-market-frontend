@@ -472,7 +472,11 @@
     "cookiePreferences": "クッキーの設定",
     "changelog": "更新履歴",
     "sdkNpm": "npmのSDK",
-    "orgsSdkNpm": "npmのSC Orgs SDK"
+    "orgsSdkNpm": "npmのSC Orgs SDK",
+    "groupHelp": "ヘルプ",
+    "groupProject": "プロジェクト",
+    "groupLegal": "法的情報",
+    "scOrgsHome": "SC Orgsを見る"
   },
   "itemAcquisition": {
     "addToCart": "カートに追加",

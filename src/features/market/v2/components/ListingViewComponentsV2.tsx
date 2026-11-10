@@ -15,6 +15,8 @@ import {
 import { ListingCardV2 } from "../ListingCardV2"
 import { Section } from "../../../../components/paper/Section"
 import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
+import { useCustomDomain } from "../../../../hooks/contractor/CustomDomain"
+import { orgScopedListingArgs } from "../../../storefront/domain"
 
 // ============================================================================
 // Shared listing row component
@@ -138,12 +140,14 @@ export function RelatedListingsV2(props: {
   const { t } = useTranslation()
   const { itemType, currentListingId } = props
 
-  const { data, isLoading } = useSearchListingsQuery({
-    itemType,
-    pageSize: 8,
-    sortBy: "created_at",
-    sortOrder: "desc",
-  })
+  // On an org's white-label domain: only the org's listings.
+  const { customOrg } = useCustomDomain()
+  const { data, isLoading } = useSearchListingsQuery(
+    orgScopedListingArgs(
+      { itemType, pageSize: 8, sortBy: "created_at", sortOrder: "desc" },
+      customOrg,
+    ),
+  )
 
   const listings = useMemo(
     () =>

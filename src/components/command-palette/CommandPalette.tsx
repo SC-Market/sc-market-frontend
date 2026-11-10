@@ -36,6 +36,9 @@ import { useStartupGateOpen } from "../../util/startupDeferral"
 
 import { useFormatters } from "../../util/format"
 import { navCommandItems, type CommandItem } from "./commandPaletteItems"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
+import { orgScopedListingArgs } from "../../features/storefront/domain"
+import { isMainSiteOnlyPath } from "../../features/storefront/whiteLabelRoutes"
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false)
@@ -59,8 +62,10 @@ export function CommandPalette() {
 
   const debouncedQuery = useDebounce(query, 400)
 
+  // On an org's white-label domain: only the org's listings and pages.
+  const { isCustomDomain, customOrg } = useCustomDomain()
   const { data: searchResults } = useSearchListingsQuery(
-    { text: debouncedQuery, pageSize: 5 },
+    orgScopedListingArgs({ text: debouncedQuery, pageSize: 5 }, customOrg),
     { skip: debouncedQuery.length < 2 },
   )
 
@@ -90,8 +95,14 @@ export function CommandPalette() {
 
   // Static navigation items
   const navItems = useMemo<CommandItem[]>(() => {
-    return navCommandItems(t, go, Boolean(profile), shops)
-  }, [profile, shops, go, t])
+    return navCommandItems(
+      t,
+      go,
+      Boolean(profile),
+      shops,
+      (path) => !isCustomDomain || !isMainSiteOnlyPath(path, customOrg),
+    )
+  }, [profile, shops, go, t, isCustomDomain, customOrg])
 
   // Action items
   const actionItems = useMemo<CommandItem[]>(() => {

@@ -7,11 +7,14 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 
 export function MarketActions() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
+  // Buy orders are served only on sc-market.space, not an org's domain.
+  const { isCustomDomain } = useCustomDomain()
 
   return (
     <Grid
@@ -51,22 +54,28 @@ export function MarketActions() {
         </Link>
       </Grid>
 
-      <Grid item xs={6} sm="auto">
-        <Link
-          to={"/buyorder/create"}
-          style={{ color: "inherit", textDecoration: "none", display: "block" }}
-        >
-          <Button
-            color="neutral"
-            startIcon={<AddRounded />}
-            variant={"outlined"}
-            size={isMobile ? "medium" : "large"}
-            fullWidth={isMobile}
+      {!isCustomDomain && (
+        <Grid item xs={6} sm="auto">
+          <Link
+            to={"/buyorder/create"}
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+              display: "block",
+            }}
           >
-            {t("buyOrderActions.createBuyOrder", "Create Buy Order")}
-          </Button>
-        </Link>
-      </Grid>
+            <Button
+              color="neutral"
+              startIcon={<AddRounded />}
+              variant={"outlined"}
+              size={isMobile ? "medium" : "large"}
+              fullWidth={isMobile}
+            >
+              {t("buyOrderActions.createBuyOrder", "Create Buy Order")}
+            </Button>
+          </Link>
+        </Grid>
+      )}
 
       <Grid item xs={6} sm="auto">
         <Link

@@ -474,7 +474,11 @@
     "cookiePreferences": "Preferencias de cookies",
     "changelog": "Novedades",
     "sdkNpm": "SDK en npm",
-    "orgsSdkNpm": "SDK de SC Orgs en npm"
+    "orgsSdkNpm": "SDK de SC Orgs en npm",
+    "groupHelp": "Ayuda",
+    "groupProject": "Proyecto",
+    "groupLegal": "Legal",
+    "scOrgsHome": "Visitar SC Orgs"
   },
   "itemAcquisition": {
     "addToCart": "Añadir al carrito",

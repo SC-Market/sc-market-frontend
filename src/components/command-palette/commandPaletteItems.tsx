@@ -29,23 +29,31 @@ export interface CommandItem {
   description?: string
   icon: React.ReactNode
   action: () => void
+  /** The page a navigation item opens. */
+  path?: string
   category: "navigation" | "action" | "content"
   keywords?: string[]
 }
 
-/** The palette's navigation destinations (more once signed in). */
+/**
+ * The palette's navigation destinations (more once signed in), only those
+ * `served` on this domain (an org's white-label domain doesn't serve SC
+ * Market-wide pages: features/storefront/whiteLabelRoutes.ts).
+ */
 export function navCommandItems(
   t: TFunction,
   go: (path: string) => void,
   signedIn: boolean,
   shops: ShopResponse[],
+  served: (path: string) => boolean = () => true,
 ): CommandItem[] {
+  const goTo = (path: string) => ({ path, action: () => go(path) })
   const items: CommandItem[] = [
     {
       id: "market",
       label: t("appUi.commandPalette.items.market"),
       icon: <SearchRounded />,
-      action: () => go("/market"),
+      ...goTo("/market"),
       category: "navigation",
       keywords: ["browse", "listings", "buy", "shop"],
     },
@@ -53,7 +61,7 @@ export function navCommandItems(
       id: "services",
       label: t("appUi.commandPalette.items.services"),
       icon: <DesignServicesRounded />,
-      action: () => go("/market/services"),
+      ...goTo("/market/services"),
       category: "navigation",
       keywords: ["hire", "contract"],
     },
@@ -61,7 +69,7 @@ export function navCommandItems(
       id: "contracts",
       label: t("appUi.commandPalette.items.contracts"),
       icon: <DescriptionRounded />,
-      action: () => go("/contracts"),
+      ...goTo("/contracts"),
       category: "navigation",
       keywords: ["jobs", "work"],
     },
@@ -69,7 +77,7 @@ export function navCommandItems(
       id: "buy-orders",
       label: t("appUi.commandPalette.items.buyOrders"),
       icon: <ShoppingCartRounded />,
-      action: () => go("/buyorders"),
+      ...goTo("/buyorders"),
       category: "navigation",
       keywords: ["demand", "want"],
     },
@@ -77,14 +85,14 @@ export function navCommandItems(
       id: "shops",
       label: t("appUi.commandPalette.items.shops"),
       icon: <StorefrontRounded />,
-      action: () => go("/shops"),
+      ...goTo("/shops"),
       category: "navigation",
     },
     {
       id: "orgs",
       label: t("appUi.commandPalette.items.orgs"),
       icon: <BusinessRounded />,
-      action: () => go("/contractors"),
+      ...goTo("/contractors"),
       category: "navigation",
       keywords: ["contractor", "org"],
     },
@@ -92,21 +100,21 @@ export function navCommandItems(
       id: "recruiting",
       label: t("appUi.commandPalette.items.recruiting"),
       icon: <PersonAddRounded />,
-      action: () => go("/recruiting"),
+      ...goTo("/recruiting"),
       category: "navigation",
     },
     {
       id: "missions",
       label: t("appUi.commandPalette.items.missions"),
       icon: <DescriptionRounded />,
-      action: () => go("/missions"),
+      ...goTo("/missions"),
       category: "navigation",
     },
     {
       id: "blueprints",
       label: t("appUi.commandPalette.items.blueprints"),
       icon: <ScienceRounded />,
-      action: () => go("/blueprints"),
+      ...goTo("/blueprints"),
       category: "navigation",
       keywords: ["crafting"],
     },
@@ -114,7 +122,7 @@ export function navCommandItems(
       id: "mining",
       label: t("appUi.commandPalette.items.mining"),
       icon: <InventoryRounded />,
-      action: () => go("/mining"),
+      ...goTo("/mining"),
       category: "navigation",
       keywords: ["ore", "resource"],
     },
@@ -122,7 +130,7 @@ export function navCommandItems(
       id: "wiki",
       label: t("appUi.commandPalette.items.wiki"),
       icon: <MenuBookRounded />,
-      action: () => go("/wiki"),
+      ...goTo("/wiki"),
       category: "navigation",
       keywords: ["items", "ships", "database"],
     },
@@ -130,14 +138,14 @@ export function navCommandItems(
       id: "resources",
       label: t("appUi.commandPalette.items.resources"),
       icon: <InventoryRounded />,
-      action: () => go("/resources"),
+      ...goTo("/resources"),
       category: "navigation",
     },
     {
       id: "help",
       label: t("appUi.commandPalette.items.help"),
       icon: <HelpOutlineRounded />,
-      action: () => go(HELP_PATHS.hub),
+      ...goTo(HELP_PATHS.hub),
       category: "navigation",
       keywords: ["help", "guide", "how", "faq", "about", "support"],
     },
@@ -149,14 +157,14 @@ export function navCommandItems(
         id: "orders",
         label: t("appUi.commandPalette.items.orders"),
         icon: <LocalShippingRounded />,
-        action: () => go("/orders"),
+        ...goTo("/orders"),
         category: "navigation",
       },
       {
         id: "messages",
         label: t("appUi.commandPalette.items.messages"),
         icon: <MessageRounded />,
-        action: () => go("/messages"),
+        ...goTo("/messages"),
         category: "navigation",
         keywords: ["chat", "dm"],
       },
@@ -164,21 +172,21 @@ export function navCommandItems(
         id: "dashboard",
         label: t("appUi.commandPalette.items.dashboard"),
         icon: <DashboardRounded />,
-        action: () => go("/dashboard"),
+        ...goTo("/dashboard"),
         category: "navigation",
       },
       {
         id: "inventory",
         label: t("nav.inventory"),
         icon: <InventoryRounded />,
-        action: () => go("/inventory"),
+        ...goTo("/inventory"),
         category: "navigation",
       },
       {
         id: "settings",
         label: t("appUi.commandPalette.items.settings"),
         icon: <SettingsRounded />,
-        action: () => go("/settings"),
+        ...goTo("/settings"),
         category: "navigation",
       },
       {
@@ -186,7 +194,7 @@ export function navCommandItems(
         label: t("appUi.commandPalette.items.priceAlerts"),
         description: t("appUi.commandPalette.items.priceAlertsDescription"),
         icon: <PriceChangeRounded />,
-        action: () => go(PATHS.priceAlerts),
+        ...goTo(PATHS.priceAlerts),
         category: "navigation",
         keywords: [
           "watchlist",
@@ -200,7 +208,7 @@ export function navCommandItems(
         id: "my-orgs",
         label: t("appUi.commandPalette.items.myOrgs"),
         icon: <PeopleRounded />,
-        action: () => go("/my-orgs"),
+        ...goTo("/my-orgs"),
         category: "navigation",
       },
     )
@@ -212,12 +220,12 @@ export function navCommandItems(
           shop: shop.name,
         }),
         icon: <StorefrontRounded />,
-        action: () => go(SHOP_PATHS.orders(shop.slug)),
+        ...goTo(SHOP_PATHS.orders(shop.slug)),
         category: "navigation",
         keywords: [shop.slug],
       })
     }
   }
 
-  return items
+  return items.filter((item) => !item.path || served(item.path))
 }

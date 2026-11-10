@@ -12,6 +12,7 @@ import { ShoppingListProvider } from "../features/wishlists/hooks/WishlistContex
 import { Root } from "../components/layout/Root"
 import { WhiteLabelAuthGate } from "../components/authentication/WhiteLabelAuthGate"
 import { RouteSuspense } from "../components/router/RouteSuspense"
+import { WhiteLabelRouteGuard } from "../components/router/WhiteLabelRouteGuard"
 import { useRoutePrefetch } from "../hooks/router/useRoutePrefetch"
 import { usePageTitle } from "../hooks/router/usePageTitle"
 import { useLocaleMeta } from "../hooks/router/useLocaleMeta"
@@ -39,7 +40,9 @@ export function AppLayout() {
           <Root>
             <RouterEffects />
             <RouteSuspense>
-              <Outlet />
+              <WhiteLabelRouteGuard>
+                <Outlet />
+              </WhiteLabelRouteGuard>
             </RouteSuspense>
           </Root>
         </WhiteLabelAuthGate>

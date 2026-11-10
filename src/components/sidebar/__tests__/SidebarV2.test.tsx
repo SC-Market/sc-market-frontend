@@ -449,6 +449,16 @@ describe("SidebarV2 — on an org's white-label host", () => {
     expect(screen.queryByText("Contracts")).not.toBeInTheDocument()
     expect(screen.getByText("Market")).toBeInTheDocument()
   })
+
+  it("links nothing SC Market-wide: no buy orders, shop directory or game data", () => {
+    render(sidebarOn({ isCustomDomain: true, customOrg: "MEDRUNNER" }))
+    expect(screen.getByText("Market")).toBeInTheDocument()
+    expect(screen.getByText("Services")).toBeInTheDocument()
+    expect(screen.queryByText("Buy Orders")).not.toBeInTheDocument()
+    expect(screen.queryByText("Shops")).not.toBeInTheDocument()
+    expect(screen.queryByText("Missions")).not.toBeInTheDocument()
+    expect(screen.queryByText("Mining")).not.toBeInTheDocument()
+  })
 })
 
 describe("SidebarV2 — browse context (logged in)", () => {

@@ -32,6 +32,8 @@ import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
 import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
+import { isMainSiteOnlyPath } from "../../features/storefront/whiteLabelRoutes"
 import { PATHS, MARKET_PATHS, ORDER_PATHS, ORG_PATHS } from "../../routes/paths"
 
 interface NavTabConfig {
@@ -79,6 +81,7 @@ export function MobileBottomNav() {
   const { status: sessionStatus, profile: userProfile } = useSession()
   const isLoggedIn = sessionStatus === "authenticated"
   const whiteLabel = useWhiteLabelSidebar()
+  const { isCustomDomain, customOrg } = useCustomDomain()
   const primaryContractor = userProfile?.contractors?.[0]
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
@@ -228,6 +231,9 @@ export function MobileBottomNav() {
       if (tab.requiresAuth && !isLoggedIn) return false
       // Hide tabs the white-label org hid (same settings as the sidebar)
       if (whiteLabel.hidden.has(tab.id)) return false
+      // ...and SC Market-wide pages (another org's page, for one)
+      if (isCustomDomain && isMainSiteOnlyPath(tab.route, customOrg))
+        return false
       return true
     })
     .slice(0, 5)
