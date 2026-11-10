@@ -21,7 +21,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "react-redux"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouter, useLocation } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { configureStore } from "@reduxjs/toolkit"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
@@ -196,6 +196,11 @@ const createStore = () =>
       ),
   })
 
+/** The current path, for asserting where a click navigated. */
+function LocationProbe() {
+  return <output data-testid="location">{useLocation().pathname}</output>
+}
+
 const renderSidebar = (
   path: string | { pathname: string; state: unknown } = "/market",
 ) =>
@@ -204,6 +209,7 @@ const renderSidebar = (
       <Provider store={createStore()}>
         <MemoryRouter initialEntries={[path]}>
           <SidebarV2 />
+          <LocationProbe />
         </MemoryRouter>
       </Provider>
     </ThemeProvider>,
@@ -561,6 +567,74 @@ describe("SidebarV2 — shop context", () => {
     expect(
       container.querySelector('a[href="/shop/test-shop/settings"]'),
     ).not.toBeNull()
+  })
+})
+
+describe("SidebarV2 — switching to a shop", () => {
+  beforeEach(() => {
+    mockProfile = { ...loggedInProfile }
+  })
+
+  // The first page the role may open and works on (shopLandingSection), never
+  // one that shows the no-permission state.
+  it.each<[string, NonNullable<ShopResponse["permissions"]>, string]>([
+    [
+      "owner",
+      {
+        can_manage: true,
+        manage_market: true,
+        manage_stock: true,
+        manage_orders: true,
+      },
+      "/shop/test-shop/orders",
+    ],
+    [
+      "manager",
+      {
+        can_manage: true,
+        manage_market: true,
+        manage_stock: false,
+        manage_orders: false,
+      },
+      "/shop/test-shop/orders",
+    ],
+    [
+      "orders-only",
+      {
+        can_manage: false,
+        manage_market: false,
+        manage_stock: false,
+        manage_orders: true,
+      },
+      "/shop/test-shop/orders",
+    ],
+    [
+      "stock-only",
+      {
+        can_manage: false,
+        manage_market: false,
+        manage_stock: true,
+        manage_orders: false,
+      },
+      "/shop/test-shop/stock",
+    ],
+    [
+      "member",
+      {
+        can_manage: false,
+        manage_market: false,
+        manage_stock: false,
+        manage_orders: false,
+      },
+      "/shop/test-shop/listings",
+    ],
+  ])("lands a %s on %s", async (_role, permissions, landing) => {
+    const user = userEvent.setup()
+    mockShops = [shopWithPerms(permissions)]
+    renderSidebar("/market")
+    await user.click(screen.getByRole("button", { name: "Switch context" }))
+    await user.click(screen.getByRole("menuitem", { name: /Test Shop/ }))
+    expect(screen.getByTestId("location")).toHaveTextContent(landing)
   })
 })
 

@@ -23,12 +23,8 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { setSidebarShopContext } from "./shopContextState"
 import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
-import {
-  ADMIN_PATHS,
-  MARKET_PATHS,
-  ORG_PATHS,
-  SHOP_PATHS,
-} from "../../routes/paths"
+import { ADMIN_PATHS, MARKET_PATHS, ORG_PATHS } from "../../routes/paths"
+import { shopLandingPath } from "../../features/shops/domain/shopPermissions"
 import { useUnreadChatCount } from "../../features/chats/hooks/UnreadChatCount"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
@@ -216,8 +212,11 @@ export function SidebarV2() {
       setContextOverride({ ctx: "admin", shopSlug: null, orgId: null })
       navigate(ADMIN_PATHS.orders)
     } else if (ctx === "shop" && id) {
+      // The switcher lists exactly `shops`, so the chosen one is in it.
+      const shop = shops.find((s) => s.slug === id)
+      if (!shop) return
       setContextOverride({ ctx, shopSlug: id, orgId: null })
-      navigate(SHOP_PATHS.orders(id))
+      navigate(shopLandingPath(shop))
     } else if (ctx === "org" && id) {
       setContextOverride({ ctx, shopSlug: null, orgId: id })
       navigate(ORG_PATHS.members(id))

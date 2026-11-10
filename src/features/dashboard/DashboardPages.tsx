@@ -4,16 +4,20 @@
  * route context and renders CustomizableDashboard. These are NEW, dedicated
  * "Dashboard" tabs — the legacy pages (Assigned to Me, shop Orders, the org
  * dashboard) are left untouched. When the flag is off the routes redirect to
- * their legacy equivalents so bookmarks degrade gracefully.
+ * their legacy equivalents so bookmarks degrade gracefully (the shop one to
+ * the page opening the shop lands on: shopLandingPath).
  */
 
 import { Navigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useFeatureFlag } from "../../hooks/market"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
-import { PATHS, SHOP_PATHS, ORG_PATHS } from "../../routes/paths"
+import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { CustomizableDashboard } from "./CustomizableDashboard"
-import { canEditShopDashboard } from "../shops/domain/shopPermissions"
+import {
+  canEditShopDashboard,
+  shopLandingPath,
+} from "../shops/domain/shopPermissions"
 import { useOrgDashboardOwner } from "./useOrgDashboardOwner"
 
 /** Personal customizable dashboard — /dashboard/overview. */
@@ -34,7 +38,7 @@ export function ShopDashboardPage() {
     return <Navigate to={PATHS.dashboardShops} replace />
   }
   if (!flags.customizable_dashboard) {
-    return <Navigate to={SHOP_PATHS.orders(shopCtx.shop.slug)} replace />
+    return <Navigate to={shopLandingPath(shopCtx.shop)} replace />
   }
   return (
     <CustomizableDashboard

@@ -1,4 +1,5 @@
 import type { ShopResponse } from "../../../store/api/v2/market"
+import { PATHS, SHOP_PATHS } from "../../../routes/paths"
 
 /**
  * What the signed-in user may do in a shop, from its `permissions` (only
@@ -122,6 +123,59 @@ export function canOpenShopSection(
   section: ShopSection,
 ): boolean {
   return SECTION_ACCESS[section](shop)
+}
+
+/**
+ * Where opening a shop lands (the sidebar's context switcher, the dashboard
+ * route with the dashboard flag off): the first page, in this order, that the
+ * user may open and do their job on.
+ *
+ * 1. orders   - who handles orders (owner, Manage Market, Manage Orders)
+ * 2. stock    - who edits stock lots but not orders (Manage Stock)
+ * 3. listings - everyone else in the shop's org (read-only)
+ *
+ * | role          | lands on |
+ * | ------------- | -------- |
+ * | owner         | orders   |
+ * | Manage Market | orders   |
+ * | Manage Orders | orders   |
+ * | Manage Stock  | stock    |
+ * | member        | listings |
+ * | outsider      | none     |
+ *
+ * Each step also checks canOpenShopSection, so the landing page can never be
+ * one that shows NoShopPermission.
+ */
+const SHOP_LANDING: ReadonlyArray<{
+  section: ShopSection
+  worksHere: (shop: ShopWithPermissions) => boolean
+}> = [
+  { section: "orders", worksHere: canHandleShopOrders },
+  { section: "stock", worksHere: canEditShopStockLots },
+  { section: "listings", worksHere: canViewShopPrivate },
+]
+
+/** The section opening the shop lands on; null for a shop the user isn't in. */
+export function shopLandingSection(
+  shop: ShopWithPermissions,
+): ShopSection | null {
+  return (
+    SHOP_LANDING.find(
+      ({ section, worksHere }) =>
+        canOpenShopSection(shop, section) && worksHere(shop),
+    )?.section ?? null
+  )
+}
+
+/**
+ * The path opening the shop lands on (shopLandingSection). A shop the user
+ * isn't in goes to My Shops, as ShopContextFromRoute sends it.
+ */
+export function shopLandingPath(
+  shop: ShopWithPermissions & Pick<ShopResponse, "slug">,
+): string {
+  const section = shopLandingSection(shop)
+  return section ? SHOP_PATHS[section](shop.slug) : PATHS.dashboardShops
 }
 
 const PATH_SECTIONS: Record<string, ShopSection> = {

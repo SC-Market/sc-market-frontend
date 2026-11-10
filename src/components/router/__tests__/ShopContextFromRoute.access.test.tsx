@@ -3,7 +3,8 @@
  * direct navigation to the rest, by one rule (canOpenShopSection, mirroring
  * the backend's canManageShop / canManageShopStock / canManageShopOrders /
  * services checks). Pinned per role: owner, manager (Manage Market),
- * stock-only, orders-only, plain member, and an outsider.
+ * stock-only, orders-only, plain member, and an outsider. Opening a shop
+ * lands on the first of those pages the role works on (shopLandingSection).
  */
 import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -14,6 +15,8 @@ import "../../../util/i18n"
 import type { ShopResponse } from "../../../features/shops/api/shopsApi"
 import {
   canOpenShopSection,
+  shopLandingPath,
+  shopLandingSection,
   type ShopSection,
 } from "../../../features/shops/domain/shopPermissions"
 import { shopNavItems } from "../../sidebar/sidebarNavItems"
@@ -300,4 +303,32 @@ describe("manage tab bar per role", () => {
     renderAt("listings", <ManageListingsTabBar title="Manage Listings" />)
     expect(tabs()).toEqual(expected)
   })
+})
+
+describe("shop landing page per role", () => {
+  it.each<[Role, ShopSection | null, string]>([
+    ["owner", "orders", "/shop/fang-shop/orders"],
+    ["manager", "orders", "/shop/fang-shop/orders"],
+    ["ordersOnly", "orders", "/shop/fang-shop/orders"],
+    ["stockOnly", "stock", "/shop/fang-shop/stock"],
+    ["member", "listings", "/shop/fang-shop/listings"],
+    ["outsider", null, "/dashboard/shops"],
+  ])("%s lands on %s", (role, section, path) => {
+    expect(shopLandingSection(shop(role))).toBe(section)
+    expect(shopLandingPath(shop(role))).toBe(path)
+  })
+
+  it.each(ROLES.filter((r) => r !== "outsider"))(
+    "%s: the landing page opens instead of the no-permission state",
+    (role) => {
+      const section = shopLandingSection(shop(role))!
+      expect(ALLOWED[role]).toContain(section)
+      asRole(role)
+      renderAt(section)
+      expect(screen.getByText(`page:${section}`)).toBeInTheDocument()
+      expect(
+        screen.queryByRole("heading", { name: NO_ACCESS_TITLES[section] }),
+      ).toBeNull()
+    },
+  )
 })
