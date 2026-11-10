@@ -9,7 +9,8 @@ import { MarketMultipleViewV2 } from "../MarketMultipleViewV2"
 import { generatedApiV2 } from "../../../../store/generatedApiV2"
 import { serviceApi } from "../../../../store/service"
 import "@testing-library/jest-dom"
-import { vi, describe, it, expect } from "vitest"
+import { vi, describe, it, expect, afterEach } from "vitest"
+import { CustomDomainContext } from "../../../../hooks/contractor/CustomDomain"
 import { querySuccess } from "../../../../__tests__/rtkQueryMocks"
 import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market"
 import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout"
@@ -491,5 +492,29 @@ describe("MarketMultipleViewV2", () => {
       // Should use fallback image
       expect(image.src).toContain("default-image.png")
     })
+  })
+})
+
+describe("MarketMultipleViewV2 on an org's white-label domain", () => {
+  const replace = vi.fn()
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    replace.mockReset()
+  })
+
+  it("sends another seller's bundle to the same page on sc-market.space", () => {
+    vi.stubGlobal("location", { ...window.location, replace })
+    // The fixture's seller is a user's shop (owner_spectrum_id null).
+    renderWithProviders(
+      <CustomDomainContext.Provider
+        value={{ isCustomDomain: true, customOrg: "MEDRUNNER" }}
+      >
+        <MarketMultipleViewV2 />
+      </CustomDomainContext.Provider>,
+    )
+    expect(screen.queryByText("Complete Weapon Bundle")).not.toBeInTheDocument()
+    expect(replace).toHaveBeenCalledWith(
+      expect.stringMatching(/^https:\/\/sc-market\.space\//),
+    )
   })
 })

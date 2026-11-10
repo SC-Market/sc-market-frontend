@@ -34,6 +34,7 @@ import {
   VariantDetailsTable,
 } from "./BundleListingParts"
 import { BundleImagePanel, BundleListingHeader } from "./BundleListingHeader"
+import { useWhiteLabelOwnerHandoff } from "../../../components/router/WhiteLabelRouteGuard"
 
 export function MarketMultipleViewV2() {
   const { t } = useTranslation()
@@ -96,6 +97,12 @@ export function MarketMultipleViewV2() {
       [itemId]: variantId || "",
     }))
   }
+
+  // Another seller's bundle on an org's white-label domain: on sc-market.space.
+  const leaving = useWhiteLabelOwnerHandoff(
+    listingDetail?.seller.owner_spectrum_id,
+  )
+  if (leaving) return null
 
   return (
     <StandardPageLayout
