@@ -478,7 +478,11 @@
     "cookiePreferences": "Cookie 偏好",
     "changelog": "更新日志",
     "sdkNpm": "npm 上的 SDK",
-    "orgsSdkNpm": "npm 上的 SC Orgs SDK"
+    "orgsSdkNpm": "npm 上的 SC Orgs SDK",
+    "groupHelp": "帮助",
+    "groupProject": "项目",
+    "groupLegal": "法律信息",
+    "scOrgsHome": "访问 SC Orgs"
   },
   "itemAcquisition": {
     "addToCart": "加入购物车",
