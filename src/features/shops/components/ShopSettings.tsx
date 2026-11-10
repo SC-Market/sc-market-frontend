@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   Alert,
@@ -16,7 +15,6 @@ import {
   useSaveShopSettings,
   useUploadShopImage,
 } from "../hooks/useShopSettingsActions"
-import { canOpenShopSettings } from "../domain/shopPermissions"
 import {
   savedSettingsDraft,
   settingsDraftToUpdateRequest,
@@ -36,7 +34,6 @@ import {
 } from "../../../util/imageResize"
 import { ShopBlocklistSection } from "./ShopBlocklist"
 import { ShopStorefrontSection } from "./ShopStorefrontSection"
-import { SHOP_PATHS } from "../../../routes/paths"
 import type {
   ShopResponse,
   ShopSlugAvailabilityResponse,
@@ -51,11 +48,8 @@ import { ShopTransferSection } from "./ShopTransferSection"
 import { ShopAppearanceFields, ShopTagFields } from "./ShopSettingsFields"
 
 export function ShopSettings() {
+  // ShopContextFromRoute only renders this page for canOpenShopSettings.
   const { shop } = useShopRouteContext()
-
-  if (!canOpenShopSettings(shop)) {
-    return <Navigate to={SHOP_PATHS.listings(shop.slug)} replace />
-  }
   // Keyed by shop: the form's draft is made once per shop, so a refetch of
   // the same shop never wipes what is being typed.
   return <ShopSettingsForm key={shop.shop_id} shop={shop} />

@@ -1861,6 +1861,20 @@
         "settings": "You don't have permission to manage this organization's settings"
       }
     },
+    "noShopPermission": {
+      "backToShop": "Go to {{shop}}",
+      "description": "Your role in the organization that owns this shop doesn't include this permission. Ask an organization admin if you need access.",
+      "titles": {
+        "listings": "You don't have access to this shop's listings",
+        "create": "You don't have permission to create listings for this shop",
+        "stock": "You don't have access to this shop's stock",
+        "orders": "You don't have permission to handle this shop's orders",
+        "dashboard": "You don't have access to this shop's dashboard",
+        "services": "You don't have permission to manage this shop's services",
+        "customers": "You don't have permission to view this shop's customers",
+        "settings": "You don't have permission to manage this shop's settings"
+      }
+    },
     "notifications": {
       "noNotifications": "No notifications",
       "noNotificationsDescription": "You're all caught up. New notifications show up here."

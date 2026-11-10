@@ -6,8 +6,11 @@
 
 import React from "react"
 import { Box, Tabs, Tab, Typography } from "@mui/material"
-import { useNavigate, useLocation, matchPath } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
+import { canOpenShopSection } from "../../shops/domain/shopPermissions"
+import { SHOP_PATHS } from "../../../routes/paths"
 
 export interface ManageListingsTabBarProps {
   /** Page title shown to the left of the tabs (e.g. "Manage Listings", "Manage Stock", "Manage Services") */
@@ -16,11 +19,19 @@ export interface ManageListingsTabBarProps {
   rightAction?: React.ReactNode
 }
 
-function getTabForPath(pathname: string): number {
+type ManageTab = "listings" | "stock" | "services"
+
+function getTabForPath(pathname: string): ManageTab {
   if (pathname.includes("/stock") || pathname.includes("/manage-stock"))
-    return 1
-  if (pathname.includes("/services")) return 2
-  return 0
+    return "stock"
+  if (pathname.includes("/services")) return "services"
+  return "listings"
+}
+
+const PERSONAL_ROUTES: Record<ManageTab, string> = {
+  listings: "/market/manage",
+  stock: "/market/manage-stock",
+  services: "/order/services",
 }
 
 export function ManageListingsTabBar({
@@ -31,27 +42,28 @@ export function ManageListingsTabBar({
   const navigate = useNavigate()
   const location = useLocation()
   const currentTab = getTabForPath(location.pathname)
+  // Under /shop/:shopSlug/...: only the tabs the user may open there
+  // (canOpenShopSection, as in the sidebar).
+  const shop = useOptionalShopRouteContext()?.shop
+  const tabs = (["listings", "stock", "services"] as const).filter(
+    (tab) => !shop || canOpenShopSection(shop, tab),
+  )
+  const labels: Record<ManageTab, string> = {
+    listings: t("sidebar.manage_listings", "Manage Listings"),
+    stock: t("sidebar.manage_stock", "Stock"),
+    services: t("sidebar.manage_services", "Manage Services"),
+  }
 
-  // Resolve shop slug from URL if under /shop/:slug/...
-  const shopMatch = matchPath("/shop/:shopSlug/*", location.pathname)
-  const shopSlug = (shopMatch?.params as { shopSlug?: string })?.shopSlug
-
-  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    if (shopSlug) {
-      const shopRoutes = [
-        `/shop/${shopSlug}/listings`,
-        `/shop/${shopSlug}/stock`,
-        `/shop/${shopSlug}/services`,
-      ]
-      navigate(shopRoutes[newValue])
-    } else {
-      const fallbackRoutes = [
-        "/market/manage",
-        "/market/manage-stock",
-        "/order/services",
-      ]
-      navigate(fallbackRoutes[newValue])
-    }
+  const handleTabChange = (_: React.SyntheticEvent, tab: ManageTab) => {
+    navigate(
+      shop
+        ? {
+            listings: SHOP_PATHS.listings(shop.slug),
+            stock: SHOP_PATHS.stock(shop.slug),
+            services: SHOP_PATHS.services(shop.slug),
+          }[tab]
+        : PERSONAL_ROUTES[tab],
+    )
   }
 
   return (
@@ -93,9 +105,9 @@ export function ManageListingsTabBar({
           scrollButtons="auto"
           sx={{ minHeight: 0, maxWidth: "100%" }}
         >
-          <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-          <Tab label={t("sidebar.manage_stock", "Stock")} />
-          <Tab label={t("sidebar.manage_services", "Manage Services")} />
+          {tabs.map((tab) => (
+            <Tab key={tab} value={tab} label={labels[tab]} />
+          ))}
         </Tabs>
       </Box>
       {rightAction != null && (

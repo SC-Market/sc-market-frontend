@@ -1,5 +1,11 @@
 import React from "react"
-import { Outlet, Navigate, useParams, useOutletContext } from "react-router-dom"
+import {
+  Outlet,
+  Navigate,
+  useLocation,
+  useParams,
+  useOutletContext,
+} from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import LoadingBar from "react-top-loading-bar"
 import {
@@ -8,6 +14,12 @@ import {
   ShopResponse,
 } from "../../features/shops/api/shopsApi"
 import { PATHS } from "../../routes/paths"
+import {
+  canOpenShopSection,
+  canViewShopPrivate,
+  shopSectionOfPath,
+} from "../../features/shops/domain/shopPermissions"
+import { NoShopPermission } from "./NoShopPermission"
 
 interface ShopRouteContext {
   shop: ShopResponse
@@ -15,11 +27,15 @@ interface ShopRouteContext {
 
 /**
  * When rendered under a route with :shopSlug (e.g. /shop/:shopSlug/listings),
- * fetches that shop and verifies the current user can manage it.
- * Provides shop data to children via outlet context.
+ * fetches that shop and verifies the current user may open the page: shops
+ * that aren't theirs (not in /shops/mine) go back to My Shops, and a page
+ * their org role doesn't allow (canOpenShopSection: the same rules the
+ * sidebar uses to hide it) shows NoShopPermission. Provides shop data to
+ * children via outlet context.
  */
 export function ShopContextFromRoute() {
   const { shopSlug } = useParams<{ shopSlug: string }>()
+  const { pathname } = useLocation()
   const theme = useTheme()
 
   const { data: myShops, isLoading: myShopsLoading } = useGetMyShopsQuery()
@@ -45,9 +61,14 @@ export function ShopContextFromRoute() {
   // Find the full ShopResponse from myShops (which includes can_manage)
   const ownedShop = myShops?.find((s) => s.slug === shopSlug)
 
-  if (!ownedShop) {
-    // User doesn't own this shop
+  if (!ownedShop || !canViewShopPrivate(ownedShop)) {
+    // Not the user's shop, nor one of their orgs'
     return <Navigate to={PATHS.dashboardShops} replace />
+  }
+
+  const section = shopSectionOfPath(pathname)
+  if (section && !canOpenShopSection(ownedShop, section)) {
+    return <NoShopPermission section={section} shop={ownedShop} />
   }
 
   return <Outlet context={{ shop: ownedShop } satisfies ShopRouteContext} />

@@ -4405,6 +4405,20 @@
         "settings": "你沒有管理此組織設定的權限"
       }
     },
+    "noShopPermission": {
+      "backToShop": "前往 {{shop}}",
+      "description": "你在擁有此商店的組織中的角色不包含此權限。如需存取，請洽詢組織管理員。",
+      "titles": {
+        "listings": "你無權存取此商店的商品",
+        "create": "你沒有為此商店建立商品的權限",
+        "stock": "你無權存取此商店的庫存",
+        "orders": "你沒有處理此商店訂單的權限",
+        "dashboard": "你無權存取此商店的儀表板",
+        "services": "你沒有管理此商店服務的權限",
+        "customers": "你沒有檢視此商店客戶的權限",
+        "settings": "你沒有管理此商店設定的權限"
+      }
+    },
     "notifications": {
       "noNotifications": "無通知",
       "noNotificationsDescription": "你已全部處理完畢。新通知會顯示在這裡。"

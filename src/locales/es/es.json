@@ -4538,6 +4538,20 @@
         "settings": "No tienes permiso para gestionar la configuración de esta organización"
       }
     },
+    "noShopPermission": {
+      "backToShop": "Ir a {{shop}}",
+      "description": "Tu rol en la organización propietaria de esta tienda no incluye este permiso. Pide acceso a un administrador de la organización si lo necesitas.",
+      "titles": {
+        "listings": "No tienes acceso a los anuncios de esta tienda",
+        "create": "No tienes permiso para crear anuncios en esta tienda",
+        "stock": "No tienes acceso al stock de esta tienda",
+        "orders": "No tienes permiso para gestionar los pedidos de esta tienda",
+        "dashboard": "No tienes acceso al panel de esta tienda",
+        "services": "No tienes permiso para gestionar los servicios de esta tienda",
+        "customers": "No tienes permiso para ver los clientes de esta tienda",
+        "settings": "No tienes permiso para gestionar la configuración de esta tienda"
+      }
+    },
     "notifications": {
       "noNotifications": "No hay notificaciones",
       "noNotificationsDescription": "Estás al día. Las nuevas notificaciones aparecen aquí."

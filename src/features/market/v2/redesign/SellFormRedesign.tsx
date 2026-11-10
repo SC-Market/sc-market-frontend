@@ -40,6 +40,7 @@ import {
   type BundleItem,
   type QualityRow,
 } from "./SellFormSections"
+import { canEditShopListings } from "../../../shops/domain/shopPermissions"
 
 /**
  * SellFormRedesign — Phase 0 of the Market redesign (behind the
@@ -65,7 +66,7 @@ export function SellFormRedesign() {
 
   const { data: shops } = useGetMyShopsQuery()
   const sellableShops = useMemo(
-    () => (shops ?? []).filter((s) => s.permissions?.manage_market !== false),
+    () => (shops ?? []).filter(canEditShopListings),
     [shops],
   )
 

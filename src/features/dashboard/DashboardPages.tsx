@@ -13,6 +13,7 @@ import { useFeatureFlag } from "../../hooks/market"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { PATHS, SHOP_PATHS, ORG_PATHS } from "../../routes/paths"
 import { CustomizableDashboard } from "./CustomizableDashboard"
+import { canEditShopDashboard } from "../shops/domain/shopPermissions"
 import { useOrgDashboardOwner } from "./useOrgDashboardOwner"
 
 /** Personal customizable dashboard — /dashboard/overview. */
@@ -38,7 +39,7 @@ export function ShopDashboardPage() {
   return (
     <CustomizableDashboard
       owner={{ ownerType: "shop", ownerId: shopCtx.shop.shop_id }}
-      canEdit={shopCtx.shop.permissions?.can_manage === true}
+      canEdit={canEditShopDashboard(shopCtx.shop)}
       title={shopCtx.shop.name}
     />
   )

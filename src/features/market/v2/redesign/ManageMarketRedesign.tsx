@@ -26,6 +26,7 @@ import {
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { WipeRelistBanner } from "../components/WipeRelistBanner"
 import { ListingRow } from "./ManageListingRow"
+import { canEditShopListings } from "../../../shops/domain/shopPermissions"
 
 /**
  * ManageMarketRedesign — Phase 0 of the Market redesign (behind the
@@ -47,7 +48,7 @@ export function ManageMarketRedesign() {
 
   const { data: shops } = useGetMyShopsQuery()
   const manageableShops = useMemo(
-    () => (shops ?? []).filter((s) => s.permissions?.manage_market !== false),
+    () => (shops ?? []).filter(canEditShopListings),
     [shops],
   )
 

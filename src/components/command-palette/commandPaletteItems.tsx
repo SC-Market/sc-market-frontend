@@ -22,6 +22,7 @@ import { HELP_PATHS, PATHS, SHOP_PATHS } from "../../routes/paths"
 
 import type { TFunction } from "i18next"
 import type { ShopResponse } from "../../features/shops/api/shopsApi"
+import { canHandleShopOrders } from "../../features/shops/domain/shopPermissions"
 export interface CommandItem {
   id: string
   label: string
@@ -203,7 +204,8 @@ export function navCommandItems(
         category: "navigation",
       },
     )
-    for (const shop of shops) {
+    // Only shops whose orders the user handles (canHandleShopOrders).
+    for (const shop of shops.filter(canHandleShopOrders)) {
       items.push({
         id: `shop-${shop.slug}`,
         label: t("appUi.commandPalette.items.shopOrders", {

@@ -30,6 +30,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS } from "../../routes/paths"
 import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
+import { canEditShopListings } from "../../features/shops/domain/shopPermissions"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 
@@ -97,7 +98,8 @@ export function CommandPalette() {
     const items: CommandItem[] = []
 
     if (profile) {
-      const primaryShop = shops[0]
+      // The first shop the user may create listings in.
+      const primaryShop = shops.find(canEditShopListings)
       if (primaryShop) {
         items.push({
           id: "create-listing",

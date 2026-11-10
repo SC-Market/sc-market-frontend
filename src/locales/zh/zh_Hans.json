@@ -4562,6 +4562,20 @@
         "settings": "你没有管理此组织设置的权限"
       }
     },
+    "noShopPermission": {
+      "backToShop": "前往 {{shop}}",
+      "description": "你在拥有此店铺的组织中的角色不包含此权限。如需访问，请联系组织管理员。",
+      "titles": {
+        "listings": "你无权访问此店铺的商品",
+        "create": "你没有为此店铺创建商品的权限",
+        "stock": "你无权访问此店铺的库存",
+        "orders": "你没有处理此店铺订单的权限",
+        "dashboard": "你无权访问此店铺的仪表盘",
+        "services": "你没有管理此店铺服务的权限",
+        "customers": "你没有查看此店铺客户的权限",
+        "settings": "你没有管理此店铺设置的权限"
+      }
+    },
     "notifications": {
       "noNotifications": "暂无通知",
       "noNotificationsDescription": "你已查看全部通知。新通知会显示在这里。"

@@ -483,7 +483,15 @@ describe("SidebarV2 — shop context", () => {
   })
 
   it("renders the core shop items when a shop is selected", () => {
-    mockShops = [shopWithPerms()]
+    // The owner (GET /shops/mine sets every flag for the owning user)
+    mockShops = [
+      shopWithPerms({
+        manage_market: true,
+        manage_stock: true,
+        manage_orders: true,
+        can_manage: true,
+      }),
+    ]
     renderSidebar("/shop/test-shop/orders")
     expect(screen.getByText("Shop Page")).toBeInTheDocument()
     expect(screen.getByText("Orders")).toBeInTheDocument()
@@ -504,19 +512,20 @@ describe("SidebarV2 — shop context", () => {
   })
 
   it("shows manage_market items (Create Listing / Stock) with the permission", () => {
+    // Manage Market: /shops/mine reports it as can_manage too
     mockShops = [
       shopWithPerms({
         manage_market: true,
         manage_stock: false,
         manage_orders: false,
-        can_manage: false,
+        can_manage: true,
       }),
     ]
     renderSidebar("/shop/test-shop/orders")
     expect(screen.getByText("Create Listing")).toBeInTheDocument()
     expect(screen.getByText("Stock")).toBeInTheDocument()
-    // can_manage still off, so no Customers / Settings
-    expect(screen.queryByText("Customers")).not.toBeInTheDocument()
+    // Services need Manage Orders
+    expect(screen.queryByText("Services")).not.toBeInTheDocument()
   })
 
   // Regression: the sidebar switched to "Browsing" on a listing's page after
@@ -769,7 +778,7 @@ describe("SidebarV2 — active highlight", () => {
         manage_market: true,
         manage_stock: false,
         manage_orders: false,
-        can_manage: false,
+        can_manage: true,
       }),
     ]
     renderSidebar("/shop/test-shop/listings/create")

@@ -1,7 +1,8 @@
 import "../../../../util/i18n"
 /**
  * Shop Settings › form: edits survive a refetch of the same shop, saving
- * sends only what changed, and the page follows canOpenShopSettings.
+ * sends only what changed. (Who may open it: ShopContextFromRoute, see
+ * src/components/router/__tests__/ShopContextFromRoute.access.test.tsx.)
  */
 import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -177,18 +178,5 @@ describe("Shop Settings › form", () => {
     save()
     await vi.waitFor(() => expect(updateShop).toHaveBeenCalledTimes(2))
     expect(updateShop.mock.calls[1][0].updateShopRequest).toEqual({})
-  })
-
-  it("redirects members without can_manage (Manage Stock or Orders only)", () => {
-    state.shop = shop({
-      permissions: {
-        can_manage: false,
-        manage_market: false,
-        manage_stock: true,
-        manage_orders: true,
-      },
-    })
-    render(page())
-    expect(screen.queryByLabelText(/Shop Name/)).not.toBeInTheDocument()
   })
 })

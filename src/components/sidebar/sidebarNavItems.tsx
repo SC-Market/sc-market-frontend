@@ -4,7 +4,10 @@
  */
 import React from "react"
 import type { TFunction } from "i18next"
-import { canOpenShopSettings } from "../../features/shops/domain/shopPermissions"
+import {
+  canOpenShopSection,
+  type ShopSection,
+} from "../../features/shops/domain/shopPermissions"
 import {
   AddRounded,
   BusinessRounded,
@@ -52,6 +55,11 @@ export interface NavItem {
   whiteLabelKey?: string
 }
 
+/**
+ * The shop's sidebar: each management page only when the user may open it
+ * (canOpenShopSection, the rule ShopContextFromRoute enforces on direct
+ * navigation, mirroring the backend's checks).
+ */
 export function shopNavItems(
   t: TFunction,
   selectedShop: ShopResponse,
@@ -59,71 +67,61 @@ export function shopNavItems(
   shopPendingOrderCount: number,
 ): NavItem[] {
   const slug = selectedShop.slug
-  const perms = selectedShop.permissions
+  const can = (section: ShopSection) =>
+    canOpenShopSection(selectedShop, section)
   const manage = t("nav.groupManage", "Manage")
-  const items: NavItem[] = [
+  const items: (NavItem | false)[] = [
     {
       label: t("nav.shopPage", "Shop Page"),
       to: SHOP_PATHS.profile(slug),
       icon: <StorefrontRounded />,
     },
-    ...(customizableDashboard
-      ? [
-          {
-            label: t("nav.dashboard", "Dashboard"),
-            to: SHOP_PATHS.dashboard(slug),
-            icon: <DashboardRounded />,
-          },
-        ]
-      : []),
-    {
+    !!customizableDashboard &&
+      can("dashboard") && {
+        label: t("nav.dashboard", "Dashboard"),
+        to: SHOP_PATHS.dashboard(slug),
+        icon: <DashboardRounded />,
+      },
+    can("orders") && {
       label: t("nav.orders", "Orders"),
       to: SHOP_PATHS.orders(slug),
       icon: <LocalShippingRounded />,
       badge: shopPendingOrderCount,
     },
-    {
+    can("listings") && {
       label: t("nav.listings", "Listings"),
       to: SHOP_PATHS.listings(slug),
       icon: <ListAltRounded />,
     },
-    {
+    can("services") && {
       label: t("nav.services", "Services"),
       to: SHOP_PATHS.services(slug),
       icon: <DesignServicesRounded />,
     },
-  ]
-  if (perms?.manage_market) {
-    items.push({
+    can("create") && {
       label: t("nav.createListing", "Create Listing"),
       to: SHOP_PATHS.create(slug),
       icon: <AddRounded />,
-    })
-  }
-  if (perms?.manage_stock || perms?.manage_market) {
-    items.push({
+    },
+    can("stock") && {
       label: t("nav.stock", "Stock"),
       to: SHOP_PATHS.stock(slug),
       icon: <InventoryRounded />,
-    })
-  }
-  if (perms?.can_manage) {
-    items.push({
+    },
+    can("customers") && {
       label: t("nav.customers", "Customers"),
       to: SHOP_PATHS.customers(slug),
       icon: <PeopleRounded />,
       group: manage,
-    })
-  }
-  if (canOpenShopSettings(selectedShop)) {
-    items.push({
+    },
+    can("settings") && {
       label: t("nav.shopSettings", "Settings"),
       to: SHOP_PATHS.settings(slug),
       icon: <SettingsRounded />,
       group: manage,
-    })
-  }
-  return items
+    },
+  ]
+  return items.filter((item): item is NavItem => item !== false)
 }
 
 export function orgNavItems(

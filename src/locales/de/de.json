@@ -4513,6 +4513,20 @@
         "settings": "Du hast keine Berechtigung, die Einstellungen dieser Organisation zu verwalten"
       }
     },
+    "noShopPermission": {
+      "backToShop": "Zu {{shop}}",
+      "description": "Deine Rolle in der Organisation, der dieser Shop gehört, umfasst diese Berechtigung nicht. Wende dich an einen Administrator der Organisation, wenn du Zugriff benötigst.",
+      "titles": {
+        "listings": "Du hast keinen Zugriff auf die Inserate dieses Shops",
+        "create": "Du hast keine Berechtigung, Inserate für diesen Shop zu erstellen",
+        "stock": "Du hast keinen Zugriff auf den Bestand dieses Shops",
+        "orders": "Du hast keine Berechtigung, die Bestellungen dieses Shops zu bearbeiten",
+        "dashboard": "Du hast keinen Zugriff auf das Dashboard dieses Shops",
+        "services": "Du hast keine Berechtigung, die Dienstleistungen dieses Shops zu verwalten",
+        "customers": "Du hast keine Berechtigung, die Kunden dieses Shops anzusehen",
+        "settings": "Du hast keine Berechtigung, die Einstellungen dieses Shops zu verwalten"
+      }
+    },
     "notifications": {
       "noNotifications": "Keine Benachrichtigungen",
       "noNotificationsDescription": "Du bist auf dem neuesten Stand. Neue Benachrichtigungen erscheinen hier."

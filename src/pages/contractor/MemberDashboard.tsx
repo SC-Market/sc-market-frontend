@@ -1,5 +1,4 @@
 import React from "react"
-import { Navigate } from "react-router-dom"
 import { Grid } from "@mui/material"
 import { useBreakpointUp } from "../../hooks/layout/useBreakpoint"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
@@ -13,7 +12,6 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
-import { SHOP_PATHS } from "../../routes/paths"
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { DiscordUserInstallCta } from "../../features/discord-install/DiscordUserInstallCta"
 
@@ -25,14 +23,6 @@ export function MemberDashboard() {
   const theme = useTheme<ExtendedTheme>()
   const lg = useBreakpointUp("lg")
   const xxl = useBreakpointUp("xxl")
-
-  if (
-    shopCtx &&
-    spectrumId &&
-    shopCtx.shop.permissions?.manage_orders === false
-  ) {
-    return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />
-  }
 
   const pageTitle = shopCtx ? t("orders.title", "Orders") : t("dashboard.title")
 

@@ -19,6 +19,7 @@ import {
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import type { ShopResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
+import { canOpenShopSettings } from "../domain/shopPermissions"
 import { useFormatters } from "../../../util/format"
 
 export function getInitials(name: string): string {
@@ -205,7 +206,7 @@ export function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           >
             {t("shops.mine.viewShop")}
           </Button>
-          {shop.permissions?.can_manage && (
+          {canOpenShopSettings(shop) && (
             <Button
               variant="contained"
               size="small"
