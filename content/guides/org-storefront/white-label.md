@@ -2,7 +2,7 @@
 title: Org storefronts and white-label
 description: Every org gets a free storefront on SC Market. Verified, active orgs unlock branding on their own sc-market.space subdomain.
 order: 30
-updated: 2026-11-02
+updated: 2026-11-10
 keywords: [white label, white-label, storefront, subdomain, org storefront, branding, theme, embed, widget]
 related: [org-storefront/white-label-theme, org-storefront/org-shop, orgs/manage-your-org]
 ---
@@ -35,7 +35,7 @@ The **Storefront** tab shows each one and what's still missing. SC Market staff 
 - **Your theme**: colors for dark and light mode, card and nav styles, corner rounding and a favicon. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 - **On your subdomain**: your logo and name in the sidebar, page titles with your org's name, and a market that only shows your org's listings.
 - **Site settings**: make the subdomain public or members-only, and pick the page visitors land on.
-- **Sidebar tabs**: hide the market sections you don't use, and add your own links to the sidebar.
+- **Sidebar tabs**: turn the market sections on or off, and add your own links to the sidebar.
 - **The Manage Theme permission**: it appears in your role editor, so you can choose who edits the look.
 
 Everything else, such as listings, orders and stock, works the same as on sc-market.space.
@@ -55,9 +55,20 @@ Only `sc-market.space` subdomains are available for now, not domains of your own
 
 - Your theme and favicon. On sc-market.space your org's pages keep the standard SC Market look.
 - When they open the home page, your chosen landing page, otherwise your org's page. In members-only mode they go to their **Assigned to Me** page instead.
-- Search engines are pointed at the matching sc-market.space page, so your org's page there keeps the ranking. Members-only mode applies only on your subdomain: your storefront on sc-market.space stays public.
+- Only your org's own content: its page, shops, listings and services.
+- A cart with only your org's items. Items they added from other sellers on sc-market.space stay in their cart there.
+- Your org's name in page titles and link previews, for example when a link is pasted into Discord. Search engines are pointed at your subdomain for your org's page, shops and listings, and at sc-market.space for everything else. Members-only mode applies only on your subdomain: your storefront on sc-market.space stays public.
 - In members-only mode, a sign-in screen with your org's name. They sign in with Discord or Citizen iD, just like on sc-market.space.
-- **Help & Guides** and **About** in the sidebar and footer open on sc-market.space in a new tab. The guides always live on the official site.
+- A short footer: **Support**, **Help & Guides**, the report link and the legal links. **Help & Guides** in the sidebar and footer opens on sc-market.space in a new tab. The guides always live on the official site.
+
+### Pages that open on sc-market.space
+
+Some links on your subdomain lead to pages that aren't your org's. Those open on sc-market.space instead:
+
+- Another seller's listing, shop, order or offer, and other orgs' pages.
+- Member profiles, messages and notifications.
+- SC Market-wide pages, such as buy orders, the shop and storefront directories, missions, blueprints and the wiki.
+- The pages of any sidebar tab you turned off (see [sidebar tabs](/guides/org-storefront/white-label-theme#advanced-site-settings)).
 
 ## What only works on sc-market.space
 
