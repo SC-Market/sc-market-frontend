@@ -23,10 +23,10 @@ import { embedNetworkEnv, isEmbedPath } from "./store/embedNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { whiteLabelHeadPlugin } from "./seo/whiteLabelHeadPlugin"
-import { FRONTEND_URL } from "./util/constants"
 import {
   resolveBrowserCustomDomain,
   getWhiteLabelConfig,
+  onDomainOrgChange,
 } from "./hooks/contractor/CustomDomain"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import i18n, { initialLocaleReady, toSupportedLocale } from "./util/i18n"
@@ -146,10 +146,12 @@ installLinkIntentPrefetch()
 // themselves — see Page.tsx and src/hooks/router/usePageTitle.ts, which now set
 // bare titles through Unhead (useHead) rather than writing document.title.
 // On an org's white-label host the server render's head rules apply to
-// every head (src/seo/whiteLabelHeadPlugin.ts): "<Org> — <page>" titles, the
-// org's site name and, on its own pages, their URLs on the host. The org's
-// name is read from the domain cache per resolve: a first visit fills the
-// cache once the domain answer is in, and the heads after it carry it.
+// every head (src/seo/whiteLabelHeadPlugin.ts): "<Org> — <page> · SC Market"
+// titles and the org's site name (URLs stay on sc-market.space). The org's
+// name is read from the domain cache per resolve; a first visit fills the
+// cache once the domain answer is in, and the head is resolved again then,
+// so a page already showing (the static "/" before its redirect, a static
+// hub) gets the org's titles too.
 const onMainSite = isMainSiteHostname(window.location.hostname)
 const head = createHead({
   init: [{ titleTemplate: applyTitleTemplate }],
@@ -158,16 +160,11 @@ const head = createHead({
     : [
         whiteLabelHeadPlugin(() => {
           const orgName = getWhiteLabelConfig()?.name
-          return orgName
-            ? {
-                orgName,
-                origin: window.location.origin,
-                mainOrigin: FRONTEND_URL.replace(/\/+$/, ""),
-              }
-            : null
+          return orgName ? { orgName, origin: window.location.origin } : null
         }),
       ],
 })
+if (!onMainSite) onDomainOrgChange(() => head.invalidate())
 
 // Get error boundary (will use fallback if Bugsnag not loaded yet)
 const ErrorBoundary = getBugsnagErrorBoundary(React)

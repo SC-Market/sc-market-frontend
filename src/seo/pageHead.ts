@@ -4,7 +4,6 @@
  * static shell with HTMLRewriter). Builders in this folder must stay free of
  * browser globals, React, RTK and `import.meta.env` so they run in Workers.
  */
-import { matchBridgeRoute, type BridgePageKind } from "../bridge/routes"
 
 /** One <meta> tag: exactly one of `name` / `property` identifies it. */
 export interface HeadMeta {
@@ -39,22 +38,37 @@ export function applyTitleTemplate(title: string | null | undefined): string {
   return title.includes("SC Market") ? title : `${title} - SC Market`
 }
 
+/** Separators a title may put between its parts ("-", "|", "—", "·", ":"). */
+const TITLE_SEPARATOR = "[-|—–·:]"
+const BRAND_SUFFIX = new RegExp(`\\s*${TITLE_SEPARATOR}\\s*SC Market\\s*$`, "i")
+const BRAND_PREFIX = new RegExp(`^SC Market\\s*${TITLE_SEPARATOR}\\s*`, "i")
+const LEADING_SEPARATOR = new RegExp(`^\\s*${TITLE_SEPARATOR}\\s*`)
+
 /**
- * The title on an org's white-label subdomain: "<Org> — <page>", without
- * SC Market's suffix (the footer still says it's on SC Market). A title
- * that already starts with the org's name is kept; no title is the org.
+ * The title on an org's white-label domain: "<Org> — <page> · SC Market",
+ * or "<Org> · SC Market" for the org's own page name alone. The page's own
+ * SC Market branding and a leading org name are folded into that form, so
+ * it is idempotent: "MEDRUNNER SERVICES - Org" and "MEDRUNNER SERVICES —
+ * Org · SC Market" both give "MEDRUNNER SERVICES — Org · SC Market".
  */
 export function applyWhiteLabelTitle(
   orgName: string,
   title: string | null | undefined,
 ): string {
-  const page = (title ?? "")
-    .replace(/\s*[-|—–]\s*SC Market\s*$/i, "")
+  let page = (title ?? "")
+    .trim()
+    .replace(BRAND_SUFFIX, "")
+    .replace(BRAND_PREFIX, "")
     .replace(/^SC Market$/i, "")
     .trim()
-  if (!page) return orgName
-  if (page.toLowerCase().startsWith(orgName.toLowerCase())) return page
-  return `${orgName} — ${page}`
+  if (page.toLowerCase().startsWith(orgName.toLowerCase())) {
+    const rest = page.slice(orgName.length)
+    // Only a whole leading name ("MEDRUNNER SERVICES - Org", not "MEDRUNNERS").
+    if (rest === "" || /^\s/.test(rest) || LEADING_SEPARATOR.test(rest)) {
+      page = rest.replace(LEADING_SEPARATOR, "").trim()
+    }
+  }
+  return page ? `${orgName} — ${page} · SC Market` : `${orgName} · SC Market`
 }
 
 /** The org's host and name, for the white-label head rules. */
@@ -62,8 +76,6 @@ export interface WhiteLabelHeadOptions {
   orgName: string
   /** The white-label host's origin, e.g. https://medrunner.sc-market.space */
   origin: string
-  /** The main site's origin, which the pages' builders use. */
-  mainOrigin: string
 }
 
 /**
@@ -79,30 +91,6 @@ export interface HeadTagModel {
   innerHTML?: string
 }
 
-/**
- * The page kinds (src/bridge/routes.ts) an org's domain serves as its own:
- * its org page, its shops, its listings. The domain hands every other
- * seller's (and every SC Market-wide page) to sc-market.space, so a page of
- * these kinds still on the host is the org's.
- */
-const WHITE_LABEL_OWN_PAGE_KINDS: ReadonlySet<BridgePageKind> = new Set([
-  "org",
-  "shop",
-  "listing",
-])
-
-/** The page's URL on the org's host, when it's one of the org's own pages. */
-function whiteLabelPageUrl(
-  pageUrl: string,
-  { origin, mainOrigin }: WhiteLabelHeadOptions,
-): string | null {
-  if (!pageUrl.startsWith(`${mainOrigin}/`)) return null
-  const path = pageUrl.slice(mainOrigin.length)
-  const kind = matchBridgeRoute(path.split(/[?#]/)[0])?.route.kind
-  if (!kind || !WHITE_LABEL_OWN_PAGE_KINDS.has(kind)) return null
-  return `${origin}${path}`
-}
-
 const TITLE_META = new Set(["og:title", "twitter:title"])
 
 function metaKey(tag: HeadTagModel): string | undefined {
@@ -110,32 +98,25 @@ function metaKey(tag: HeadTagModel): string | undefined {
 }
 
 /**
- * The white-label head rules, for a page shown on the org's own host. One
+ * The white-label head rules, for a page shown on an org's own host. One
  * function for the server render (whiteLabelPageHead, the SSR `host`
  * variant) and the browser's head (whiteLabelHeadPlugin, Unhead), so the
  * two never disagree:
  *
  * - `<title>`, og:title and twitter:title in the white-label form
- *   (applyWhiteLabelTitle);
- * - on the org's own pages (its org page, shops, listings), the page's own
- *   URL on the org's host: canonical, og:url, twitter:url and the JSON-LD's
- *   (whole values only). The org's pages are indexed on its domain;
+ *   (applyWhiteLabelTitle): the org and SC Market;
  * - og:site_name is the org's and twitter:domain its host, replacing the
- *   shell's; twitter:url is added when the page has none.
+ *   shell's (added when the page has none).
  *
- * Other URLs (images, links to other pages) are left as they are. Rewrites
- * `tags` in place and returns the tags to add.
+ * URLs are left as the pages make them: canonical, og:url, twitter:url and
+ * the JSON-LD's are the page's URL on sc-market.space (owner decision,
+ * 2026-11-10: search engines see one site, the org's domain never competes
+ * with it). Rewrites `tags` in place and returns the tags to add.
  */
 export function applyWhiteLabelHeadRules(
   tags: HeadTagModel[],
-  options: WhiteLabelHeadOptions,
+  { orgName, origin }: WhiteLabelHeadOptions,
 ): HeadTagModel[] {
-  const { orgName, origin } = options
-  const canonical = tags.find(
-    (t) => t.tag === "link" && t.props.rel === "canonical",
-  )?.props.href
-  const pageUrl = canonical ?? null
-  const hostUrl = pageUrl ? whiteLabelPageUrl(pageUrl, options) : null
   const siteMeta: Record<string, string> = {
     "og:site_name": orgName,
     "twitter:domain": new URL(origin).host,
@@ -148,24 +129,12 @@ export function applyWhiteLabelHeadRules(
       continue
     }
     const key = metaKey(tag)
-    if (key) seen.add(key)
-    if (key && TITLE_META.has(key) && tag.props.content !== undefined) {
+    if (!key) continue
+    seen.add(key)
+    if (TITLE_META.has(key) && tag.props.content !== undefined) {
       tag.props.content = applyWhiteLabelTitle(orgName, tag.props.content)
-    } else if (key && key in siteMeta) {
+    } else if (key in siteMeta) {
       tag.props.content = siteMeta[key]
-    }
-    if (!pageUrl || !hostUrl) continue
-    for (const name of Object.keys(tag.props)) {
-      if (tag.props[name] === pageUrl) tag.props[name] = hostUrl
-    }
-    if (
-      tag.tag === "script" &&
-      tag.innerHTML &&
-      /json/.test(tag.props.type ?? "")
-    ) {
-      tag.innerHTML = tag.innerHTML
-        .split(serializeJsonLd(pageUrl))
-        .join(serializeJsonLd(hostUrl))
     }
   }
 
@@ -174,12 +143,6 @@ export function applyWhiteLabelHeadRules(
     if (!seen.has(key)) {
       added.push({ tag: "meta", props: { property: key, content } })
     }
-  }
-  if (hostUrl && !seen.has("twitter:url")) {
-    added.push({
-      tag: "meta",
-      props: { name: "twitter:url", content: hostUrl },
-    })
   }
   return added
 }

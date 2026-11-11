@@ -165,13 +165,6 @@ describe("matchBridgeRoute", () => {
 
 /** The sitemap proxy's rule (functions/[sitemap].ts). */
 const SITEMAP_RULE = "/sitemap*.xml"
-/**
- * Exact robots.txt, for white-label hosts' own robots (src/bridge/whiteLabelSeo.ts):
- * the sitemap route's file again, no new Function. On the main host it
- * passes straight to the static file.
- */
-const ROBOTS_RULE = "/robots.txt"
-const SITEMAP_ROUTE_RULES = [SITEMAP_RULE, ROBOTS_RULE]
 const PAGINATED_PRERENDERED_HUBS: string[] = [
   "/wiki/items",
   "/wiki/ships",
@@ -239,12 +232,10 @@ describe("public/_routes.json", () => {
     expect(PAGINATED_PATHS).toContain("/storefronts")
   })
 
-  it("invokes it for the sitemap proxy and robots.txt only", () => {
+  it("invokes it for the main-host sitemap proxy only", () => {
     expect(invokes("/sitemap.xml")).toBe(true)
     expect(invokes("/sitemap-market-0.xml")).toBe(true)
     expect(invokes("/sitemaps")).toBe(false)
-    expect(invokes("/robots.txt")).toBe(true)
-    expect(invokes("/robots.txt.bak")).toBe(false)
   })
 
   // The hubs' detail pages stay on the bridge: only the exact hub path is
@@ -266,6 +257,7 @@ describe("public/_routes.json", () => {
       "/sw.js",
       "/index.html",
       "/favicon.ico",
+      "/robots.txt",
       "/logo512.png",
       "/homepage-preview.webp",
       "/manifest.webmanifest",
@@ -286,7 +278,7 @@ describe("public/_routes.json", () => {
 
   it("has no catch-all include: every rule is an exact path or a /prefix/*", () => {
     for (const rule of routesJson.include) {
-      if (SITEMAP_ROUTE_RULES.includes(rule)) continue
+      if (rule === SITEMAP_RULE) continue
       expect(rule, rule).toMatch(/^\/([a-z-]+(\/[a-z-]+)*(\/\*)?)?$/)
     }
   })
@@ -295,11 +287,12 @@ describe("public/_routes.json", () => {
     const files = Object.keys(import.meta.glob("/functions/**/*.ts"))
     for (const rule of routesJson.include) {
       const segment = rule.split("/")[1]
-      const file = SITEMAP_ROUTE_RULES.includes(rule)
-        ? "/functions/[sitemap].ts"
-        : segment
-          ? `/functions/${segment}/[[path]].ts`
-          : "/functions/index.ts"
+      const file =
+        rule === SITEMAP_RULE
+          ? "/functions/[sitemap].ts"
+          : segment
+            ? `/functions/${segment}/[[path]].ts`
+            : "/functions/index.ts"
       expect(files, rule).toContain(file)
     }
   })

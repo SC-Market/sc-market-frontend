@@ -1,7 +1,6 @@
 /**
- * The SSR switches that the SSR Function and the bridge's per-host files
- * (robots.txt, sitemap.xml on a white-label host: src/bridge/whiteLabelSeo.ts)
- * both read. Framework-free and pure (tested).
+ * The SSR switches the SSR Function reads (env SSR_ENABLED, SSR_VARIANTS).
+ * Framework-free and pure (tested).
  */
 import { isMainSiteHostname } from "../util/mainSiteHost"
 import { ALL_SSR_VARIANTS, type SsrVariant } from "./protocol"
@@ -54,7 +53,7 @@ export function isWhiteLabelCandidate(hostname: string): boolean {
 /**
  * Whether this request's host is served as an org's white-label domain by
  * the edge (the `host` variant: org-branded renders, a 302 to sc-market.space
- * for the pages it doesn't serve, its own robots.txt and sitemap).
+ * for the pages it doesn't serve).
  */
 export function whiteLabelHostServed(
   env: SsrSwitchEnv,

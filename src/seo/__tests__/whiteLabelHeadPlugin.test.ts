@@ -7,7 +7,6 @@ import type { ResolvableHead } from "unhead/types"
 const OPTIONS = {
   orgName: "MEDRUNNER",
   origin: "https://medrunner.sc-market.space",
-  mainOrigin: "https://sc-market.space",
 }
 
 // The shell's (src/document/document.html) tags the pages' heads replace.
@@ -76,30 +75,29 @@ describe("whiteLabelHeadPlugin", () => {
     head.push(orgPageHead())
     renderDOMHead(head)
 
-    const host = "https://medrunner.sc-market.space/contractor/MEDRUNNER"
-    expect(document.title).toBe("MEDRUNNER - Org")
-    expect(canonical()).toEqual([host])
-    expect(meta("og:url")).toEqual([host])
-    expect(meta("twitter:url")).toEqual([host])
-    expect(meta("og:title")).toEqual(["MEDRUNNER - Org"])
-    expect(meta("twitter:title")).toEqual(["MEDRUNNER - Org"])
+    expect(document.title).toBe("MEDRUNNER — Org · SC Market")
+    // URLs stay on sc-market.space: one site for search engines.
+    expect(canonical()).toEqual([ORG_URL])
+    expect(meta("og:url")).toEqual([ORG_URL])
+    expect(meta("twitter:url")).toEqual([ORG_URL])
+    expect(meta("og:title")).toEqual(["MEDRUNNER — Org · SC Market"])
+    expect(meta("twitter:title")).toEqual(["MEDRUNNER — Org · SC Market"])
     expect(meta("og:site_name")).toEqual(["MEDRUNNER"])
     // The shell's own tag, replaced rather than duplicated.
     expect(meta("twitter:domain")).toEqual(["medrunner.sc-market.space"])
-    expect(jsonLd()).toEqual([{ "@type": "Organization", url: host }])
+    expect(jsonLd()).toEqual([{ "@type": "Organization", url: ORG_URL }])
   })
 
   it("adopts a server render's tags without duplicating them", () => {
-    const host = "https://medrunner.sc-market.space/contractor/MEDRUNNER"
     // What the SSR `host` variant sent (whiteLabelPageHead).
     document.head.innerHTML = `
-      <title>MEDRUNNER - Org</title>
-      <link rel="canonical" href="${host}">
-      <meta property="og:title" content="MEDRUNNER - Org">
-      <meta property="og:url" content="${host}">
-      <meta name="twitter:url" content="${host}">
-      <meta name="twitter:title" content="MEDRUNNER - Org">
-      <script type="application/ld+json">${serializeJsonLd({ "@type": "Organization", url: host })}</script>
+      <title>MEDRUNNER — Org · SC Market</title>
+      <link rel="canonical" href="${ORG_URL}">
+      <meta property="og:title" content="MEDRUNNER — Org · SC Market">
+      <meta property="og:url" content="${ORG_URL}">
+      <meta name="twitter:url" content="${ORG_URL}">
+      <meta name="twitter:title" content="MEDRUNNER — Org · SC Market">
+      <script type="application/ld+json">${serializeJsonLd({ "@type": "Organization", url: ORG_URL })}</script>
       <meta property="og:site_name" content="MEDRUNNER">
       <meta property="twitter:domain" content="medrunner.sc-market.space">`
     const head = createHead({
@@ -109,24 +107,43 @@ describe("whiteLabelHeadPlugin", () => {
     head.push(orgPageHead())
     renderDOMHead(head)
 
-    expect(canonical()).toEqual([host])
-    expect(meta("og:url")).toEqual([host])
+    expect(document.title).toBe("MEDRUNNER — Org · SC Market")
+    expect(canonical()).toEqual([ORG_URL])
+    expect(meta("og:url")).toEqual([ORG_URL])
+    expect(meta("og:title")).toEqual(["MEDRUNNER — Org · SC Market"])
     expect(meta("og:site_name")).toEqual(["MEDRUNNER"])
     expect(meta("twitter:domain")).toEqual(["medrunner.sc-market.space"])
-    expect(jsonLd()).toEqual([{ "@type": "Organization", url: host }])
+    expect(jsonLd()).toEqual([{ "@type": "Organization", url: ORG_URL }])
   })
 
-  it("keeps a page that isn't the org's own on sc-market.space", () => {
+  it("brands a page already showing once the org is known (invalidate)", () => {
+    let options: typeof OPTIONS | null = null
     const head = createHead({
       init: [{ titleTemplate: applyTitleTemplate }],
-      plugins: [whiteLabelHeadPlugin(() => OPTIONS)],
+      plugins: [whiteLabelHeadPlugin(() => options)],
     })
-    head.push(orgPageHead("https://sc-market.space/contracts"))
+    // The static "/" before the domain answer is in.
+    head.push({
+      title: "SC Market — Star Citizen Trading Marketplace",
+      meta: [
+        {
+          property: "og:title",
+          content: "SC Market — Star Citizen Trading Marketplace",
+        },
+      ],
+    })
     renderDOMHead(head)
+    expect(document.title).toBe("SC Market — Star Citizen Trading Marketplace")
 
-    expect(canonical()).toEqual(["https://sc-market.space/contracts"])
-    expect(meta("og:url")).toEqual(["https://sc-market.space/contracts"])
-    expect(meta("og:title")).toEqual(["MEDRUNNER - Org"])
+    options = OPTIONS
+    head.invalidate()
+    renderDOMHead(head)
+    expect(document.title).toBe(
+      "MEDRUNNER — Star Citizen Trading Marketplace · SC Market",
+    )
+    expect(meta("og:title")).toEqual([
+      "MEDRUNNER — Star Citizen Trading Marketplace · SC Market",
+    ])
     expect(meta("og:site_name")).toEqual(["MEDRUNNER"])
   })
 
