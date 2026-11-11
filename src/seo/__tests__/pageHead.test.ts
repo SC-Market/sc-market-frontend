@@ -6,6 +6,8 @@ import {
   applyWhiteLabelTitle,
   faqPageJsonLd,
   headDescription,
+  isPrivateWhiteLabel,
+  PRIVATE_WHITE_LABEL_ROBOTS,
   serializeJsonLd,
   whiteLabelPageHead,
 } from "../pageHead"
@@ -267,5 +269,56 @@ describe("applyWhiteLabelHeadRules", () => {
         },
       },
     ])
+  })
+})
+
+describe("isPrivateWhiteLabel", () => {
+  it.each([
+    [{ focus_mode: "public", require_membership: false }, false],
+    [{}, false],
+    [{ focus_mode: "internal", require_membership: false }, true],
+    [{ focus_mode: "internal", require_membership: true }, true],
+    [{ focus_mode: "public", require_membership: true }, true],
+  ])("%o is private: %s", (domain, expected) => {
+    expect(isPrivateWhiteLabel(domain)).toBe(expected)
+  })
+})
+
+describe("white-label robots (members-only or internal domains)", () => {
+  const options = {
+    orgName: "MEDRUNNER SERVICES",
+    origin: "https://medrunner.sc-market.space",
+  }
+  const TAGS =
+    '<title>Org - SC Market</title><link rel="canonical" href="https://sc-market.space/contractor/MEDRUNNER">'
+
+  it("adds robots noindex, nofollow to a private domain's server render", () => {
+    const out = whiteLabelPageHead(TAGS, { ...options, noindex: true })
+    expect(out).toContain('<meta name="robots" content="noindex, nofollow">')
+    expect(out.match(/name="robots"/g)).toHaveLength(1)
+  })
+
+  it("replaces the page's own robots instead of adding a second", () => {
+    const out = whiteLabelPageHead(
+      `${TAGS}<meta name="robots" content="index, follow">`,
+      { ...options, noindex: true },
+    )
+    expect(out.match(/<meta name="robots"[^>]*>/g)).toEqual([
+      `<meta name="robots" content="${PRIVATE_WHITE_LABEL_ROBOTS}">`,
+    ])
+  })
+
+  it("leaves a public domain indexable", () => {
+    for (const opts of [options, { ...options, noindex: false }]) {
+      const tags: HeadTagModel[] = [
+        { tag: "title", props: {}, textContent: "Page" },
+      ]
+      const added = applyWhiteLabelHeadRules(tags, opts)
+      expect(added.some((t) => t.props.name === "robots")).toBe(false)
+      expect(whiteLabelPageHead(TAGS, opts)).not.toContain("robots")
+    }
+    // A page's own robots (a query variant's noindex) is kept as it is.
+    const own = '<meta name="robots" content="noindex">'
+    expect(whiteLabelPageHead(own, options)).toContain(own)
   })
 })

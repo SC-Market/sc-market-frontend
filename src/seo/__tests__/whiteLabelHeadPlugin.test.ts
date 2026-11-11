@@ -147,6 +147,38 @@ describe("whiteLabelHeadPlugin", () => {
     expect(meta("og:site_name")).toEqual(["MEDRUNNER"])
   })
 
+  it("marks a members-only or internal domain's page noindex once its domain answer is in", () => {
+    let options: (typeof OPTIONS & { noindex: boolean }) | null = null
+    const head = createHead({
+      init: [{ titleTemplate: applyTitleTemplate }],
+      plugins: [whiteLabelHeadPlugin(() => options)],
+    })
+    // The static "/" before the domain answer is in.
+    head.push({ title: "SC Market — Star Citizen Trading Marketplace" })
+    renderDOMHead(head)
+    expect(meta("robots")).toEqual([])
+
+    options = { ...OPTIONS, noindex: true }
+    head.invalidate()
+    renderDOMHead(head)
+    expect(meta("robots")).toEqual(["noindex, nofollow"])
+
+    // A page with robots of its own (a query variant's noindex): one tag.
+    head.push({ meta: [{ name: "robots", content: "noindex" }] })
+    renderDOMHead(head)
+    expect(meta("robots")).toEqual(["noindex, nofollow"])
+  })
+
+  it("leaves a public domain's pages indexable", () => {
+    const head = createHead({
+      init: [{ titleTemplate: applyTitleTemplate }],
+      plugins: [whiteLabelHeadPlugin(() => ({ ...OPTIONS, noindex: false }))],
+    })
+    head.push(orgPageHead())
+    renderDOMHead(head)
+    expect(meta("robots")).toEqual([])
+  })
+
   it("leaves the head alone until the org is known", () => {
     const head = createHead({
       init: [{ titleTemplate: applyTitleTemplate }],

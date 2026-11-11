@@ -76,6 +76,29 @@ export interface WhiteLabelHeadOptions {
   orgName: string
   /** The white-label host's origin, e.g. https://medrunner.sc-market.space */
   origin: string
+  /**
+   * A members-only or internal domain (isPrivateWhiteLabel): its pages get
+   * robots PRIVATE_WHITE_LABEL_ROBOTS.
+   */
+  noindex?: boolean
+}
+
+/** robots on a members-only or internal white-label domain. */
+export const PRIVATE_WHITE_LABEL_ROBOTS = "noindex, nofollow"
+
+/**
+ * Whether an org's white-label domain is members-only or internal (from
+ * its GET /api/domain/:hostname answer; no focus mode is public). Its pages
+ * are behind a sign-in, so search engines must not index them. Public
+ * storefronts (and sc-market.space) stay indexable.
+ */
+export function isPrivateWhiteLabel(domain: {
+  focus_mode?: string | null
+  require_membership?: boolean | null
+}): boolean {
+  return (
+    (domain.focus_mode || "public") !== "public" || !!domain.require_membership
+  )
 }
 
 /**
@@ -106,7 +129,9 @@ function metaKey(tag: HeadTagModel): string | undefined {
  * - `<title>`, og:title and twitter:title in the white-label form
  *   (applyWhiteLabelTitle): the org and SC Market;
  * - og:site_name is the org's and twitter:domain its host, replacing the
- *   shell's (added when the page has none).
+ *   shell's (added when the page has none);
+ * - on a members-only or internal domain (`noindex`), robots
+ *   PRIVATE_WHITE_LABEL_ROBOTS, replacing the page's own robots.
  *
  * URLs are left as the pages make them: canonical, og:url, twitter:url and
  * the JSON-LD's are the page's URL on sc-market.space (owner decision,
@@ -115,12 +140,16 @@ function metaKey(tag: HeadTagModel): string | undefined {
  */
 export function applyWhiteLabelHeadRules(
   tags: HeadTagModel[],
-  { orgName, origin }: WhiteLabelHeadOptions,
+  { orgName, origin, noindex }: WhiteLabelHeadOptions,
 ): HeadTagModel[] {
   const siteMeta: Record<string, string> = {
     "og:site_name": orgName,
     "twitter:domain": new URL(origin).host,
   }
+  // By name (siteMeta's are by property).
+  const nameMeta: Record<string, string> = noindex
+    ? { robots: PRIVATE_WHITE_LABEL_ROBOTS }
+    : {}
   const seen = new Set<string>()
 
   for (const tag of tags) {
@@ -135,6 +164,8 @@ export function applyWhiteLabelHeadRules(
       tag.props.content = applyWhiteLabelTitle(orgName, tag.props.content)
     } else if (key in siteMeta) {
       tag.props.content = siteMeta[key]
+    } else if (key in nameMeta) {
+      tag.props.content = nameMeta[key]
     }
   }
 
@@ -142,6 +173,11 @@ export function applyWhiteLabelHeadRules(
   for (const [key, content] of Object.entries(siteMeta)) {
     if (!seen.has(key)) {
       added.push({ tag: "meta", props: { property: key, content } })
+    }
+  }
+  for (const [key, content] of Object.entries(nameMeta)) {
+    if (!seen.has(key)) {
+      added.push({ tag: "meta", props: { name: key, content } })
     }
   }
   return added

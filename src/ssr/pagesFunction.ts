@@ -24,6 +24,10 @@ import { matchBridgeRoute, type BridgePageKind } from "../bridge/routes"
 import { inlineStylesheets } from "../../scripts/vite/inlineEntryCssPlugin"
 import { isMainSiteHostname } from "../util/mainSiteHost"
 import { hasPageQuery } from "../document/pageQuery"
+import {
+  isPrivateWhiteLabel,
+  PRIVATE_WHITE_LABEL_ROBOTS,
+} from "../seo/pageHead"
 import { createApiFetch, type ApiFetch } from "./apiFetch"
 import {
   requestContextFrom,
@@ -373,6 +377,41 @@ interface Plan {
 /** Why a white-label host isn't rendered (planFor falls back to the bridge). */
 class WhiteLabelUnavailable extends Error {}
 
+/** A members-only or internal domain: the bridge's answer, never indexed. */
+class WhiteLabelPrivate extends WhiteLabelUnavailable {}
+
+const ROBOTS_META_RE = /<meta\b[^>]*\bname="robots"[^>]*>/gi
+
+/**
+ * `response` (the static shell, from the bridge) for a members-only or
+ * internal org domain: `X-Robots-Tag` and a robots meta of
+ * PRIVATE_WHITE_LABEL_ROBOTS (replacing the page's own), so search engines
+ * never index it, with or without running the page's JS. Pure (tested).
+ */
+export async function withPrivateRobots(response: Response): Promise<Response> {
+  const headers = new Headers(response.headers)
+  headers.set("X-Robots-Tag", PRIVATE_WHITE_LABEL_ROBOTS)
+  const init = {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  }
+  if (
+    !response.body ||
+    !(headers.get("Content-Type") ?? "").includes("text/html")
+  ) {
+    return new Response(response.body, init)
+  }
+  const html = (await response.text())
+    .replace(ROBOTS_META_RE, "")
+    .replace(
+      /<\/head>/i,
+      `<meta name="robots" content="${PRIVATE_WHITE_LABEL_ROBOTS}"></head>`,
+    )
+  headers.delete("Content-Length")
+  return new Response(html, init)
+}
+
 /**
  * The org whose white-label domain `hostname` is, as the browser resolves
  * it (HookProvider: GET /api/domain/:hostname, then the org's theme). Only
@@ -402,8 +441,8 @@ async function resolveWhiteLabel(
   if (!data?.spectrum_id || !data.contractor_id) {
     throw new WhiteLabelUnavailable("white-label: unknown host")
   }
-  if ((data.focus_mode ?? "public") !== "public" || data.require_membership) {
-    throw new WhiteLabelUnavailable("white-label: members only")
+  if (isPrivateWhiteLabel(data)) {
+    throw new WhiteLabelPrivate("white-label: members only")
   }
   const theme = await api.fetch(
     `${base}/api/contractors/${encodeURIComponent(data.spectrum_id)}/theme`,
@@ -663,6 +702,9 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   try {
     plan = await planFor(context, url, decision.kind)
   } catch (error) {
+    if (error instanceof WhiteLabelPrivate) {
+      return withPrivateRobots(await fallback(context, error.message))
+    }
     if (error instanceof WhiteLabelUnavailable) {
       return fallback(context, error.message)
     }
