@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { wikiItemImage } from "../wikiItemImage"
-import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 
 describe("wikiItemImage", () => {
   it("uses the manufacturer logo looked up by code, not by display name", () => {
@@ -26,9 +26,7 @@ describe("wikiItemImage", () => {
   })
 
   it("falls back when there is no image and no known manufacturer code", () => {
-    expect(wikiItemImage({ manufacturer_code: null })).toBe(FALLBACK_IMAGE_URL)
-    expect(wikiItemImage({ manufacturer_code: "volt" })).toBe(
-      FALLBACK_IMAGE_URL,
-    )
+    expect(wikiItemImage({ manufacturer_code: null })).toBe(MISSING_IMAGE_URL)
+    expect(wikiItemImage({ manufacturer_code: "volt" })).toBe(MISSING_IMAGE_URL)
   })
 })

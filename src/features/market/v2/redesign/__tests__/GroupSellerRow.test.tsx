@@ -2,7 +2,7 @@ import "../../components/__tests__/setup"
 /**
  * A grouped listing's seller rows show what the top-level listing card
  * (ListingCardV2) shows for that listing, compactly: the listing's photo as
- * a thumbnail (FALLBACK_IMAGE_URL without one, as on the card), title, shop
+ * a thumbnail (MISSING_IMAGE_URL without one, as on the card), title, shop
  * link, rating and badges, seller activity, price, quality, stock, updated
  * time and the NEW / bulk discount / out of stock / internal / unlisted
  * chips.
@@ -17,7 +17,7 @@ import type {
   GetListingsApiResponse,
   ListingSearchResult,
 } from "../../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../../util/constants"
 import {
   formatPrice,
   formatPriceRange,
@@ -144,7 +144,7 @@ describe("grouped listing seller rows", () => {
     renderSellers([variant({ photo: undefined })])
     expect(screen.getByTestId("group-seller-thumbnail")).toHaveAttribute(
       "src",
-      FALLBACK_IMAGE_URL,
+      MISSING_IMAGE_URL,
     )
   })
 
@@ -251,7 +251,7 @@ describe("grouped listing seller rows", () => {
     const row = within(screen.getByTestId("group-seller-row"))
     expect(row.getByTestId("group-seller-thumbnail")).toHaveAttribute(
       "src",
-      FALLBACK_IMAGE_URL,
+      MISSING_IMAGE_URL,
     )
     expect(row.getByTestId("rating")).toHaveTextContent("4/3/trusted")
     expect(row.getByTestId("seller-activity-compact")).toHaveTextContent(

@@ -6,8 +6,6 @@
  * Search Console property and robots.txt can point at it.
  *
  * - Only these file names; anything else goes to Pages (ctx.next()).
- * - On an org's white-label host (the SSR `host` variant), its own
- *   robots.txt and sitemap.xml instead (src/bridge/whiteLabelSeo.ts).
  * - The index's section URLs are rewritten to this host.
  * - Edge-cached for an hour per URL (the API rebuilds every 6 hours).
  * - The API's Last-Modified (the file's <lastmod>) is passed through; the
@@ -15,11 +13,8 @@
  * - An unknown section is a 404; an API failure is a 503 with Retry-After
  *   (never cached), so a crawler retries instead of dropping the sitemap.
  */
+import type { BridgeContext } from "./handler"
 import { isMainSiteHostname } from "../util/mainSiteHost"
-import {
-  handleWhiteLabelSeoFile,
-  type WhiteLabelSeoContext,
-} from "./whiteLabelSeo"
 
 /** /sitemap.xml or /sitemap-<section>-<n>.xml (sections may be hyphenated: missions-hubs) */
 export const SITEMAP_PATH = /^\/sitemap(-[a-z]+(?:-[a-z]+)*-[0-9]{1,3})?\.xml$/
@@ -53,13 +48,9 @@ function xmlResponse(
 }
 
 export async function handleSitemapRequest(
-  ctx: WhiteLabelSeoContext,
+  ctx: BridgeContext,
   runtime: SitemapRuntime,
 ): Promise<Response> {
-  const whiteLabel = await handleWhiteLabelSeoFile(ctx, runtime, (path) =>
-    SITEMAP_PATH.test(path),
-  )
-  if (whiteLabel) return whiteLabel
   const { request, env } = ctx
   if (request.method !== "GET" && request.method !== "HEAD") return ctx.next()
   const url = new URL(request.url)

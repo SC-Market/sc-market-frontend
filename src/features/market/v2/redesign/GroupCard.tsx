@@ -15,7 +15,7 @@ import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import GroupsRounded from "@mui/icons-material/GroupsRounded"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import type { ListingSearchResult } from "../../../../store/api/v2/market"
 import {
   CARD_CHIP_SX,
@@ -234,7 +234,7 @@ export function GroupCard({
               width={320}
               height={180}
               fetchPriority={priority ? "high" : undefined}
-              image={cheapest.photo || FALLBACK_IMAGE_URL}
+              image={cheapest.photo || MISSING_IMAGE_URL}
               sx={{
                 width: "100%",
                 objectFit: "cover",

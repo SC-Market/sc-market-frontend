@@ -490,7 +490,7 @@ describe("MarketMultipleViewV2", () => {
       fireEvent.error(image)
 
       // Should use fallback image
-      expect(image.src).toContain("default-image.png")
+      expect(image.src).toContain("missing-image.webp")
     })
   })
 })

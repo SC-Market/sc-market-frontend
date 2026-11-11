@@ -18,6 +18,23 @@ export interface WhiteLabelDomainConfig {
   require_membership: boolean
 }
 
+const domainOrgListeners = new Set<() => void>()
+
+/**
+ * Call `listener` whenever this page's domain answer is cached or dropped
+ * (the browser's white-label head re-resolves then). Returns the unsubscribe.
+ */
+export function onDomainOrgChange(listener: () => void): () => void {
+  domainOrgListeners.add(listener)
+  return () => {
+    domainOrgListeners.delete(listener)
+  }
+}
+
+function notifyDomainOrgChange(): void {
+  for (const listener of domainOrgListeners) listener()
+}
+
 function getCachedDomainOrg(): WhiteLabelDomainConfig | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
@@ -53,6 +70,7 @@ export function cacheDomainOrg(data: {
   } catch {
     // silently fail
   }
+  notifyDomainOrgChange()
 }
 
 export function getWhiteLabelConfig(): WhiteLabelDomainConfig | null {
@@ -66,6 +84,7 @@ export function clearDomainOrg(): void {
   } catch {
     // silently fail
   }
+  notifyDomainOrgChange()
 }
 
 export interface CustomDomain {

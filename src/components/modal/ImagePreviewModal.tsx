@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ImageZoomPan } from "../animations/ImageZoomPan"
 import { ImagePreviewSheet } from "./ImagePreviewSheet"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 
 export function ImagePreviewModal(props: {
   images: string[]
@@ -183,8 +184,7 @@ export function ImagePreviewModal(props: {
               }}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null
-                currentTarget.src =
-                  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                currentTarget.src = MISSING_IMAGE_URL
               }}
             />
           )}
@@ -285,8 +285,7 @@ export function ImagePreviewModal(props: {
                   }}
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null
-                    currentTarget.src =
-                      "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                    currentTarget.src = MISSING_IMAGE_URL
                   }}
                 />
               </Paper>

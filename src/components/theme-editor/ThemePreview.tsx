@@ -24,7 +24,7 @@ import {
   cardFadeGradient,
 } from "../../hooks/styles/Theme"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 import { sanitizeThemeData } from "./sanitizeThemeData"
 
 /** Sample listing strings — mirrors `ListingCard` layout, not real data. */
@@ -268,7 +268,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             >
               <Box
                 component="img"
-                src={FALLBACK_IMAGE_URL}
+                src={MISSING_IMAGE_URL}
                 alt=""
                 sx={{
                   width: "100%",

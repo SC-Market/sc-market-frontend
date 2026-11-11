@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 
 export function ImagePreviewPaper(props: { photos: string[] }) {
   const { photos } = props
@@ -107,10 +108,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             margin: "auto",
             objectFit: "contain",
           }}
-          src={
-            photos[imageIndex] ||
-            "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-          }
+          src={photos[imageIndex] || MISSING_IMAGE_URL}
           alt={t(
             "accessibility.galleryImage",
             "Gallery image {{index}} of {{total}}",
@@ -122,8 +120,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
           loading="eager"
           onError={({ currentTarget }) => {
             currentTarget.onerror = null
-            currentTarget.src =
-              "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+            currentTarget.src = MISSING_IMAGE_URL
           }}
         />
       </Paper>
@@ -164,8 +161,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
                 loading="lazy"
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
-                  currentTarget.src =
-                    "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                  currentTarget.src = MISSING_IMAGE_URL
                 }}
               />
             </Box>

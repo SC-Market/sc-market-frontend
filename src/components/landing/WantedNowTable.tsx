@@ -18,7 +18,7 @@ import { Link } from "react-router-dom"
 import type { StandingBuyOrder } from "../../features/market/api/marketV2Api"
 import { ExtendedTheme, linkColor } from "../../hooks/styles/Theme"
 import { MARKET_PATHS } from "../../routes/paths"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 import { LandingImg } from "./LandingImage"
 import { WANTED_NOW_COUNT } from "./landingLinks"
 import { remainingQuantity } from "../../features/market/domain/buyOrders"
@@ -82,7 +82,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
           {/* Buyer uploads come in one size (no srcset to offer); the box
               is fixed by width/height, so loading never moves the row. */}
           <LandingImg
-            src={order.photos?.[0]?.url || FALLBACK_IMAGE_URL}
+            src={order.photos?.[0]?.url || MISSING_IMAGE_URL}
             alt=""
             width={THUMB_SIZE}
             height={THUMB_SIZE}
@@ -90,7 +90,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
             decoding="async"
             onError={({ currentTarget }) => {
               currentTarget.onerror = null
-              currentTarget.src = FALLBACK_IMAGE_URL
+              currentTarget.src = MISSING_IMAGE_URL
             }}
             sx={{
               flexShrink: 0,

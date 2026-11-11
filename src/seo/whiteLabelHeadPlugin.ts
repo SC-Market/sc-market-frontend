@@ -10,12 +10,13 @@ import {
  * server render's (applyWhiteLabelHeadRules, src/seo/pageHead.ts), applied
  * to every head Unhead resolves. A page the app renders from scratch there
  * (the static "/" redirecting to the org's page, client-side navigation)
- * then has the org's titles, site name and, on the org's own pages, its
- * URLs on the host, like a server-rendered one; a hydrated one keeps them.
+ * then has the org's titles and site name like a server-rendered one; a
+ * hydrated one keeps them. URLs stay on sc-market.space.
  *
  * `options` is read per resolve: the org's name comes from the domain
- * cache, which a first visit fills once the domain answer is in. Without
- * it (null) the head is left as the pages make it.
+ * cache, which a first visit fills once the domain answer is in (the head
+ * is invalidated then: entry.client.tsx, onDomainOrgChange). Without it
+ * (null) the head is left as the pages make it.
  */
 export function whiteLabelHeadPlugin(
   options: () => WhiteLabelHeadOptions | null,

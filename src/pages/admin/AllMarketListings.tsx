@@ -26,7 +26,7 @@ import {
   ListingSearchResult,
 } from "../../store/api/v2/market"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 import {
   CARD_GRID_PAGE_SIZE_OPTIONS,
   NumberedPagination,
@@ -61,10 +61,10 @@ function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
               <CardMedia
                 component="img"
                 loading="lazy"
-                image={listing.photo || FALLBACK_IMAGE_URL}
+                image={listing.photo || MISSING_IMAGE_URL}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
-                  currentTarget.src = FALLBACK_IMAGE_URL
+                  currentTarget.src = MISSING_IMAGE_URL
                 }}
                 sx={{ height: 140, objectFit: "cover" }}
                 alt={listing.title}

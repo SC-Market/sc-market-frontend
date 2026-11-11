@@ -18,7 +18,7 @@ import Inventory2Rounded from "@mui/icons-material/Inventory2Rounded"
 import { Link as RouterLink, useParams } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { useGetListingDetailQuery } from "../../../../store/api/v2/market"
 import type {
   VariantDetail,
@@ -96,7 +96,7 @@ export function ListingDetailRedesign() {
     return [...allVariants].sort((a, b) => a.price - b.price)[0]
   }, [allVariants, selectedVariantId])
 
-  const photos = listing?.photos?.length ? listing.photos : [FALLBACK_IMAGE_URL]
+  const photos = listing?.photos?.length ? listing.photos : [MISSING_IMAGE_URL]
 
   // For a bundle the "unit" is the set: quantity available = min set count the
   // seller can assemble (bounded by the scarcest component). Phase 0: visual only

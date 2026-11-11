@@ -21,7 +21,7 @@ import RefreshRounded from "@mui/icons-material/RefreshRounded"
 import AddRounded from "@mui/icons-material/AddRounded"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { useGetStockLotsQuery } from "../../../../store/api/v2/market"
 import type {
   MyListingItem,
@@ -83,7 +83,7 @@ export function ListingRow({
           <Stack direction="row" spacing={1.5} alignItems="center">
             <ImageAvatar
               variant="rounded"
-              src={listing.photo || FALLBACK_IMAGE_URL}
+              src={listing.photo || MISSING_IMAGE_URL}
               alt={listing.title}
               sx={{ width: 36, height: 36 }}
             />

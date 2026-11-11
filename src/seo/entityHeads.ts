@@ -18,7 +18,7 @@ import {
   SHOP_PATHS,
   USER_PATHS,
 } from "../routes/paths"
-import { FALLBACK_IMAGE_URL } from "./constants"
+import { MISSING_IMAGE_ABSOLUTE_URL } from "./constants"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 
 import { formatInteger, formatNumber } from "../util/format/format"
@@ -116,8 +116,8 @@ export function sellerRatingLabel(
 }
 
 /**
- * The listing's image: its first photo, else the game item's image, else the
- * site fallback (the RSI placeholder, only when there's nothing else).
+ * The listing's image: its first photo, else the game item's image, else
+ * SC Market's missing-image placeholder (absolute: it's the og:image).
  */
 export function listingImage(
   data: Pick<GetListingDetailResponse, "listing" | "items">,
@@ -126,7 +126,7 @@ export function listingImage(
     data.listing.photos?.find((photo) => !!photo) ||
     data.items?.find((item) => !!item.game_item?.image_url)?.game_item
       .image_url ||
-    FALLBACK_IMAGE_URL
+    MISSING_IMAGE_ABSOLUTE_URL
   )
 }
 
@@ -200,7 +200,7 @@ export function buildListingHead(
         "@type": "Product",
         name: listing.title,
         description: listing.description || description,
-        image: image !== FALLBACK_IMAGE_URL ? image : undefined,
+        image: image !== MISSING_IMAGE_ABSOLUTE_URL ? image : undefined,
         url: canonical,
         category: items[0]?.game_item?.type || undefined,
       },
@@ -286,7 +286,7 @@ export function buildAggregateHead(
 export function bundleImage(
   data: Pick<GetListingDetailResponse, "items">,
 ): string {
-  return data.items[0]?.game_item.image_url || FALLBACK_IMAGE_URL
+  return data.items[0]?.game_item.image_url || MISSING_IMAGE_ABSOLUTE_URL
 }
 
 /**

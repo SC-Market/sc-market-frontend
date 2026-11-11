@@ -1,5 +1,6 @@
 import type { GetListingDetailResponse } from "../../../store/api/v2/market"
 import type { Order } from "../../orders/domain/types"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 
 /**
  * MarketMultipleViewV2 Component
@@ -113,9 +114,7 @@ export function toBundleListingV2(
     })),
     photos: items[0]?.game_item.image_url
       ? [items[0].game_item.image_url]
-      : [
-          "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png",
-        ],
+      : [MISSING_IMAGE_URL],
     seller: {
       name: seller.name,
       slug: seller.slug,

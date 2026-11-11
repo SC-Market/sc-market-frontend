@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { SwipeableItem } from "../../../../components/gestures"
 import { type MyListingItem } from "../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { listingStatusLabel } from "../../domain/listingStatus"
 import { useFormatters, useNow } from "../../../../util/format"
@@ -144,7 +144,7 @@ export function MobileListingRow({
       >
         <ImageAvatar
           alt=""
-          src={listing.photo || FALLBACK_IMAGE_URL}
+          src={listing.photo || MISSING_IMAGE_URL}
           variant="rounded"
           sx={{ width: 48, height: 48, flexShrink: 0, ml: 0.5 }}
           imgProps={{ loading: "lazy" }}

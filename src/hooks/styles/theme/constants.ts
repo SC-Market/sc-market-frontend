@@ -47,10 +47,6 @@ export const breakpointsValues = {
   xxxl: 2200,
 } as const
 
-/**
- * Missing-image placeholder, served from public/. A root-relative path, so it
- * loads from the current origin on sc-market.space and on white-label domains.
- */
-export const MISSING_IMAGE_URL = "/missing-image.webp"
+export { MISSING_IMAGE_URL } from "../../../seo/constants"
 
 export { defaultLayoutSpacing, defaultBorderRadius, defaultBorderWidth }

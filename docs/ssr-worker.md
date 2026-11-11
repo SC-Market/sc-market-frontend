@@ -97,11 +97,11 @@ visitor whose variant is switched off gets the default HTML, which the
 browser renders from scratch instead of hydrating (as before: no mismatch,
 just no hydration speed-up).
 
-| Variant  | Read from                                                                                                                                                                                                                   | Rendered as                                                                                                                                                                                                                                                                                                                              | Browser hydrates when                                                                                                                                                                                                                                                       |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`  | `theme=light` cookie; or no theme cookie / `system` plus `scm_scheme=light` (the pre-theme script in `document.html` writes the OS scheme it saw, so the _next_ page can be light)                                          | The light theme (`useRequestContext().theme`, HookProvider)                                                                                                                                                                                                                                                                              | The pre-theme script resolves the same scheme (`data-ssr-theme`)                                                                                                                                                                                                            |
-| `locale` | `?lng`, then the `i18next` cookie (the detector caches the choice there, SameSite=Lax), then `Accept-Language` (the first visit: the most preferred tag we ship, as i18next picks from `navigator.languages`), else English | A per-request `i18n.cloneInstance` with the locale's strings; `<html lang>` set; renders run one at a time per isolate for the helpers that read the language outside React (`util/renderLanguage.ts`)                                                                                                                                   | `toSupportedLocale(i18n.language)` is the rendered one (`data-ssr-lng`). A visitor whose language is only in localStorage (older visits, before the cookie) differs and gets the page rendered from scratch; the detector writes the cookie then, so the next page hydrates |
-| `host`   | The request's `Host`, when it isn't the main site: `GET /api/domain/:host`, then `GET /api/contractors/:sid/theme` (edge-cached 60 s, anonymous)                                                                            | The org's theme and branding: the custom-domain context, sidebar brand and settings (prefetched with the page), "<Org> — <page>" title. The resolved domain and theme ship with the page data (`whiteLabel`), and `entry.client` seeds the browser's domain and theme caches with them before the first render (`src/ssr/whiteLabel.ts`) | `data-ssr-host` is this host and its domain answer was seeded                                                                                                                                                                                                               |
+| Variant  | Read from                                                                                                                                                                                                                   | Rendered as                                                                                                                                                                                                                                                                                                                                           | Browser hydrates when                                                                                                                                                                                                                                                       |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`  | `theme=light` cookie; or no theme cookie / `system` plus `scm_scheme=light` (the pre-theme script in `document.html` writes the OS scheme it saw, so the _next_ page can be light)                                          | The light theme (`useRequestContext().theme`, HookProvider)                                                                                                                                                                                                                                                                                           | The pre-theme script resolves the same scheme (`data-ssr-theme`)                                                                                                                                                                                                            |
+| `locale` | `?lng`, then the `i18next` cookie (the detector caches the choice there, SameSite=Lax), then `Accept-Language` (the first visit: the most preferred tag we ship, as i18next picks from `navigator.languages`), else English | A per-request `i18n.cloneInstance` with the locale's strings; `<html lang>` set; renders run one at a time per isolate for the helpers that read the language outside React (`util/renderLanguage.ts`)                                                                                                                                                | `toSupportedLocale(i18n.language)` is the rendered one (`data-ssr-lng`). A visitor whose language is only in localStorage (older visits, before the cookie) differs and gets the page rendered from scratch; the detector writes the cookie then, so the next page hydrates |
+| `host`   | The request's `Host`, when it isn't the main site: `GET /api/domain/:host`, then `GET /api/contractors/:sid/theme` (edge-cached 60 s, anonymous)                                                                            | The org's theme and branding: the custom-domain context, sidebar brand and settings (prefetched with the page), "<Org> — <page> · SC Market" titles. The resolved domain and theme ship with the page data (`whiteLabel`), and `entry.client` seeds the browser's domain and theme caches with them before the first render (`src/ssr/whiteLabel.ts`) | `data-ssr-host` is this host and its domain answer was seeded                                                                                                                                                                                                               |
 
 Crawlers (`isCrawler`) always get the default theme and English, whatever
 they send. The `host` variant applies to them too (it's the host, not the
@@ -125,22 +125,25 @@ visitor).
 Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   wanted, they are a route-table and sitemap change; this variant would
   then render them.
-- **White-label hosts index the org's own pages (owner decision,
-  2026-11-10).** A page rendered there is always the org's own (its org
-  page, its shops, its listings): every other page answers a 302 to the
-  same URL on sc-market.space (below). Its canonical, `og:url`,
-  `twitter:url` and the JSON-LD's page URL are on the host, the titles
-  (`<title>`, `og:title`, `twitter:title`) are "<Org> — <page>", and
+- **White-label hosts point at sc-market.space (owner decision,
+  2026-11-10: search engines see one site, no duplicates).** A page
+  rendered there is always the org's own (its org page, its shops, its
+  listings): every other page answers a 302 to the same URL on
+  sc-market.space (below). Its canonical, `og:url`, `twitter:url` and the
+  JSON-LD's page URL are the main site's URL for the page (the builders use
+  `VITE_FRONTEND_URL`; the white-label rules leave URLs alone), so the
+  org's domain never competes with the main page. The titles (`<title>`,
+  `og:title`, `twitter:title`) carry the org and SC Market,
+  "<Org> — <page> · SC Market" (or "<Org> · SC Market"), and
   `og:site_name` / `twitter:domain` are the org's (`whiteLabelPageHead`,
-  src/seo/pageHead.ts). Links to other pages and images keep their URLs.
-  The browser applies the same rules (`applyWhiteLabelHeadRules`, one
-  function for both) to every head on the host through an Unhead plugin
-  (src/seo/whiteLabelHeadPlugin.ts), so a page rendered from scratch there
-  (the static `/` redirecting to the org's page, client-side navigation)
-  gets the same head, and a hydrated one keeps it. Host URLs are for the
-  org's own pages only (org page, shops, listings); the host's other pages
-  keep their sc-market.space canonical, with the org's titles and site name.
-  The document drops SC Market's web-app manifest and uses the org theme's
+  src/seo/pageHead.ts). The browser applies the same rules
+  (`applyWhiteLabelHeadRules`, one function for both) to every head on the
+  host through an Unhead plugin (src/seo/whiteLabelHeadPlugin.ts), so a
+  page rendered from scratch there (the static `/` redirecting to the
+  org's page, a static hub, client-side navigation) gets the same head,
+  and a hydrated one keeps it. On a first visit the org is only known once
+  the domain answer is in; the head is resolved again then
+  (`onDomainOrgChange`, entry.client.tsx). The document drops SC Market's web-app manifest and uses the org theme's
   favicon (`whiteLabelDocument`, src/ssr/whiteLabel.ts). In-app links are
   relative, so they stay on the host.
 - **Theme** never changes content, only colours.
@@ -158,14 +161,13 @@ Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   (`RequestContextValue.handoff`) and never cached. Pages that never
   invoke the Function (`/buyorders`, `/messages`, `/notifications`, ...)
   keep the browser's hand-off.
-- **robots.txt and sitemap.xml per host** (src/bridge/whiteLabelSeo.ts,
-  through `functions/[sitemap].ts`; `_routes.json` adds the exact
-  `/robots.txt`). robots.txt is the site's rules with
-  `Sitemap: https://<host>/sitemap.xml`; sitemap.xml lists the org page,
-  its active shops and its listings (up to 1,000) on the host; both are
-  edge-cached for an hour per host. A members-only or internal domain
-  disallows everything and has no sitemap. On the main host robots.txt
-  passes straight to the static file.
+- **No robots.txt or sitemap of its own.** A white-label host serves the
+  site's static `public/robots.txt` (crawling allowed, the same rules), whose
+  only sitemap is `https://sc-market.space/sitemap.xml`; that sitemap lists
+  the org's pages under sc-market.space, matching their canonicals. There is
+  no per-host sitemap (`/sitemap.xml` on a white-label host is not proxied:
+  `sitemapProxy.ts` answers on the main host only), and `/robots.txt` never
+  invokes a Function.
 
 - Only the SSR prefixes (`/market/<id>`, `/shops/*`, `/contractor/*`,
   `/user/*`, the game-data detail pages) are server-rendered on a
@@ -327,8 +329,7 @@ rate, since each variant fills its own cache entries.
   on every request to a white-label host (a cache hit, ~1 ms). It adds no
   invocations on the SSR prefixes (a white-label host already invoked the
   Function there, for the bridge's pass-through), and its 302s cost less
-  than the pass-through did. The one new invocation is `/robots.txt`, on
-  every host (on the main host it only passes to the static file).
+  than the pass-through did.
 - Rough upper bound: if 30 % of SSR visitors are non-default and none of
   their pages is cached yet, renders grow by about 30 % of visitor misses;
   at the current levels (well under the 8M-request / 25M-CPU-ms alerts)

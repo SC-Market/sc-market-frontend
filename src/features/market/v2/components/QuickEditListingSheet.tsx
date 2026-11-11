@@ -28,7 +28,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { listingStatusLabel } from "../../domain/listingStatus"
 import { selectOnFocus } from "../../../../util/selectOnFocus"
@@ -164,7 +164,7 @@ export function QuickEditListingSheet({
       >
         <ImageAvatar
           alt=""
-          src={listing.photo || FALLBACK_IMAGE_URL}
+          src={listing.photo || MISSING_IMAGE_URL}
           variant="rounded"
           sx={{ width: 44, height: 44, flexShrink: 0 }}
           imgProps={{ loading: "lazy" }}

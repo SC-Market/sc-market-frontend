@@ -43,6 +43,7 @@ import { MARKET_PATHS } from "../../../routes/paths"
 import { useFormatters, useNow } from "../../../util/format"
 
 import type { BundleItemV2, BundleListingV2 } from "./bundleListing"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 
 /** The bundle's product image; clicking it toggles the zoom modal. */
 export function BundleImagePanel({
@@ -104,8 +105,7 @@ export function BundleImagePanel({
           )}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null
-            currentTarget.src =
-              "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+            currentTarget.src = MISSING_IMAGE_URL
           }}
         />
       </Paper>

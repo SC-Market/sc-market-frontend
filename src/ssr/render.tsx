@@ -237,18 +237,15 @@ async function renderPageNow(
       : renderSSRHead(head as unknown as Parameters<typeof renderSSRHead>[0])
           .headTags
   const { whiteLabel } = ssr.requestContext
-  // On the org's white-label host: "<Org> — <page>", as the browser's title
-  // template makes it (entry.client.tsx), and the page's own URL (canonical,
-  // og:url, JSON-LD) on the org's host. Every page rendered there is the
-  // org's own: the others answer 302 to sc-market.space (pagesFunction.ts).
+  // On the org's white-label host: "<Org> — <page> · SC Market" titles and
+  // the org's site name, as the browser's head makes them
+  // (whiteLabelHeadPlugin). The page's URLs (canonical, og:url, JSON-LD)
+  // stay on sc-market.space. Every page rendered there is the org's own:
+  // the others answer 302 to sc-market.space (pagesFunction.ts).
   const pageHeadTags = whiteLabel
     ? whiteLabelPageHead(headTags, {
         orgName: whiteLabel.domain.name,
         origin: `https://${whiteLabel.hostname}`,
-        mainOrigin: (ssr.env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(
-          /\/+$/,
-          "",
-        ),
       })
     : headTags
 

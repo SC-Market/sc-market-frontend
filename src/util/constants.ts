@@ -1,5 +1,5 @@
 import SCMarketLogo from "../assets/scmarket-logo.png"
-import { DEFAULT_FRONTEND_URL, FALLBACK_IMAGE_URL } from "../seo/constants"
+import { DEFAULT_FRONTEND_URL, MISSING_IMAGE_URL } from "../seo/constants"
 
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost"
@@ -16,7 +16,7 @@ export const isCitizenIdEnabled = true
 
 export const defaultAvatar = SCMarketLogo
 
-export { FALLBACK_IMAGE_URL }
+export { MISSING_IMAGE_URL }
 
 export const DISCORD_INVITE = "https://discord.com/invite/N4Gy8py8J4"
 

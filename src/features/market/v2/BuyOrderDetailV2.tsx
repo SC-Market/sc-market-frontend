@@ -17,7 +17,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { useGetBuyOrderDetailQuery } from "../../../store/api/v2/market"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
-import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 import { useTranslation } from "react-i18next"
 import { StorefrontRounded } from "@mui/icons-material"
 import { MARKET_PATHS, PATHS } from "../../../routes/paths"
@@ -49,7 +49,7 @@ export function BuyOrderDetailV2() {
 
   const photos = useMemo(() => {
     if (buyOrder?.photos?.length) return buyOrder.photos.map((p) => p.url)
-    return [FALLBACK_IMAGE_URL]
+    return [MISSING_IMAGE_URL]
   }, [buyOrder])
 
   const remaining = remainingQuantity(buyOrder ?? {})
