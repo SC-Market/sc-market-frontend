@@ -42,6 +42,7 @@ import {
   CONTRACTOR_CARD_AVATAR_SIZE,
   CONTRACTOR_CARD_HEADER_SX,
 } from "./contractorCardSx"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 
 export const contractorKindIcons = {
   freight: <LocalShippingRoundedIcon />,
@@ -122,17 +123,13 @@ export const ContractorListItem = React.memo(
                     sx={CONTRACTOR_CARD_HEADER_SX}
                     avatar={
                       <Avatar
-                        src={
-                          contractor.avatar ||
-                          "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-                        }
+                        src={contractor.avatar || MISSING_IMAGE_URL}
                         aria-label={t("contractors.contractor")}
                         variant={"rounded"}
                         imgProps={{
                           onError: ({ currentTarget }) => {
                             currentTarget.onerror = null
-                            currentTarget.src =
-                              "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                            currentTarget.src = MISSING_IMAGE_URL
                           },
                         }}
                         sx={{

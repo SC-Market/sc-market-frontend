@@ -42,6 +42,7 @@ import AddRounded from "@mui/icons-material/AddRounded"
 import { SellOrdersPanel } from "./AggregateAdminSellOrdersPanel"
 import { BuyOrdersPanel } from "./AggregateAdminBuyOrdersPanel"
 import { StatStrip, QualityTabs, AnalyticsCard } from "./AggregateAdminStats"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 
 // ---------------------------------------------------------------------------
 // Main export
@@ -119,10 +120,7 @@ export function MarketAggregateViewV2Admin({
             >
               <Box
                 component="img"
-                src={
-                  game_item.image_url ||
-                  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-                }
+                src={game_item.image_url || MISSING_IMAGE_URL}
                 alt={game_item.name}
                 sx={{
                   display: "block",
@@ -132,8 +130,7 @@ export function MarketAggregateViewV2Admin({
                   objectFit: "contain",
                 }}
                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                  e.currentTarget.src =
-                    "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                  e.currentTarget.src = MISSING_IMAGE_URL
                 }}
               />
             </Paper>

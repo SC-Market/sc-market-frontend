@@ -3,7 +3,7 @@
  * logo, else the generic fallback.
  */
 import type { WikiItemSearchResult } from "../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 import { getFactionIcon } from "../../util/gameIcons"
 
 /** The image fields of a wiki item (search result or comparison row). */
@@ -20,6 +20,6 @@ export function wikiItemImage(item: WikiItemImageFields): string {
     item.image_url ||
     item.thumbnail_path ||
     getFactionIcon(item.manufacturer_code) ||
-    FALLBACK_IMAGE_URL
+    MISSING_IMAGE_URL
   )
 }

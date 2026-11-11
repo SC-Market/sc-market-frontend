@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../mobile/BottomSheet"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ImageZoomPan } from "../animations/ImageZoomPan"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 
 /** ImagePreviewModal on mobile: a full-height bottom sheet. */
 export function ImagePreviewSheet({
@@ -92,8 +93,7 @@ export function ImagePreviewSheet({
               }}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null
-                currentTarget.src =
-                  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                currentTarget.src = MISSING_IMAGE_URL
               }}
             />
           )}
@@ -199,8 +199,7 @@ export function ImagePreviewSheet({
                   }}
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null
-                    currentTarget.src =
-                      "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                    currentTarget.src = MISSING_IMAGE_URL
                   }}
                 />
               </Paper>

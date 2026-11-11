@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Box, Card, CardMedia, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 
 /** Main photo with a thumbnail strip to switch between the listing's photos. */
 export function ListingPhotoGallery({
@@ -19,10 +19,10 @@ export function ListingPhotoGallery({
       <Card sx={{ overflow: "hidden" }}>
         <CardMedia
           component="img"
-          image={photos[activePhoto] || FALLBACK_IMAGE_URL}
+          image={photos[activePhoto] || MISSING_IMAGE_URL}
           alt={title}
           onError={(e) => {
-            ;(e.target as HTMLImageElement).src = FALLBACK_IMAGE_URL
+            ;(e.target as HTMLImageElement).src = MISSING_IMAGE_URL
           }}
           sx={{
             width: "100%",
@@ -46,11 +46,11 @@ export function ListingPhotoGallery({
             <Box
               key={`${p}-${i}`}
               component="img"
-              src={p || FALLBACK_IMAGE_URL}
+              src={p || MISSING_IMAGE_URL}
               alt=""
               onClick={() => setActivePhoto(i)}
               onError={(e) => {
-                ;(e.target as HTMLImageElement).src = FALLBACK_IMAGE_URL
+                ;(e.target as HTMLImageElement).src = MISSING_IMAGE_URL
               }}
               sx={{
                 width: 64,

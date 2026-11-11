@@ -18,7 +18,7 @@ import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { ListingNameAndRating } from "../../../components/rating/ListingRating"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { PAYMENT_TYPE_MAP } from "../../../util/constants"
+import { PAYMENT_TYPE_MAP, MISSING_IMAGE_URL } from "../../../util/constants"
 import { formatServiceUrl } from "../../../util/urls"
 import { ServiceChips } from "./ServiceChips"
 
@@ -148,10 +148,7 @@ export const ServiceListingBase = React.memo(
                 {service.photos[0] ? (
                   <ImageAvatar
                     alt=""
-                    src={
-                      service.photos[0] ||
-                      "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-                    }
+                    src={service.photos[0] || MISSING_IMAGE_URL}
                     variant={"rounded"}
                     sx={{ height: 128 + 32, width: 128 + 32 }}
                     slotProps={{

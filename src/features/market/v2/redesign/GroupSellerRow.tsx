@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { linkColor } from "../../../../hooks/styles/Theme"
 import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { useFormatters, useNow } from "../../../../util/format"
 import {
   type QualityColor,
@@ -35,7 +35,7 @@ import { formatMarketUrl } from "../../domain/urls"
  */
 export interface SellerRowData {
   listingUrl: string
-  /** The listing's first photo (the card's image); FALLBACK_IMAGE_URL when absent. */
+  /** The listing's first photo (the card's image); MISSING_IMAGE_URL when absent. */
   photo?: string
   title: string
   /** The variant (quality) this row sells, when the row is one variant. */
@@ -222,7 +222,7 @@ export function GroupSellerRow({
           >
             <Box
               component="img"
-              src={row.photo || FALLBACK_IMAGE_URL}
+              src={row.photo || MISSING_IMAGE_URL}
               alt={t("marketV2.imageOf", { name: row.title })}
               loading="lazy"
               width={64}

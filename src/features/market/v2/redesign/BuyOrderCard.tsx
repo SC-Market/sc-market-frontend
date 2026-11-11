@@ -16,7 +16,7 @@ import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import type { StandingBuyOrder } from "../../../../store/api/v2/market"
 import { ListingWrapper } from "../../components/listings/ListingWrapper"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { remainingQuantity } from "../../domain/buyOrders"
 import { useFormatters } from "../../../../util/format"
 
@@ -37,7 +37,7 @@ export function BuyOrderCard({
   const { t } = useTranslation()
 
   const remaining = remainingQuantity(order)
-  const imageUrl = order.photos?.[0]?.url || FALLBACK_IMAGE_URL
+  const imageUrl = order.photos?.[0]?.url || MISSING_IMAGE_URL
   const isDark = theme.palette.mode === "dark"
 
   // A negotiable order may be posted without a price (price_per_unit 0):
@@ -99,7 +99,7 @@ export function BuyOrderCard({
               }}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
+                currentTarget.src = MISSING_IMAGE_URL
               }}
               alt={t("marketV2.imageOf", { name: order.game_item_name })}
             />

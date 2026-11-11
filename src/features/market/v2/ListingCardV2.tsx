@@ -16,7 +16,7 @@ import {
   cardFadeGradient,
   primaryFill,
 } from "../../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { MarketListingRating } from "../../../components/rating/ListingRating"
 import type { ListingSearchResult } from "../../../store/api/v2/market"
@@ -149,7 +149,7 @@ export function ListingCardV2({
               width={320}
               height={180}
               fetchPriority={priority ? "high" : undefined}
-              image={listing.photo || FALLBACK_IMAGE_URL}
+              image={listing.photo || MISSING_IMAGE_URL}
               sx={{
                 width: "100%",
                 objectFit: "cover",

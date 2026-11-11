@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type { GameItemAggregate } from "../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { QualityBadge } from "../../../../components/market/v2/QualityBadge"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useFormatters } from "../../../../util/format"
@@ -47,7 +47,7 @@ export function AggregateCard({ item }: { item: GameItemAggregate }) {
       >
         <CardMedia
           component="img"
-          image={item.image_url || FALLBACK_IMAGE_URL}
+          image={item.image_url || MISSING_IMAGE_URL}
           alt={item.name}
           sx={{
             height: 120,

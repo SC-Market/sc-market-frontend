@@ -14,7 +14,7 @@ import {
 import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import { useTranslation } from "react-i18next"
 import { ListingSearchResult } from "../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { SHOP_PATHS } from "../../../../routes/paths"
 
@@ -46,7 +46,7 @@ export function ListingTableV2({
               <TableCell padding="none" sx={{ width: 40, pl: 1 }}>
                 <ImageAvatar
                   alt=""
-                  src={l.photo || FALLBACK_IMAGE_URL}
+                  src={l.photo || MISSING_IMAGE_URL}
                   sx={{ width: 40, height: 40 }}
                   variant="rounded"
                   imgProps={{ loading: "lazy" }}

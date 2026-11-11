@@ -14,9 +14,10 @@ import { isAlphaNumeric } from "./AuthenticateRSI"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
+import { MISSING_IMAGE_ABSOLUTE_URL } from "../../seo/constants"
 
-export const fallback_image =
-  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+/** The new org's logo until one is chosen; the API stores it, so absolute. */
+export const fallback_image = MISSING_IMAGE_ABSOLUTE_URL
 export const fallback_banner =
   "https://media.discordapp.net/attachments/690989503397101678/1157162282468524092/default_profile_banner.jpg?ex=65179adb&is=6516495b&hm=ce331ef90d2acf941e008199b7df2fd8127df642fdade0deb70d3fb79b136eae&=&width=2430&height=1366"
 

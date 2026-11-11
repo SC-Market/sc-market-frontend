@@ -23,7 +23,7 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { CartItemDetail } from "../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 import { useFormatters } from "../../../util/format"
 import {
   formatCraftedSource,
@@ -70,7 +70,7 @@ export function CartItemEntryV2(props: {
         {/* Avatar */}
         <Grid item>
           <ImageAvatar
-            src={FALLBACK_IMAGE_URL}
+            src={MISSING_IMAGE_URL}
             alt={item.listing.title}
             variant="rounded"
             sx={{ width: 48, height: 48 }}
@@ -78,7 +78,7 @@ export function CartItemEntryV2(props: {
               loading: "lazy",
               onError: (e: React.SyntheticEvent<HTMLImageElement>) => {
                 e.currentTarget.onerror = null
-                e.currentTarget.src = FALLBACK_IMAGE_URL
+                e.currentTarget.src = MISSING_IMAGE_URL
               },
             }}
           />

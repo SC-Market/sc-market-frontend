@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { ImageAvatar } from "../../../../components/avatar/ImageAvatar"
 import type { GameItemAggregate } from "../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useTranslation } from "react-i18next"
 import { useFormatters, type Formatters } from "../../../../util/format"
@@ -46,7 +46,7 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
               <TableCell padding="none" sx={{ width: 40, pl: 1 }}>
                 <ImageAvatar
                   alt=""
-                  src={item.image_url || FALLBACK_IMAGE_URL}
+                  src={item.image_url || MISSING_IMAGE_URL}
                   sx={{ width: 40, height: 40 }}
                   variant="rounded"
                   imgProps={{ loading: "lazy" }}

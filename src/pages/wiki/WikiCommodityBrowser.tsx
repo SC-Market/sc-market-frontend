@@ -30,7 +30,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getCommodityColor } from "../../util/gameIcons"
-import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiCommoditiesSeoText } from "../../seo/hubHeads"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
@@ -328,7 +328,7 @@ export function WikiCommodityBrowser() {
                         >
                           <ImageAvatar
                             alt=""
-                            src={c.image_url || FALLBACK_IMAGE_URL}
+                            src={c.image_url || MISSING_IMAGE_URL}
                             variant="rounded"
                             sx={{
                               width: 40,

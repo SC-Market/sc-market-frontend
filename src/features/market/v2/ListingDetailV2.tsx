@@ -33,7 +33,7 @@ import {
 } from "./components/ListingViewComponentsV2"
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { useListingPermissions } from "../hooks/useListingPermissions"
-import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { FRONTEND_URL, MISSING_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useWhiteLabelOwnerHandoff } from "../../../components/router/WhiteLabelRouteGuard"
@@ -75,7 +75,7 @@ export function ListingDetailV2() {
   const listing = listingData?.listing
   const seller = listingData?.seller
   const items = useMemo(() => listingData?.items ?? [], [listingData?.items])
-  const photos = listing?.photos?.length ? listing.photos : [FALLBACK_IMAGE_URL]
+  const photos = listing?.photos?.length ? listing.photos : [MISSING_IMAGE_URL]
   const firstItem = items[0]
   const gameItemId = firstItem?.game_item?.id
   const gameItemName = firstItem?.game_item?.name

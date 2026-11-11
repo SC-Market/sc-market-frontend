@@ -25,7 +25,7 @@ import { useTranslation } from "react-i18next"
 import { EditRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import type { MyListingItem } from "../../../../store/api/v2/market"
-import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { listingStatusLabel } from "../../domain/listingStatus"
@@ -144,7 +144,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <ImageAvatar
                 alt=""
-                src={listing.photo || FALLBACK_IMAGE_URL}
+                src={listing.photo || MISSING_IMAGE_URL}
                 variant="rounded"
                 sx={{ width: 48, height: 48, flexShrink: 0 }}
                 imgProps={{ loading: "lazy" }}

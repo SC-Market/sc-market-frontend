@@ -14,7 +14,7 @@ import {
   type WikiItemSearchResult,
 } from "../../store/api/v2/market"
 import { Link as RouterLink } from "react-router-dom"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { MISSING_IMAGE_URL } from "../../util/constants"
 import { WIKI_ITEM_CARD_HEIGHT } from "../../components/game-data/cardGrids"
 import { wikiItemImage } from "./wikiItemImage"
 import { WIKI_PATHS } from "../../routes/paths"
@@ -63,7 +63,7 @@ export function ItemGridCard({
         sx={{ objectFit: "contain", bgcolor: "background.default", p: 1 }}
         onError={({ currentTarget }) => {
           currentTarget.onerror = null
-          currentTarget.src = FALLBACK_IMAGE_URL
+          currentTarget.src = MISSING_IMAGE_URL
         }}
       />
       <CardContent

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
 import type { StandingBuyOrder } from "../../../store/api/v2/market"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
-import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { MISSING_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { totalRemainingQuantity } from "../domain/buyOrders"
 import { useFormatters } from "../../../util/format"
@@ -82,7 +82,7 @@ export function BuyOrderAggregateCard({
   const imageUrl = useMemo(
     () =>
       aggregate.orders.find((o) => o.photos && o.photos.length > 0)?.photos?.[0]
-        ?.url || FALLBACK_IMAGE_URL,
+        ?.url || MISSING_IMAGE_URL,
     [aggregate.orders],
   )
 
@@ -128,7 +128,7 @@ export function BuyOrderAggregateCard({
                 }}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
-                  currentTarget.src = FALLBACK_IMAGE_URL
+                  currentTarget.src = MISSING_IMAGE_URL
                 }}
                 alt={t("marketV2.imageOf", { name: aggregate.item_name })}
               />
