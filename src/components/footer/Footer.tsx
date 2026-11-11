@@ -186,10 +186,7 @@ export function Footer() {
                     [MEDIUM]: { maxWidth: "none" },
                   }}
                 >
-                  {t(
-                    "footer.tagline",
-                    "The player-to-player marketplace for Star Citizen",
-                  )}
+                  {t("footer.tagline", "Star Citizen Marketplace (SC Market)")}
                 </Typography>
               </Box>
             )}

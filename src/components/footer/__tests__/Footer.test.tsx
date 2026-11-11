@@ -107,7 +107,7 @@ describe("Footer groups", () => {
       screen.getByRole("link", { name: "SC Market" }).getAttribute("href"),
     ).toBe("/")
     expect(
-      screen.getByText("The player-to-player marketplace for Star Citizen"),
+      screen.getByText("Star Citizen Marketplace (SC Market)"),
     ).toBeTruthy()
   })
 
@@ -170,7 +170,7 @@ describe("Footer on an org's white-label domain", () => {
     ).toBeTruthy()
     expect(screen.queryByRole("link", { name: "SC Market" })).toBeNull()
     expect(
-      screen.queryByText("The player-to-player marketplace for Star Citizen"),
+      screen.queryByText("Star Citizen Marketplace (SC Market)"),
     ).toBeNull()
     expect(screen.queryByRole("link", { name: "LadyFleur" })).toBeNull()
     expect(screen.queryByText(/STAR-GSFY-MQW9/)).toBeNull()
