@@ -98,8 +98,9 @@ export function MarketPageLayout({
                 // with the sidebar open the actions' row (Create Listing,
                 // Create Buy Order, My Cart) ran past <main> and scrolled it
                 // sideways. Capped at the row, the actions wrap instead.
-                minWidth: 0,
-                maxWidth: "100%",
+                // Doubled class: Grid's own sm-and-up media rules reset
+                // max-width to none after the sx base styles.
+                "&.MuiGrid-item": { minWidth: 0, maxWidth: "100%" },
               }}
             >
               {headerActions}
