@@ -21,7 +21,9 @@ import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { embedNetworkEnv, isEmbedPath } from "./store/embedNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
-import { applyTitleTemplate, applyWhiteLabelTitle } from "./seo/pageHead"
+import { applyTitleTemplate } from "./seo/pageHead"
+import { whiteLabelHeadPlugin } from "./seo/whiteLabelHeadPlugin"
+import { FRONTEND_URL } from "./util/constants"
 import {
   resolveBrowserCustomDomain,
   getWhiteLabelConfig,
@@ -143,23 +145,28 @@ installLinkIntentPrefetch()
 // Because this template owns the suffix, imperative writers must NOT append it
 // themselves — see Page.tsx and src/hooks/router/usePageTitle.ts, which now set
 // bare titles through Unhead (useHead) rather than writing document.title.
-// On an org's white-label subdomain: "<Org> — <page>" (the org's name from
-// the domain cache, read per title: a first visit fills the cache once the
-// domain answer is in, and the titles after it carry the org's name).
+// On an org's white-label host the server render's head rules apply to
+// every head (src/seo/whiteLabelHeadPlugin.ts): "<Org> — <page>" titles, the
+// org's site name and, on its own pages, their URLs on the host. The org's
+// name is read from the domain cache per resolve: a first visit fills the
+// cache once the domain answer is in, and the heads after it carry it.
 const onMainSite = isMainSiteHostname(window.location.hostname)
 const head = createHead({
-  init: [
-    {
-      titleTemplate: onMainSite
-        ? applyTitleTemplate
-        : (title?: string | null) => {
-            const orgName = getWhiteLabelConfig()?.name
-            return orgName
-              ? applyWhiteLabelTitle(orgName, title)
-              : applyTitleTemplate(title)
-          },
-    },
-  ],
+  init: [{ titleTemplate: applyTitleTemplate }],
+  plugins: onMainSite
+    ? []
+    : [
+        whiteLabelHeadPlugin(() => {
+          const orgName = getWhiteLabelConfig()?.name
+          return orgName
+            ? {
+                orgName,
+                origin: window.location.origin,
+                mainOrigin: FRONTEND_URL.replace(/\/+$/, ""),
+              }
+            : null
+        }),
+      ],
 })
 
 // Get error boundary (will use fallback if Bugsnag not loaded yet)

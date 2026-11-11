@@ -133,6 +133,13 @@ Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   (`<title>`, `og:title`, `twitter:title`) are "<Org> — <page>", and
   `og:site_name` / `twitter:domain` are the org's (`whiteLabelPageHead`,
   src/seo/pageHead.ts). Links to other pages and images keep their URLs.
+  The browser applies the same rules (`applyWhiteLabelHeadRules`, one
+  function for both) to every head on the host through an Unhead plugin
+  (src/seo/whiteLabelHeadPlugin.ts), so a page rendered from scratch there
+  (the static `/` redirecting to the org's page, client-side navigation)
+  gets the same head, and a hydrated one keeps it. Host URLs are for the
+  org's own pages only (org page, shops, listings); the host's other pages
+  keep their sc-market.space canonical, with the org's titles and site name.
   The document drops SC Market's web-app manifest and uses the org theme's
   favicon (`whiteLabelDocument`, src/ssr/whiteLabel.ts). In-app links are
   relative, so they stay on the host.

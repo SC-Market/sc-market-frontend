@@ -1,11 +1,12 @@
 import { describe, it, expect } from "vitest"
 import {
   applyTitleTemplate,
+  applyWhiteLabelHeadRules,
+  type HeadTagModel,
   applyWhiteLabelTitle,
   faqPageJsonLd,
   headDescription,
   serializeJsonLd,
-  whiteLabelHeadTitle,
   whiteLabelPageHead,
 } from "../pageHead"
 
@@ -106,22 +107,6 @@ describe("applyWhiteLabelTitle (an org's white-label subdomain)", () => {
   })
 })
 
-describe("whiteLabelHeadTitle", () => {
-  it("rewrites only the <title>, escaped, in the org's form", () => {
-    const tags =
-      '<title>Med &amp; Kits — 1M aUEC · Star Citizen | SC Market</title><meta property="og:title" content="Med &amp; Kits">'
-    expect(whiteLabelHeadTitle(tags, "Medrunner <Ops>")).toBe(
-      '<title>Medrunner &lt;Ops&gt; — Med &amp; Kits — 1M aUEC · Star Citizen</title><meta property="og:title" content="Med &amp; Kits">',
-    )
-    expect(
-      whiteLabelHeadTitle(
-        "<title>MEDRUNNER SERVICES - Org - SC Market</title>",
-        "MEDRUNNER SERVICES",
-      ),
-    ).toBe("<title>MEDRUNNER SERVICES - Org</title>")
-  })
-})
-
 describe("whiteLabelPageHead", () => {
   const options = {
     orgName: "MEDRUNNER SERVICES",
@@ -193,5 +178,108 @@ describe("whiteLabelPageHead", () => {
     )
     expect(out).toContain('href="https://elsewhere.test/x"')
     expect(out).not.toContain("twitter:url")
+  })
+
+  it("escapes the titles and keeps the tags' other markup", () => {
+    const out = whiteLabelPageHead(
+      '<title>Med &amp; Kits — 1M aUEC · Star Citizen | SC Market</title><meta data-hid="x" property="og:title" content="Med &amp; Kits" />',
+      { ...options, orgName: "Medrunner <Ops>" },
+    )
+    expect(out).toContain(
+      "<title>Medrunner &lt;Ops&gt; — Med &amp; Kits — 1M aUEC · Star Citizen</title>",
+    )
+    expect(out).toContain(
+      '<meta data-hid="x" property="og:title" content="Medrunner &lt;Ops&gt; — Med &amp; Kits" />',
+    )
+  })
+
+  it("replaces the head's own og:site_name and twitter:domain", () => {
+    const out = whiteLabelPageHead(
+      '<meta property="og:site_name" content="SC Market"><meta property="twitter:domain" content="sc-market.space">',
+      options,
+    )
+    expect(out).toBe(
+      '<meta property="og:site_name" content="MEDRUNNER SERVICES"><meta property="twitter:domain" content="medrunner.sc-market.space">',
+    )
+  })
+})
+
+describe("applyWhiteLabelHeadRules", () => {
+  const options = {
+    orgName: "MEDRUNNER SERVICES",
+    origin: "https://medrunner.sc-market.space",
+    mainOrigin: "https://sc-market.space",
+  }
+  const head = (canonical: string): HeadTagModel[] => [
+    { tag: "title", props: {}, textContent: "Page - SC Market" },
+    { tag: "link", props: { rel: "canonical", href: canonical } },
+    { tag: "meta", props: { property: "og:url", content: canonical } },
+    { tag: "meta", props: { property: "og:title", content: "Page" } },
+  ]
+
+  it.each([
+    "/contractor/MEDRUNNER",
+    "/contractor/MEDRUNNER/about",
+    "/shops/medrunner-kits",
+    "/market/abc-med-pen",
+  ])("puts the org's own page %s on the host", (path) => {
+    const tags = head(`https://sc-market.space${path}`)
+    const added = applyWhiteLabelHeadRules(tags, options)
+    expect(tags[1].props.href).toBe(`https://medrunner.sc-market.space${path}`)
+    expect(tags[2].props.content).toBe(
+      `https://medrunner.sc-market.space${path}`,
+    )
+    expect(added).toContainEqual({
+      tag: "meta",
+      props: {
+        name: "twitter:url",
+        content: `https://medrunner.sc-market.space${path}`,
+      },
+    })
+  })
+
+  it.each(["/market", "/contracts", "/market/cart", "/"])(
+    "keeps %s's URLs on sc-market.space, branded",
+    (path) => {
+      const tags = head(`https://sc-market.space${path}`)
+      const added = applyWhiteLabelHeadRules(tags, options)
+      expect(tags[1].props.href).toBe(`https://sc-market.space${path}`)
+      expect(tags[2].props.content).toBe(`https://sc-market.space${path}`)
+      expect(tags[0].textContent).toBe("MEDRUNNER SERVICES — Page")
+      expect(tags[3].props.content).toBe("MEDRUNNER SERVICES — Page")
+      expect(added).toEqual([
+        {
+          tag: "meta",
+          props: { property: "og:site_name", content: "MEDRUNNER SERVICES" },
+        },
+        {
+          tag: "meta",
+          props: {
+            property: "twitter:domain",
+            content: "medrunner.sc-market.space",
+          },
+        },
+      ])
+    },
+  )
+
+  it("rewrites the JSON-LD's page URL, serialized, and no other", () => {
+    const url = "https://sc-market.space/market/a?b=1&c=2"
+    const tags: HeadTagModel[] = [
+      { tag: "link", props: { rel: "canonical", href: url } },
+      {
+        tag: "script",
+        props: { type: "application/ld+json" },
+        innerHTML: serializeJsonLd({
+          url,
+          seller: "https://sc-market.space/contractor/MEDRUNNER",
+        }),
+      },
+    ]
+    applyWhiteLabelHeadRules(tags, options)
+    expect(JSON.parse(tags[1].innerHTML!)).toEqual({
+      url: "https://medrunner.sc-market.space/market/a?b=1&c=2",
+      seller: "https://sc-market.space/contractor/MEDRUNNER",
+    })
   })
 })

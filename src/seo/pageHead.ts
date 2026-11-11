@@ -4,6 +4,7 @@
  * static shell with HTMLRewriter). Builders in this folder must stay free of
  * browser globals, React, RTK and `import.meta.env` so they run in Workers.
  */
+import { matchBridgeRoute, type BridgePageKind } from "../bridge/routes"
 
 /** One <meta> tag: exactly one of `name` / `property` identifies it. */
 export interface HeadMeta {
@@ -56,30 +57,131 @@ export function applyWhiteLabelTitle(
   return `${orgName} — ${page}`
 }
 
-/**
- * Server-rendered head tags (the bridge's `<title>` and meta) with the
- * title in the white-label form (applyWhiteLabelTitle), for a page rendered
- * on the org's own host. The title text is HTML-escaped in the tags.
- */
-export function whiteLabelHeadTitle(headTags: string, orgName: string): string {
-  const unescape = (v: string) =>
-    v.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
-  const escape = (v: string) =>
-    v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-  return headTags.replace(
-    /<title>([\s\S]*?)<\/title>/,
-    (_match, title: string) =>
-      `<title>${escape(applyWhiteLabelTitle(orgName, unescape(title)))}</title>`,
-  )
-}
-
-/** The org's host and name, for whiteLabelPageHead. */
+/** The org's host and name, for the white-label head rules. */
 export interface WhiteLabelHeadOptions {
   orgName: string
   /** The white-label host's origin, e.g. https://medrunner.sc-market.space */
   origin: string
-  /** The main site's origin, which the bridge's builders use. */
+  /** The main site's origin, which the pages' builders use. */
   mainOrigin: string
+}
+
+/**
+ * A head tag as the white-label rules read it: Unhead's resolved HeadTag
+ * shape (the browser's head), also parsed from a server render's head HTML
+ * (whiteLabelPageHead). Values are raw (unescaped); `innerHTML` is a
+ * script's JSON as serializeJsonLd wrote it.
+ */
+export interface HeadTagModel {
+  tag: string
+  props: Record<string, string>
+  textContent?: string
+  innerHTML?: string
+}
+
+/**
+ * The page kinds (src/bridge/routes.ts) an org's domain serves as its own:
+ * its org page, its shops, its listings. The domain hands every other
+ * seller's (and every SC Market-wide page) to sc-market.space, so a page of
+ * these kinds still on the host is the org's.
+ */
+const WHITE_LABEL_OWN_PAGE_KINDS: ReadonlySet<BridgePageKind> = new Set([
+  "org",
+  "shop",
+  "listing",
+])
+
+/** The page's URL on the org's host, when it's one of the org's own pages. */
+function whiteLabelPageUrl(
+  pageUrl: string,
+  { origin, mainOrigin }: WhiteLabelHeadOptions,
+): string | null {
+  if (!pageUrl.startsWith(`${mainOrigin}/`)) return null
+  const path = pageUrl.slice(mainOrigin.length)
+  const kind = matchBridgeRoute(path.split(/[?#]/)[0])?.route.kind
+  if (!kind || !WHITE_LABEL_OWN_PAGE_KINDS.has(kind)) return null
+  return `${origin}${path}`
+}
+
+const TITLE_META = new Set(["og:title", "twitter:title"])
+
+function metaKey(tag: HeadTagModel): string | undefined {
+  return tag.tag === "meta" ? (tag.props.property ?? tag.props.name) : undefined
+}
+
+/**
+ * The white-label head rules, for a page shown on the org's own host. One
+ * function for the server render (whiteLabelPageHead, the SSR `host`
+ * variant) and the browser's head (whiteLabelHeadPlugin, Unhead), so the
+ * two never disagree:
+ *
+ * - `<title>`, og:title and twitter:title in the white-label form
+ *   (applyWhiteLabelTitle);
+ * - on the org's own pages (its org page, shops, listings), the page's own
+ *   URL on the org's host: canonical, og:url, twitter:url and the JSON-LD's
+ *   (whole values only). The org's pages are indexed on its domain;
+ * - og:site_name is the org's and twitter:domain its host, replacing the
+ *   shell's; twitter:url is added when the page has none.
+ *
+ * Other URLs (images, links to other pages) are left as they are. Rewrites
+ * `tags` in place and returns the tags to add.
+ */
+export function applyWhiteLabelHeadRules(
+  tags: HeadTagModel[],
+  options: WhiteLabelHeadOptions,
+): HeadTagModel[] {
+  const { orgName, origin } = options
+  const canonical = tags.find(
+    (t) => t.tag === "link" && t.props.rel === "canonical",
+  )?.props.href
+  const pageUrl = canonical ?? null
+  const hostUrl = pageUrl ? whiteLabelPageUrl(pageUrl, options) : null
+  const siteMeta: Record<string, string> = {
+    "og:site_name": orgName,
+    "twitter:domain": new URL(origin).host,
+  }
+  const seen = new Set<string>()
+
+  for (const tag of tags) {
+    if (tag.tag === "title" && tag.textContent !== undefined) {
+      tag.textContent = applyWhiteLabelTitle(orgName, tag.textContent)
+      continue
+    }
+    const key = metaKey(tag)
+    if (key) seen.add(key)
+    if (key && TITLE_META.has(key) && tag.props.content !== undefined) {
+      tag.props.content = applyWhiteLabelTitle(orgName, tag.props.content)
+    } else if (key && key in siteMeta) {
+      tag.props.content = siteMeta[key]
+    }
+    if (!pageUrl || !hostUrl) continue
+    for (const name of Object.keys(tag.props)) {
+      if (tag.props[name] === pageUrl) tag.props[name] = hostUrl
+    }
+    if (
+      tag.tag === "script" &&
+      tag.innerHTML &&
+      /json/.test(tag.props.type ?? "")
+    ) {
+      tag.innerHTML = tag.innerHTML
+        .split(serializeJsonLd(pageUrl))
+        .join(serializeJsonLd(hostUrl))
+    }
+  }
+
+  const added: HeadTagModel[] = []
+  for (const [key, content] of Object.entries(siteMeta)) {
+    if (!seen.has(key)) {
+      added.push({ tag: "meta", props: { property: key, content } })
+    }
+  }
+  if (hostUrl && !seen.has("twitter:url")) {
+    added.push({
+      tag: "meta",
+      props: { name: "twitter:url", content: hostUrl },
+    })
+  }
+  return added
 }
 
 const ATTR_UNESCAPE = (v: string) =>
@@ -94,52 +196,91 @@ const ATTR_ESCAPE = (v: string) =>
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
+const TEXT_ESCAPE = (v: string) =>
+  v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
+/** One tag of a head's HTML: `<title>`/`<script>` with content, or void. */
+const HEAD_TAG_RE =
+  /<(title|script)\b([^>]*)>([\s\S]*?)<\/\1>|<(meta|link)\b([^>]*)>/g
+const ATTR_RE = /([^\s"'=/>]+)(?:="([^"]*)")?/g
+
+function parseAttrs(attrs: string): Record<string, string> {
+  const props: Record<string, string> = {}
+  for (const [, name, value] of attrs.matchAll(ATTR_RE)) {
+    props[name] = value === undefined ? "" : ATTR_UNESCAPE(value)
+  }
+  return props
+}
+
+/** The attributes' text with `props`' values written in (others as they were). */
+function writeAttrs(attrs: string, props: Record<string, string>): string {
+  return attrs.replace(ATTR_RE, (whole, name: string, value?: string) =>
+    value === undefined || props[name] === undefined
+      ? whole
+      : `${name}="${ATTR_ESCAPE(props[name])}"`,
+  )
+}
+
+function serializeAddedTag(tag: HeadTagModel): string {
+  const attrs = Object.entries(tag.props)
+    .map(([name, value]) => ` ${name}="${ATTR_ESCAPE(value)}"`)
+    .join("")
+  return `<${tag.tag}${attrs}>`
+}
 
 /**
  * A page's server-rendered head tags for the org's own white-label host
  * (the SSR `host` variant; the pages it renders there are the org's own,
- * the rest answer 302 to sc-market.space):
- *
- * - the <title>, og:title and twitter:title in the white-label form
- *   (applyWhiteLabelTitle);
- * - the page's own URL (canonical, og:url, twitter:url, the JSON-LD's) on
- *   the org's host: the org's pages are indexed on its domain;
- * - twitter:domain and og:site_name for the org, replacing the shell's.
- *
- * Other URLs (images, links to other pages) are left as they are.
+ * the rest answer 302 to sc-market.space): applyWhiteLabelHeadRules on the
+ * tags of the HTML. Changed tags keep their markup with the new values
+ * (escaped); the added ones follow the page's.
  */
 export function whiteLabelPageHead(
   headTags: string,
-  { orgName, origin, mainOrigin }: WhiteLabelHeadOptions,
+  options: WhiteLabelHeadOptions,
 ): string {
-  let tags = whiteLabelHeadTitle(headTags, orgName).replace(
-    /(<meta\b[^>]*\b(?:property|name)="(?:og:title|twitter:title)"[^>]*\bcontent=")([^"]*)(")/g,
-    (_m, before: string, title: string, after: string) =>
-      `${before}${ATTR_ESCAPE(applyWhiteLabelTitle(orgName, ATTR_UNESCAPE(title)))}${after}`,
+  const parsed: { match: RegExpExecArray; model: HeadTagModel }[] = []
+  for (const match of headTags.matchAll(HEAD_TAG_RE)) {
+    const [, contentTag, contentAttrs, content, voidTag, voidAttrs] = match
+    const model: HeadTagModel = contentTag
+      ? {
+          tag: contentTag,
+          props: parseAttrs(contentAttrs),
+          ...(contentTag === "title"
+            ? { textContent: ATTR_UNESCAPE(content) }
+            : { innerHTML: content }),
+        }
+      : { tag: voidTag, props: parseAttrs(voidAttrs) }
+    parsed.push({ match, model })
+  }
+  const before = parsed.map(({ model }) => JSON.stringify(model))
+  const added = applyWhiteLabelHeadRules(
+    parsed.map(({ model }) => model),
+    options,
   )
-  const canonical = /<link\b[^>]*\brel="canonical"[^>]*\bhref="([^"]*)"/.exec(
-    tags,
-  )?.[1]
-  const pageUrl = canonical ? ATTR_UNESCAPE(canonical) : null
-  let hostUrl: string | null = null
-  if (pageUrl && pageUrl.startsWith(`${mainOrigin}/`)) {
-    hostUrl = `${origin}${pageUrl.slice(mainOrigin.length)}`
-    // Attribute values (escaped) and JSON-LD strings (raw), whole values only.
-    for (const [from, to] of [
-      [ATTR_ESCAPE(pageUrl), ATTR_ESCAPE(hostUrl)],
-      [pageUrl, hostUrl],
-    ]) {
-      tags = tags.split(`"${from}"`).join(`"${to}"`)
+
+  let out = ""
+  let last = 0
+  parsed.forEach(({ match, model }, i) => {
+    out += headTags.slice(last, match.index)
+    last = match.index + match[0].length
+    if (JSON.stringify(model) === before[i]) {
+      out += match[0]
+      return
     }
-  }
-  const extra = [
-    `<meta property="og:site_name" content="${ATTR_ESCAPE(orgName)}">`,
-    `<meta property="twitter:domain" content="${ATTR_ESCAPE(new URL(origin).host)}">`,
-  ]
-  if (hostUrl && !/\b(?:name|property)="twitter:url"/.test(tags)) {
-    extra.push(`<meta name="twitter:url" content="${ATTR_ESCAPE(hostUrl)}">`)
-  }
-  return `${tags}\n${extra.join("\n")}`
+    const [, contentTag, contentAttrs, , voidTag, voidAttrs] = match
+    out += contentTag
+      ? `<${contentTag}${writeAttrs(contentAttrs, model.props)}>${
+          contentTag === "title"
+            ? TEXT_ESCAPE(model.textContent ?? "")
+            : (model.innerHTML ?? "")
+        }</${contentTag}>`
+      : `<${voidTag}${writeAttrs(voidAttrs, model.props)}>`
+  })
+  out += headTags.slice(last)
+  return added.length > 0
+    ? `${out}\n${added.map(serializeAddedTag).join("\n")}`
+    : out
 }
 
 /**
