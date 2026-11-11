@@ -53,6 +53,7 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
   ],
   "finalUrl": "/contractor/TESTORG",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contractor/TESTORG",
@@ -171,6 +172,7 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
   ],
   "finalUrl": "/org/TESTORG/dashboard",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -250,6 +252,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
   ],
   "finalUrl": "/org/TESTORG/manage/about",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -285,6 +288,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
   ],
   "finalUrl": "/org/TESTORG/manage/roles",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -324,6 +328,7 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
   ],
   "finalUrl": "/shop/test-shop/orders",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -364,6 +369,7 @@ exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
   ],
   "finalUrl": "/shop/test-shop/listings",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -407,6 +413,7 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
   ],
   "finalUrl": "/shop/test-shop/settings",
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",

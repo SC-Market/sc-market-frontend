@@ -17,6 +17,7 @@ exports[`routes (shard 3/4) > / 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/blueprints",
     "/buyorder/create",
@@ -79,6 +80,7 @@ exports[`routes (shard 3/4) > /admin/feature-flags 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -122,6 +124,7 @@ exports[`routes (shard 3/4) > /admin/feature-flags/:flagName 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/admin",
     "/admin/feature-flags",
@@ -167,6 +170,7 @@ exports[`routes (shard 3/4) > /admin/game-item-attributes 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -210,6 +214,7 @@ exports[`routes (shard 3/4) > /admin/market 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -254,6 +259,7 @@ exports[`routes (shard 3/4) > /admin/moderation 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -329,6 +335,7 @@ exports[`routes (shard 3/4) > /admin/users 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -370,6 +377,7 @@ exports[`routes (shard 3/4) > /blueprints 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/blueprints/BP_CRAFT_fixture_rifle",
     "/changelog",
@@ -410,6 +418,7 @@ exports[`routes (shard 3/4) > /bulk 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/buyorder/create",
     "/changelog",
@@ -452,6 +461,7 @@ exports[`routes (shard 3/4) > /buyorder/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -492,6 +502,7 @@ exports[`routes (shard 3/4) > /contractors 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -531,6 +542,7 @@ exports[`routes (shard 3/4) > /contracts/create 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contracts",
@@ -572,6 +584,7 @@ exports[`routes (shard 3/4) > /dashboard 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -614,6 +627,7 @@ exports[`routes (shard 3/4) > /discord/install 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -655,6 +669,7 @@ exports[`routes (shard 3/4) > /email/unsubscribe/:token 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -696,6 +711,7 @@ exports[`routes (shard 3/4) > /email/verify 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -819,6 +835,7 @@ exports[`routes (shard 3/4) > /inventory 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -862,6 +879,7 @@ exports[`routes (shard 3/4) > /market 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/buyorder/create",
     "/changelog",
@@ -904,6 +922,7 @@ exports[`routes (shard 3/4) > /market/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -942,6 +961,7 @@ exports[`routes (shard 3/4) > /market/aggregate/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1048,6 +1068,7 @@ exports[`routes (shard 3/4) > /mining 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1087,6 +1108,7 @@ exports[`routes (shard 3/4) > /missions/givers/:slug 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1131,6 +1153,7 @@ exports[`routes (shard 3/4) > /missions/systems/:slug 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1175,6 +1198,7 @@ exports[`routes (shard 3/4) > /myorg 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contractors",
@@ -1217,6 +1241,7 @@ exports[`routes (shard 3/4) > /notifications 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1255,6 +1280,7 @@ exports[`routes (shard 3/4) > /order/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1293,6 +1319,7 @@ exports[`routes (shard 3/4) > /order/:id/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1331,6 +1358,7 @@ exports[`routes (shard 3/4) > /order/service/:service_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1409,6 +1437,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/about 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1459,6 +1488,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/roles 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1507,6 +1537,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/theme 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1552,6 +1583,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/members 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1596,6 +1628,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1638,6 +1671,7 @@ exports[`routes (shard 3/4) > /org/manage 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contractors",
@@ -1679,6 +1713,7 @@ exports[`routes (shard 3/4) > /resources/:resource_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1718,6 +1753,7 @@ exports[`routes (shard 3/4) > /services 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1760,6 +1796,7 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/customers 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1801,6 +1838,7 @@ exports[`routes (shard 3/4) > /shopping-lists 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1841,6 +1879,7 @@ exports[`routes (shard 3/4) > /signup 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1877,6 +1916,7 @@ exports[`routes (shard 3/4) > /widget/orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1917,6 +1957,7 @@ exports[`routes (shard 3/4) > /wiki 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/blueprints",
     "/changelog",
@@ -1968,6 +2009,7 @@ exports[`routes (shard 3/4) > /wiki/compare 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -2026,6 +2068,7 @@ exports[`routes (shard 3/4) > /wiki/ships 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -2065,6 +2108,7 @@ exports[`routes (shard 3/4) > /wiki/ships/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
