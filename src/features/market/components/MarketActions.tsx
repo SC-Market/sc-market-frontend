@@ -20,7 +20,6 @@ export function MarketActions() {
     <Grid
       container
       spacing={theme.layoutSpacing.component}
-      direction={{ xs: "row", sm: "row" }}
       justifyContent={{ xs: "stretch", sm: "flex-end" }}
     >
       <Grid item xs={6} sm="auto">

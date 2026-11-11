@@ -94,6 +94,12 @@ export function MarketPageLayout({
               sx={{
                 display: "flex",
                 justifyContent: { xs: "stretch", sm: "flex-end" },
+                // "auto" sizes the item to its content and never shrinks it:
+                // with the sidebar open the actions' row (Create Listing,
+                // Create Buy Order, My Cart) ran past <main> and scrolled it
+                // sideways. Capped at the row, the actions wrap instead.
+                minWidth: 0,
+                maxWidth: "100%",
               }}
             >
               {headerActions}
