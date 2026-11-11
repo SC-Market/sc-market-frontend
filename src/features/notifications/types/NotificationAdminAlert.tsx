@@ -6,6 +6,29 @@ import { NotificationBase } from "../components/NotificationBase"
 import { useNotificationUpdateMutation } from "../api/notificationApi"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 
+/** The admin alert a notification of entity_type admin_alerts points at. */
+export interface AdminAlertNotice {
+  alert_id: string
+  title: string
+  content?: string
+  link?: string | null
+}
+
+/**
+ * The alert's link if it is an absolute http(s) URL, else null. The server
+ * only accepts those; this keeps a javascript: or data: link stored before
+ * that check (or by any other path) from ever being opened.
+ */
+export function safeAlertLink(link: string | null | undefined): string | null {
+  if (!link) return null
+  try {
+    const { protocol } = new URL(link)
+    return protocol === "http:" || protocol === "https:" ? link : null
+  } catch {
+    return null
+  }
+}
+
 export function NotificationAdminAlert(props: { notif: Notification }) {
   const { notif } = props
   const { t } = useTranslation()
@@ -16,6 +39,7 @@ export function NotificationAdminAlert(props: { notif: Notification }) {
     notif.entity && typeof notif.entity === "object" && "title" in notif.entity
       ? (notif.entity as { title: string; content?: string; link?: string })
       : null
+  const link = safeAlertLink(alertEntity?.link)
 
   const handleClick = async () => {
     await updateNotification({
@@ -23,16 +47,14 @@ export function NotificationAdminAlert(props: { notif: Notification }) {
       read: true,
     })
 
-    if (alertEntity?.link) {
-      window.open(alertEntity.link, "_blank")
-    }
+    if (link) window.open(link, "_blank", "noopener,noreferrer")
   }
 
   return (
     <NotificationBase
       icon={<NotificationsActiveRoundedIcon />}
       notif={notif}
-      onClick={alertEntity?.link ? handleClick : undefined}
+      onClick={link ? handleClick : undefined}
     >
       {alertEntity?.title && (
         <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
@@ -51,7 +73,7 @@ export function NotificationAdminAlert(props: { notif: Notification }) {
           )}
         </Typography>
       )}
-      {alertEntity?.link && (
+      {link && (
         <Typography
           variant="body2"
           sx={{ mt: 1, color: "primary.main", fontWeight: "bold" }}

@@ -9836,17 +9836,14 @@ export type AdminUser = {
   user_id: string
   username: string
   display_name: string
-  discord_id: string | null
   profile_description: string
   role: SiteRole
   banned: boolean
   avatar: string
   banner: string
-  balance: string
   created_at: string
   locale: string
   rsi_confirmed: boolean
-  market_order_template: string
 }
 export type AdminUsersResponse = {
   users: AdminUser[]
@@ -9866,7 +9863,6 @@ export type AdminUserSortField =
   | "role"
   | "banned"
   | "rsi_confirmed"
-  | "balance"
   | "locale"
 export type MembershipAnalyticsPoint = {
   /** Start of the period (ISO 8601). */
