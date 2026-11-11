@@ -282,6 +282,8 @@ describe("white-label hosts", () => {
     )
     await Promise.all(pending)
     expect(response.headers.get("X-SCM-SSR")).toBe("miss")
+    // A public storefront stays indexable.
+    expect(response.headers.get("X-Robots-Tag")).toBeNull()
     expect(answer.lastOptions?.requestContext.whiteLabel).toMatchObject({
       hostname: "medrunner.sc-market.space",
       domain: { spectrum_id: "MEDRUNNER", name: "Medrunner" },
@@ -353,6 +355,52 @@ describe("white-label hosts", () => {
       expect(pageKeys()).toEqual([])
     },
   )
+
+  it.each([
+    ["a members-only host", { require_membership: true }],
+    ["an internal workspace", { focus_mode: "internal" }],
+  ] as const)(
+    "serves %s's shell noindex, nofollow (header and meta)",
+    async (_name, overrides) => {
+      api({
+        "/api/domain/medrunner.sc-market.space": [200, domain(overrides)],
+      })
+      const ctx = visitor(`${HOST}/contractor/MEDRUNNER`, {}, ENV)
+      ctx.next = async () =>
+        new Response(
+          SHELL.replace(
+            "<head>",
+            '<head><meta name="robots" content="index, follow">',
+          ),
+          { headers: { "Content-Type": "text/html; charset=utf-8" } },
+        )
+      const response = await onRequest(ctx)
+      await Promise.all(pending)
+      expect(response.headers.get("X-Robots-Tag")).toBe("noindex, nofollow")
+      const html = await response.text()
+      expect(html.match(/<meta name="robots"[^>]*>/g)).toEqual([
+        '<meta name="robots" content="noindex, nofollow">',
+      ])
+      expect(html).toContain('<div id="root"></div>')
+    },
+  )
+
+  it.each([
+    ["an unknown host", [404, {}]],
+    ["a failing domain lookup", [503, {}]],
+  ] as const)("doesn't mark %s noindex", async (_name, lookup) => {
+    api({
+      "/api/domain/medrunner.sc-market.space": lookup as unknown as [
+        number,
+        unknown,
+      ],
+    })
+    const response = await onRequest(
+      visitor(`${HOST}/contractor/MEDRUNNER`, {}, ENV),
+    )
+    await Promise.all(pending)
+    expect(response.headers.get("X-Robots-Tag")).toBeNull()
+  })
 
   it.each(["/user/someone", "/wiki/items/abc", "/market/aggregate/1-laser"])(
     "answers %s on the org's host with a 302 to sc-market.space, before any lookup",

@@ -168,6 +168,14 @@ Accept-Language, Cookie` on SSR answers). If per-language URLs are ever
   no per-host sitemap (`/sitemap.xml` on a white-label host is not proxied:
   `sitemapProxy.ts` answers on the main host only), and `/robots.txt` never
   invokes a Function.
+- **Members-only and internal domains are noindex.** Their pages carry
+  `<meta name="robots" content="noindex, nofollow">` (crawlers may fetch
+  them, so they see it): in the browser's head on every page, the static `/`
+  included, once the domain answer is in (`whiteLabelHeadPlugin`, `noindex`
+  from `isPrivateWhiteLabel`), and on an SSR path the Function's fallback
+  adds it to the shell with `X-Robots-Tag: noindex, nofollow`
+  (`withPrivateRobots`). `whiteLabelPageHead` applies the same rule.
+  Public storefronts and sc-market.space are unchanged.
 
 - Only the SSR prefixes (`/market/<id>`, `/shops/*`, `/contractor/*`,
   `/user/*`, the game-data detail pages) are server-rendered on a

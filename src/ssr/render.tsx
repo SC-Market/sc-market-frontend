@@ -29,7 +29,11 @@ import {
 } from "../server/prerenderData"
 import { createRenderCache, emotionStyleTags } from "../server/emotionStyles"
 import { bridgeHeadTags } from "../server/bridgeHead"
-import { applyTitleTemplate, whiteLabelPageHead } from "../seo/pageHead"
+import {
+  applyTitleTemplate,
+  isPrivateWhiteLabel,
+  whiteLabelPageHead,
+} from "../seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { whiteLabelDocument } from "./whiteLabel"
 import { RenderedContentBodies } from "../features/help/content"
@@ -246,6 +250,7 @@ async function renderPageNow(
     ? whiteLabelPageHead(headTags, {
         orgName: whiteLabel.domain.name,
         origin: `https://${whiteLabel.hostname}`,
+        noindex: isPrivateWhiteLabel(whiteLabel.domain),
       })
     : headTags
 

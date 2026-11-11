@@ -18,6 +18,7 @@ exports[`routes (shard 2/4) > /accountlink 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -63,6 +64,7 @@ exports[`routes (shard 2/4) > /admin/alerts 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -107,6 +109,7 @@ exports[`routes (shard 2/4) > /admin/attribute-definitions 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -150,6 +153,7 @@ exports[`routes (shard 2/4) > /admin/test-accounts 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -193,6 +197,7 @@ exports[`routes (shard 2/4) > /admin/wipe 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -233,6 +238,7 @@ exports[`routes (shard 2/4) > /availability 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -273,6 +279,7 @@ exports[`routes (shard 2/4) > /blueprints/inventory 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/blueprints/BP_CRAFT_fixture_rifle",
     "/changelog",
@@ -313,6 +320,7 @@ exports[`routes (shard 2/4) > /contractor/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contractor/TESTORG",
@@ -358,6 +366,7 @@ exports[`routes (shard 2/4) > /contractor_invite/:invite_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -398,6 +407,7 @@ exports[`routes (shard 2/4) > /contracts 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/contracts/create",
@@ -438,6 +448,7 @@ exports[`routes (shard 2/4) > /crafting/calculator 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -478,6 +489,7 @@ exports[`routes (shard 2/4) > /delivery/:delivery_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -550,6 +562,7 @@ exports[`routes (shard 2/4) > /market/cart 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -590,6 +603,7 @@ exports[`routes (shard 2/4) > /market/category/:name 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/buyorder/create",
     "/changelog",
@@ -671,6 +685,7 @@ exports[`routes (shard 2/4) > /market/me 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -713,6 +728,7 @@ exports[`routes (shard 2/4) > /mining/locations 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -752,6 +768,7 @@ exports[`routes (shard 2/4) > /missions 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -796,6 +813,7 @@ exports[`routes (shard 2/4) > /missions/factions/:slug 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -840,6 +858,7 @@ exports[`routes (shard 2/4) > /missions/types/:slug 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -886,6 +905,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/dashboard 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -929,6 +949,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/fleet 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -975,6 +996,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/manage/invites 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1023,6 +1045,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/manage/storefront 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1069,6 +1092,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/money 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1114,6 +1138,7 @@ exports[`routes (shard 2/4) > /org/:contractor_id/send 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1155,6 +1180,7 @@ exports[`routes (shard 2/4) > /profile/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1200,6 +1226,7 @@ exports[`routes (shard 2/4) > /shop/:shopSlug/listings/create 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1242,6 +1269,7 @@ exports[`routes (shard 2/4) > /shop/:shopSlug/services 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/dashboard",
@@ -1284,6 +1312,7 @@ exports[`routes (shard 2/4) > /shop/:shopSlug/stock 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1363,6 +1392,7 @@ exports[`routes (shard 2/4) > /still-selling/:token 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1402,6 +1432,7 @@ exports[`routes (shard 2/4) > /wiki/items 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1441,6 +1472,7 @@ exports[`routes (shard 2/4) > /wiki/items/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",
@@ -1480,6 +1512,7 @@ exports[`routes (shard 2/4) > /wiki/locations 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/",
     "/about",
     "/changelog",
     "/developers",

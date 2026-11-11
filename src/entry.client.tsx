@@ -21,7 +21,7 @@ import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { embedNetworkEnv, isEmbedPath } from "./store/embedNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
-import { applyTitleTemplate } from "./seo/pageHead"
+import { applyTitleTemplate, isPrivateWhiteLabel } from "./seo/pageHead"
 import { whiteLabelHeadPlugin } from "./seo/whiteLabelHeadPlugin"
 import {
   resolveBrowserCustomDomain,
@@ -151,7 +151,8 @@ installLinkIntentPrefetch()
 // name is read from the domain cache per resolve; a first visit fills the
 // cache once the domain answer is in, and the head is resolved again then,
 // so a page already showing (the static "/" before its redirect, a static
-// hub) gets the org's titles too.
+// hub) gets the org's titles too. A members-only or internal domain's pages
+// get robots "noindex, nofollow" the same way.
 const onMainSite = isMainSiteHostname(window.location.hostname)
 const head = createHead({
   init: [{ titleTemplate: applyTitleTemplate }],
@@ -159,8 +160,14 @@ const head = createHead({
     ? []
     : [
         whiteLabelHeadPlugin(() => {
-          const orgName = getWhiteLabelConfig()?.name
-          return orgName ? { orgName, origin: window.location.origin } : null
+          const config = getWhiteLabelConfig()
+          return config?.name
+            ? {
+                orgName: config.name,
+                origin: window.location.origin,
+                noindex: isPrivateWhiteLabel(config),
+              }
+            : null
         }),
       ],
 })
