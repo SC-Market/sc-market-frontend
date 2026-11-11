@@ -40,6 +40,7 @@ import { shell } from "./app/shell"
 import { providePages } from "./routes/definePage"
 import { pages } from "./app/pages"
 import { removeBridgeSummary } from "./document/bridgeSummary"
+import { removeStaticJsonLd } from "./document/foreignHead"
 import { hasPageQuery } from "./document/pageQuery"
 import { isMainSiteHostname } from "./util/mainSiteHost"
 import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
@@ -201,6 +202,23 @@ const container = document.getElementById("root")!
 // The edge bridge's crawler summary is not part of the React tree.
 removeBridgeSummary(container)
 
+// A white-label host hydrates only HTML rendered for it (data-ssr-host, and
+// its domain answer seeded above). Any other page there is a static file of
+// the main site's.
+const renderedForOtherHost = () => {
+  const hostname = window.location.hostname
+  return (
+    !isMainSiteHostname(hostname) &&
+    !(whiteLabelRendered && renderedVariant().host === hostname.toLowerCase())
+  )
+}
+
+// Such a page's head carries SC Market's JSON-LD, which the org's pages never
+// render, so Unhead would leave it in place (src/document/foreignHead.ts).
+if (container.hasAttribute("data-prerendered") && renderedForOtherHost()) {
+  removeStaticJsonLd()
+}
+
 const app = (
   <StrictMode>
     <Provider store={store} serverState={serverState}>
@@ -231,12 +249,8 @@ const renderFresh = () => {
   const visitorLight =
     // Set by document.html's pre-theme script.
     document.documentElement.getAttribute("data-pre-theme") === "light"
-  const hostname = window.location.hostname
   return (
-    // A white-label host hydrates only HTML rendered for it (data-ssr-host,
-    // and its domain answer seeded above).
-    (!isMainSiteHostname(hostname) &&
-      !(whiteLabelRendered && rendered.host === hostname.toLowerCase())) ||
+    renderedForOtherHost() ||
     hasPageQuery(window.location.search) ||
     toSupportedLocale(i18n.language) !== rendered.lng ||
     visitorLight !== (rendered.theme === "light")
