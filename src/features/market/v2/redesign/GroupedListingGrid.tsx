@@ -10,6 +10,7 @@ import { useFlip } from "./useFlip"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS, insertAds } from "../../../../components/ads/adConfig"
 import { useCampaignAd } from "../../../../components/ads/useCampaignAd"
+import { useAdLayoutSeed } from "../../../../components/ads/useAdLayoutSeed"
 import type { AdConfig } from "../../../../components/ads/types"
 import { type ListingGridProps } from "../ListingSearchV2"
 import { ListingCardV2 } from "../ListingCardV2"
@@ -88,6 +89,7 @@ const GroupedListingGridInner = React.forwardRef<
 
   // The in-universe ads go between cards, as in the flat grid (insertAds).
   const campaignAd = useCampaignAd()
+  const adLayoutSeed = useAdLayoutSeed()
   const entries = useMemo(
     (): GridEntry[] =>
       insertAds(
@@ -95,13 +97,14 @@ const GroupedListingGridInner = React.forwardRef<
         (entry) => entry.key,
         MARKET_ADS,
         campaignAd,
+        adLayoutSeed,
       ).map(
         (entry, i): GridEntry =>
           "_isAd" in entry
             ? { kind: "ad", key: `ad:${i}`, ad: entry.ad }
             : entry,
       ),
-    [listings, campaignAd],
+    [listings, campaignAd, adLayoutSeed],
   )
 
   // Reactively track which breakpoints are active (largest → smallest). Hooks

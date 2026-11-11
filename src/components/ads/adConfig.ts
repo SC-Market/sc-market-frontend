@@ -9,6 +9,7 @@ import {
   yellow,
 } from "@mui/material/colors"
 import { AdConfig } from "./types"
+import { AD_MIN_LISTINGS, adPositions } from "./adPlacement"
 import ionImage from "../../assets/ion.webp"
 import infernoImage from "../../assets/inferno.webp"
 import perseusImage from "../../assets/perseus.webp"
@@ -140,16 +141,13 @@ export const MARKET_ADS: AdConfig[] = [
   },
 ]
 
-/** Listings between two ads. */
-export const AD_FREQUENCY = 24
-/**
- * Index of the first ad in a page of listings. Below the market's default
- * page size (12): at 12 the first slot was past the end of a default page,
- * so no ad ever showed.
- */
-export const AD_FIRST_POSITION = 8
-/** Fewer listings than this get no ads. */
-export const AD_MIN_LISTINGS = 10
+export {
+  AD_FIRST_POSITION,
+  AD_FREQUENCY,
+  AD_MIN_GAP,
+  AD_MIN_LEAD,
+  AD_MIN_LISTINGS,
+} from "./adPlacement"
 
 /**
  * The ads in rotation order: each ad appears `weight` times per cycle, spread
@@ -184,28 +182,19 @@ export function hashString(value: string): number {
 
 export type WithAds<T> = T | { _isAd: true; ad: AdConfig }
 
-/** Where the ads go in a page of `count` listings (indexes in the result). */
-function adPositions(count: number): number[] {
-  const positions: number[] = []
-  for (
-    let i = AD_FIRST_POSITION;
-    i < count + positions.length;
-    i += AD_FREQUENCY + 1
-  ) {
-    positions.push(i)
-  }
-  return positions
-}
-
 /**
- * Splices ads into a page of listings. A page that gets any ads gets exactly
- * one sister-site (SC Orgs) ad: which slot it takes and which poster it is
- * both come from a hash of the page's first listing. The other slots run
- * through the remaining ads' rotation, starting at a point from the same
- * hash, so neighbouring slots don't repeat an ad. A page with one slot shows
- * just the SC Orgs ad. Different pages and searches get different ads, the
- * same results always the same ones (no Math.random: server and client
- * render the same grid).
+ * Splices ads into a page of listings. Where the slots go comes from
+ * `layoutSeed` (adPositions: a seeded random, one seed per page load, see
+ * useAdLayoutSeed), so the slots move between visits but not while the page
+ * is open; the same seed and page size always give the same slots.
+ *
+ * A page that gets any ads gets exactly one sister-site (SC Orgs) ad: which
+ * slot it takes and which poster it is both come from a hash of the page's
+ * first listing. The other slots run through the remaining ads' rotation,
+ * starting at a point from the same hash, so neighbouring slots don't repeat
+ * an ad. A page with one slot shows just the SC Orgs ad. Different pages and
+ * searches get different ads, the same results always the same ones (the
+ * seed is the only random input).
  *
  * `campaignAd` (an event campaign's creative for this visitor, see
  * useCampaignAd) takes one of the other slots, never the SC Orgs one: at most
@@ -221,11 +210,12 @@ export function insertAds<T>(
   keyOf: (listing: T) => string,
   ads: AdConfig[] = MARKET_ADS,
   campaignAd: AdConfig | null = null,
+  layoutSeed = 0,
 ): WithAds<T>[] {
   if (listings.length < AD_MIN_LISTINGS || ads.length === 0) return listings
   const sisterRotation = buildAdRotation(ads.filter((ad) => ad.sisterSite))
   const otherRotation = buildAdRotation(ads.filter((ad) => !ad.sisterSite))
-  const positions = adPositions(listings.length)
+  const positions = adPositions(listings.length, layoutSeed)
   const hash = hashString(keyOf(listings[0]))
   // A second hash for the poster choice, so it doesn't track the slot choice.
   const posterHash = hashString(`sister:${keyOf(listings[0])}`)

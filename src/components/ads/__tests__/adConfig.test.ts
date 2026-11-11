@@ -8,14 +8,13 @@ import uk from "../../../locales/uk/ukrainian.json"
 import zhHans from "../../../locales/zh/zh_Hans.json"
 import zhHant from "../../../locales/zh/zh_Hant.json"
 import {
-  AD_FIRST_POSITION,
-  AD_FREQUENCY,
   AD_MIN_LISTINGS,
   MARKET_ADS,
   buildAdRotation,
   insertAds,
 } from "../adConfig"
 import type { AdConfig } from "../types"
+import { adPositions } from "../adPlacement"
 import { IAE_2956 } from "../iae2956"
 
 const SC_ORGS_POSTERS = [
@@ -58,19 +57,34 @@ describe("market ad rotation", () => {
     })
   })
 
-  it("splices ads at the first position and then every AD_FREQUENCY listings", () => {
-    const out = insertAds(listings(60), (l) => l.listing_id)
-    const adAt = out.flatMap((item, i) => ("_isAd" in item ? [i] : []))
-    const expected: number[] = []
-    for (
-      let i = AD_FIRST_POSITION;
-      i < 60 + expected.length;
-      i += AD_FREQUENCY + 1
-    ) {
-      expected.push(i)
+  it("splices the ads in at the layout seed's positions", () => {
+    for (const seed of [0, 1, 99, 123456789]) {
+      const out = insertAds(
+        listings(60),
+        (l) => l.listing_id,
+        MARKET_ADS,
+        null,
+        seed,
+      )
+      const adAt = out.flatMap((item, i) => ("_isAd" in item ? [i] : []))
+      expect(adAt).toEqual(adPositions(60, seed))
+      expect(out.filter((item) => !("_isAd" in item))).toHaveLength(60)
     }
-    expect(adAt).toEqual(expected)
-    expect(out.filter((item) => !("_isAd" in item))).toHaveLength(60)
+  })
+
+  it("keeps the listings' order and the ads' choice whatever the seed", () => {
+    const page = listings(120)
+    const key = (l: { listing_id: string }) => l.listing_id
+    const parts = (seed: number) => {
+      const out = insertAds(page, key, MARKET_ADS, IAE_2956.creatives[3], seed)
+      return {
+        listings: out.flatMap((item) => ("_isAd" in item ? [] : [item])),
+        ads: out.flatMap((item) => ("_isAd" in item ? [item.ad.id] : [])),
+      }
+    }
+    expect(parts(5).listings).toEqual(page)
+    expect(parts(5).ads).toEqual(parts(0).ads)
+    expect(parts(5)).toEqual(parts(5))
   })
 
   it("puts one ad in a default page of 12 listings", () => {
