@@ -8,11 +8,11 @@ import {
   FormLabel,
   Typography,
 } from "@mui/material"
-import { usePreviewAdminAlertAudienceQuery } from "../../../store/api/v2/market"
-import type {
-  AdminAlertChannel,
-  AdminAlertCreate,
-} from "../../../datatypes/AdminAlert"
+import {
+  usePreviewAdminAlertAudienceQuery,
+  type AdminAlertChannel,
+  type AdminAlertTargetType,
+} from "../../../store/api/v2/market"
 
 const CHANNELS: AdminAlertChannel[] = ["in_app", "push", "email", "discord_dm"]
 
@@ -24,7 +24,7 @@ const CHANNELS: AdminAlertChannel[] = ["in_app", "push", "email", "discord_dm"]
 export function AlertChannelsField(props: {
   channels: AdminAlertChannel[]
   onChange: (channels: AdminAlertChannel[]) => void
-  targetType: AdminAlertCreate["target_type"]
+  targetType: AdminAlertTargetType
   targetSpectrumId?: string | null
 }) {
   const { t } = useTranslation()

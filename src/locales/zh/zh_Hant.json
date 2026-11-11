@@ -97,7 +97,9 @@
         "body": "此提醒將透過電子郵件寄給所有擁有已驗證地址且未關閉公告郵件的使用者。",
         "cancel": "返回",
         "confirm": "寄送電子郵件"
-      }
+      },
+      "editNoResend": "儲存變更不會再次傳送此警示。",
+      "notFound": "此警示不存在或已被刪除。"
     },
     "alerts.actions": "操作",
     "alerts.active": "啟用中",

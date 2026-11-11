@@ -3,7 +3,7 @@ import React from "react"
 import { render } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import type { GameDataImportJob } from "../../../store/api/admin"
+import type { GameDataImportJob } from "../../../store/api/v2/market"
 import { AdminGameDataImportView } from "../AdminGameDataImportView"
 
 const mocks = vi.hoisted(() => ({
@@ -11,16 +11,16 @@ const mocks = vi.hoisted(() => ({
   jobs: undefined as { jobs: GameDataImportJob[] } | undefined,
 }))
 
-vi.mock("../../../store/api/admin", () => ({
+vi.mock("../../../store/api/v2/admin-overrides", () => ({
   useImportGameDataMutation: () => [vi.fn(), { isLoading: false }],
-  useListGameDataImportJobsQuery: () => ({
-    data: mocks.jobs,
-    refetch: vi.fn(),
-  }),
 }))
 
 vi.mock("../../../store/api/v2/market", () => ({
   useGetPagesDeployHookStatusQuery: () => ({ data: undefined }),
+  useListGameDataImportJobsQuery: () => ({
+    data: mocks.jobs,
+    refetch: vi.fn(),
+  }),
 }))
 
 vi.mock("../../../hooks/alert/AlertHook", () => ({

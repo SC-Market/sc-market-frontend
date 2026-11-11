@@ -19,7 +19,7 @@ import {
   ExpandMoreRounded,
   ExpandLessRounded,
 } from "@mui/icons-material"
-import { GameDataImportJob } from "../../store/api/admin"
+import type { GameDataImportJob } from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
 
 export function statusColor(

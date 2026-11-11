@@ -19,8 +19,9 @@ import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
-import { CreateAlertDialog } from "./CreateAlertDialog"
-import { EditAlertDialog } from "./EditAlertDialog"
+import { ALERT_TARGET_TYPES } from "../../features/admin/hooks/useAdminAlertForm"
+import { Link } from "react-router-dom"
+import { ADMIN_PATHS } from "../../routes/paths"
 import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import { useFormatters } from "../../util/format"
@@ -47,19 +48,13 @@ export function AdminAlertsView() {
     setActiveFilter,
     selectedAlert,
     isDeleteModalOpen,
-    handleOpenCreateModal,
-    handleOpenEditModal,
     handleOpenDeleteModal,
-    handleCloseModals,
-    confirmEmailOpen,
-    setConfirmEmailOpen,
-    isCreating,
+    handleCloseDeleteModal,
     isDeleting,
-    handleCreateAlert,
     handleDeleteAlert,
   } = alerts
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<(typeof rows)[number]>[] = [
     {
       field: "title",
       headerName: t("admin.alerts.field.title", "Title"),
@@ -73,7 +68,7 @@ export function AdminAlertsView() {
       width: 150,
       display: "flex",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Chip
           label={params.value}
           color="primary"
@@ -89,9 +84,9 @@ export function AdminAlertsView() {
       display: "flex",
       flex: 1,
       sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-          {((params.value as string[] | undefined) ?? []).map((c) => (
+          {params.row.channels.map((c) => (
             <Chip
               key={c}
               label={c.replace("_", " ")}
@@ -108,7 +103,7 @@ export function AdminAlertsView() {
       width: 200,
       display: "flex",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) =>
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) =>
         params.value ? (
           <Button
             variant="text"
@@ -134,7 +129,7 @@ export function AdminAlertsView() {
       width: 120,
       display: "flex",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Typography variant="body2">{fmt.date(params.value)}</Typography>
       ),
     },
@@ -144,7 +139,7 @@ export function AdminAlertsView() {
       width: 100,
       display: "flex",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Chip
           label={
             params.value
@@ -162,11 +157,12 @@ export function AdminAlertsView() {
       width: 150,
       display: "flex",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams<(typeof rows)[number]>) => (
         <Box>
           <IconButton
             size="small"
-            onClick={() => handleOpenEditModal(params.row)}
+            component={Link}
+            to={ADMIN_PATHS.alertEdit(params.row.alert_id)}
             color="primary"
             aria-label={t("accessibility.edit")}
           >
@@ -217,7 +213,10 @@ export function AdminAlertsView() {
               value={targetTypeFilter}
               label={t("admin.alerts.targetTypeFilter", "Target Type")}
               onChange={(e) =>
-                setTargetTypeFilter(e.target.value as typeof targetTypeFilter)
+                setTargetTypeFilter(
+                  ALERT_TARGET_TYPES.find((type) => type === e.target.value) ??
+                    "",
+                )
               }
             >
               <MenuItem value="">{t("adminUi.alerts.allTypes")}</MenuItem>
@@ -264,7 +263,8 @@ export function AdminAlertsView() {
           <Button
             variant="contained"
             startIcon={<AdminIcons.Add />}
-            onClick={handleOpenCreateModal}
+            component={Link}
+            to={ADMIN_PATHS.alertNew}
             fullWidth
           >
             {t("admin.alerts.createAlert", "Create Alert")}
@@ -302,33 +302,10 @@ export function AdminAlertsView() {
         </Grid>
       )}
 
-      {/* Create Alert Modal */}
-      <CreateAlertDialog alerts={alerts} />
-
-      {/* Emailing every user: confirm first. */}
-      <ConfirmDialog
-        open={confirmEmailOpen}
-        onClose={() => setConfirmEmailOpen(false)}
-        stackAbove
-        title={t("admin.alerts.confirmEmail.title", "Email every user?")}
-        message={t(
-          "admin.alerts.confirmEmail.body",
-          "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
-        )}
-        cancelLabel={t("admin.alerts.confirmEmail.cancel", "Go back")}
-        confirmLabel={t("admin.alerts.confirmEmail.confirm", "Send the email")}
-        confirmColor="warning"
-        loading={isCreating}
-        onConfirm={() => handleCreateAlert(true)}
-      />
-
-      {/* Edit Alert Modal */}
-      <EditAlertDialog alerts={alerts} />
-
       {/* Delete Alert Modal */}
       <ConfirmDialog
         open={isDeleteModalOpen}
-        onClose={handleCloseModals}
+        onClose={handleCloseDeleteModal}
         maxWidth="sm"
         title={t("admin.alerts.deleteAlert", "Delete Alert")}
         message={t(

@@ -1,30 +1,42 @@
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 import {
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  TextField,
-  Box,
-  Switch,
-  FormControlLabel,
   Autocomplete,
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
 } from "@mui/material"
-import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
-import type { AdminAlertsState } from "../../features/admin/hooks/useAdminAlerts"
+import { ConfirmDialog } from "../../components/dialog/ConfirmDialog"
+import { AlertChannelsField } from "../../features/admin/components/AlertChannelsField"
+import { useAdminAlertForm } from "../../features/admin/hooks/useAdminAlertForm"
+import type { AdminAlert } from "../../store/api/v2/market"
+import { ADMIN_PATHS } from "../../routes/paths"
 
-/** Edit dialog for an existing alert. */
-export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
+/**
+ * Admin › Alerts › New (no `alert`) or Edit: the alert form as a page.
+ * Creating sends the alert; editing never re-sends it.
+ */
+export function AdminAlertFormView({ alert }: { alert?: AdminAlert }) {
   const { t } = useTranslation()
+  const form = useAdminAlertForm(alert)
   const {
-    selectedAlert,
-    isEditModalOpen,
-    handleCloseModals,
+    isEdit,
     formData,
     setFormData,
+    channels,
+    setChannels,
+    confirmEmailOpen,
+    setConfirmEmailOpen,
     linkError,
     handleLinkChange,
     contractorError,
@@ -35,46 +47,24 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
     isSearchingContractors,
     handleContractorChange,
     handleTargetTypeChange,
-    isUpdating,
-    handleUpdateAlert,
-    updateAlertMut,
-    issueAlert,
-  } = alerts
+    isSaving,
+    canSubmit,
+    handleSubmit,
+  } = form
+
   return (
-    <ResponsiveDialog
-      open={isEditModalOpen}
-      onClose={handleCloseModals}
-      maxWidth="md"
-      mobile="fullScreen"
-      title={t("admin.alerts.editAlert", "Edit Alert")}
-      disableClose={isUpdating}
-      disableBackdropClose
-      actions={
-        <>
-          <Button onClick={handleCloseModals} disabled={isUpdating}>
-            {t("common.cancel")}
-          </Button>
-          <Button
-            onClick={handleUpdateAlert}
-            variant="contained"
-            disabled={
-              isUpdating ||
-              !formData.title ||
-              !formData.content ||
-              !!linkError ||
-              !!contractorError
-            }
-          >
-            {isUpdating
-              ? t("admin.alerts.updating", "Updating...")
-              : t("admin.alerts.update", "Update")}
-          </Button>
-        </>
-      }
-    >
-      <Box sx={{ mt: 2 }}>
+    <Paper sx={{ p: { xs: 2, md: 3 } }}>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault()
+          if (canSubmit) handleSubmit()
+        }}
+      >
         <TextField
           fullWidth
+          required
           label={t("admin.alerts.field.title", "Title")}
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -93,11 +83,11 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
           type="url"
         />
         <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="admin-alerts-view-target-type-3-label">
+          <InputLabel id="admin-alert-form-target-type-label">
             {t("admin.alerts.targetType", "Target Type")}
           </InputLabel>
           <Select
-            labelId="admin-alerts-view-target-type-3-label"
+            labelId="admin-alert-form-target-type-label"
             value={formData.target_type}
             label={t("admin.alerts.targetType", "Target Type")}
             onChange={(e) => handleTargetTypeChange(e.target.value)}
@@ -125,9 +115,9 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
             options={contractorOptions}
             getOptionLabel={(option) => option.name}
             value={selectedContractor}
-            onChange={(event, newValue) => handleContractorChange(newValue)}
+            onChange={(_event, newValue) => handleContractorChange(newValue)}
             inputValue={contractorSearchQuery}
-            onInputChange={(event, newInputValue) => {
+            onInputChange={(_event, newInputValue) => {
               setContractorSearchQuery(newInputValue)
             }}
             renderInput={(params) => (
@@ -135,7 +125,12 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
                 {...params}
                 label={t("admin.alerts.selectContractor", "Select Contractor")}
                 error={!!contractorError}
-                helperText={contractorError}
+                helperText={
+                  contractorError ||
+                  (isEdit && formData.target_spectrum_id && !selectedContractor
+                    ? formData.target_spectrum_id
+                    : undefined)
+                }
                 placeholder={t(
                   "admin.alerts.contractorPlaceholder",
                   "Search orgs",
@@ -171,6 +166,21 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
             loadingText={t("admin.alerts.searching", "Searching...")}
           />
         )}
+        {isEdit ? (
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            {t(
+              "admin.alerts.editNoResend",
+              "Saving changes doesn't send the alert again.",
+            )}
+          </Typography>
+        ) : (
+          <AlertChannelsField
+            channels={channels}
+            onChange={setChannels}
+            targetType={formData.target_type}
+            targetSpectrumId={formData.target_spectrum_id}
+          />
+        )}
         <MarkdownEditor
           value={formData.content}
           onChange={(value: string) =>
@@ -185,36 +195,51 @@ export function EditAlertDialog({ alerts }: { alerts: AdminAlertsState }) {
           }}
           variant="vertical"
         />
-        {selectedAlert && (
+        {isEdit && (
           <FormControlLabel
             control={
               <Switch
-                checked={selectedAlert.active}
-                onChange={(e) => {
-                  if (selectedAlert) {
-                    updateAlertMut({
-                      alertId: selectedAlert.alert_id,
-                      data: { active: e.target.checked },
-                    })
-                      .unwrap()
-                      .then(() => {
-                        issueAlert({
-                          message: t("admin.alerts.updated", "Alert updated"),
-                          severity: "success",
-                        })
-                      })
-                      .catch((error) => {
-                        issueAlert(error)
-                      })
-                  }
-                }}
+                checked={formData.active}
+                onChange={(e) =>
+                  setFormData({ ...formData, active: e.target.checked })
+                }
               />
             }
             label={t("admin.alerts.active", "Active")}
             sx={{ mt: 2 }}
           />
         )}
+        <Stack direction="row" spacing={1} justifyContent="flex-end" mt={3}>
+          <Button component={Link} to={ADMIN_PATHS.alerts} disabled={isSaving}>
+            {t("common.cancel")}
+          </Button>
+          <Button type="submit" variant="contained" disabled={!canSubmit}>
+            {isEdit
+              ? isSaving
+                ? t("admin.alerts.updating", "Updating...")
+                : t("admin.alerts.update", "Update")
+              : isSaving
+                ? t("admin.alerts.creating", "Creating...")
+                : t("admin.alerts.create", "Create")}
+          </Button>
+        </Stack>
       </Box>
-    </ResponsiveDialog>
+
+      {/* Emailing every user: confirm first. */}
+      <ConfirmDialog
+        open={confirmEmailOpen}
+        onClose={() => setConfirmEmailOpen(false)}
+        title={t("admin.alerts.confirmEmail.title", "Email every user?")}
+        message={t(
+          "admin.alerts.confirmEmail.body",
+          "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
+        )}
+        cancelLabel={t("admin.alerts.confirmEmail.cancel", "Go back")}
+        confirmLabel={t("admin.alerts.confirmEmail.confirm", "Send the email")}
+        confirmColor="warning"
+        loading={isSaving}
+        onConfirm={() => handleSubmit(true)}
+      />
+    </Paper>
   )
 }

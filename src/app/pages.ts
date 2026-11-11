@@ -14,6 +14,14 @@ export const pages = {
     () => import("../pages/contracting/AcceptOrgInvite"),
     (m) => m.AcceptOrgInvite,
   ),
+  AdminAlertEdit: pageEntry(
+    () => import("../pages/admin/AdminAlertForm"),
+    (m) => m.AdminAlertEdit,
+  ),
+  AdminAlertNew: pageEntry(
+    () => import("../pages/admin/AdminAlertForm"),
+    (m) => m.AdminAlertNew,
+  ),
   AdminAlerts: pageEntry(
     () => import("../pages/admin/AdminAlerts"),
     (m) => m.AdminAlerts,

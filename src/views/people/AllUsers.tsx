@@ -16,12 +16,12 @@ import {
   TableHead,
   TableSortLabel,
 } from "@mui/material"
-import { AdminUser } from "../../datatypes/User"
 import {
   useGetAdminUsersQuery,
-  useGetActivityAdminQuery,
-  useGetMembershipAnalyticsQuery,
-} from "../../features/admin/api/adminApi"
+  useGetAdminActivityQuery,
+  useGetAdminMembershipAnalyticsQuery,
+  type AdminUser,
+} from "../../store/api/v2/market"
 import { MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
@@ -43,10 +43,10 @@ export function AdminUserList(): ReactElement {
 
   const { data: usersResponse, isLoading } = useGetAdminUsersQuery({
     page,
-    page_size: pageSize,
+    pageSize,
     ...(roleFilter && { role: roleFilter }),
     ...(bannedFilter !== undefined && { banned: bannedFilter }),
-    ...(rsiFilter !== undefined && { rsi_confirmed: rsiFilter }),
+    ...(rsiFilter !== undefined && { rsiConfirmed: rsiFilter }),
   })
 
   const handleRequestSort = (property: keyof AdminUser) => {
@@ -206,7 +206,7 @@ export function AdminUserList(): ReactElement {
 }
 
 export function AdminDailyActivity() {
-  const { data } = useGetActivityAdminQuery()
+  const { data } = useGetAdminActivityQuery()
   const { t } = useTranslation()
 
   return (
@@ -264,7 +264,7 @@ export function AdminDailyActivity() {
 }
 
 export function AdminMembershipAnalytics() {
-  const { data, isLoading, error } = useGetMembershipAnalyticsQuery()
+  const { data, isLoading, error } = useGetAdminMembershipAnalyticsQuery()
   const { t } = useTranslation()
 
   if (isLoading) {
@@ -353,21 +353,21 @@ export function AdminMembershipAnalytics() {
               name: t("appUi.adminUsers.totalMembers"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
-                y: parseInt(u.cumulative_members),
+                y: u.cumulative_members,
               })),
             },
             {
               name: t("appUi.adminUsers.rsiVerified"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
-                y: parseInt(u.cumulative_members_rsi_verified),
+                y: u.cumulative_members_rsi_verified,
               })),
             },
             {
               name: t("appUi.adminUsers.newMembers"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
-                y: parseInt(u.new_members),
+                y: u.new_members,
               })),
             },
           ]}

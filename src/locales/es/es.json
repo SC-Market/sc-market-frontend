@@ -97,7 +97,9 @@
         "body": "Este aviso se enviará por correo a todos los usuarios con una dirección verificada que no hayan desactivado los correos de anuncios.",
         "cancel": "Volver",
         "confirm": "Enviar el correo"
-      }
+      },
+      "editNoResend": "Guardar los cambios no vuelve a enviar la alerta.",
+      "notFound": "Esta alerta no existe o se eliminó."
     },
     "alerts.actions": "Acciones",
     "alerts.active": "Activo",

@@ -97,7 +97,9 @@
         "body": "Diese Meldung wird per E-Mail an alle Nutzer mit bestätigter Adresse gesendet, die Ankündigungs-E-Mails nicht deaktiviert haben.",
         "cancel": "Zurück",
         "confirm": "E-Mail senden"
-      }
+      },
+      "editNoResend": "Beim Speichern wird die Meldung nicht erneut gesendet.",
+      "notFound": "Diese Meldung existiert nicht oder wurde gelöscht."
     },
     "alerts.actions": "Aktionen",
     "alerts.active": "Aktiv",

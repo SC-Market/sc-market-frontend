@@ -9,7 +9,7 @@ import {
   Chip,
   Box,
 } from "@mui/material"
-import { AdminUser } from "../../datatypes/User"
+import type { AdminUser } from "../../store/api/v2/market"
 import { Link } from "react-router-dom"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"

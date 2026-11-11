@@ -2,6 +2,7 @@
  * The admin dialogs on ResponsiveDialog / ConfirmDialog: each is named by
  * its title, the long forms go full screen on phones and ignore backdrop
  * clicks (typed work), and nothing closes while a save is in flight.
+ * (Alert create / edit are pages now: AdminAlertPages.test.tsx.)
  */
 import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
@@ -11,7 +12,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const h = vi.hoisted(() => ({
   mobile: false,
-  creatingAlert: false,
   creatingDefinition: false,
   grant: vi.fn(),
 }))
@@ -34,18 +34,6 @@ vi.mock("../../../components/markdown/Markdown.lazy", () => ({
   ),
   MarkdownRender: (props: { text: string }) => <div>{props.text}</div>,
 }))
-vi.mock("../../../features/admin/components/AlertChannelsField", () => ({
-  AlertChannelsField: () => null,
-}))
-vi.mock("../../../features/admin/api/adminApi", () => ({
-  useGetAdminAlertsQuery: () => ({ data: undefined, isLoading: false }),
-  useCreateAdminAlertMutation: () => [vi.fn(), { isLoading: h.creatingAlert }],
-  useUpdateAdminAlertMutation: () => [vi.fn(), { isLoading: false }],
-  useDeleteAdminAlertMutation: () => [vi.fn(), { isLoading: false }],
-}))
-vi.mock("../../../features/contractor/api/contractorApi", () => ({
-  useSearchContractorsQuery: () => ({ data: [], isLoading: false }),
-}))
 vi.mock("../../../store/api/attributes", () => ({
   useGetAttributeDefinitionsQuery: () => ({ data: undefined }),
   useCreateAttributeDefinitionMutation: () => [
@@ -54,9 +42,6 @@ vi.mock("../../../store/api/attributes", () => ({
   ],
   useUpdateAttributeDefinitionMutation: () => [vi.fn(), { isLoading: false }],
   useDeleteAttributeDefinitionMutation: () => [vi.fn(), { isLoading: false }],
-}))
-vi.mock("../../../store/api/premium", () => ({
-  useGetPremiumOrgsQuery: () => ({ data: undefined, isLoading: false }),
 }))
 vi.mock("../../../store/api/contractors", () => ({
   useSearchContractorsQuery: () => ({ data: undefined }),
@@ -70,6 +55,7 @@ vi.mock("../../../features/admin/hooks/useOrgPremiumAdmin", () => ({
   }),
 }))
 vi.mock("../../../store/api/v2/market", () => ({
+  useListOrgPremiumTiersQuery: () => ({ data: undefined, isLoading: false }),
   useGetStatsQuery: () => ({ data: [] }),
   useGetUserOverridesQuery: () => ({ data: undefined }),
 }))
@@ -81,10 +67,7 @@ vi.mock("../../../components/search/UserSearch", () => ({
   UserSearch: () => <input aria-label="User search" />,
 }))
 
-import { useAdminAlerts } from "../../../features/admin/hooks/useAdminAlerts"
 import { useAdminAttributeDefinitions } from "../../../features/admin/hooks/useAdminAttributeDefinitions"
-import { CreateAlertDialog } from "../CreateAlertDialog"
-import { EditAlertDialog } from "../EditAlertDialog"
 import {
   CreateAttributeDefinitionDialog,
   EditAttributeDefinitionDialog,
@@ -94,34 +77,6 @@ import { AdminFeatureFlagDetailView } from "../AdminFeatureFlagDetailView"
 
 const wrap = (ui: React.ReactElement) =>
   render(<ThemeProvider theme={createTheme()}>{ui}</ThemeProvider>)
-
-function AlertsHarness() {
-  const alerts = useAdminAlerts()
-  return (
-    <>
-      <Button onClick={alerts.handleOpenCreateModal}>open create</Button>
-      <Button
-        onClick={() =>
-          alerts.handleOpenEditModal({
-            alert_id: "a1",
-            title: "Downtime",
-            content: "Back soon",
-            link: null,
-            target_type: "all_users",
-            target_spectrum_id: null,
-            created_by: "u1",
-            created_at: "2026-11-01T00:00:00Z",
-            active: true,
-          })
-        }
-      >
-        open edit
-      </Button>
-      <CreateAlertDialog alerts={alerts} />
-      <EditAlertDialog alerts={alerts} />
-    </>
-  )
-}
 
 function DefinitionsHarness() {
   const defs = useAdminAttributeDefinitions()
@@ -139,51 +94,8 @@ const fullScreen = () => document.querySelector(".MuiDialog-paperFullScreen")
 
 beforeEach(() => {
   h.mobile = false
-  h.creatingAlert = false
   h.creatingDefinition = false
   h.grant.mockReset()
-})
-
-describe("Create / Edit alert", () => {
-  it("create: named by its title, ignores backdrop clicks, Cancel closes", async () => {
-    wrap(<AlertsHarness />)
-    fireEvent.click(screen.getByText("open create"))
-    expect(
-      screen.getByRole("dialog", { name: "Create Alert" }),
-    ).toBeInTheDocument()
-    expect(fullScreen()).toBeNull()
-    fireEvent.click(backdrop())
-    expect(screen.getByRole("dialog")).toBeInTheDocument()
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull())
-  })
-
-  it("create: full screen on phones", () => {
-    h.mobile = true
-    wrap(<AlertsHarness />)
-    fireEvent.click(screen.getByText("open create"))
-    expect(fullScreen()).not.toBeNull()
-  })
-
-  it("create: nothing closes while it saves", () => {
-    h.creatingAlert = true
-    wrap(<AlertsHarness />)
-    fireEvent.click(screen.getByText("open create"))
-    const dialog = screen.getByRole("dialog", { name: "Create Alert" })
-    fireEvent.keyDown(dialog, { key: "Escape" })
-    expect(screen.getByRole("dialog")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Close" })).toBeDisabled()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled()
-  })
-
-  it("edit: named by its title and filled with the alert", () => {
-    wrap(<AlertsHarness />)
-    fireEvent.click(screen.getByText("open edit"))
-    expect(
-      screen.getByRole("dialog", { name: "Edit Alert" }),
-    ).toBeInTheDocument()
-    expect(screen.getByDisplayValue("Downtime")).toBeInTheDocument()
-  })
 })
 
 describe("Attribute definition dialogs", () => {

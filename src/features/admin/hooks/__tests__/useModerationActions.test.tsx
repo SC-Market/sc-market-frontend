@@ -7,10 +7,13 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }))
 vi.mock("../../api/moderationApi", () => ({
   useReportContentMutation: vi.fn(),
-  useUpdateReportMutation: vi.fn(),
+}))
+vi.mock("../../../../store/api/v2/market", () => ({
+  useUpdateContentReportMutation: vi.fn(),
 }))
 
 import * as moderationApi from "../../api/moderationApi"
+import * as v2 from "../../../../store/api/v2/market"
 import {
   mockMutationTrigger,
   mutationIdle,
@@ -18,8 +21,9 @@ import {
 import { useReportContent, useUpdateReport } from "../useModerationActions"
 
 type E = typeof moderationApi.moderationApi.endpoints
+type V2 = typeof v2.marketV2Api.endpoints
 const report = mockMutationTrigger<E["reportContent"]>()
-const update = mockMutationTrigger<E["updateReport"]>()
+const update = mockMutationTrigger<V2["updateContentReport"]>()
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -28,9 +32,9 @@ beforeEach(() => {
     report,
     mutationIdle<E["reportContent"]>(),
   ])
-  vi.mocked(moderationApi.useUpdateReportMutation).mockReturnValue([
+  vi.mocked(v2.useUpdateContentReportMutation).mockReturnValue([
     update,
-    mutationIdle<E["updateReport"]>(),
+    mutationIdle<V2["updateContentReport"]>(),
   ])
 })
 
@@ -73,7 +77,7 @@ describe("useUpdateReport", () => {
     ).resolves.toBe(true)
     expect(update).toHaveBeenCalledWith({
       reportId: "r1",
-      data: { status: "resolved", notes: "ok" },
+      updateContentReportRequest: { status: "resolved", notes: "ok" },
     })
     update.mockReturnValueOnce({
       unwrap: () => Promise.reject({ status: 500 }),

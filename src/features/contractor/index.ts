@@ -70,7 +70,6 @@ export {
   useBlockUserForOrgMutation,
   useUnblockUserForOrgMutation,
   useGetContractorAuditLogsQuery,
-  useGetAdminAuditLogsQuery,
   useGetContractorLanguagesQuery,
   useSetContractorLanguagesMutation,
 } from "./api/contractorApi"

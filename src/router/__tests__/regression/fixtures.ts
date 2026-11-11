@@ -47,6 +47,7 @@ export const PARAM_VALUES: Record<string, string> = {
   wishlist_id: "wishlist-1",
   resource_id: "resource-1",
   flagName: "fixture_flag",
+  alertId: "11111111-1111-4111-8111-111111111111",
   category: "buying",
 }
 

@@ -2421,12 +2421,172 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin"],
       }),
+      getSpectrumMigrationStatus: build.query<
+        GetSpectrumMigrationStatusApiResponse,
+        GetSpectrumMigrationStatusApiArg
+      >({
+        query: () => ({ url: `/admin/spectrum-migration/status` }),
+        providesTags: ["Admin"],
+      }),
+      simulateSpectrumMigration: build.mutation<
+        SimulateSpectrumMigrationApiResponse,
+        SimulateSpectrumMigrationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/spectrum-migration/simulate`,
+          method: "POST",
+          body: queryArg.spectrumMigrationSimulateRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      runSpectrumMigration: build.mutation<
+        RunSpectrumMigrationApiResponse,
+        RunSpectrumMigrationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/spectrum-migration/migrate`,
+          method: "POST",
+          body: queryArg.spectrumMigrationRunRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      rollbackSpectrumMigration: build.mutation<
+        RollbackSpectrumMigrationApiResponse,
+        RollbackSpectrumMigrationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/spectrum-migration/rollback`,
+          method: "POST",
+          body: queryArg.spectrumMigrationRollbackRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      getAdminActivity: build.query<
+        GetAdminActivityApiResponse,
+        GetAdminActivityApiArg
+      >({
+        query: () => ({ url: `/admin/activity` }),
+        providesTags: ["Admin"],
+      }),
+      getAdminUsers: build.query<GetAdminUsersApiResponse, GetAdminUsersApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/admin/users`,
+            params: {
+              page: queryArg.page,
+              page_size: queryArg.pageSize,
+              role: queryArg.role,
+              banned: queryArg.banned,
+              rsi_confirmed: queryArg.rsiConfirmed,
+              sort_by: queryArg.sortBy,
+              sort_order: queryArg.sortOrder,
+            },
+          }),
+          providesTags: ["Admin"],
+        },
+      ),
+      getAdminMembershipAnalytics: build.query<
+        GetAdminMembershipAnalyticsApiResponse,
+        GetAdminMembershipAnalyticsApiArg
+      >({
+        query: () => ({ url: `/admin/membership/analytics` }),
+        providesTags: ["Admin"],
+      }),
+      getAdminOfferAnalytics: build.query<
+        GetAdminOfferAnalyticsApiResponse,
+        GetAdminOfferAnalyticsApiArg
+      >({
+        query: () => ({ url: `/admin/offers/analytics` }),
+        providesTags: ["Admin"],
+      }),
+      getAdminAuditLogs: build.query<
+        GetAdminAuditLogsApiResponse,
+        GetAdminAuditLogsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/audit-logs`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            action: queryArg.action,
+            subject_type: queryArg.subjectType,
+            subject_id: queryArg.subjectId,
+            actor_id: queryArg.actorId,
+            start_date: queryArg.startDate,
+            end_date: queryArg.endDate,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      postAdminTestNotification: build.mutation<
+        PostAdminTestNotificationApiResponse,
+        PostAdminTestNotificationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/notifications/test`,
+          method: "POST",
+          body: queryArg.adminTestNotificationRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       getSellerReachability: build.query<
         GetSellerReachabilityApiResponse,
         GetSellerReachabilityApiArg
       >({
         query: () => ({ url: `/admin/seller-reachability` }),
         providesTags: ["Admin"],
+      }),
+      listOrgPremiumTiers: build.query<
+        ListOrgPremiumTiersApiResponse,
+        ListOrgPremiumTiersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/premium`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      getOrgPremiumTier: build.query<
+        GetOrgPremiumTierApiResponse,
+        GetOrgPremiumTierApiArg
+      >({
+        query: (queryArg) => ({ url: `/admin/premium/${queryArg.spectrumId}` }),
+        providesTags: ["Admin"],
+      }),
+      setOrgPremiumTier: build.mutation<
+        SetOrgPremiumTierApiResponse,
+        SetOrgPremiumTierApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/premium/${queryArg.spectrumId}`,
+          method: "PUT",
+          body: queryArg.setOrgPremiumRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      revokeOrgPremiumTier: build.mutation<
+        RevokeOrgPremiumTierApiResponse,
+        RevokeOrgPremiumTierApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/premium/${queryArg.spectrumId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      setOrgPremiumDomain: build.mutation<
+        SetOrgPremiumDomainApiResponse,
+        SetOrgPremiumDomainApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/premium/${queryArg.spectrumId}/domain`,
+          method: "PATCH",
+          body: queryArg.setOrgPremiumDomainRequest,
+        }),
+        invalidatesTags: ["Admin"],
       }),
       listAdminOrders: build.query<
         ListAdminOrdersApiResponse,
@@ -2461,6 +2621,32 @@ const injectedRtkApi = api
           },
         }),
         providesTags: ["Admin"],
+      }),
+      listContentReports: build.query<
+        ListContentReportsApiResponse,
+        ListContentReportsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/moderation/reports`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            status: queryArg.status,
+            reporter_id: queryArg.reporterId,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      updateContentReport: build.mutation<
+        UpdateContentReportApiResponse,
+        UpdateContentReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/moderation/reports/${queryArg.reportId}`,
+          method: "PUT",
+          body: queryArg.updateContentReportRequest,
+        }),
+        invalidatesTags: ["Admin"],
       }),
       searchIdentityUsers: build.query<
         SearchIdentityUsersApiResponse,
@@ -2586,6 +2772,32 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/active-listing-count` }),
         providesTags: ["Admin"],
       }),
+      listAdminAlerts: build.query<
+        ListAdminAlertsApiResponse,
+        ListAdminAlertsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/alerts`,
+          params: {
+            page: queryArg.page,
+            pageSize: queryArg.pageSize,
+            target_type: queryArg.targetType,
+            active: queryArg.active,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      createAdminAlert: build.mutation<
+        CreateAdminAlertApiResponse,
+        CreateAdminAlertApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/alerts`,
+          method: "POST",
+          body: queryArg.adminAlertCreateRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       previewAdminAlertAudience: build.query<
         PreviewAdminAlertAudienceApiResponse,
         PreviewAdminAlertAudienceApiArg
@@ -2598,6 +2810,33 @@ const injectedRtkApi = api
           },
         }),
         providesTags: ["Admin"],
+      }),
+      getAdminAlert: build.query<GetAdminAlertApiResponse, GetAdminAlertApiArg>(
+        {
+          query: (queryArg) => ({ url: `/admin/alerts/${queryArg.alertId}` }),
+          providesTags: ["Admin"],
+        },
+      ),
+      updateAdminAlert: build.mutation<
+        UpdateAdminAlertApiResponse,
+        UpdateAdminAlertApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/alerts/${queryArg.alertId}`,
+          method: "PATCH",
+          body: queryArg.adminAlertUpdateRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      deleteAdminAlert: build.mutation<
+        DeleteAdminAlertApiResponse,
+        DeleteAdminAlertApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/alerts/${queryArg.alertId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Admin"],
       }),
       getAccountPrivacy: build.query<
         GetAccountPrivacyApiResponse,
@@ -4304,9 +4543,96 @@ export type SendStillSellingTestDmApiResponse =
 export type SendStillSellingTestDmApiArg = {
   stillSellingTestRequest: StillSellingTestRequest
 }
+export type GetSpectrumMigrationStatusApiResponse =
+  /** status 200 Ok */ SpectrumMigrationStatus
+export type GetSpectrumMigrationStatusApiArg = void
+export type SimulateSpectrumMigrationApiResponse =
+  /** status 200 Ok */ MigrationResult
+export type SimulateSpectrumMigrationApiArg = {
+  spectrumMigrationSimulateRequest: SpectrumMigrationSimulateRequest
+}
+export type RunSpectrumMigrationApiResponse =
+  /** status 200 Ok */ MigrationResult
+export type RunSpectrumMigrationApiArg = {
+  spectrumMigrationRunRequest: SpectrumMigrationRunRequest
+}
+export type RollbackSpectrumMigrationApiResponse =
+  /** status 200 Ok */ SpectrumMigrationRollbackResponse
+export type RollbackSpectrumMigrationApiArg = {
+  spectrumMigrationRollbackRequest: SpectrumMigrationRollbackRequest
+}
+export type GetAdminActivityApiResponse =
+  /** status 200 Ok */ AdminActivityResponse
+export type GetAdminActivityApiArg = void
+export type GetAdminUsersApiResponse = /** status 200 Ok */ AdminUsersResponse
+export type GetAdminUsersApiArg = {
+  /** 1-based page */
+  page?: number
+  /** 1–100, default 20 */
+  pageSize?: number
+  role?: SiteRole
+  banned?: boolean
+  rsiConfirmed?: boolean
+  sortBy?: AdminUserSortField
+  sortOrder?: "asc" | "desc"
+}
+export type GetAdminMembershipAnalyticsApiResponse =
+  /** status 200 Ok */ MembershipAnalyticsResponse
+export type GetAdminMembershipAnalyticsApiArg = void
+export type GetAdminOfferAnalyticsApiResponse =
+  /** status 200 Ok */ OfferAnalyticsResponse
+export type GetAdminOfferAnalyticsApiArg = void
+export type GetAdminAuditLogsApiResponse =
+  /** status 200 Ok */ AdminAuditLogsResponse
+export type GetAdminAuditLogsApiArg = {
+  /** 1-based page */
+  page?: number
+  /** 1–100, default 20 */
+  pageSize?: number
+  action?: string
+  subjectType?: string
+  subjectId?: string
+  actorId?: string
+  /** Inclusive lower bound on created_at */
+  startDate?: string
+  /** Inclusive upper bound on created_at */
+  endDate?: string
+}
+export type PostAdminTestNotificationApiResponse =
+  /** status 200 Ok */ AdminTestNotificationResponse
+export type PostAdminTestNotificationApiArg = {
+  adminTestNotificationRequest: AdminTestNotificationRequest
+}
 export type GetSellerReachabilityApiResponse =
   /** status 200 Ok */ SellerReachabilityReport
 export type GetSellerReachabilityApiArg = void
+export type ListOrgPremiumTiersApiResponse =
+  /** status 200 Ok */ OrgPremiumTierPage
+export type ListOrgPremiumTiersApiArg = {
+  /** 1-based page */
+  page?: number
+  /** 1–100, default 20 */
+  pageSize?: number
+}
+export type GetOrgPremiumTierApiResponse = /** status 200 Ok */ OrgPremiumTier
+export type GetOrgPremiumTierApiArg = {
+  spectrumId: string
+}
+export type SetOrgPremiumTierApiResponse = /** status 200 Ok */ OrgPremiumTier
+export type SetOrgPremiumTierApiArg = {
+  spectrumId: string
+  setOrgPremiumRequest: SetOrgPremiumRequest
+}
+export type RevokeOrgPremiumTierApiResponse =
+  /** status 200 Ok */ RevokeOrgPremiumResponse
+export type RevokeOrgPremiumTierApiArg = {
+  spectrumId: string
+}
+export type SetOrgPremiumDomainApiResponse = /** status 200 Ok */ OrgPremiumTier
+export type SetOrgPremiumDomainApiArg = {
+  spectrumId: string
+  setOrgPremiumDomainRequest: SetOrgPremiumDomainRequest
+}
 export type ListAdminOrdersApiResponse = /** status 200 Ok */ AdminOrdersPage
 export type ListAdminOrdersApiArg = {
   /** active: not started or in progress; past: fulfilled or cancelled */
@@ -4332,6 +4658,22 @@ export type GetAdminOrderAnalyticsApiResponse =
 export type GetAdminOrderAnalyticsApiArg = {
   /** Also count orders involving test accounts, orgs or shops */
   includeTest?: boolean
+}
+export type ListContentReportsApiResponse =
+  /** status 200 Ok */ AdminContentReportsPage
+export type ListContentReportsApiArg = {
+  /** 1-based page */
+  page?: number
+  /** 1–100, default 20 */
+  pageSize?: number
+  status?: ContentReportStatus
+  reporterId?: string
+}
+export type UpdateContentReportApiResponse =
+  /** status 200 Ok */ UpdateContentReportResponse
+export type UpdateContentReportApiArg = {
+  reportId: string
+  updateContentReportRequest: UpdateContentReportRequest
 }
 export type SearchIdentityUsersApiResponse =
   /** status 200 Ok */ IdentitySearchResponse
@@ -4405,12 +4747,39 @@ export type GetActiveListingCountApiResponse = /** status 200 Ok */ {
   count: number
 }
 export type GetActiveListingCountApiArg = void
+export type ListAdminAlertsApiResponse = /** status 200 Ok */ AdminAlertsPage
+export type ListAdminAlertsApiArg = {
+  /** 0-based page */
+  page?: number
+  /** 1–100, default 20 */
+  pageSize?: number
+  targetType?: AdminAlertTargetType
+  active?: boolean
+}
+export type CreateAdminAlertApiResponse = /** status 200 Ok */ AdminAlert
+export type CreateAdminAlertApiArg = {
+  adminAlertCreateRequest: AdminAlertCreateRequest
+}
 export type PreviewAdminAlertAudienceApiResponse =
   /** status 200 Ok */ AdminAlertAudiencePreview
 export type PreviewAdminAlertAudienceApiArg = {
   targetType: AdminAlertTargetType
   /** The org, when target_type is specific_org */
   targetSpectrumId?: string
+}
+export type GetAdminAlertApiResponse = /** status 200 Ok */ AdminAlert
+export type GetAdminAlertApiArg = {
+  alertId: string
+}
+export type UpdateAdminAlertApiResponse = /** status 200 Ok */ AdminAlert
+export type UpdateAdminAlertApiArg = {
+  alertId: string
+  adminAlertUpdateRequest: AdminAlertUpdateRequest
+}
+export type DeleteAdminAlertApiResponse =
+  /** status 200 Ok */ AdminAlertDeleteResponse
+export type DeleteAdminAlertApiArg = {
+  alertId: string
 }
 export type GetAccountPrivacyApiResponse =
   /** status 200 Ok */ AccountPrivacySettings
@@ -9412,6 +9781,228 @@ export type StillSellingTestRequest = {
   /** Language of the test DM (default: the admin's own). */
   locale?: StillSellingLocale
 }
+export type SpectrumMigrationStatus = {
+  totalUsers: number
+  verifiedUsers: number
+  usersWithSpectrumId: number
+  usersNeedingMigration: number
+  usersWithoutSpectrumId: number
+}
+export type MigrationResult = {
+  totalUsers: number
+  successfulMigrations: number
+  failedMigrations: number
+  unverifiedUsers: number
+  errors: {
+    error: string
+    user_id: string
+    username: string
+  }[]
+}
+export type SpectrumMigrationSimulateRequest = {
+  /** 1–100, default 10 */
+  batchSize?: number
+  /** 0–5000 ms, default 500 */
+  delayBetweenRequests?: number
+}
+export type SpectrumMigrationRunRequest = {
+  /** 1–100, default 10 */
+  batchSize?: number
+  /** 0–5000 ms, default 500 */
+  delayBetweenRequests?: number
+  /** 0–10000 ms, default 1000 */
+  delayBetweenBatches?: number
+}
+export type SpectrumMigrationRollbackResponse = {
+  usersAffected: number
+  message: string
+}
+export type SpectrumMigrationRollbackRequest = {
+  /** Must be true. */
+  confirm: boolean
+}
+export type AdminActivityPoint = {
+  /** Start of the period (ISO 8601). */
+  date: string
+  count: number
+}
+export type AdminActivityResponse = {
+  daily: AdminActivityPoint[]
+  weekly: AdminActivityPoint[]
+  monthly: AdminActivityPoint[]
+}
+export type SiteRole = "user" | "admin"
+export type AdminUser = {
+  user_id: string
+  username: string
+  display_name: string
+  discord_id: string | null
+  profile_description: string
+  role: SiteRole
+  banned: boolean
+  avatar: string
+  banner: string
+  balance: string
+  created_at: string
+  locale: string
+  rsi_confirmed: boolean
+  market_order_template: string
+}
+export type AdminUsersResponse = {
+  users: AdminUser[]
+  pagination: {
+    has_prev: boolean
+    has_next: boolean
+    total_pages: number
+    total_users: number
+    page_size: number
+    page: number
+  }
+}
+export type AdminUserSortField =
+  | "created_at"
+  | "username"
+  | "display_name"
+  | "role"
+  | "banned"
+  | "rsi_confirmed"
+  | "balance"
+  | "locale"
+export type MembershipAnalyticsPoint = {
+  /** Start of the period (ISO 8601). */
+  date: string
+  new_members: number
+  new_members_rsi_verified: number
+  new_members_rsi_unverified: number
+  cumulative_members: number
+  cumulative_members_rsi_verified: number
+  cumulative_members_rsi_unverified: number
+}
+export type MembershipAnalyticsSummary = {
+  total_members: number
+  admin_members: number
+  regular_members: number
+  rsi_confirmed_members: number
+  banned_members: number
+  new_members_30d: number
+  new_members_7d: number
+}
+export type MembershipAnalyticsResponse = {
+  /** Last 30 days. */
+  daily_totals: MembershipAnalyticsPoint[]
+  /** Last 12 weeks. */
+  weekly_totals: MembershipAnalyticsPoint[]
+  /** Last 12 months. */
+  monthly_totals: MembershipAnalyticsPoint[]
+  summary: MembershipAnalyticsSummary
+}
+export type OfferAnalyticsPoint = {
+  /** YYYY-MM-DD */
+  date: string
+  total: number
+  active: number
+  accepted: number
+  rejected: number
+}
+export type OfferAnalyticsMonthlyPoint = {
+  /** YYYY-MM-DD */
+  date: string
+  total: number
+  active: number
+  accepted: number
+  rejected: number
+  average_accepted_value: number
+}
+export type OfferAnalyticsTopShop = {
+  name: string
+  slug: string
+  accepted_offers: number
+  total_offers: number
+}
+export type OfferAnalyticsTopUser = {
+  username: string
+  accepted_offers: number
+  total_offers: number
+}
+export type OfferAnalyticsResponse = {
+  daily_totals: OfferAnalyticsPoint[]
+  weekly_totals: OfferAnalyticsPoint[]
+  monthly_totals: OfferAnalyticsMonthlyPoint[]
+  top_shops: OfferAnalyticsTopShop[]
+  top_users: OfferAnalyticsTopUser[]
+  summary: {
+    total_value: number
+    rejected_offers: number
+    accepted_offers: number
+    waiting_for_seller: number
+    waiting_for_buyer: number
+    active_offers: number
+    total_offers: number
+  }
+}
+export type AdminAuditLogContractor = {
+  contractor_id: string
+  name: string
+  spectrum_id: string
+}
+export type AdminAuditLogEntry = {
+  audit_log_id: string
+  action: string
+  actor_id: string | null
+  actor: MinimalUser | null
+  subject_type: string
+  subject_id: string
+  metadata: RecordStringUnknown
+  created_at: string
+  contractor: AdminAuditLogContractor | null
+}
+export type AdminAuditLogsResponse = {
+  items: AdminAuditLogEntry[]
+  total: number
+  page: number
+  page_size: number
+}
+export type AdminTestNotificationData = {
+  order_id?: string
+  contractor_id?: string | null
+  message_id?: string
+  review_id?: string
+  status?: string
+  offer_id?: string
+  listing_id?: string
+  bid_id?: string
+  invite_id?: string
+  alert_id?: string
+}
+export type AdminTestNotificationResponse = {
+  message: string
+  data?: AdminTestNotificationData
+}
+export type AdminTestNotificationType =
+  | "order_create"
+  | "order_assigned"
+  | "order_message"
+  | "order_review"
+  | "order_status_fulfilled"
+  | "order_status_in_progress"
+  | "order_status_not_started"
+  | "order_status_cancelled"
+  | "offer_create"
+  | "counter_offer_create"
+  | "offer_message"
+  | "market_item_bid"
+  | "market_item_offer"
+  | "contractor_invite"
+  | "admin_alert"
+  | "order_review_revision_requested"
+export type AdminTestNotificationRequest = {
+  notification_type: AdminTestNotificationType
+  /** Username of the account that receives the test notification. */
+  target_username: string
+  /** Org to scope the notification preferences to. Defaults to the sample
+    order's or offer's org. */
+  contractor_id?: string | null
+}
 export type ReachabilityCount = {
   /** Sellers (a user, or an org) in this bucket reachable this way. */
   sellers: number
@@ -9519,6 +10110,36 @@ export type SellerReachabilityReport = {
   email_category: "announcements"
   /** Clicks on "Add SC Market to Discord" links per install type and surface (last 7 and 30 days), most clicked first. */
   install_clicks: DiscordInstallClickCount[]
+}
+export type PremiumTierName = "white_label"
+export type OrgPremiumTier = {
+  id: string
+  spectrum_id: string
+  contractor_name: string
+  tier: PremiumTierName
+  custom_domain: string | null
+  /** user_id of the admin who granted it. */
+  granted_by: string
+  granted_at: string
+  revoked_at: string | null
+}
+export type OrgPremiumTierPage = {
+  items: OrgPremiumTier[]
+  total: number
+  page: number
+  page_size: number
+}
+export type SetOrgPremiumRequest = {
+  tier: PremiumTierName
+  /** Omit to keep the current domain; null or "" clears it. */
+  custom_domain?: string | null
+}
+export type RevokeOrgPremiumResponse = {
+  message: string
+}
+export type SetOrgPremiumDomainRequest = {
+  /** null or "" clears it. */
+  custom_domain?: string | null
 }
 export type AdminOrderCounts = {
   fulfilled: number
@@ -9642,6 +10263,42 @@ export type AdminOrderAnalytics = {
     active_orders: number
     total_orders: number
   }
+}
+export type ContentReportStatus =
+  | "pending"
+  | "in_progress"
+  | "resolved"
+  | "dismissed"
+export type AdminContentReport = {
+  report_id: string
+  reporter: MinimalUser
+  reported_url: string
+  report_reason: string | null
+  report_details: string | null
+  status: ContentReportStatus
+  created_at: string
+  handled_at: string | null
+  handled_by: MinimalUser | null
+  notes: string | null
+}
+export type AdminContentReportsPage = {
+  reports: AdminContentReport[]
+  pagination: {
+    has_prev: boolean
+    has_next: boolean
+    total_pages: number
+    total_reports: number
+    page_size: number
+    page: number
+  }
+}
+export type UpdateContentReportResponse = {
+  result: string
+  report: AdminContentReport
+}
+export type UpdateContentReportRequest = {
+  status: ContentReportStatus
+  notes?: string
 }
 export type IdentitySearchRow = {
   user_id: string
@@ -9812,6 +10469,56 @@ export type LastWipeStats = {
   messages_queued: number
   messages_sent: number
 }
+export type AdminAlertTargetType =
+  | "org_members"
+  | "all_users"
+  | "org_owners"
+  | "admins_only"
+  | "specific_org"
+export type AdminAlertChannel = "in_app" | "push" | "email" | "discord_dm"
+export type AdminAlert = {
+  alert_id: string
+  title: string
+  /** Markdown. */
+  content: string
+  link: string | null
+  target_type: AdminAlertTargetType
+  /** The org, when target_type is specific_org. */
+  target_spectrum_id: string | null
+  created_by: string
+  created_at: string
+  active: boolean
+  /** Delivery channels; in_app is always included. */
+  channels: AdminAlertChannel[]
+}
+export type AdminAlertsPage = {
+  alerts: AdminAlert[]
+  pagination: {
+    has_prev: boolean
+    has_next: boolean
+    total_pages: number
+    total: number
+    page_size: number
+    /** 0-based */
+    page: number
+  }
+}
+export type AdminAlertCreateRequest = {
+  title: string
+  /** Markdown. */
+  content: string
+  /** An absolute URL the alert links to. */
+  link?: string | null
+  target_type: AdminAlertTargetType
+  /** Required when target_type is specific_org. */
+  target_spectrum_id?: string | null
+  /** Delivery channels. in_app is always added. Default: in_app and push.
+    Chosen channels ignore user opt-outs except email, which respects the
+    user's email opt-outs and unsubscribes; others never send. */
+  channels?: AdminAlertChannel[]
+  /** Required (true) to email all users. */
+  confirm_email_all_users?: boolean
+}
 export type AdminAlertAudiencePreview = {
   /** Users the alert would reach (the posting admin excluded). */
   recipients: number
@@ -9820,12 +10527,19 @@ export type AdminAlertAudiencePreview = {
   /** Of those, how many have Discord linked (Discord DM reach). */
   discord_linked: number
 }
-export type AdminAlertTargetType =
-  | "all_users"
-  | "org_members"
-  | "org_owners"
-  | "admins_only"
-  | "specific_org"
+export type AdminAlertUpdateRequest = {
+  title?: string
+  content?: string
+  link?: string | null
+  target_type?: AdminAlertTargetType
+  /** Required when target_type is specific_org; null clears the org. */
+  target_spectrum_id?: string | null
+  active?: boolean
+}
+export type AdminAlertDeleteResponse = {
+  success: boolean
+  message: string
+}
 export type AccountPrivacySettings = {
   /** Hide my online status: buyers never see when you were last active (on
     your shops' listings, cards and shop page, or on an org's shop you help
@@ -10082,9 +10796,26 @@ export const {
   useSendStillSellingCampaignMutation,
   useStopStillSellingCampaignMutation,
   useSendStillSellingTestDmMutation,
+  useGetSpectrumMigrationStatusQuery,
+  useSimulateSpectrumMigrationMutation,
+  useRunSpectrumMigrationMutation,
+  useRollbackSpectrumMigrationMutation,
+  useGetAdminActivityQuery,
+  useGetAdminUsersQuery,
+  useGetAdminMembershipAnalyticsQuery,
+  useGetAdminOfferAnalyticsQuery,
+  useGetAdminAuditLogsQuery,
+  usePostAdminTestNotificationMutation,
   useGetSellerReachabilityQuery,
+  useListOrgPremiumTiersQuery,
+  useGetOrgPremiumTierQuery,
+  useSetOrgPremiumTierMutation,
+  useRevokeOrgPremiumTierMutation,
+  useSetOrgPremiumDomainMutation,
   useListAdminOrdersQuery,
   useGetAdminOrderAnalyticsQuery,
+  useListContentReportsQuery,
+  useUpdateContentReportMutation,
   useSearchIdentityUsersQuery,
   useGetIdentityUserQuery,
   useReleaseIdentityUsernameMutation,
@@ -10099,7 +10830,12 @@ export const {
   useExpireAllListingsMutation,
   useGetLastWipeQuery,
   useGetActiveListingCountQuery,
+  useListAdminAlertsQuery,
+  useCreateAdminAlertMutation,
   usePreviewAdminAlertAudienceQuery,
+  useGetAdminAlertQuery,
+  useUpdateAdminAlertMutation,
+  useDeleteAdminAlertMutation,
   useGetAccountPrivacyQuery,
   useUpdateAccountPrivacyMutation,
   useRequestDeletionMutation,

@@ -97,7 +97,9 @@
         "body": "Cette alerte sera envoyée par e-mail à tous les utilisateurs ayant une adresse vérifiée qui n'ont pas désactivé les e-mails de communiqués.",
         "cancel": "Retour",
         "confirm": "Envoyer l'e-mail"
-      }
+      },
+      "editNoResend": "Enregistrer les modifications ne renvoie pas l'alerte.",
+      "notFound": "Cette alerte n'existe pas ou a été supprimée."
     },
     "alerts.actions": "Actions",
     "alerts.active": "Active",

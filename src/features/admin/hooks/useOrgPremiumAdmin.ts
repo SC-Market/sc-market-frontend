@@ -1,24 +1,25 @@
 import { useCallback } from "react"
 import {
-  useRevokeOrgPremiumMutation,
-  useSetOrgPremiumMutation,
-} from "../../../store/api/premium"
+  useRevokeOrgPremiumTierMutation,
+  useSetOrgPremiumTierMutation,
+  type PremiumTierName,
+} from "../../../store/api/v2/market"
 
 /**
  * Admin premium management: grant an org a premium tier (optionally with a
  * custom domain) or revoke it. Settles once the request does, either way.
  */
 export function useOrgPremiumAdmin() {
-  const [setOrgPremium, { isLoading: isSetting }] = useSetOrgPremiumMutation()
+  const [setOrgPremium, { isLoading: isSetting }] =
+    useSetOrgPremiumTierMutation()
   const [revokeOrgPremium, { isLoading: isRevoking }] =
-    useRevokeOrgPremiumMutation()
+    useRevokeOrgPremiumTierMutation()
 
   const grant = useCallback(
-    async (spectrumId: string, tier: string, customDomain: string) => {
+    async (spectrumId: string, tier: PremiumTierName, customDomain: string) => {
       await setOrgPremium({
-        spectrum_id: spectrumId,
-        tier,
-        custom_domain: customDomain || null,
+        spectrumId,
+        setOrgPremiumRequest: { tier, custom_domain: customDomain || null },
       })
     },
     [setOrgPremium],
@@ -26,7 +27,7 @@ export function useOrgPremiumAdmin() {
 
   const revoke = useCallback(
     async (spectrumId: string) => {
-      await revokeOrgPremium(spectrumId)
+      await revokeOrgPremium({ spectrumId })
     },
     [revokeOrgPremium],
   )

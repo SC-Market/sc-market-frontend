@@ -14,9 +14,11 @@ import {
   Autocomplete,
 } from "@mui/material"
 import { ExpandMoreRounded, ExpandLessRounded } from "@mui/icons-material"
-import { useGetAdminAuditLogsQuery } from "../../features/contractor/api/contractorApi"
+import {
+  useGetAdminAuditLogsQuery,
+  type AdminAuditLogEntry,
+} from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
-import { AuditLogEntry } from "../../features/contractor/domain/types"
 import { ControlledTable } from "../../components/table/PaginatedTable"
 import { useFormatters } from "../../util/format"
 import {
@@ -52,13 +54,13 @@ export function AdminAuditLogsView() {
 
   const { data, isLoading, error } = useGetAdminAuditLogsQuery({
     page: page + 1, // Backend uses 1-based pagination
-    page_size: pageSize,
+    pageSize,
     action: actionFilter || undefined,
-    subject_type: subjectTypeFilter || undefined,
-    subject_id: subjectIdFilter || undefined,
-    actor_id: actorIdFilter || undefined,
-    start_date: startDateFilter || undefined,
-    end_date: endDateFilter || undefined,
+    subjectType: subjectTypeFilter || undefined,
+    subjectId: subjectIdFilter || undefined,
+    actorId: actorIdFilter || undefined,
+    startDate: startDateFilter || undefined,
+    endDate: endDateFilter || undefined,
   })
 
   const handleClearFilters = () => {
@@ -229,7 +231,7 @@ export function AdminAuditLogsView() {
               headCells={headCells}
               disableSelect={true}
               generateRow={({ row }) => {
-                const entry = row as AuditLogEntry
+                const entry: AdminAuditLogEntry = row
                 const isExpanded = expandedRows.has(entry.audit_log_id)
                 const hasMetadata = Object.keys(entry.metadata).length > 0
 

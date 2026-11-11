@@ -7,10 +7,12 @@ import {
 } from "../../../hooks/alert/AlertHook"
 import {
   useReportContentMutation,
-  useUpdateReportMutation,
   type CreateReportRequest,
-  type UpdateReportRequest,
 } from "../api/moderationApi"
+import {
+  useUpdateContentReportMutation,
+  type UpdateContentReportRequest,
+} from "../../../store/api/v2/market"
 
 /**
  * Report a page. Warns when no reason is picked; alerts the outcome and
@@ -64,12 +66,19 @@ export function useReportContent() {
 
 /** Set a report's status and notes. Resolves to whether it saved. */
 export function useUpdateReport() {
-  const [updateReport, { isLoading: isUpdating }] = useUpdateReportMutation()
+  const [updateReport, { isLoading: isUpdating }] =
+    useUpdateContentReportMutation()
 
   const update = useCallback(
-    async (reportId: string, data: UpdateReportRequest): Promise<boolean> => {
+    async (
+      reportId: string,
+      data: UpdateContentReportRequest,
+    ): Promise<boolean> => {
       try {
-        await updateReport({ reportId, data }).unwrap()
+        await updateReport({
+          reportId,
+          updateContentReportRequest: data,
+        }).unwrap()
         return true
       } catch (error) {
         console.error("Failed to update report:", error)

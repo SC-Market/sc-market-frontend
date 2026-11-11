@@ -8,7 +8,7 @@ import {
   OrderAnalyticsSkeleton,
   OfferAnalyticsSkeleton,
 } from "../../features/admin/components/AdminOrderStatsSkeleton"
-import { useGetOfferAnalyticsQuery } from "../../features/admin/api/adminApi"
+import { useGetAdminOfferAnalyticsQuery } from "../../store/api/v2/market"
 import { Divider, Grid, Typography } from "@mui/material"
 import { LabeledSwitch } from "../../components/buttons/LabeledSwitch"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
@@ -80,7 +80,7 @@ export function AdminOrderStats() {
     includeTest: showTestOrders,
   })
   const { data: offerAnalytics, isLoading: offersLoading } =
-    useGetOfferAnalyticsQuery()
+    useGetAdminOfferAnalyticsQuery()
 
   const isLoading = ordersLoading && offersLoading
 

@@ -19,12 +19,12 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { UserSearch } from "../../components/search/UserSearch"
 import { User } from "../../datatypes/User"
 import { useGetUserOrganizationsQuery } from "../../features/contractor/api/organizationsApi"
+import type { AdminTestNotificationType } from "../../store/api/v2/market"
 
-const NOTIFICATION_TYPES = [
+const NOTIFICATION_TYPES: readonly AdminTestNotificationType[] = [
   "order_create",
   "order_assigned",
   "order_message",
-  "order_comment",
   "order_review",
   "order_status_fulfilled",
   "order_status_in_progress",
@@ -42,7 +42,9 @@ const NOTIFICATION_TYPES = [
 
 export function AdminNotificationTestView() {
   const { t } = useTranslation()
-  const [notificationType, setNotificationType] = useState<string>("")
+  const [notificationType, setNotificationType] = useState<
+    AdminTestNotificationType | ""
+  >("")
   const [targetUser, setTargetUser] = useState<User | null>(null)
   const [contractorId, setContractorId] = useState<string>("")
   const {
@@ -102,7 +104,11 @@ export function AdminNotificationTestView() {
               <Select
                 labelId="admin-notification-test-type-label"
                 value={notificationType}
-                onChange={(e) => setNotificationType(e.target.value)}
+                onChange={(e) =>
+                  setNotificationType(
+                    NOTIFICATION_TYPES.find((n) => n === e.target.value) ?? "",
+                  )
+                }
                 label={t(
                   "admin.notificationTest.notificationType",
                   "Notification Type",

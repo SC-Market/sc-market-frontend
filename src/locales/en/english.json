@@ -321,7 +321,9 @@
         "body": "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
         "cancel": "Go back",
         "confirm": "Send the email"
-      }
+      },
+      "editNoResend": "Saving changes doesn't send the alert again.",
+      "notFound": "This alert doesn't exist or was deleted."
     },
     "alerts.actions": "Actions",
     "alerts.active": "Active",

@@ -1728,6 +1728,28 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/alerts",
   },
   {
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/alerts/new",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/alerts/new",
+  },
+  {
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/alerts/:alertId/edit",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/alerts/:alertId/edit",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/audit-logs",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

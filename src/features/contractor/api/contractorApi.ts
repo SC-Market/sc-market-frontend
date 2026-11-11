@@ -18,48 +18,6 @@ import { Language } from "../../../constants/languages"
 export const contractorsApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getAdminAuditLogs: builder.query<
-      AuditLogsResponse,
-      {
-        page?: number
-        page_size?: number
-        action?: string
-        subject_type?: string
-        subject_id?: string
-        actor_id?: string
-        start_date?: string
-        end_date?: string
-      }
-    >({
-      query: ({
-        page = 1,
-        page_size = 20,
-        action,
-        subject_type,
-        subject_id,
-        actor_id,
-        start_date,
-        end_date,
-      }) => {
-        const params = new URLSearchParams({
-          page: page.toString(),
-          page_size: page_size.toString(),
-        })
-        if (action) params.append("action", action)
-        if (subject_type) params.append("subject_type", subject_type)
-        if (subject_id) params.append("subject_id", subject_id)
-        if (actor_id) params.append("actor_id", actor_id)
-        if (start_date) params.append("start_date", start_date)
-        if (end_date) params.append("end_date", end_date)
-
-        return `/api/admin/audit-logs?${params.toString()}`
-      },
-      transformResponse: unwrapResponse,
-      providesTags: [
-        "AdminAuditLogs" as const,
-        { type: "AdminAuditLogs" as const, id: "LIST" },
-      ],
-    }),
     getContractorBySpectrumID: builder.query<Contractor, string>({
       query: (spectrum_id) => `/api/contractors/${spectrum_id}`,
       // Keep contractor data in cache for 5 minutes (frequently viewed)
@@ -857,7 +815,6 @@ export const {
   useBlockUserForOrgMutation,
   useUnblockUserForOrgMutation,
   useGetContractorAuditLogsQuery,
-  useGetAdminAuditLogsQuery,
   useGetContractorLanguagesQuery,
   useSetContractorLanguagesMutation,
 } = contractorsApi

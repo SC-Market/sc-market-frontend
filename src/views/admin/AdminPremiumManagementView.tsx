@@ -15,12 +15,18 @@ import {
 import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
-import { useGetPremiumOrgsQuery, PremiumTier } from "../../store/api/premium"
+import {
+  useListOrgPremiumTiersQuery,
+  type OrgPremiumTier,
+  type PremiumTierName,
+} from "../../store/api/v2/market"
 import { useSearchContractorsQuery } from "../../store/api/contractors"
 import { useTranslation } from "react-i18next"
 import { useOrgPremiumAdmin } from "../../features/admin/hooks/useOrgPremiumAdmin"
 import type { MinimalContractor } from "../../store/api/contractors"
 import { useFormatters } from "../../util/format"
+
+const PREMIUM_TIERS: readonly PremiumTierName[] = ["white_label"]
 
 export function AdminPremiumManagementView() {
   const fmt = useFormatters()
@@ -29,10 +35,14 @@ export function AdminPremiumManagementView() {
   const [grantDialogOpen, setGrantDialogOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedOrg, setSelectedOrg] = useState<MinimalContractor | null>(null)
-  const [selectedTier, setSelectedTier] = useState("white_label")
+  const [selectedTier, setSelectedTier] =
+    useState<PremiumTierName>("white_label")
   const [selectedDomain, setSelectedDomain] = useState("")
 
-  const { data, isLoading } = useGetPremiumOrgsQuery({ page, page_size: 20 })
+  const { data, isLoading } = useListOrgPremiumTiersQuery({
+    page,
+    pageSize: 20,
+  })
   const { data: searchResults } = useSearchContractorsQuery(
     { query: searchQuery },
     { skip: searchQuery.length < 2 },
@@ -100,7 +110,7 @@ export function AdminPremiumManagementView() {
       field: "revoked_at",
       headerName: t("admin.premium.status", "Status"),
       width: 120,
-      renderCell: (params: GridRenderCellParams<PremiumTier>) => (
+      renderCell: (params: GridRenderCellParams<OrgPremiumTier>) => (
         <Chip
           label={
             params.value
@@ -117,7 +127,7 @@ export function AdminPremiumManagementView() {
       headerName: "",
       width: 120,
       sortable: false,
-      renderCell: (params: GridRenderCellParams<PremiumTier>) =>
+      renderCell: (params: GridRenderCellParams<OrgPremiumTier>) =>
         !params.row.revoked_at ? (
           <Button
             size="small"
@@ -245,7 +255,12 @@ export function AdminPremiumManagementView() {
             labelId="admin-premium-management-view-tier-label"
             value={selectedTier}
             label={t("admin.premium.tier", "Tier")}
-            onChange={(e) => setSelectedTier(e.target.value)}
+            onChange={(e) =>
+              setSelectedTier(
+                PREMIUM_TIERS.find((tier) => tier === e.target.value) ??
+                  "white_label",
+              )
+            }
           >
             <MenuItem value="white_label">{t("org.whiteLabelTab")}</MenuItem>
           </Select>

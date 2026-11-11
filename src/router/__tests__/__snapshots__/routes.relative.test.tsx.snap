@@ -360,6 +360,82 @@ exports[`relative link resolution (every leaf) > /admin/alerts 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /admin/alerts/:alertId/edit 1`] = `
+{
+  "links": {
+    "path:""": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+    "path:"#frag"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit#frag",
+    "path:"."": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+    "path:".."": "/admin/alerts/11111111-1111-4111-8111-111111111111",
+    "path:"../.."": "/admin/alerts",
+    "path:"../sibling"": "/admin/alerts/11111111-1111-4111-8111-111111111111/sibling",
+    "path:"./"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/",
+    "path:"./child"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/child",
+    "path:"?tab=x"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit?tab=x",
+    "path:"child"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/child",
+    "route:""": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+    "route:"#frag"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit#frag",
+    "route:"."": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/",
+    "route:"./child"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/child",
+    "route:"?tab=x"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit?tab=x",
+    "route:"child"": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit/child",
+  },
+  "location": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+  "params": {
+    "alertId": "11111111-1111-4111-8111-111111111111",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/alerts/:alertId/edit",
+  ],
+  "resolvedDot": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+  "url": "/admin/alerts/11111111-1111-4111-8111-111111111111/edit",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /admin/alerts/new 1`] = `
+{
+  "links": {
+    "path:""": "/admin/alerts/new",
+    "path:"#frag"": "/admin/alerts/new#frag",
+    "path:"."": "/admin/alerts/new",
+    "path:".."": "/admin/alerts",
+    "path:"../.."": "/admin",
+    "path:"../sibling"": "/admin/alerts/sibling",
+    "path:"./"": "/admin/alerts/new/",
+    "path:"./child"": "/admin/alerts/new/child",
+    "path:"?tab=x"": "/admin/alerts/new?tab=x",
+    "path:"child"": "/admin/alerts/new/child",
+    "route:""": "/admin/alerts/new",
+    "route:"#frag"": "/admin/alerts/new#frag",
+    "route:"."": "/admin/alerts/new",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/admin/alerts/new/",
+    "route:"./child"": "/admin/alerts/new/child",
+    "route:"?tab=x"": "/admin/alerts/new?tab=x",
+    "route:"child"": "/admin/alerts/new/child",
+  },
+  "location": "/admin/alerts/new",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/alerts/new",
+  ],
+  "resolvedDot": "/admin/alerts/new",
+  "url": "/admin/alerts/new",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /admin/attribute-definitions 1`] = `
 {
   "links": {

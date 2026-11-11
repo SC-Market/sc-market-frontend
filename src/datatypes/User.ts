@@ -1,4 +1,3 @@
-import type { SiteRole } from "../util/siteRole"
 import { Rating } from "../features/contractor/domain/types"
 import type { BadgeMetadata } from "../store/api/v2/market"
 
@@ -51,41 +50,4 @@ export interface MinimalUser {
   }
   last_seen?: string
   in_game?: boolean
-}
-
-export interface AdminUser {
-  discord_id: string
-  user_id: string
-  display_name: string
-  profile_description: string
-  role: SiteRole
-  banned: boolean
-  username: string
-  avatar: string
-  banner: string
-  balance: string
-  created_at: string
-  locale: string
-  rsi_confirmed: boolean
-  market_order_template: string
-}
-
-export interface AdminUsersResponse {
-  users: AdminUser[]
-  pagination: {
-    page: number
-    page_size: number
-    total_users: number
-    total_pages: number
-    has_next: boolean
-    has_prev: boolean
-  }
-}
-
-export interface AdminUsersQuery {
-  page?: number
-  page_size?: number
-  role?: SiteRole
-  banned?: boolean
-  rsi_confirmed?: boolean
 }

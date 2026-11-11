@@ -103,7 +103,9 @@
         "body": "此提醒将通过邮件发送给所有拥有已验证邮箱且未关闭公告邮件的用户。",
         "cancel": "返回",
         "confirm": "发送邮件"
-      }
+      },
+      "editNoResend": "保存更改不会再次发送此提醒。",
+      "notFound": "此提醒不存在或已被删除。"
     },
     "alerts.actions": "操作",
     "alerts.active": "启用",

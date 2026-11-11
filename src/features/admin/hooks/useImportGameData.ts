@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useImportGameDataMutation } from "../../../store/api/admin"
+import { useImportGameDataMutation } from "../../../store/api/v2/admin-overrides"
 
 /**
  * Upload a game data zip to start an import job. Alerts that it started (or

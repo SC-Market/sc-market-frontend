@@ -23,7 +23,7 @@ import {
 } from "@mui/material"
 import { CloudUploadRounded } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useListGameDataImportJobsQuery } from "../../store/api/admin"
+import { useListGameDataImportJobsQuery } from "../../store/api/v2/market"
 import { useGetPagesDeployHookStatusQuery } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useImportGameData } from "../../features/admin/hooks/useImportGameData"

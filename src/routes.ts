@@ -489,6 +489,16 @@ export default [
                 file: "routes/pages/AdminAlerts.tsx",
               },
               {
+                id: "routes/pages/AdminAlertNew",
+                path: "/admin/alerts/new",
+                file: "routes/pages/AdminAlertNew.tsx",
+              },
+              {
+                id: "routes/pages/AdminAlertEdit",
+                path: "/admin/alerts/:alertId/edit",
+                file: "routes/pages/AdminAlertEdit.tsx",
+              },
+              {
                 id: "routes/pages/AdminAuditLogs",
                 path: "/admin/audit-logs",
                 file: "routes/pages/AdminAuditLogs.tsx",

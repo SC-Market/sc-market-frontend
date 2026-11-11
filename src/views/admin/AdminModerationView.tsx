@@ -13,9 +13,12 @@ import {
   Box,
 } from "@mui/material"
 import { ResponsiveDialog } from "../../components/dialog/ResponsiveDialog"
-import { useGetAdminReportsQuery } from "../../features/admin/api/moderationApi"
+import {
+  useListContentReportsQuery,
+  type AdminContentReport,
+  type ContentReportStatus,
+} from "../../store/api/v2/market"
 import { useUpdateReport } from "../../features/admin/hooks/useModerationActions"
-import { ContentReport } from "../../features/admin/api/moderationApi"
 import { UserDetails } from "../../components/list/UserDetails"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
@@ -23,34 +26,45 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import { useFormatters } from "../../util/format"
 
+const REPORT_STATUSES: readonly ContentReportStatus[] = [
+  "pending",
+  "in_progress",
+  "resolved",
+  "dismissed",
+]
+
+/** A select's value as a report status ("" for none / all). */
+function asReportStatus(value: string): ContentReportStatus | "" {
+  return REPORT_STATUSES.find((status) => status === value) ?? ""
+}
+
 export function AdminModerationView() {
   const fmt = useFormatters()
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const [statusFilter, setStatusFilter] = useState<
-    "pending" | "in_progress" | "resolved" | "dismissed" | ""
-  >("pending")
-  const [selectedReport, setSelectedReport] = useState<ContentReport | null>(
-    null,
+  const [statusFilter, setStatusFilter] = useState<ContentReportStatus | "">(
+    "pending",
   )
+  const [selectedReport, setSelectedReport] =
+    useState<AdminContentReport | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [updateStatus, setUpdateStatus] = useState("")
+  const [updateStatus, setUpdateStatus] = useState<ContentReportStatus | "">("")
   const [updateNotes, setUpdateNotes] = useState("")
 
   const {
     data: reportsData,
     isLoading,
     error,
-  } = useGetAdminReportsQuery({
+  } = useListContentReportsQuery({
     page,
-    page_size: pageSize,
+    pageSize,
     status: statusFilter || undefined,
   })
 
   const { update: updateReport, isUpdating } = useUpdateReport()
 
-  const handleOpenModal = (report: ContentReport) => {
+  const handleOpenModal = (report: AdminContentReport) => {
     setSelectedReport(report)
     setUpdateStatus(report.status)
     setUpdateNotes(report.notes || "")
@@ -65,14 +79,10 @@ export function AdminModerationView() {
   }
 
   const handleUpdateReport = async () => {
-    if (!selectedReport) return
+    if (!selectedReport || !updateStatus) return
 
     const updated = await updateReport(selectedReport.report_id, {
-      status: updateStatus as
-        | "pending"
-        | "in_progress"
-        | "resolved"
-        | "dismissed",
+      status: updateStatus,
       notes: updateNotes || undefined,
     })
     if (updated) handleCloseModal()
@@ -203,9 +213,7 @@ export function AdminModerationView() {
               labelId="admin-moderation-view-status-filter-label"
               value={statusFilter}
               label={t("admin.moderation.filter.status", "Status Filter")}
-              onChange={(e) =>
-                setStatusFilter(e.target.value as typeof statusFilter)
-              }
+              onChange={(e) => setStatusFilter(asReportStatus(e.target.value))}
             >
               <MenuItem value="">{t("adminUi.common.allStatuses")}</MenuItem>
               <MenuItem value="pending">
@@ -291,7 +299,7 @@ export function AdminModerationView() {
               labelId="admin-moderation-view-status-label"
               value={updateStatus}
               label={t("admin.moderation.field.status", "Status")}
-              onChange={(e) => setUpdateStatus(e.target.value)}
+              onChange={(e) => setUpdateStatus(asReportStatus(e.target.value))}
             >
               <MenuItem value="pending">
                 {t("adminUi.moderation.statuses.pending")}

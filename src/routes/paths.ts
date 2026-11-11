@@ -216,6 +216,8 @@ export const ADMIN_PATHS = {
   market: "/admin/market",
   premium: "/admin/premium",
   alerts: "/admin/alerts",
+  alertNew: "/admin/alerts/new",
+  alertEdit: (alertId: string) => `/admin/alerts/${alertId}/edit`,
   moderation: "/admin/moderation",
   featureFlags: "/admin/feature-flags",
   featureFlag: (flagName: string) => `/admin/feature-flags/${flagName}`,

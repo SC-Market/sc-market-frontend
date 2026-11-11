@@ -5,14 +5,14 @@ import { MuiAreaChart, MuiLineChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
-import { OfferAnalytics } from "../../features/offers/domain/types"
+import type { OfferAnalyticsResponse } from "../../store/api/v2/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 import { useFormatters } from "../../util/format"
 
 interface OfferAnalyticsProps {
-  analytics: OfferAnalytics
+  analytics: OfferAnalyticsResponse
 }
 
 export function OfferAnalyticsCharts({ analytics }: OfferAnalyticsProps) {

@@ -9,6 +9,7 @@ import {
   fetchBaseQuery,
   retry,
   BaseQueryFn,
+  RetryOptions,
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react"
@@ -20,10 +21,16 @@ import {
   requestMfaChallenge,
 } from "../features/mfa/challengeBroker"
 
+/**
+ * Per-endpoint options (`extraOptions` on an endpoint definition) are the
+ * retry options: `maxRetries: 0` turns retries off for a non-idempotent
+ * mutation.
+ */
 export type AppBaseQuery = BaseQueryFn<
   string | FetchArgs,
   unknown,
-  FetchBaseQueryError
+  FetchBaseQueryError,
+  RetryOptions
 >
 
 export interface CreateBaseQueryOptions {

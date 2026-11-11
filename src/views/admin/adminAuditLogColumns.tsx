@@ -1,4 +1,4 @@
-import { AuditLogEntry } from "../../features/contractor/domain/types"
+import type { AdminAuditLogEntry } from "../../store/api/v2/market"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { type Formatters } from "../../util/format"
 
@@ -64,7 +64,7 @@ export const AUDIT_LOG_ACTIONS = [
 ] as const
 
 export const headCells: readonly HeadCell<
-  AuditLogEntry & { expanded?: boolean }
+  AdminAuditLogEntry & { expanded?: boolean }
 >[] = [
   {
     id: "expanded",

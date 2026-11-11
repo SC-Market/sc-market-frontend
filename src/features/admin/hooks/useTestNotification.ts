@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useTestNotificationMutation } from "../api/adminApi"
-
-type TestNotificationResult = ReturnType<
-  typeof useTestNotificationMutation
->[1]["data"]
+import type {
+  AdminTestNotificationResponse,
+  AdminTestNotificationType,
+} from "../../../store/api/v2/market"
+import { usePostAdminTestNotificationMutation } from "../../../store/api/v2/admin-overrides"
 
 /**
  * Admin notification test: trigger a notification type for a user with real
@@ -15,15 +15,14 @@ export function useTestNotification() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [testNotification, { isLoading: isTesting }] =
-    useTestNotificationMutation()
-  const [testResult, setTestResult] = useState<TestNotificationResult | null>(
-    null,
-  )
+    usePostAdminTestNotificationMutation()
+  const [testResult, setTestResult] =
+    useState<AdminTestNotificationResponse | null>(null)
   const [testError, setTestError] = useState<string>("")
 
   const run = useCallback(
     async (
-      notificationType: string,
+      notificationType: AdminTestNotificationType | "",
       targetUsername: string | undefined,
       contractorId: string,
     ) => {
@@ -43,9 +42,11 @@ export function useTestNotification() {
 
       try {
         const result = await testNotification({
-          notification_type: notificationType,
-          target_username: targetUsername,
-          contractor_id: contractorId || null,
+          adminTestNotificationRequest: {
+            notification_type: notificationType,
+            target_username: targetUsername,
+            contractor_id: contractorId || null,
+          },
         }).unwrap()
 
         setTestResult(result)
