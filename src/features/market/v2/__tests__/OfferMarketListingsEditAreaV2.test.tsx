@@ -122,6 +122,7 @@ const mockListingSearchResults = {
   total: 2,
   page: 1,
   page_size: 50,
+  item_summaries: [],
 }
 
 const mockListingDetail = {

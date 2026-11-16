@@ -2,10 +2,9 @@ import React, { useMemo, useState } from "react"
 import { Grid } from "@mui/material"
 import { useBreakpointUp } from "../../../../hooks/layout/useBreakpoint"
 import { formatMarketUrl } from "../../domain/urls"
-import type { ListingSearchResult } from "../../../../store/api/v2/market"
+import type { SearchItemSummary } from "../../../../store/api/v2/market"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states"
-import { isFungibleType } from "./fungibility"
 import { useFlip } from "./useFlip"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS, insertAds } from "../../../../components/ads/adConfig"
@@ -25,60 +24,23 @@ import {
 } from "../../../../components/grid/firstScreen"
 
 import { GroupCard } from "./GroupCard"
+import { type ListingGroupEntry, buildGroupEntries } from "./groupEntries"
 
-type GridEntry =
-  | { kind: "single"; key: string; listing: ListingSearchResult }
-  | { kind: "group"; key: string; listings: ListingSearchResult[] }
-  | { kind: "ad"; key: string; ad: AdConfig }
-
-/** Group fungible listings sharing name+type, preserving incoming order. */
-function buildEntries(listings: ListingSearchResult[]): GridEntry[] {
-  // Group by the catalog item's UUID, NOT name+type. Names drift for the same
-  // item (e.g. "Scourge Railgun" vs a paint variant) and can collide across
-  // different items, so name-grouping both over- and under-merged. game_item_id
-  // is the authoritative catalog identity (now returned on search results).
-  const groupKeyOf = (l: ListingSearchResult) => l.game_item_id
-
-  // First pass: bucket fungible listings by key to know group sizes.
-  const buckets = new Map<string, ListingSearchResult[]>()
-  for (const l of listings) {
-    if (!isFungibleType(l.game_item_type) || !l.game_item_id) continue
-    const k = groupKeyOf(l)
-    const arr = buckets.get(k)
-    if (arr) arr.push(l)
-    else buckets.set(k, [l])
-  }
-
-  // Second pass: emit entries in original order; group appears at first member.
-  const emitted = new Set<string>()
-  const entries: GridEntry[] = []
-  for (const l of listings) {
-    const isFungible = isFungibleType(l.game_item_type) && !!l.game_item_id
-    const k = isFungible ? groupKeyOf(l) : ""
-    const bucket = isFungible ? buckets.get(k) : undefined
-
-    if (isFungible && bucket && bucket.length > 1) {
-      if (emitted.has(k)) continue
-      emitted.add(k)
-      const sorted = [...bucket].sort(
-        (a, b) => (a.price_min ?? 0) - (b.price_min ?? 0),
-      )
-      entries.push({ kind: "group", key: `g:${k}`, listings: sorted })
-    } else {
-      entries.push({ kind: "single", key: `s:${l.listing_id}`, listing: l })
-    }
-  }
-  return entries
+export interface GroupedListingGridProps extends ListingGridProps {
+  /** The search's item_summaries: each page item over every result page. */
+  itemSummaries: SearchItemSummary[]
 }
+
+type GridEntry = ListingGroupEntry | { kind: "ad"; key: string; ad: AdConfig }
 
 /** Breakpoint keys from largest to smallest, matching the custom theme. */
 const BP_ORDER = ["xxxl", "xxl", "xl", "lg", "md", "sm", "xs"] as const
 
 const GroupedListingGridInner = React.forwardRef<
   HTMLDivElement,
-  ListingGridProps
+  GroupedListingGridProps
 >(function GroupedListingGrid(
-  { listings, loading, error, onRetry, gridBreakpoints },
+  { listings, itemSummaries, loading, error, onRetry, gridBreakpoints },
   ref,
 ) {
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -93,7 +55,7 @@ const GroupedListingGridInner = React.forwardRef<
   const entries = useMemo(
     (): GridEntry[] =>
       insertAds(
-        buildEntries(listings),
+        buildGroupEntries(listings, itemSummaries),
         (entry) => entry.key,
         MARKET_ADS,
         campaignAd,
@@ -104,7 +66,7 @@ const GroupedListingGridInner = React.forwardRef<
             ? { kind: "ad", key: `ad:${i}`, ad: entry.ad }
             : entry,
       ),
-    [listings, campaignAd, adLayoutSeed],
+    [listings, itemSummaries, campaignAd, adLayoutSeed],
   )
 
   // Reactively track which breakpoints are active (largest → smallest). Hooks
@@ -233,6 +195,7 @@ const GroupedListingGridInner = React.forwardRef<
             >
               <GroupCard
                 listings={entry.listings}
+                summary={entry.summary}
                 index={index}
                 priority={priority(index)}
                 open={expanded === entry.key}

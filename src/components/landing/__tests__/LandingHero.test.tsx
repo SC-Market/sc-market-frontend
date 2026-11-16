@@ -100,6 +100,7 @@ const LISTINGS: SearchListingsResponse = {
   total: 439,
   page: 1,
   page_size: 10,
+  item_summaries: [],
 }
 
 const ORDERS: SearchBuyOrdersResponse = {

@@ -17,7 +17,7 @@ import type {
   GetListingsApiResponse,
   ListingSearchResult,
 } from "../../../../../store/api/v2/market"
-import { sellerCards, sellerCount, sellerShops } from "../groupSellerRule"
+import { sellerCards, sellerShops } from "../groupSellerRule"
 
 vi.mock("react-i18next", async (importOriginal) =>
   (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(
@@ -115,13 +115,13 @@ describe("grouped listing sellers", () => {
       ...searchRows,
       { shop_id: PHAL, listing_id: "x" } as ListingSearchResult,
     ]
-    expect(sellerCount(twoFromPhal)).toBe(2)
+    expect(sellerShops(twoFromPhal).length).toBe(2)
     expect(sellerShops(twoFromPhal).map((rows) => rows.length)).toEqual([1, 2])
   })
 
   it("gives every counted seller a card, winners first, tags on winners only", () => {
     const cards = sellerCards([phal, splashy])
-    expect(cards.length).toBe(sellerCount(searchRows))
+    expect(cards.length).toBe(sellerShops(searchRows).length)
     expect(cards.map((c) => [c.shop_id, c.tags])).toEqual([
       [PHAL, ["lowestPrice", "topRated"]],
       [SPLASHY, []],
