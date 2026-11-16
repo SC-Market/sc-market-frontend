@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   MARKET_FILTER_PANEL_SX,
-  MarketPageContainer,
+  MarketPageBody,
   MarketPageLayout,
 } from "../../components/layout/MarketPageLayout"
 import { Page } from "../../components/metadata/Page"
@@ -52,44 +52,42 @@ export function Contracts() {
               ) : undefined
             }
           >
-            <MarketPageContainer>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                {showMobileSidebar ? (
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <Grid item xs={12}>
-                      <Divider light />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <ContractSidebar />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Grid container spacing={theme.layoutSpacing.layout}>
-                        <ContractListings />
-                      </Grid>
+            <MarketPageBody>
+              {showMobileSidebar ? (
+                <Grid container spacing={theme.layoutSpacing.layout}>
+                  <Grid item xs={12}>
+                    <Divider light />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ContractSidebar />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container spacing={theme.layoutSpacing.layout}>
+                      <ContractListings />
                     </Grid>
                   </Grid>
-                ) : (
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    spacing={theme.layoutSpacing.layout}
-                    sx={{ width: "100%", maxWidth: "xxxl" }}
-                  >
-                    {contractSidebarOpen && (
-                      <Paper sx={MARKET_FILTER_PANEL_SX}>
-                        <ContractSidebar />
-                      </Paper>
-                    )}
+                </Grid>
+              ) : (
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  spacing={theme.layoutSpacing.layout}
+                  sx={{ width: "100%", maxWidth: "xxxl" }}
+                >
+                  {contractSidebarOpen && (
+                    <Paper sx={MARKET_FILTER_PANEL_SX}>
+                      <ContractSidebar />
+                    </Paper>
+                  )}
 
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Grid container spacing={theme.layoutSpacing.layout}>
-                        <ContractListings />
-                      </Grid>
-                    </Box>
-                  </Stack>
-                )}
-              </Box>
-            </MarketPageContainer>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Grid container spacing={theme.layoutSpacing.layout}>
+                      <ContractListings />
+                    </Grid>
+                  </Box>
+                </Stack>
+              )}
+            </MarketPageBody>
           </MarketPageLayout>
         </ContractSidebarContext.Provider>
       </ContractSearchContext.Provider>

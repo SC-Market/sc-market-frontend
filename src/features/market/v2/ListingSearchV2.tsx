@@ -47,7 +47,7 @@ import {
 } from "./marketSearchLayout"
 import {
   MARKET_FILTER_PANEL_SX,
-  MarketPageContainer,
+  MarketPageBody,
 } from "../../../components/layout/MarketPageLayout"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { listingSearchArgs } from "./listingSearchArgs"
@@ -205,153 +205,151 @@ export function ListingSearchV2() {
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <MarketPageContainer>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {showMobileSidebar ? (
-            <Grid container spacing={{ xs: 1, sm: theme.layoutSpacing.layout }}>
-              <Grid item xs={12}>
-                <HideOnScroll>
-                  <MarketNavArea />
-                </HideOnScroll>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <Box sx={{ flex: 1 }}>
-                    <UnifiedSearchBar
-                      tokens={marketSearchTokens}
-                      onChange={handleMarketTokensChange}
-                      mode="market"
-                      placeholder={t("marketV2.searchItems")}
-                    />
-                  </Box>
-                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
-                </Box>
-              </Grid>
-              <Grid item xs={12} sx={{ px: { xs: 0 } }}>
-                {viewMode === "list" ? (
-                  <ListingTableV2 listings={listings} />
-                ) : flags.market_v2_redesign ? (
-                  <GroupedListingGrid
-                    listings={listings}
-                    itemSummaries={itemSummaries}
-                    loading={isAwaitingData({ isFetching, currentData })}
-                    error={!!error}
-                    onRetry={refetch}
-                    gridBreakpoints={gridBreakpoints}
-                    ref={ref}
-                  />
-                ) : (
-                  <ListingGrid
-                    listings={listings}
-                    loading={isAwaitingData({ isFetching, currentData })}
-                    error={!!error}
-                    onRetry={refetch}
-                    gridBreakpoints={gridBreakpoints}
-                    ref={ref}
-                  />
-                )}
-              </Grid>
-
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
-
-              <Grid item xs={12}>
-                <NumberedPagination
-                  count={total}
-                  page={currentPage - 1} // Convert 1-based to 0-based
-                  rowsPerPage={currentPageSize}
-                  onPageChange={handleChangePage}
-                  rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  link={{ path: pathname, searchParams }}
-                />
-              </Grid>
+      <MarketPageBody>
+        {showMobileSidebar ? (
+          <Grid container spacing={{ xs: 1, sm: theme.layoutSpacing.layout }}>
+            <Grid item xs={12}>
+              <HideOnScroll>
+                <MarketNavArea />
+              </HideOnScroll>
             </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxxl" }}
-            >
-              {/* Desktop: Persistent sidebar */}
-              <Paper sx={MARKET_FILTER_PANEL_SX}>
-                <MarketSearchAreaV2 />
-              </Paper>
 
-              {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box
-                  sx={{
-                    mb: 1.5,
-                    display: "flex",
-                    gap: 1,
-                    alignItems: "center",
-                  }}
-                >
-                  <Box sx={{ flex: 1 }}>
-                    <UnifiedSearchBar
-                      tokens={marketSearchTokens}
-                      onChange={handleMarketTokensChange}
-                      mode="market"
-                      placeholder={t("marketV2.searchItemsSellers")}
-                    />
-                  </Box>
-                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+            <Grid item xs={12}>
+              <Divider light />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box sx={{ flex: 1 }}>
+                  <UnifiedSearchBar
+                    tokens={marketSearchTokens}
+                    onChange={handleMarketTokensChange}
+                    mode="market"
+                    placeholder={t("marketV2.searchItems")}
+                  />
                 </Box>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sx={{ px: 0 }}>
-                    {viewMode === "list" ? (
-                      <ListingTableV2 listings={listings} />
-                    ) : flags.market_v2_redesign ? (
-                      <GroupedListingGrid
-                        listings={listings}
-                        itemSummaries={itemSummaries}
-                        loading={isAwaitingData({ isFetching, currentData })}
-                        error={!!error}
-                        onRetry={refetch}
-                        gridBreakpoints={gridBreakpoints}
-                        ref={ref}
-                      />
-                    ) : (
-                      <ListingGrid
-                        listings={listings}
-                        loading={isAwaitingData({ isFetching, currentData })}
-                        error={!!error}
-                        onRetry={refetch}
-                        gridBreakpoints={gridBreakpoints}
-                        ref={ref}
-                      />
-                    )}
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Divider light />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <NumberedPagination
-                      count={total}
-                      page={currentPage - 1} // Convert 1-based to 0-based
-                      rowsPerPage={currentPageSize}
-                      onPageChange={handleChangePage}
-                      rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      link={{ path: pathname, searchParams }}
-                    />
-                  </Grid>
-                </Grid>
+                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
               </Box>
-            </Stack>
-          )}
-        </Box>
-      </MarketPageContainer>
+            </Grid>
+            <Grid item xs={12} sx={{ px: { xs: 0 } }}>
+              {viewMode === "list" ? (
+                <ListingTableV2 listings={listings} />
+              ) : flags.market_v2_redesign ? (
+                <GroupedListingGrid
+                  listings={listings}
+                  itemSummaries={itemSummaries}
+                  loading={isAwaitingData({ isFetching, currentData })}
+                  error={!!error}
+                  onRetry={refetch}
+                  gridBreakpoints={gridBreakpoints}
+                  ref={ref}
+                />
+              ) : (
+                <ListingGrid
+                  listings={listings}
+                  loading={isAwaitingData({ isFetching, currentData })}
+                  error={!!error}
+                  onRetry={refetch}
+                  gridBreakpoints={gridBreakpoints}
+                  ref={ref}
+                />
+              )}
+            </Grid>
+
+            <Grid item xs={12}>
+              <Divider light />
+            </Grid>
+
+            <Grid item xs={12}>
+              <NumberedPagination
+                count={total}
+                page={currentPage - 1} // Convert 1-based to 0-based
+                rowsPerPage={currentPageSize}
+                onPageChange={handleChangePage}
+                rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                link={{ path: pathname, searchParams }}
+              />
+            </Grid>
+          </Grid>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxxl" }}
+          >
+            {/* Desktop: Persistent sidebar */}
+            <Paper sx={MARKET_FILTER_PANEL_SX}>
+              <MarketSearchAreaV2 />
+            </Paper>
+
+            {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Box
+                sx={{
+                  mb: 1.5,
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                }}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <UnifiedSearchBar
+                    tokens={marketSearchTokens}
+                    onChange={handleMarketTokensChange}
+                    mode="market"
+                    placeholder={t("marketV2.searchItemsSellers")}
+                  />
+                </Box>
+                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+              </Box>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sx={{ px: 0 }}>
+                  {viewMode === "list" ? (
+                    <ListingTableV2 listings={listings} />
+                  ) : flags.market_v2_redesign ? (
+                    <GroupedListingGrid
+                      listings={listings}
+                      itemSummaries={itemSummaries}
+                      loading={isAwaitingData({ isFetching, currentData })}
+                      error={!!error}
+                      onRetry={refetch}
+                      gridBreakpoints={gridBreakpoints}
+                      ref={ref}
+                    />
+                  ) : (
+                    <ListingGrid
+                      listings={listings}
+                      loading={isAwaitingData({ isFetching, currentData })}
+                      error={!!error}
+                      onRetry={refetch}
+                      gridBreakpoints={gridBreakpoints}
+                      ref={ref}
+                    />
+                  )}
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider light />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <NumberedPagination
+                    count={total}
+                    page={currentPage - 1} // Convert 1-based to 0-based
+                    rowsPerPage={currentPageSize}
+                    onPageChange={handleChangePage}
+                    rowsPerPageOptions={CARD_GRID_PAGE_SIZE_OPTIONS}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    link={{ path: pathname, searchParams }}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Stack>
+        )}
+      </MarketPageBody>
     </>
   )
 }

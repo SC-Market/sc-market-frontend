@@ -53,6 +53,18 @@ export function MarketPageContainer({
   )
 }
 
+/**
+ * Content of a MarketPageLayout page (and its skeleton): the shared
+ * container, centering the filter panel + results row.
+ */
+export function MarketPageBody({ children }: { children: ReactNode }) {
+  return (
+    <MarketPageContainer sx={{ display: "flex", justifyContent: "center" }}>
+      {children}
+    </MarketPageContainer>
+  )
+}
+
 export interface MarketPageLayoutProps {
   /** Page title in the header (names the current page, e.g. "Market", "Services") */
   title: string

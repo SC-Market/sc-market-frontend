@@ -14,7 +14,7 @@ import {
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   MARKET_FILTER_PANEL_SX,
-  MarketPageContainer,
+  MarketPageBody,
 } from "../layout/MarketPageLayout"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ListingSkeleton } from "./ListingSkeleton"
@@ -109,47 +109,45 @@ export function MarketSearchSkeleton({
   )
 
   return (
-    <MarketPageContainer>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        {showMobileSidebar ? (
-          <Grid
-            container
-            spacing={
-              kind === "listings"
-                ? { xs: 1, sm: theme.layoutSpacing.layout }
-                : theme.layoutSpacing.layout
-            }
-          >
-            {/* MarketNavArea renders an empty row here */}
-            <Grid item xs={12} />
-            <Grid item xs={12}>
-              <Divider light />
-            </Grid>
-            <Grid item xs={12}>
-              <SearchRowSkeleton />
-            </Grid>
-            <Grid item xs={12} sx={{ px: { xs: 0 } }}>
-              {cards}
-            </Grid>
+    <MarketPageBody>
+      {showMobileSidebar ? (
+        <Grid
+          container
+          spacing={
+            kind === "listings"
+              ? { xs: 1, sm: theme.layoutSpacing.layout }
+              : theme.layoutSpacing.layout
+          }
+        >
+          {/* MarketNavArea renders an empty row here */}
+          <Grid item xs={12} />
+          <Grid item xs={12}>
+            <Divider light />
           </Grid>
-        ) : (
-          <Stack
-            direction="row"
-            justifyContent="center"
-            spacing={theme.layoutSpacing.layout}
-            sx={{ width: "100%", maxWidth: "xxxl" }}
-          >
-            <FilterPanelBoxSkeleton />
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Box sx={{ mb: 1.5 }}>
-                <SearchRowSkeleton />
-              </Box>
-              {cards}
+          <Grid item xs={12}>
+            <SearchRowSkeleton />
+          </Grid>
+          <Grid item xs={12} sx={{ px: { xs: 0 } }}>
+            {cards}
+          </Grid>
+        </Grid>
+      ) : (
+        <Stack
+          direction="row"
+          justifyContent="center"
+          spacing={theme.layoutSpacing.layout}
+          sx={{ width: "100%", maxWidth: "xxxl" }}
+        >
+          <FilterPanelBoxSkeleton />
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Box sx={{ mb: 1.5 }}>
+              <SearchRowSkeleton />
             </Box>
-          </Stack>
-        )}
-      </Box>
-    </MarketPageContainer>
+            {cards}
+          </Box>
+        </Stack>
+      )}
+    </MarketPageBody>
   )
 }
 
@@ -181,43 +179,41 @@ export function ServiceMarketSkeleton() {
   const xs = useIsMobile()
 
   return (
-    <MarketPageContainer>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        {xs ? (
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            <Grid item xs={12}>
-              <Divider light />
-            </Grid>
-            <Grid item xs={12}>
-              <Grid
-                container
-                spacing={theme.layoutSpacing.layout}
-                justifyContent={"center"}
-              >
-                <ServiceListingsSkeleton />
-              </Grid>
+    <MarketPageBody>
+      {xs ? (
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
+          <Grid item xs={12}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.layout}
+              justifyContent={"center"}
+            >
+              <ServiceListingsSkeleton />
             </Grid>
           </Grid>
-        ) : (
-          <Stack
-            direction="row"
-            justifyContent="center"
-            spacing={theme.layoutSpacing.layout}
-            sx={{ width: "100%", maxWidth: "xxxl" }}
-          >
-            <FilterPanelBoxSkeleton />
-            <Box sx={{ flex: 1 }}>
-              <Grid
-                container
-                spacing={theme.layoutSpacing.layout}
-                justifyContent={"center"}
-              >
-                <ServiceListingsSkeleton />
-              </Grid>
-            </Box>
-          </Stack>
-        )}
-      </Box>
-    </MarketPageContainer>
+        </Grid>
+      ) : (
+        <Stack
+          direction="row"
+          justifyContent="center"
+          spacing={theme.layoutSpacing.layout}
+          sx={{ width: "100%", maxWidth: "xxxl" }}
+        >
+          <FilterPanelBoxSkeleton />
+          <Box sx={{ flex: 1 }}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.layout}
+              justifyContent={"center"}
+            >
+              <ServiceListingsSkeleton />
+            </Grid>
+          </Box>
+        </Stack>
+      )}
+    </MarketPageBody>
   )
 }

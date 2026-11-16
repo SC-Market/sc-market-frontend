@@ -25,7 +25,7 @@ import {
 } from "./marketSearchLayout"
 import {
   MARKET_FILTER_PANEL_SX,
-  MarketPageContainer,
+  MarketPageBody,
 } from "../../../components/layout/MarketPageLayout"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
@@ -164,70 +164,68 @@ export function BuyOrdersViewV2() {
     <>
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <MarketPageContainer>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {showMobileSidebar ? (
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid item xs={12}>
-                <HideOnScroll>
-                  <MarketNavArea />
-                </HideOnScroll>
-              </Grid>
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
-              <Grid item xs={12}>
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <Box sx={{ flex: 1 }}>
-                    <UnifiedSearchBar
-                      tokens={marketSearchTokens}
-                      onChange={handleMarketTokensChange}
-                      mode="market"
-                      placeholder={t("marketV2.searchBuyOrders")}
-                    />
-                  </Box>
-                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                {cardGrid}
-              </Grid>
+      <MarketPageBody>
+        {showMobileSidebar ? (
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <HideOnScroll>
+                <MarketNavArea />
+              </HideOnScroll>
             </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxxl" }}
-            >
-              <Paper sx={MARKET_FILTER_PANEL_SX}>
-                <MarketSearchAreaV2 />
-              </Paper>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box
-                  sx={{
-                    mb: 1.5,
-                    display: "flex",
-                    gap: 1,
-                    alignItems: "center",
-                  }}
-                >
-                  <Box sx={{ flex: 1 }}>
-                    <UnifiedSearchBar
-                      tokens={marketSearchTokens}
-                      onChange={handleMarketTokensChange}
-                      mode="market"
-                      placeholder={t("marketV2.searchBuyOrders")}
-                    />
-                  </Box>
-                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+            <Grid item xs={12}>
+              <Divider light />
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box sx={{ flex: 1 }}>
+                  <UnifiedSearchBar
+                    tokens={marketSearchTokens}
+                    onChange={handleMarketTokensChange}
+                    mode="market"
+                    placeholder={t("marketV2.searchBuyOrders")}
+                  />
                 </Box>
-                {cardGrid}
+                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
               </Box>
-            </Stack>
-          )}
-        </Box>
-      </MarketPageContainer>
+            </Grid>
+            <Grid item xs={12}>
+              {cardGrid}
+            </Grid>
+          </Grid>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxxl" }}
+          >
+            <Paper sx={MARKET_FILTER_PANEL_SX}>
+              <MarketSearchAreaV2 />
+            </Paper>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Box
+                sx={{
+                  mb: 1.5,
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                }}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <UnifiedSearchBar
+                    tokens={marketSearchTokens}
+                    onChange={handleMarketTokensChange}
+                    mode="market"
+                    placeholder={t("marketV2.searchBuyOrders")}
+                  />
+                </Box>
+                <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+              </Box>
+              {cardGrid}
+            </Box>
+          </Stack>
+        )}
+      </MarketPageBody>
     </>
   )
 }

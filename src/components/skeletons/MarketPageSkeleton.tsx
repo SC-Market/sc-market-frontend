@@ -2,10 +2,7 @@ import { Box, Divider, Grid, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  MarketPageContainer,
-  MarketPageLayout,
-} from "../layout/MarketPageLayout"
+import { MarketPageBody, MarketPageLayout } from "../layout/MarketPageLayout"
 import {
   marketPageKind,
   marketPageTitle,
@@ -114,32 +111,30 @@ export function ContractsListSkeleton() {
       // Create Contract
       headerActions={<HeaderActionsSkeleton widths={[196]} />}
     >
-      <MarketPageContainer>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {showMobileSidebar ? (
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
-              {/* ContractSidebar is a closed bottom sheet here */}
-              <Grid item xs={12} />
-              <Grid item xs={12}>
-                {cards}
-              </Grid>
+      <MarketPageBody>
+        {showMobileSidebar ? (
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <Divider light />
             </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxxl" }}
-            >
-              <FilterPanelBoxSkeleton />
-              <Box sx={{ flex: 1, minWidth: 0 }}>{cards}</Box>
-            </Stack>
-          )}
-        </Box>
-      </MarketPageContainer>
+            {/* ContractSidebar is a closed bottom sheet here */}
+            <Grid item xs={12} />
+            <Grid item xs={12}>
+              {cards}
+            </Grid>
+          </Grid>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxxl" }}
+          >
+            <FilterPanelBoxSkeleton />
+            <Box sx={{ flex: 1, minWidth: 0 }}>{cards}</Box>
+          </Stack>
+        )}
+      </MarketPageBody>
     </MarketPageLayout>
   )
 }

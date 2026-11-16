@@ -5,7 +5,7 @@ import { ServiceListings } from "../contracts/ServiceListings.lazy"
 import React, { Suspense } from "react"
 import {
   MARKET_FILTER_PANEL_SX,
-  MarketPageContainer,
+  MarketPageBody,
 } from "../../components/layout/MarketPageLayout"
 import { ServiceListingsSkeleton } from "../../components/skeletons/MarketSearchSkeleton"
 import { useTheme } from "@mui/material/styles"
@@ -20,66 +20,64 @@ export function ServiceMarketView() {
   return (
     <>
       {xs && <ServiceSidebar />}
-      <MarketPageContainer>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {xs ? (
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
+      <MarketPageBody>
+        {xs ? (
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <Divider light />
+            </Grid>
 
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  spacing={theme.layoutSpacing.layout}
-                  justifyContent={"center"}
+            <Grid item xs={12}>
+              <Grid
+                container
+                spacing={theme.layoutSpacing.layout}
+                justifyContent={"center"}
+              >
+                <Suspense
+                  fallback={
+                    <>
+                      <PageBusy />
+                      <ServiceListingsSkeleton />
+                    </>
+                  }
                 >
-                  <Suspense
-                    fallback={
-                      <>
-                        <PageBusy />
-                        <ServiceListingsSkeleton />
-                      </>
-                    }
-                  >
-                    <ServiceListings />
-                  </Suspense>
-                </Grid>
+                  <ServiceListings />
+                </Suspense>
               </Grid>
             </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxxl" }}
-            >
-              <Paper sx={MARKET_FILTER_PANEL_SX}>
-                <ServiceSearchArea />
-              </Paper>
+          </Grid>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxxl" }}
+          >
+            <Paper sx={MARKET_FILTER_PANEL_SX}>
+              <ServiceSearchArea />
+            </Paper>
 
-              <Box sx={{ flex: 1 }}>
-                <Grid
-                  container
-                  spacing={theme.layoutSpacing.layout}
-                  justifyContent={"center"}
+            <Box sx={{ flex: 1 }}>
+              <Grid
+                container
+                spacing={theme.layoutSpacing.layout}
+                justifyContent={"center"}
+              >
+                <Suspense
+                  fallback={
+                    <>
+                      <PageBusy />
+                      <ServiceListingsSkeleton />
+                    </>
+                  }
                 >
-                  <Suspense
-                    fallback={
-                      <>
-                        <PageBusy />
-                        <ServiceListingsSkeleton />
-                      </>
-                    }
-                  >
-                    <ServiceListings />
-                  </Suspense>
-                </Grid>
-              </Box>
-            </Stack>
-          )}
-        </Box>
-      </MarketPageContainer>
+                  <ServiceListings />
+                </Suspense>
+              </Grid>
+            </Box>
+          </Stack>
+        )}
+      </MarketPageBody>
     </>
   )
 }
