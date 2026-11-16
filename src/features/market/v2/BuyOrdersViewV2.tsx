@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback, useRef } from "react"
-import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
+import { Box, Divider, Grid, Paper, Stack } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
@@ -23,7 +23,10 @@ import {
   LISTING_GRID_SKELETON_COUNT,
   buyOrderGridBreakpoints,
 } from "./marketSearchLayout"
-import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout"
+import {
+  MARKET_FILTER_PANEL_SX,
+  MarketPageContainer,
+} from "../../../components/layout/MarketPageLayout"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
@@ -161,7 +164,7 @@ export function BuyOrdersViewV2() {
     <>
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
+      <MarketPageContainer>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
@@ -224,7 +227,7 @@ export function BuyOrdersViewV2() {
             </Stack>
           )}
         </Box>
-      </Container>
+      </MarketPageContainer>
     </>
   )
 }

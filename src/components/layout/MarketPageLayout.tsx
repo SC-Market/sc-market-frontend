@@ -4,6 +4,8 @@ import {
   Container,
   Divider,
   Grid,
+  SxProps,
+  Theme,
   Typography,
   useTheme,
 } from "@mui/material"
@@ -23,6 +25,33 @@ export const MARKET_FILTER_PANEL_SX = {
   flexShrink: 0,
   overflowY: "auto",
 } as const
+
+/**
+ * The one container for the MarketPageLayout pages: the header and every
+ * page's content (market search, buy orders, services, contracts) and their
+ * skeletons, so the title, filter panel and results share the same edges.
+ * Full-bleed on mobile, 24px gutters from `sm`.
+ */
+export function MarketPageContainer({
+  children,
+  sx,
+}: {
+  children: ReactNode
+  sx?: SxProps<Theme>
+}) {
+  return (
+    <Container
+      maxWidth="xxxl"
+      disableGutters
+      sx={[
+        { px: { xs: 0, sm: 3 }, marginX: "auto" },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      {children}
+    </Container>
+  )
+}
 
 export interface MarketPageLayoutProps {
   /** Page title in the header (names the current page, e.g. "Market", "Services") */
@@ -54,12 +83,12 @@ export function MarketPageLayout({
   return (
     <>
       <OpenLayout sidebarOpen={true} noMobilePadding={true} noFooter={noFooter}>
-        <Container
-          maxWidth="xxl"
+        <MarketPageContainer
           sx={{
             paddingTop: { xs: 2, sm: 8 },
-            paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-            marginX: "auto",
+            // The title keeps an 8px inset on mobile, where the content
+            // below runs edge to edge.
+            px: { xs: 1, sm: 3 },
           }}
         >
           <Grid
@@ -108,7 +137,7 @@ export function MarketPageLayout({
           </Grid>
 
           <Divider light sx={{ mt: 2, mb: 2 }} />
-        </Container>
+        </MarketPageContainer>
 
         {children}
       </OpenLayout>

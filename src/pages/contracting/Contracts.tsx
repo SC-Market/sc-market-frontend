@@ -7,7 +7,7 @@ import {
   ContractSearchState,
 } from "../../features/contracting/hooks/ContractSearch"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
-import { Divider, Grid, Box, Stack, Container, Paper } from "@mui/material"
+import { Divider, Grid, Box, Stack, Paper } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import { useTranslation } from "react-i18next"
@@ -15,6 +15,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   MARKET_FILTER_PANEL_SX,
+  MarketPageContainer,
   MarketPageLayout,
 } from "../../components/layout/MarketPageLayout"
 import { Page } from "../../components/metadata/Page"
@@ -51,7 +52,7 @@ export function Contracts() {
               ) : undefined
             }
           >
-            <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+            <MarketPageContainer>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 {showMobileSidebar ? (
                   <Grid container spacing={theme.layoutSpacing.layout}>
@@ -88,7 +89,7 @@ export function Contracts() {
                   </Stack>
                 )}
               </Box>
-            </Container>
+            </MarketPageContainer>
           </MarketPageLayout>
         </ContractSidebarContext.Provider>
       </ContractSearchContext.Provider>

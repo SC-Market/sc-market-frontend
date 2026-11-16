@@ -1,8 +1,11 @@
-import { Box, Container, Divider, Grid, Stack } from "@mui/material"
+import { Box, Divider, Grid, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { MarketPageLayout } from "../layout/MarketPageLayout"
+import {
+  MarketPageContainer,
+  MarketPageLayout,
+} from "../layout/MarketPageLayout"
 import {
   marketPageKind,
   marketPageTitle,
@@ -111,7 +114,7 @@ export function ContractsListSkeleton() {
       // Create Contract
       headerActions={<HeaderActionsSkeleton widths={[196]} />}
     >
-      <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+      <MarketPageContainer>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
@@ -136,7 +139,7 @@ export function ContractsListSkeleton() {
             </Stack>
           )}
         </Box>
-      </Container>
+      </MarketPageContainer>
     </MarketPageLayout>
   )
 }

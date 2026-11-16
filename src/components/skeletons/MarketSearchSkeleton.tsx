@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
+import { Box, Divider, Grid, Paper, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import {
   useBreakpointDown,
@@ -12,7 +12,10 @@ import {
   listingSearchGridBreakpoints,
 } from "../../features/market/v2/marketSearchLayout"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
-import { MARKET_FILTER_PANEL_SX } from "../layout/MarketPageLayout"
+import {
+  MARKET_FILTER_PANEL_SX,
+  MarketPageContainer,
+} from "../layout/MarketPageLayout"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ListingSkeleton } from "./ListingSkeleton"
 import {
@@ -106,14 +109,7 @@ export function MarketSearchSkeleton({
   )
 
   return (
-    <Container
-      maxWidth={"xxxl"}
-      sx={
-        kind === "listings"
-          ? { padding: 0, px: { xs: 0, sm: 2 } }
-          : { padding: 0 }
-      }
-    >
+    <MarketPageContainer>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {showMobileSidebar ? (
           <Grid
@@ -153,7 +149,7 @@ export function MarketSearchSkeleton({
           </Stack>
         )}
       </Box>
-    </Container>
+    </MarketPageContainer>
   )
 }
 
@@ -185,7 +181,7 @@ export function ServiceMarketSkeleton() {
   const xs = useIsMobile()
 
   return (
-    <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
+    <MarketPageContainer>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {xs ? (
           <Grid container spacing={theme.layoutSpacing.layout}>
@@ -207,7 +203,7 @@ export function ServiceMarketSkeleton() {
             direction="row"
             justifyContent="center"
             spacing={theme.layoutSpacing.layout}
-            sx={{ width: "100%", maxWidth: "xxl" }}
+            sx={{ width: "100%", maxWidth: "xxxl" }}
           >
             <FilterPanelBoxSkeleton />
             <Box sx={{ flex: 1 }}>
@@ -222,6 +218,6 @@ export function ServiceMarketSkeleton() {
           </Stack>
         )}
       </Box>
-    </Container>
+    </MarketPageContainer>
   )
 }

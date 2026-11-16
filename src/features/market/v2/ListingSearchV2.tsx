@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useRef } from "react"
-import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
+import { Box, Divider, Grid, Paper, Stack } from "@mui/material"
 import {
   useIsMobile,
   useBreakpointDown,
@@ -45,7 +45,10 @@ import {
   LISTING_GRID_SKELETON_COUNT,
   listingSearchGridBreakpoints,
 } from "./marketSearchLayout"
-import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout"
+import {
+  MARKET_FILTER_PANEL_SX,
+  MarketPageContainer,
+} from "../../../components/layout/MarketPageLayout"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { listingSearchArgs } from "./listingSearchArgs"
 import { orgScopedListingArgs } from "../../storefront/domain"
@@ -201,7 +204,7 @@ export function ListingSearchV2() {
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 0, sm: 2 } }}>
+      <MarketPageContainer>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
             <Grid container spacing={{ xs: 1, sm: theme.layoutSpacing.layout }}>
@@ -345,7 +348,7 @@ export function ListingSearchV2() {
             </Stack>
           )}
         </Box>
-      </Container>
+      </MarketPageContainer>
     </>
   )
 }
