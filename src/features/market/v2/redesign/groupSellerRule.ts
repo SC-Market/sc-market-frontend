@@ -2,10 +2,11 @@ import type { GameItemListingResult } from "../../../../store/api/v2/market"
 
 /**
  * The one rule for "who sells this item" in a grouped listing: one seller per
- * distinct shop_id, in the order the rows arrive. The collapsed GroupCard's
- * "N sellers" and the expanded GroupSellers list both go through it, so the
- * expansion shows exactly one card per seller it counts (never only the
- * superlative winners).
+ * distinct shop_id (with stock), in the order the rows arrive. The expanded
+ * GroupSellers list shows one card per seller it counts (never only the
+ * superlative winners); the collapsed GroupCard's "N sellers" is the search's
+ * item summary, which the backend counts by the same rule over every result
+ * page (SearchItemSummary.seller_count).
  */
 export function sellerShops<T extends { shop_id: string }>(
   rows: readonly T[],
@@ -17,11 +18,6 @@ export function sellerShops<T extends { shop_id: string }>(
     else byShop.set(row.shop_id, [row])
   }
   return [...byShop.values()]
-}
-
-/** "N sellers": distinct shops (sellerShops). */
-export function sellerCount(rows: readonly { shop_id: string }[]): number {
-  return sellerShops(rows).length
 }
 
 /** Quality score for a variant (higher = better). Value preferred over tier. */

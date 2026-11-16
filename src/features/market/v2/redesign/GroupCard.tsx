@@ -16,7 +16,10 @@ import GroupsRounded from "@mui/icons-material/GroupsRounded"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { MISSING_IMAGE_URL } from "../../../../util/constants"
-import type { ListingSearchResult } from "../../../../store/api/v2/market"
+import type {
+  ListingSearchResult,
+  SearchItemSummary,
+} from "../../../../store/api/v2/market"
 import {
   CARD_CHIP_SX,
   NEUTRAL_CARD_CHIP_SX,
@@ -32,7 +35,6 @@ import { useFormatters } from "../../../../util/format"
 import { TagChip } from "../../../../components/tags/TagChip"
 import { NUMERIC_SX } from "../../../../hooks/styles/theme/fonts"
 import { GroupSellers } from "./GroupSellers"
-import { sellerCount as groupSellerCount } from "./groupSellerRule"
 import { GroupBuyOrders } from "./GroupBuyOrders"
 import { GroupSellersFallback } from "./GroupSellersFallback"
 
@@ -43,47 +45,45 @@ import { GroupSellersFallback } from "./GroupSellersFallback"
  * `market_v2_redesign` flag is on. Takes the SAME props as `ListingGrid` and
  * mirrors its loading-skeleton and empty-state behavior exactly.
  *
- * Grouping is CLIENT-SIDE over the currently-loaded page of results only (not
- * the whole catalog): fungible items (per ./fungibility.ts) that share the same
- * game_item_id collapse into ONE expandable group card when more than one seller
- * is present. Everything else (non-fungible, or fungible with a single seller)
- * renders as the REAL `ListingCardV2` at the normal grid size so it stays
- * pixel-identical to the flag-off view. Seller count = distinct shop_id.
+ * Grouping (./groupEntries.ts) is by game_item_id over the WHOLE search, from
+ * the search's item_summaries: a fungible item (per ./fungibility.ts) with more
+ * than one matching listing on any result page collapses into ONE expandable
+ * group card. Everything else renders as the REAL `ListingCardV2` at the normal
+ * grid size so it stays pixel-identical to the flag-off view. The card's counts,
+ * prices, quality, stock and bulk discount come from the summary, so they match
+ * the expanded seller list (one seller per in-stock shop, groupSellerRule.ts).
  *
  * Only one group can be expanded at a time. Sellers within a group are sorted
  * cheapest-first; the page's own sort (via URL params) drives everything else.
  */
 
 /**
- * Quality RANGE across every seller in a group — this is the aggregate signal a
- * buyer wants while scanning (not the cheapest listing's quality alone): "does
- * this item have the quality I need, roughly?". Colored by the best tier/value
- * available. Prefers value (0-1000) over tier (1-5), consistent with the chip.
+ * Quality RANGE across every seller of the item (the search's item summary,
+ * every result page) — the aggregate signal a buyer wants while scanning (not
+ * the cheapest listing's quality alone): "does this item have the quality I
+ * need, roughly?". Colored by the best tier/value available. Prefers value
+ * (0-1000) over tier (1-5), consistent with the chip.
  */
 function groupQualityChipProps(
-  listings: ListingSearchResult[],
+  summary: SearchItemSummary,
 ): { label: string; color: QualityColor } | null {
-  const values = listings.flatMap((l) =>
-    [l.quality_value_min, l.quality_value_max].filter(
-      (v): v is number => v != null,
-    ),
-  )
-  if (values.length) {
-    const min = Math.min(...values)
-    const max = Math.max(...values)
+  const range = (
+    ...bounds: (number | undefined)[]
+  ): [number, number] | null => {
+    const xs = bounds.filter((v): v is number => v != null)
+    return xs.length ? [Math.min(...xs), Math.max(...xs)] : null
+  }
+  const values = range(summary.quality_value_min, summary.quality_value_max)
+  if (values) {
+    const [min, max] = values
     return {
       label: min === max ? `${min}` : `${min}–${max}`,
       color: qualityValueColor(max),
     }
   }
-  const tiers = listings.flatMap((l) =>
-    [l.quality_tier_min, l.quality_tier_max].filter(
-      (v): v is number => v != null,
-    ),
-  )
-  if (tiers.length) {
-    const min = Math.min(...tiers)
-    const max = Math.max(...tiers)
+  const tiers = range(summary.quality_tier_min, summary.quality_tier_max)
+  if (tiers) {
+    const [min, max] = tiers
     return {
       label: min === max ? `Q${min}` : `Q${min}–${max}`,
       color: qualityTierColor(max),
@@ -101,12 +101,16 @@ function groupQualityChipProps(
  */
 export function GroupCard({
   listings,
+  summary,
   index,
   priority,
   open,
   onToggle,
 }: {
+  /** This page's listings of the item, cheapest first (photo, name, id). */
   listings: ListingSearchResult[]
+  /** The item over every matching listing (the search's item_summaries). */
+  summary: SearchItemSummary
   index: number
   /** In the grid's first rows: fetch the image at high priority. */
   priority: boolean
@@ -118,26 +122,18 @@ export function GroupCard({
   const fmt = useFormatters()
 
   const cheapest = listings[0]
-  // "N sellers" = distinct SHOPS, not listing rows (one shop can list the
-  // item several times). Same rule as the expanded list (groupSellerRule.ts),
-  // which shows one card per seller.
-  const sellerCount = groupSellerCount(listings)
-  const priceMin = Math.min(...listings.map((l) => l.price_min ?? 0))
-  const priceMax = Math.max(
-    ...listings.map((l) => l.price_max ?? l.price_min ?? 0),
-  )
-  const totalQuantity = listings.reduce(
-    (sum, l) => sum + (l.quantity_available ?? 0),
-    0,
-  )
-  // Aggregate quality RANGE across all sellers — the scan-level signal a buyer
-  // wants, not just the cheapest listing's quality.
-  const qc = groupQualityChipProps(listings)
-  // Aggregate-level tags (parity with ListingCardV2, adapted to a group): show
-  // BULK DISCOUNT if ANY seller offers one; the group is only fully out of stock
-  // if EVERY seller is (a group is "available" as long as one seller has stock).
-  const anyBulkDiscount = listings.some((l) => l.has_bulk_discount)
-  const allOutOfStock = listings.every((l) => (l.quantity_available ?? 0) === 0)
+  // Everything below covers the item's matching listings on EVERY result
+  // page (the search's item summary), not just this page's. "N sellers" =
+  // distinct in-stock SHOPS, the expanded list's rule (groupSellerRule.ts).
+  const sellerCount = summary.seller_count
+  const priceMin = summary.price_min
+  const priceMax = summary.price_max
+  const totalQuantity = summary.quantity_available
+  const qc = groupQualityChipProps(summary)
+  // BULK DISCOUNT if ANY seller offers one; the group is only out of stock if
+  // EVERY seller is (it is "available" as long as one seller has stock).
+  const anyBulkDiscount = summary.has_bulk_discount
+  const allOutOfStock = summary.quantity_available === 0
 
   return (
     <Fade

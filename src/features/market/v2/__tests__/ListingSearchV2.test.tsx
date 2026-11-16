@@ -305,6 +305,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -332,6 +333,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -358,6 +360,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -390,6 +393,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -417,6 +421,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -445,6 +450,7 @@ describe("ListingSearchV2", () => {
         total: 100, // More than one page
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -472,6 +478,7 @@ describe("ListingSearchV2", () => {
         total: 0,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -532,6 +539,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -572,6 +580,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -599,6 +608,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -626,6 +636,7 @@ describe("ListingSearchV2", () => {
         total: 100,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 
@@ -659,6 +670,7 @@ describe("ListingSearchV2", () => {
         total: 2,
         page: 1,
         page_size: 48,
+        item_summaries: [],
       }),
     )
 

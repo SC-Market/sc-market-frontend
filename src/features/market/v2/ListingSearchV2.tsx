@@ -134,6 +134,7 @@ export function ListingSearchV2() {
     total = 0,
     page: currentPage = 1,
     page_size: currentPageSize = 48,
+    item_summaries: itemSummaries = [],
   } = results || {}
 
   // Dynamic SEO head based on active filters (shared with the edge bridge)
@@ -237,6 +238,7 @@ export function ListingSearchV2() {
                 ) : flags.market_v2_redesign ? (
                   <GroupedListingGrid
                     listings={listings}
+                    itemSummaries={itemSummaries}
                     loading={isAwaitingData({ isFetching, currentData })}
                     error={!!error}
                     onRetry={refetch}
@@ -310,6 +312,7 @@ export function ListingSearchV2() {
                     ) : flags.market_v2_redesign ? (
                       <GroupedListingGrid
                         listings={listings}
+                        itemSummaries={itemSummaries}
                         loading={isAwaitingData({ isFetching, currentData })}
                         error={!!error}
                         onRetry={refetch}
