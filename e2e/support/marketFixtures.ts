@@ -92,9 +92,11 @@ export function searchListings(
       (!text || l.title.toLowerCase().includes(text)) &&
       (!type || l.type === type),
   ).map(searchResult)
+  // Every fixture listing has its own game item, so no item is grouped.
   return {
     listings,
     total: listings.length,
+    item_summaries: [],
     page: Number(params.get("page") ?? 1),
     page_size: Number(params.get("page_size") ?? 48),
   }
