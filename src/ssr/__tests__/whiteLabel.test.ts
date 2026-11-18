@@ -116,8 +116,15 @@ describe("server-side white-label context", () => {
 })
 
 describe("whiteLabelDocument", () => {
-  const SHELL =
-    '<head><link rel="icon" href="/favicon.ico" /><link rel="manifest" href="/manifest.webmanifest" /></head>'
+  const SHELL = [
+    "<head>",
+    '    <link rel="icon" href="/favicon.ico" sizes="48x48" data-site-icon />',
+    '    <link rel="icon" type="image/svg+xml" href="/favicon.svg" data-site-icon />',
+    // Prettier wraps the longer tags in document.html over several lines.
+    '    <link\n      rel="icon"\n      type="image/png"\n      sizes="96x96"\n      href="/favicon-96x96.png"\n      data-site-icon\n    />',
+    '    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" data-site-icon />',
+    '<link rel="manifest" href="/manifest.webmanifest" /></head>',
+  ].join("\n")
   it("drops SC Market's manifest and uses the org's favicon", () => {
     const out = whiteLabelDocument(
       SHELL,
@@ -127,11 +134,13 @@ describe("whiteLabelDocument", () => {
     expect(out).toContain(
       '<link rel="icon" href="https://cdn.test/fav.png?a=1&amp;b=2" />',
     )
+    expect(out).not.toContain("data-site-icon")
+    expect(out.match(/rel="icon"/g)).toHaveLength(1)
   })
 
   it("keeps the site favicon without an https org one", () => {
     expect(whiteLabelDocument(SHELL, rendered(null))).toBe(
-      '<head><link rel="icon" href="/favicon.ico" /></head>',
+      SHELL.replace('<link rel="manifest" href="/manifest.webmanifest" />', ""),
     )
     expect(
       whiteLabelDocument(

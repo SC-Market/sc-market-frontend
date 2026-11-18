@@ -85,7 +85,8 @@ export function whiteLabelOrgTheme(
 }
 
 const SHELL_MANIFEST = '<link rel="manifest" href="/manifest.webmanifest" />'
-const SHELL_ICON = '<link rel="icon" href="/favicon.ico" />'
+/** The shell's site icon tags (src/document/document.html), one per line. */
+const SHELL_ICONS = /[ \t]*<link\b[^>]*\bdata-site-icon\b[^>]*>\n?/g
 
 /**
  * The document of a page rendered for an org's white-label host, branded
@@ -103,10 +104,14 @@ export function whiteLabelDocument(
   const favicon = whiteLabel.theme?.favicon_url
   let out = html.replace(SHELL_MANIFEST, "")
   if (favicon && /^https:\/\//i.test(favicon)) {
-    out = out.replace(
-      SHELL_ICON,
-      () => `<link rel="icon" href="${escape(favicon)}" />`,
-    )
+    // Swap SC Market's whole icon set for the org's one favicon, where the
+    // set was, so no SC Market icon (svg, png sizes, apple-touch) outranks it.
+    let first = true
+    out = out.replace(SHELL_ICONS, () => {
+      if (!first) return ""
+      first = false
+      return `<link rel="icon" href="${escape(favicon)}" />\n`
+    })
   }
   return out
 }

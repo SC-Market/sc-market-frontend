@@ -207,9 +207,16 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     if (customOrg) {
       const favicon = getCachedFaviconUrl(customOrg)
       if (favicon) {
-        document
-          .querySelector('link[rel="icon"]')
-          ?.setAttribute("href", favicon)
+        // The shell's site icons (data-site-icon, src/document/document.html):
+        // the first becomes the org's favicon, the rest go, so the SVG or a
+        // sized PNG of SC Market's doesn't win over it.
+        document.querySelectorAll("link[data-site-icon]").forEach((link, i) => {
+          if (i > 0) return link.remove()
+          link.setAttribute("rel", "icon")
+          link.removeAttribute("type")
+          link.removeAttribute("sizes")
+          link.setAttribute("href", favicon)
+        })
       }
     }
   }, [localizedTheme, customOrg])
