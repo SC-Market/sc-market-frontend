@@ -4333,7 +4333,9 @@
       "auctionEndTimeRequired": "オークション終了時刻は必須です"
     },
     "descriptionOptional": "説明（任意）",
-    "auctionHelp": "オークションの仕組み"
+    "auctionHelp": "オークションの仕組み",
+    "sellingAs": "販売ショップ",
+    "sellingAsHelp": "出品はこのショップ名で表示され、注文はこのショップに届きます。"
   },
   "CreateLotDialog": {
     "create": "ロットを作成",
@@ -6510,7 +6512,8 @@
       "title": "マイショップ",
       "totalShops": "ショップ数",
       "viewShop": "ショップを表示",
-      "yes": "はい"
+      "yes": "はい",
+      "createListing": "出品を作成"
     },
     "profile": {
       "byOwner": "運営: <owner>{{name}}</owner>",
@@ -6537,7 +6540,8 @@
       "tabOrder": "注文",
       "tabReviews": "レビュー",
       "tabServices": "サービス",
-      "tabsLabel": "ショップのタブ"
+      "tabsLabel": "ショップのタブ",
+      "manageListings": "出品を管理"
     },
     "reviewCount_other": "レビュー {{count}} 件",
     "saleCount_other": "販売 {{count}} 件",
@@ -9286,5 +9290,13 @@
       "radiationScrub": "放射線除去速度",
       "storage": "収納"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "出品を作成",
+    "heading": "どのショップから販売しますか？",
+    "body": "出品はこのショップ名で表示され、注文はこのショップに届きます。",
+    "noShopTitle": "販売するにはショップが必要です",
+    "noShopBody": "出品はあなたのショップ名で表示されます。ショップを作成すると、そのまま最初の出品に進みます。名前やデザインは後で変更できます。",
+    "createShop": "ショップを作成"
   }
 }

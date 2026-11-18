@@ -4379,7 +4379,9 @@
       "auctionEndTimeRequired": "La hora de finalización de la subasta es obligatoria"
     },
     "descriptionOptional": "Descripción (opcional)",
-    "auctionHelp": "Cómo funcionan las subastas"
+    "auctionHelp": "Cómo funcionan las subastas",
+    "sellingAs": "Vendiendo como",
+    "sellingAsHelp": "El anuncio se muestra con el nombre de esta tienda y sus pedidos van a la tienda."
   },
   "CreateLotDialog": {
     "create": "Crear lote",
@@ -6630,7 +6632,8 @@
       "title": "Mis tiendas",
       "totalShops": "Tiendas totales",
       "viewShop": "Ver tienda",
-      "yes": "Sí"
+      "yes": "Sí",
+      "createListing": "Crear anuncio"
     },
     "profile": {
       "byOwner": "de <owner>{{name}}</owner>",
@@ -6657,7 +6660,8 @@
       "tabOrder": "Encargar",
       "tabReviews": "Reseñas",
       "tabServices": "Servicios",
-      "tabsLabel": "Pestañas de la tienda"
+      "tabsLabel": "Pestañas de la tienda",
+      "manageListings": "Gestionar anuncios"
     },
     "reviewCount_many": "{{count}} reseñas",
     "reviewCount_one": "{{count}} reseña",
@@ -9624,5 +9628,13 @@
       "radiationScrub": "Ritmo de eliminación de radiación",
       "storage": "Almacenamiento"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "Crear anuncio",
+    "heading": "¿Desde qué tienda vendes?",
+    "body": "El anuncio se muestra con el nombre de esta tienda y sus pedidos van a la tienda.",
+    "noShopTitle": "Necesitas una tienda para vender",
+    "noShopBody": "Tus anuncios se muestran con el nombre de tu tienda. Crea tu tienda y te llevaremos directamente a tu primer anuncio. Puedes cambiarle el nombre y personalizarla más tarde.",
+    "createShop": "Crear mi tienda"
   }
 }

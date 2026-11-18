@@ -275,14 +275,14 @@ export default [
             file: "routes/pages/AuthenticateRSIPage.tsx",
           },
           {
-            id: "routes/elements/ShopRedirectListings.create",
+            id: "routes/pages/ChooseShopToSell",
             path: "/market/create/:tab",
-            file: "routes/elements/ShopRedirectListings.create.tsx",
+            file: "routes/pages/ChooseShopToSell.tsx",
           },
           {
-            id: "routes/elements/ShopRedirectListings.create~2",
+            id: "routes/pages/ChooseShopToSell~2",
             path: "/market/create",
-            file: "routes/elements/ShopRedirectListings.create.tsx",
+            file: "routes/pages/ChooseShopToSell.tsx",
           },
           {
             id: "routes/pages/MyListingsGate",

@@ -4250,7 +4250,9 @@
       "auctionEndTimeRequired": "必須填寫拍賣結束時間"
     },
     "descriptionOptional": "描述（選填）",
-    "auctionHelp": "拍賣如何運作"
+    "auctionHelp": "拍賣如何運作",
+    "sellingAs": "出售商店",
+    "sellingAsHelp": "上架將以此商店名稱顯示，訂單也會送到此商店。"
   },
   "CreateLotDialog": {
     "create": "建立批次",
@@ -6510,7 +6512,8 @@
       "title": "我的商店",
       "totalShops": "商店總數",
       "viewShop": "檢視商店",
-      "yes": "是"
+      "yes": "是",
+      "createListing": "建立上架"
     },
     "profile": {
       "byOwner": "店主：<owner>{{name}}</owner>",
@@ -6537,7 +6540,8 @@
       "tabOrder": "下單",
       "tabReviews": "評價",
       "tabServices": "服務",
-      "tabsLabel": "商店分頁"
+      "tabsLabel": "商店分頁",
+      "manageListings": "管理上架"
     },
     "reviewCount_other": "{{count}} 則評價",
     "saleCount_other": "已售 {{count}} 筆",
@@ -9286,5 +9290,13 @@
       "radiationScrub": "輻射清除速率",
       "storage": "儲物空間"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "建立上架",
+    "heading": "你要從哪個商店出售？",
+    "body": "上架將以此商店名稱顯示，訂單也會送到此商店。",
+    "noShopTitle": "你需要一個商店才能出售",
+    "noShopBody": "你的上架會以商店名稱顯示。建立商店後，我們會直接帶你進入第一個上架。你之後可以重新命名和自訂商店。",
+    "createShop": "建立我的商店"
   }
 }

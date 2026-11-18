@@ -47,6 +47,7 @@ import { useTranslation } from "react-i18next"
 import { ShopHeader, ShopRatingSummary } from "./ShopProfileHeader"
 import { ShopReviewsTab } from "./ShopReviewsTab"
 import { ShopListingsTab } from "./ShopListingsTab"
+import { ShopOwnerActions } from "./ShopOwnerActions"
 import { useWhiteLabelOwnerHandoff } from "../../../components/router/WhiteLabelRouteGuard"
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -113,6 +114,7 @@ export function ShopProfile() {
               >
                 <Grid item xs={12} md={8}>
                   <ShopHeader shop={shop} />
+                  <ShopOwnerActions shopId={shop.shop_id} />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <ShopRatingSummary shop={shop} />

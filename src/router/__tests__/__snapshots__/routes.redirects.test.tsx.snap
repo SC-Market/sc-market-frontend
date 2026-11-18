@@ -211,6 +211,7 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
     "/recruiting",
     "/resources",
     "/settings",
+    "/shop/test-shop/listings/create",
     "/shop/test-shop/settings",
     "/shopping-lists",
     "/shops",
@@ -224,6 +225,7 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
   ],
   "finalUrl": "/dashboard/shops",
   "mainLinks": [
+    "/shop/test-shop/listings/create",
     "/shop/test-shop/settings",
     "/shops/test-shop",
   ],
@@ -502,50 +504,6 @@ exports[`redirects and guards > /help → /guides 1`] = `
   "session": "anonymous",
   "title": "Help & Guides — How to Use SC Market",
   "url": "/help",
-}
-`;
-
-exports[`redirects and guards > /market/create with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/shop/test-shop/listings/create",
-  "h1": [
-    "Create New Listing",
-  ],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "listings/create",
-  ],
-  "session": "admin",
-  "title": "Create Listing - SC Market",
-  "url": "/market/create",
-}
-`;
-
-exports[`redirects and guards > /market/create/:tab with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/shop/test-shop/listings/create",
-  "h1": [
-    "Create New Listing",
-  ],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "listings/create",
-  ],
-  "session": "admin",
-  "title": "Create Listing - SC Market",
-  "url": "/market/create/unique",
 }
 `;
 

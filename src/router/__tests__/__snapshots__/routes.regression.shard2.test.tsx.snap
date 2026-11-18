@@ -634,10 +634,15 @@ exports[`routes (shard 2/4) > /market/category/:name 1`] = `
 
 exports[`routes (shard 2/4) > /market/create/:tab 1`] = `
 {
-  "consoleErrors": [],
+  "consoleErrors": [
+    "<h1> cannot contain a nested <h4>.",
+    "In HTML, <h4> cannot be a child of <h1>.",
+  ],
   "errorElementErrors": [],
-  "finalUrl": "/dashboard/shops",
-  "h1": [],
+  "finalUrl": "/shop/test-shop/listings/create",
+  "h1": [
+    "Create New Listing",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "REPLACE",
@@ -648,19 +653,28 @@ exports[`routes (shard 2/4) > /market/create/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
-    "/shop/test-shop/settings",
-    "/shops/test-shop",
+    "/",
+    "/about",
+    "/changelog",
+    "/developers",
+    "/discord/install?type=server&src=footer",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/guides/selling/sell-items",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/dashboard/shops",
+    "/shop/:shopSlug",
+    "listings/create",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Shops - SC Market",
+  "title": "Create Listing - SC Market",
   "url": "/market/create/unique",
 }
 `;
@@ -1207,10 +1221,7 @@ exports[`routes (shard 2/4) > /profile/:tab 1`] = `
 
 exports[`routes (shard 2/4) > /shop/:shopSlug/listings/create 1`] = `
 {
-  "consoleErrors": [
-    "<h1> cannot contain a nested <h4>.",
-    "In HTML, <h4> cannot be a child of <h1>.",
-  ],
+  "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/shop/test-shop/listings/create",
   "h1": [

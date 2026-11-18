@@ -19,7 +19,11 @@ import {
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import type { ShopResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
-import { canOpenShopSettings } from "../domain/shopPermissions"
+import AddRounded from "@mui/icons-material/AddRounded"
+import {
+  canEditShopListings,
+  canOpenShopSettings,
+} from "../domain/shopPermissions"
 import { useFormatters } from "../../../util/format"
 
 export function getInitials(name: string): string {
@@ -206,9 +210,20 @@ export function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           >
             {t("shops.mine.viewShop")}
           </Button>
-          {canOpenShopSettings(shop) && (
+          {shop.status !== "archived" && canEditShopListings(shop) && (
             <Button
               variant="contained"
+              size="small"
+              startIcon={<AddRounded />}
+              component={RouterLink}
+              to={SHOP_PATHS.create(shop.slug)}
+            >
+              {t("shops.mine.createListing", "Create listing")}
+            </Button>
+          )}
+          {canOpenShopSettings(shop) && (
+            <Button
+              variant="outlined"
               size="small"
               component={RouterLink}
               to={SHOP_PATHS.settings(shop.slug)}

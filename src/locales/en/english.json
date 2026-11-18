@@ -1404,7 +1404,9 @@
       "auctionEndTimeRequired": "Auction end time is required"
     },
     "descriptionOptional": "Description (optional)",
-    "auctionHelp": "How auctions work"
+    "auctionHelp": "How auctions work",
+    "sellingAs": "Selling as",
+    "sellingAsHelp": "The listing is shown under this shop's name, and its orders go to the shop."
   },
   "CreateLotDialog": {
     "create": "Create Lot",
@@ -6570,7 +6572,8 @@
       "title": "My Shops",
       "totalShops": "Total Shops",
       "viewShop": "View Shop",
-      "yes": "Yes"
+      "yes": "Yes",
+      "createListing": "Create listing"
     },
     "profile": {
       "byOwner": "by <owner>{{name}}</owner>",
@@ -6597,7 +6600,8 @@
       "tabOrder": "Order",
       "tabReviews": "Reviews",
       "tabServices": "Services",
-      "tabsLabel": "Shop tabs"
+      "tabsLabel": "Shop tabs",
+      "manageListings": "Manage listings"
     },
     "reviewCount_one": "{{count}} review",
     "reviewCount_other": "{{count}} reviews",
@@ -9455,5 +9459,13 @@
       "radiationScrub": "Radiation scrub rate",
       "storage": "Storage"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "Create Listing",
+    "heading": "Which shop are you selling from?",
+    "body": "The listing is shown under this shop's name, and its orders go to the shop.",
+    "noShopTitle": "You need a shop to sell",
+    "noShopBody": "Your listings are shown under your shop's name. Create your shop and we'll take you straight to your first listing. You can rename and customize it later.",
+    "createShop": "Create my shop"
   }
 }

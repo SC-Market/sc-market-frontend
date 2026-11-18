@@ -1399,6 +1399,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/listings 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/shop/test-shop/listings/create",
     "/shop/test-shop/settings",
     "/shops/test-shop",
   ],

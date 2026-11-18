@@ -4356,7 +4356,9 @@
       "auctionEndTimeRequired": "Die Endzeit der Auktion ist erforderlich"
     },
     "descriptionOptional": "Beschreibung (optional)",
-    "auctionHelp": "So funktionieren Auktionen"
+    "auctionHelp": "So funktionieren Auktionen",
+    "sellingAs": "Verkaufen als",
+    "sellingAsHelp": "Das Angebot erscheint unter dem Namen dieses Shops, und seine Bestellungen gehen an den Shop."
   },
   "CreateLotDialog": {
     "create": "Los erstellen",
@@ -6570,7 +6572,8 @@
       "title": "Meine Shops",
       "totalShops": "Shops gesamt",
       "viewShop": "Shop anzeigen",
-      "yes": "Ja"
+      "yes": "Ja",
+      "createListing": "Angebot erstellen"
     },
     "profile": {
       "byOwner": "von <owner>{{name}}</owner>",
@@ -6597,7 +6600,8 @@
       "tabOrder": "Bestellen",
       "tabReviews": "Bewertungen",
       "tabServices": "Dienstleistungen",
-      "tabsLabel": "Shop-Tabs"
+      "tabsLabel": "Shop-Tabs",
+      "manageListings": "Angebote verwalten"
     },
     "reviewCount_one": "{{count}} Bewertung",
     "reviewCount_other": "{{count}} Bewertungen",
@@ -9455,5 +9459,13 @@
       "radiationScrub": "Strahlungsabbaurate",
       "storage": "Stauraum"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "Angebot erstellen",
+    "heading": "Aus welchem Shop verkaufst du?",
+    "body": "Das Angebot erscheint unter dem Namen dieses Shops, und seine Bestellungen gehen an den Shop.",
+    "noShopTitle": "Du brauchst einen Shop zum Verkaufen",
+    "noShopBody": "Deine Angebote erscheinen unter dem Namen deines Shops. Erstelle deinen Shop und wir bringen dich direkt zu deinem ersten Angebot. Du kannst ihn später umbenennen und anpassen.",
+    "createShop": "Meinen Shop erstellen"
   }
 }

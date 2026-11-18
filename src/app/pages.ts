@@ -158,6 +158,10 @@ export const pages = {
     () => import("../components/market/MarketRouter"),
     (m) => m.CreateBuyOrderGate,
   ),
+  ChooseShopToSell: pageEntry(
+    () => import("../features/market/components/ChooseShopToSell"),
+    (m) => m.ChooseShopToSell,
+  ),
   CreateListingGate: pageEntry(
     () => import("../components/market/MarketRouter"),
     (m) => m.CreateListingGate,

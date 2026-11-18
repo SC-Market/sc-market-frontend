@@ -4398,7 +4398,9 @@
       "auctionEndTimeRequired": "必须填写拍卖结束时间"
     },
     "descriptionOptional": "描述（可选）",
-    "auctionHelp": "拍卖如何运作"
+    "auctionHelp": "拍卖如何运作",
+    "sellingAs": "出售店铺",
+    "sellingAsHelp": "上架将以此店铺名称显示，订单也会发送到此店铺。"
   },
   "CreateLotDialog": {
     "create": "创建批次",
@@ -6516,7 +6518,8 @@
       "title": "我的店铺",
       "totalShops": "店铺总数",
       "viewShop": "查看店铺",
-      "yes": "是"
+      "yes": "是",
+      "createListing": "创建上架"
     },
     "profile": {
       "byOwner": "店主：<owner>{{name}}</owner>",
@@ -6543,7 +6546,8 @@
       "tabOrder": "下单",
       "tabReviews": "评价",
       "tabServices": "服务",
-      "tabsLabel": "店铺标签页"
+      "tabsLabel": "店铺标签页",
+      "manageListings": "管理上架"
     },
     "reviewCount_other": "{{count}} 条评价",
     "saleCount_other": "已售 {{count}} 笔",
@@ -9292,5 +9296,13 @@
       "radiationScrub": "辐射清除速率",
       "storage": "储物空间"
     }
+  },
+  "chooseShopToSell": {
+    "pageTitle": "创建上架",
+    "heading": "你要从哪个店铺出售？",
+    "body": "上架将以此店铺名称显示，订单也会发送到此店铺。",
+    "noShopTitle": "你需要一个店铺才能出售",
+    "noShopBody": "你的上架会以店铺名称显示。创建店铺后，我们会直接带你进入第一个上架。你之后可以重命名和自定义店铺。",
+    "createShop": "创建我的店铺"
   }
 }

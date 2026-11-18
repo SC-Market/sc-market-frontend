@@ -44,6 +44,7 @@ import { OrderLimitsSection } from "./CreateListingOptions"
 import { AboutSection } from "./CreateListingEssentials"
 import { PricingQuantitySection } from "./CreateListingEssentials"
 import { MoreOptionsToggle } from "./CreateListingOptions"
+import { SellingAsSection } from "./CreateListingSellingAs"
 
 export function CreateListingV2() {
   const { t } = useTranslation()
@@ -286,6 +287,8 @@ export function CreateListingV2() {
                 </Alert>
               </Grid>
             )}
+
+            <SellingAsSection shop={shop} />
 
             {/* ============================================================ */}
             {/* ESSENTIAL FIELDS — always visible                            */}

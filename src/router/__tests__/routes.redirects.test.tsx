@@ -71,16 +71,6 @@ const REDIRECT_CASES: Array<
     { session: "admin" },
   ],
   [
-    "/market/create with shop cookie",
-    "/market/create",
-    { session: "admin", cookies: withShop },
-  ],
-  [
-    "/market/create/:tab with shop cookie",
-    "/market/create/unique",
-    { session: "admin", cookies: withShop },
-  ],
-  [
     "/market/manage-stock with shop cookie",
     "/market/manage-stock",
     { session: "admin", cookies: withShop },

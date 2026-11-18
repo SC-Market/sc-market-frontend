@@ -481,6 +481,7 @@ exports[`routes (shard 1/4) > /dashboard/shops 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/shop/test-shop/listings/create",
     "/shop/test-shop/settings",
     "/shops/test-shop",
   ],
@@ -668,6 +669,7 @@ exports[`routes (shard 1/4) > /market/manage 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/shop/test-shop/listings/create",
     "/shop/test-shop/settings",
     "/shops/test-shop",
   ],
