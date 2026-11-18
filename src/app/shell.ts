@@ -24,9 +24,6 @@ import { ShopContextFromRoute } from "../components/router/ShopContextFromRoute"
 import {
   OrgShopRedirectListings,
   OrgShopRedirectStock,
-  ShopRedirect,
-  ShopRedirectListings,
-  ShopRedirectStock,
 } from "../components/router/ShopRedirect"
 
 export const shell = {
@@ -42,8 +39,5 @@ export const shell = {
   OrgShopRedirectStock,
   RouteErrorFallback,
   ShopContextFromRoute,
-  ShopRedirect,
-  ShopRedirectListings,
-  ShopRedirectStock,
   SiteAdminRoute,
 }

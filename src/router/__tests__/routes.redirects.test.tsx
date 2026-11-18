@@ -5,7 +5,7 @@
  * Covers the Phase 1 risk areas end to end:
  * - index-route <Navigate to="about"/"listings" replace> under
  *   /org/:contractor_id/manage and /shop/:shopSlug (relative targets),
- * - absolute <Navigate>s (/services, /orders/assigned, ShopRedirect*,
+ * - absolute <Navigate>s (/services, /orders/assigned,
  *   OrgRedirect*, SiteAdminRoute, LoggedInRoute's verify/onboarding gates,
  *   OrgContextFromRoute / ShopContextFromRoute rejections),
  * - unmatched URLs falling through to the `/*` splat (Error404),
@@ -42,7 +42,6 @@ vi.mock("@mui/x-charts/BarChart", async () =>
 const ORG = FIXTURE.orgId
 const SHOP = FIXTURE.shopSlug
 const withOrg = { current_contractor: ORG }
-const withShop = { current_shop_slug: SHOP }
 
 const REDIRECT_CASES: Array<
   [name: string, url: string, options: RenderOptions]
@@ -59,32 +58,6 @@ const REDIRECT_CASES: Array<
   ["/services → /market/services", "/services", { session: "anonymous" }],
   ["/orders/assigned → /dashboard", "/orders/assigned", { session: "admin" }],
   ["/help → /guides", "/help", { session: "anonymous" }],
-  // ShopRedirect* (cookie-driven)
-  [
-    "/market/manage with shop cookie",
-    "/market/manage",
-    { session: "admin", cookies: withShop },
-  ],
-  [
-    "/market/manage without shop cookie",
-    "/market/manage",
-    { session: "admin" },
-  ],
-  [
-    "/market/manage-stock with shop cookie",
-    "/market/manage-stock",
-    { session: "admin", cookies: withShop },
-  ],
-  [
-    "/market/stock/:id with shop cookie",
-    "/market/stock/listing-1",
-    { session: "admin", cookies: withShop },
-  ],
-  [
-    "/order/services with shop cookie",
-    "/order/services",
-    { session: "admin", cookies: withShop },
-  ],
   // OrgRedirect* (current org from cookie)
   [
     "/org/manage with org cookie",

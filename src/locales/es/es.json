@@ -9629,12 +9629,35 @@
       "storage": "Almacenamiento"
     }
   },
-  "chooseShopToSell": {
-    "pageTitle": "Crear anuncio",
-    "heading": "¿Desde qué tienda vendes?",
-    "body": "El anuncio se muestra con el nombre de esta tienda y sus pedidos van a la tienda.",
-    "noShopTitle": "Necesitas una tienda para vender",
-    "noShopBody": "Tus anuncios se muestran con el nombre de tu tienda. Crea tu tienda y te llevaremos directamente a tu primer anuncio. Puedes cambiarle el nombre y personalizarla más tarde.",
-    "createShop": "Crear mi tienda"
+  "chooseShop": {
+    "createShop": "Crear mi tienda",
+    "createListing": {
+      "pageTitle": "Crear anuncio",
+      "heading": "¿Desde qué tienda vendes?",
+      "body": "El anuncio se muestra con el nombre de esta tienda y sus pedidos van a la tienda.",
+      "noShopTitle": "Necesitas una tienda para vender",
+      "noShopBody": "Tus anuncios se muestran con el nombre de tu tienda. Crea tu tienda y te llevaremos directamente a tu primer anuncio. Puedes cambiarle el nombre y personalizarla más tarde."
+    },
+    "manageListings": {
+      "pageTitle": "Gestionar anuncios",
+      "heading": "¿Qué tienda?",
+      "body": "Elige la tienda cuyos anuncios quieres gestionar.",
+      "noShopTitle": "Aún no tienes una tienda",
+      "noShopBody": "Los anuncios pertenecen a una tienda y se muestran con su nombre. Crea tu tienda para empezar a vender. Puedes cambiarle el nombre y personalizarla más tarde."
+    },
+    "manageStock": {
+      "pageTitle": "Gestionar stock",
+      "heading": "¿Qué tienda?",
+      "body": "Elige la tienda cuyo stock quieres gestionar.",
+      "noShopTitle": "Aún no tienes una tienda",
+      "noShopBody": "El stock pertenece a los anuncios de una tienda. Crea tu tienda para empezar a publicar y controlar tu stock. Puedes cambiarle el nombre y personalizarla más tarde."
+    },
+    "services": {
+      "pageTitle": "Mis servicios",
+      "heading": "¿Qué tienda?",
+      "body": "Elige la tienda cuyos servicios quieres gestionar.",
+      "noShopTitle": "Aún no tienes una tienda",
+      "noShopBody": "Los servicios se ofrecen con el nombre de una tienda. Crea tu tienda para empezar a ofrecer servicios. Puedes cambiarle el nombre y personalizarla más tarde."
+    }
   }
 }

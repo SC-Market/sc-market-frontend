@@ -507,89 +507,6 @@ exports[`redirects and guards > /help → /guides 1`] = `
 }
 `;
 
-exports[`redirects and guards > /market/manage with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/shop/test-shop/listings",
-  "h1": [
-    "Manage Listings",
-  ],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "listings",
-  ],
-  "session": "admin",
-  "title": "Manage Listings - SC Market",
-  "url": "/market/manage",
-}
-`;
-
-exports[`redirects and guards > /market/manage without shop cookie 1`] = `
-{
-  "cookies": {},
-  "finalUrl": "/dashboard/shops",
-  "h1": [],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/dashboard/shops",
-  ],
-  "session": "admin",
-  "title": "Shops - SC Market",
-  "url": "/market/manage",
-}
-`;
-
-exports[`redirects and guards > /market/manage-stock with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/shop/test-shop/stock",
-  "h1": [
-    "Stock",
-  ],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "stock",
-  ],
-  "session": "admin",
-  "title": "Stock - SC Market",
-  "url": "/market/manage-stock",
-}
-`;
-
-exports[`redirects and guards > /market/stock/:id with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/shop/test-shop/listings",
-  "h1": [
-    "Manage Listings",
-  ],
-  "historyAction": "REPLACE",
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "listings",
-  ],
-  "session": "admin",
-  "title": "Manage Listings - SC Market",
-  "url": "/market/stock/listing-1",
-}
-`;
-
 exports[`redirects and guards > /myorg with org cookie 1`] = `
 {
   "cookies": {
@@ -627,24 +544,6 @@ exports[`redirects and guards > /myorg without org cookie 1`] = `
   "session": "admin",
   "title": "My Organization - SC Market",
   "url": "/myorg",
-}
-`;
-
-exports[`redirects and guards > /order/services with shop cookie 1`] = `
-{
-  "cookies": {
-    "current_shop_slug": "test-shop",
-  },
-  "finalUrl": "/404",
-  "h1": [],
-  "historyAction": "PUSH",
-  "matches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "session": "admin",
-  "title": "404 - SC Market",
-  "url": "/order/services",
 }
 `;
 

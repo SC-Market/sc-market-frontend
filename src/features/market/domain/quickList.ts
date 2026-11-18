@@ -7,7 +7,10 @@ import type {
   PriceOracleItem,
   ShopResponse,
 } from "../../../store/api/v2/market"
-import { canEditShopListings } from "../../shops/domain/shopPermissions"
+import {
+  canEditShopListings,
+  usableShops,
+} from "../../shops/domain/shopPermissions"
 import {
   emptyListingDraft,
   quantityUnitFor,
@@ -177,9 +180,7 @@ export function suggestedQuickListPrice(
 export function quickListShops(
   myShops: ReadonlyArray<ShopResponse> | null | undefined,
 ): ShopResponse[] {
-  return (myShops ?? []).filter(
-    (shop) => shop.status !== "archived" && canEditShopListings(shop),
-  )
+  return usableShops(myShops, canEditShopListings)
 }
 
 /**

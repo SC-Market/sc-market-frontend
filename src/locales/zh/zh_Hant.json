@@ -9291,12 +9291,35 @@
       "storage": "儲物空間"
     }
   },
-  "chooseShopToSell": {
-    "pageTitle": "建立上架",
-    "heading": "你要從哪個商店出售？",
-    "body": "上架將以此商店名稱顯示，訂單也會送到此商店。",
-    "noShopTitle": "你需要一個商店才能出售",
-    "noShopBody": "你的上架會以商店名稱顯示。建立商店後，我們會直接帶你進入第一個上架。你之後可以重新命名和自訂商店。",
-    "createShop": "建立我的商店"
+  "chooseShop": {
+    "createShop": "建立我的商店",
+    "createListing": {
+      "pageTitle": "建立上架",
+      "heading": "你要從哪個商店出售？",
+      "body": "上架將以此商店名稱顯示，訂單也會送到此商店。",
+      "noShopTitle": "你需要一個商店才能出售",
+      "noShopBody": "你的上架會以商店名稱顯示。建立商店後，我們會直接帶你進入第一個上架。你之後可以重新命名和自訂商店。"
+    },
+    "manageListings": {
+      "pageTitle": "管理商品",
+      "heading": "哪個商店？",
+      "body": "選擇你要管理其上架的商店。",
+      "noShopTitle": "你還沒有商店",
+      "noShopBody": "上架屬於商店，並以商店名稱顯示。建立商店即可開始上架。你之後可以重新命名和自訂商店。"
+    },
+    "manageStock": {
+      "pageTitle": "管理庫存",
+      "heading": "哪個商店？",
+      "body": "選擇你要管理其庫存的商店。",
+      "noShopTitle": "你還沒有商店",
+      "noShopBody": "庫存屬於商店的上架。建立商店即可開始上架並管理庫存。你之後可以重新命名和自訂商店。"
+    },
+    "services": {
+      "pageTitle": "我的服務",
+      "heading": "哪個商店？",
+      "body": "選擇你要管理其服務的商店。",
+      "noShopTitle": "你還沒有商店",
+      "noShopBody": "服務以商店名稱提供。建立商店即可開始提供服務。你之後可以重新命名和自訂商店。"
+    }
   }
 }

@@ -9629,12 +9629,35 @@
       "storage": "Stockage"
     }
   },
-  "chooseShopToSell": {
-    "pageTitle": "Créer une annonce",
-    "heading": "Depuis quelle boutique vendez-vous ?",
-    "body": "L'annonce apparaît sous le nom de cette boutique, et ses commandes vont à la boutique.",
-    "noShopTitle": "Il vous faut une boutique pour vendre",
-    "noShopBody": "Vos annonces apparaissent sous le nom de votre boutique. Créez votre boutique et nous vous emmènerons directement à votre première annonce. Vous pourrez la renommer et la personnaliser plus tard.",
-    "createShop": "Créer ma boutique"
+  "chooseShop": {
+    "createShop": "Créer ma boutique",
+    "createListing": {
+      "pageTitle": "Créer une annonce",
+      "heading": "Depuis quelle boutique vendez-vous ?",
+      "body": "L'annonce apparaît sous le nom de cette boutique, et ses commandes vont à la boutique.",
+      "noShopTitle": "Il vous faut une boutique pour vendre",
+      "noShopBody": "Vos annonces apparaissent sous le nom de votre boutique. Créez votre boutique et nous vous emmènerons directement à votre première annonce. Vous pourrez la renommer et la personnaliser plus tard."
+    },
+    "manageListings": {
+      "pageTitle": "Gérer les annonces",
+      "heading": "Quelle boutique ?",
+      "body": "Choisissez la boutique dont vous voulez gérer les annonces.",
+      "noShopTitle": "Vous n'avez pas encore de boutique",
+      "noShopBody": "Les annonces appartiennent à une boutique et apparaissent sous son nom. Créez votre boutique pour commencer à vendre. Vous pourrez la renommer et la personnaliser plus tard."
+    },
+    "manageStock": {
+      "pageTitle": "Gérer le stock",
+      "heading": "Quelle boutique ?",
+      "body": "Choisissez la boutique dont vous voulez gérer le stock.",
+      "noShopTitle": "Vous n'avez pas encore de boutique",
+      "noShopBody": "Le stock appartient aux annonces d'une boutique. Créez votre boutique pour commencer à vendre et suivre votre stock. Vous pourrez la renommer et la personnaliser plus tard."
+    },
+    "services": {
+      "pageTitle": "Mes services",
+      "heading": "Quelle boutique ?",
+      "body": "Choisissez la boutique dont vous voulez gérer les services.",
+      "noShopTitle": "Vous n'avez pas encore de boutique",
+      "noShopBody": "Les services sont proposés sous le nom d'une boutique. Créez votre boutique pour commencer à proposer des services. Vous pourrez la renommer et la personnaliser plus tard."
+    }
   }
 }

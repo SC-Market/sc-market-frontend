@@ -302,6 +302,10 @@ export function createFakeApi(session: SessionKind) {
       if (url.pathname === `/api/v2/shops/${FIXTURE.shopSlug}`) {
         return json(fixtureShopPublic)
       }
+      if (url.pathname === `/api/services/user/${FIXTURE.username}`) {
+        // The fixture user has no services: their services page renders empty
+        return json({ data: [] })
+      }
       if (url.pathname === "/api/v2/game-data/blueprints/search") {
         return json(fixtureBlueprintSearch)
       }

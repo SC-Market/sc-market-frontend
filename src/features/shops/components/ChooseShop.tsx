@@ -1,11 +1,16 @@
 /**
- * /market/create: "Create Listing" from anywhere that isn't a shop page (the
- * market header, empty states, the landing page). Listings are created in a
- * shop (/shop/:slug/listings/create), so this page picks the shop:
- * - one shop you can list in: straight to its create page;
+ * Shop-picker pages for the shop-less URLs of pages that live in a shop:
+ * - /market/create, /market/create/:tab → /shop/:slug/listings/create
+ * - /market/manage, /market/stock/:listingId → /shop/:slug/listings
+ * - /market/manage-stock → /shop/:slug/stock
+ * - /order/services → /shop/:slug/services
+ *
+ * Only the shops you can do that in count (shopPermissions):
+ * - one: straight there;
  * - several: a list to choose from;
- * - none: create your shop, then on to its create page.
- * The query string (e.g. ?game_item_id=…&game_item_name=… prefills) is kept.
+ * - none: create your shop, then on to its page.
+ * The query string and hash (e.g. ?game_item_id=…&game_item_name=… prefills)
+ * are kept.
  */
 import {
   Alert,
@@ -21,38 +26,79 @@ import AddRounded from "@mui/icons-material/AddRounded"
 import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded"
 import StorefrontRounded from "@mui/icons-material/StorefrontRounded"
 import LoadingButton from "@mui/lab/LoadingButton"
+import { useMemo } from "react"
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { usePageReady } from "../../../components/metadata/PageReady"
+import { useSession } from "../../../hooks/login/useSession"
 import { SHOP_PATHS } from "../../../routes/paths"
-import { useQuickCreateShop } from "../../shops/hooks/useShopActions"
-import { useSellingAsShop } from "../quick-list/useSellingAsShop"
+import {
+  useGetMyShopsQuery,
+  type ShopResponse,
+} from "../../../store/api/v2/market"
+import {
+  canEditShopListings,
+  canEditShopStockLots,
+  canManageShopServices,
+  usableShops,
+} from "../domain/shopPermissions"
+import { useQuickCreateShop } from "../hooks/useShopActions"
 
-export function ChooseShopToSell() {
+export type ShopPick =
+  | "createListing"
+  | "manageListings"
+  | "manageStock"
+  | "services"
+
+/** Where each pick goes in the chosen shop, and who can go there. */
+export const SHOP_PICKS: Record<
+  ShopPick,
+  { to: (slug: string) => string; canUse: (shop: ShopResponse) => boolean }
+> = {
+  createListing: { to: SHOP_PATHS.create, canUse: canEditShopListings },
+  manageListings: { to: SHOP_PATHS.listings, canUse: canEditShopListings },
+  manageStock: { to: SHOP_PATHS.stock, canUse: canEditShopStockLots },
+  services: { to: SHOP_PATHS.services, canUse: canManageShopServices },
+}
+
+export function ChooseShop({ pick }: { pick: ShopPick }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { search } = useLocation()
-  const { shops, isLoading, isError, refetch } = useSellingAsShop()
+  const { search, hash } = useLocation()
+  const session = useSession()
+  const {
+    data: myShops,
+    isLoading: shopsLoading,
+    isError,
+    refetch,
+  } = useGetMyShopsQuery(undefined, {
+    skip: session.status !== "authenticated",
+  })
+  const { to, canUse } = SHOP_PICKS[pick]
+  const shops = useMemo(() => usableShops(myShops, canUse), [myShops, canUse])
+  const isLoading = session.status === "unknown" || shopsLoading
   const { create: quickCreateShop, isLoading: isCreating } =
     useQuickCreateShop()
   usePageReady(isLoading)
 
-  const createIn = (slug: string) => `${SHOP_PATHS.create(slug)}${search}`
+  const target = (slug: string) => `${to(slug)}${search}${hash}`
 
   if (!isLoading && !isError && shops.length === 1) {
-    return <Navigate to={createIn(shops[0].slug)} replace />
+    return <Navigate to={target(shops[0].slug)} replace />
   }
 
   const handleCreateShop = async () => {
     const shop = await quickCreateShop(true)
-    if (shop) navigate(createIn(shop.slug), { replace: true })
+    if (shop) navigate(target(shop.slug), { replace: true })
   }
+
+  const copy = `chooseShop.${pick}`
 
   return (
     <StandardPageLayout
-      title={t("chooseShopToSell.pageTitle", "Create Listing")}
+      title={t(`${copy}.pageTitle`)}
       headerTitle={
         <Typography
           variant="h4"
@@ -60,7 +106,7 @@ export function ChooseShopToSell() {
           fontWeight="bold"
           color="text.secondary"
         >
-          {t("chooseShopToSell.heading", "Which shop are you selling from?")}
+          {t(`${copy}.heading`)}
         </Typography>
       }
       sidebarOpen={true}
@@ -85,14 +131,9 @@ export function ChooseShopToSell() {
         ) : shops.length === 0 ? (
           <Card variant="outlined" sx={{ p: 3 }}>
             <Stack spacing={2} alignItems="flex-start">
-              <Typography variant="h6">
-                {t("chooseShopToSell.noShopTitle", "You need a shop to sell")}
-              </Typography>
+              <Typography variant="h6">{t(`${copy}.noShopTitle`)}</Typography>
               <Typography variant="body2" color="text.secondary">
-                {t(
-                  "chooseShopToSell.noShopBody",
-                  "Your listings are shown under your shop's name. Create your shop and we'll take you straight to your first listing. You can rename and customize it later.",
-                )}
+                {t(`${copy}.noShopBody`)}
               </Typography>
               <LoadingButton
                 variant="contained"
@@ -100,23 +141,20 @@ export function ChooseShopToSell() {
                 loading={isCreating}
                 onClick={handleCreateShop}
               >
-                {t("chooseShopToSell.createShop", "Create my shop")}
+                {t("chooseShop.createShop")}
               </LoadingButton>
             </Stack>
           </Card>
         ) : (
           <Stack spacing={1.5}>
             <Typography variant="body2" color="text.secondary">
-              {t(
-                "chooseShopToSell.body",
-                "The listing is shown under this shop's name, and its orders go to the shop.",
-              )}
+              {t(`${copy}.body`)}
             </Typography>
             {shops.map((shop) => (
               <Card key={shop.shop_id} variant="outlined">
                 <CardActionArea
                   component={Link}
-                  to={createIn(shop.slug)}
+                  to={target(shop.slug)}
                   sx={{ p: 2 }}
                 >
                   <Stack direction="row" spacing={2} alignItems="center">
@@ -148,4 +186,24 @@ export function ChooseShopToSell() {
       </Box>
     </StandardPageLayout>
   )
+}
+
+/** /market/create */
+export function ChooseShopToSell() {
+  return <ChooseShop pick="createListing" />
+}
+
+/** /market/manage, /market/stock/:listingId */
+export function ChooseShopToManageListings() {
+  return <ChooseShop pick="manageListings" />
+}
+
+/** /market/manage-stock */
+export function ChooseShopToManageStock() {
+  return <ChooseShop pick="manageStock" />
+}
+
+/** /order/services */
+export function ChooseShopForServices() {
+  return <ChooseShop pick="services" />
 }

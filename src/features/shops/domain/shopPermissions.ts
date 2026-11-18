@@ -197,3 +197,13 @@ export function shopSectionOfPath(pathname: string): ShopSection | null {
   const rest = /^\/shop\/[^/]+\/(.+?)\/?$/.exec(pathname)?.[1]
   return rest ? (PATH_SECTIONS[rest] ?? null) : null
 }
+
+/** The user's shops (GET /shops/mine) that aren't archived and pass `canUse`. */
+export function usableShops<S extends ShopResponse>(
+  myShops: ReadonlyArray<S> | null | undefined,
+  canUse: (shop: S) => boolean,
+): S[] {
+  return (myShops ?? []).filter(
+    (shop) => shop.status !== "archived" && canUse(shop),
+  )
+}

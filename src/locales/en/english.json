@@ -9460,12 +9460,35 @@
       "storage": "Storage"
     }
   },
-  "chooseShopToSell": {
-    "pageTitle": "Create Listing",
-    "heading": "Which shop are you selling from?",
-    "body": "The listing is shown under this shop's name, and its orders go to the shop.",
-    "noShopTitle": "You need a shop to sell",
-    "noShopBody": "Your listings are shown under your shop's name. Create your shop and we'll take you straight to your first listing. You can rename and customize it later.",
-    "createShop": "Create my shop"
+  "chooseShop": {
+    "createShop": "Create my shop",
+    "createListing": {
+      "pageTitle": "Create Listing",
+      "heading": "Which shop are you selling from?",
+      "body": "The listing is shown under this shop's name, and its orders go to the shop.",
+      "noShopTitle": "You need a shop to sell",
+      "noShopBody": "Your listings are shown under your shop's name. Create your shop and we'll take you straight to your first listing. You can rename and customize it later."
+    },
+    "manageListings": {
+      "pageTitle": "Manage Listings",
+      "heading": "Which shop's listings?",
+      "body": "Choose the shop whose listings you want to manage.",
+      "noShopTitle": "You don't have a shop yet",
+      "noShopBody": "Listings belong to a shop and are shown under its name. Create your shop to start listing. You can rename and customize it later."
+    },
+    "manageStock": {
+      "pageTitle": "Manage Stock",
+      "heading": "Which shop's stock?",
+      "body": "Choose the shop whose stock you want to manage.",
+      "noShopTitle": "You don't have a shop yet",
+      "noShopBody": "Stock belongs to a shop's listings. Create your shop to start listing and tracking stock. You can rename and customize it later."
+    },
+    "services": {
+      "pageTitle": "My Services",
+      "heading": "Which shop's services?",
+      "body": "Choose the shop whose services you want to manage.",
+      "noShopTitle": "You don't have a shop yet",
+      "noShopBody": "Services are offered under a shop's name. Create your shop to start offering services. You can rename and customize it later."
+    }
   }
 }

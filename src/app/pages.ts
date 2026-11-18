@@ -158,8 +158,20 @@ export const pages = {
     () => import("../components/market/MarketRouter"),
     (m) => m.CreateBuyOrderGate,
   ),
+  ChooseShopForServices: pageEntry(
+    () => import("../features/shops/components/ChooseShop"),
+    (m) => m.ChooseShopForServices,
+  ),
+  ChooseShopToManageListings: pageEntry(
+    () => import("../features/shops/components/ChooseShop"),
+    (m) => m.ChooseShopToManageListings,
+  ),
+  ChooseShopToManageStock: pageEntry(
+    () => import("../features/shops/components/ChooseShop"),
+    (m) => m.ChooseShopToManageStock,
+  ),
   ChooseShopToSell: pageEntry(
-    () => import("../features/market/components/ChooseShopToSell"),
+    () => import("../features/shops/components/ChooseShop"),
     (m) => m.ChooseShopToSell,
   ),
   CreateListingGate: pageEntry(

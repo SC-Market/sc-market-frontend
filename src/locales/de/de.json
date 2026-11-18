@@ -9460,12 +9460,35 @@
       "storage": "Stauraum"
     }
   },
-  "chooseShopToSell": {
-    "pageTitle": "Angebot erstellen",
-    "heading": "Aus welchem Shop verkaufst du?",
-    "body": "Das Angebot erscheint unter dem Namen dieses Shops, und seine Bestellungen gehen an den Shop.",
-    "noShopTitle": "Du brauchst einen Shop zum Verkaufen",
-    "noShopBody": "Deine Angebote erscheinen unter dem Namen deines Shops. Erstelle deinen Shop und wir bringen dich direkt zu deinem ersten Angebot. Du kannst ihn später umbenennen und anpassen.",
-    "createShop": "Meinen Shop erstellen"
+  "chooseShop": {
+    "createShop": "Meinen Shop erstellen",
+    "createListing": {
+      "pageTitle": "Angebot erstellen",
+      "heading": "Aus welchem Shop verkaufst du?",
+      "body": "Das Angebot erscheint unter dem Namen dieses Shops, und seine Bestellungen gehen an den Shop.",
+      "noShopTitle": "Du brauchst einen Shop zum Verkaufen",
+      "noShopBody": "Deine Angebote erscheinen unter dem Namen deines Shops. Erstelle deinen Shop und wir bringen dich direkt zu deinem ersten Angebot. Du kannst ihn später umbenennen und anpassen."
+    },
+    "manageListings": {
+      "pageTitle": "Inserate verwalten",
+      "heading": "Welcher Shop?",
+      "body": "Wähle den Shop, dessen Angebote du verwalten möchtest.",
+      "noShopTitle": "Du hast noch keinen Shop",
+      "noShopBody": "Angebote gehören zu einem Shop und erscheinen unter seinem Namen. Erstelle deinen Shop, um mit dem Verkaufen zu beginnen. Du kannst ihn später umbenennen und anpassen."
+    },
+    "manageStock": {
+      "pageTitle": "Bestand verwalten",
+      "heading": "Welcher Shop?",
+      "body": "Wähle den Shop, dessen Bestand du verwalten möchtest.",
+      "noShopTitle": "Du hast noch keinen Shop",
+      "noShopBody": "Der Bestand gehört zu den Angeboten eines Shops. Erstelle deinen Shop, um Angebote und Bestand zu verwalten. Du kannst ihn später umbenennen und anpassen."
+    },
+    "services": {
+      "pageTitle": "Meine Dienstleistungen",
+      "heading": "Welcher Shop?",
+      "body": "Wähle den Shop, dessen Dienstleistungen du verwalten möchtest.",
+      "noShopTitle": "Du hast noch keinen Shop",
+      "noShopBody": "Dienstleistungen werden unter dem Namen eines Shops angeboten. Erstelle deinen Shop, um Dienstleistungen anzubieten. Du kannst ihn später umbenennen und anpassen."
+    }
   }
 }

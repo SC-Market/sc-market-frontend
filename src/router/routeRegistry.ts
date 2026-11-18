@@ -64,15 +64,16 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/accountlink": () => import("../pages/authentication/AuthenticateRSI"),
 
   // Market management routes
-  "/market/manage": () => import("../components/market/MarketRouter"),
-  "/market/manage-stock": () => import("../pages/market/ManageStockLots"),
+  "/market/manage": () => import("../features/shops/components/ChooseShop"),
+  "/market/manage-stock": () =>
+    import("../features/shops/components/ChooseShop"),
 
   // Order routes
   "/orders": () => import("../pages/contracting/CreateOrder"),
   "/order/service/create": () => import("../pages/contracting/CreateService"),
   "/order/service/:service_id/edit": () =>
     import("../pages/contracting/CreateService"),
-  "/order/services": () => import("../pages/contracting/MyServices"),
+  "/order/services": () => import("../features/shops/components/ChooseShop"),
 
   // Organization routes
   "/org/register": () => import("../pages/contractor/OrgRegister"),

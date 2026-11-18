@@ -290,19 +290,19 @@ export default [
             file: "routes/pages/MyListingsGate.tsx",
           },
           {
-            id: "routes/elements/ShopRedirectListings",
+            id: "routes/pages/ChooseShopToManageListings",
             path: "/market/manage",
-            file: "routes/elements/ShopRedirectListings.tsx",
+            file: "routes/pages/ChooseShopToManageListings.tsx",
           },
           {
-            id: "routes/elements/ShopRedirectStock",
+            id: "routes/pages/ChooseShopToManageStock",
             path: "/market/manage-stock",
-            file: "routes/elements/ShopRedirectStock.tsx",
+            file: "routes/pages/ChooseShopToManageStock.tsx",
           },
           {
-            id: "routes/elements/ShopRedirectListings~2",
+            id: "routes/pages/ChooseShopToManageListings~2",
             path: "/market/stock/:listingId",
-            file: "routes/elements/ShopRedirectListings.tsx",
+            file: "routes/pages/ChooseShopToManageListings.tsx",
           },
           {
             id: "routes/pages/InventoryPage",
@@ -395,9 +395,9 @@ export default [
             file: "routes/pages/UpdateService.tsx",
           },
           {
-            id: "routes/elements/ShopRedirect.services",
+            id: "routes/pages/ChooseShopForServices",
             path: "/order/services",
-            file: "routes/elements/ShopRedirect.services.tsx",
+            file: "routes/pages/ChooseShopForServices.tsx",
           },
           {
             id: "routes/pages/OrgRegister",
