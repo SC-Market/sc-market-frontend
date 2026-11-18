@@ -2,7 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <!--
+      Site icons. Each tag carries data-site-icon so an org's white-label
+      host can swap the whole set for its own favicon (whiteLabelDocument in
+      src/ssr/whiteLabel.ts, and HookProvider on the client). Solid-tile
+      icons, so search results never show them on a white circle.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" data-site-icon />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" data-site-icon />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="/favicon-48x48.png"
+      data-site-icon
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/favicon-96x96.png"
+      data-site-icon
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="144x144"
+      href="/favicon-144x144.png"
+      data-site-icon
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/favicon-192x192.png"
+      data-site-icon
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon.png"
+      data-site-icon
+    />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover, interactive-widget=resizes-content"
