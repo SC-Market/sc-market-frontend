@@ -40,6 +40,11 @@ export type QuickListStockMode = "simple" | "batches"
 
 export interface QuickListForm {
   item: QuickListItem | null
+  /**
+   * A custom listing (no game item) and its title, or null when listing a
+   * game item. Set by the item picker's "list it as a custom item".
+   */
+  customTitle: string | null
   price: number
   quantity: number
   /** Quality of the simple stock: a tier 1-5, or undefined for Any */
@@ -63,6 +68,7 @@ export function emptyQuickListForm(
 ): QuickListForm {
   return {
     item,
+    customTitle: null,
     price: 0,
     quantity: 1,
     qualityTier: undefined,
@@ -89,6 +95,7 @@ export function nextQuickListForm(previous: QuickListForm): QuickListForm {
   return {
     ...previous,
     item: null,
+    customTitle: null,
     price: 0,
     quantity: 1,
     qualityTier: undefined,
@@ -112,9 +119,13 @@ export function quickListTotal(
   )
 }
 
-/** The listing draft the form describes, titled after the item. */
+/**
+ * The listing draft the form describes: titled after the game item, or a
+ * custom listing with its own title.
+ */
 export function quickListDraft(form: QuickListForm): ListingDraft {
   const perBatch = form.stockMode === "batches" && form.pricePerBatch
+  const custom = form.customTitle !== null
   const lots: ListingLotDraft[] =
     form.stockMode === "simple"
       ? [{ quantity: form.quantity, quality_tier: form.qualityTier }]
@@ -127,9 +138,9 @@ export function quickListDraft(form: QuickListForm): ListingDraft {
         }))
   return {
     ...emptyListingDraft(),
-    gameItemId: form.item?.id ?? null,
-    customItem: false,
-    title: form.item?.name ?? "",
+    gameItemId: custom ? null : (form.item?.id ?? null),
+    customItem: custom,
+    title: form.customTitle ?? form.item?.name ?? "",
     description: form.description,
     pricingMode: perBatch ? "per_variant" : "unified",
     basePrice: perBatch ? 0 : form.price,
@@ -137,7 +148,7 @@ export function quickListDraft(form: QuickListForm): ListingDraft {
     saleType: form.saleType,
     auctionEndTime: form.auctionEndTime,
     pickupMethod: form.pickupMethod,
-    quantityUnit: quantityUnitFor(form.item?.type),
+    quantityUnit: quantityUnitFor(custom ? null : form.item?.type),
     minOrderQuantity: form.minOrderQuantity,
     maxOrderQuantity: form.maxOrderQuantity,
     bulkDiscountTiers: form.bulkDiscountTiers,

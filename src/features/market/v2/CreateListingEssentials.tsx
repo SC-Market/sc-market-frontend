@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  Grid,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Grid, InputAdornment, TextField, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { NumericFormat } from "react-number-format"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
@@ -13,6 +6,10 @@ import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { HelpTip } from "../../help/components/HelpTip"
+import {
+  CustomListingLink,
+  CustomListingNotice,
+} from "../components/CustomListing"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert"
 import { quantityUnitFor } from "../domain/listingDraft"
@@ -88,28 +85,7 @@ export function AboutSection({
       <FormPaper title={t("CreateListingV2.about", "About")}>
         <Grid item xs={12}>
           {customItem ? (
-            <Alert
-              severity="info"
-              action={
-                <Button
-                  color="inherit"
-                  size="small"
-                  onClick={() => setCustomItem(false)}
-                >
-                  {t("market.customItem.pickGameItem", "Pick a game item")}
-                </Button>
-              }
-            >
-              <Typography variant="body2" fontWeight="bold">
-                {t("market.customItem.title", "Custom listing")}
-              </Typography>
-              <Typography variant="body2">
-                {t(
-                  "market.customItem.explainer",
-                  "Not linked to an in-game item. Buyers find it by its title and description. It won't appear on item pages or in price history, and won't match buy orders.",
-                )}
-              </Typography>
-            </Alert>
+            <CustomListingNotice onPickGameItem={() => setCustomItem(false)} />
           ) : (
             <>
               <GameItemSearchAutocomplete
@@ -129,17 +105,7 @@ export function AboutSection({
                 label={t("CreateListingV2.selectGameItem", "Select Game Item")}
                 onCustomItem={listAsCustomItem}
               />
-              <Button
-                size="small"
-                variant="text"
-                onClick={() => listAsCustomItem("")}
-                sx={{ mt: 0.5, textTransform: "none" }}
-              >
-                {t(
-                  "market.customItem.link",
-                  "Can't find your item, or not selling an in-game item? Create a custom listing",
-                )}
-              </Button>
+              <CustomListingLink onClick={() => listAsCustomItem("")} />
             </>
           )}
         </Grid>

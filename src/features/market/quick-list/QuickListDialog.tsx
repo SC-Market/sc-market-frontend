@@ -90,6 +90,8 @@ export function QuickListDialog({
     clearError,
     hint,
     pickItem,
+    listAsCustomItem,
+    pickGameItemInstead,
     total,
     perBatch,
     fieldError,
@@ -125,22 +127,18 @@ export function QuickListDialog({
       externalPhotoUrls: photos.photos,
     }
     const issue = validateListingDraft(draft)
-    if (issue || !draft.gameItemId) {
-      const resolved = issue ?? ({ code: "gameItemRequired" } as const)
+    if (issue) {
       setError({
-        field: issueField(resolved, form),
-        message: listingDraftIssueError(resolved, t).message,
+        field: issueField(issue, form),
+        message: listingDraftIssueError(issue, t).message,
       })
-      if (resolved.code === "auctionEndTimeRequired") setMoreOpen(true)
+      if (issue.code === "auctionEndTimeRequired") setMoreOpen(true)
       return
     }
     setError(null)
     try {
       const result = await createListing({
-        createListingRequest: buildCreateListingRequest(
-          { ...draft, gameItemId: draft.gameItemId },
-          shop,
-        ),
+        createListingRequest: buildCreateListingRequest(draft, shop),
       }).unwrap()
       selling.remember(shop.shop_id)
       const price = perBatch
@@ -222,6 +220,8 @@ export function QuickListDialog({
     }`
 
   const blocked = !verified || !shop || photos.isUploading
+  // A game item picked, or a custom listing
+  const hasItem = !!item || form.customTitle !== null
 
   // The item search gets focus when there's no item yet (and after "list another")
   useEffect(() => {
@@ -245,7 +245,7 @@ export function QuickListDialog({
             variant="outlined"
             size="large"
             fullWidth={isMobile}
-            disabled={blocked || !item}
+            disabled={blocked || !hasItem}
             loading={publishing}
             onClick={() => void publish(true)}
           >
@@ -255,7 +255,7 @@ export function QuickListDialog({
             variant="contained"
             size="large"
             fullWidth={isMobile}
-            disabled={blocked || !item}
+            disabled={blocked || !hasItem}
             loading={publishing}
             onClick={() => void publish(false)}
           >
@@ -350,11 +350,21 @@ export function QuickListDialog({
           item={item}
           itemPicked={itemPicked}
           itemFieldKey={itemFieldKey}
+          customTitle={form.customTitle}
           fieldError={fieldError}
           pickItem={pickItem}
           onChangeItem={() => {
             setItemPicked(false)
             pickItem(null)
+            setItemFieldKey((k) => k + 1)
+          }}
+          onCustomItem={listAsCustomItem}
+          onCustomTitleChange={(title) => {
+            clearError("title")
+            update({ customTitle: title })
+          }}
+          onPickGameItem={() => {
+            pickGameItemInstead()
             setItemFieldKey((k) => k + 1)
           }}
         />

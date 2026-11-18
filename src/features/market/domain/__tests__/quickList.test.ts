@@ -15,7 +15,11 @@ import {
   shopSlugFromPath,
   suggestedQuickListPrice,
 } from "../quickList"
-import { validateListingDraft } from "../listingDraft"
+import {
+  buildCreateListingRequest,
+  validateListingDraft,
+} from "../listingDraft"
+import { issueField } from "../../quick-list/quickListFields"
 
 const ITEM = {
   id: "item-1",
@@ -148,6 +152,36 @@ describe("quickListDraft", () => {
       code: "gameItemRequired",
     })
   })
+
+  it("is a custom listing with its own title and no game item", () => {
+    const form = {
+      ...emptyQuickListForm(),
+      customTitle: "Hand-painted Cutlass model",
+      price: 50000,
+      quantity: 2,
+    }
+    const draft = quickListDraft(form)
+    expect(validateListingDraft(draft)).toBeNull()
+    expect(draft).toMatchObject({
+      gameItemId: null,
+      customItem: true,
+      title: "Hand-painted Cutlass model",
+      quantityUnit: "unit",
+    })
+    const request = buildCreateListingRequest(draft, {
+      shop_id: "shop-1",
+      is_org_owned: false,
+    })
+    expect(request.game_item_id).toBeUndefined()
+    expect(request.title).toBe("Hand-painted Cutlass model")
+  })
+
+  it("needs a title for a custom listing, shown on the title field", () => {
+    const form = { ...emptyQuickListForm(), customTitle: "  ", price: 10 }
+    const issue = validateListingDraft(quickListDraft(form))
+    expect(issue).toEqual({ code: "titleRequired" })
+    expect(issueField(issue!, form)).toBe("title")
+  })
 })
 
 describe("nextQuickListForm", () => {
@@ -163,6 +197,7 @@ describe("nextQuickListForm", () => {
     }
     const next = nextQuickListForm(form)
     expect(next.item).toBeNull()
+    expect(next.customTitle).toBeNull()
     expect(next.price).toBe(0)
     expect(next.quantity).toBe(1)
     expect(next.description).toBe("")

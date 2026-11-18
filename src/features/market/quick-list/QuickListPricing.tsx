@@ -60,7 +60,8 @@ export function QuickListPricing({
           thousandSeparator
           fullWidth
           required={!perBatch}
-          disabled={!item || perBatch}
+          // Priced once there's something to list: a game item or a custom one
+          disabled={(!item && form.customTitle === null) || perBatch}
           label={t("quickList.price", "Price per unit")}
           value={form.price || ""}
           onValueChange={(values, source) => {

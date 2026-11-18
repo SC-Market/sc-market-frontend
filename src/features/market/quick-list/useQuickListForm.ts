@@ -58,9 +58,30 @@ export function useQuickListForm(pageItem: QuickListItem | null) {
     setForm((prev) => ({
       ...prev,
       item: next,
+      customTitle: null,
       price: 0,
       qualityTier: undefined,
     }))
+  }
+
+  /** Switch to a custom listing (no game item), titled with what was typed. */
+  const listAsCustomItem = (typedName: string) => {
+    clearError("item")
+    setPriceTouched(false)
+    setItemPicked(false)
+    setForm((prev) => ({
+      ...prev,
+      item: null,
+      customTitle: typedName,
+      price: 0,
+      qualityTier: undefined,
+    }))
+  }
+
+  /** Back from a custom listing to picking a game item. */
+  const pickGameItemInstead = () => {
+    clearError("title")
+    setForm((prev) => ({ ...prev, customTitle: null }))
   }
 
   const total = quickListTotal(form)
@@ -113,6 +134,8 @@ export function useQuickListForm(pageItem: QuickListItem | null) {
     clearError,
     hint,
     pickItem,
+    listAsCustomItem,
+    pickGameItemInstead,
     total,
     perBatch,
     fieldError,

@@ -70,6 +70,7 @@ vi.mock("../../components/GameItemSearchAutocomplete", () => ({
       type: string | null,
       id: string | null,
     ) => void
+    onCustomItem?: (typedName: string) => void
   }) => (
     <>
       <input
@@ -79,6 +80,14 @@ vi.mock("../../components/GameItemSearchAutocomplete", () => ({
           props.onChange(h.nextItem.name, h.nextItem.type, h.nextItem.id)
         }
       />
+      {props.onCustomItem && (
+        <button
+          type="button"
+          onClick={() => props.onCustomItem?.("Hand-painted Cutlass model")}
+        >
+          List typed as custom item
+        </button>
+      )}
       {props.errorText && <p>{props.errorText}</p>}
     </>
   ),
@@ -401,6 +410,60 @@ describe("QuickListDialog", () => {
   it("lets the user change a picked item", async () => {
     renderDialog()
     fireEvent.click(screen.getByRole("button", { name: "Change item" }))
+    expect(screen.getByTestId("item-search")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled()
+  })
+
+  it("lists something that isn't a game item as a custom listing", async () => {
+    renderDialog({ item: null })
+    expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled()
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "List typed as custom item" }),
+    )
+
+    expect(screen.getByText("Custom listing")).toBeInTheDocument()
+    expect(screen.getByLabelText(/^Title/)).toHaveValue(
+      "Hand-painted Cutlass model",
+    )
+    fireEvent.change(screen.getByLabelText(/Price per unit/), {
+      target: { value: "50000" },
+    })
+    fireEvent.click(screen.getByRole("button", { name: "Publish" }))
+
+    await waitFor(() => expect(h.create).toHaveBeenCalledTimes(1))
+    expect(request()).toMatchObject({
+      title: "Hand-painted Cutlass model",
+      base_price: 50000,
+      shop_id: "id-miras-shop",
+    })
+    expect(request().game_item_id).toBeUndefined()
+  })
+
+  it("needs a title for a custom listing from the Can't find your item link", async () => {
+    renderDialog({ item: null })
+    fireEvent.click(
+      screen.getByRole("button", { name: /Can't find your item/ }),
+    )
+    expect(screen.getByLabelText(/^Title/)).toHaveValue("")
+    fireEvent.change(screen.getByLabelText(/Price per unit/), {
+      target: { value: "100" },
+    })
+    fireEvent.click(screen.getByRole("button", { name: "Publish" }))
+
+    expect(
+      await screen.findByText("Couldn't publish: Title is required"),
+    ).toBeInTheDocument()
+    expect(h.create).not.toHaveBeenCalled()
+  })
+
+  it("goes back from a custom listing to picking a game item", () => {
+    renderDialog({ item: null })
+    fireEvent.click(
+      screen.getByRole("button", { name: "List typed as custom item" }),
+    )
+    fireEvent.click(screen.getByRole("button", { name: "Pick a game item" }))
+    expect(screen.queryByText("Custom listing")).toBeNull()
     expect(screen.getByTestId("item-search")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled()
   })

@@ -4,6 +4,7 @@ import type { QuickListBatch, QuickListForm } from "../domain/quickList"
 /** Where an error shows: next to its field, or above the actions. */
 export type QuickListField =
   | "item"
+  | "title"
   | "price"
   | "quantity"
   | "batches"
@@ -21,9 +22,10 @@ export function issueField(
 ): QuickListField {
   switch (issue.code) {
     case "gameItemRequired":
+      return "item"
     case "titleRequired":
     case "titleTooLong":
-      return "item"
+      return form.customTitle !== null ? "title" : "item"
     case "basePriceRequired":
       return "price"
     case "stockLotRequired":

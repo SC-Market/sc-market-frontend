@@ -1,29 +1,75 @@
 import { Box, Chip, Link, Stack, TextField } from "@mui/material"
 import { OpenInNewRounded } from "@mui/icons-material"
+import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink } from "react-router-dom"
 import { WIKI_PATHS } from "../../../routes/paths"
+import {
+  CustomListingLink,
+  CustomListingNotice,
+} from "../components/CustomListing"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
+import { LISTING_TITLE_MAX } from "../domain/listingDraft"
 import { type QuickListItem } from "../domain/quickList"
 import { type QuickListField } from "./quickListFields"
 
-/** The item: picked from the page (with "Change item"), or a catalog search. */
+/**
+ * The item: picked from the page (with "Change item"), a catalog search, or
+ * a custom listing (no game item) with its own title.
+ */
 export function QuickListItemField({
   item,
   itemPicked,
   itemFieldKey,
+  customTitle,
   fieldError,
   pickItem,
   onChangeItem,
+  onCustomItem,
+  onCustomTitleChange,
+  onPickGameItem,
 }: {
   item: QuickListItem | null
   itemPicked: boolean
   itemFieldKey: number
+  /** The custom listing's title, or null when listing a game item */
+  customTitle: string | null
   fieldError: (field: QuickListField) => string | undefined
   pickItem: (next: QuickListItem | null) => void
   onChangeItem: () => void
+  /** Switch to a custom listing, titled with the typed text */
+  onCustomItem: (typedName: string) => void
+  onCustomTitleChange: (title: string) => void
+  onPickGameItem: () => void
 }) {
   const { t } = useTranslation()
+  // Switching to a custom listing moves focus to its title
+  const isCustom = customTitle !== null
+  const titleRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (isCustom) titleRef.current?.focus()
+  }, [isCustom])
+
+  if (customTitle !== null) {
+    const titleError = fieldError("title")
+    return (
+      <Stack spacing={1.5}>
+        <CustomListingNotice onPickGameItem={onPickGameItem} />
+        <TextField
+          id="quick-list-title"
+          label={t("CreateListingV2.title", "Title")}
+          value={customTitle}
+          onChange={(e) => onCustomTitleChange(e.target.value)}
+          required
+          fullWidth
+          inputRef={titleRef}
+          error={!!titleError}
+          helperText={titleError}
+          inputProps={{ maxLength: LISTING_TITLE_MAX }}
+        />
+      </Stack>
+    )
+  }
   return (
     <Box>
       {item && itemPicked ? (
@@ -41,16 +87,20 @@ export function QuickListItemField({
           />
         </>
       ) : (
-        <GameItemSearchAutocomplete
-          key={itemFieldKey}
-          value={item?.name ?? null}
-          required
-          label={t("quickList.item", "Item")}
-          errorText={fieldError("item")}
-          onChange={(name, type, id) =>
-            pickItem(name && id ? { id, name, type } : null)
-          }
-        />
+        <>
+          <GameItemSearchAutocomplete
+            key={itemFieldKey}
+            value={item?.name ?? null}
+            required
+            label={t("quickList.item", "Item")}
+            errorText={fieldError("item")}
+            onChange={(name, type, id) =>
+              pickItem(name && id ? { id, name, type } : null)
+            }
+            onCustomItem={onCustomItem}
+          />
+          <CustomListingLink onClick={() => onCustomItem("")} />
+        </>
       )}
       {item && (
         <Stack
