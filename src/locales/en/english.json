@@ -3164,32 +3164,21 @@
     "hub": {
       "givers": {
         "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} missions",
-        "lead": "{{name}} offers {{missions}} in Star Citizen."
+        "heading": "{{name}} missions"
       },
       "factions": {
         "title": "{{name}} Reputation Missions in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} reputation missions",
-        "lead": "{{missions}} in Star Citizen raise your reputation with {{name}}."
+        "heading": "{{name}} reputation missions"
       },
       "types": {
         "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} missions",
-        "lead": "Star Citizen has {{missions}} of the {{name}} type."
+        "heading": "{{name}} missions"
       },
       "systems": {
         "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
-        "heading": "Missions in {{name}}",
-        "lead": "Star Citizen has {{missions}} in the {{name}} system."
+        "heading": "Missions in {{name}}"
       }
     },
-    "where": "They are offered in {{systems}}.",
-    "rewardRange": "They pay {{min}} to {{max}} aUEC.",
-    "rewardUpTo": "They pay up to {{max}} aUEC.",
-    "allLegal": "All of them are legal.",
-    "allIllegal": "All of them are illegal.",
-    "legalMix": "Legal: {{legal}}, illegal: {{illegal}}.",
-    "blueprints": "Missions that can reward a crafting blueprint: {{count}}.",
     "topRelated": "{{kind}}: {{list}}.",
     "browseBy": "Browse missions by",
     "related": "Related mission hubs",
@@ -3199,17 +3188,156 @@
     "next": "Next page",
     "notFound": "This mission hub doesn't exist. Hubs change with game updates: browse them all below.",
     "loadError": "Failed to load this mission hub. Please try again.",
-    "columns": {
-      "mission": "Mission",
-      "system": "System",
-      "type": "Type",
-      "giver": "Giver",
-      "legality": "Legality",
-      "reward": "Reward"
+    "detailTitle": "Browse similar missions",
+    "aside": "About this hub",
+    "dataFrom": "Data from {{version}}",
+    "filterInSearch": "Filter in mission search",
+    "rep": "{{n}} rep",
+    "kicker": {
+      "givers": "Mission giver",
+      "factions": "Faction",
+      "types": "Mission type",
+      "systems": "Star system"
     },
-    "legal": "Legal",
-    "illegal": "Illegal",
-    "detailTitle": "Browse similar missions"
+    "summary": {
+      "range": "{{min}} to {{max}}",
+      "otherTypes": "{{n}} of other types",
+      "lead": {
+        "givers": "{{name}} is a Star Citizen mission giver. It offers {{missions}}.",
+        "giversIn": "{{name}} is a Star Citizen mission giver in {{systems}}. It offers {{missions}}.",
+        "factions": "{{name}} is a Star Citizen faction: {{missions}} raise your reputation with it.",
+        "factionsIn": "{{name}} is a Star Citizen faction: {{missions}} in {{systems}} raise your reputation with it.",
+        "types": "{{name}} is a Star Citizen mission type with {{missions}}.",
+        "typesIn": "{{name}} is a Star Citizen mission type with {{missions}} in {{systems}}.",
+        "systems": "Star Citizen has {{missions}} in the {{name}} system."
+      },
+      "byType": "By type: {{list}}.",
+      "byTypeUntyped": "By type: {{list}}, plus {{n}} with no listed type.",
+      "allLegal": "All {{n}} are legal.",
+      "allIllegal": "All {{n}} are illegal.",
+      "someIllegal_one": "{{n}} of them is illegal.",
+      "someIllegal_other": "{{n}} of them are illegal.",
+      "reputation_one": "{{n}} mission pays {{range}} reputation.",
+      "reputation_other": "{{n}} missions pay {{range}} reputation.",
+      "reputationWith_one": "{{n}} mission pays {{range}} reputation with {{faction}}.",
+      "reputationWith_other": "{{n}} missions pay {{range}} reputation with {{faction}}.",
+      "payout_one": "{{n}} mission lists a payout of {{range}} aUEC.",
+      "payout_other": "{{n}} missions list a payout of {{range}} aUEC.",
+      "blueprints_one": "{{n}} mission can reward a crafting blueprint ({{items}}).",
+      "blueprints_other": "{{n}} missions can reward a crafting blueprint ({{items}}).",
+      "blueprintItems_one": "{{n}} item in all",
+      "blueprintItems_other": "{{n}} different items in all",
+      "ranksOpen_one": "{{n}} mission is open at {{rank}} standing.",
+      "ranksOpen_other": "{{n}} missions are open at {{rank}} standing.",
+      "ranksLater_one": "{{n}} more unlocks as your standing rises, the last at {{rank}} ({{threshold}} reputation).",
+      "ranksLater_other": "{{n}} more unlock as your standing rises, the last at {{rank}} ({{threshold}} reputation).",
+      "otherLadders_one": "{{n}} mission needs a rank on another reputation ladder.",
+      "otherLadders_other": "{{n}} missions need a rank on another reputation ladder.",
+      "unranked_one": "{{n}} mission lists no required rank in the game data.",
+      "unranked_other": "{{n}} missions list no required rank in the game data."
+    },
+    "tiles": {
+      "missions": "Missions",
+      "types_one": "{{n}} type",
+      "types_other": "{{n}} types",
+      "typesUntyped_one": "{{n}} type, {{untyped}} untyped",
+      "typesUntyped_other": "{{n}} types, {{untyped}} untyped",
+      "reputation": "Reputation per mission",
+      "ofMissions": "{{n}} of {{total}} missions",
+      "payout": "aUEC payout",
+      "listedFor": "listed for {{n}} of {{total}}",
+      "blueprints": "Blueprint rewards",
+      "items_one": "{{n}} item",
+      "items_other": "{{n}} items",
+      "fromMissions_one": "from {{n}} mission",
+      "fromMissions_other": "from {{n}} missions",
+      "legality": "Legality",
+      "allLegal": "All legal",
+      "allIllegal": "All illegal",
+      "legalN": "{{n}} legal",
+      "illegalN": "{{n}} illegal",
+      "noneIllegal": "none illegal"
+    },
+    "ladder": {
+      "title": "Reputation ranks",
+      "hint": "{{ladder}}. Bars show missions open at each rank. Pick yours to filter the list.",
+      "hintWith": "{{ladder}} with {{faction}}. Bars show missions open at each rank. Pick yours to filter the list.",
+      "rank": "Rank {{n}}",
+      "rungAria": "{{rank}}: {{threshold}} reputation, {{missions}} unlock, {{open}} open in total",
+      "plusMissions_one": "+{{n}} mission",
+      "plusMissions_other": "+{{n}} missions",
+      "plusBlueprints_one": "+{{n}} blueprint",
+      "plusBlueprints_other": "+{{n}} blueprints",
+      "openAt": "At {{rank}}: {{open}} of {{total}} missions open.",
+      "openAtUnranked": "At {{rank}}: {{open}} of {{total}} missions open (+{{n}} with no rank listed).",
+      "unranked_one": "{{n}} mission doesn't list a required rank in the game data.",
+      "unranked_other": "{{n}} missions don't list a required rank in the game data.",
+      "allRanked": "Every mission lists its required rank.",
+      "showAll": "Show all ranks",
+      "line": "{{rank}} ({{threshold}} rep): {{missions}}"
+    },
+    "list": {
+      "title_one": "All {{n}} mission",
+      "title_other": "All {{n}} missions",
+      "byRank": "Grouped by the rank you need",
+      "byGiver": "Grouped by mission giver",
+      "byType": "Grouped by type",
+      "all": "All",
+      "noType": "No type listed",
+      "giverNotListed": "Giver not listed",
+      "rankNotListed": "Rank not listed",
+      "rankNotListedHint": "the game data has no standing requirement",
+      "otherLadder": "another ladder, {{threshold}}",
+      "filters": "Filter missions",
+      "rewardsBlueprint": "Rewards a blueprint",
+      "sort": "Sort",
+      "sorts": {
+        "name": "Name",
+        "rank": "Rank needed",
+        "reputation": "Reputation",
+        "reward": "aUEC payout"
+      },
+      "noMatch": "No missions match these filters.",
+      "rep": "rep",
+      "fee": "Fee",
+      "blueprintCount_one": "{{n}} blueprint",
+      "blueprintCount_other": "{{n}} blueprints"
+    },
+    "facts": {
+      "title": {
+        "givers": "Giver facts",
+        "factions": "Faction facts",
+        "types": "Mission type facts",
+        "systems": "Star system facts"
+      },
+      "self": {
+        "givers": "Giver",
+        "factions": "Faction",
+        "types": "Mission type",
+        "systems": "Star system"
+      },
+      "faction": "Faction",
+      "givers": "Mission givers",
+      "systems": "Star system",
+      "types": "Mission types",
+      "reputation": "Reputation",
+      "legality": "Legality",
+      "more": "+{{n}} more",
+      "noSystem_one": "{{n}} mission lists no system",
+      "noSystem_other": "{{n}} missions list no system",
+      "ladder": "{{ladder}}, {{n}} ranks ({{min}}–{{max}} rep)",
+      "legalMix": "{{legal}} legal, {{illegal}} illegal"
+    },
+    "blueprintPanel": {
+      "title": "Blueprint rewards",
+      "blueprint": "Blueprint",
+      "market": "Market",
+      "blueprintAria": "{{name}} blueprint",
+      "marketAria": "Buy or sell {{name}} on the market",
+      "fromRank": "from {{rank}}",
+      "showAll": "Show all {{n}} blueprints",
+      "showFewer": "Show fewer"
+    }
   },
   "myListings": {
     "active": "Active",

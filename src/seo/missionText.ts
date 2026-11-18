@@ -258,6 +258,18 @@ export function parseGameVersion(
 }
 
 /**
+ * "Star Citizen 4.10.2 LIVE"; a version number that already names its type
+ * ("4.10-LIVE (Data.p4k 2026-11-14)") isn't followed by it again.
+ */
+export function gameVersionLabel(
+  v: Pick<GameVersion, "version_number" | "version_type" | "build_number">,
+): string {
+  const { number, type } = parseGameVersion(v)
+  const named = new RegExp(`(^|[^A-Za-z])${type}([^A-Za-z]|$)`).test(number)
+  return `Star Citizen ${number}${named ? "" : ` ${type}`}`
+}
+
+/**
  * "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build 12881860)."
  * for mission, blueprint and item pages and their hubs. Null without a version.
  */
@@ -265,13 +277,13 @@ export function freshnessStamp(
   v: GameVersion | null | undefined,
 ): string | null {
   if (!v) return null
-  const { number, type, build } = parseGameVersion(v)
+  const { build } = parseGameVersion(v)
   const date = v.last_data_update ? new Date(v.last_data_update) : null
   const updated =
     date && !Number.isNaN(date.getTime())
       ? `, updated ${formatDate(date, "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}`
       : ""
-  return `Data from Star Citizen ${number} ${type}${updated}${build ? ` (build ${build})` : ""}.`
+  return `Data from ${gameVersionLabel(v)}${updated}${build ? ` (build ${build})` : ""}.`
 }
 
 /** JSON-LD dateModified for game-data pages: the version's last import. */

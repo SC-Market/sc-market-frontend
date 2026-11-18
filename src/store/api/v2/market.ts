@@ -1532,6 +1532,10 @@ const injectedRtkApi = api
             params: {
               page: queryArg.page,
               page_size: queryArg.pageSize,
+              sort: queryArg.sort,
+              type: queryArg["type"],
+              max_rank: queryArg.maxRank,
+              has_blueprints: queryArg.hasBlueprints,
             },
           }),
           providesTags: ["Game Data - Missions"],
@@ -3940,6 +3944,14 @@ export type GetMissionHubApiArg = {
   page?: number
   /** Missions per page (default: 100, max: 100) */
   pageSize?: number
+  /** List order: name (default), rank, reputation or reward */
+  sort?: MissionHubSort
+  /** Only missions of this type (its slug, "none" for missions without one) */
+  type?: string
+  /** Only missions open at this rank index of the main ladder (`ladders[0]`) */
+  maxRank?: number
+  /** Only missions that can reward a blueprint */
+  hasBlueprints?: boolean
 }
 export type GetMissionDetailApiResponse =
   /** status 200 Complete mission details with reward pools */ MissionDetailResponse
@@ -8060,6 +8072,129 @@ export type MissionHubsResponse = {
   systems: MissionHubSummary[]
 }
 export type MissionHubKind = "givers" | "factions" | "types" | "systems"
+export type MissionHubTypeCount = {
+  slug: string
+  name: string
+  mission_count: number
+}
+export type MissionHubRank = {
+  rank_index: number
+  standing_code: string
+  /** "Jr. Contractor" */
+  display_name: string
+  /** Reputation the rank starts at */
+  threshold: number
+  /** The hub's missions that require exactly this rank */
+  mission_count: number
+  /** Blueprint items first rewarded at this rank (their lowest rank on the ladder) */
+  new_blueprint_count: number
+}
+export type MissionHubLadder = {
+  scope_code: string
+  /** "Standing" */
+  scope_display_name: string
+  /** The hub's missions that require a rank on this ladder */
+  mission_count: number
+  /** Every rank of the ladder, lowest first */
+  ranks: MissionHubRank[]
+}
+export type MissionHubBlueprintItem = {
+  /** Blueprint code */
+  blueprint_code: string
+  /** Blueprint name (the /blueprints/<name> page) */
+  blueprint_name: string
+  /** Crafted item */
+  game_item_id: string
+  item_name: string
+  /** Crafted item's slug ("d1cebfc3--testudo-backpack-combustion") */
+  item_slug: string
+  /** The hub's missions that can reward it */
+  mission_count: number
+  /** Lowest rank (main ladder) among those missions; absent when none lists one */
+  min_rank_index?: number
+}
+export type MissionHubSort = "name" | "rank" | "reputation" | "reward"
+export type MissionHubBlueprintReward = {
+  /** Blueprint code */
+  blueprint_code: string
+  /** Blueprint name (the /blueprints/<name> page) */
+  blueprint_name: string
+  /** Crafted item */
+  game_item_id: string
+  item_name: string
+  /** Crafted item's slug ("d1cebfc3--testudo-backpack-combustion") */
+  item_slug: string
+}
+export type MissionHubMission = {
+  /** Mission UUID */
+  mission_id: string
+  /** Mission code (internal name for URL-friendly links) */
+  mission_code: string
+  /** Mission name */
+  mission_name: string
+  /** Mission category */
+  category: string
+  /** Career type */
+  career_type?: string
+  /** Legal status */
+  legal_status?: string
+  /** Difficulty level (1-5) */
+  difficulty_level?: number
+  /** Star system */
+  star_system?: string
+  /** Planet or moon */
+  planet_moon?: string
+  /** Faction */
+  faction?: string
+  /** Minimum credit reward */
+  credit_reward_min?: number
+  /** Maximum credit reward */
+  credit_reward_max?: number
+  /** Number of blueprint rewards */
+  blueprint_reward_count: number
+  /** Names of blueprint reward output items */
+  blueprint_reward_names?: string[]
+  /** Average community difficulty rating */
+  community_difficulty_avg?: number
+  /** Average community satisfaction rating */
+  community_satisfaction_avg?: number
+  /** Is chain starter mission */
+  is_chain_starter: boolean
+  /** Is part of a chain */
+  is_chain_mission: boolean
+  /** Is shareable mission */
+  is_shareable: boolean
+  /** Is unique (one-time) mission */
+  is_unique_mission: boolean
+  /** Is illegal */
+  is_illegal?: boolean
+  /** Reputation XP reward */
+  reputation_reward?: number
+  /** Reputation scope (e.g., headhunter, salvage) */
+  reward_scope?: string
+  /** Faction whose reputation the mission pays */
+  reputation_reward_faction?: string
+  /** Mission giver organization */
+  mission_giver_org?: string
+  /** Associated event name (e.g., "Nyx Mission Pack") */
+  associated_event?: string
+  /** Total ship encounter count */
+  ship_encounter_count: number
+  /** Hauling order summaries for material badges */
+  hauling_orders?: HaulingOrder[]
+  /** Required standing code */
+  min_standing?: string
+  /** Required rank's name ("Jr. Contractor") */
+  min_standing_display?: string
+  /** Required rank's index on its ladder (0 = the first rank) */
+  min_standing_rank_index?: number
+  /** Reputation the required rank starts at */
+  min_standing_threshold?: number
+  /** The ladder (reputation scope) the required rank is on */
+  min_standing_scope?: string
+  /** Blueprints it can reward, by item name */
+  blueprint_rewards: MissionHubBlueprintReward[]
+}
 export type MissionHubDetailResponse = {
   kind: MissionHubKind
   slug: string
@@ -8082,8 +8217,33 @@ export type MissionHubDetailResponse = {
   factions: MissionHubSummary[]
   types: MissionHubSummary[]
   systems: MissionHubSummary[]
-  /** This page of the hub's missions, by name */
-  missions: MissionSearchResult[]
+  /** Lowest reputation one of its missions pays */
+  reputation_min?: number
+  /** Highest reputation one of its missions pays */
+  reputation_max?: number
+  /** Missions that list a reputation reward */
+  reputation_mission_count: number
+  /** Missions that list an aUEC payout */
+  reward_mission_count: number
+  /** Its missions by type, most first (types without a hub page too) */
+  type_counts: MissionHubTypeCount[]
+  /** Missions without a type in the game files */
+  untyped_count: number
+  /** Missions without a star system in the game files */
+  unlisted_system_count: number
+  /** The reputation ladders its missions' required ranks are on, most missions
+    first. The first is the hub's main ladder (the `max_rank` filter's). */
+  ladders: MissionHubLadder[]
+  /** Missions without a required rank in the game files */
+  unranked_mission_count: number
+  /** Every blueprint item its missions can reward, most missions first */
+  blueprint_rewards: MissionHubBlueprintItem[]
+  /** Missions matching the filters (the list's pages count these) */
+  filtered_count: number
+  /** The list's order */
+  sort: MissionHubSort
+  /** This page of the hub's missions (filtered, in `sort` order) */
+  missions: MissionHubMission[]
   page: number
   page_size: number
 }
@@ -10440,6 +10600,14 @@ export type ImportGameDataResponse = {
     shopItemsImported: number
     /** In-game shops upserted from shop-inventories.json (0 unless GAME_DATA_IMPORT_SHOPS=true) */
     shopsImported: number
+    /** Ships rejected by validation or the database; each one is listed in errors */
+    shipsFailed: number
+    /** Ships written to the ship wiki */
+    shipsImported: number
+    /** New game_items rows created for ships */
+    shipsInserted: number
+    /** Ship records in the game data */
+    shipsProcessed: number
     blueprintsUpdated: number
     blueprintsInserted: number
     blueprintsProcessed: number

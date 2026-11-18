@@ -170,10 +170,13 @@ import {
   missionCountText,
   missionHubCrumbs,
   missionHubIndexText,
-  missionHubIntro,
+  missionHubFactRows,
+  missionHubFactsTitle,
   missionHubKindLabel,
   missionHubLink,
   missionHubMissionLink,
+  missionHubRankLines,
+  missionHubSummary,
   missionHubText,
 } from "../seo/missionHubs"
 import { englishT } from "./englishT"
@@ -424,6 +427,16 @@ function linkList(links: SeoLink[]): SeoLink[] {
     if (out.length >= MAX_HUB_LINKS) break
   }
   return out
+}
+
+/** A heading and its plain-text lines (nothing when there are none). */
+function textBlocks(heading: string, items: string[]): SummaryBlock[] {
+  return items.length > 0
+    ? [
+        { tag: "h2", text: heading },
+        { tag: "ul-text", items },
+      ]
+    : []
 }
 
 function linkBlocks(heading: string, links: SeoLink[]): SummaryBlock[] {
@@ -2164,6 +2177,7 @@ function missionHubPage(kind: MissionHubKind): BridgePage {
       const version = ctx.related.versions?.LIVE ?? null
       const head = buildMissionHubHead(hub, ctx.origin, englishT, LANG, version)
       const text = missionHubText(hub, englishT)
+      const summary = missionHubSummary(hub, englishT, LANG)
       const path = GAME_DATA_PATHS.missionHub(kind, hub.slug)
       const related = MISSION_HUB_KINDS.filter((k) => k !== kind).flatMap((k) =>
         hub[k].slice(0, 12).map((other) => ({
@@ -2175,10 +2189,30 @@ function missionHubPage(kind: MissionHubKind): BridgePage {
         head,
         text.heading,
         [
-          ...paragraphs(...missionHubIntro(hub, englishT, LANG)),
+          ...paragraphs(summary.lead, summary.details.join(" ")),
+          ...textBlocks(
+            missionHubFactsTitle(kind, englishT),
+            missionHubFactRows(hub, englishT, LANG).map(
+              (row) =>
+                `${row.label}: ${row.items
+                  .map((i) => (i.note ? `${i.text} ${i.note}` : i.text))
+                  .join(", ")}${row.note ? ` (${row.note})` : ""}`,
+            ),
+          ),
+          ...textBlocks(
+            englishT("missionHubs.ladder.title", "Reputation ranks"),
+            missionHubRankLines(hub, englishT, LANG),
+          ),
           ...linkBlocks(
             englishT("missionHubs.missionList", "Missions"),
             hub.missions.map(missionHubMissionLink),
+          ),
+          ...linkBlocks(
+            englishT("missionHubs.blueprintPanel.title", "Blueprint rewards"),
+            hub.blueprint_rewards.slice(0, 24).map((item) => ({
+              href: WIKI_PATHS.item(item.item_slug),
+              text: item.item_name,
+            })),
           ),
           ...linkBlocks(
             englishT("missionHubs.related", "Related mission hubs"),

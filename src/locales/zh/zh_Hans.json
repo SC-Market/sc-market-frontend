@@ -4904,32 +4904,21 @@
     "hub": {
       "givers": {
         "title": "星际公民 (Star Citizen) 中的 {{name}} 任务 ({{count}}) | SC Market",
-        "heading": "{{name}} 任务",
-        "lead": "{{name}} 在星际公民 (Star Citizen) 中提供 {{missions}}。"
+        "heading": "{{name}} 任务"
       },
       "factions": {
         "title": "星际公民 (Star Citizen) 中的 {{name}} 声望任务 ({{count}}) | SC Market",
-        "heading": "{{name}} 声望任务",
-        "lead": "星际公民 (Star Citizen) 中有 {{missions}}可以提升你在 {{name}} 的声望。"
+        "heading": "{{name}} 声望任务"
       },
       "types": {
         "title": "星际公民 (Star Citizen) 中的 {{name}} 任务 ({{count}}) | SC Market",
-        "heading": "{{name}} 任务",
-        "lead": "星际公民 (Star Citizen) 中有 {{missions}} 属于 {{name}} 类型。"
+        "heading": "{{name}} 任务"
       },
       "systems": {
         "title": "星际公民 (Star Citizen) 中 {{name}} 星系的任务 ({{count}}) | SC Market",
-        "heading": "{{name}} 星系的任务",
-        "lead": "星际公民 (Star Citizen) 的 {{name}} 星系中有 {{missions}}。"
+        "heading": "{{name}} 星系的任务"
       }
     },
-    "where": "可在 {{systems}} 接取。",
-    "rewardRange": "报酬为 {{min}} 至 {{max}} aUEC。",
-    "rewardUpTo": "报酬最高 {{max}} aUEC。",
-    "allLegal": "全部为合法任务。",
-    "allIllegal": "全部为非法任务。",
-    "legalMix": "合法：{{legal}}，非法：{{illegal}}。",
-    "blueprints": "可能奖励制作蓝图的任务：{{count}}。",
     "topRelated": "{{kind}}：{{list}}。",
     "browseBy": "按分类浏览任务",
     "related": "相关任务分类",
@@ -4939,17 +4928,136 @@
     "next": "下一页",
     "notFound": "该任务分类不存在。分类会随游戏更新而变化：可在下方查看全部分类。",
     "loadError": "无法加载该任务分类，请重试。",
-    "columns": {
-      "mission": "任务",
-      "system": "星系",
-      "type": "类型",
-      "giver": "发布者",
-      "legality": "合法性",
-      "reward": "报酬"
+    "detailTitle": "浏览类似任务",
+    "aside": "关于此汇总页",
+    "dataFrom": "数据来自 {{version}}",
+    "filterInSearch": "在任务搜索中筛选",
+    "rep": "{{n}} 声望",
+    "kicker": {
+      "givers": "任务发布者",
+      "factions": "派系",
+      "types": "任务类型",
+      "systems": "星系"
     },
-    "legal": "合法",
-    "illegal": "非法",
-    "detailTitle": "浏览类似任务"
+    "summary": {
+      "range": "{{min}} 至 {{max}}",
+      "otherTypes": "其他类型 {{n}} 个",
+      "lead": {
+        "givers": "{{name}} 是星际公民 (Star Citizen) 中的任务发布者，提供 {{missions}}。",
+        "giversIn": "{{name}} 是星际公民 (Star Citizen) 中位于 {{systems}} 的任务发布者，提供 {{missions}}。",
+        "factions": "{{name}} 是星际公民 (Star Citizen) 中的派系：{{missions}}可提升你在该派系的声望。",
+        "factionsIn": "{{name}} 是星际公民 (Star Citizen) 中的派系：{{systems}} 的{{missions}}可提升你在该派系的声望。",
+        "types": "{{name}} 是星际公民 (Star Citizen) 中的任务类型，共有 {{missions}}。",
+        "typesIn": "{{name}} 是星际公民 (Star Citizen) 中的任务类型，在 {{systems}} 共有 {{missions}}。",
+        "systems": "星际公民 (Star Citizen) 的 {{name}} 星系共有 {{missions}}。"
+      },
+      "byType": "按类型：{{list}}。",
+      "byTypeUntyped": "按类型：{{list}}，另有 {{n}} 个未注明类型。",
+      "allLegal": "全部 {{n}} 个都是合法任务。",
+      "allIllegal": "全部 {{n}} 个都是非法任务。",
+      "someIllegal_other": "其中 {{n}} 个是非法任务。",
+      "reputation_other": "{{n}} 个任务可获得 {{range}} 声望。",
+      "reputationWith_other": "{{n}} 个任务可获得 {{range}} {{faction}} 声望。",
+      "payout_other": "{{n}} 个任务标明报酬 {{range}} aUEC。",
+      "blueprints_other": "{{n}} 个任务可能奖励制造蓝图（{{items}}）。",
+      "blueprintItems_other": "共 {{n}} 种物品",
+      "ranksOpen_other": "在 {{rank}} 等级可接 {{n}} 个任务。",
+      "ranksLater_other": "随着等级提升还会解锁 {{n}} 个，最后一个在 {{rank}}（{{threshold}} 声望）。",
+      "otherLadders_other": "{{n}} 个任务需要另一声望体系的等级。",
+      "unranked_other": "{{n}} 个任务在游戏数据中未列出所需等级。"
+    },
+    "tiles": {
+      "missions": "任务",
+      "types_other": "{{n}} 种类型",
+      "typesUntyped_other": "{{n}} 种类型，{{untyped}} 个无类型",
+      "reputation": "每个任务的声望",
+      "ofMissions": "{{total}} 个任务中的 {{n}} 个",
+      "payout": "aUEC 报酬",
+      "listedFor": "{{total}} 个中 {{n}} 个标明",
+      "blueprints": "蓝图奖励",
+      "items_other": "{{n}} 种物品",
+      "fromMissions_other": "来自 {{n}} 个任务",
+      "legality": "合法性",
+      "allLegal": "全部合法",
+      "allIllegal": "全部非法",
+      "legalN": "{{n}} 个合法",
+      "illegalN": "{{n}} 个非法",
+      "noneIllegal": "无非法任务"
+    },
+    "ladder": {
+      "title": "声望等级",
+      "hint": "{{ladder}}。条形图显示各等级可接的任务。选择你的等级以筛选列表。",
+      "hintWith": "{{faction}} 的{{ladder}}。条形图显示各等级可接的任务。选择你的等级以筛选列表。",
+      "rank": "等级 {{n}}",
+      "rungAria": "{{rank}}：{{threshold}} 声望，解锁 {{missions}}，共可接 {{open}} 个",
+      "plusMissions_other": "+{{n}} 个任务",
+      "plusBlueprints_other": "+{{n}} 个蓝图",
+      "openAt": "{{rank}}：{{total}} 个任务中可接 {{open}} 个。",
+      "openAtUnranked": "{{rank}}：{{total}} 个任务中可接 {{open}} 个（另有 {{n}} 个未列出等级）。",
+      "unranked_other": "{{n}} 个任务在游戏数据中未列出所需等级。",
+      "allRanked": "每个任务都列出了所需等级。",
+      "showAll": "显示所有等级",
+      "line": "{{rank}}（{{threshold}} 声望）：{{missions}}"
+    },
+    "list": {
+      "title_other": "全部 {{n}} 个任务",
+      "byRank": "按所需等级分组",
+      "byGiver": "按任务发布者分组",
+      "byType": "按类型分组",
+      "all": "全部",
+      "noType": "未注明类型",
+      "giverNotListed": "未注明发布者",
+      "rankNotListed": "未列出等级",
+      "rankNotListedHint": "游戏数据中没有声望要求",
+      "otherLadder": "另一声望体系，{{threshold}}",
+      "filters": "筛选任务",
+      "rewardsBlueprint": "奖励蓝图",
+      "sort": "排序",
+      "sorts": {
+        "name": "名称",
+        "rank": "所需等级",
+        "reputation": "声望",
+        "reward": "aUEC 报酬"
+      },
+      "noMatch": "没有符合这些筛选条件的任务。",
+      "rep": "声望",
+      "fee": "费用",
+      "blueprintCount_other": "{{n}} 个蓝图"
+    },
+    "facts": {
+      "title": {
+        "givers": "发布者概况",
+        "factions": "派系概况",
+        "types": "任务类型概况",
+        "systems": "星系概况"
+      },
+      "self": {
+        "givers": "发布者",
+        "factions": "派系",
+        "types": "任务类型",
+        "systems": "星系"
+      },
+      "faction": "派系",
+      "givers": "任务发布者",
+      "systems": "星系",
+      "types": "任务类型",
+      "reputation": "声望",
+      "legality": "合法性",
+      "more": "另有 {{n}} 个",
+      "noSystem_other": "{{n}} 个任务未注明星系",
+      "ladder": "{{ladder}}，{{n}} 个等级（{{min}}–{{max}} 声望）",
+      "legalMix": "{{legal}} 个合法，{{illegal}} 个非法"
+    },
+    "blueprintPanel": {
+      "title": "蓝图奖励",
+      "blueprint": "蓝图",
+      "market": "市场",
+      "blueprintAria": "{{name}} 蓝图",
+      "marketAria": "在市场上买卖 {{name}}",
+      "fromRank": "自 {{rank}} 起",
+      "showAll": "显示全部 {{n}} 个蓝图",
+      "showFewer": "收起"
+    }
   },
   "myListings": {
     "active": "启用",

@@ -6,8 +6,8 @@ import { englishT } from "../englishT"
 import { matchBridgeRoute } from "../routes"
 import type {
   MissionHubDetailResponse,
+  MissionHubMission,
   MissionHubsResponse,
-  MissionSearchResult,
 } from "../../store/api/v2/market"
 import {
   missionCountText,
@@ -35,7 +35,7 @@ function ctx(
   return { params, origin: ORIGIN, pathname: "/x", pageNumber, related }
 }
 
-function mission(code: string, name: string): MissionSearchResult {
+function mission(code: string, name: string): MissionHubMission {
   return {
     mission_id: code,
     mission_code: code,
@@ -54,6 +54,7 @@ function mission(code: string, name: string): MissionSearchResult {
     is_unique_mission: false,
     is_illegal: true,
     ship_encounter_count: 0,
+    blueprint_rewards: [],
   }
 }
 
@@ -81,6 +82,74 @@ const HUB: MissionHubDetailResponse = {
     { slug: "nyx", name: "Nyx", mission_count: 56 },
     { slug: "stanton", name: "Stanton", mission_count: 54 },
   ],
+  reputation_min: 1000,
+  reputation_max: 5000,
+  reputation_mission_count: 400,
+  reward_mission_count: 300,
+  type_counts: [
+    { slug: "mercenary", name: "Mercenary", mission_count: 308 },
+    { slug: "bounty-hunter", name: "Bounty Hunter", mission_count: 46 },
+    { slug: "investigation", name: "Investigation", mission_count: 40 },
+    { slug: "priority", name: "Priority", mission_count: 21 },
+    { slug: "delivery", name: "Delivery", mission_count: 12 },
+  ],
+  untyped_count: 29,
+  unlisted_system_count: 26,
+  ladders: [
+    {
+      scope_code: "factionreputationscope",
+      scope_display_name: "Standing",
+      mission_count: 300,
+      ranks: [
+        {
+          rank_index: 0,
+          standing_code: "r0",
+          display_name: "Neutral",
+          threshold: 0,
+          mission_count: 100,
+          new_blueprint_count: 0,
+        },
+        {
+          rank_index: 1,
+          standing_code: "r1",
+          display_name: "Jr. Contractor",
+          threshold: 800,
+          mission_count: 150,
+          new_blueprint_count: 1,
+        },
+        {
+          rank_index: 2,
+          standing_code: "r2",
+          display_name: "Contractor",
+          threshold: 2200,
+          mission_count: 50,
+          new_blueprint_count: 0,
+        },
+        {
+          rank_index: 3,
+          standing_code: "r3",
+          display_name: "Sr. Contractor",
+          threshold: 5800,
+          mission_count: 0,
+          new_blueprint_count: 0,
+        },
+      ],
+    },
+  ],
+  unranked_mission_count: 156,
+  blueprint_rewards: [
+    {
+      blueprint_code: "c",
+      blueprint_name: "BP_CRAFT_pistol",
+      game_item_id: "8bb2fca8-0000-0000-0000-000000000000",
+      item_name: "Volt Pistol",
+      item_slug: "8bb2fca8--volt-pistol",
+      mission_count: 12,
+      min_rank_index: 1,
+    },
+  ],
+  filtered_count: 456,
+  sort: "name",
   missions: [
     mission("HH_A", "Finish the job"),
     mission("HH B/2", "Sweep and Clear"),
@@ -143,14 +212,15 @@ describe("mission hub text", () => {
     expect(missionCountText(2, englishT, "en")).toBe("2 missions")
   })
 
-  it("intro: count, systems, reward range, legal mix, blueprints and top types", () => {
+  it("summary: only data — lead (systems, types, legality), then reputation, aUEC, blueprints and ranks", () => {
     expect(missionHubIntro(HUB, englishT, "en")).toEqual([
-      "Headhunters offers 456 missions in Star Citizen.",
-      "They are offered in Pyro, Nyx, and Stanton.",
-      "They pay 3,000 to 175,000 aUEC.",
-      "Legal: 135, illegal: 321.",
-      "Missions that can reward a crafting blueprint: 12.",
-      "Mission types: Mercenary (308), Bounty Hunter (46), and Investigation (40).",
+      "Headhunters is a Star Citizen mission giver in Pyro, Nyx, and Stanton. It offers 456 missions. By type: 308 Mercenary, 46 Bounty Hunter, 40 Investigation, and 33 of other types, plus 29 with no listed type. 321 of them are illegal.",
+      "400 missions pay 1,000 to 5,000 reputation with Headhunters.",
+      "300 missions list a payout of 3,000 to 175,000 aUEC.",
+      "12 missions can reward a crafting blueprint (1 item in all).",
+      "100 missions are open at Neutral standing.",
+      "200 more unlock as your standing rises, the last at Contractor (2,200 reputation).",
+      "156 missions list no required rank in the game data.",
     ])
     const allLegal = {
       ...HUB,
@@ -160,13 +230,36 @@ describe("mission hub text", () => {
       illegal_count: 0,
       givers: HUB.factions,
       types: [],
+      systems: [],
+      blueprint_mission_count: 0,
+      blueprint_rewards: [],
+      reward_mission_count: 0,
+      reputation_mission_count: 0,
     }
-    expect(missionHubIntro(allLegal, englishT, "en")).toContain(
-      "All of them are legal.",
+    const lines = missionHubIntro(allLegal, englishT, "en")
+    expect(lines[0]).toBe(
+      "Delivery is a Star Citizen mission type with 456 missions. All 456 are legal.",
     )
-    expect(missionHubIntro(allLegal, englishT, "en")[0]).toBe(
-      "Star Citizen has 456 missions of the Delivery type.",
-    )
+    // Type hubs have no ladder; their top givers close the summary.
+    expect(lines.slice(1)).toEqual(["Mission givers: Headhunters (450)."])
+  })
+
+  it("summary leaves out what the data doesn't list", () => {
+    const sparse = {
+      ...HUB,
+      reputation_min: undefined,
+      reputation_max: undefined,
+      reputation_mission_count: 0,
+      reward_mission_count: 0,
+      blueprint_mission_count: 0,
+      blueprint_rewards: [],
+      ladders: [],
+      legal_count: 400,
+      illegal_count: 0,
+    }
+    const lines = missionHubIntro(sparse, englishT, "en")
+    expect(lines).toHaveLength(1)
+    expect(lines[0]).not.toMatch(/legal/)
   })
 
   it("titles: '<Giver> Missions in Star Citizen (<n>) | SC Market'; factions say reputation", () => {
@@ -236,10 +329,19 @@ describe("mission hub bridge pages", () => {
     )
     expect(doc.canonical).toBe(`${ORIGIN}/missions/givers/headhunters`)
     expect(texts(doc.summary)).toContain("Headhunters missions")
-    expect(texts(doc.summary)).toContain("They pay 3,000 to 175,000 aUEC.")
+    expect(texts(doc.summary)[1]).toMatch(
+      /^Headhunters is a Star Citizen mission giver in Pyro/,
+    )
+    expect(texts(doc.summary)[2]).toMatch(/^400 missions pay 1,000 to 5,000/)
+    const textItems = doc.summary.flatMap((b) =>
+      b.tag === "ul-text" ? b.items : [],
+    )
+    expect(textItems).toContain("Giver: Headhunters")
+    expect(textItems).toContain("Reputation: Standing, 4 ranks (0–5,800 rep)")
+    expect(textItems).toContain("Jr. Contractor (800 rep): 150 missions")
     expect(
       texts(doc.summary).some((s) =>
-        s.startsWith("Data from Star Citizen 4.3.2 LIVE"),
+        s.startsWith("Data from Star Citizen 4.3.2 LIVE,"),
       ),
     ).toBe(true)
     const hrefs = links(doc.summary).map((l) => l.href)
@@ -252,6 +354,7 @@ describe("mission hub bridge pages", () => {
     expect(hrefs).toContain("/missions/types")
     // 456 missions: 5 pages, linked from page 1.
     expect(hrefs).toContain("/missions/givers/headhunters?page=2")
+    expect(hrefs).toContain("/wiki/items/8bb2fca8--volt-pistol")
 
     const types = doc.head.jsonLd.map(
       (j) => (j as { "@type": string })["@type"],

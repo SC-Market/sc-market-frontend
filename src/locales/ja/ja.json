@@ -4839,32 +4839,21 @@
     "hub": {
       "givers": {
         "title": "Star Citizen の {{name}} のミッション ({{count}}) | SC Market",
-        "heading": "{{name}} のミッション",
-        "lead": "{{name}} は Star Citizen で {{missions}}を提供しています。"
+        "heading": "{{name}} のミッション"
       },
       "factions": {
         "title": "Star Citizen の {{name}} の評判ミッション ({{count}}) | SC Market",
-        "heading": "{{name}} の評判ミッション",
-        "lead": "Star Citizen の {{missions}}で {{name}} からの評判が上がります。"
+        "heading": "{{name}} の評判ミッション"
       },
       "types": {
         "title": "Star Citizen の {{name}} ミッション ({{count}}) | SC Market",
-        "heading": "{{name}} ミッション",
-        "lead": "Star Citizen には {{name}} タイプの {{missions}}があります。"
+        "heading": "{{name}} ミッション"
       },
       "systems": {
         "title": "Star Citizen の {{name}} のミッション ({{count}}) | SC Market",
-        "heading": "{{name}} のミッション",
-        "lead": "Star Citizen の {{name}} 星系には {{missions}}があります。"
+        "heading": "{{name}} のミッション"
       }
     },
-    "where": "{{systems}} で受けられます。",
-    "rewardRange": "報酬は {{min}}〜{{max}} aUEC です。",
-    "rewardUpTo": "報酬は最大 {{max}} aUEC です。",
-    "allLegal": "すべて合法です。",
-    "allIllegal": "すべて違法です。",
-    "legalMix": "合法：{{legal}}、違法：{{illegal}}。",
-    "blueprints": "クラフト設計図が報酬になりうるミッション：{{count}}。",
     "topRelated": "{{kind}}：{{list}}。",
     "browseBy": "ミッションを分類で見る",
     "related": "関連するミッション一覧",
@@ -4874,17 +4863,136 @@
     "next": "次のページ",
     "notFound": "このミッション一覧は存在しません。一覧はゲームのアップデートで変わります。下からすべての一覧を見られます。",
     "loadError": "このミッション一覧を読み込めませんでした。もう一度お試しください。",
-    "columns": {
-      "mission": "ミッション",
-      "system": "星系",
-      "type": "種類",
-      "giver": "依頼主",
-      "legality": "合法性",
-      "reward": "報酬"
+    "detailTitle": "似たミッションを探す",
+    "aside": "このハブについて",
+    "dataFrom": "{{version}} のデータ",
+    "filterInSearch": "ミッション検索で絞り込む",
+    "rep": "評判 {{n}}",
+    "kicker": {
+      "givers": "ミッション提供者",
+      "factions": "勢力",
+      "types": "ミッションタイプ",
+      "systems": "星系"
     },
-    "legal": "合法",
-    "illegal": "違法",
-    "detailTitle": "似たミッションを探す"
+    "summary": {
+      "range": "{{min}}〜{{max}}",
+      "otherTypes": "その他のタイプ {{n}} 件",
+      "lead": {
+        "givers": "{{name}} は Star Citizen のミッション提供者で、{{missions}}を提供しています。",
+        "giversIn": "{{name}} は {{systems}} にいる Star Citizen のミッション提供者で、{{missions}}を提供しています。",
+        "factions": "{{name}} は Star Citizen の勢力で、{{missions}}でこの勢力の評判が上がります。",
+        "factionsIn": "{{name}} は Star Citizen の勢力で、{{systems}} の{{missions}}でこの勢力の評判が上がります。",
+        "types": "{{name}} は Star Citizen のミッションタイプで、{{missions}}があります。",
+        "typesIn": "{{name}} は Star Citizen のミッションタイプで、{{systems}} に{{missions}}があります。",
+        "systems": "Star Citizen の {{name}} 星系には{{missions}}があります。"
+      },
+      "byType": "タイプ別：{{list}}。",
+      "byTypeUntyped": "タイプ別：{{list}}。ほかにタイプ未記載が {{n}} 件。",
+      "allLegal": "{{n}} 件すべてが合法です。",
+      "allIllegal": "{{n}} 件すべてが違法です。",
+      "someIllegal_other": "そのうち {{n}} 件は違法です。",
+      "reputation_other": "{{n}} 件のミッションで評判 {{range}} を得られます。",
+      "reputationWith_other": "{{n}} 件のミッションで {{faction}} の評判 {{range}} を得られます。",
+      "payout_other": "{{n}} 件のミッションに {{range}} aUEC の報酬が記載されています。",
+      "blueprints_other": "{{n}} 件のミッションでクラフト用設計図が報酬になることがあります（{{items}}）。",
+      "blueprintItems_other": "全 {{n}} 種のアイテム",
+      "ranksOpen_other": "ランク {{rank}} で {{n}} 件のミッションを受けられます。",
+      "ranksLater_other": "ランクが上がるとさらに {{n}} 件が解放され、最後は {{rank}}（評判 {{threshold}}）です。",
+      "otherLadders_other": "{{n}} 件のミッションは別の評判ランクが必要です。",
+      "unranked_other": "{{n}} 件のミッションはゲームデータに必要ランクの記載がありません。"
+    },
+    "tiles": {
+      "missions": "ミッション",
+      "types_other": "{{n}} タイプ",
+      "typesUntyped_other": "{{n}} タイプ、タイプなし {{untyped}}",
+      "reputation": "ミッションごとの評判",
+      "ofMissions": "{{total}} 件中 {{n}} 件",
+      "payout": "aUEC 報酬",
+      "listedFor": "{{total}} 件中 {{n}} 件に記載",
+      "blueprints": "設計図報酬",
+      "items_other": "{{n}} アイテム",
+      "fromMissions_other": "{{n}} 件のミッションから",
+      "legality": "合法性",
+      "allLegal": "すべて合法",
+      "allIllegal": "すべて違法",
+      "legalN": "合法 {{n}}",
+      "illegalN": "違法 {{n}}",
+      "noneIllegal": "違法なし"
+    },
+    "ladder": {
+      "title": "評判ランク",
+      "hint": "{{ladder}}。バーは各ランクで受けられるミッションを示します。自分のランクを選ぶと一覧を絞り込めます。",
+      "hintWith": "{{faction}} の{{ladder}}。バーは各ランクで受けられるミッションを示します。自分のランクを選ぶと一覧を絞り込めます。",
+      "rank": "ランク {{n}}",
+      "rungAria": "{{rank}}：評判 {{threshold}}、{{missions}}が解放、合計 {{open}} 件",
+      "plusMissions_other": "+{{n}} ミッション",
+      "plusBlueprints_other": "+{{n}} 設計図",
+      "openAt": "{{rank}}：{{total}} 件中 {{open}} 件を受けられます。",
+      "openAtUnranked": "{{rank}}：{{total}} 件中 {{open}} 件を受けられます（ランク未記載 +{{n}}）。",
+      "unranked_other": "{{n}} 件のミッションはゲームデータに必要ランクの記載がありません。",
+      "allRanked": "すべてのミッションに必要ランクが記載されています。",
+      "showAll": "すべてのランクを表示",
+      "line": "{{rank}}（評判 {{threshold}}）：{{missions}}"
+    },
+    "list": {
+      "title_other": "全 {{n}} 件のミッション",
+      "byRank": "必要ランク別",
+      "byGiver": "ミッション提供者別",
+      "byType": "タイプ別",
+      "all": "すべて",
+      "noType": "タイプ未記載",
+      "giverNotListed": "提供者未記載",
+      "rankNotListed": "ランク未記載",
+      "rankNotListedHint": "ゲームデータに評判の条件がありません",
+      "otherLadder": "別の評判、{{threshold}}",
+      "filters": "ミッションを絞り込む",
+      "rewardsBlueprint": "設計図が報酬",
+      "sort": "並べ替え",
+      "sorts": {
+        "name": "名前",
+        "rank": "必要ランク",
+        "reputation": "評判",
+        "reward": "aUEC 報酬"
+      },
+      "noMatch": "この条件に合うミッションはありません。",
+      "rep": "評判",
+      "fee": "手数料",
+      "blueprintCount_other": "設計図 {{n}}"
+    },
+    "facts": {
+      "title": {
+        "givers": "提供者の概要",
+        "factions": "勢力の概要",
+        "types": "ミッションタイプの概要",
+        "systems": "星系の概要"
+      },
+      "self": {
+        "givers": "提供者",
+        "factions": "勢力",
+        "types": "ミッションタイプ",
+        "systems": "星系"
+      },
+      "faction": "勢力",
+      "givers": "ミッション提供者",
+      "systems": "星系",
+      "types": "ミッションタイプ",
+      "reputation": "評判",
+      "legality": "合法性",
+      "more": "ほか {{n}} 件",
+      "noSystem_other": "{{n}} 件は星系の記載なし",
+      "ladder": "{{ladder}}、{{n}} ランク（評判 {{min}}〜{{max}}）",
+      "legalMix": "合法 {{legal}}、違法 {{illegal}}"
+    },
+    "blueprintPanel": {
+      "title": "設計図報酬",
+      "blueprint": "設計図",
+      "market": "マーケット",
+      "blueprintAria": "{{name}} の設計図",
+      "marketAria": "マーケットで {{name}} を売買",
+      "fromRank": "{{rank}} から",
+      "showAll": "{{n}} 件の設計図をすべて表示",
+      "showFewer": "表示を減らす"
+    }
   },
   "myListings": {
     "active": "有効",

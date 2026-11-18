@@ -4874,32 +4874,21 @@
     "hub": {
       "givers": {
         "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} Missionen",
-        "lead": "{{name}} bietet {{missions}} in Star Citizen an."
+        "heading": "{{name}} Missionen"
       },
       "factions": {
         "title": "{{name}} Rufmissionen in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} Rufmissionen",
-        "lead": "{{missions}} in Star Citizen steigern deinen Ruf bei {{name}}."
+        "heading": "{{name}} Rufmissionen"
       },
       "types": {
         "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
-        "heading": "{{name}} Missionen",
-        "lead": "Star Citizen hat {{missions}} vom Typ {{name}}."
+        "heading": "{{name}} Missionen"
       },
       "systems": {
         "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
-        "heading": "Missionen in {{name}}",
-        "lead": "Star Citizen hat {{missions}} im System {{name}}."
+        "heading": "Missionen in {{name}}"
       }
     },
-    "where": "Sie werden in {{systems}} angeboten.",
-    "rewardRange": "Sie zahlen {{min}} bis {{max}} aUEC.",
-    "rewardUpTo": "Sie zahlen bis zu {{max}} aUEC.",
-    "allLegal": "Alle sind legal.",
-    "allIllegal": "Alle sind illegal.",
-    "legalMix": "Legal: {{legal}}, illegal: {{illegal}}.",
-    "blueprints": "Missionen, die eine Blaupause als Belohnung geben können: {{count}}.",
     "topRelated": "{{kind}}: {{list}}.",
     "browseBy": "Missionen durchsuchen nach",
     "related": "Verwandte Missionsübersichten",
@@ -4909,17 +4898,156 @@
     "next": "Nächste Seite",
     "notFound": "Diese Missionsübersicht gibt es nicht. Übersichten ändern sich mit Spielupdates: Alle findest du unten.",
     "loadError": "Diese Missionsübersicht konnte nicht geladen werden. Bitte versuche es erneut.",
-    "columns": {
-      "mission": "Mission",
-      "system": "System",
-      "type": "Typ",
-      "giver": "Auftraggeber",
-      "legality": "Legalität",
-      "reward": "Belohnung"
+    "detailTitle": "Ähnliche Missionen durchsuchen",
+    "aside": "Über diese Übersicht",
+    "dataFrom": "Daten aus {{version}}",
+    "filterInSearch": "In der Missionssuche filtern",
+    "rep": "{{n}} Ruf",
+    "kicker": {
+      "givers": "Auftraggeber",
+      "factions": "Fraktion",
+      "types": "Missionstyp",
+      "systems": "Sternensystem"
     },
-    "legal": "Legal",
-    "illegal": "Illegal",
-    "detailTitle": "Ähnliche Missionen durchsuchen"
+    "summary": {
+      "range": "{{min}} bis {{max}}",
+      "otherTypes": "{{n}} anderer Typen",
+      "lead": {
+        "givers": "{{name}} ist ein Auftraggeber in Star Citizen und bietet {{missions}} an.",
+        "giversIn": "{{name}} ist ein Auftraggeber in Star Citizen in {{systems}} und bietet {{missions}} an.",
+        "factions": "{{name}} ist eine Fraktion in Star Citizen: {{missions}} erhöhen deinen Ruf bei ihr.",
+        "factionsIn": "{{name}} ist eine Fraktion in Star Citizen: {{missions}} in {{systems}} erhöhen deinen Ruf bei ihr.",
+        "types": "{{name}} ist ein Missionstyp in Star Citizen mit {{missions}}.",
+        "typesIn": "{{name}} ist ein Missionstyp in Star Citizen mit {{missions}} in {{systems}}.",
+        "systems": "Star Citizen hat {{missions}} im System {{name}}."
+      },
+      "byType": "Nach Typ: {{list}}.",
+      "byTypeUntyped": "Nach Typ: {{list}}, dazu {{n}} ohne angegebenen Typ.",
+      "allLegal": "Alle {{n}} sind legal.",
+      "allIllegal": "Alle {{n}} sind illegal.",
+      "someIllegal_one": "{{n}} davon ist illegal.",
+      "someIllegal_other": "{{n}} davon sind illegal.",
+      "reputation_one": "{{n}} Mission bringt {{range}} Ruf.",
+      "reputation_other": "{{n}} Missionen bringen {{range}} Ruf.",
+      "reputationWith_one": "{{n}} Mission bringt {{range}} Ruf bei {{faction}}.",
+      "reputationWith_other": "{{n}} Missionen bringen {{range}} Ruf bei {{faction}}.",
+      "payout_one": "{{n}} Mission nennt eine Auszahlung von {{range}} aUEC.",
+      "payout_other": "{{n}} Missionen nennen eine Auszahlung von {{range}} aUEC.",
+      "blueprints_one": "{{n}} Mission kann eine Herstellungsblaupause belohnen ({{items}}).",
+      "blueprints_other": "{{n}} Missionen können eine Herstellungsblaupause belohnen ({{items}}).",
+      "blueprintItems_one": "insgesamt {{n}} Gegenstand",
+      "blueprintItems_other": "insgesamt {{n}} verschiedene Gegenstände",
+      "ranksOpen_one": "{{n}} Mission ist ab dem Rang {{rank}} verfügbar.",
+      "ranksOpen_other": "{{n}} Missionen sind ab dem Rang {{rank}} verfügbar.",
+      "ranksLater_one": "{{n}} weitere wird mit steigendem Rang freigeschaltet, die letzte bei {{rank}} ({{threshold}} Ruf).",
+      "ranksLater_other": "{{n}} weitere werden mit steigendem Rang freigeschaltet, die letzten bei {{rank}} ({{threshold}} Ruf).",
+      "otherLadders_one": "{{n}} Mission erfordert einen Rang auf einer anderen Rufleiter.",
+      "otherLadders_other": "{{n}} Missionen erfordern einen Rang auf einer anderen Rufleiter.",
+      "unranked_one": "{{n}} Mission nennt in den Spieldaten keinen erforderlichen Rang.",
+      "unranked_other": "{{n}} Missionen nennen in den Spieldaten keinen erforderlichen Rang."
+    },
+    "tiles": {
+      "missions": "Missionen",
+      "types_one": "{{n}} Typ",
+      "types_other": "{{n}} Typen",
+      "typesUntyped_one": "{{n}} Typ, {{untyped}} ohne Typ",
+      "typesUntyped_other": "{{n}} Typen, {{untyped}} ohne Typ",
+      "reputation": "Ruf pro Mission",
+      "ofMissions": "{{n}} von {{total}} Missionen",
+      "payout": "aUEC-Auszahlung",
+      "listedFor": "bei {{n}} von {{total}} angegeben",
+      "blueprints": "Blaupausen-Belohnungen",
+      "items_one": "{{n}} Gegenstand",
+      "items_other": "{{n}} Gegenstände",
+      "fromMissions_one": "aus {{n}} Mission",
+      "fromMissions_other": "aus {{n}} Missionen",
+      "legality": "Legalität",
+      "allLegal": "Alle legal",
+      "allIllegal": "Alle illegal",
+      "legalN": "{{n}} legal",
+      "illegalN": "{{n}} illegal",
+      "noneIllegal": "keine illegal"
+    },
+    "ladder": {
+      "title": "Rufränge",
+      "hint": "{{ladder}}. Die Balken zeigen die bei jedem Rang verfügbaren Missionen. Wähle deinen Rang, um die Liste zu filtern.",
+      "hintWith": "{{ladder}} bei {{faction}}. Die Balken zeigen die bei jedem Rang verfügbaren Missionen. Wähle deinen Rang, um die Liste zu filtern.",
+      "rank": "Rang {{n}}",
+      "rungAria": "{{rank}}: {{threshold}} Ruf, {{missions}} werden freigeschaltet, insgesamt {{open}} verfügbar",
+      "plusMissions_one": "+{{n}} Mission",
+      "plusMissions_other": "+{{n}} Missionen",
+      "plusBlueprints_one": "+{{n}} Blaupause",
+      "plusBlueprints_other": "+{{n}} Blaupausen",
+      "openAt": "Bei {{rank}}: {{open}} von {{total}} Missionen verfügbar.",
+      "openAtUnranked": "Bei {{rank}}: {{open}} von {{total}} Missionen verfügbar (+{{n}} ohne angegebenen Rang).",
+      "unranked_one": "{{n}} Mission nennt in den Spieldaten keinen erforderlichen Rang.",
+      "unranked_other": "{{n}} Missionen nennen in den Spieldaten keinen erforderlichen Rang.",
+      "allRanked": "Jede Mission nennt ihren erforderlichen Rang.",
+      "showAll": "Alle Ränge anzeigen",
+      "line": "{{rank}} ({{threshold}} Ruf): {{missions}}"
+    },
+    "list": {
+      "title_one": "Alle {{n}} Mission",
+      "title_other": "Alle {{n}} Missionen",
+      "byRank": "Nach erforderlichem Rang gruppiert",
+      "byGiver": "Nach Auftraggeber gruppiert",
+      "byType": "Nach Typ gruppiert",
+      "all": "Alle",
+      "noType": "Kein Typ angegeben",
+      "giverNotListed": "Auftraggeber nicht angegeben",
+      "rankNotListed": "Rang nicht angegeben",
+      "rankNotListedHint": "die Spieldaten nennen keine Rufanforderung",
+      "otherLadder": "andere Rufleiter, {{threshold}}",
+      "filters": "Missionen filtern",
+      "rewardsBlueprint": "Belohnt eine Blaupause",
+      "sort": "Sortieren",
+      "sorts": {
+        "name": "Name",
+        "rank": "Erforderlicher Rang",
+        "reputation": "Ruf",
+        "reward": "aUEC-Auszahlung"
+      },
+      "noMatch": "Keine Missionen entsprechen diesen Filtern.",
+      "rep": "Ruf",
+      "fee": "Gebühr",
+      "blueprintCount_one": "{{n}} Blaupause",
+      "blueprintCount_other": "{{n}} Blaupausen"
+    },
+    "facts": {
+      "title": {
+        "givers": "Fakten zum Auftraggeber",
+        "factions": "Fakten zur Fraktion",
+        "types": "Fakten zum Missionstyp",
+        "systems": "Fakten zum Sternensystem"
+      },
+      "self": {
+        "givers": "Auftraggeber",
+        "factions": "Fraktion",
+        "types": "Missionstyp",
+        "systems": "Sternensystem"
+      },
+      "faction": "Fraktion",
+      "givers": "Auftraggeber",
+      "systems": "Sternensystem",
+      "types": "Missionstypen",
+      "reputation": "Ruf",
+      "legality": "Legalität",
+      "more": "+{{n}} weitere",
+      "noSystem_one": "{{n}} Mission ohne angegebenes System",
+      "noSystem_other": "{{n}} Missionen ohne angegebenes System",
+      "ladder": "{{ladder}}, {{n}} Ränge ({{min}}–{{max}} Ruf)",
+      "legalMix": "{{legal}} legal, {{illegal}} illegal"
+    },
+    "blueprintPanel": {
+      "title": "Blaupausen-Belohnungen",
+      "blueprint": "Blaupause",
+      "market": "Markt",
+      "blueprintAria": "Blaupause: {{name}}",
+      "marketAria": "{{name}} auf dem Markt kaufen oder verkaufen",
+      "fromRank": "ab {{rank}}",
+      "showAll": "Alle {{n}} Blaupausen anzeigen",
+      "showFewer": "Weniger anzeigen"
+    }
   },
   "myListings": {
     "active": "Aktiv",

@@ -1,7 +1,12 @@
 import { describe, it, expect } from "vitest"
-import type { Mission, MissionRewardPool } from "../../store/api/v2/market"
+import type {
+  GameVersion,
+  Mission,
+  MissionRewardPool,
+} from "../../store/api/v2/market"
 import {
   freshnessStamp,
+  gameVersionLabel,
   missionGiver,
   missionSummaryLine,
   missionTextParts,
@@ -119,5 +124,30 @@ describe("missionText", () => {
     ).toBe(
       "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build 12881860).",
     )
+  })
+
+  it("doesn't repeat the type when the version number names it", () => {
+    const v: GameVersion = {
+      version_id: "v",
+      version_type: "LIVE",
+      version_number: "4.10-LIVE (Data.p4k 2026-11-14)",
+      is_active: true,
+      last_data_update: "2026-11-18T02:14:59.047Z",
+      created_at: "",
+      updated_at: "",
+    }
+    expect(gameVersionLabel(v)).toBe(
+      "Star Citizen 4.10-LIVE (Data.p4k 2026-11-14)",
+    )
+    expect(freshnessStamp(v)).toBe(
+      "Data from Star Citizen 4.10-LIVE (Data.p4k 2026-11-14), updated 18 Nov 2026.",
+    )
+    expect(
+      gameVersionLabel({
+        ...v,
+        version_number: "4.11 PTU",
+        version_type: "PTU",
+      }),
+    ).toBe("Star Citizen 4.11 PTU")
   })
 })

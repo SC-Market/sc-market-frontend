@@ -1,33 +1,20 @@
 /**
  * /missions/<kind>/<slug>: one mission hub (a giver, faction, type or star
- * system): the intro generated from its data, this page of its missions
- * (?page=N, 100 per page, real links), the related hubs and the data's
- * freshness. Prerendered (src/prerender/paths.ts) with the bridge's head
- * (seo/missionHubs.ts); ?page=N gets its head from the bridge.
+ * system). Header (kind, name, systems · count · faction, data freshness,
+ * "Filter in mission search"), the plain-language summary built from its
+ * data, stat tiles, the reputation ladder (giver and faction hubs with rank
+ * data), the missions (grouped on one-page hubs, flat and sortable on
+ * paginated ones; ?page=N, 100 per page, real links), and an aside with the
+ * facts, blueprint rewards and related hubs. Prerendered
+ * (src/prerender/paths.ts) with the bridge's head (seo/missionHubs.ts);
+ * ?page=N gets its head from the bridge.
+ *
+ * Desktop: a mission opens in the detail modal over the hub (URL
+ * /missions/<code>; closing returns to the hub). Mobile: its page.
  */
-import React, { useMemo } from "react"
-import {
-  Alert,
-  Box,
-  Chip,
-  Grid,
-  Link,
-  Paper,
-  Skeleton,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material"
-import {
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom"
+import React, { useMemo, useState } from "react"
+import { Alert, Box, Grid, Skeleton, Typography } from "@mui/material"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   useGetActiveVersionsQuery,
@@ -37,26 +24,47 @@ import {
 } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
-import { MissionName } from "../../components/game-data/MissionName"
+import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { SeoHead } from "../../seo/SeoHead"
 import { headDescription, type PageHead } from "../../seo/pageHead"
 import { pagedPath, queryIndexing } from "../../seo/queryIndexing"
-import { missionGiver, missionRewardRange } from "../../seo/missionText"
+import { gameVersionLabel } from "../../seo/missionText"
 import {
   buildMissionHubHead,
-  MISSION_HUB_KINDS,
   MISSION_HUB_PAGE_SIZE,
-  missionHubIntro,
+  missionHubFactRows,
+  missionHubFactsTitle,
   missionHubKindLabel,
+  missionHubLadder,
+  missionHubReputationFaction,
+  missionHubSummary,
   missionHubText,
 } from "../../seo/missionHubs"
 import { FRONTEND_URL } from "../../util/constants"
 import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
 import { scrollPageToTop } from "../../components/layout/pageScroll"
+import { HubHeader } from "./hub/HubHeader"
+import { HubRelated } from "./hub/HubRelated"
+import { HubSummary } from "./hub/HubSummary"
+import { HubStatTiles } from "./hub/HubStatTiles"
+import { RankLadder } from "./hub/RankLadder"
+import { HubMissionList } from "./hub/HubMissionList"
+import { HubFacts } from "./hub/HubFacts"
+import { HubBlueprintRewards } from "./hub/HubBlueprintRewards"
+import { useHubMissionModal } from "./hub/useHubMissionModal"
+import {
+  DEFAULT_HUB_FILTERS,
+  groupHubMissions,
+  hubListMode,
+  hubStatTiles,
+  ladderRungs,
+  type HubListFilters,
+} from "./hub/hubModel"
 
 /** Hub pages are bare `?page=N` URLs: the links carry no other params. */
 const NO_PARAMS = new URLSearchParams()
@@ -84,15 +92,26 @@ function isNotFound(error: unknown): boolean {
 export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
   const { slug = "" } = useParams<{ slug: string }>()
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const lang = i18n.resolvedLanguage || "en"
   const page = queryIndexing(searchParams).pageNumber ?? 1
+  const [filters, setFilters] = useState<HubListFilters>(DEFAULT_HUB_FILTERS)
 
   const query = useGetMissionHubQuery(
-    { kind, slug, page, pageSize: MISSION_HUB_PAGE_SIZE },
+    {
+      kind,
+      slug,
+      page,
+      pageSize: MISSION_HUB_PAGE_SIZE,
+      sort: filters.sort === "name" ? undefined : filters.sort,
+      type: filters.type,
+      maxRank: filters.maxRank,
+      hasBlueprints: filters.hasBlueprints || undefined,
+    },
     { skip: !slug },
   )
-  const { data, isLoading, error } = query
+  const { data, isLoading, isFetching, error } = query
   const { data: versions } = useGetActiveVersionsQuery()
   usePageReady(isPrimaryLoading(query))
 
@@ -112,15 +131,17 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
   const kindLabel = missionHubKindLabel(kind, t)
   const notFound = isNotFound(error)
 
+  const changeFilters = (next: HubListFilters) => {
+    setFilters(next)
+    // A new filter starts the list over at its first page.
+    if (page > 1) navigate(path)
+  }
+
   return (
     <StandardPageLayout
       title={head?.title ?? kindLabel}
       description={head ? headDescription(head) : ""}
       canonicalUrl={path}
-      headerTitle={
-        text?.heading ??
-        (isLoading ? <Skeleton variant="text" width={240} /> : kindLabel)
-      }
       breadcrumbs={[
         {
           label: t("missionHubs.missions", "Missions"),
@@ -148,9 +169,37 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
                 )}
           </Alert>
         )}
-        {data && <HubBody hub={data} page={page} lang={lang} />}
-        <MissionHubIndexLinks />
-        <GameDataFreshness />
+        {!data && !isLoading && (
+          <Typography
+            variant="h4"
+            component="h1"
+            color="text.secondary"
+            sx={{ fontWeight: "bold", mb: 2 }}
+          >
+            {kindLabel}
+          </Typography>
+        )}
+        {data && text && (
+          <HubBody
+            hub={data}
+            heading={text.heading}
+            page={page}
+            lang={lang}
+            filters={filters}
+            onFiltersChange={changeFilters}
+            busy={isFetching}
+            versionLabel={
+              versions?.LIVE ? gameVersionLabel(versions.LIVE) : null
+            }
+          />
+        )}
+        <Box
+          component="footer"
+          sx={{ mt: 1, pt: 2, borderTop: 1, borderColor: "divider" }}
+        >
+          <MissionHubIndexLinks sx={{ mt: 0 }} />
+          <GameDataFreshness />
+        </Box>
       </Grid>
     </StandardPageLayout>
   )
@@ -158,189 +207,136 @@ export function MissionHubPage({ kind }: { kind: MissionHubKind }) {
 
 function HubBody({
   hub,
+  heading,
   page,
   lang,
+  filters,
+  onFiltersChange,
+  busy,
+  versionLabel,
 }: {
   hub: MissionHubDetailResponse
+  heading: string
   page: number
   lang: string
+  filters: HubListFilters
+  onFiltersChange: (next: HubListFilters) => void
+  busy: boolean
+  versionLabel: string | null
 }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const isMobile = useBreakpointDown("lg")
+  const modal = useHubMissionModal()
   const path = GAME_DATA_PATHS.missionHub(hub.kind, hub.slug)
-  const related = MISSION_HUB_KINDS.filter(
-    (k) => k !== hub.kind && hub[k].length > 0,
-  )
+
+  const summary = missionHubSummary(hub, t, lang)
+  const tiles = hubStatTiles(hub, t, lang)
+  const ladder = missionHubLadder(hub)
+  const rungs = ladder ? ladderRungs(ladder) : []
+  const faction = missionHubReputationFaction(hub)
+  const mode = hubListMode(hub, filters.sort)
+  const groups =
+    mode === "flat" ? [] : groupHubMissions(hub.missions, mode, ladder, t, lang)
+  const facts = missionHubFactRows(hub, t, lang)
 
   return (
     <>
-      <Box
-        component="section"
-        aria-label={t("missionHubs.missionList", "Missions")}
-        sx={{ mb: 2 }}
-      >
-        {missionHubIntro(hub, t, lang).map((line) => (
-          <Typography
-            key={line}
-            variant="body1"
-            color="text.secondary"
-            component="p"
-            sx={{ mb: 0.75 }}
-          >
-            {line}
-          </Typography>
-        ))}
-      </Box>
-
-      <Typography variant="h6" component="h2" sx={{ mt: 2, mb: 1 }}>
-        {t("missionHubs.missionList", "Missions")}
-      </Typography>
-      <Paper variant="outlined" sx={{ overflowX: "auto" }}>
-        <Table size="small" sx={{ "& td, & th": { py: 0.75, px: 1 } }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                {t("missionHubs.columns.mission", "Mission")}
-              </TableCell>
-              <TableCell>{t("missionHubs.columns.system", "System")}</TableCell>
-              <TableCell>{t("missionHubs.columns.type", "Type")}</TableCell>
-              <TableCell>{t("missionHubs.columns.giver", "Giver")}</TableCell>
-              <TableCell>
-                {t("missionHubs.columns.legality", "Legality")}
-              </TableCell>
-              <TableCell align="right">
-                {t("missionHubs.columns.reward", "Reward")}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {hub.missions.map((m) => {
-              const giver = missionGiver(m)
-              const illegal = m.is_illegal || m.legal_status === "ILLEGAL"
-              return (
-                <TableRow key={m.mission_id} hover>
-                  <TableCell sx={{ minWidth: 200 }}>
-                    <Link
-                      component={RouterLink}
-                      to={GAME_DATA_PATHS.mission(
-                        encodeURIComponent(m.mission_code),
-                      )}
-                      underline="hover"
-                      color="inherit"
-                    >
-                      <MissionName
-                        name={m.mission_name}
-                        giver={giver}
-                        variant="body2"
-                        fontWeight={600}
-                        component="span"
-                      />
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">
-                      {m.star_system || "—"}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">
-                      {m.career_type || "—"}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
-                      {giver || "—"}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    {illegal ? (
-                      <Chip
-                        label={t("missionHubs.illegal", "Illegal")}
-                        size="small"
-                        color="error"
-                        variant="outlined"
-                      />
-                    ) : m.is_illegal === false || m.legal_status === "LEGAL" ? (
-                      <Chip
-                        label={t("missionHubs.legal", "Legal")}
-                        size="small"
-                        color="success"
-                        variant="outlined"
-                      />
-                    ) : (
-                      "—"
-                    )}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="body2"
-                      color="success.main"
-                      fontWeight={600}
-                      noWrap
-                    >
-                      {missionRewardRange(m, lang) ?? "—"}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-
-      <NumberedPagination
-        count={hub.mission_count}
-        page={page - 1}
-        rowsPerPage={MISSION_HUB_PAGE_SIZE}
-        onPageChange={(newPage) => {
-          navigate(pagedPath(path, newPage + 1))
-          scrollPageToTop()
-        }}
-        link={{ path, searchParams: NO_PARAMS }}
-        sx={{ mt: 1.5, px: 0 }}
+      <HubHeader
+        hub={hub}
+        heading={heading}
+        lang={lang}
+        versionLabel={versionLabel}
       />
 
-      {related.length > 0 && (
-        <Box
-          component="section"
-          aria-labelledby="mission-hub-related"
-          sx={{ mt: 3 }}
-        >
-          <Typography
-            id="mission-hub-related"
-            variant="h6"
-            component="h2"
-            sx={{ mb: 1 }}
-          >
-            {t("missionHubs.related", "Related mission hubs")}
-          </Typography>
-          {related.map((k) => (
-            <Box key={k} sx={{ mb: 1.5 }}>
-              <Typography
-                variant="subtitle2"
-                color="text.secondary"
-                component="h3"
-                sx={{ mb: 0.5 }}
-              >
-                {missionHubKindLabel(k, t)}
-              </Typography>
-              <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
-                {hub[k].map((other) => (
-                  <Chip
-                    key={other.slug}
-                    label={`${other.name} (${other.mission_count})`}
-                    component={RouterLink}
-                    to={GAME_DATA_PATHS.missionHub(k, other.slug)}
-                    clickable
-                    size="small"
-                    variant="outlined"
-                  />
-                ))}
-              </Stack>
-            </Box>
-          ))}
-        </Box>
+      <HubSummary summary={summary} />
+      <HubStatTiles tiles={tiles} />
+
+      {ladder && (
+        <RankLadder
+          rungs={rungs}
+          ladderName={ladder.scope_display_name}
+          factionName={faction?.name}
+          selected={filters.maxRank}
+          onSelect={(maxRank) => onFiltersChange({ ...filters, maxRank })}
+          totalMissions={hub.mission_count}
+          unrankedMissions={hub.unranked_mission_count}
+          lang={lang}
+        />
       )}
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "minmax(0, 1fr)",
+            md: "minmax(0, 1fr) 336px",
+          },
+          gap: 3,
+          alignItems: "start",
+        }}
+      >
+        <Box sx={{ minWidth: 0 }}>
+          <HubMissionList
+            hub={hub}
+            missions={hub.missions}
+            mode={mode}
+            groups={groups}
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            showRank={!!ladder}
+            busy={busy}
+            lang={lang}
+            onOpen={isMobile ? undefined : modal.openMission}
+            pagination={
+              hub.filtered_count > MISSION_HUB_PAGE_SIZE ? (
+                <NumberedPagination
+                  count={hub.filtered_count}
+                  page={page - 1}
+                  rowsPerPage={MISSION_HUB_PAGE_SIZE}
+                  onPageChange={(newPage) => {
+                    navigate(pagedPath(path, newPage + 1))
+                    scrollPageToTop()
+                  }}
+                  link={{ path, searchParams: NO_PARAMS }}
+                  sx={{ mt: 1.5, px: 0 }}
+                />
+              ) : undefined
+            }
+          />
+        </Box>
+        <Box
+          component="aside"
+          aria-label={t("missionHubs.aside", "About this hub")}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+            minWidth: 0,
+            mb: 3,
+          }}
+        >
+          <HubFacts title={missionHubFactsTitle(hub.kind, t)} rows={facts} />
+          {hub.blueprint_rewards.length > 0 && (
+            <HubBlueprintRewards
+              items={hub.blueprint_rewards}
+              ladder={ladder}
+              lang={lang}
+            />
+          )}
+          <HubRelated hub={hub} />
+        </Box>
+      </Box>
+
+      <MissionDetailModal
+        missionId={modal.openId}
+        open={!!modal.openId}
+        onClose={modal.close}
+        onBlueprintClick={(name) => {
+          modal.dismiss()
+          navigate(GAME_DATA_PATHS.blueprint(encodeURIComponent(name)))
+        }}
+      />
     </>
   )
 }
@@ -348,10 +344,13 @@ function HubBody({
 function HubSkeleton() {
   return (
     <Box>
-      {[90, 70, 60].map((w) => (
+      <Skeleton variant="text" width={120} />
+      <Skeleton variant="text" width="45%" height={48} />
+      {[90, 70].map((w) => (
         <Skeleton key={w} variant="text" width={`${w}%`} />
       ))}
-      <Skeleton variant="rounded" height={420} sx={{ mt: 2 }} />
+      <Skeleton variant="rounded" height={84} sx={{ mt: 2 }} />
+      <Skeleton variant="rounded" height={420} sx={{ mt: 3 }} />
     </Box>
   )
 }
