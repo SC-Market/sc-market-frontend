@@ -66,6 +66,7 @@ exports[`routes (shard 2/4) > /admin/alerts 1`] = `
   "mainLinks": [
     "/",
     "/about",
+    "/admin/alerts/new",
     "/changelog",
     "/developers",
     "/discord/install?type=server&src=footer",
