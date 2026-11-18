@@ -27,6 +27,12 @@ export interface ListingLotDraft {
 
 export interface ListingDraft {
   gameItemId: string | null
+  /**
+   * The seller chose to list something that isn't a catalogued game item
+   * (a custom listing). Sent without a game item; only valid with no
+   * gameItemId.
+   */
+  customItem: boolean
   title: string
   description: string
   pricingMode: "unified" | "per_variant"
@@ -55,6 +61,7 @@ export interface ListingDraft {
 export function emptyListingDraft(): ListingDraft {
   return {
     gameItemId: null,
+    customItem: false,
     title: "",
     description: "",
     pricingMode: "unified",
@@ -104,7 +111,9 @@ export type ListingDraftIssue =
 export function validateListingDraft(
   draft: ListingDraft,
 ): ListingDraftIssue | null {
-  if (!draft.gameItemId) return { code: "gameItemRequired" }
+  if (!draft.gameItemId && !draft.customItem) {
+    return { code: "gameItemRequired" }
+  }
   if (!draft.title.trim()) return { code: "titleRequired" }
   if (draft.title.length > LISTING_TITLE_MAX) return { code: "titleTooLong" }
   if (draft.pricingMode === "unified" && !(draft.basePrice > 0)) {
@@ -279,13 +288,15 @@ function lotInput(
  * that can have members-only listings.
  */
 export function buildCreateListingRequest(
-  draft: ListingDraft & { gameItemId: string },
+  draft: ListingDraft,
   shop: Pick<ShopResponse, "shop_id" | "is_org_owned">,
 ): CreateListingRequest {
   return {
     title: draft.title.trim(),
     description: draft.description.trim() || undefined,
-    game_item_id: draft.gameItemId,
+    game_item_id: draft.customItem
+      ? undefined
+      : (draft.gameItemId ?? undefined),
     pricing_mode: draft.pricingMode,
     base_price: draft.pricingMode === "unified" ? draft.basePrice : undefined,
     lots: draft.lots.map((lot) => lotInput(lot, draft.pricingMode)),

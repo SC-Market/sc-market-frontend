@@ -106,6 +106,12 @@ describe("listingDraftIssueError", () => {
 describe("buildCreateListingRequest", () => {
   const shop = { shop_id: "shop-1", is_org_owned: false }
 
+  it("sends a custom listing without a game item", () => {
+    const custom = draft({ gameItemId: null, customItem: true })
+    expect(validateListingDraft(custom)).toBeNull()
+    expect(buildCreateListingRequest(custom, shop).game_item_id).toBeUndefined()
+  })
+
   it("sends only what is set", () => {
     const request = buildCreateListingRequest(
       { ...draft({ title: " Rifle " }), gameItemId: "item-1" },

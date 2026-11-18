@@ -57,4 +57,37 @@ describe("GameItemSearchAutocomplete", () => {
     renderField(null)
     expect(screen.getByRole("combobox")).toHaveValue("")
   })
+
+  it("offers what was typed as a custom item when asked to", () => {
+    const store = createStore()
+    const onChange = vi.fn()
+    const onCustomItem = vi.fn()
+    render(
+      <Provider store={store}>
+        <GameItemSearchAutocomplete
+          value={null}
+          onChange={onChange}
+          onCustomItem={onCustomItem}
+          label="Item"
+        />
+      </Provider>,
+    )
+    const box = screen.getByRole("combobox")
+    fireEvent.change(box, { target: { value: "Verdict LMG" } })
+    fireEvent.click(
+      screen.getByRole("option", {
+        name: /List "Verdict LMG" as a custom item/,
+      }),
+    )
+    expect(onCustomItem).toHaveBeenCalledWith("Verdict LMG")
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it("has no custom-item option unless asked to", () => {
+    renderField(null)
+    fireEvent.change(screen.getByRole("combobox"), {
+      target: { value: "Verdict LMG" },
+    })
+    expect(screen.queryByText(/as a custom item/)).toBeNull()
+  })
 })

@@ -1,4 +1,11 @@
-import { Grid, InputAdornment, TextField, Typography } from "@mui/material"
+import {
+  Alert,
+  Button,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { NumericFormat } from "react-number-format"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
@@ -18,6 +25,8 @@ import { type StockLotFormData } from "./CreateListingStockLots"
 
 /** Essential fields: game item, title, description and photos. */
 export function AboutSection({
+  customItem,
+  setCustomItem,
   gameItemName,
   setGameItemName,
   setGameItemId,
@@ -35,6 +44,9 @@ export function AboutSection({
   fieldError,
   clearError,
 }: {
+  /** Listing something that isn't a catalogued game item */
+  customItem: boolean
+  setCustomItem: (value: boolean) => void
   gameItemName: string | null
   setGameItemName: (value: string | null) => void
   setGameItemId: (value: string | null) => void
@@ -58,27 +70,78 @@ export function AboutSection({
 }) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
+
+  // Switch to a custom listing, carrying what was typed into the title
+  const listAsCustomItem = (typedName: string) => {
+    clearError("game_item_id")
+    setCustomItem(true)
+    setGameItemName(null)
+    setGameItemId(null)
+    setGameItemType(null)
+    setQuantityUnit("unit")
+    if (!title && typedName) setTitle(typedName)
+  }
+
   return (
     <>
       {/* About Section */}
       <FormPaper title={t("CreateListingV2.about", "About")}>
         <Grid item xs={12}>
-          <GameItemSearchAutocomplete
-            required
-            errorText={fieldError("game_item_id")}
-            value={gameItemName}
-            onChange={(itemName, itemType, itemId) => {
-              clearError("game_item_id")
-              setGameItemName(itemName)
-              setGameItemId(itemId)
-              setGameItemType(itemType)
-              setQuantityUnit(quantityUnitFor(itemType))
-              if (!title && itemName) {
-                setTitle(itemName)
+          {customItem ? (
+            <Alert
+              severity="info"
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={() => setCustomItem(false)}
+                >
+                  {t("market.customItem.pickGameItem", "Pick a game item")}
+                </Button>
               }
-            }}
-            label={t("CreateListingV2.selectGameItem", "Select Game Item")}
-          />
+            >
+              <Typography variant="body2" fontWeight="bold">
+                {t("market.customItem.title", "Custom listing")}
+              </Typography>
+              <Typography variant="body2">
+                {t(
+                  "market.customItem.explainer",
+                  "Not linked to an in-game item. Buyers find it by its title and description. It won't appear on item pages or in price history, and won't match buy orders.",
+                )}
+              </Typography>
+            </Alert>
+          ) : (
+            <>
+              <GameItemSearchAutocomplete
+                required
+                errorText={fieldError("game_item_id")}
+                value={gameItemName}
+                onChange={(itemName, itemType, itemId) => {
+                  clearError("game_item_id")
+                  setGameItemName(itemName)
+                  setGameItemId(itemId)
+                  setGameItemType(itemType)
+                  setQuantityUnit(quantityUnitFor(itemType))
+                  if (!title && itemName) {
+                    setTitle(itemName)
+                  }
+                }}
+                label={t("CreateListingV2.selectGameItem", "Select Game Item")}
+                onCustomItem={listAsCustomItem}
+              />
+              <Button
+                size="small"
+                variant="text"
+                onClick={() => listAsCustomItem("")}
+                sx={{ mt: 0.5, textTransform: "none" }}
+              >
+                {t(
+                  "market.customItem.link",
+                  "Can't find your item, or not selling an in-game item? Create a custom listing",
+                )}
+              </Button>
+            </>
+          )}
         </Grid>
 
         <Grid item xs={12}>

@@ -724,7 +724,15 @@
     "visibilityPublic": "公开",
     "visibilityPublicHelp": "对所有买家可见",
     "removeBulkTier": "移除第 {{n}} 档",
-    "applySearchNow": "立即应用搜索"
+    "applySearchNow": "立即应用搜索",
+    "customItem": {
+      "option": "将“{{name}}”作为自定义物品上架",
+      "optionHint": "列表中没有？无需关联游戏物品即可出售",
+      "link": "找不到你的物品，或出售的不是游戏物品？创建自定义上架",
+      "title": "自定义上架",
+      "explainer": "未关联游戏物品。买家通过标题和描述找到它。它不会出现在物品页面或价格历史中，也不会匹配求购订单。",
+      "pickGameItem": "选择游戏物品"
+    }
   },
   "marketActions": {
     "createListing": "创建商品",

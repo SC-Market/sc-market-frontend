@@ -10,6 +10,7 @@ import {
   Theme,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/SearchRounded"
+import EditNoteIcon from "@mui/icons-material/EditNoteRounded"
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { marketV2Api } from "../../../store/api/v2/market"
@@ -19,6 +20,19 @@ interface GameItemOption {
   name: string
   type: string
   id: string
+}
+
+/** The "list it as a custom item" row shown after the search results. */
+interface CustomItemOption {
+  custom: true
+  /** What the user typed */
+  name: string
+}
+
+type PickerOption = GameItemOption | CustomItemOption
+
+function isCustomOption(option: PickerOption): option is CustomItemOption {
+  return "custom" in option
 }
 
 interface GameItemSearchAutocompleteProps {
@@ -40,6 +54,12 @@ interface GameItemSearchAutocompleteProps {
   required?: boolean
   /** Error shown under the field */
   errorText?: string
+  /**
+   * Offers "List "<typed text>" as a custom item" under the results, for
+   * things the game data doesn't have. Called with the typed text (may be
+   * empty) when it is picked.
+   */
+  onCustomItem?: (typedName: string) => void
 }
 
 /** Stand-in option for a `value` the field did not pick itself. */
@@ -55,6 +75,7 @@ export function GameItemSearchAutocomplete({
   sx,
   required,
   errorText,
+  onCustomItem,
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
   const [searchTrigger] = marketV2Api.endpoints.searchGameItems.useLazyQuery()
@@ -77,6 +98,12 @@ export function GameItemSearchAutocomplete({
     }
   }
   const selectedName = selectedItem?.name
+
+  const typed = inputValue.trim()
+  const options: PickerOption[] =
+    onCustomItem && typed && typed !== selectedName && !isSearching
+      ? [...itemOptions, { custom: true, name: typed }]
+      : itemOptions
 
   const debouncedSearch = useMemo(
     () =>
@@ -109,7 +136,7 @@ export function GameItemSearchAutocomplete({
       id="game-item-search"
       size={size}
       sx={sx}
-      options={itemOptions}
+      options={options}
       loading={isSearching}
       value={selectedItem}
       inputValue={inputValue}
@@ -119,6 +146,10 @@ export function GameItemSearchAutocomplete({
         }
       }}
       onChange={(event, newValue) => {
+        if (newValue && isCustomOption(newValue)) {
+          onCustomItem?.(newValue.name)
+          return
+        }
         setSelectedItem(newValue)
         onChange(
           newValue?.name || null,
@@ -131,19 +162,50 @@ export function GameItemSearchAutocomplete({
       }}
       filterOptions={(x) => x}
       isOptionEqualToValue={(option, val) =>
-        val.id ? option.id === val.id : option.name === val.name
+        isCustomOption(option) || isCustomOption(val)
+          ? false
+          : val.id
+            ? option.id === val.id
+            : option.name === val.name
       }
       getOptionLabel={(option) => option.name}
-      renderOption={(props, option) => (
-        <li {...props} key={option.id}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography variant="body2">{option.name}</Typography>
-            <Typography variant="caption" color="text.secondary">
-              {option.type}
-            </Typography>
+      renderOption={(props, option) =>
+        isCustomOption(option) ? (
+          <Box
+            component="li"
+            {...props}
+            key="custom-item"
+            sx={{ borderTop: 1, borderColor: "divider" }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <EditNoteIcon fontSize="small" color="primary" />
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography variant="body2" color="primary">
+                  {t("market.customItem.option", {
+                    defaultValue: 'List "{{name}}" as a custom item',
+                    name: option.name,
+                  })}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {t(
+                    "market.customItem.optionHint",
+                    "Not in the list? Sell it without linking a game item",
+                  )}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
-        </li>
-      )}
+        ) : (
+          <li {...props} key={option.id}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Typography variant="body2">{option.name}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {option.type}
+              </Typography>
+            </Box>
+          </li>
+        )
+      }
       renderInput={(params) => (
         <TextField
           {...params}

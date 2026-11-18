@@ -720,7 +720,15 @@
     "visibilityPublic": "Public",
     "visibilityPublicHelp": "Visible par tous les acheteurs",
     "removeBulkTier": "Supprimer le palier {{n}}",
-    "applySearchNow": "Appliquer la recherche maintenant"
+    "applySearchNow": "Appliquer la recherche maintenant",
+    "customItem": {
+      "option": "Publier « {{name}} » comme article personnalisé",
+      "optionHint": "Pas dans la liste ? Vendez-le sans le lier à un objet du jeu",
+      "link": "Vous ne trouvez pas votre article, ou ce n'est pas un objet du jeu ? Créez une annonce personnalisée",
+      "title": "Annonce personnalisée",
+      "explainer": "Non liée à un objet du jeu. Les acheteurs la trouvent par son titre et sa description. Elle n'apparaît pas sur les pages d'objets ni dans l'historique des prix, et ne correspond à aucun ordre d'achat.",
+      "pickGameItem": "Choisir un objet du jeu"
+    }
   },
   "marketActions": {
     "createListing": "Créer une annonce",

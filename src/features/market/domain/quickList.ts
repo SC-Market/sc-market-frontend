@@ -125,6 +125,7 @@ export function quickListDraft(form: QuickListForm): ListingDraft {
   return {
     ...emptyListingDraft(),
     gameItemId: form.item?.id ?? null,
+    customItem: false,
     title: form.item?.name ?? "",
     description: form.description,
     pricingMode: perBatch ? "per_variant" : "unified",

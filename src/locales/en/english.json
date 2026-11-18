@@ -2751,7 +2751,15 @@
     "visibilityPublic": "Public",
     "visibilityPublicHelp": "Visible to all buyers",
     "removeBulkTier": "Remove tier {{n}}",
-    "applySearchNow": "Apply search now"
+    "applySearchNow": "Apply search now",
+    "customItem": {
+      "option": "List \"{{name}}\" as a custom item",
+      "optionHint": "Not in the list? Sell it without linking a game item",
+      "link": "Can't find your item, or not selling an in-game item? Create a custom listing",
+      "title": "Custom listing",
+      "explainer": "Not linked to an in-game item. Buyers find it by its title and description. It won't appear on item pages or in price history, and won't match buy orders.",
+      "pickGameItem": "Pick a game item"
+    }
   },
   "marketActions": {
     "createListing": "Create Listing",

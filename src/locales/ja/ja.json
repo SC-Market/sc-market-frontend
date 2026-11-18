@@ -718,7 +718,15 @@
     "visibilityPublic": "公開",
     "visibilityPublicHelp": "すべての購入者に表示されます",
     "removeBulkTier": "ティア {{n}} を削除",
-    "applySearchNow": "今すぐ検索を適用"
+    "applySearchNow": "今すぐ検索を適用",
+    "customItem": {
+      "option": "「{{name}}」をカスタムアイテムとして出品",
+      "optionHint": "一覧にない場合は、ゲームアイテムに紐付けずに販売できます",
+      "link": "アイテムが見つからない、またはゲーム内アイテムではない場合は、カスタム出品を作成",
+      "title": "カスタム出品",
+      "explainer": "ゲームアイテムに紐付けられていません。購入者はタイトルと説明で見つけます。アイテムページや価格履歴には表示されず、購入注文とも照合されません。",
+      "pickGameItem": "ゲームアイテムを選ぶ"
+    }
   },
   "marketActions": {
     "createListing": "出品を作成",

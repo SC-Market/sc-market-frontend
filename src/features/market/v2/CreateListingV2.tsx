@@ -67,6 +67,8 @@ export function CreateListingV2() {
   const [gameItemType, setGameItemType] = useState<string | null>(
     searchParams.get("game_item_type"),
   )
+  // Listing something that isn't a catalogued game item
+  const [customItem, setCustomItem] = useState(false)
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">(
     "unified",
   )
@@ -184,6 +186,7 @@ export function CreateListingV2() {
   // The form as a draft: the rules and the request are shared with Quick List
   const draft: ListingDraft = {
     gameItemId,
+    customItem,
     title,
     description,
     pricingMode,
@@ -218,11 +221,8 @@ export function CreateListingV2() {
     event.preventDefault()
 
     const issue = validateListingDraft(draft)
-    if (issue || !draft.gameItemId) {
-      const validationError = listingDraftIssueError(
-        issue ?? { code: "gameItemRequired" },
-        t,
-      )
+    if (issue) {
+      const validationError = listingDraftIssueError(issue, t)
       showError(validationError)
       issueAlert({
         message: validationError.message,
@@ -232,10 +232,7 @@ export function CreateListingV2() {
     }
     setFormError(null)
 
-    const request = buildCreateListingRequest(
-      { ...draft, gameItemId: draft.gameItemId },
-      shop,
-    )
+    const request = buildCreateListingRequest(draft, shop)
 
     const result = await submitListing(request)
     if (!result.ok) {
@@ -295,6 +292,8 @@ export function CreateListingV2() {
             {/* ============================================================ */}
 
             <AboutSection
+              customItem={customItem}
+              setCustomItem={setCustomItem}
               gameItemName={gameItemName}
               setGameItemName={setGameItemName}
               setGameItemId={setGameItemId}

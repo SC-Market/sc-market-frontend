@@ -719,7 +719,15 @@
     "visibilityPublic": "Öffentlich",
     "visibilityPublicHelp": "Für alle Käufer sichtbar",
     "removeBulkTier": "Stufe {{n}} entfernen",
-    "applySearchNow": "Suche jetzt anwenden"
+    "applySearchNow": "Suche jetzt anwenden",
+    "customItem": {
+      "option": "„{{name}}“ als eigenen Artikel anbieten",
+      "optionHint": "Nicht in der Liste? Ohne Spielgegenstand verkaufen",
+      "link": "Artikel nicht gefunden oder kein Spielgegenstand? Eigenes Angebot erstellen",
+      "title": "Eigenes Angebot",
+      "explainer": "Nicht mit einem Spielgegenstand verknüpft. Käufer finden es über Titel und Beschreibung. Es erscheint nicht auf Artikelseiten oder im Preisverlauf und passt zu keinen Kaufaufträgen.",
+      "pickGameItem": "Spielgegenstand wählen"
+    }
   },
   "marketActions": {
     "createListing": "Inserat erstellen",

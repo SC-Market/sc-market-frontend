@@ -718,7 +718,15 @@
     "visibilityPublic": "公開",
     "visibilityPublicHelp": "所有買家皆可見",
     "removeBulkTier": "移除第 {{n}} 級",
-    "applySearchNow": "立即套用搜尋"
+    "applySearchNow": "立即套用搜尋",
+    "customItem": {
+      "option": "將「{{name}}」作為自訂物品上架",
+      "optionHint": "清單中沒有？無需關聯遊戲物品即可出售",
+      "link": "找不到你的物品，或出售的不是遊戲物品？建立自訂上架",
+      "title": "自訂上架",
+      "explainer": "未關聯遊戲物品。買家透過標題和描述找到它。它不會出現在物品頁面或價格歷史中，也不會匹配求購訂單。",
+      "pickGameItem": "選擇遊戲物品"
+    }
   },
   "marketActions": {
     "createListing": "建立商品",
