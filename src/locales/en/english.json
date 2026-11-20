@@ -7844,6 +7844,8 @@
       "noChanges": "No changes",
       "warnings_one": "{{count}} warning",
       "warnings_other": "{{count}} warnings",
+      "renames_one": "{{count}} item renamed",
+      "renames_other": "{{count}} items renamed",
       "noDetails": "No details available",
       "importSuccess": "Game data imported",
       "importFailed": "Import failed",

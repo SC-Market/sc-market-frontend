@@ -7717,6 +7717,7 @@
       },
       "noChanges": "変更なし",
       "warnings_other": "警告 {{count}} 件",
+      "renames_other": "{{count}} 件のアイテム名を変更",
       "noDetails": "詳細はありません",
       "importSuccess": "ゲームデータをインポートしました",
       "importFailed": "インポートに失敗しました",

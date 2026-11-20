@@ -20033,6 +20033,67 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ImportItemRename": {
+				"description": "One game item renamed by an import",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "game_items.id"
+					},
+					"oldName": {
+						"type": "string"
+					},
+					"newName": {
+						"type": "string"
+					},
+					"match": {
+						"type": "string",
+						"enum": [
+							"p4k_id",
+							"exact",
+							"cstone_uuid",
+							"fuzzy",
+							"normalized"
+						],
+						"description": "How the row was matched to the export item"
+					},
+					"oldSource": {
+						"type": "string",
+						"enum": [
+							"cig",
+							"override",
+							"derived",
+							"key_derived",
+							"placeholder"
+						],
+						"description": "Source of the old name (rows matched by p4k_id)"
+					},
+					"newSource": {
+						"type": "string",
+						"enum": [
+							"cig",
+							"override",
+							"derived",
+							"key_derived",
+							"placeholder"
+						]
+					},
+					"p4kId": {
+						"type": "string",
+						"description": "Export item id (p4k_id)"
+					}
+				},
+				"required": [
+					"id",
+					"oldName",
+					"newName",
+					"match",
+					"newSource",
+					"p4kId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ImportGameDataResponse": {
 				"description": "Import summary returned by game data import endpoint",
 				"properties": {
@@ -20113,6 +20174,20 @@
 								"type": "number",
 								"format": "double"
 							},
+							"itemNameConflicts": {
+								"type": "number",
+								"format": "double",
+								"description": "Item names not given because another item has the name (each listed in errors; retried next import)"
+							},
+							"itemRenamesBySource": {
+								"properties": {},
+								"additionalProperties": {
+									"type": "number",
+									"format": "double"
+								},
+								"type": "object",
+								"description": "Already-imported items renamed, by name source transition, e.g.\n{ \"key_derived->derived\": 26, \"key_derived->cig\": 38 }"
+							},
 							"nameChanges": {
 								"type": "number",
 								"format": "double"
@@ -20171,6 +20246,8 @@
 							"missionsInserted",
 							"missionsProcessed",
 							"fullSetsCreated",
+							"itemNameConflicts",
+							"itemRenamesBySource",
 							"nameChanges",
 							"updated",
 							"inserted",
@@ -20183,6 +20260,13 @@
 							"totalP4KItems"
 						],
 						"type": "object"
+					},
+					"itemRenames": {
+						"items": {
+							"$ref": "#/components/schemas/ImportItemRename"
+						},
+						"type": "array",
+						"description": "Every item rename the import made (old → new name), for review"
 					},
 					"errors": {
 						"items": {
@@ -20198,6 +20282,7 @@
 				"required": [
 					"success",
 					"summary",
+					"itemRenames",
 					"errors",
 					"timestamp"
 				],
@@ -25858,7 +25943,7 @@
 						}
 					}
 				},
-				"description": "Search game items by name",
+				"description": "Search game items, best matches first: exact name, then names starting\nwith the query, names whose words start with the query's words, names\ncontaining it, then a localization key or class name\n(\"@item_Nameksar_lmg_energy_01_tint02\", \"ksar_lmg_energy_01\"), then the\nmanufacturer (\"Kastak\", \"KSAR\", or with other words: \"kastak lmg\"), then\nnear spellings (\"verdikt\").",
 				"summary": "Search game items",
 				"tags": [
 					"Game Items V2"

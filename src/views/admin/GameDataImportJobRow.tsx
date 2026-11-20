@@ -19,7 +19,10 @@ import {
   ExpandMoreRounded,
   ExpandLessRounded,
 } from "@mui/icons-material"
-import type { GameDataImportJob } from "../../store/api/v2/market"
+import type {
+  GameDataImportJob,
+  ImportItemRename,
+} from "../../store/api/v2/market"
 import { useFormatters } from "../../util/format"
 
 export function statusColor(
@@ -28,6 +31,49 @@ export function statusColor(
   if (s === "completed") return "success"
   if (s === "failed") return "error"
   return "info"
+}
+
+/**
+ * A job summary value as display lines. Numbers are formatted; an object is
+ * one "key: value" line per entry (a transition key "key_derived->derived"
+ * reads "key_derived → derived"), nested values flattened inline; an array is
+ * comma-joined. Empty objects/arrays show "—".
+ */
+export function summaryValueLines(
+  value: unknown,
+  formatNumber: (n: number) => string,
+): string[] {
+  const inline = (v: unknown): string => {
+    if (typeof v === "number") return formatNumber(v)
+    if (v === null || v === undefined) return "—"
+    if (Array.isArray(v)) return v.length ? v.map(inline).join(", ") : "—"
+    if (typeof v === "object") {
+      const entries = Object.entries(v as Record<string, unknown>)
+      return entries.length
+        ? entries.map(([k, x]) => `${k}: ${inline(x)}`).join(", ")
+        : "—"
+    }
+    return String(v)
+  }
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const entries = Object.entries(value as Record<string, unknown>)
+    if (entries.length === 0) return ["—"]
+    return entries.map(
+      ([k, v]) => `${k.replace(/\s*->\s*/g, " → ")}: ${inline(v)}`,
+    )
+  }
+  return [inline(value)]
+}
+
+/**
+ * One import rename as text: `"Old" → "New" (key_derived → derived)`, or
+ * the match type for rows matched by name/CStone UUID.
+ */
+export function renameLine(r: ImportItemRename): string {
+  const how = r.oldSource
+    ? `${r.oldSource} → ${r.newSource}`
+    : `${r.match}, ${r.newSource}`
+  return `"${r.oldName}" → "${r.newName}" (${how})`
 }
 
 export function JobDetailRow({ job }: { job: GameDataImportJob }) {
@@ -136,7 +182,16 @@ export function JobDetailRow({ job }: { job: GameDataImportJob }) {
                             .replace(/^./, (s) => s.toUpperCase())}
                         </TableCell>
                         <TableCell sx={{ border: "none", py: 0.5 }}>
-                          {typeof v === "number" ? fmt.number(v) : String(v)}
+                          {summaryValueLines(v, fmt.number).map((line, i) => (
+                            <Typography
+                              key={i}
+                              variant="body2"
+                              component="span"
+                              display="block"
+                            >
+                              {line}
+                            </Typography>
+                          ))}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -155,6 +210,25 @@ export function JobDetailRow({ job }: { job: GameDataImportJob }) {
                     {job.result.errors.slice(0, 20).map((e, i) => (
                       <li key={i}>
                         <Typography variant="caption">{e}</Typography>
+                      </li>
+                    ))}
+                  </Box>
+                </Alert>
+              )}
+              {job.result?.itemRenames && job.result.itemRenames.length > 0 && (
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  {t("adminUi.gameDataImport.renames", {
+                    count: job.result.itemRenames.length,
+                  })}
+                  <Box
+                    component="ul"
+                    sx={{ m: 0, pl: 2, maxHeight: 240, overflow: "auto" }}
+                  >
+                    {job.result.itemRenames.map((r) => (
+                      <li key={r.id}>
+                        <Typography variant="caption">
+                          {renameLine(r)}
+                        </Typography>
                       </li>
                     ))}
                   </Box>

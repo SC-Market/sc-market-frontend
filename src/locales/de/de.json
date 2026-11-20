@@ -7844,6 +7844,8 @@
       "noChanges": "Keine Änderungen",
       "warnings_one": "{{count}} Warnung",
       "warnings_other": "{{count}} Warnungen",
+      "renames_one": "{{count}} Gegenstand umbenannt",
+      "renames_other": "{{count}} Gegenstände umbenannt",
       "noDetails": "Keine Details verfügbar",
       "importSuccess": "Spieldaten importiert",
       "importFailed": "Import fehlgeschlagen",

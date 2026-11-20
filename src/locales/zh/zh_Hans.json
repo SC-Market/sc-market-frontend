@@ -7723,6 +7723,7 @@
       },
       "noChanges": "无变化",
       "warnings_other": "{{count}} 条警告",
+      "renames_other": "{{count}} 个物品已改名",
       "noDetails": "暂无详细信息",
       "importSuccess": "游戏数据已导入",
       "importFailed": "导入失败",

@@ -7717,6 +7717,7 @@
       },
       "noChanges": "沒有變更",
       "warnings_other": "{{count}} 則警告",
+      "renames_other": "{{count}} 個物品已改名",
       "noDetails": "沒有詳細資訊",
       "importSuccess": "遊戲資料已匯入",
       "importFailed": "匯入失敗",
