@@ -49,6 +49,54 @@ export function isResizeObserverLoopNoise(message: string): boolean {
   return RESIZE_OBSERVER_LOOP.test(message.trim())
 }
 
+/** The parts of a BugSnag error this module's filters read. */
+export interface ReportedError {
+  errorClass: string
+  errorMessage: string
+  stacktrace: ReadonlyArray<{ file?: string | null; method?: string | null }>
+}
+
+// Our code only runs from the bundle's hashed files under /assets/.
+const OUR_BUNDLE_FILE = /\/assets\/[^/?#]+\.m?js(?:[?#]|$)/
+// A wrapped getOwnPropertyDescriptor, as Chromium names it:
+// "Object.getOwnPropertyDescriptor [as _getOwnPropertyDescriptor]".
+const DESCRIPTOR_WRAPPER = /\bgetOwnPropertyDescriptor\b/
+
+/**
+ * A browser extension's injected script that wraps
+ * Object.getOwnPropertyDescriptor and ends up calling its own wrapper, so
+ * it recurses until the stack overflows. Chromium reports it on
+ * window.onerror with the page URL as the file (the script is inline:
+ * "https://sc-market.space/market:1:2995"; our HTML has no such code).
+ * Discarded only when EVERY frame is that wrapper AND none of them is in
+ * our bundle: a stack overflow with any frame of ours is still reported.
+ */
+export function isInjectedDescriptorRecursion(error: ReportedError): boolean {
+  if (error.errorClass !== "RangeError") return false
+  if (!/Maximum call stack size exceeded/i.test(error.errorMessage)) {
+    return false
+  }
+  const frames = error.stacktrace
+  if (frames.length === 0) return false
+  return frames.every(
+    (frame) =>
+      DESCRIPTOR_WRAPPER.test(frame.method ?? "") &&
+      !OUR_BUNDLE_FILE.test(frame.file ?? ""),
+  )
+}
+
+/** True when a reported event is noise that is not sent. */
+export function isNoiseEvent(errors: ReadonlyArray<ReportedError>): boolean {
+  return (
+    errors.length > 0 &&
+    errors.every(
+      (error) =>
+        isResizeObserverLoopNoise(error.errorMessage) ||
+        isInjectedDescriptorRecursion(error),
+    )
+  )
+}
+
 /**
  * BugSnag Performance (page-load and navigation timings) is analytics, so it
  * only starts after the visitor clicks "Accept" in the cookie banner
@@ -126,14 +174,7 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
             }
           },
           onError: (event) => {
-            if (
-              event.errors.length > 0 &&
-              event.errors.every((error) =>
-                isResizeObserverLoopNoise(error.errorMessage),
-              )
-            ) {
-              return false
-            }
+            if (isNoiseEvent(event.errors)) return false
             if (event.request.url) {
               event.request.url = stripQuery(event.request.url)
             }
