@@ -27,6 +27,12 @@ import { useSearchIdentityUsersQuery } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
 import { UserPanel } from "./IdentityUserPanel"
 import { StatusChips } from "./IdentityStatusChips"
+import {
+  StackedRow,
+  StackedRows,
+  StackedRowsMessage,
+} from "./IdentityStackedRows"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 
 export function AdminIdentityView() {
   const { t } = useTranslation()
@@ -36,6 +42,7 @@ export function AdminIdentityView() {
   const [input, setInput] = useState(initial)
   const [query, setQuery] = useState(initial.length >= 2 ? initial : "")
   const [selected, setSelected] = useState<string | null>(null)
+  const isMobile = useIsMobile()
   const { data, error, isFetching } = useSearchIdentityUsersQuery(
     { q: query },
     { skip: query.length < 2 },
@@ -50,7 +57,7 @@ export function AdminIdentityView() {
   }
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={{ xs: 2, md: 3 }} sx={{ minWidth: 0 }}>
       <Alert severity="info">
         {t(
           "adminIdentity.intro",
@@ -58,7 +65,7 @@ export function AdminIdentityView() {
         )}
       </Alert>
 
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: { xs: 1.5, sm: 2 } }}>
         <Box component="form" onSubmit={submit} noValidate>
           <Stack
             direction={{ xs: "column", sm: "row" }}
@@ -92,7 +99,53 @@ export function AdminIdentityView() {
 
       {error && <Alert severity="error">{describeMfaError(error, t)}</Alert>}
 
-      {query.length >= 2 && (
+      {query.length >= 2 && isMobile && (
+        <StackedRows aria-label={t("adminIdentity.results", "Search results")}>
+          {isFetching && (
+            <StackedRowsMessage>
+              {t("adminIdentity.loading", "Loading...")}
+            </StackedRowsMessage>
+          )}
+          {!isFetching && data?.users.length === 0 && (
+            <StackedRowsMessage>
+              {t("adminIdentity.noResults", "No accounts match.")}
+            </StackedRowsMessage>
+          )}
+          {!isFetching &&
+            data?.users.map((u) => (
+              <StackedRow
+                key={u.user_id}
+                title={u.username}
+                adornment={<StatusChips user={u} />}
+                onClick={() => setSelected(u.user_id)}
+                selected={u.user_id === selected}
+                testId={`identity-row-${u.user_id}`}
+                fields={[
+                  {
+                    label: t(
+                      "adminIdentity.columns.displayName",
+                      "Display name",
+                    ),
+                    value: u.display_name,
+                    wide: true,
+                  },
+                  {
+                    label: t("adminIdentity.columns.discord", "Discord id"),
+                    value: u.discord_provider_id ?? u.discord_id_column ?? "-",
+                    mono: true,
+                  },
+                  {
+                    label: t("adminIdentity.columns.spectrum", "Spectrum id"),
+                    value: u.spectrum_user_id ?? "-",
+                    mono: true,
+                  },
+                ]}
+              />
+            ))}
+        </StackedRows>
+      )}
+
+      {query.length >= 2 && !isMobile && (
         <Paper>
           <TableContainer>
             <Table

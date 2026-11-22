@@ -1,18 +1,5 @@
 import { useState } from "react"
-import {
-  Alert,
-  Box,
-  Button,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material"
+import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   useGetIdentityUserQuery,
@@ -24,6 +11,7 @@ import { useFormatters } from "../../util/format"
 import { kindLabel } from "./identityShared"
 import { ActionDialog, ActionId } from "./IdentityActionDialog"
 import { StatusChips, Field, formatDate } from "./IdentityStatusChips"
+import { IdentityRecords } from "./IdentityRecords"
 
 export function UserPanel(props: { userId: string }) {
   const fmt = useFormatters()
@@ -50,7 +38,7 @@ export function UserPanel(props: { userId: string }) {
     user.discord_provider_id !== null || user.discord_id_column !== null
 
   return (
-    <Paper sx={{ p: 2 }} data-testid="identity-user-panel">
+    <Paper sx={{ p: { xs: 1.5, sm: 2 } }} data-testid="identity-user-panel">
       <Stack spacing={2}>
         <Stack
           direction="row"
@@ -59,7 +47,11 @@ export function UserPanel(props: { userId: string }) {
           flexWrap="wrap"
           useFlexGap
         >
-          <Typography variant="h6" color="text.secondary">
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ overflowWrap: "anywhere" }}
+          >
             {user.username}
           </Typography>
           <StatusChips user={user} />
@@ -147,7 +139,7 @@ export function UserPanel(props: { userId: string }) {
         </Box>
 
         {user.username_twins.length > 0 && (
-          <Alert severity="warning">
+          <Alert severity="warning" sx={{ overflowWrap: "anywhere" }}>
             {t(
               "adminIdentity.detail.twins",
               "Other accounts with this username in a different case: {{names}}",
@@ -158,7 +150,13 @@ export function UserPanel(props: { userId: string }) {
           </Alert>
         )}
 
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          useFlexGap
+          sx={{ "& > .MuiButton-root": { flexGrow: { xs: 1, md: 0 } } }}
+        >
           <Button
             variant="outlined"
             disabled={locked}
@@ -200,152 +198,7 @@ export function UserPanel(props: { userId: string }) {
           )}
         </Stack>
 
-        <Typography variant="subtitle1" color="text.secondary">
-          {t("adminIdentity.detail.providers", "Linked logins")}
-        </Typography>
-        <TableContainer>
-          <Table
-            size="small"
-            aria-label={t("adminIdentity.detail.providers", "Linked logins")}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  {t("adminIdentity.detail.providerType", "Provider")}
-                </TableCell>
-                <TableCell>
-                  {t("adminIdentity.detail.providerId", "Id")}
-                </TableCell>
-                <TableCell>
-                  {t(
-                    "adminIdentity.detail.providerUsername",
-                    "Name at link time",
-                  )}
-                </TableCell>
-                <TableCell>
-                  {t("adminIdentity.detail.linkedAt", "Linked")}
-                </TableCell>
-                <TableCell>
-                  {t("adminIdentity.detail.lastUsed", "Last login")}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {user.providers.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    {t("adminIdentity.detail.noProviders", "No linked logins.")}
-                  </TableCell>
-                </TableRow>
-              )}
-              {user.providers.map((p) => (
-                <TableRow key={p.provider_type}>
-                  <TableCell>
-                    {p.provider_type}
-                    {p.is_primary &&
-                      ` (${t("adminIdentity.detail.primary", "primary")})`}
-                  </TableCell>
-                  <TableCell sx={{ fontFamily: "monospace" }}>
-                    {p.provider_id}
-                  </TableCell>
-                  <TableCell>{p.provider_username ?? "-"}</TableCell>
-                  <TableCell>{formatDate(p.linked_at, fmt)}</TableCell>
-                  <TableCell>{formatDate(p.last_used_at, fmt)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <Typography variant="subtitle1" color="text.secondary">
-          {t("adminIdentity.detail.sessions", "Active sessions")}
-        </Typography>
-        {user.sessions.length === 0 ? (
-          <Typography variant="body2" color="text.primary">
-            {t("adminIdentity.detail.noSessions", "No active sessions.")}
-          </Typography>
-        ) : (
-          <TableContainer>
-            <Table
-              size="small"
-              aria-label={t("adminIdentity.detail.sessions", "Active sessions")}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    {t(
-                      "adminIdentity.detail.sessionRefreshed",
-                      "Last refreshed",
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {t("adminIdentity.detail.sessionExpires", "Expires")}
-                  </TableCell>
-                  <TableCell>
-                    {t("adminIdentity.detail.sessionAgent", "Browser")}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {user.sessions.map((s) => (
-                  <TableRow key={`${s.refreshed_at}-${s.expires_at}`}>
-                    <TableCell>{formatDate(s.refreshed_at, fmt)}</TableCell>
-                    <TableCell>{formatDate(s.expires_at, fmt)}</TableCell>
-                    <TableCell sx={{ wordBreak: "break-all" }}>
-                      {s.user_agent ?? "-"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-
-        <Typography variant="subtitle1" color="text.secondary">
-          {t("adminIdentity.detail.recent", "Recent identity changes")}
-        </Typography>
-        {user.recent_actions.length === 0 ? (
-          <Typography variant="body2" color="text.primary">
-            {t("adminIdentity.detail.noRecent", "None.")}
-          </Typography>
-        ) : (
-          <TableContainer>
-            <Table
-              size="small"
-              aria-label={t(
-                "adminIdentity.detail.recent",
-                "Recent identity changes",
-              )}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    {t("adminIdentity.detail.when", "When")}
-                  </TableCell>
-                  <TableCell>
-                    {t("adminIdentity.detail.change", "Change")}
-                  </TableCell>
-                  <TableCell>{t("adminIdentity.detail.by", "By")}</TableCell>
-                  <TableCell>
-                    {t("adminIdentity.dialog.reason", "Reason")}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {user.recent_actions.map((a) => (
-                  <TableRow key={a.audit_log_id}>
-                    <TableCell>{formatDate(a.created_at, fmt)}</TableCell>
-                    <TableCell>{kindLabel(a.kind, t)}</TableCell>
-                    <TableCell>{a.actor_username ?? "-"}</TableCell>
-                    <TableCell sx={{ whiteSpace: "pre-wrap" }}>
-                      {a.reason ?? "-"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        <IdentityRecords user={user} />
       </Stack>
       <ActionDialog
         action={action}

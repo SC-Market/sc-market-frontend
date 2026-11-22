@@ -100,6 +100,14 @@ function mutation(
   ]
 }
 
+const layout = vi.hoisted(() => ({ mobile: false }))
+vi.mock("../../../hooks/layout/useBreakpoint", async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import("../../../hooks/layout/useBreakpoint")
+  >()),
+  useIsMobile: () => layout.mobile,
+}))
+
 vi.mock("../../../store/api/v2/market", () => ({
   useSearchIdentityUsersQuery: (arg: unknown, opts: { skip?: boolean }) => {
     if (!opts?.skip) m.searchArgs.push(arg)
@@ -114,6 +122,7 @@ vi.mock("../../../store/api/v2/market", () => ({
 }))
 
 beforeEach(() => {
+  layout.mobile = false
   m.searchArgs.length = 0
   m.search = { data: { users: [row()] }, isFetching: false, error: undefined }
   m.user = { data: detail(), isLoading: false, error: undefined }
@@ -370,5 +379,65 @@ describe("AdminIdentityView", () => {
     expect(
       within(panel).getByText("Discord not linked (held by another account)"),
     ).toBeInTheDocument()
+  })
+})
+
+describe("AdminIdentityView on phones", () => {
+  beforeEach(() => {
+    layout.mobile = true
+  })
+
+  it("shows results and the account's records as stacked rows, not tables", async () => {
+    const panel = await openUser()
+    expect(screen.queryByRole("table")).toBeNull()
+    expect(
+      screen.getByRole("list", { name: "Search results" }),
+    ).toBeInTheDocument()
+    expect(screen.getByTestId(`identity-row-${USER_ID}`)).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    )
+    const logins = within(panel).getByRole("list", { name: "Linked logins" })
+    expect(within(logins).getByText("stale#1")).toBeInTheDocument()
+    expect(within(logins).getByText("900000000000000001")).toBeInTheDocument()
+    const sessions = within(panel).getByRole("list", {
+      name: "Active sessions",
+    })
+    expect(within(sessions).getByText("UA-1")).toBeInTheDocument()
+    const recent = within(panel).getByRole("list", {
+      name: "Recent identity changes",
+    })
+    expect(within(recent).getByText("fixing a missing id")).toBeInTheDocument()
+  })
+
+  it("keeps the actions working from the stacked layout", async () => {
+    const panel = await openUser()
+    const dialog = openAction(panel, /release username/i)
+    fireEvent.change(within(dialog).getByTestId("identity-reason"), {
+      target: { value: "stale holder, ticket 42" },
+    })
+    await confirm(dialog)
+    expect(m.calls.release).toEqual([
+      {
+        userId: USER_ID,
+        identityActionRequest: { reason: "stale holder, ticket 42" },
+      },
+    ])
+  })
+
+  it("says so when nothing matches", async () => {
+    m.search = { data: { users: [] }, isFetching: false, error: undefined }
+    render(
+      <MemoryRouter>
+        <AdminIdentityView />
+      </MemoryRouter>,
+    )
+    fireEvent.change(screen.getByTestId("identity-search"), {
+      target: { value: "nobody" },
+    })
+    await act(async () => {
+      fireEvent.submit(screen.getByTestId("identity-search").closest("form")!)
+    })
+    expect(screen.getByText("No accounts match.")).toBeInTheDocument()
   })
 })
