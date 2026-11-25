@@ -38,11 +38,15 @@ export function OrgTabs({
         scrollButtons="auto"
         allowScrollButtonsMobile
       >
+        {/* Each tab's value is its useOrgTab index: Recruiting is only
+            rendered when the org has a post, and MUI's implicit (child
+            order) values would shift Reviews to 4 without it. */}
         <HapticTab
           label={t("orgInfo.store")}
           component={Link}
           to={ORG_PATHS.profile(spectrumId)}
           icon={<StorefrontRounded />}
+          value={0}
           {...a11yProps(0)}
         />
         <HapticTab
@@ -50,6 +54,7 @@ export function OrgTabs({
           component={Link}
           to={ORG_PATHS.profileTab(spectrumId, "about")}
           icon={<InfoRounded />}
+          value={1}
           {...a11yProps(1)}
         />
         <HapticTab
@@ -57,6 +62,7 @@ export function OrgTabs({
           component={Link}
           to={ORG_PATHS.profileTab(spectrumId, "order")}
           icon={<CreateRounded />}
+          value={2}
           {...a11yProps(2)}
         />
         <HapticTab
@@ -64,6 +70,7 @@ export function OrgTabs({
           component={Link}
           to={ORG_PATHS.profileTab(spectrumId, "members")}
           icon={<PeopleAltRoundedIcon />}
+          value={3}
           {...a11yProps(3)}
         />
         {hasRecruitingPost && (
@@ -72,6 +79,7 @@ export function OrgTabs({
             component={Link}
             to={ORG_PATHS.profileTab(spectrumId, "recruiting")}
             icon={<PersonAddRounded />}
+            value={4}
             {...a11yProps(4)}
           />
         )}
@@ -80,6 +88,7 @@ export function OrgTabs({
           component={Link}
           to={ORG_PATHS.profileTab(spectrumId, "reviews")}
           icon={<StarRounded />}
+          value={5}
           {...a11yProps(5)}
         />
       </Tabs>
