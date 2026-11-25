@@ -14,6 +14,19 @@
 # grounding (ai-input), and AI training (ai-train) — because visibility in both
 # search and AI answer engines is a goal, not something to opt out of.
 
+# As a condition of accessing this website, you agree to abide by the
+# following content signals:
+#   search:   building a search index and providing search results (e.g.
+#             returning hyperlinks and short excerpts from the website's
+#             contents). Search does not include providing AI-generated
+#             search summaries.
+#   ai-input: inputting content into one or more AI models (e.g. retrieval
+#             augmented generation, grounding, or other real-time taking of
+#             content for generative AI search answers).
+#   ai-train: training or fine-tuning AI models.
+# yes = the use is allowed; no = it is not; a signal that is not listed
+# expresses no preference.
+
 User-agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Disallow: /profile
