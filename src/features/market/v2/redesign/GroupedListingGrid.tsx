@@ -6,6 +6,7 @@ import type { SearchItemSummary } from "../../../../store/api/v2/market"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states"
 import { useFlip } from "./useFlip"
+import { useStaggeredReveal } from "./useStaggeredReveal"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS, insertAds } from "../../../../components/ads/adConfig"
 import { useCampaignAd } from "../../../../components/ads/useCampaignAd"
@@ -48,6 +49,10 @@ const GroupedListingGridInner = React.forwardRef<
   // Animate the reorder: when a card expands and earlier row-mates get bumped
   // below the full-width panel, FLIP makes them slide instead of jumping.
   const { register } = useFlip(expanded)
+
+  // The cards' entrance: one stagger in the order they are shown, owned here
+  // (the cards themselves don't fade in). See ./useStaggeredReveal.ts.
+  const revealRef = useStaggeredReveal<HTMLDivElement>()
 
   // The in-universe ads go between cards, as in the flat grid (insertAds).
   const campaignAd = useCampaignAd()
@@ -145,7 +150,7 @@ const GroupedListingGridInner = React.forwardRef<
   return (
     <>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <Grid container spacing={1}>
+      <Grid container spacing={1} ref={revealRef}>
         {orderedEntries.map(({ entry, index }) =>
           index >= rendered ? (
             <Grid
@@ -171,7 +176,12 @@ const GroupedListingGridInner = React.forwardRef<
               key={entry.key}
               ref={register(entry.key)}
             >
-              <AdCard ad={entry.ad} index={index} noGridWrapper />
+              <AdCard
+                ad={entry.ad}
+                index={index}
+                noGridWrapper
+                animate={false}
+              />
             </Grid>
           ) : entry.kind === "single" ? (
             <Grid
@@ -196,7 +206,6 @@ const GroupedListingGridInner = React.forwardRef<
               <GroupCard
                 listings={entry.listings}
                 summary={entry.summary}
-                index={index}
                 priority={priority(index)}
                 open={expanded === entry.key}
                 onToggle={() =>
