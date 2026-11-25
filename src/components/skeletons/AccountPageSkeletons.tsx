@@ -366,7 +366,6 @@ export function OrderPageSkeleton() {
         { label: t("dashboard.title", "Dashboard"), href: PATHS.dashboard },
         { label: fallbackTitle },
       ]}
-      showOrgInBreadcrumbs={true}
       entityTitle={fallbackTitle}
       sidebarOpen={true}
       maxWidth="xl"

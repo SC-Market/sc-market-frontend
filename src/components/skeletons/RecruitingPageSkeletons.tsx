@@ -133,7 +133,6 @@ export function CreateRecruitingPostSkeleton() {
         { label: t("recruiting.title", "Recruiting"), href: "/recruiting" },
         { label: t("recruiting_post.page.createPost") },
       ]}
-      showOrgInBreadcrumbs={true}
       sidebarOpen={true}
       maxWidth="md"
       headerActions={<HelpLink guide="orgRecruiting" />}

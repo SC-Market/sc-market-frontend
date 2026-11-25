@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useMemo } from "react"
+import React, { ReactElement, ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
@@ -10,8 +10,6 @@ import {
 import { ErrorPage } from "../../pages/errors/ErrorPage"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
-import { useSession } from "../../hooks/login/useSession"
-import { ORG_PATHS } from "../../routes/paths"
 
 export interface BreadcrumbItem {
   label: string
@@ -27,7 +25,6 @@ export interface BannerPageLayoutProps {
 
   // Breadcrumbs
   breadcrumbs?: BreadcrumbItem[]
-  showOrgInBreadcrumbs?: boolean
 
   // Layout configuration
   sidebarOpen?: boolean
@@ -61,15 +58,11 @@ export interface BannerPageLayoutProps {
  * Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 10.1, 10.2
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
-  const { profile } = useSession()
-  const primaryContractor = profile?.contractors?.[0]
-
   const {
     title,
     canonicalUrl,
     dontUseDefaultCanonUrl,
     breadcrumbs,
-    showOrgInBreadcrumbs = false,
     sidebarOpen = true,
     noFooter = false,
     noSidebar = false,
@@ -79,22 +72,6 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
     error,
     skeleton,
   } = props
-
-  // Inject primary contractor into breadcrumbs if it exists and is enabled
-  const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs)
-      return breadcrumbs
-
-    // Insert org after first breadcrumb (home)
-    return [
-      breadcrumbs[0],
-      {
-        label: primaryContractor.name || primaryContractor.spectrum_id,
-        href: ORG_PATHS.profile(primaryContractor.spectrum_id),
-      },
-      ...breadcrumbs.slice(1),
-    ]
-  }, [breadcrumbs, primaryContractor, showOrgInBreadcrumbs])
 
   // Handle 404 errors
   if (
@@ -130,9 +107,9 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
         {/* Breadcrumbs - also while loading (pages pass a "Loading…" label
             for the last crumb), so the banner below doesn't drop when the
             data arrives */}
-        {enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
+        {breadcrumbs && breadcrumbs.length > 0 && (
           <PageBreadcrumbs
-            items={enhancedBreadcrumbs}
+            items={breadcrumbs}
             MuiBreadcrumbsProps={{
               sx: {
                 mb: 0,
