@@ -10,6 +10,7 @@ import {
   type BridgeRuntime,
 } from "../handler"
 import type { HtmlRewriterLike } from "../render"
+import type { MissionHubDetailResponse } from "../../store/api/v2/market"
 import * as f from "./fixtures"
 
 const SHELL = `<!doctype html><html><head><title>SC Market</title></head><body><div id="root"></div></body></html>`
@@ -443,6 +444,8 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
 
   describe("mission hub pages (prerendered per hub at build time)", () => {
     const PRERENDERED = `<!doctype html><html><head><title>Headhunters Missions</title></head><body><div id="root" data-prerendered><h1>Headhunters missions</h1></div></body></html>`
+    // The full response shape (every field the API always sends): the
+    // hub builders read them all, so a partial fixture fails the build.
     const hub = {
       kind: "givers",
       slug: "new-giver",
@@ -456,10 +459,20 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
       factions: [],
       types: [],
       systems: [],
+      reputation_mission_count: 0,
+      reward_mission_count: 0,
+      type_counts: [],
+      untyped_count: 3,
+      unlisted_system_count: 3,
+      ladders: [],
+      unranked_mission_count: 3,
+      blueprint_rewards: [],
+      filtered_count: 3,
+      sort: "name",
       missions: [],
       page: 1,
       page_size: 100,
-    }
+    } satisfies MissionHubDetailResponse
     const html = (body: string) =>
       new Response(body, {
         headers: { "Content-Type": "text/html; charset=utf-8" },
