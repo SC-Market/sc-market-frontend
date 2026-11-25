@@ -42,7 +42,6 @@ export function MemberDashboard() {
       headerActions={<HelpLink guide="handleOrders" />}
       title={pageTitle}
       breadcrumbs={[{ label: pageTitle }]}
-      showOrgInBreadcrumbs={!shopCtx}
       headerTitle={pageTitle}
       sidebarOpen={true}
       maxWidth="xl"

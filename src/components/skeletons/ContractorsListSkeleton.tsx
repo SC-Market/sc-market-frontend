@@ -6,9 +6,13 @@ import { ContractorSkeleton } from "./ContractorSkeleton"
 import { StandardPageLayout } from "../layout/StandardPageLayout"
 import { SidebarPageMobileBody } from "../layout/SidebarPageLayout"
 import { useTranslation } from "react-i18next"
+import { ScOrgsNote } from "../../features/recruiting/components/ScOrgsNote"
 
 /** Cards the /contractors page shows while a page of orgs loads. */
 export const CONTRACTORS_LOADING_CARD_COUNT = 10
+
+/** The SC Orgs line above the /contractors results (page and skeleton). */
+export const CONTRACTORS_SC_ORGS_NOTE_SX = { px: { xs: 1, md: 0 }, mb: 2 }
 
 /**
  * The /contractors results while loading: the page renders this, and so does
@@ -53,6 +57,7 @@ export function ContractorsListSkeleton() {
             </Grid>
           }
         >
+          <ScOrgsNote topic="directory" sx={CONTRACTORS_SC_ORGS_NOTE_SX} />
           <ContractorCardsSkeleton />
           <Divider light sx={{ mt: 2 }} />
           <Skeleton variant="rectangular" height={52} sx={{ mt: 2 }} />
@@ -119,6 +124,7 @@ export function ContractorsListSkeleton() {
 
             {/* Content area */}
             <Box sx={{ flex: 1, maxWidth: "md" }}>
+              <ScOrgsNote topic="directory" sx={CONTRACTORS_SC_ORGS_NOTE_SX} />
               <ContractorCardsSkeleton count={6} />
               <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                 <Skeleton

@@ -1930,6 +1930,14 @@ const HUB_PAGES: Record<
             href: ORG_PATHS.profile(enc(c.spectrum_id)),
             text: c.name,
           })),
+          // The SPA's ScOrgsNote (topic "directory"): SC Orgs' org directory.
+          after: [
+            {
+              tag: "external",
+              href: `${SC_ORGS_SITE}/communities`,
+              text: englishT("scOrgs.directoryNote"),
+            },
+          ],
         },
         ctx,
       ),

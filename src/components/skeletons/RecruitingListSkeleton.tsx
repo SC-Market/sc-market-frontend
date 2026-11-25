@@ -136,7 +136,6 @@ export function RecruitingListSkeleton() {
       title={seo.title}
       description={seo.description}
       breadcrumbs={[{ label: t("recruiting_orgs") }]}
-      showOrgInBreadcrumbs={true}
       headerTitle={t("recruiting_orgs")}
       isLoading
       sidebar={<RecruitingSidebarSkeleton />}

@@ -1908,7 +1908,9 @@
     "orgCardAction": "SC Orgs で開く",
     "verifiedTitle": "SC Orgs にも組織を登録しましょう",
     "verifiedBody": "組織運営のための姉妹サイト SC Orgs では、{{org}} の入団申請、イベント、メンバー管理ツールが使えます。",
-    "verifiedAction": "SC Orgs に登録"
+    "verifiedAction": "SC Orgs に登録",
+    "directoryNote": "ほかの組織もお探しですか？姉妹サイトの SC Orgs で組織ディレクトリをご覧ください",
+    "registerNote": "姉妹サイトの SC Orgs でも組織を運営できます：メンバー名簿、イベント、応募の管理"
   },
   "contractor": {
     "fields": {

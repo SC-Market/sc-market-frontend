@@ -1910,7 +1910,9 @@
     "orgCardAction": "在 SC Orgs 上打开",
     "verifiedTitle": "也把你的组织登记到 SC Orgs",
     "verifiedBody": "SC Orgs 是我们用于管理组织的姊妹网站，为 {{org}} 提供入会申请、活动和成员管理工具。",
-    "verifiedAction": "在 SC Orgs 上登记"
+    "verifiedAction": "在 SC Orgs 上登记",
+    "directoryNote": "想找更多组织？在我们的姊妹站 SC Orgs 浏览组织目录",
+    "registerNote": "你也可以在我们的姊妹站 SC Orgs 上运营组织：成员名册、活动和入会申请"
   },
   "contractor": {
     "fields": {

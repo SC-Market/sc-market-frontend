@@ -1850,7 +1850,9 @@
     "orgCardAction": "在 SC Orgs 上開啟",
     "verifiedTitle": "也把你的組織登記到 SC Orgs",
     "verifiedBody": "SC Orgs 是我們用於管理組織的姊妹網站，為 {{org}} 提供入會申請、活動和成員管理工具。",
-    "verifiedAction": "在 SC Orgs 上登記"
+    "verifiedAction": "在 SC Orgs 上登記",
+    "directoryNote": "想找更多組織？在我們的姊妹站 SC Orgs 瀏覽組織目錄",
+    "registerNote": "你也可以在我們的姊妹站 SC Orgs 上經營組織：成員名冊、活動和入會申請"
   },
   "contractor": {
     "fields": {
