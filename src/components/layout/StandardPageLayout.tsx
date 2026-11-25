@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useMemo } from "react"
+import React, { ReactElement, ReactNode } from "react"
 import { Navigate, useLocation } from "react-router-dom"
 import { Grid, GridProps, Skeleton } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
@@ -19,7 +19,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
 import { useSession } from "../../hooks/login/useSession"
-import { PATHS, ORG_PATHS } from "../../routes/paths"
+import { PATHS } from "../../routes/paths"
 import { layoutDescription } from "../../seo/pageHead"
 
 export interface BreadcrumbItem {
@@ -37,7 +37,6 @@ export interface StandardPageLayoutProps {
 
   // Breadcrumbs
   breadcrumbs?: BreadcrumbItem[]
-  showOrgInBreadcrumbs?: boolean
 
   // Header
   headerTitle?: ReactNode
@@ -81,7 +80,6 @@ export function StandardPageLayout(
 ): ReactElement {
   const { profile } = useSession()
   const location = useLocation()
-  const primaryContractor = profile?.contractors?.[0]
 
   const {
     title,
@@ -89,7 +87,6 @@ export function StandardPageLayout(
     canonicalUrl,
     dontUseDefaultCanonUrl,
     breadcrumbs,
-    showOrgInBreadcrumbs = false,
     headerTitle,
     headerActions,
     sidebarOpen = true,
@@ -106,22 +103,6 @@ export function StandardPageLayout(
     GridProps,
     ContainerProps,
   } = props
-
-  // Inject primary contractor into breadcrumbs if it exists and is enabled
-  const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs)
-      return breadcrumbs
-
-    // Insert org after first breadcrumb (home)
-    return [
-      breadcrumbs[0],
-      {
-        label: primaryContractor.name || primaryContractor.spectrum_id,
-        href: ORG_PATHS.profile(primaryContractor.spectrum_id),
-      },
-      ...breadcrumbs.slice(1),
-    ]
-  }, [breadcrumbs, primaryContractor, showOrgInBreadcrumbs])
 
   // Handle 404 errors
   if (
@@ -189,9 +170,9 @@ export function StandardPageLayout(
         {...ContainerProps}
       >
         {/* Breadcrumbs */}
-        {enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
+        {breadcrumbs && breadcrumbs.length > 0 && (
           <Grid item xs={12}>
-            <PageBreadcrumbs items={enhancedBreadcrumbs} />
+            <PageBreadcrumbs items={breadcrumbs} />
           </Grid>
         )}
 

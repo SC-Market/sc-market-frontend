@@ -148,7 +148,6 @@ export function ViewOrder() {
             t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() }),
         },
       ]}
-      showOrgInBreadcrumbs={true}
       entityTitle={
         order?.title ||
         t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() })

@@ -6,6 +6,7 @@ import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { CreateNewContractor } from "../../views/authentication/CreateNewContractor"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { ScOrgsNote } from "../../features/recruiting/components/ScOrgsNote"
 
 export function OrgRegister() {
   const { t } = useTranslation()
@@ -18,6 +19,9 @@ export function OrgRegister() {
       sidebarOpen={true}
       maxWidth="md"
     >
+      <Grid item xs={12}>
+        <ScOrgsNote topic="register" />
+      </Grid>
       <Grid item xs={12}>
         <Tabs
           value={page}

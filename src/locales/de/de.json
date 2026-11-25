@@ -1913,7 +1913,9 @@
     "orgCardAction": "Auf SC Orgs öffnen",
     "verifiedTitle": "Trag deine Org auch auf SC Orgs ein",
     "verifiedBody": "SC Orgs, unsere Schwesterseite für die Org-Verwaltung, bietet {{org}} Bewerbungen, Events und Tools für Mitglieder.",
-    "verifiedAction": "Auf SC Orgs registrieren"
+    "verifiedAction": "Auf SC Orgs registrieren",
+    "directoryNote": "Du suchst weitere Orgs? Stöbere im Org-Verzeichnis auf SC Orgs, unserer Schwesterseite",
+    "registerNote": "Du kannst deine Org auch auf SC Orgs führen, unserer Schwesterseite: Mitgliederlisten, Events und Bewerbungen"
   },
   "contractor": {
     "fields": {

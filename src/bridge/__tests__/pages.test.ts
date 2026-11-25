@@ -694,6 +694,25 @@ describe("recruiting hub", () => {
   })
 })
 
+describe("contractors hub", () => {
+  it("points to SC Orgs' org directory, like the SPA's ScOrgsNote", () => {
+    const doc = build(
+      "contractors",
+      { data: { items: [], total: 0 } },
+      {},
+      "/contractors",
+    )
+    expect(doc.summary.filter((b) => b.tag === "external")).toEqual([
+      {
+        tag: "external",
+        href: "https://sc-orgs.space/communities",
+        text: englishT("scOrgs.directoryNote"),
+      },
+    ])
+    expect(englishT("scOrgs.directoryNote")).toMatch(/^Looking for more orgs\?/)
+  })
+})
+
 function jsonLdTypes(doc: ReturnType<typeof build>): string[] {
   return doc.head.jsonLd.map(
     (j) => (j as { "@type"?: string })["@type"] ?? "@graph",
