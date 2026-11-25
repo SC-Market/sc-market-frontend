@@ -2281,7 +2281,9 @@
       "failed": "Impossible d'enregistrer le service"
     },
     "photoUploadNote": "Note sur le téléversement de photos",
-    "uploadingPhotos": "Téléversement des photos"
+    "uploadingPhotos": "Téléversement des photos",
+    "offeringAs": "Proposer en tant que",
+    "offeringAsHelp": "Le service apparaît sous le nom de cette boutique, et ses commandes vont à la boutique."
   },
   "CreateOrderForm": {
     "services": "Services",
@@ -9661,6 +9663,13 @@
       "body": "Choisissez la boutique dont vous voulez gérer les services.",
       "noShopTitle": "Vous n'avez pas encore de boutique",
       "noShopBody": "Les services sont proposés sous le nom d'une boutique. Créez votre boutique pour commencer à proposer des services. Vous pourrez la renommer et la personnaliser plus tard."
+    },
+    "createService": {
+      "pageTitle": "Créer un service",
+      "heading": "Quelle boutique propose ce service ?",
+      "body": "Le service apparaît sous le nom de cette boutique, et ses commandes vont à la boutique.",
+      "noShopTitle": "Il vous faut une boutique pour proposer des services",
+      "noShopBody": "Les services sont proposés sous le nom d'une boutique. Créez votre boutique et nous vous emmènerons directement à votre premier service. Vous pourrez la renommer et la personnaliser plus tard."
     }
   }
 }

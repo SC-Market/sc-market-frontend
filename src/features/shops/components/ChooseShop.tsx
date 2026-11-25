@@ -4,6 +4,7 @@
  * - /market/manage, /market/stock/:listingId → /shop/:slug/listings
  * - /market/manage-stock → /shop/:slug/stock
  * - /order/services → /shop/:slug/services
+ * - /order/service/create → /shop/:slug/services/create
  *
  * Only the shops you can do that in count (shopPermissions):
  * - one: straight there;
@@ -51,6 +52,7 @@ export type ShopPick =
   | "manageListings"
   | "manageStock"
   | "services"
+  | "createService"
 
 /** Where each pick goes in the chosen shop, and who can go there. */
 export const SHOP_PICKS: Record<
@@ -61,6 +63,10 @@ export const SHOP_PICKS: Record<
   manageListings: { to: SHOP_PATHS.listings, canUse: canEditShopListings },
   manageStock: { to: SHOP_PATHS.stock, canUse: canEditShopStockLots },
   services: { to: SHOP_PATHS.services, canUse: canManageShopServices },
+  createService: {
+    to: SHOP_PATHS.serviceCreate,
+    canUse: canManageShopServices,
+  },
 }
 
 export function ChooseShop({ pick }: { pick: ShopPick }) {
@@ -206,4 +212,9 @@ export function ChooseShopToManageStock() {
 /** /order/services */
 export function ChooseShopForServices() {
   return <ChooseShop pick="services" />
+}
+
+/** /order/service/create */
+export function ChooseShopToCreateService() {
+  return <ChooseShop pick="createService" />
 }

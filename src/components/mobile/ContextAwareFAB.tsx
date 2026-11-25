@@ -24,7 +24,7 @@ import {
   primaryFillHover,
 } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
-import { PATHS, MARKET_PATHS } from "../../routes/paths"
+import { PATHS, MARKET_PATHS, ORDER_PATHS } from "../../routes/paths"
 
 interface Action {
   icon: React.ReactNode
@@ -48,7 +48,7 @@ export function ContextAwareFAB() {
       icon: <StoreRounded />,
       name: t("market.createListing"),
       onClick: () => {
-        navigate(MARKET_PATHS.manage)
+        navigate(MARKET_PATHS.create)
       },
     },
     {
@@ -62,7 +62,7 @@ export function ContextAwareFAB() {
       icon: <DesignServicesRounded />,
       name: t("services.createService"),
       onClick: () => {
-        navigate(MARKET_PATHS.services)
+        navigate(ORDER_PATHS.serviceCreate)
       },
     },
     {

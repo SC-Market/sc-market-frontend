@@ -1,10 +1,10 @@
 /**
  * ShopSelector — dropdown for selecting which shop to create a listing under.
  *
- * Fetches the user's shops via GET /shops/mine and offers the ones they can
- * list in (canEditShopListings: their own, and org shops where they have
- * Manage Market). If there are none, offers a quick-create button that
- * calls POST /shops/quick.
+ * Fetches the user's shops via GET /shops/mine and offers the ones `canUse`
+ * allows (by default canEditShopListings: their own, and org shops where they
+ * have Manage Market; the service form passes canManageShopServices). If
+ * there are none, offers a quick-create button that calls POST /shops/quick.
  */
 
 import React, { useCallback, useEffect, useMemo } from "react"
@@ -22,8 +22,11 @@ import { ImageAvatar } from "../../../components/avatar/ImageAvatar"
 import { StorefrontRounded } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
-import { useGetMyShopsQuery } from "../../../store/api/v2/market"
-import { canEditShopListings } from "../domain/shopPermissions"
+import {
+  useGetMyShopsQuery,
+  type ShopResponse,
+} from "../../../store/api/v2/market"
+import { canEditShopListings, usableShops } from "../domain/shopPermissions"
 import { useQuickCreateShop } from "../hooks/useShopActions"
 import AddRounded from "@mui/icons-material/AddRounded"
 
@@ -33,6 +36,8 @@ interface ShopSelectorProps {
   label?: string
   helperText?: string
   id?: string
+  /** Which of the user's shops are offered (archived ones never are). */
+  canUse?: (shop: ShopResponse) => boolean
 }
 
 export function ShopSelector({
@@ -41,6 +46,7 @@ export function ShopSelector({
   label,
   helperText,
   id,
+  canUse = canEditShopListings,
 }: ShopSelectorProps) {
   const { t } = useTranslation()
 
@@ -48,13 +54,10 @@ export function ShopSelector({
   const { create: quickCreateShop, isLoading: isCreating } =
     useQuickCreateShop()
 
-  // The user's shops they can list in (personal and org-owned)
+  // The user's shops (personal and org-owned) that canUse allows
   const filteredShops = useMemo(
-    () =>
-      (shops || []).filter(
-        (s) => s.status !== "archived" && canEditShopListings(s),
-      ),
-    [shops],
+    () => usableShops(shops, canUse),
+    [shops, canUse],
   )
 
   // Auto-select if only one shop is available

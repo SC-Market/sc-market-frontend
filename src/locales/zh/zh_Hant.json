@@ -2213,7 +2213,9 @@
       "failed": "無法儲存服務"
     },
     "photoUploadNote": "照片上傳說明",
-    "uploadingPhotos": "正在上傳照片"
+    "uploadingPhotos": "正在上傳照片",
+    "offeringAs": "提供商店",
+    "offeringAsHelp": "服務將以此商店名稱顯示，訂單也會送到此商店。"
   },
   "CreateOrderForm": {
     "services": "服務",
@@ -9321,6 +9323,13 @@
       "body": "選擇你要管理其服務的商店。",
       "noShopTitle": "你還沒有商店",
       "noShopBody": "服務以商店名稱提供。建立商店即可開始提供服務。你之後可以重新命名和自訂商店。"
+    },
+    "createService": {
+      "pageTitle": "建立服務",
+      "heading": "由哪個商店提供此服務？",
+      "body": "服務將以此商店名稱顯示，訂單也會送到此商店。",
+      "noShopTitle": "你需要一個商店才能提供服務",
+      "noShopBody": "服務以商店名稱提供。建立商店後，我們會直接帶你建立第一個服務。你之後可以重新命名和自訂商店。"
     }
   }
 }

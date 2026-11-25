@@ -1291,8 +1291,8 @@ exports[`routes (shard 2/4) > /shop/:shopSlug/services 1`] = `
     "/guides",
     "/guides/discord/api-tokens",
     "/market",
-    "/order/service/create",
     "/privacy",
+    "/shop/test-shop/services/create",
     "/terms",
   ],
   "matches": [

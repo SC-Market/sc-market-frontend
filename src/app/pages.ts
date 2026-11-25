@@ -162,6 +162,10 @@ export const pages = {
     () => import("../features/shops/components/ChooseShop"),
     (m) => m.ChooseShopForServices,
   ),
+  ChooseShopToCreateService: pageEntry(
+    () => import("../features/shops/components/ChooseShop"),
+    (m) => m.ChooseShopToCreateService,
+  ),
   ChooseShopToManageListings: pageEntry(
     () => import("../features/shops/components/ChooseShop"),
     (m) => m.ChooseShopToManageListings,

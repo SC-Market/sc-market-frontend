@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom"
 import { AssignmentRounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
-import { MARKET_PATHS, ORDER_PATHS } from "../../routes/paths"
+import { MARKET_PATHS, ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
+import { useOptionalShopRouteContext } from "../router/ShopContextFromRoute"
+import {
+  canEditShopListings,
+  canManageShopServices,
+} from "../../features/shops/domain/shopPermissions"
 
 export interface EmptyOrdersProps extends Omit<
   EmptyStateProps,
@@ -57,6 +62,45 @@ export function EmptyOrders({
 }: EmptyOrdersProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const shop = useOptionalShopRouteContext()?.shop
+
+  // Where "Create Market Listing" / "Create Service Listing" go. On a shop's
+  // page (/shop/:slug/orders) they create in that shop, and only show when
+  // your role there allows it; elsewhere the shop picker asks which shop.
+  const listingCreatePath = shop
+    ? canEditShopListings(shop)
+      ? SHOP_PATHS.create(shop.slug)
+      : null
+    : MARKET_PATHS.create
+  const serviceCreatePath = shop
+    ? canManageShopServices(shop)
+      ? SHOP_PATHS.serviceCreate(shop.slug)
+      : null
+    : ORDER_PATHS.serviceCreate
+  const createActions = (): [
+    EmptyStateProps["action"] | undefined,
+    EmptyStateProps["secondaryAction"] | undefined,
+  ] => {
+    const actions: { label: string; onClick: () => void }[] = []
+    if (listingCreatePath) {
+      actions.push({
+        label: t("emptyStates.orders.createMarketListing", {
+          defaultValue: "Create Market Listing",
+        }),
+        onClick: () => navigate(listingCreatePath),
+      })
+    }
+    if (serviceCreatePath) {
+      actions.push({
+        label: t("emptyStates.orders.createServiceListing", {
+          defaultValue: "Create Service Listing",
+        }),
+        onClick: () => navigate(serviceCreatePath),
+      })
+    }
+    const [first, second] = actions
+    return [first && { ...first, variant: "contained" }, second]
+  }
 
   const defaultTitle = isOffers
     ? t("emptyStates.orders.noOffers", { defaultValue: "No offers yet" })
@@ -94,19 +138,7 @@ export function EmptyOrders({
         defaultValue:
           "Create market listings or service listings to start receiving offers from customers",
       })
-      defaultAction = {
-        label: t("emptyStates.orders.createMarketListing", {
-          defaultValue: "Create Market Listing",
-        }),
-        onClick: () => navigate(MARKET_PATHS.create),
-        variant: "contained" as const,
-      }
-      defaultSecondaryAction = {
-        label: t("emptyStates.orders.createServiceListing", {
-          defaultValue: "Create Service Listing",
-        }),
-        onClick: () => navigate(ORDER_PATHS.serviceCreate),
-      }
+      ;[defaultAction, defaultSecondaryAction] = createActions()
     }
   } else {
     // For orders
@@ -135,23 +167,9 @@ export function EmptyOrders({
         defaultValue:
           "Create market listings or service listings to start receiving offers from customers",
       })
-      defaultAction = showCreateAction
-        ? {
-            label: t("emptyStates.orders.createMarketListing", {
-              defaultValue: "Create Market Listing",
-            }),
-            onClick: () => navigate(MARKET_PATHS.create),
-            variant: "contained" as const,
-          }
-        : undefined
-      defaultSecondaryAction = showCreateAction
-        ? {
-            label: t("emptyStates.orders.createServiceListing", {
-              defaultValue: "Create Service Listing",
-            }),
-            onClick: () => navigate(ORDER_PATHS.serviceCreate),
-          }
-        : undefined
+      if (showCreateAction) {
+        ;[defaultAction, defaultSecondaryAction] = createActions()
+      }
     }
   }
 

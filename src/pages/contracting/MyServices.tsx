@@ -9,11 +9,14 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageMyServices } from "../../features/contracting/hooks/usePageMyServices"
 import { ManageListingsTabBar } from "../../features/market/components/ManageListingsTabBar"
+import { useShopRouteContext } from "../../components/router/ShopContextFromRoute"
+import { SHOP_PATHS } from "../../routes/paths"
 
 export function MyServicesPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const pageData = usePageMyServices()
+  const { shop } = useShopRouteContext()
 
   return (
     <StandardPageLayout
@@ -32,7 +35,7 @@ export function MyServicesPage() {
           title={t("sidebar.manage_services", "Manage Services")}
           rightAction={
             <Link
-              to={"/order/service/create"}
+              to={SHOP_PATHS.serviceCreate(shop.slug)}
               style={{ color: "inherit", textDecoration: "none" }}
             >
               <Button

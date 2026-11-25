@@ -1539,7 +1539,9 @@
     "title": "Title",
     "typeOptional": "Type (Optional)",
     "update": "Update",
-    "uploadingPhotos": "Uploading Photos"
+    "uploadingPhotos": "Uploading Photos",
+    "offeringAs": "Offering as",
+    "offeringAsHelp": "The service is shown under this shop's name, and its orders go to the shop."
   },
   "customerList": {
     "customers": "Customers",
@@ -9491,6 +9493,13 @@
       "body": "Choose the shop whose services you want to manage.",
       "noShopTitle": "You don't have a shop yet",
       "noShopBody": "Services are offered under a shop's name. Create your shop to start offering services. You can rename and customize it later."
+    },
+    "createService": {
+      "pageTitle": "Create Service",
+      "heading": "Which shop is offering this service?",
+      "body": "The service is shown under this shop's name, and its orders go to the shop.",
+      "noShopTitle": "You need a shop to offer services",
+      "noShopBody": "Services are offered under a shop's name. Create your shop and we'll take you straight to your first service. You can rename and customize it later."
     }
   }
 }

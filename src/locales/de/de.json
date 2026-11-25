@@ -2276,7 +2276,9 @@
       "failed": "Dienstleistung konnte nicht gespeichert werden"
     },
     "photoUploadNote": "Hinweis zum Foto-Upload",
-    "uploadingPhotos": "Fotos werden hochgeladen"
+    "uploadingPhotos": "Fotos werden hochgeladen",
+    "offeringAs": "Anbieten als",
+    "offeringAsHelp": "Die Dienstleistung erscheint unter dem Namen dieses Shops, und ihre Bestellungen gehen an den Shop."
   },
   "CreateOrderForm": {
     "services": "Dienstleistungen",
@@ -9491,6 +9493,13 @@
       "body": "Wähle den Shop, dessen Dienstleistungen du verwalten möchtest.",
       "noShopTitle": "Du hast noch keinen Shop",
       "noShopBody": "Dienstleistungen werden unter dem Namen eines Shops angeboten. Erstelle deinen Shop, um Dienstleistungen anzubieten. Du kannst ihn später umbenennen und anpassen."
+    },
+    "createService": {
+      "pageTitle": "Dienstleistung erstellen",
+      "heading": "Welcher Shop bietet diese Dienstleistung an?",
+      "body": "Die Dienstleistung erscheint unter dem Namen dieses Shops, und ihre Bestellungen gehen an den Shop.",
+      "noShopTitle": "Du brauchst einen Shop, um Dienstleistungen anzubieten",
+      "noShopBody": "Dienstleistungen werden unter dem Namen eines Shops angeboten. Erstelle deinen Shop, und wir bringen dich direkt zu deiner ersten Dienstleistung. Du kannst ihn später umbenennen und anpassen."
     }
   }
 }

@@ -10,7 +10,11 @@ import { render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import type { ShopResponse } from "../../../features/shops/api/shopsApi"
 import { querySuccess } from "../../../__tests__/rtkQueryMocks"
-import { OrgShopRedirectListings, OrgShopRedirectStock } from "../ShopRedirect"
+import {
+  OrgShopRedirectListings,
+  OrgShopRedirectServices,
+  OrgShopRedirectStock,
+} from "../ShopRedirect"
 
 let mockShops: ShopResponse[] = []
 vi.mock("../../../store/api/v2/market", async () => {
@@ -47,6 +51,11 @@ function renderAt(path: string) {
         />
         <Route path="/shop/:slug/listings" element={<p>shop listings</p>} />
         <Route path="/shop/:slug/stock" element={<p>shop stock</p>} />
+        <Route
+          path="/org/:contractor_id/services"
+          element={<OrgShopRedirectServices />}
+        />
+        <Route path="/shop/:slug/services" element={<p>shop services</p>} />
         <Route path="/dashboard/shops" element={<p>my shops</p>} />
       </Routes>
     </MemoryRouter>,
@@ -66,6 +75,13 @@ describe("OrgShopRedirect", () => {
   it("sends the org's stock page to its shop's stock", () => {
     renderAt("/org/~TESTORG/manage-stock")
     expect(screen.getByText("shop stock")).toBeInTheDocument()
+  })
+
+  // /org/:id/services rendered Manage Services with no shop, which listed
+  // (and created) the user's own services instead of the org's.
+  it("sends the org's services page to its shop's services", () => {
+    renderAt("/org/~TESTORG/services")
+    expect(screen.getByText("shop services")).toBeInTheDocument()
   })
 
   it("sends you to My Shops when the org has no shop of yours", () => {

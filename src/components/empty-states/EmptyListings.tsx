@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { Inventory2Rounded } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
-import { MARKET_PATHS } from "../../routes/paths"
+import { MARKET_PATHS, SHOP_PATHS } from "../../routes/paths"
+import { useOptionalShopRouteContext } from "../router/ShopContextFromRoute"
+import { canEditShopListings } from "../../features/shops/domain/shopPermissions"
 
 export interface EmptyListingsProps extends Omit<
   EmptyStateProps,
@@ -59,6 +61,14 @@ export function EmptyListings({
 }: EmptyListingsProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  // On a shop's page "Create Listing" creates in that shop (when your role
+  // there allows it); elsewhere the shop picker asks which shop.
+  const shop = useOptionalShopRouteContext()?.shop
+  const createPath = shop
+    ? canEditShopListings(shop)
+      ? SHOP_PATHS.create(shop.slug)
+      : null
+    : MARKET_PATHS.create
 
   if (isError) {
     return (
@@ -109,15 +119,16 @@ export function EmptyListings({
           "Create your first listing to start selling items on the market",
       })
 
-  const defaultAction = showCreateAction
-    ? {
-        label: t("emptyStates.listings.createListing", {
-          defaultValue: "Create Listing",
-        }),
-        onClick: () => navigate(MARKET_PATHS.create),
-        variant: "contained" as const,
-      }
-    : undefined
+  const defaultAction =
+    showCreateAction && createPath
+      ? {
+          label: t("emptyStates.listings.createListing", {
+            defaultValue: "Create Listing",
+          }),
+          onClick: () => navigate(createPath),
+          variant: "contained" as const,
+        }
+      : undefined
 
   return (
     <EmptyState

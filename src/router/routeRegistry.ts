@@ -70,7 +70,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
 
   // Order routes
   "/orders": () => import("../pages/contracting/CreateOrder"),
-  "/order/service/create": () => import("../pages/contracting/CreateService"),
+  "/order/service/create": () =>
+    import("../features/shops/components/ChooseShop"),
   "/order/service/:service_id/edit": () =>
     import("../pages/contracting/CreateService"),
   "/order/services": () => import("../features/shops/components/ChooseShop"),

@@ -2220,7 +2220,7 @@ exports[`route table > lists every leaf route 2`] = `
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
-    "lazy": true,
+    "lazy": false,
     "pattern": "/org/:contractor_id/services",
   },
   {
@@ -2288,6 +2288,17 @@ exports[`route table > lists every leaf route 2`] = `
     ],
     "lazy": true,
     "pattern": "/shop/:shopSlug/services",
+  },
+  {
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > services/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/services/create",
   },
   {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > customers",

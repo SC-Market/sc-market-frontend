@@ -2281,7 +2281,9 @@
       "failed": "No se pudo guardar el servicio"
     },
     "photoUploadNote": "Nota sobre la subida de fotos",
-    "uploadingPhotos": "Subiendo fotos"
+    "uploadingPhotos": "Subiendo fotos",
+    "offeringAs": "Ofreciendo como",
+    "offeringAsHelp": "El servicio se muestra con el nombre de esta tienda y sus pedidos van a la tienda."
   },
   "CreateOrderForm": {
     "services": "Servicios",
@@ -9661,6 +9663,13 @@
       "body": "Elige la tienda cuyos servicios quieres gestionar.",
       "noShopTitle": "Aún no tienes una tienda",
       "noShopBody": "Los servicios se ofrecen con el nombre de una tienda. Crea tu tienda para empezar a ofrecer servicios. Puedes cambiarle el nombre y personalizarla más tarde."
+    },
+    "createService": {
+      "pageTitle": "Crear servicio",
+      "heading": "¿Qué tienda ofrece este servicio?",
+      "body": "El servicio se muestra con el nombre de esta tienda y sus pedidos van a la tienda.",
+      "noShopTitle": "Necesitas una tienda para ofrecer servicios",
+      "noShopBody": "Los servicios se ofrecen con el nombre de una tienda. Crea tu tienda y te llevaremos directamente a tu primer servicio. Puedes cambiarle el nombre y personalizarla más tarde."
     }
   }
 }

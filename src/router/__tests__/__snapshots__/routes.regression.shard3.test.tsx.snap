@@ -1822,6 +1822,50 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/customers 1`] = `
 }
 `;
 
+exports[`routes (shard 3/4) > /shop/:shopSlug/services/create 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/shop/test-shop/services/create",
+  "h1": [
+    "Create Service",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "services/create",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/",
+    "/about",
+    "/changelog",
+    "/developers",
+    "/discord/install?type=server&src=footer",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "services/create",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Create Service - SC Market",
+  "url": "/shop/test-shop/services/create",
+}
+`;
+
 exports[`routes (shard 3/4) > /shopping-lists 1`] = `
 {
   "consoleErrors": [],

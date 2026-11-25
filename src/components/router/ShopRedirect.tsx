@@ -4,15 +4,16 @@ import { useGetMyShopsQuery } from "../../features/shops/api/shopsApi"
 import { PATHS } from "../../routes/paths"
 
 /**
- * Orgs no longer own listings or stock; their shops do. The old
- * /org/:contractor_id/listings and /org/:contractor_id/manage-stock pages
+ * Orgs no longer own listings or stock; their shops do, and an org's
+ * services are managed from its shop. The old /org/:contractor_id/listings,
+ * /org/:contractor_id/manage-stock and /org/:contractor_id/services pages
  * send you to that org's shop page (subpath), or to My Shops when the org
  * has no shop you belong to, or several to pick from.
  */
 export function OrgShopRedirect({
   subpath,
 }: {
-  subpath: "listings" | "stock"
+  subpath: "listings" | "stock" | "services"
 }) {
   const { contractor_id } = useParams<{ contractor_id: string }>()
   const { data: myShops, isLoading } = useGetMyShopsQuery()
@@ -39,4 +40,8 @@ export function OrgShopRedirectListings() {
 
 export function OrgShopRedirectStock() {
   return <OrgShopRedirect subpath="stock" />
+}
+
+export function OrgShopRedirectServices() {
+  return <OrgShopRedirect subpath="services" />
 }

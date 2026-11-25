@@ -1159,13 +1159,13 @@ exports[`routes (shard 4/4) > /order/service/create 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/order/service/create",
+  "finalUrl": "/shop/test-shop/services/create",
   "h1": [
     "Create Service",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "POP",
+  "historyAction": "REPLACE",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
@@ -1186,7 +1186,8 @@ exports[`routes (shard 4/4) > /order/service/create 1`] = `
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/order/service/create",
+    "/shop/:shopSlug",
+    "services/create",
   ],
   "pageReady": "true",
   "routeErrors": null,
@@ -1223,8 +1224,8 @@ exports[`routes (shard 4/4) > /order/services 1`] = `
     "/guides",
     "/guides/discord/api-tokens",
     "/market",
-    "/order/service/create",
     "/privacy",
+    "/shop/test-shop/services/create",
     "/terms",
   ],
   "matches": [
@@ -1425,13 +1426,11 @@ exports[`routes (shard 4/4) > /org/:contractor_id/services 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/org/TESTORG/services",
-  "h1": [
-    "Manage Services",
-  ],
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "POP",
+  "historyAction": "REPLACE",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
@@ -1440,29 +1439,20 @@ exports[`routes (shard 4/4) > /org/:contractor_id/services 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
-    "/",
-    "/about",
-    "/changelog",
-    "/developers",
-    "/discord/install?type=server&src=footer",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/market",
-    "/order/service/create",
-    "/privacy",
-    "/terms",
+    "/shop/test-shop/listings/create",
+    "/shop/test-shop/settings",
+    "/shops/test-shop",
   ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "services",
+    "/dashboard/shops",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Manage Services - SC Market",
+  "title": "Shops - SC Market",
   "url": "/org/TESTORG/services",
 }
 `;

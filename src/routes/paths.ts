@@ -70,6 +70,7 @@ export const SHOP_PATHS = {
   orders: (slug: string) => `/shop/${slug}/orders`,
   dashboard: (slug: string) => `/shop/${slug}/dashboard`,
   services: (slug: string) => `/shop/${slug}/services`,
+  serviceCreate: (slug: string) => `/shop/${slug}/services/create`,
   settings: (slug: string) => `/shop/${slug}/settings`,
   analytics: (slug: string) => `/shop/${slug}/analytics`,
   customers: (slug: string) => `/shop/${slug}/customers`,

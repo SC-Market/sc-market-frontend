@@ -46,4 +46,32 @@ describe("ContextAwareFAB", () => {
       "/market/manage-stock",
     )
   })
+
+  // Regression: "Create Listing" opened Manage Listings and "Create Service"
+  // the public services search; both now open the create flow, which asks
+  // which shop (personal or org) it's for.
+  it.each([
+    ["/market/manage", "Create Listing", "/market/create"],
+    ["/order/services", "Create Service", "/order/service/create"],
+  ])("on %s, %s navigates to %s", (start, name, to) => {
+    render(
+      <MemoryRouter initialEntries={[start]}>
+        <Routes>
+          <Route
+            path="*"
+            element={
+              <>
+                <ContextAwareFAB />
+                <LocationProbe />
+              </>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    fireEvent.click(screen.getByRole("button", { name }))
+
+    expect(screen.getByTestId("location").textContent).toBe(to)
+  })
 })

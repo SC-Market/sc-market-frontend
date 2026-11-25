@@ -385,9 +385,9 @@ export default [
             file: "routes/pages/PersonalDashboardPage.tsx",
           },
           {
-            id: "routes/pages/CreateService",
+            id: "routes/pages/ChooseShopToCreateService",
             path: "/order/service/create",
-            file: "routes/pages/CreateService.tsx",
+            file: "routes/pages/ChooseShopToCreateService.tsx",
           },
           {
             id: "routes/pages/UpdateService",
@@ -762,9 +762,9 @@ export default [
                 file: "routes/elements/OrgShopRedirectStock.tsx",
               },
               {
-                id: "routes/pages/MyServicesPage",
+                id: "routes/elements/OrgShopRedirectServices",
                 path: "services",
-                file: "routes/pages/MyServicesPage.tsx",
+                file: "routes/elements/OrgShopRedirectServices.tsx",
               },
             ],
           },
@@ -802,6 +802,11 @@ export default [
                 id: "routes/pages/MyServicesPage~2",
                 path: "services",
                 file: "routes/pages/MyServicesPage.tsx",
+              },
+              {
+                id: "routes/pages/CreateService~2",
+                path: "services/create",
+                file: "routes/pages/CreateService.tsx",
               },
               {
                 id: "routes/pages/ShopCustomers",

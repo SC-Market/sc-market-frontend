@@ -13,6 +13,7 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom"
 import type { ShopResponse } from "../../../../store/api/v2/market"
 import {
   ChooseShopForServices,
+  ChooseShopToCreateService,
   ChooseShopToManageListings,
   ChooseShopToManageStock,
   ChooseShopToSell,
@@ -115,6 +116,10 @@ function renderAt(path: string) {
           element={<ChooseShopToManageStock />}
         />
         <Route path="/order/services" element={<ChooseShopForServices />} />
+        <Route
+          path="/order/service/create"
+          element={<ChooseShopToCreateService />}
+        />
         <Route path="/shop/:slug/*" element={<Where />} />
       </Routes>
     </MemoryRouter>,
@@ -140,6 +145,7 @@ describe("ChooseShop", () => {
     ["/market/stock/listing-1", "/shop/mine/listings"],
     ["/market/manage-stock#lots", "/shop/mine/stock#lots"],
     ["/order/services", "/shop/mine/services"],
+    ["/order/service/create", "/shop/mine/services/create"],
   ])("%s goes straight to the only shop: %s", (from, to) => {
     mockShops = [shop("mine", "My Shop")]
     renderAt(from)
@@ -177,6 +183,24 @@ describe("ChooseShop", () => {
     renderAt("/order/services")
     expect(screen.getByTestId("where")).toHaveTextContent(
       "/shop/orders/services",
+    )
+  })
+
+  // Bug report: "every time I make a listing for my org it posts to my
+  // personal shop". /order/service/create had no shop, so every new service
+  // was created as the user's own. It now asks which shop offers it.
+  it("asks which shop offers a new service, and opens that shop's form", () => {
+    mockShops = [
+      shop("mine", "My Shop"),
+      shop("org", "Org Shop", { org: true, permissions: ORDERS_ONLY }),
+      shop("stock", "Stock Shop", { org: true, permissions: STOCK_ONLY }),
+    ]
+    renderAt("/order/service/create")
+    expect(screen.getByText("My Shop")).toBeInTheDocument()
+    expect(screen.queryByText("Stock Shop")).not.toBeInTheDocument()
+    fireEvent.click(screen.getByText("Org Shop"))
+    expect(screen.getByTestId("where")).toHaveTextContent(
+      "/shop/org/services/create",
     )
   })
 

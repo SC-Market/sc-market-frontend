@@ -185,6 +185,7 @@ const PATH_SECTIONS: Record<string, ShopSection> = {
   orders: "orders",
   dashboard: "dashboard",
   services: "services",
+  "services/create": "services",
   customers: "customers",
   settings: "settings",
 }
