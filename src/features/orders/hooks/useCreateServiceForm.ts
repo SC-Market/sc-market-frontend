@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ORDER_PATHS } from "../../../routes/paths"
+import { withShopContext } from "../../../components/sidebar/shopContextState"
 
 interface StarmapObject {
   id: string
@@ -91,6 +92,9 @@ export function useCreateServiceForm(service?: Service) {
   const [destTargetObject, setDestTargetObject] =
     useState<StarmapObject | null>(null)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  // Set on the first submit, so the required fields show their errors only
+  // after the user has tried to save.
+  const [submitAttempted, setSubmitAttempted] = useState(false)
 
   // Populate form when editing existing service
   useEffect(() => {
@@ -183,6 +187,17 @@ export function useCreateServiceForm(service?: Service) {
     useUploadServicePhotosMutation()
 
   const submitService = useCallback(async () => {
+    setSubmitAttempted(true)
+    // The type drives the service's icon, the type filter on the services
+    // page and the type of every order placed from it, so the API requires it.
+    if (!state.type) {
+      // The submit button sits below the field, so also say it out loud.
+      issueAlert({
+        message: t("CreateServiceForm.typeRequired"),
+        severity: "warning",
+      })
+      return
+    }
     const allPhotos = [...state.photos]
 
     if (service) {
@@ -222,7 +237,13 @@ export function useCreateServiceForm(service?: Service) {
             message: t("CreateServiceForm.alert.submitted"),
             severity: "success",
           })
-          navigate(ORDER_PATHS.services)
+          // Like listings: open the saved service, keeping the sidebar in
+          // its shop's context.
+          const shopSlug = service.shop?.slug
+          navigate(
+            ORDER_PATHS.service(serviceId),
+            shopSlug ? { state: withShopContext(shopSlug) } : undefined,
+          )
         })
         .catch((err) => issueAlert(err))
     } else {
@@ -259,13 +280,18 @@ export function useCreateServiceForm(service?: Service) {
             message: t("CreateServiceForm.alert.submitted"),
             severity: "success",
           })
-          navigate(ORDER_PATHS.serviceEdit(serviceId))
+          const shopSlug = shopCtx?.shop.slug
+          navigate(
+            ORDER_PATHS.service(serviceId),
+            shopSlug ? { state: withShopContext(shopSlug) } : undefined,
+          )
         })
         .catch((err) => issueAlert(err))
     }
   }, [
     createService,
     contractorId,
+    shopCtx,
     departTargetObject,
     destTargetObject,
     service,
@@ -300,6 +326,7 @@ export function useCreateServiceForm(service?: Service) {
     removePendingFile,
     isUploadingPhotos,
     submitService,
+    submitAttempted,
     issueAlert,
   }
 }

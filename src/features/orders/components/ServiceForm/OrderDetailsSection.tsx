@@ -18,7 +18,8 @@ import { useServiceFormContext } from "./ServiceFormContext"
 export function OrderDetailsSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { state, setState } = useServiceFormContext()
+  const { state, setState, submitAttempted } = useServiceFormContext()
+  const typeMissing = submitAttempted && !state.type
 
   return (
     <Section xs={12}>
@@ -50,9 +51,14 @@ export function OrderDetailsSection() {
           <TextField
             fullWidth
             select
-            label={t("CreateServiceForm.typeOptional")}
+            label={t("CreateServiceForm.type") + "*"}
             id="order-type"
             value={state.type}
+            aria-required="true"
+            error={typeMissing}
+            helperText={
+              typeMissing ? t("CreateServiceForm.typeRequired") : undefined
+            }
             onChange={(e: React.ChangeEvent<{ value: string }>) =>
               setState({ ...state, type: e.target.value })
             }

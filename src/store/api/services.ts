@@ -246,7 +246,7 @@ export type ServiceBody = {
   title: string
   rush: boolean
   description: string
-  kind?:
+  kind:
     | "Escort"
     | "Transport"
     | "Construction"
