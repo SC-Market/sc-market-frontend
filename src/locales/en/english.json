@@ -4383,7 +4383,9 @@
     "orgCardAction": "Open on SC Orgs",
     "verifiedTitle": "Also list your org on SC Orgs",
     "verifiedBody": "SC Orgs, our sister site for running orgs, gives {{org}} recruiting applications, events and member tools.",
-    "verifiedAction": "Register on SC Orgs"
+    "verifiedAction": "Register on SC Orgs",
+    "directoryNote": "Looking for more orgs? Browse the org directory on SC Orgs, our sister site",
+    "registerNote": "You can also run your org on SC Orgs, our sister site: rosters, events and applications"
   },
   "recruiting_orgs": "Recruiting Orgs",
   "recruiting_post": {
