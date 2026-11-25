@@ -139,7 +139,6 @@ function renderCard(s: SearchItemSummary, listings: ListingSearchResult[]) {
         <GroupCard
           listings={listings}
           summary={s}
-          index={0}
           priority={false}
           open={false}
           onToggle={() => {}}

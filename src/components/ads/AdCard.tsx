@@ -31,6 +31,11 @@ interface AdCardProps {
   index: number
   /** If true, renders without ListingWrapper (the caller lays out the grid) */
   noGridWrapper?: boolean
+  /**
+   * Fade in with an index-based delay (default). False when the grid runs
+   * one entrance for all its cards (the redesigned market grid).
+   */
+  animate?: boolean
 }
 
 /**
@@ -287,11 +292,12 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
  * presses exactly as the tiles around it do.
  */
 export function AdCard(props: AdCardProps) {
-  const { ad, index, noGridWrapper = false } = props
+  const { ad, index, noGridWrapper = false, animate = true } = props
 
   const content = (
     <Fade
       in={true}
+      appear={animate}
       style={{
         transitionDelay: `${50 + 50 * index}ms`,
         transitionDuration: "500ms",
