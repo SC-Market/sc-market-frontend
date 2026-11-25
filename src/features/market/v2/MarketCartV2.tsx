@@ -124,7 +124,6 @@ export function MarketCartV2() {
           { label: t("sidebar.market_short"), href: MARKET_PATHS.search },
           { label: t("cart.yourCart") },
         ]}
-        showOrgInBreadcrumbs={true}
         headerTitle={
           <>
             <BackArrow /> {t("cart.yourCart")}
@@ -150,7 +149,6 @@ export function MarketCartV2() {
         { label: t("sidebar.market_short"), href: "/market" },
         { label: t("cart.yourCart") },
       ]}
-      showOrgInBreadcrumbs={true}
       headerTitle={
         <>
           <BackArrow /> {t("cart.yourCart")}

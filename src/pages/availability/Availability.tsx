@@ -97,7 +97,6 @@ export function Availability() {
         { label: t("dashboard.title", "Dashboard"), href: "/dashboard" },
         { label: t("availability.title") },
       ]}
-      showOrgInBreadcrumbs={true}
       headerTitle={t("availability.title")}
       isLoading={isLoading}
       error={error}

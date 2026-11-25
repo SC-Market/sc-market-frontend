@@ -154,6 +154,7 @@ function ShopTabs(props: {
           component={Link}
           to={SHOP_PATHS.profile(props.slug)}
           icon={<StorefrontRounded />}
+          value={0}
           {...a11yProps(0)}
         />
         <HapticTab
@@ -161,6 +162,7 @@ function ShopTabs(props: {
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "services")}
           icon={<DesignServicesRounded />}
+          value={1}
           {...a11yProps(1)}
         />
         <HapticTab
@@ -168,6 +170,7 @@ function ShopTabs(props: {
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "reviews")}
           icon={<StarRounded />}
+          value={2}
           {...a11yProps(2)}
         />
         <HapticTab
@@ -175,6 +178,7 @@ function ShopTabs(props: {
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "about")}
           icon={<InfoRounded />}
+          value={3}
           {...a11yProps(3)}
         />
         {props.shop.accepts_custom_orders && (
@@ -183,6 +187,7 @@ function ShopTabs(props: {
             component={Link}
             to={SHOP_PATHS.profileTab(props.slug, "order")}
             icon={<CreateRounded />}
+            value={4}
             {...a11yProps(4)}
           />
         )}

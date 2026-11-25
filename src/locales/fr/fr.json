@@ -1918,7 +1918,9 @@
     "orgCardAction": "Ouvrir sur SC Orgs",
     "verifiedTitle": "Inscrivez aussi votre org sur SC Orgs",
     "verifiedBody": "SC Orgs, notre site partenaire pour gérer les orgs, offre à {{org}} les candidatures, les événements et des outils pour les membres.",
-    "verifiedAction": "S’inscrire sur SC Orgs"
+    "verifiedAction": "S’inscrire sur SC Orgs",
+    "directoryNote": "Vous cherchez d'autres orgs ? Parcourez l'annuaire des orgs sur SC Orgs, notre site partenaire",
+    "registerNote": "Vous pouvez aussi gérer votre org sur SC Orgs, notre site partenaire : effectifs, événements et candidatures"
   },
   "contractor": {
     "fields": {

@@ -1918,7 +1918,9 @@
     "orgCardAction": "Abrir en SC Orgs",
     "verifiedTitle": "Registra también tu organización en SC Orgs",
     "verifiedBody": "SC Orgs, nuestro sitio hermano para gestionar organizaciones, ofrece a {{org}} solicitudes de reclutamiento, eventos y herramientas para miembros.",
-    "verifiedAction": "Registrarse en SC Orgs"
+    "verifiedAction": "Registrarse en SC Orgs",
+    "directoryNote": "¿Buscas más organizaciones? Explora el directorio de organizaciones en SC Orgs, nuestro sitio hermano",
+    "registerNote": "También puedes gestionar tu organización en SC Orgs, nuestro sitio hermano: miembros, eventos y solicitudes"
   },
   "contractor": {
     "fields": {

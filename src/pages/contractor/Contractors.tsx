@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
-import { ContractorCardsSkeleton } from "../../components/skeletons"
+import {
+  CONTRACTORS_SC_ORGS_NOTE_SX,
+  ContractorCardsSkeleton,
+} from "../../components/skeletons"
 import { Divider, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
@@ -19,6 +22,7 @@ import { contractorsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { NumberedPagination } from "../../components/pagination/NumberedPagination"
+import { ScOrgsNote } from "../../features/recruiting/components/ScOrgsNote"
 
 export function Contractors() {
   const { t } = useTranslation()
@@ -94,6 +98,7 @@ export function Contractors() {
       <ContractorSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <ContractorSearchContext.Provider value={[searchState, setSearchState]}>
           <div ref={ref} />
+          <ScOrgsNote topic="directory" sx={CONTRACTORS_SC_ORGS_NOTE_SX} />
           {pageData.error ? (
             <EmptyContractors isError onRetry={() => pageData.refetch()} />
           ) : pageData.isFetching ? (

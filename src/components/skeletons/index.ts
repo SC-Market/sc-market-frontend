@@ -53,6 +53,7 @@ export { MarketCartSkeleton } from "./MarketCartSkeleton"
 export {
   ContractorsListSkeleton,
   ContractorCardsSkeleton,
+  CONTRACTORS_SC_ORGS_NOTE_SX,
 } from "./ContractorsListSkeleton"
 export { FleetSkeleton } from "./FleetSkeleton"
 export { RecruitingListSkeleton } from "./RecruitingListSkeleton"

@@ -115,7 +115,6 @@ export function Recruiting() {
       title={recruitingSeoText().title}
       description={recruitingSeoText().description}
       breadcrumbs={[{ label: t("recruiting_orgs") }]}
-      showOrgInBreadcrumbs={true}
       headerTitle={t("recruiting_orgs")}
       headerActions={headerActions}
       sidebar={

@@ -21,6 +21,7 @@ import {
   org,
   recruiting,
   resources,
+  scOrgs,
   seoAnswers,
   viewProfile,
   wiki,
@@ -41,6 +42,7 @@ const RESOURCES: Record<string, unknown> = {
     scOrgsNote: recruiting.scOrgsNote,
     scOrgsLfoNote: recruiting.scOrgsLfoNote,
   },
+  scOrgs: { directoryNote: scOrgs.directoryNote },
   wiki: {
     hub: wiki.hub,
     locations: { title: wiki.locations.title },

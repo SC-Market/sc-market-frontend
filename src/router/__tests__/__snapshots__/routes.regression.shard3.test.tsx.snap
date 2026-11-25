@@ -587,7 +587,6 @@ exports[`routes (shard 3/4) > /dashboard 1`] = `
     "/",
     "/about",
     "/changelog",
-    "/dashboard",
     "/developers",
     "/discord/install?type=server&src=footer",
     "/guides",
